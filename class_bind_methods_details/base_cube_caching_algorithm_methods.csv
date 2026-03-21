@@ -1,0 +1,11 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+CubeCachingAlgorithm,Low Level Cube I/O,isis/src/base/objs/CubeCachingAlgorithm/CubeCachingAlgorithm.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,CubeCachingAlgorithm,isis_pybind.CubeCachingAlgorithm,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,CubeCachingAlgorithm(),isis_pybind.CubeCachingAlgorithm(),N,抽象基类/纯虚接口
+Public API,CacheResult(),isis_pybind.CubeCachingAlgorithm.cache_result,N,抽象基类/纯虚接口
+Public API,CacheResult(QList<RawCubeChunk *>),isis_pybind.CubeCachingAlgorithm.cache_result,N,抽象基类/纯虚接口
+Public API,CacheResult(const CacheResult &other),isis_pybind.CubeCachingAlgorithm.cache_result,N,抽象基类/纯虚接口
+Public API,bool algorithmUnderstoodData() const,isis_pybind.CubeCachingAlgorithm.algorithm_understood_data,N,抽象基类/纯虚接口
+Public API,QList<RawCubeChunk *> getChunksToFree() const,isis_pybind.CubeCachingAlgorithm.get_chunks_to_free,N,抽象基类/纯虚接口

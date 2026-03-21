@@ -1,0 +1,20 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+MultivariateStatistics,Statistics,isis/src/base/objs/MultivariateStatistics/MultivariateStatistics.h,isis_pybind_standalone/src/bind_statistics.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,MultivariateStatistics,isis_pybind.MultivariateStatistics,Y,Python class symbol is exported
+Construction/Enum,MultivariateStatistics(),isis_pybind.MultivariateStatistics(),Y,Constructor is explicitly bound
+Public API,void Reset(),isis_pybind.MultivariateStatistics.reset,Y,Current Python name
+Mutation/Configuration,"void AddData(const double *x, const double *y, const unsigned int count)",isis_pybind.MultivariateStatistics.add_data,Y,Current Python name
+Mutation/Configuration,"void AddData(double x, double y, unsigned int count = 1)",isis_pybind.MultivariateStatistics.add_data,Y,Current Python name
+Mutation/Configuration,"void RemoveData(const double *x, const double *y, const unsigned int count)",isis_pybind.MultivariateStatistics.remove_data,Y,Current Python name
+Public API,Isis::Statistics X() const,isis_pybind.MultivariateStatistics.x,N,Method not found in current binding files
+Public API,Isis::Statistics Y() const,isis_pybind.MultivariateStatistics.y,N,Method not found in current binding files
+Public API,double SumXY() const,isis_pybind.MultivariateStatistics.sum_xy,Y,Current Python name
+Public API,double Covariance() const,isis_pybind.MultivariateStatistics.covariance,Y,Current Python name
+Public API,double Correlation() const,isis_pybind.MultivariateStatistics.correlation,Y,Current Python name
+Public API,"void LinearRegression(double &a, double &b) const",isis_pybind.MultivariateStatistics.linear_regression,Y,Current Python name
+Query,BigInt ValidPixels() const,isis_pybind.MultivariateStatistics.valid_pixels,Y,Current Python name
+Public API,BigInt InvalidPixels() const,isis_pybind.MultivariateStatistics.invalid_pixels,Y,Current Python name
+Public API,BigInt TotalPixels() const,isis_pybind.MultivariateStatistics.total_pixels,Y,Current Python name
+Public API,"PvlObject toPvl(QString name = ""MultivariateStatistics"") const",isis_pybind.MultivariateStatistics.to_pvl,Y,Current Python name

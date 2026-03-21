@@ -1,0 +1,7 @@
+<map id="Isis::ProcessImport" name="Isis::ProcessImport">
+<area shape="rect" id="node1" title="Byte swapper." alt="" coords="251,455,386,696"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_process_import_fits.html" title="Import a FITS file." alt="" coords="5,776,194,953"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_process_import_pds.html" title="Convert PDS archive files to Isis format." alt="" coords="218,744,419,985"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_process_import_vicar.html" title="Import a Vicar file." alt="" coords="444,824,609,905"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_process.html" title="Base class for all cube processing derivatives." alt="" coords="229,5,407,407"/>
+</map>

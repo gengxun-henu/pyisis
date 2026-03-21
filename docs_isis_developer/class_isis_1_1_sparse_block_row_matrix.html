@@ -1,0 +1,662 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::SparseBlockRowMatrix Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_sparse_block_row_matrix.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_sparse_block_row_matrix-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::SparseBlockRowMatrix Class Reference<div class="ingroups"><a class="el" href="group___utility.html">Utility</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html" title="SparseBlockRowMatrix.">SparseBlockRowMatrix</a>.  
+ <a href="class_isis_1_1_sparse_block_row_matrix.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_sparse_block_matrix_8h_source.html">SparseBlockMatrix.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::SparseBlockRowMatrix:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_sparse_block_row_matrix__inherit__graph.png" border="0" usemap="#a_isis_1_1_sparse_block_row_matrix_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_sparse_block_row_matrix_inherit__map" id="a_isis_1_1_sparse_block_row_matrix_inherit__map">
+<area shape="rect" title="SparseBlockRowMatrix." alt="" coords="5,151,214,424"/>
+<area shape="rect" href="class_q_map.html" title=" " alt="" coords="25,5,194,103"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::SparseBlockRowMatrix:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_sparse_block_row_matrix__coll__graph.png" border="0" usemap="#a_isis_1_1_sparse_block_row_matrix_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_sparse_block_row_matrix_coll__map" id="a_isis_1_1_sparse_block_row_matrix_coll__map">
+<area shape="rect" title="SparseBlockRowMatrix." alt="" coords="5,151,214,424"/>
+<area shape="rect" href="class_q_map.html" title=" " alt="" coords="25,5,194,103"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a374a052229113fa59e35656a47c74357"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#a374a052229113fa59e35656a47c74357">SparseBlockRowMatrix</a> ()</td></tr>
+<tr class="separator:a374a052229113fa59e35656a47c74357"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57d857c0351c5507ca7ebf082af6b7fc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#a57d857c0351c5507ca7ebf082af6b7fc">~SparseBlockRowMatrix</a> ()</td></tr>
+<tr class="memdesc:a57d857c0351c5507ca7ebf082af6b7fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_sparse_block_row_matrix.html#a57d857c0351c5507ca7ebf082af6b7fc">More...</a><br /></td></tr>
+<tr class="separator:a57d857c0351c5507ca7ebf082af6b7fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af973a59b595b59e6d0ed201fc0346804"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#af973a59b595b59e6d0ed201fc0346804">SparseBlockRowMatrix</a> (const <a class="el" href="class_isis_1_1_sparse_block_row_matrix.html">SparseBlockRowMatrix</a> &amp;src)</td></tr>
+<tr class="memdesc:af973a59b595b59e6d0ed201fc0346804"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="class_isis_1_1_sparse_block_row_matrix.html#af973a59b595b59e6d0ed201fc0346804">More...</a><br /></td></tr>
+<tr class="separator:af973a59b595b59e6d0ed201fc0346804"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d2ac24144e90a2bd32fc33c45da799c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html">SparseBlockRowMatrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#a4d2ac24144e90a2bd32fc33c45da799c">operator=</a> (const <a class="el" href="class_isis_1_1_sparse_block_row_matrix.html">SparseBlockRowMatrix</a> &amp;src)</td></tr>
+<tr class="memdesc:a4d2ac24144e90a2bd32fc33c45da799c"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Equals" operator.  <a href="class_isis_1_1_sparse_block_row_matrix.html#a4d2ac24144e90a2bd32fc33c45da799c">More...</a><br /></td></tr>
+<tr class="separator:a4d2ac24144e90a2bd32fc33c45da799c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc525d080a7f204a723456848c5047d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#abc525d080a7f204a723456848c5047d2">wipe</a> ()</td></tr>
+<tr class="memdesc:abc525d080a7f204a723456848c5047d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deletes all pointer elements and removes them from the map.  <a href="class_isis_1_1_sparse_block_row_matrix.html#abc525d080a7f204a723456848c5047d2">More...</a><br /></td></tr>
+<tr class="separator:abc525d080a7f204a723456848c5047d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bc9682b065053a121f1cb2a9e293f70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#a3bc9682b065053a121f1cb2a9e293f70">copy</a> (const <a class="el" href="class_isis_1_1_sparse_block_row_matrix.html">SparseBlockRowMatrix</a> &amp;src)</td></tr>
+<tr class="memdesc:a3bc9682b065053a121f1cb2a9e293f70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy method.  <a href="class_isis_1_1_sparse_block_row_matrix.html#a3bc9682b065053a121f1cb2a9e293f70">More...</a><br /></td></tr>
+<tr class="separator:a3bc9682b065053a121f1cb2a9e293f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ababfd2e8e0b7bd2f8e2a1595a9bc7905"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#ababfd2e8e0b7bd2f8e2a1595a9bc7905">zeroBlocks</a> ()</td></tr>
+<tr class="memdesc:ababfd2e8e0b7bd2f8e2a1595a9bc7905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets all elements of all matrix blocks to zero.  <a href="class_isis_1_1_sparse_block_row_matrix.html#ababfd2e8e0b7bd2f8e2a1595a9bc7905">More...</a><br /></td></tr>
+<tr class="separator:ababfd2e8e0b7bd2f8e2a1595a9bc7905"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af788a2c63f38a651e92d81ef63979ad9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#af788a2c63f38a651e92d81ef63979ad9">insertMatrixBlock</a> (int nRowBlock, int nRows, int nCols)</td></tr>
+<tr class="memdesc:af788a2c63f38a651e92d81ef63979ad9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts a "newed" <a class="el" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5" title="Definition for an Isis::LinearAlgebra::Matrix of doubles.">LinearAlgebra::Matrix</a> pointer of size (nRows, nCols) into the map with the block row number as key.  <a href="class_isis_1_1_sparse_block_row_matrix.html#af788a2c63f38a651e92d81ef63979ad9">More...</a><br /></td></tr>
+<tr class="separator:af788a2c63f38a651e92d81ef63979ad9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fe2e84ea2b4af14b4bdb6c91cfdcd9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#a9fe2e84ea2b4af14b4bdb6c91cfdcd9b">copyToBoost</a> (boost::numeric::ublas::compressed_matrix&lt; double &gt; &amp;B)</td></tr>
+<tr class="memdesc:a9fe2e84ea2b4af14b4bdb6c91cfdcd9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a <a class="el" href="class_isis_1_1_sparse_block_row_matrix.html" title="SparseBlockRowMatrix.">SparseBlockRowMatrix</a> to a Boost compressed_matrix.  <a href="class_isis_1_1_sparse_block_row_matrix.html#a9fe2e84ea2b4af14b4bdb6c91cfdcd9b">More...</a><br /></td></tr>
+<tr class="separator:a9fe2e84ea2b4af14b4bdb6c91cfdcd9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef040d1d0e0c6b35427ee8371e2ebea0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#aef040d1d0e0c6b35427ee8371e2ebea0">getLeadingColumnsForBlock</a> (int nblockColumn)</td></tr>
+<tr class="memdesc:aef040d1d0e0c6b35427ee8371e2ebea0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sums and returns the number of columns in each matrix block prior to nblockColumn.  <a href="class_isis_1_1_sparse_block_row_matrix.html#aef040d1d0e0c6b35427ee8371e2ebea0">More...</a><br /></td></tr>
+<tr class="separator:aef040d1d0e0c6b35427ee8371e2ebea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0818d3ae071b957e3441b34434ecc1c5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#a0818d3ae071b957e3441b34434ecc1c5">numberOfElements</a> ()</td></tr>
+<tr class="memdesc:a0818d3ae071b957e3441b34434ecc1c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns total number of matrix elements in map (NOTE: NOT the number of matrix blocks).  <a href="class_isis_1_1_sparse_block_row_matrix.html#a0818d3ae071b957e3441b34434ecc1c5">More...</a><br /></td></tr>
+<tr class="separator:a0818d3ae071b957e3441b34434ecc1c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cc8ac972063d4f408fb52c8facfb86e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#a2cc8ac972063d4f408fb52c8facfb86e">print</a> (std::ostream &amp;outstream)</td></tr>
+<tr class="memdesc:a2cc8ac972063d4f408fb52c8facfb86e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints matrix blocks to std output stream out for debugging.  <a href="class_isis_1_1_sparse_block_row_matrix.html#a2cc8ac972063d4f408fb52c8facfb86e">More...</a><br /></td></tr>
+<tr class="separator:a2cc8ac972063d4f408fb52c8facfb86e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b08881bd85b510e65507a60576cc49a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html#a4b08881bd85b510e65507a60576cc49a">printClean</a> (std::ostream &amp;outstream)</td></tr>
+<tr class="memdesc:a4b08881bd85b510e65507a60576cc49a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints matrix blocks to std output stream out for debugging.  <a href="class_isis_1_1_sparse_block_row_matrix.html#a4b08881bd85b510e65507a60576cc49a">More...</a><br /></td></tr>
+<tr class="separator:a4b08881bd85b510e65507a60576cc49a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html" title="SparseBlockRowMatrix.">SparseBlockRowMatrix</a>. </p>
+<p>A <a class="el" href="class_isis_1_1_sparse_block_row_matrix.html" title="SparseBlockRowMatrix.">SparseBlockRowMatrix</a> is a <a class="el" href="class_q_map.html" title="This is free and unencumbered software released into the public domain.">QMap</a> of square matrix blocks and represents a row of square matrix blocks in the reduced normal equations matrix. The key into each row map is the block’s column index. The value at each key is a square dense matrix (Boost matrix) with a dimension equivalent to the number of exterior orientation parameters used for the image. Zero blocks are not stored.</p>
+<p>Note that this class is not apparently different than the <a class="el" href="class_isis_1_1_sparse_block_column_matrix.html" title="SparseBlockColumnMatrix.">SparseBlockColumnMatrix</a>. It was implemented for convenience in the BundleAdjustment class for those times when we need to access rows of matrix blocks as opposed to columns of matrix blocks.</p>
+<p>TO BE RESOLVED: Do we really need this as a separate class? Can we do everything we need with the <a class="el" href="class_isis_1_1_sparse_block_column_matrix.html" title="SparseBlockColumnMatrix.">SparseBlockColumnMatrix</a>?</p>
+<dl class="section author"><dt>Author</dt><dd>2011-07-29 Ken Edmundson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a374a052229113fa59e35656a47c74357"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a374a052229113fa59e35656a47c74357">&#9670;&nbsp;</a></span>SparseBlockRowMatrix() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SparseBlockRowMatrix::SparseBlockRowMatrix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a57d857c0351c5507ca7ebf082af6b7fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57d857c0351c5507ca7ebf082af6b7fc">&#9670;&nbsp;</a></span>~SparseBlockRowMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SparseBlockRowMatrix::~SparseBlockRowMatrix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+<p>See description of wipe method below. </p>
+
+</div>
+</div>
+<a id="af973a59b595b59e6d0ed201fc0346804"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af973a59b595b59e6d0ed201fc0346804">&#9670;&nbsp;</a></span>SparseBlockRowMatrix() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SparseBlockRowMatrix::SparseBlockRowMatrix </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_sparse_block_row_matrix.html">SparseBlockRowMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy constructor. </p>
+<p>Calls copy method immediately below.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html" title="SparseBlockRowMatrix.">SparseBlockRowMatrix</a> to copy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3bc9682b065053a121f1cb2a9e293f70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bc9682b065053a121f1cb2a9e293f70">&#9670;&nbsp;</a></span>copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SparseBlockRowMatrix::copy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_sparse_block_row_matrix.html">SparseBlockRowMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy method. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html" title="SparseBlockRowMatrix.">SparseBlockRowMatrix</a> to copy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9fe2e84ea2b4af14b4bdb6c91cfdcd9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fe2e84ea2b4af14b4bdb6c91cfdcd9b">&#9670;&nbsp;</a></span>copyToBoost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SparseBlockRowMatrix::copyToBoost </td>
+          <td>(</td>
+          <td class="paramtype">boost::numeric::ublas::compressed_matrix&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>B</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies a <a class="el" href="class_isis_1_1_sparse_block_row_matrix.html" title="SparseBlockRowMatrix.">SparseBlockRowMatrix</a> to a Boost compressed_matrix. </p>
+<p>This may be a temporary implementation</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">B</td><td>Boost matrix to copy this <a class="el" href="class_isis_1_1_sparse_block_row_matrix.html" title="SparseBlockRowMatrix.">SparseBlockRowMatrix</a> to </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aef040d1d0e0c6b35427ee8371e2ebea0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef040d1d0e0c6b35427ee8371e2ebea0">&#9670;&nbsp;</a></span>getLeadingColumnsForBlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SparseBlockRowMatrix::getLeadingColumnsForBlock </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nblockColumn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sums and returns the number of columns in each matrix block prior to nblockColumn. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nblockColumn</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int Number of leading columns for block at nblockColumn </dd></dl>
+
+</div>
+</div>
+<a id="af788a2c63f38a651e92d81ef63979ad9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af788a2c63f38a651e92d81ef63979ad9">&#9670;&nbsp;</a></span>insertMatrixBlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::SparseBlockRowMatrix::insertMatrixBlock </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nRowBlock</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nRows</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nCols</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserts a "newed" <a class="el" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5" title="Definition for an Isis::LinearAlgebra::Matrix of doubles.">LinearAlgebra::Matrix</a> pointer of size (nRows, nCols) into the map with the block row number as key. </p>
+<p>The matrix::clear call initializes the matrix elements to zero. If an entry exists at the key nRowBlock, no insertion is made.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nRowBlock</td><td>block row number of inserted matrix (key into map) </td></tr>
+    <tr><td class="paramname">nRows</td><td>number of rows in matrix to be inserted </td></tr>
+    <tr><td class="paramname">nCols</td><td>number of columns in matrix to be inserted</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Returns true if insertion successful Returns false if block already exists at nRowBlock or if allocation of new block fails TODO: we return true in the <a class="el" href="class_isis_1_1_sparse_block_column_matrix.html" title="SparseBlockColumnMatrix.">SparseBlockColumnMatrix</a> if the block already exists, why is it different here? </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="namespace_isis.html#a7cc3393bbcdd160b4c51d469ff7fb672">Isis::operator&gt;&gt;()</a>.</p>
+
+</div>
+</div>
+<a id="a0818d3ae071b957e3441b34434ecc1c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0818d3ae071b957e3441b34434ecc1c5">&#9670;&nbsp;</a></span>numberOfElements()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SparseBlockRowMatrix::numberOfElements </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns total number of matrix elements in map (NOTE: NOT the number of matrix blocks). </p>
+<p>The sum of all the elements of all the matrix blocks.</p>
+<dl class="section return"><dt>Returns</dt><dd>int Total number of matrix elements in <a class="el" href="class_isis_1_1_sparse_block_row_matrix.html" title="SparseBlockRowMatrix.">SparseBlockRowMatrix</a> </dd></dl>
+
+</div>
+</div>
+<a id="a4d2ac24144e90a2bd32fc33c45da799c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d2ac24144e90a2bd32fc33c45da799c">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html">SparseBlockRowMatrix</a> &amp; Isis::SparseBlockRowMatrix::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_sparse_block_row_matrix.html">SparseBlockRowMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>"Equals" operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html" title="SparseBlockRowMatrix.">SparseBlockRowMatrix</a> to check against </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2cc8ac972063d4f408fb52c8facfb86e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cc8ac972063d4f408fb52c8facfb86e">&#9670;&nbsp;</a></span>print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SparseBlockRowMatrix::print </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>outstream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Prints matrix blocks to std output stream out for debugging. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">outstream</td><td>output stream </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4b08881bd85b510e65507a60576cc49a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b08881bd85b510e65507a60576cc49a">&#9670;&nbsp;</a></span>printClean()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SparseBlockRowMatrix::printClean </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>outstream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Prints matrix blocks to std output stream out for debugging. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">outstream</td><td>output stream </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abc525d080a7f204a723456848c5047d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc525d080a7f204a723456848c5047d2">&#9670;&nbsp;</a></span>wipe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SparseBlockRowMatrix::wipe </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Deletes all pointer elements and removes them from the map. </p>
+<p>Effectively, a destructor, and in fact, called by the ~SparseBlockColumnMatrix above. </p>
+
+</div>
+</div>
+<a id="ababfd2e8e0b7bd2f8e2a1595a9bc7905"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ababfd2e8e0b7bd2f8e2a1595a9bc7905">&#9670;&nbsp;</a></span>zeroBlocks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SparseBlockRowMatrix::zeroBlocks </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets all elements of all matrix blocks to zero. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/SparseBlockMatrix/<a class="el" href="_sparse_block_matrix_8h_source.html">SparseBlockMatrix.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/SparseBlockMatrix/<a class="el" href="_sparse_block_matrix_8cpp.html">SparseBlockMatrix.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html">SparseBlockRowMatrix</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

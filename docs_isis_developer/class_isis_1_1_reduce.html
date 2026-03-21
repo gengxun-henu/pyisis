@@ -1,0 +1,863 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Reduce Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_reduce.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_reduce-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Reduce Class Reference<div class="ingroups"><a class="el" href="group___geometry.html">Geometry</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="class_isis_1_1_reduce.html" title="Reduce the pixel dimensions of an image.">Reduce</a> the pixel dimensions of an image.  
+ <a href="class_isis_1_1_reduce.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_reduce_8h_source.html">Reduce.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::Reduce:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_reduce__inherit__graph.png" border="0" usemap="#a_isis_1_1_reduce_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_reduce_inherit__map" id="a_isis_1_1_reduce_inherit__map">
+<area shape="rect" title="Reduce the pixel dimensions of an image." alt="" coords="38,5,191,359"/>
+<area shape="rect" href="class_isis_1_1_average.html" title="Functor for reduce using average functionality." alt="" coords="5,407,104,504"/>
+<area shape="rect" href="class_isis_1_1_nearest.html" title="Functor for reduce using near functionality." alt="" coords="128,407,224,504"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::Reduce:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_reduce__coll__graph.png" border="0" usemap="#a_isis_1_1_reduce_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_reduce_coll__map" id="a_isis_1_1_reduce_coll__map">
+<area shape="rect" title="Reduce the pixel dimensions of an image." alt="" coords="104,1113,258,1243"/>
+<area shape="rect" title=" " alt="" coords="17,5,76,87"/>
+<area shape="rect" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data." alt="" coords="41,247,188,584"/>
+<area shape="rect" href="class_isis_1_1_portal.html" title="Buffer for containing a two dimensional section of an image." alt="" coords="76,864,185,993"/>
+<area shape="rect" title=" " alt="" coords="122,5,160,87"/>
+<area shape="rect" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes." alt="" coords="262,808,375,1049"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a5b8edf85e0a3fd45139abd5d08939960"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a5b8edf85e0a3fd45139abd5d08939960">Reduce</a> (<a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a> *pInCube, const double sampleScale, const double lineScale)</td></tr>
+<tr class="memdesc:a5b8edf85e0a3fd45139abd5d08939960"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_isis_1_1_reduce.html#a5b8edf85e0a3fd45139abd5d08939960">More...</a><br /></td></tr>
+<tr class="separator:a5b8edf85e0a3fd45139abd5d08939960"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bf4870d2b78972a817b8a5268b2b469"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a1bf4870d2b78972a817b8a5268b2b469">~Reduce</a> ()</td></tr>
+<tr class="memdesc:a1bf4870d2b78972a817b8a5268b2b469"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_reduce.html#a1bf4870d2b78972a817b8a5268b2b469">More...</a><br /></td></tr>
+<tr class="separator:a1bf4870d2b78972a817b8a5268b2b469"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83f06d7b857e08441d58aaf7ff29b33c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a83f06d7b857e08441d58aaf7ff29b33c">UpdateOutputLabel</a> (<a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a> *pOutCube)</td></tr>
+<tr class="memdesc:a83f06d7b857e08441d58aaf7ff29b33c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create label for the reduced output image.  <a href="class_isis_1_1_reduce.html#a83f06d7b857e08441d58aaf7ff29b33c">More...</a><br /></td></tr>
+<tr class="separator:a83f06d7b857e08441d58aaf7ff29b33c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9da43827811086be2b6d1079b517e695"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a9da43827811086be2b6d1079b517e695">setInputBoundary</a> (int startSample, int endSample, int startLine, int endLine)</td></tr>
+<tr class="memdesc:a9da43827811086be2b6d1079b517e695"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters to input image sub area.  <a href="class_isis_1_1_reduce.html#a9da43827811086be2b6d1079b517e695">More...</a><br /></td></tr>
+<tr class="separator:a9da43827811086be2b6d1079b517e695"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:abb19323379dfa54d1249341e1728e000"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#abb19323379dfa54d1249341e1728e000">mInCube</a></td></tr>
+<tr class="memdesc:abb19323379dfa54d1249341e1728e000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input image.  <a href="class_isis_1_1_reduce.html#abb19323379dfa54d1249341e1728e000">More...</a><br /></td></tr>
+<tr class="separator:abb19323379dfa54d1249341e1728e000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06041fa41132c1e32ca80e852e094e8c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a06041fa41132c1e32ca80e852e094e8c">mdSampleScale</a></td></tr>
+<tr class="memdesc:a06041fa41132c1e32ca80e852e094e8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample scale.  <a href="class_isis_1_1_reduce.html#a06041fa41132c1e32ca80e852e094e8c">More...</a><br /></td></tr>
+<tr class="separator:a06041fa41132c1e32ca80e852e094e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76d77e0e2ea5d1cbcdffed07c6c396ec"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a76d77e0e2ea5d1cbcdffed07c6c396ec">mdLineScale</a></td></tr>
+<tr class="memdesc:a76d77e0e2ea5d1cbcdffed07c6c396ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Line scale.  <a href="class_isis_1_1_reduce.html#a76d77e0e2ea5d1cbcdffed07c6c396ec">More...</a><br /></td></tr>
+<tr class="separator:a76d77e0e2ea5d1cbcdffed07c6c396ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e38c31a06529edc176fcd6eb36c7645"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a2e38c31a06529edc176fcd6eb36c7645">miStartSample</a></td></tr>
+<tr class="memdesc:a2e38c31a06529edc176fcd6eb36c7645"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input start sample.  <a href="class_isis_1_1_reduce.html#a2e38c31a06529edc176fcd6eb36c7645">More...</a><br /></td></tr>
+<tr class="separator:a2e38c31a06529edc176fcd6eb36c7645"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c683c0cb830792ed403b868f4ef10df"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a2c683c0cb830792ed403b868f4ef10df">miEndSample</a></td></tr>
+<tr class="memdesc:a2c683c0cb830792ed403b868f4ef10df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input end sample.  <a href="class_isis_1_1_reduce.html#a2c683c0cb830792ed403b868f4ef10df">More...</a><br /></td></tr>
+<tr class="separator:a2c683c0cb830792ed403b868f4ef10df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d14e0b69a6bd587f9d0da8d56cb1472"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a5d14e0b69a6bd587f9d0da8d56cb1472">miStartLine</a></td></tr>
+<tr class="memdesc:a5d14e0b69a6bd587f9d0da8d56cb1472"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input start line.  <a href="class_isis_1_1_reduce.html#a5d14e0b69a6bd587f9d0da8d56cb1472">More...</a><br /></td></tr>
+<tr class="separator:a5d14e0b69a6bd587f9d0da8d56cb1472"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ac9f6be89793b298a46c1678a3f526b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a6ac9f6be89793b298a46c1678a3f526b">miEndLine</a></td></tr>
+<tr class="memdesc:a6ac9f6be89793b298a46c1678a3f526b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input end line.  <a href="class_isis_1_1_reduce.html#a6ac9f6be89793b298a46c1678a3f526b">More...</a><br /></td></tr>
+<tr class="separator:a6ac9f6be89793b298a46c1678a3f526b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c18011b01e7af7ba8f9953a255d84ea"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a6c18011b01e7af7ba8f9953a255d84ea">mdLine</a></td></tr>
+<tr class="memdesc:a6c18011b01e7af7ba8f9953a255d84ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Line index.  <a href="class_isis_1_1_reduce.html#a6c18011b01e7af7ba8f9953a255d84ea">More...</a><br /></td></tr>
+<tr class="separator:a6c18011b01e7af7ba8f9953a255d84ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92c5e2c86bc75136a767b3b2b3c7f3ee"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a92c5e2c86bc75136a767b3b2b3c7f3ee">miOutputSamples</a></td></tr>
+<tr class="memdesc:a92c5e2c86bc75136a767b3b2b3c7f3ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output Samples.  <a href="class_isis_1_1_reduce.html#a92c5e2c86bc75136a767b3b2b3c7f3ee">More...</a><br /></td></tr>
+<tr class="separator:a92c5e2c86bc75136a767b3b2b3c7f3ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bae6eab735061fb7bc020a93951ea46"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a9bae6eab735061fb7bc020a93951ea46">miOutputLines</a></td></tr>
+<tr class="memdesc:a9bae6eab735061fb7bc020a93951ea46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output Lines.  <a href="class_isis_1_1_reduce.html#a9bae6eab735061fb7bc020a93951ea46">More...</a><br /></td></tr>
+<tr class="separator:a9bae6eab735061fb7bc020a93951ea46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0954586c8224e268d25779e9066d293f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a0954586c8224e268d25779e9066d293f">miInputSamples</a></td></tr>
+<tr class="memdesc:a0954586c8224e268d25779e9066d293f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input Samples.  <a href="class_isis_1_1_reduce.html#a0954586c8224e268d25779e9066d293f">More...</a><br /></td></tr>
+<tr class="separator:a0954586c8224e268d25779e9066d293f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e7dbf70f97416ae2a8b0e59cdbbf2bf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a3e7dbf70f97416ae2a8b0e59cdbbf2bf">miInputLines</a></td></tr>
+<tr class="memdesc:a3e7dbf70f97416ae2a8b0e59cdbbf2bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input Lines.  <a href="class_isis_1_1_reduce.html#a3e7dbf70f97416ae2a8b0e59cdbbf2bf">More...</a><br /></td></tr>
+<tr class="separator:a3e7dbf70f97416ae2a8b0e59cdbbf2bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e321133f2a53540965956260bdc69e5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a9e321133f2a53540965956260bdc69e5">miInputBands</a></td></tr>
+<tr class="memdesc:a9e321133f2a53540965956260bdc69e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input Bands.  <a href="class_isis_1_1_reduce.html#a9e321133f2a53540965956260bdc69e5">More...</a><br /></td></tr>
+<tr class="separator:a9e321133f2a53540965956260bdc69e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c7447f78938ac61e360b2eae75ee314"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#a8c7447f78938ac61e360b2eae75ee314">miBandIndex</a></td></tr>
+<tr class="memdesc:a8c7447f78938ac61e360b2eae75ee314"><td class="mdescLeft">&#160;</td><td class="mdescRight">Band Index.  <a href="class_isis_1_1_reduce.html#a8c7447f78938ac61e360b2eae75ee314">More...</a><br /></td></tr>
+<tr class="separator:a8c7447f78938ac61e360b2eae75ee314"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbafa40fe3c78fa199a2dddb58744bf8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_portal.html">Isis::Portal</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_reduce.html#adbafa40fe3c78fa199a2dddb58744bf8">m_iPortal</a></td></tr>
+<tr class="memdesc:adbafa40fe3c78fa199a2dddb58744bf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input portal.  <a href="class_isis_1_1_reduce.html#adbafa40fe3c78fa199a2dddb58744bf8">More...</a><br /></td></tr>
+<tr class="separator:adbafa40fe3c78fa199a2dddb58744bf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="class_isis_1_1_reduce.html" title="Reduce the pixel dimensions of an image.">Reduce</a> the pixel dimensions of an image. </p>
+<p><a class="el" href="class_isis_1_1_reduce.html" title="Reduce the pixel dimensions of an image.">Reduce</a> the pixel dimensions of an image. Has the functionality to reduce only a sub area in input image to output</p>
+<dl class="section author"><dt>Author</dt><dd>1995-11-06 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a5b8edf85e0a3fd45139abd5d08939960"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b8edf85e0a3fd45139abd5d08939960">&#9670;&nbsp;</a></span>Reduce()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Reduce::Reduce </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a> *&#160;</td>
+          <td class="paramname"><em>pInCube</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>sampleScale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>lineScale</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<p><a class="el" href="class_isis_1_1_reduce.html" title="Reduce the pixel dimensions of an image.">Reduce</a> Constructor.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (4/26/2011)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pInCube</td><td>- Input cube </td></tr>
+    <tr><td class="paramname">psBands</td><td>- Bands list </td></tr>
+    <tr><td class="paramname">sampleScale</td><td>- Sample scale </td></tr>
+    <tr><td class="paramname">lineScale</td><td>- Line scale </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube.html#a6336fc0d356682258017972eeaf49c12">Isis::Cube::sampleCount()</a>.</p>
+
+</div>
+</div>
+<a id="a1bf4870d2b78972a817b8a5268b2b469"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bf4870d2b78972a817b8a5268b2b469">&#9670;&nbsp;</a></span>~Reduce()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Reduce::~Reduce </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/11/2011) </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9da43827811086be2b6d1079b517e695"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9da43827811086be2b6d1079b517e695">&#9670;&nbsp;</a></span>setInputBoundary()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Reduce::setInputBoundary </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>startSample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>endSample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>startLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>endLine</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parameters to input image sub area. </p>
+<p>Parameters to input image sub area to be reduced.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/11/2011)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">startSample</td><td>- input image start sample </td></tr>
+    <tr><td class="paramname">endSample</td><td>- input image end sample </td></tr>
+    <tr><td class="paramname">startLine</td><td>- input image start line </td></tr>
+    <tr><td class="paramname">endLine</td><td>- input image end line </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a83f06d7b857e08441d58aaf7ff29b33c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83f06d7b857e08441d58aaf7ff29b33c">&#9670;&nbsp;</a></span>UpdateOutputLabel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a> Isis::Reduce::UpdateOutputLabel </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a> *&#160;</td>
+          <td class="paramname"><em>pOutCube</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create label for the reduced output image. </p>
+<p>Update the Mapping, Instrument, and <a class="el" href="class_isis_1_1_alpha_cube.html" title="This class is used to rewrite the &quot;alpha&quot; keywords out of the AlphaCube group or Instrument group.">AlphaCube</a> groups in the output cube label.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pOutCube</td><td>- Resulting reduced output cube </td></tr>
+    <tr><td class="paramname">pResultsGrp</td><td>- This is the Results group that will go into the application log file. This group must be created by the calling application. Information will be added to it if the Mapping or Instrument groups are deleted from the output image label </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_sub_area.html#ae9f5f64b42816697b6542c8d78fc76c2">Isis::SubArea::SetSubArea()</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, and <a class="el" href="class_isis_1_1_sub_area.html#ad16f422d6ffac7aff5f5c31ebbbda638">Isis::SubArea::UpdateLabel()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="adbafa40fe3c78fa199a2dddb58744bf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbafa40fe3c78fa199a2dddb58744bf8">&#9670;&nbsp;</a></span>m_iPortal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_portal.html">Isis::Portal</a>* Isis::Reduce::m_iPortal</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Input portal. </p>
+
+</div>
+</div>
+<a id="a6c18011b01e7af7ba8f9953a255d84ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c18011b01e7af7ba8f9953a255d84ea">&#9670;&nbsp;</a></span>mdLine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Reduce::mdLine</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Line index. </p>
+
+</div>
+</div>
+<a id="a76d77e0e2ea5d1cbcdffed07c6c396ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76d77e0e2ea5d1cbcdffed07c6c396ec">&#9670;&nbsp;</a></span>mdLineScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Reduce::mdLineScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Line scale. </p>
+
+</div>
+</div>
+<a id="a06041fa41132c1e32ca80e852e094e8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06041fa41132c1e32ca80e852e094e8c">&#9670;&nbsp;</a></span>mdSampleScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Reduce::mdSampleScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sample scale. </p>
+
+</div>
+</div>
+<a id="a8c7447f78938ac61e360b2eae75ee314"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c7447f78938ac61e360b2eae75ee314">&#9670;&nbsp;</a></span>miBandIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Reduce::miBandIndex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Band Index. </p>
+
+</div>
+</div>
+<a id="a6ac9f6be89793b298a46c1678a3f526b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ac9f6be89793b298a46c1678a3f526b">&#9670;&nbsp;</a></span>miEndLine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Reduce::miEndLine</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Input end line. </p>
+
+</div>
+</div>
+<a id="a2c683c0cb830792ed403b868f4ef10df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c683c0cb830792ed403b868f4ef10df">&#9670;&nbsp;</a></span>miEndSample</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Reduce::miEndSample</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Input end sample. </p>
+
+</div>
+</div>
+<a id="a9e321133f2a53540965956260bdc69e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e321133f2a53540965956260bdc69e5">&#9670;&nbsp;</a></span>miInputBands</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Reduce::miInputBands</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Input Bands. </p>
+
+</div>
+</div>
+<a id="a3e7dbf70f97416ae2a8b0e59cdbbf2bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e7dbf70f97416ae2a8b0e59cdbbf2bf">&#9670;&nbsp;</a></span>miInputLines</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Reduce::miInputLines</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Input Lines. </p>
+
+</div>
+</div>
+<a id="a0954586c8224e268d25779e9066d293f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0954586c8224e268d25779e9066d293f">&#9670;&nbsp;</a></span>miInputSamples</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Reduce::miInputSamples</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Input Samples. </p>
+
+</div>
+</div>
+<a id="abb19323379dfa54d1249341e1728e000"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb19323379dfa54d1249341e1728e000">&#9670;&nbsp;</a></span>mInCube</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a>* Isis::Reduce::mInCube</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Input image. </p>
+
+</div>
+</div>
+<a id="a9bae6eab735061fb7bc020a93951ea46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bae6eab735061fb7bc020a93951ea46">&#9670;&nbsp;</a></span>miOutputLines</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Reduce::miOutputLines</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Output Lines. </p>
+
+</div>
+</div>
+<a id="a92c5e2c86bc75136a767b3b2b3c7f3ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92c5e2c86bc75136a767b3b2b3c7f3ee">&#9670;&nbsp;</a></span>miOutputSamples</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Reduce::miOutputSamples</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Output Samples. </p>
+
+</div>
+</div>
+<a id="a5d14e0b69a6bd587f9d0da8d56cb1472"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d14e0b69a6bd587f9d0da8d56cb1472">&#9670;&nbsp;</a></span>miStartLine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Reduce::miStartLine</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Input start line. </p>
+
+</div>
+</div>
+<a id="a2e38c31a06529edc176fcd6eb36c7645"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e38c31a06529edc176fcd6eb36c7645">&#9670;&nbsp;</a></span>miStartSample</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Reduce::miStartSample</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Input start sample. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Reduce/<a class="el" href="_reduce_8h_source.html">Reduce.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Reduce/<a class="el" href="_reduce_8cpp.html">Reduce.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_reduce.html">Reduce</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

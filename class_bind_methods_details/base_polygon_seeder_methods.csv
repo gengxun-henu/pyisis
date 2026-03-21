@@ -1,0 +1,12 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+PolygonSeeder,Pattern Matching,isis/src/base/objs/PolygonSeeder/PolygonSeeder.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,PolygonSeeder,isis_pybind.PolygonSeeder,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,PolygonSeeder(),isis_pybind.PolygonSeeder(),N,抽象基类/纯虚接口
+Public API,virtual std::vector<geos::geom::Point *> Seed(const geos::geom::MultiPolygon *mp) = 0,isis_pybind.PolygonSeeder.seed,N,抽象基类/纯虚接口
+Public API,double MinimumThickness(),isis_pybind.PolygonSeeder.minimum_thickness,N,抽象基类/纯虚接口
+Public API,double MinimumArea(),isis_pybind.PolygonSeeder.minimum_area,N,抽象基类/纯虚接口
+Public API,QString Algorithm() const,isis_pybind.PolygonSeeder.algorithm,N,抽象基类/纯虚接口
+Public API,virtual PvlGroup PluginParameters(QString grpName),isis_pybind.PolygonSeeder.plugin_parameters,N,抽象基类/纯虚接口
+Public API,Pvl InvalidInput(),isis_pybind.PolygonSeeder.invalid_input,N,抽象基类/纯虚接口

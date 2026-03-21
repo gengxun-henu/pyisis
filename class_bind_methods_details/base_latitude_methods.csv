@@ -1,0 +1,17 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Latitude,Utility,isis/src/base/objs/Latitude/Latitude.h,isis_pybind_standalone/src/base/bind_base_geometry.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Latitude,isis_pybind.Latitude,Y,Python class symbol is exported
+Construction/Enum,"ErrorChecking enum (ThrowAllErrors, AllowPastPole)",isis_pybind.Latitude.ErrorChecking,N,Enum exposure not detected in current binding files
+Construction/Enum,"CoordinateType enum (Planetocentric, Planetographic)",isis_pybind.Latitude.CoordinateType,N,Enum exposure not detected in current binding files
+Construction/Enum,Latitude(),isis_pybind.Latitude(),Y,Constructor is explicitly bound
+Public API,double planetocentric(Angle::Units units = Angle::Radians) const,isis_pybind.Latitude.planetocentric,N,Method not found in current binding files
+Mutation/Configuration,"void setPlanetocentric(double latitude, Angle::Units units = Angle::Radians)",isis_pybind.Latitude.set_planetocentric,N,Method not found in current binding files
+Public API,double planetographic(Angle::Units units = Angle::Radians) const,isis_pybind.Latitude.planetographic,N,Method not found in current binding files
+Mutation/Configuration,"void setPlanetographic(double latitude, Angle::Units units = Angle::Radians)",isis_pybind.Latitude.set_planetographic,N,Method not found in current binding files
+Public API,ErrorChecking errorChecking() const,isis_pybind.Latitude.error_checking,N,Method not found in current binding files
+Mutation/Configuration,void setErrorChecking(ErrorChecking errors),isis_pybind.Latitude.set_error_checking,N,Method not found in current binding files
+Public API,"bool inRange(Latitude min, Latitude max) const",isis_pybind.Latitude.in_range,N,Method not found in current binding files
+Mutation/Configuration,"Latitude add(Angle angleToAdd, PvlGroup mapping)",isis_pybind.Latitude.add,N,Method not found in current binding files
+Mutation/Configuration,"Latitude add(Angle angleToAdd, Distance equatorialRadius, Distance polarRadius, CoordinateType latType)",isis_pybind.Latitude.add,N,Method not found in current binding files

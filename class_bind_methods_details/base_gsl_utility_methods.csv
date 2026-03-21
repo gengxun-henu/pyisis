@@ -1,0 +1,25 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+GSLUtility,Utility,isis/src/base/objs/GSLUtility/GSLUtility.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,GSLUtility,isis_pybind.GSLUtility,N,Python class symbol not found in current binding files
+Static/Factory,static GSLUtility *getInstance(),isis_pybind.GSLUtility.get_instance,N,Method not found in current binding files
+Public API,inline bool success(int status) const { return (status == GSL_SUCCESS),isis_pybind.GSLUtility.success,N,Method not found in current binding files
+Public API,inline QString status(int gsl_errno) const { return (QString(gsl_strerror(gsl_errno))),isis_pybind.GSLUtility.status,N,Method not found in current binding files
+Public API,"void check(int gsl_status, const char *src = __FILE__, int line = __LINE__) const",isis_pybind.GSLUtility.check,N,Method not found in current binding files
+Public API,size_t Rows(const gsl_matrix *m) const,isis_pybind.GSLUtility.rows,N,Method not found in current binding files
+Public API,size_t Columns(const gsl_matrix *m) const,isis_pybind.GSLUtility.columns,N,Method not found in current binding files
+Public API,size_t Rows(const GSLMatrix &m) const,isis_pybind.GSLUtility.rows,N,Method not found in current binding files
+Public API,size_t Columns(const GSLMatrix &m) const,isis_pybind.GSLUtility.columns,N,Method not found in current binding files
+Query,size_t size(const gsl_vector *v) const,isis_pybind.GSLUtility.size,N,Method not found in current binding files
+Query,size_t size(const gsl_matrix *m) const,isis_pybind.GSLUtility.size,N,Method not found in current binding files
+Public API,"gsl_vector *vector(size_t n, bool zero = false) const",isis_pybind.GSLUtility.vector,N,Method not found in current binding files
+Public API,"gsl_matrix *matrix(size_t n1, size_t n2, bool zero = false) const",isis_pybind.GSLUtility.matrix,N,Method not found in current binding files
+Public API,"gsl_matrix *identity(size_t n1, size_t n2) const",isis_pybind.GSLUtility.identity,N,Method not found in current binding files
+Mutation/Configuration,void setIdentity(gsl_matrix *m) const,isis_pybind.GSLUtility.set_identity,N,Method not found in current binding files
+Public API,void free(gsl_vector *v) const,isis_pybind.GSLUtility.free,N,Method not found in current binding files
+Public API,void free(gsl_matrix *m) const,isis_pybind.GSLUtility.free,N,Method not found in current binding files
+Public API,GSLVector gslToGSL(const gsl_vector *v) const,isis_pybind.GSLUtility.gsl_to_gsl,N,Method not found in current binding files
+Public API,GSLMatrix gslToGSL(const gsl_matrix *m) const,isis_pybind.GSLUtility.gsl_to_gsl,N,Method not found in current binding files
+Public API,"gsl_vector *GSLTogsl(const GSLVector &v, gsl_vector *gv = 0) const",isis_pybind.GSLUtility.gsl_togsl,N,Method not found in current binding files
+Public API,"gsl_matrix *GSLTogsl(const GSLMatrix &m, gsl_matrix *gm = 0) const",isis_pybind.GSLUtility.gsl_togsl,N,Method not found in current binding files

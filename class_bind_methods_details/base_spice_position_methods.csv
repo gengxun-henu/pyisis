@@ -1,0 +1,47 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+SpicePosition,"Spice, Instruments, and Cameras",isis/src/base/objs/SpicePosition/SpicePosition.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,SpicePosition,isis_pybind.SpicePosition,N,Python class symbol not found in current binding files
+Construction/Enum,"Source enum (Spice, Memcache, HermiteCache, PolyFunction, PolyFunctionOverHermiteConstant)",isis_pybind.SpicePosition.Source,N,Enum exposure not detected in current binding files
+Construction/Enum,"PartialType enum (WRT_X, WRT_Y, WRT_Z)",isis_pybind.SpicePosition.PartialType,N,Enum exposure not detected in current binding files
+Construction/Enum,"OverrideType enum (NoOverrides, ScaleOnly, BaseAndScale)",isis_pybind.SpicePosition.OverrideType,N,Enum exposure not detected in current binding files
+Construction/Enum,SpicePosition(),isis_pybind.SpicePosition(),N,Constructor binding not detected in current binding files
+Mutation/Configuration,void SetTimeBias(double timeBias),isis_pybind.SpicePosition.set_time_bias,N,Method not found in current binding files
+Public API,double GetTimeBias() const,isis_pybind.SpicePosition.get_time_bias,N,Method not found in current binding files
+Mutation/Configuration,virtual void SetAberrationCorrection(const QString &correction),isis_pybind.SpicePosition.set_aberration_correction,N,Method not found in current binding files
+Public API,virtual QString GetAberrationCorrection() const,isis_pybind.SpicePosition.get_aberration_correction,N,Method not found in current binding files
+Public API,double GetLightTime() const,isis_pybind.SpicePosition.get_light_time,N,Method not found in current binding files
+Mutation/Configuration,virtual const std::vector<double> &SetEphemerisTime(double et),isis_pybind.SpicePosition.set_ephemeris_time,N,Method not found in current binding files
+Public API,virtual double EphemerisTime() const { return p_et,isis_pybind.SpicePosition.ephemeris_time,N,Method not found in current binding files
+Public API,double scaledTime() const,isis_pybind.SpicePosition.scaled_time,N,Method not found in current binding files
+Public API,const std::vector<double> &GetCenterCoordinate(),isis_pybind.SpicePosition.get_center_coordinate,N,Method not found in current binding files
+Public API,virtual const std::vector<double> &Coordinate() { return p_coordinate,isis_pybind.SpicePosition.coordinate,N,Method not found in current binding files
+Public API,const std::vector<double> &Velocity(),isis_pybind.SpicePosition.velocity,N,Method not found in current binding files
+Query,bool HasVelocity() { return p_hasVelocity,isis_pybind.SpicePosition.has_velocity,N,Method not found in current binding files
+Read/Write IO,"void LoadCache(double startTime, double endTime, int size)",isis_pybind.SpicePosition.load_cache,N,Method not found in current binding files
+Read/Write IO,void LoadCache(double time),isis_pybind.SpicePosition.load_cache,N,Method not found in current binding files
+Read/Write IO,void LoadCache(Table &table),isis_pybind.SpicePosition.load_cache,N,Method not found in current binding files
+Read/Write IO,void LoadCache(nlohmann::json &isd),isis_pybind.SpicePosition.load_cache,N,Method not found in current binding files
+Public API,Table LineCache(const QString &tableName),isis_pybind.SpicePosition.line_cache,N,Method not found in current binding files
+Read/Write IO,Table LoadHermiteCache(const QString &tableName),isis_pybind.SpicePosition.load_hermite_cache,N,Method not found in current binding files
+Public API,void ReloadCache(),isis_pybind.SpicePosition.reload_cache,N,Method not found in current binding files
+Public API,void ReloadCache(Table &table),isis_pybind.SpicePosition.reload_cache,N,Method not found in current binding files
+Public API,Table Cache(const QString &tableName),isis_pybind.SpicePosition.cache,N,Method not found in current binding files
+Query,bool IsCached() const { return (m_state != NULL),isis_pybind.SpicePosition.is_cached,N,Method not found in current binding files
+Public API,int cacheSize() const { if (m_state) { return m_state->getStates().size(),isis_pybind.SpicePosition.cache_size,N,Method not found in current binding files
+Mutation/Configuration,void SetPolynomial(const Source type = PolyFunction),isis_pybind.SpicePosition.set_polynomial,N,Method not found in current binding files
+Mutation/Configuration,"void SetPolynomial(const std::vector<double>& XC, const std::vector<double>& YC, const std::vector<double>& ZC, const Source type = PolyFunction)",isis_pybind.SpicePosition.set_polynomial,N,Method not found in current binding files
+Public API,"void GetPolynomial(std::vector<double>& XC, std::vector<double>& YC, std::vector<double>& ZC)",isis_pybind.SpicePosition.get_polynomial,N,Method not found in current binding files
+Mutation/Configuration,void SetPolynomialDegree(int degree),isis_pybind.SpicePosition.set_polynomial_degree,N,Method not found in current binding files
+Public API,Source GetSource() { return p_source,isis_pybind.SpicePosition.get_source,N,Method not found in current binding files
+Public API,void ComputeBaseTime(),isis_pybind.SpicePosition.compute_base_time,N,Method not found in current binding files
+Public API,double GetBaseTime() { return p_baseTime,isis_pybind.SpicePosition.get_base_time,N,Method not found in current binding files
+Mutation/Configuration,"void SetOverrideBaseTime(double baseTime, double timeScale)",isis_pybind.SpicePosition.set_override_base_time,N,Method not found in current binding files
+Public API,double GetTimeScale() { return p_timeScale,isis_pybind.SpicePosition.get_time_scale,N,Method not found in current binding files
+Public API,double DPolynomial(const int coeffIndex),isis_pybind.SpicePosition.d_polynomial,N,Method not found in current binding files
+Public API,"std::vector<double> CoordinatePartial(SpicePosition::PartialType partialVar, int coeffIndex)",isis_pybind.SpicePosition.coordinate_partial,N,Method not found in current binding files
+Public API,"std::vector<double> VelocityPartial(SpicePosition::PartialType partialVar, int coeffIndex)",isis_pybind.SpicePosition.velocity_partial,N,Method not found in current binding files
+Public API,void Memcache2HermiteCache(double tolerance),isis_pybind.SpicePosition.memcache2_hermite_cache,N,Method not found in current binding files
+Public API,std::vector<double> Extrapolate(double timeEt),isis_pybind.SpicePosition.extrapolate,N,Method not found in current binding files
+Public API,std::vector<double> HermiteCoordinate(),isis_pybind.SpicePosition.hermite_coordinate,N,Method not found in current binding files

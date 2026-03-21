@@ -1,0 +1,1585 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::CubeStretch Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_cube_stretch.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_cube_stretch-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::CubeStretch Class Reference<div class="ingroups"><a class="el" href="group___utility.html">Utility</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Stores stretch information for a cube.  
+ <a href="class_isis_1_1_cube_stretch.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_cube_stretch_8h_source.html">CubeStretch.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::CubeStretch:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_cube_stretch__inherit__graph.png" border="0" usemap="#a_isis_1_1_cube_stretch_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_cube_stretch_inherit__map" id="a_isis_1_1_cube_stretch_inherit__map">
+<area shape="rect" title="Stores stretch information for a cube." alt="" coords="5,295,141,584"/>
+<area shape="rect" href="class_isis_1_1_stretch.html" title="Pixel value mapper." alt="" coords="14,5,132,247"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::CubeStretch:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_cube_stretch__coll__graph.png" border="0" usemap="#a_isis_1_1_cube_stretch_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_cube_stretch_coll__map" id="a_isis_1_1_cube_stretch_coll__map">
+<area shape="rect" title="Stores stretch information for a cube." alt="" coords="5,295,141,584"/>
+<area shape="rect" href="class_isis_1_1_stretch.html" title="Pixel value mapper." alt="" coords="14,5,132,247"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aae3d9a83ee3d80dbfd76783ce498ce2a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#aae3d9a83ee3d80dbfd76783ce498ce2a">CubeStretch</a> (QString name=&quot;DefaultStretch&quot;, QString stretchType=&quot;Default&quot;, int bandNumber=1)</td></tr>
+<tr class="memdesc:aae3d9a83ee3d80dbfd76783ce498ce2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> object with default mapping of special pixel values to themselves and a provided name, and a provided stretch type.  <a href="class_isis_1_1_cube_stretch.html#aae3d9a83ee3d80dbfd76783ce498ce2a">More...</a><br /></td></tr>
+<tr class="separator:aae3d9a83ee3d80dbfd76783ce498ce2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7bf8374b11ea2d55c452481815868a6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#af7bf8374b11ea2d55c452481815868a6">CubeStretch</a> (<a class="el" href="class_isis_1_1_cube_stretch.html">CubeStretch</a> const &amp;stretch)</td></tr>
+<tr class="memdesc:af7bf8374b11ea2d55c452481815868a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor for a <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a>.  <a href="class_isis_1_1_cube_stretch.html#af7bf8374b11ea2d55c452481815868a6">More...</a><br /></td></tr>
+<tr class="separator:af7bf8374b11ea2d55c452481815868a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0f40ae6d9550bc743bfa3a864a43fbf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#ae0f40ae6d9550bc743bfa3a864a43fbf">CubeStretch</a> (<a class="el" href="class_isis_1_1_stretch.html">Stretch</a> const &amp;stretch)</td></tr>
+<tr class="memdesc:ae0f40ae6d9550bc743bfa3a864a43fbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> object from a normal <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a>.  <a href="class_isis_1_1_cube_stretch.html#ae0f40ae6d9550bc743bfa3a864a43fbf">More...</a><br /></td></tr>
+<tr class="separator:ae0f40ae6d9550bc743bfa3a864a43fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedb37a6b67fd04c86e9f8a322002ca07"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#aedb37a6b67fd04c86e9f8a322002ca07">CubeStretch</a> (<a class="el" href="class_isis_1_1_stretch.html">Stretch</a> const &amp;stretch, QString type)</td></tr>
+<tr class="memdesc:aedb37a6b67fd04c86e9f8a322002ca07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> object from a normal <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a>.  <a href="class_isis_1_1_cube_stretch.html#aedb37a6b67fd04c86e9f8a322002ca07">More...</a><br /></td></tr>
+<tr class="separator:aedb37a6b67fd04c86e9f8a322002ca07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6a57c2358bbb568b01647a34b336610"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#ab6a57c2358bbb568b01647a34b336610">CubeStretch</a> (<a class="el" href="class_isis_1_1_blob.html">Blob</a> blob)</td></tr>
+<tr class="memdesc:ab6a57c2358bbb568b01647a34b336610"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> from a <a class="el" href="class_isis_1_1_blob.html">Blob</a>.  <a href="class_isis_1_1_cube_stretch.html#ab6a57c2358bbb568b01647a34b336610">More...</a><br /></td></tr>
+<tr class="separator:ab6a57c2358bbb568b01647a34b336610"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a110c6606bbc616b0b826c3dee0b21ae1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#a110c6606bbc616b0b826c3dee0b21ae1">~CubeStretch</a> ()</td></tr>
+<tr class="separator:a110c6606bbc616b0b826c3dee0b21ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31a4203f31ff54c8506ba03d682eb31d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#a31a4203f31ff54c8506ba03d682eb31d">operator==</a> (<a class="el" href="class_isis_1_1_cube_stretch.html">CubeStretch</a> &amp;stretch2)</td></tr>
+<tr class="memdesc:a31a4203f31ff54c8506ba03d682eb31d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the CubeStretches are equal.  <a href="class_isis_1_1_cube_stretch.html#a31a4203f31ff54c8506ba03d682eb31d">More...</a><br /></td></tr>
+<tr class="separator:a31a4203f31ff54c8506ba03d682eb31d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a761e61e36d19f995a580dcfb22ab3fc6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_blob.html">Isis::Blob</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#a761e61e36d19f995a580dcfb22ab3fc6">toBlob</a> () const</td></tr>
+<tr class="memdesc:a761e61e36d19f995a580dcfb22ab3fc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize the <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> to a <a class="el" href="class_isis_1_1_blob.html">Blob</a>.  <a href="class_isis_1_1_cube_stretch.html#a761e61e36d19f995a580dcfb22ab3fc6">More...</a><br /></td></tr>
+<tr class="separator:a761e61e36d19f995a580dcfb22ab3fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae67c00fb410127e7c68fc9006973ffc0"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#ae67c00fb410127e7c68fc9006973ffc0">getType</a> () const</td></tr>
+<tr class="memdesc:ae67c00fb410127e7c68fc9006973ffc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Type of <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a>.  <a href="class_isis_1_1_cube_stretch.html#ae67c00fb410127e7c68fc9006973ffc0">More...</a><br /></td></tr>
+<tr class="separator:ae67c00fb410127e7c68fc9006973ffc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaf3f5e180d6693e0b8e49a51700b16a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#aeaf3f5e180d6693e0b8e49a51700b16a">setType</a> (QString stretchType)</td></tr>
+<tr class="memdesc:aeaf3f5e180d6693e0b8e49a51700b16a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the type of <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a>.  <a href="class_isis_1_1_cube_stretch.html#aeaf3f5e180d6693e0b8e49a51700b16a">More...</a><br /></td></tr>
+<tr class="separator:aeaf3f5e180d6693e0b8e49a51700b16a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dce6774f9ad679eb5c46aa76455c826"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#a7dce6774f9ad679eb5c46aa76455c826">getName</a> () const</td></tr>
+<tr class="memdesc:a7dce6774f9ad679eb5c46aa76455c826"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> name.  <a href="class_isis_1_1_cube_stretch.html#a7dce6774f9ad679eb5c46aa76455c826">More...</a><br /></td></tr>
+<tr class="separator:a7dce6774f9ad679eb5c46aa76455c826"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ac8ab48760dff464c37acb3da2b7e33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#a4ac8ab48760dff464c37acb3da2b7e33">setName</a> (QString name)</td></tr>
+<tr class="memdesc:a4ac8ab48760dff464c37acb3da2b7e33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> name.  <a href="class_isis_1_1_cube_stretch.html#a4ac8ab48760dff464c37acb3da2b7e33">More...</a><br /></td></tr>
+<tr class="separator:a4ac8ab48760dff464c37acb3da2b7e33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4328ea3d7871053e897007ece5ba6a1a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#a4328ea3d7871053e897007ece5ba6a1a">getBandNumber</a> () const</td></tr>
+<tr class="memdesc:a4328ea3d7871053e897007ece5ba6a1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the band number for the stretch.  <a href="class_isis_1_1_cube_stretch.html#a4328ea3d7871053e897007ece5ba6a1a">More...</a><br /></td></tr>
+<tr class="separator:a4328ea3d7871053e897007ece5ba6a1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ee6c0a106e8d7ab61302c8af6ac02be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_stretch.html#a0ee6c0a106e8d7ab61302c8af6ac02be">setBandNumber</a> (int bandNumber)</td></tr>
+<tr class="memdesc:a0ee6c0a106e8d7ab61302c8af6ac02be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the band number for the stretch.  <a href="class_isis_1_1_cube_stretch.html#a0ee6c0a106e8d7ab61302c8af6ac02be">More...</a><br /></td></tr>
+<tr class="separator:a0ee6c0a106e8d7ab61302c8af6ac02be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0874817fdd51d7fefb3e92ee876fad0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a0874817fdd51d7fefb3e92ee876fad0a">AddPair</a> (const double input, const double output)</td></tr>
+<tr class="memdesc:a0874817fdd51d7fefb3e92ee876fad0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a stretch pair to the list of pairs.  <a href="class_isis_1_1_stretch.html#a0874817fdd51d7fefb3e92ee876fad0a">More...</a><br /></td></tr>
+<tr class="separator:a0874817fdd51d7fefb3e92ee876fad0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23217c73947267e9daf07b71a9dfb7e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a23217c73947267e9daf07b71a9dfb7e2">SetNull</a> (const double value)</td></tr>
+<tr class="memdesc:a23217c73947267e9daf07b71a9dfb7e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the mapping for NULL pixels.  <a href="class_isis_1_1_stretch.html#a23217c73947267e9daf07b71a9dfb7e2">More...</a><br /></td></tr>
+<tr class="separator:a23217c73947267e9daf07b71a9dfb7e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab80f5bf9e2970ef26112687345400ae8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#ab80f5bf9e2970ef26112687345400ae8">SetLis</a> (const double value)</td></tr>
+<tr class="memdesc:ab80f5bf9e2970ef26112687345400ae8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the mapping for LIS pixels.  <a href="class_isis_1_1_stretch.html#ab80f5bf9e2970ef26112687345400ae8">More...</a><br /></td></tr>
+<tr class="separator:ab80f5bf9e2970ef26112687345400ae8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd00522d8efec39dca5546396babe839"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#afd00522d8efec39dca5546396babe839">SetLrs</a> (const double value)</td></tr>
+<tr class="memdesc:afd00522d8efec39dca5546396babe839"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the mapping for LRS pixels.  <a href="class_isis_1_1_stretch.html#afd00522d8efec39dca5546396babe839">More...</a><br /></td></tr>
+<tr class="separator:afd00522d8efec39dca5546396babe839"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0c37f3e38a767b3e675d182b87e334e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#ab0c37f3e38a767b3e675d182b87e334e">SetHis</a> (const double value)</td></tr>
+<tr class="memdesc:ab0c37f3e38a767b3e675d182b87e334e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the mapping for HIS pixels.  <a href="class_isis_1_1_stretch.html#ab0c37f3e38a767b3e675d182b87e334e">More...</a><br /></td></tr>
+<tr class="separator:ab0c37f3e38a767b3e675d182b87e334e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52d51416b75f5c759d448ce61665e497"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a52d51416b75f5c759d448ce61665e497">SetHrs</a> (const double value)</td></tr>
+<tr class="memdesc:a52d51416b75f5c759d448ce61665e497"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the mapping for HRS pixels.  <a href="class_isis_1_1_stretch.html#a52d51416b75f5c759d448ce61665e497">More...</a><br /></td></tr>
+<tr class="separator:a52d51416b75f5c759d448ce61665e497"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6827bd46e83311b91d1b14042cb9fe88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a6827bd46e83311b91d1b14042cb9fe88">SetMinimum</a> (const double value)</td></tr>
+<tr class="separator:a6827bd46e83311b91d1b14042cb9fe88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a234078b4634be9bb2a17ad554663cb5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a234078b4634be9bb2a17ad554663cb5d">SetMaximum</a> (const double value)</td></tr>
+<tr class="separator:a234078b4634be9bb2a17ad554663cb5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc5bfc5b2deec0ed4e8c5a07083d3564"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#afc5bfc5b2deec0ed4e8c5a07083d3564">Load</a> (<a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl, QString &amp;grpName)</td></tr>
+<tr class="memdesc:afc5bfc5b2deec0ed4e8c5a07083d3564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the stretch pairs from the pvl file into the <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> object.  <a href="class_isis_1_1_stretch.html#afc5bfc5b2deec0ed4e8c5a07083d3564">More...</a><br /></td></tr>
+<tr class="separator:afc5bfc5b2deec0ed4e8c5a07083d3564"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6beaae51c4709cca3e8a83b8f72a9f49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a6beaae51c4709cca3e8a83b8f72a9f49">Load</a> (QString &amp;file, QString &amp;grpName)</td></tr>
+<tr class="memdesc:a6beaae51c4709cca3e8a83b8f72a9f49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the stretch pairs from the pvl file into the <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> object.  <a href="class_isis_1_1_stretch.html#a6beaae51c4709cca3e8a83b8f72a9f49">More...</a><br /></td></tr>
+<tr class="separator:a6beaae51c4709cca3e8a83b8f72a9f49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37e330414e39f2fa5d3c43dcef1dc90e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a37e330414e39f2fa5d3c43dcef1dc90e">Save</a> (<a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl, QString &amp;grpName)</td></tr>
+<tr class="separator:a37e330414e39f2fa5d3c43dcef1dc90e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60613867b9bef340d860bf62461817c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a60613867b9bef340d860bf62461817c6">Save</a> (QString &amp;file, QString &amp;grpName)</td></tr>
+<tr class="memdesc:a60613867b9bef340d860bf62461817c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the stretch pairs in the <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> object into the given pvl file.  <a href="class_isis_1_1_stretch.html#a60613867b9bef340d860bf62461817c6">More...</a><br /></td></tr>
+<tr class="separator:a60613867b9bef340d860bf62461817c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af34aba8d4791daab481d2315ec98f33f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#af34aba8d4791daab481d2315ec98f33f">Map</a> (const double value) const</td></tr>
+<tr class="memdesc:af34aba8d4791daab481d2315ec98f33f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maps an input value to an output value based on the stretch pairs and/or special pixel mappings.  <a href="class_isis_1_1_stretch.html#af34aba8d4791daab481d2315ec98f33f">More...</a><br /></td></tr>
+<tr class="separator:af34aba8d4791daab481d2315ec98f33f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a064a71cc80742476ad31a55d46ce4ae1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a064a71cc80742476ad31a55d46ce4ae1">Parse</a> (const QString &amp;pairs)</td></tr>
+<tr class="memdesc:a064a71cc80742476ad31a55d46ce4ae1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a string of the form "i1:o1 i2:o2...iN:oN" where each i:o represents an input:output pair.  <a href="class_isis_1_1_stretch.html#a064a71cc80742476ad31a55d46ce4ae1">More...</a><br /></td></tr>
+<tr class="separator:a064a71cc80742476ad31a55d46ce4ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f4550722fa077493737ccddde193dc5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a9f4550722fa077493737ccddde193dc5">Parse</a> (const QString &amp;pairs, const <a class="el" href="class_isis_1_1_histogram.html">Isis::Histogram</a> *hist)</td></tr>
+<tr class="memdesc:a9f4550722fa077493737ccddde193dc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a string of the form "i1:o1 i2:o2...iN:oN" where each i:o represents an input:output pair where the input is a percentage.  <a href="class_isis_1_1_stretch.html#a9f4550722fa077493737ccddde193dc5">More...</a><br /></td></tr>
+<tr class="separator:a9f4550722fa077493737ccddde193dc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affeda5003a4c9ace863525cd5d428f43"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#affeda5003a4c9ace863525cd5d428f43">Text</a> () const</td></tr>
+<tr class="memdesc:affeda5003a4c9ace863525cd5d428f43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts stretch pair to a string.  <a href="class_isis_1_1_stretch.html#affeda5003a4c9ace863525cd5d428f43">More...</a><br /></td></tr>
+<tr class="separator:affeda5003a4c9ace863525cd5d428f43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af56580ead933ed3aa6ff5a4843c36d2e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#af56580ead933ed3aa6ff5a4843c36d2e">Pairs</a> () const</td></tr>
+<tr class="memdesc:af56580ead933ed3aa6ff5a4843c36d2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of stretch pairs.  <a href="class_isis_1_1_stretch.html#af56580ead933ed3aa6ff5a4843c36d2e">More...</a><br /></td></tr>
+<tr class="separator:af56580ead933ed3aa6ff5a4843c36d2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98ac83787150c6f134940db9fa0e40b7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a98ac83787150c6f134940db9fa0e40b7">Input</a> (const int index) const</td></tr>
+<tr class="memdesc:a98ac83787150c6f134940db9fa0e40b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the input side of the stretch pair at the specified index.  <a href="class_isis_1_1_stretch.html#a98ac83787150c6f134940db9fa0e40b7">More...</a><br /></td></tr>
+<tr class="separator:a98ac83787150c6f134940db9fa0e40b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63acef90a108bcf91c5aae8b64165960"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a63acef90a108bcf91c5aae8b64165960">Output</a> (const int index) const</td></tr>
+<tr class="memdesc:a63acef90a108bcf91c5aae8b64165960"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the output side of the stretch pair at the specified index.  <a href="class_isis_1_1_stretch.html#a63acef90a108bcf91c5aae8b64165960">More...</a><br /></td></tr>
+<tr class="separator:a63acef90a108bcf91c5aae8b64165960"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae72330147243d385b88076f048df88f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#ae72330147243d385b88076f048df88f9">ClearPairs</a> ()</td></tr>
+<tr class="memdesc:ae72330147243d385b88076f048df88f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the stretch pairs.  <a href="class_isis_1_1_stretch.html#ae72330147243d385b88076f048df88f9">More...</a><br /></td></tr>
+<tr class="separator:ae72330147243d385b88076f048df88f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a031365f2d8269a360a8463e58d94e160"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stretch.html#a031365f2d8269a360a8463e58d94e160">CopyPairs</a> (const <a class="el" href="class_isis_1_1_stretch.html">Stretch</a> &amp;other)</td></tr>
+<tr class="memdesc:a031365f2d8269a360a8463e58d94e160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the stretch pairs from another <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> object, but maintains special pixel values.  <a href="class_isis_1_1_stretch.html#a031365f2d8269a360a8463e58d94e160">More...</a><br /></td></tr>
+<tr class="separator:a031365f2d8269a360a8463e58d94e160"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Stores stretch information for a cube. </p>
+<p>Stores stretch pairs, band number associated with the stretch, and the stretch type from the Advanced <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> <a class="el" href="class_isis_1_1_tool.html" title="Base class for the Qisis tools.">Tool</a> (or 'Default' if not specified)</p>
+<dl class="section author"><dt>Author</dt><dd>2020-07-28 Kristin Berry </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aae3d9a83ee3d80dbfd76783ce498ce2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae3d9a83ee3d80dbfd76783ce498ce2a">&#9670;&nbsp;</a></span>CubeStretch() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CubeStretch::CubeStretch </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em> = <code>&quot;DefaultStretch&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>stretchType</em> = <code>&quot;Default&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bandNumber</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> object with default mapping of special pixel values to themselves and a provided name, and a provided stretch type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name to use for <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> </td></tr>
+    <tr><td class="paramname">type</td><td>Type of stretch </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af7bf8374b11ea2d55c452481815868a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7bf8374b11ea2d55c452481815868a6">&#9670;&nbsp;</a></span>CubeStretch() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CubeStretch::CubeStretch </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube_stretch.html">CubeStretch</a> const &amp;&#160;</td>
+          <td class="paramname"><em>stretch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy constructor for a <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a>. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_stretch.html#a4328ea3d7871053e897007ece5ba6a1a">getBandNumber()</a>, <a class="el" href="class_isis_1_1_cube_stretch.html#a7dce6774f9ad679eb5c46aa76455c826">getName()</a>, and <a class="el" href="class_isis_1_1_cube_stretch.html#ae67c00fb410127e7c68fc9006973ffc0">getType()</a>.</p>
+
+</div>
+</div>
+<a id="ae0f40ae6d9550bc743bfa3a864a43fbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0f40ae6d9550bc743bfa3a864a43fbf">&#9670;&nbsp;</a></span>CubeStretch() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CubeStretch::CubeStretch </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_stretch.html">Stretch</a> const &amp;&#160;</td>
+          <td class="paramname"><em>stretch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> object from a normal <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a></td><td><a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> to construct the <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> from. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aedb37a6b67fd04c86e9f8a322002ca07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedb37a6b67fd04c86e9f8a322002ca07">&#9670;&nbsp;</a></span>CubeStretch() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CubeStretch::CubeStretch </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_stretch.html">Stretch</a> const &amp;&#160;</td>
+          <td class="paramname"><em>stretch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>stretchType</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> object from a normal <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a></td><td><a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> to construct the <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> from. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab6a57c2358bbb568b01647a34b336610"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6a57c2358bbb568b01647a34b336610">&#9670;&nbsp;</a></span>CubeStretch() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CubeStretch::CubeStretch </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_blob.html">Blob</a>&#160;</td>
+          <td class="paramname"><em>blob</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> from a <a class="el" href="class_isis_1_1_blob.html">Blob</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">blob</td><td>The <a class="el" href="class_isis_1_1_blob.html">Blob</a> to read data from. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_blob.html#a94b47499d612bfe24689b093f1269634">Isis::Blob::getBuffer()</a>, <a class="el" href="class_isis_1_1_blob.html#aa69259b4d285f0aaa420928d178677de">Isis::Blob::Label()</a>, <a class="el" href="class_isis_1_1_stretch.html#a064a71cc80742476ad31a55d46ce4ae1">Isis::Stretch::Parse()</a>, <a class="el" href="class_isis_1_1_cube_stretch.html#a0ee6c0a106e8d7ab61302c8af6ac02be">setBandNumber()</a>, <a class="el" href="class_isis_1_1_cube_stretch.html#a4ac8ab48760dff464c37acb3da2b7e33">setName()</a>, <a class="el" href="class_isis_1_1_cube_stretch.html#aeaf3f5e180d6693e0b8e49a51700b16a">setType()</a>, and <a class="el" href="class_isis_1_1_blob.html#a16662f05507a1588be13ba6d3d95f9bb">Isis::Blob::Size()</a>.</p>
+
+</div>
+</div>
+<a id="a110c6606bbc616b0b826c3dee0b21ae1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a110c6606bbc616b0b826c3dee0b21ae1">&#9670;&nbsp;</a></span>~CubeStretch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CubeStretch::~CubeStretch </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0874817fdd51d7fefb3e92ee876fad0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0874817fdd51d7fefb3e92ee876fad0a">&#9670;&nbsp;</a></span>AddPair()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::AddPair </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds a stretch pair to the list of pairs. </p>
+<p>Note that all input pairs must be in ascending order.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Input value to map</td></tr>
+    <tr><td class="paramname">output</td><td>Output value when the input is mapped</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">Isis::IException::Programmer</a></td><td>- input pairs must be in ascending order </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_independent_cube_viewport.html#ac7aa997f70c68786764473c79a6b6734">Isis::IndependentCubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_visual_display.html#af1c494d0c84d3e9475844477205a2062">Isis::VisualDisplay::setPixelData()</a>, <a class="el" href="class_isis_1_1_binary_stretch_type.html#a64a1ffcd0ebacdfc1d8697379fe289c6">Isis::BinaryStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_linear_stretch_type.html#a53bd013b8ff19f025cca87c3f34a9e9b">Isis::LinearStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#af48bf0125517646ae500b963aa1c8a40">Isis::StretchTool::stretchBand()</a>, and <a class="el" href="class_isis_1_1_stretch_tool.html#ab7e4d2205570d4df6ed10813aa2b76d7">Isis::StretchTool::stretchBuffer()</a>.</p>
+
+</div>
+</div>
+<a id="ae72330147243d385b88076f048df88f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae72330147243d385b88076f048df88f9">&#9670;&nbsp;</a></span>ClearPairs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::ClearPairs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears the stretch pairs. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_independent_cube_viewport.html#ac7aa997f70c68786764473c79a6b6734">Isis::IndependentCubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_visual_display.html#af1c494d0c84d3e9475844477205a2062">Isis::VisualDisplay::setPixelData()</a>, and <a class="el" href="class_isis_1_1_stretch_tool.html#af48bf0125517646ae500b963aa1c8a40">Isis::StretchTool::stretchBand()</a>.</p>
+
+</div>
+</div>
+<a id="a031365f2d8269a360a8463e58d94e160"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a031365f2d8269a360a8463e58d94e160">&#9670;&nbsp;</a></span>CopyPairs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::CopyPairs </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_stretch.html">Stretch</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Copies the stretch pairs from another <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> object, but maintains special pixel values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>- The <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> to copy pairs from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_stretch_tool.html#aeb851202f534ee2b646fe7315240106a">Isis::StretchTool::loadStretchFromCube()</a>, <a class="el" href="class_isis_1_1_independent_cube_viewport.html#a402d66e1e50c1746dcf7ea9d148e198d">Isis::IndependentCubeViewport::restretch()</a>, <a class="el" href="class_isis_1_1_binary_stretch_type.html#a64a1ffcd0ebacdfc1d8697379fe289c6">Isis::BinaryStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_linear_stretch_type.html#a53bd013b8ff19f025cca87c3f34a9e9b">Isis::LinearStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_manual_stretch_type.html#a86c7dcf048e96b71718807f2fd588809">Isis::ManualStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_sawtooth_stretch_type.html#a15c0601dd76acdc7135b48df4613bd64">Isis::SawtoothStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#a03cafad090386d1e7ef7c7513132fb14">Isis::CubeViewport::stretchGray()</a>, and <a class="el" href="class_isis_1_1_stretch_tool.html#a58c2f832b939b9cee4c57a42ecfd99d9">Isis::StretchTool::stretchRequested()</a>.</p>
+
+</div>
+</div>
+<a id="a4328ea3d7871053e897007ece5ba6a1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4328ea3d7871053e897007ece5ba6a1a">&#9670;&nbsp;</a></span>getBandNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::CubeStretch::getBandNumber </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the band number for the stretch. </p>
+<dl class="section return"><dt>Returns</dt><dd>int band number </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_stretch.html#af7bf8374b11ea2d55c452481815868a6">CubeStretch()</a>, <a class="el" href="class_isis_1_1_cube_stretch.html#a31a4203f31ff54c8506ba03d682eb31d">operator==()</a>, and <a class="el" href="class_isis_1_1_cube_stretch.html#a761e61e36d19f995a580dcfb22ab3fc6">toBlob()</a>.</p>
+
+</div>
+</div>
+<a id="a7dce6774f9ad679eb5c46aa76455c826"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dce6774f9ad679eb5c46aa76455c826">&#9670;&nbsp;</a></span>getName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::CubeStretch::getName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> name. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString name of stretch </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_stretch.html#af7bf8374b11ea2d55c452481815868a6">CubeStretch()</a>, <a class="el" href="class_isis_1_1_cube_stretch.html#a31a4203f31ff54c8506ba03d682eb31d">operator==()</a>, and <a class="el" href="class_isis_1_1_cube_stretch.html#a761e61e36d19f995a580dcfb22ab3fc6">toBlob()</a>.</p>
+
+</div>
+</div>
+<a id="ae67c00fb410127e7c68fc9006973ffc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae67c00fb410127e7c68fc9006973ffc0">&#9670;&nbsp;</a></span>getType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::CubeStretch::getType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the Type of <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString Type of <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a>. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_stretch.html#af7bf8374b11ea2d55c452481815868a6">CubeStretch()</a>, <a class="el" href="class_isis_1_1_advanced_stretch.html#af251135c8dd2f1ab74017d71ab29276d">Isis::AdvancedStretch::restoreSavedStretch()</a>, and <a class="el" href="class_isis_1_1_cube_stretch.html#a761e61e36d19f995a580dcfb22ab3fc6">toBlob()</a>.</p>
+
+</div>
+</div>
+<a id="a98ac83787150c6f134940db9fa0e40b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98ac83787150c6f134940db9fa0e40b7">&#9670;&nbsp;</a></span>Input()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Stretch::Input </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the value of the input side of the stretch pair at the specified index. </p>
+<p>If the index number is out of bounds, then the method returns -1</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index number to retrieve the input stretch pair value from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double The input side of the stretch pair at the specified index </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_histogram_widget.html#a71bace260aba9d6de1cbe0250c2eb21b">Isis::HistogramWidget::setStretch()</a>, <a class="el" href="class_isis_1_1_binary_stretch_type.html#a64a1ffcd0ebacdfc1d8697379fe289c6">Isis::BinaryStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_linear_stretch_type.html#a53bd013b8ff19f025cca87c3f34a9e9b">Isis::LinearStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_sawtooth_stretch_type.html#a15c0601dd76acdc7135b48df4613bd64">Isis::SawtoothStretchType::setStretch()</a>, and <a class="el" href="class_isis_1_1_stretch_type.html#aa0edf6050b3e3131c53931002db75d73">Isis::StretchType::updateTable()</a>.</p>
+
+</div>
+</div>
+<a id="afc5bfc5b2deec0ed4e8c5a07083d3564"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc5bfc5b2deec0ed4e8c5a07083d3564">&#9670;&nbsp;</a></span>Load() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::Load </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl.html">Isis::Pvl</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString &amp;&#160;</td>
+          <td class="paramname"><em>grpName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads the stretch pairs from the pvl file into the <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> object. </p>
+<p>The pvl should look similar to this: </p><div class="fragment"><div class="line">Group = <a class="code" href="class_isis_1_1_stretch.html#af56580ead933ed3aa6ff5a4843c36d2e">Pairs</a></div>
+<div class="line">  <a class="code" href="class_isis_1_1_stretch.html#a98ac83787150c6f134940db9fa0e40b7">Input</a> = (0,100,255)</div>
+<div class="line">  <a class="code" href="class_isis_1_1_stretch.html#a63acef90a108bcf91c5aae8b64165960">Output</a> = (255,100,0)</div>
+<div class="line">EndGroup</div>
+<div class="ttc" id="aclass_isis_1_1_stretch_html_a63acef90a108bcf91c5aae8b64165960"><div class="ttname"><a href="class_isis_1_1_stretch.html#a63acef90a108bcf91c5aae8b64165960">Isis::Stretch::Output</a></div><div class="ttdeci">double Output(const int index) const</div><div class="ttdoc">Returns the value of the output side of the stretch pair at the specified index.</div><div class="ttdef"><b>Definition:</b> Stretch.cpp:302</div></div>
+<div class="ttc" id="aclass_isis_1_1_stretch_html_a98ac83787150c6f134940db9fa0e40b7"><div class="ttname"><a href="class_isis_1_1_stretch.html#a98ac83787150c6f134940db9fa0e40b7">Isis::Stretch::Input</a></div><div class="ttdeci">double Input(const int index) const</div><div class="ttdoc">Returns the value of the input side of the stretch pair at the specified index.</div><div class="ttdef"><b>Definition:</b> Stretch.cpp:287</div></div>
+<div class="ttc" id="aclass_isis_1_1_stretch_html_af56580ead933ed3aa6ff5a4843c36d2e"><div class="ttname"><a href="class_isis_1_1_stretch.html#af56580ead933ed3aa6ff5a4843c36d2e">Isis::Stretch::Pairs</a></div><div class="ttdeci">int Pairs() const</div><div class="ttdoc">Returns the number of stretch pairs.</div><div class="ttdef"><b>Definition:</b> Stretch.h:162</div></div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td>- The pvl containing the stretch pairs </td></tr>
+    <tr><td class="paramname">grpName</td><td>- The group name to get the input and output keywords from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">Isis::PvlObject::findGroup()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#aec162efdd61490e50dc5211e7f97469b">Isis::PvlContainer::findKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#a2c88473ba977e24be39e95a3ac4f29c8">Isis::PvlKeyword::size()</a>, <a class="el" href="namespace_isis.html#ad7233a0dfd589ede203db382294b286c">Isis::toDouble()</a>, and <a class="el" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261aa29caa5de1aa5d875ec6127aa5b5e490">Isis::PvlObject::Traverse</a>.</p>
+
+</div>
+</div>
+<a id="a6beaae51c4709cca3e8a83b8f72a9f49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6beaae51c4709cca3e8a83b8f72a9f49">&#9670;&nbsp;</a></span>Load() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::Load </td>
+          <td>(</td>
+          <td class="paramtype">QString &amp;&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString &amp;&#160;</td>
+          <td class="paramname"><em>grpName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads the stretch pairs from the pvl file into the <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> object. </p>
+<p>The file should look similar to this: </p><div class="fragment"><div class="line">Group = <a class="code" href="class_isis_1_1_stretch.html#af56580ead933ed3aa6ff5a4843c36d2e">Pairs</a></div>
+<div class="line">  <a class="code" href="class_isis_1_1_stretch.html#a98ac83787150c6f134940db9fa0e40b7">Input</a> = (0,100,255)</div>
+<div class="line">  <a class="code" href="class_isis_1_1_stretch.html#a63acef90a108bcf91c5aae8b64165960">Output</a> = (255,100,0)</div>
+<div class="line">EndGroup</div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>- The input file containing the stretch pairs </td></tr>
+    <tr><td class="paramname">grpName</td><td>- The group name to get the input and output keywords from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af34aba8d4791daab481d2315ec98f33f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af34aba8d4791daab481d2315ec98f33f">&#9670;&nbsp;</a></span>Map()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Stretch::Map </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Maps an input value to an output value based on the stretch pairs and/or special pixel mappings. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Value to map</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double The mapped output value is returned by this method </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a8895b40ca4715b7f17cb899df4276b2c">Isis::IsHisPixel()</a>, <a class="el" href="namespace_isis.html#a4939b70d37c42eea35d7b00b62579d2a">Isis::IsHrsPixel()</a>, <a class="el" href="namespace_isis.html#ae393c6e7ad4c833ecf2fa251561ffa51">Isis::IsLisPixel()</a>, <a class="el" href="namespace_isis.html#a4472bfa7fadd355fcea0027edb21d3a6">Isis::IsNullPixel()</a>, and <a class="el" href="namespace_isis.html#a795c7763f5f7c0aa13355e63551f4e70">Isis::IsValidPixel()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_visual_display.html#a45ff19c170ca068b783b32755c6695d6">Isis::VisualDisplay::paintPixmap()</a>.</p>
+
+</div>
+</div>
+<a id="a31a4203f31ff54c8506ba03d682eb31d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31a4203f31ff54c8506ba03d682eb31d">&#9670;&nbsp;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::CubeStretch::operator== </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube_stretch.html">CubeStretch</a> &amp;&#160;</td>
+          <td class="paramname"><em>stretch2</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if the CubeStretches are equal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stretch2</td><td>The stretch to compare with</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if stretches are equal. Else, false. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_stretch.html#a4328ea3d7871053e897007ece5ba6a1a">getBandNumber()</a>, <a class="el" href="class_isis_1_1_cube_stretch.html#a7dce6774f9ad679eb5c46aa76455c826">getName()</a>, and <a class="el" href="class_isis_1_1_stretch.html#affeda5003a4c9ace863525cd5d428f43">Isis::Stretch::Text()</a>.</p>
+
+</div>
+</div>
+<a id="a63acef90a108bcf91c5aae8b64165960"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63acef90a108bcf91c5aae8b64165960">&#9670;&nbsp;</a></span>Output()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Stretch::Output </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the value of the output side of the stretch pair at the specified index. </p>
+<p>If the index number is out of bounds, then the method returns -1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index number to retieve the output stretch pair value from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double The output side of the stretch pair at the specified index </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_histogram_widget.html#a71bace260aba9d6de1cbe0250c2eb21b">Isis::HistogramWidget::setStretch()</a>, <a class="el" href="class_isis_1_1_binary_stretch_type.html#a64a1ffcd0ebacdfc1d8697379fe289c6">Isis::BinaryStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_sawtooth_stretch_type.html#a15c0601dd76acdc7135b48df4613bd64">Isis::SawtoothStretchType::setStretch()</a>, and <a class="el" href="class_isis_1_1_stretch_type.html#aa0edf6050b3e3131c53931002db75d73">Isis::StretchType::updateTable()</a>.</p>
+
+</div>
+</div>
+<a id="af56580ead933ed3aa6ff5a4843c36d2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af56580ead933ed3aa6ff5a4843c36d2e">&#9670;&nbsp;</a></span>Pairs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Stretch::Pairs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of stretch pairs. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_independent_cube_viewport.html#ac7aa997f70c68786764473c79a6b6734">Isis::IndependentCubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_histogram_widget.html#a71bace260aba9d6de1cbe0250c2eb21b">Isis::HistogramWidget::setStretch()</a>, <a class="el" href="class_isis_1_1_binary_stretch_type.html#a64a1ffcd0ebacdfc1d8697379fe289c6">Isis::BinaryStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_linear_stretch_type.html#a53bd013b8ff19f025cca87c3f34a9e9b">Isis::LinearStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_sawtooth_stretch_type.html#a15c0601dd76acdc7135b48df4613bd64">Isis::SawtoothStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#aa2ef499a3eda552fc29f2ddbdd2ced7d">Isis::CubeViewport::stretchBlue()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#ab7e4d2205570d4df6ed10813aa2b76d7">Isis::StretchTool::stretchBuffer()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#a03cafad090386d1e7ef7c7513132fb14">Isis::CubeViewport::stretchGray()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#a4d162d3bdf874bc432f3b83d98978456">Isis::CubeViewport::stretchGreen()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#a9a6d879aebf1193749d79f37b6acf208">Isis::CubeViewport::stretchRed()</a>, and <a class="el" href="class_isis_1_1_stretch_type.html#aa0edf6050b3e3131c53931002db75d73">Isis::StretchType::updateTable()</a>.</p>
+
+</div>
+</div>
+<a id="a064a71cc80742476ad31a55d46ce4ae1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a064a71cc80742476ad31a55d46ce4ae1">&#9670;&nbsp;</a></span>Parse() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::Parse </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>pairs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Parses a string of the form "i1:o1 i2:o2...iN:oN" where each i:o represents an input:output pair. </p>
+<p>Therefore, the user can enter a string in this form and this method will parse the string and load the stretch pairs into the object via AddPairs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pairs</td><td>A string containing stretch pairs for example "0:0 50:0 100:255 255:255"</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>- invalid stretch pair </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_stretch.html#ab6a57c2358bbb568b01647a34b336610">CubeStretch()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#a0f7cf616ae71f62dbea4700c07c81672">Isis::CubeViewport::stretchBlue()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#a01e958f19e71234b4bfb089238da8f9d">Isis::CubeViewport::stretchGray()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#a6ea739117b5dc06bdff76ca71911054c">Isis::CubeViewport::stretchGreen()</a>, and <a class="el" href="class_isis_1_1_cube_viewport.html#a947b76e7edccb34bb1dc3764f577584c">Isis::CubeViewport::stretchRed()</a>.</p>
+
+</div>
+</div>
+<a id="a9f4550722fa077493737ccddde193dc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f4550722fa077493737ccddde193dc5">&#9670;&nbsp;</a></span>Parse() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::Parse </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>pairs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_histogram.html">Isis::Histogram</a> *&#160;</td>
+          <td class="paramname"><em>hist</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Parses a string of the form "i1:o1 i2:o2...iN:oN" where each i:o represents an input:output pair where the input is a percentage. </p>
+<p>Using the <a class="el" href="class_isis_1_1_histogram.html" title="Container of a cube histogram.">Histogram</a> an appropriate dn value will be calculated for each input percentage. Therefore, the user can enter a string in this form and this method will parse the string and load the stretch pairs into the object via AddPairs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pairs</td><td>A string containing stretch pairs for example "0:0 50:0 100:255"</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>- invalid stretch pair </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_histogram.html#a895416c80bc1df9520d0449025c4080a">Isis::Histogram::Percent()</a>.</p>
+
+</div>
+</div>
+<a id="a37e330414e39f2fa5d3c43dcef1dc90e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37e330414e39f2fa5d3c43dcef1dc90e">&#9670;&nbsp;</a></span>Save() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::Save </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl.html">Isis::Pvl</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString &amp;&#160;</td>
+          <td class="paramname"><em>grpName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_object.html#ac18c485fdccb8e8bf16866e6c6ad2e3d">Isis::PvlObject::addGroup()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#ad23c104f285206b85e42d1faf50eb171">Isis::PvlContainer::addKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#af80ef16d6eb13934fc2265889447e5d7">Isis::PvlKeyword::addValue()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a60613867b9bef340d860bf62461817c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60613867b9bef340d860bf62461817c6">&#9670;&nbsp;</a></span>Save() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::Save </td>
+          <td>(</td>
+          <td class="paramtype">QString &amp;&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString &amp;&#160;</td>
+          <td class="paramname"><em>grpName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Saves the stretch pairs in the <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> object into the given pvl file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>- The file that the stretch pairs will be written to </td></tr>
+    <tr><td class="paramname">grpName</td><td>- The name of the group to create and put the stretch pairs into. The group will contain two keywords, Input, and Output. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl.html#a459537cb2fc4e4a259ca917f2d37ec2e">Isis::Pvl::write()</a>.</p>
+
+</div>
+</div>
+<a id="a0ee6c0a106e8d7ab61302c8af6ac02be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ee6c0a106e8d7ab61302c8af6ac02be">&#9670;&nbsp;</a></span>setBandNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CubeStretch::setBandNumber </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bandNumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the band number for the stretch. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">int</td><td>band number </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_stretch.html#ab6a57c2358bbb568b01647a34b336610">CubeStretch()</a>, and <a class="el" href="class_isis_1_1_stretch_tool.html#ac702b6c9956e102076055618e7c85e1f">Isis::StretchTool::saveStretchToCube()</a>.</p>
+
+</div>
+</div>
+<a id="ab0c37f3e38a767b3e675d182b87e334e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0c37f3e38a767b3e675d182b87e334e">&#9670;&nbsp;</a></span>SetHis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::SetHis </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the mapping for HIS pixels. </p>
+<p>If not called the HIS pixels will be mapped to HIS. Otherwise you can map HIS to any double value. For example, SetHis(255.0).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Value to map input HIS </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_viewport_1_1_band_info.html#a02a8ab7d2eeac4a9dbd401c93c9f065d">Isis::CubeViewport::BandInfo::BandInfo()</a>, <a class="el" href="class_isis_1_1_q_stretch.html#af7a39b292d19f7036549c8612867fbe2">Isis::QStretch::QStretch()</a>, and <a class="el" href="class_isis_1_1_visual_display.html#ab2dbff845f4d3e180e35a4302b9d7988">Isis::VisualDisplay::VisualDisplay()</a>.</p>
+
+</div>
+</div>
+<a id="a52d51416b75f5c759d448ce61665e497"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52d51416b75f5c759d448ce61665e497">&#9670;&nbsp;</a></span>SetHrs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::SetHrs </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the mapping for HRS pixels. </p>
+<p>If not called the HRS pixels will be mapped to HRS. Otherwise you can map HRS to any double value. For example, SetHrs(255.0).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Value to map input HRS </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_viewport_1_1_band_info.html#a02a8ab7d2eeac4a9dbd401c93c9f065d">Isis::CubeViewport::BandInfo::BandInfo()</a>, <a class="el" href="class_isis_1_1_q_stretch.html#af7a39b292d19f7036549c8612867fbe2">Isis::QStretch::QStretch()</a>, and <a class="el" href="class_isis_1_1_visual_display.html#ab2dbff845f4d3e180e35a4302b9d7988">Isis::VisualDisplay::VisualDisplay()</a>.</p>
+
+</div>
+</div>
+<a id="ab80f5bf9e2970ef26112687345400ae8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab80f5bf9e2970ef26112687345400ae8">&#9670;&nbsp;</a></span>SetLis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::SetLis </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the mapping for LIS pixels. </p>
+<p>If not called the LIS pixels will be mapped to LIS. Otherwise you can map LIS to any double value. For example, SetLis(0.0).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Value to map input LIS </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_viewport_1_1_band_info.html#a02a8ab7d2eeac4a9dbd401c93c9f065d">Isis::CubeViewport::BandInfo::BandInfo()</a>, <a class="el" href="class_isis_1_1_q_stretch.html#af7a39b292d19f7036549c8612867fbe2">Isis::QStretch::QStretch()</a>, and <a class="el" href="class_isis_1_1_visual_display.html#ab2dbff845f4d3e180e35a4302b9d7988">Isis::VisualDisplay::VisualDisplay()</a>.</p>
+
+</div>
+</div>
+<a id="afd00522d8efec39dca5546396babe839"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd00522d8efec39dca5546396babe839">&#9670;&nbsp;</a></span>SetLrs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::SetLrs </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the mapping for LRS pixels. </p>
+<p>If not called the LRS pixels will be mapped to LRS. Otherwise you can map LRS to any double value. For example, SetLrs(0.0).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Value to map input LRS </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_viewport_1_1_band_info.html#a02a8ab7d2eeac4a9dbd401c93c9f065d">Isis::CubeViewport::BandInfo::BandInfo()</a>, <a class="el" href="class_isis_1_1_q_stretch.html#af7a39b292d19f7036549c8612867fbe2">Isis::QStretch::QStretch()</a>, and <a class="el" href="class_isis_1_1_visual_display.html#ab2dbff845f4d3e180e35a4302b9d7988">Isis::VisualDisplay::VisualDisplay()</a>.</p>
+
+</div>
+</div>
+<a id="a234078b4634be9bb2a17ad554663cb5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a234078b4634be9bb2a17ad554663cb5d">&#9670;&nbsp;</a></span>SetMaximum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::SetMaximum </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_viewport_1_1_band_info.html#a02a8ab7d2eeac4a9dbd401c93c9f065d">Isis::CubeViewport::BandInfo::BandInfo()</a>, <a class="el" href="class_isis_1_1_q_stretch.html#af7a39b292d19f7036549c8612867fbe2">Isis::QStretch::QStretch()</a>, and <a class="el" href="class_isis_1_1_visual_display.html#ab2dbff845f4d3e180e35a4302b9d7988">Isis::VisualDisplay::VisualDisplay()</a>.</p>
+
+</div>
+</div>
+<a id="a6827bd46e83311b91d1b14042cb9fe88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6827bd46e83311b91d1b14042cb9fe88">&#9670;&nbsp;</a></span>SetMinimum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::SetMinimum </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_viewport_1_1_band_info.html#a02a8ab7d2eeac4a9dbd401c93c9f065d">Isis::CubeViewport::BandInfo::BandInfo()</a>, <a class="el" href="class_isis_1_1_q_stretch.html#af7a39b292d19f7036549c8612867fbe2">Isis::QStretch::QStretch()</a>, and <a class="el" href="class_isis_1_1_visual_display.html#ab2dbff845f4d3e180e35a4302b9d7988">Isis::VisualDisplay::VisualDisplay()</a>.</p>
+
+</div>
+</div>
+<a id="a4ac8ab48760dff464c37acb3da2b7e33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ac8ab48760dff464c37acb3da2b7e33">&#9670;&nbsp;</a></span>setName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CubeStretch::setName </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">QString</td><td>name for stretch </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_stretch.html#ab6a57c2358bbb568b01647a34b336610">CubeStretch()</a>, and <a class="el" href="class_isis_1_1_stretch_tool.html#ac702b6c9956e102076055618e7c85e1f">Isis::StretchTool::saveStretchToCube()</a>.</p>
+
+</div>
+</div>
+<a id="a23217c73947267e9daf07b71a9dfb7e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23217c73947267e9daf07b71a9dfb7e2">&#9670;&nbsp;</a></span>SetNull()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Stretch::SetNull </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the mapping for NULL pixels. </p>
+<p>If not called the NULL pixels will be mapped to NULL. Otherwise you can map NULLs to any double value. For example, SetNull(0.0).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Value to map input NULLs </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_viewport_1_1_band_info.html#a02a8ab7d2eeac4a9dbd401c93c9f065d">Isis::CubeViewport::BandInfo::BandInfo()</a>, <a class="el" href="class_isis_1_1_q_stretch.html#af7a39b292d19f7036549c8612867fbe2">Isis::QStretch::QStretch()</a>, and <a class="el" href="class_isis_1_1_visual_display.html#ab2dbff845f4d3e180e35a4302b9d7988">Isis::VisualDisplay::VisualDisplay()</a>.</p>
+
+</div>
+</div>
+<a id="aeaf3f5e180d6693e0b8e49a51700b16a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeaf3f5e180d6693e0b8e49a51700b16a">&#9670;&nbsp;</a></span>setType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CubeStretch::setType </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>stretchType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the type of <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">QString</td><td>Type of <a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_stretch.html#ab6a57c2358bbb568b01647a34b336610">CubeStretch()</a>.</p>
+
+</div>
+</div>
+<a id="affeda5003a4c9ace863525cd5d428f43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affeda5003a4c9ace863525cd5d428f43">&#9670;&nbsp;</a></span>Text()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Stretch::Text </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts stretch pair to a string. </p>
+<dl class="section return"><dt>Returns</dt><dd>string The stretch pair as a string </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_stretch.html#a31a4203f31ff54c8506ba03d682eb31d">operator==()</a>, <a class="el" href="class_isis_1_1_binary_stretch_type.html#a64a1ffcd0ebacdfc1d8697379fe289c6">Isis::BinaryStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_linear_stretch_type.html#a53bd013b8ff19f025cca87c3f34a9e9b">Isis::LinearStretchType::setStretch()</a>, <a class="el" href="class_isis_1_1_manual_stretch_type.html#a86c7dcf048e96b71718807f2fd588809">Isis::ManualStretchType::setStretch()</a>, and <a class="el" href="class_isis_1_1_cube_stretch.html#a761e61e36d19f995a580dcfb22ab3fc6">toBlob()</a>.</p>
+
+</div>
+</div>
+<a id="a761e61e36d19f995a580dcfb22ab3fc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a761e61e36d19f995a580dcfb22ab3fc6">&#9670;&nbsp;</a></span>toBlob()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_blob.html">Isis::Blob</a> Isis::CubeStretch::toBlob </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Serialize the <a class="el" href="class_isis_1_1_cube_stretch.html" title="Stores stretch information for a cube.">CubeStretch</a> to a <a class="el" href="class_isis_1_1_blob.html">Blob</a>. </p>
+<p>The stretch will be serialized as a string. See <a class="el" href="class_isis_1_1_stretch.html#affeda5003a4c9ace863525cd5d428f43" title="Converts stretch pair to a string.">Stretch::Text</a> for more information.</p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_blob.html">Blob</a></b> a <a class="el" href="class_isis_1_1_blob.html">Blob</a> containing the stretch data. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_stretch.html#a4328ea3d7871053e897007ece5ba6a1a">getBandNumber()</a>, <a class="el" href="class_isis_1_1_cube_stretch.html#a7dce6774f9ad679eb5c46aa76455c826">getName()</a>, <a class="el" href="class_isis_1_1_cube_stretch.html#ae67c00fb410127e7c68fc9006973ffc0">getType()</a>, <a class="el" href="class_isis_1_1_blob.html#aa69259b4d285f0aaa420928d178677de">Isis::Blob::Label()</a>, <a class="el" href="class_isis_1_1_blob.html#a1de009b123e8a1ccbda1ddd5b0f9b6db">Isis::Blob::setData()</a>, and <a class="el" href="class_isis_1_1_stretch.html#affeda5003a4c9ace863525cd5d428f43">Isis::Stretch::Text()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_stretch_tool.html#ac702b6c9956e102076055618e7c85e1f">Isis::StretchTool::saveStretchToCube()</a>, and <a class="el" href="class_isis_1_1_cube.html#a983f491635a90c12ce1631a17d8b5000">Isis::Cube::write()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CubeStretch/<a class="el" href="_cube_stretch_8h_source.html">CubeStretch.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CubeStretch/<a class="el" href="_cube_stretch_8cpp.html">CubeStretch.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_cube_stretch.html">CubeStretch</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

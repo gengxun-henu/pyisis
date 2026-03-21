@@ -1,0 +1,7 @@
+<map id="Isis::LineScanCameraGroundMap" name="Isis::LineScanCameraGroundMap">
+<area shape="rect" id="node1" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="64,891,282,1068"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_camera_ground_map.html" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="87,584,259,841"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,295,125,376"/>
+<area shape="rect" id="node4" title=" " alt="" coords="165,5,224,87"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_camera.html" title=" " alt="" coords="292,167,510,504"/>
+</map>

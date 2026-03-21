@@ -1,0 +1,978 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Message Namespace Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('namespace_isis_1_1_message.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Message Namespace Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Namespace containing standardized Isis error messages.  
+<a href="namespace_isis_1_1_message.html#details">More...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a3e3db179a224517c3d1db5281d67c23e"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a3e3db179a224517c3d1db5281d67c23e">ArraySubscriptNotInRange</a> (int index)</td></tr>
+<tr class="memdesc:a3e3db179a224517c3d1db5281d67c23e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> object or application is checking array bounds and the legal range has been violated.  <a href="namespace_isis_1_1_message.html#a3e3db179a224517c3d1db5281d67c23e">More...</a><br /></td></tr>
+<tr class="separator:a3e3db179a224517c3d1db5281d67c23e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c40323c7f50bb4f713bfa39e95c1cd5"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a1c40323c7f50bb4f713bfa39e95c1cd5">KeywordAmbiguous</a> (const QString &amp;key)</td></tr>
+<tr class="memdesc:a1c40323c7f50bb4f713bfa39e95c1cd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when a supplied keyword for an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> application parameter does not contain enough characters to distinguish it from another keyword.  <a href="namespace_isis_1_1_message.html#a1c40323c7f50bb4f713bfa39e95c1cd5">More...</a><br /></td></tr>
+<tr class="separator:a1c40323c7f50bb4f713bfa39e95c1cd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11464b68ddd63a1d0bc04db72686d952"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a11464b68ddd63a1d0bc04db72686d952">KeywordUnrecognized</a> (const QString &amp;key)</td></tr>
+<tr class="memdesc:a11464b68ddd63a1d0bc04db72686d952"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when a supplied keyword for an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> application parameter does not match any of the parameters for that application.  <a href="namespace_isis_1_1_message.html#a11464b68ddd63a1d0bc04db72686d952">More...</a><br /></td></tr>
+<tr class="separator:a11464b68ddd63a1d0bc04db72686d952"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe3288cd60c1d7d4d3a736e076fccbaa"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#afe3288cd60c1d7d4d3a736e076fccbaa">KeywordDuplicated</a> (const QString &amp;key)</td></tr>
+<tr class="memdesc:afe3288cd60c1d7d4d3a736e076fccbaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when a supplied keyword for an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> application parameter is the same as one previously supplied.  <a href="namespace_isis_1_1_message.html#afe3288cd60c1d7d4d3a736e076fccbaa">More...</a><br /></td></tr>
+<tr class="separator:afe3288cd60c1d7d4d3a736e076fccbaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add71d86a525223c3eaf16fd79e5cad18"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#add71d86a525223c3eaf16fd79e5cad18">KeywordNotArray</a> (const QString &amp;key)</td></tr>
+<tr class="memdesc:add71d86a525223c3eaf16fd79e5cad18"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when a supplied keyword is being used as an array (i.e., with a subscript) but is only a scaler entity.  <a href="namespace_isis_1_1_message.html#add71d86a525223c3eaf16fd79e5cad18">More...</a><br /></td></tr>
+<tr class="separator:add71d86a525223c3eaf16fd79e5cad18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81ec7fa1fe0ae5bcc1bd0946a85b35a3"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a81ec7fa1fe0ae5bcc1bd0946a85b35a3">KeywordNotFound</a> (const QString &amp;key)</td></tr>
+<tr class="memdesc:a81ec7fa1fe0ae5bcc1bd0946a85b35a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when a supplied keyword is not defined in the application.  <a href="namespace_isis_1_1_message.html#a81ec7fa1fe0ae5bcc1bd0946a85b35a3">More...</a><br /></td></tr>
+<tr class="separator:a81ec7fa1fe0ae5bcc1bd0946a85b35a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae535ec14ebc6b81561e318432bfacfd0"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#ae535ec14ebc6b81561e318432bfacfd0">KeywordBlockInvalid</a> (const QString &amp;block)</td></tr>
+<tr class="memdesc:ae535ec14ebc6b81561e318432bfacfd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error has been deprecated and should not be used in new code.  <a href="namespace_isis_1_1_message.html#ae535ec14ebc6b81561e318432bfacfd0">More...</a><br /></td></tr>
+<tr class="separator:ae535ec14ebc6b81561e318432bfacfd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a086808c512cb0ba2f7e4af41b436a992"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a086808c512cb0ba2f7e4af41b436a992">KeywordBlockStartMissing</a> (const QString &amp;block, const QString &amp;found)</td></tr>
+<tr class="memdesc:a086808c512cb0ba2f7e4af41b436a992"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error has been deprecated and should not be used in new code.  <a href="namespace_isis_1_1_message.html#a086808c512cb0ba2f7e4af41b436a992">More...</a><br /></td></tr>
+<tr class="separator:a086808c512cb0ba2f7e4af41b436a992"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35149089d1dcdd5583a3c28b9e6c202c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a35149089d1dcdd5583a3c28b9e6c202c">KeywordBlockEndMissing</a> (const QString &amp;block, const QString &amp;found)</td></tr>
+<tr class="memdesc:a35149089d1dcdd5583a3c28b9e6c202c"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error has been deprecated and should not be used in new code.  <a href="namespace_isis_1_1_message.html#a35149089d1dcdd5583a3c28b9e6c202c">More...</a><br /></td></tr>
+<tr class="separator:a35149089d1dcdd5583a3c28b9e6c202c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a69de37cc02ac13dbf0f78432ca1433"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a7a69de37cc02ac13dbf0f78432ca1433">KeywordValueBad</a> (const QString &amp;key)</td></tr>
+<tr class="memdesc:a7a69de37cc02ac13dbf0f78432ca1433"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when a supplied keyword does not appear in the list (e.g., an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> cube label).  <a href="namespace_isis_1_1_message.html#a7a69de37cc02ac13dbf0f78432ca1433">More...</a><br /></td></tr>
+<tr class="separator:a7a69de37cc02ac13dbf0f78432ca1433"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad320f435d05e5ab220dc4ae94ccf560e"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#ad320f435d05e5ab220dc4ae94ccf560e">KeywordValueBad</a> (const QString &amp;key, const QString &amp;value)</td></tr>
+<tr class="memdesc:ad320f435d05e5ab220dc4ae94ccf560e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when the value of a supplied keyword is incorrect.  <a href="namespace_isis_1_1_message.html#ad320f435d05e5ab220dc4ae94ccf560e">More...</a><br /></td></tr>
+<tr class="separator:ad320f435d05e5ab220dc4ae94ccf560e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a062a36dbcca47f25890a713a0b0b01de"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a062a36dbcca47f25890a713a0b0b01de">KeywordValueExpected</a> (const QString &amp;key)</td></tr>
+<tr class="memdesc:a062a36dbcca47f25890a713a0b0b01de"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when the value of a supplied keyword was expected but not present.  <a href="namespace_isis_1_1_message.html#a062a36dbcca47f25890a713a0b0b01de">More...</a><br /></td></tr>
+<tr class="separator:a062a36dbcca47f25890a713a0b0b01de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39466bc3cefb12119e8bc2cfba415e6a"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a39466bc3cefb12119e8bc2cfba415e6a">KeywordValueNotInRange</a> (const QString &amp;key, const QString &amp;value, const QString &amp;range)</td></tr>
+<tr class="memdesc:a39466bc3cefb12119e8bc2cfba415e6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when the value of a supplied keyword is not within a specific range.  <a href="namespace_isis_1_1_message.html#a39466bc3cefb12119e8bc2cfba415e6a">More...</a><br /></td></tr>
+<tr class="separator:a39466bc3cefb12119e8bc2cfba415e6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cf9a02a3a1427b2dd183aee863c2706"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a6cf9a02a3a1427b2dd183aee863c2706">KeywordValueNotInList</a> (const QString &amp;key, const QString &amp;value, const std::vector&lt; QString &gt; &amp;list)</td></tr>
+<tr class="memdesc:a6cf9a02a3a1427b2dd183aee863c2706"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when the value of a supplied keyword is not one of a specific list of possible values.  <a href="namespace_isis_1_1_message.html#a6cf9a02a3a1427b2dd183aee863c2706">More...</a><br /></td></tr>
+<tr class="separator:a6cf9a02a3a1427b2dd183aee863c2706"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74180ce7352f1e2143f2e29d4e9adf7a"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a74180ce7352f1e2143f2e29d4e9adf7a">MissingDelimiter</a> (const char delimiter)</td></tr>
+<tr class="memdesc:a74180ce7352f1e2143f2e29d4e9adf7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when a delimiter is missing.  <a href="namespace_isis_1_1_message.html#a74180ce7352f1e2143f2e29d4e9adf7a">More...</a><br /></td></tr>
+<tr class="separator:a74180ce7352f1e2143f2e29d4e9adf7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabfc73b46076000cf1cc38321f58ed84"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#aabfc73b46076000cf1cc38321f58ed84">MissingDelimiter</a> (const char delimiter, const QString &amp;near)</td></tr>
+<tr class="memdesc:aabfc73b46076000cf1cc38321f58ed84"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when a delimiter is missing.  <a href="namespace_isis_1_1_message.html#aabfc73b46076000cf1cc38321f58ed84">More...</a><br /></td></tr>
+<tr class="separator:aabfc73b46076000cf1cc38321f58ed84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41ec635b0f5e412c360455c48c2e79cb"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a41ec635b0f5e412c360455c48c2e79cb">FileOpen</a> (const QString &amp;filename)</td></tr>
+<tr class="memdesc:a41ec635b0f5e412c360455c48c2e79cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when a file could not be opened.  <a href="namespace_isis_1_1_message.html#a41ec635b0f5e412c360455c48c2e79cb">More...</a><br /></td></tr>
+<tr class="separator:a41ec635b0f5e412c360455c48c2e79cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8461e0416f3ebb896989280496234e43"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a8461e0416f3ebb896989280496234e43">FileCreate</a> (const QString &amp;filename)</td></tr>
+<tr class="memdesc:a8461e0416f3ebb896989280496234e43"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when a file could not be created.  <a href="namespace_isis_1_1_message.html#a8461e0416f3ebb896989280496234e43">More...</a><br /></td></tr>
+<tr class="separator:a8461e0416f3ebb896989280496234e43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab15f477d96f8c7a9460c1d7e7c2dd8d4"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#ab15f477d96f8c7a9460c1d7e7c2dd8d4">FileRead</a> (const QString &amp;filename)</td></tr>
+<tr class="memdesc:ab15f477d96f8c7a9460c1d7e7c2dd8d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when an error accrues during a read of a file.  <a href="namespace_isis_1_1_message.html#ab15f477d96f8c7a9460c1d7e7c2dd8d4">More...</a><br /></td></tr>
+<tr class="separator:ab15f477d96f8c7a9460c1d7e7c2dd8d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0876cd5c70ce3efd4b14d1cd12c6d512"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#a0876cd5c70ce3efd4b14d1cd12c6d512">FileWrite</a> (const QString &amp;filename)</td></tr>
+<tr class="memdesc:a0876cd5c70ce3efd4b14d1cd12c6d512"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when an error accrues during a write to a file.  <a href="namespace_isis_1_1_message.html#a0876cd5c70ce3efd4b14d1cd12c6d512">More...</a><br /></td></tr>
+<tr class="separator:a0876cd5c70ce3efd4b14d1cd12c6d512"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0f312e6dae4d74c883394a27051d65a"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis_1_1_message.html#ae0f312e6dae4d74c883394a27051d65a">MemoryAllocationFailed</a> ()</td></tr>
+<tr class="memdesc:ae0f312e6dae4d74c883394a27051d65a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This error should be used when an error accrues during a memory allocation such as "new".  <a href="namespace_isis_1_1_message.html#ae0f312e6dae4d74c883394a27051d65a">More...</a><br /></td></tr>
+<tr class="separator:ae0f312e6dae4d74c883394a27051d65a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Namespace containing standardized Isis error messages. </p>
+<p>IsisMessage is not a class. It only contains a namespace which consists of all the standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error messages. These messages should be used when applicable instead of constructing the message string inside the object or application. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a3e3db179a224517c3d1db5281d67c23e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e3db179a224517c3d1db5281d67c23e">&#9670;&nbsp;</a></span>ArraySubscriptNotInRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::ArraySubscriptNotInRange </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> object or application is checking array bounds and the legal range has been violated. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>- Array index which is out of bounds</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#ace8c542223e3469c2d26ac64eee3a1aa">Isis::Buffer::at()</a>, <a class="el" href="class_isis_1_1_histogram.html#a28cbcda6d3ff339aede5a2d37736f316">Isis::Histogram::BinCount()</a>, <a class="el" href="class_isis_1_1_histogram.html#a583af7cfa15f8f80448c5b9573f58e90">Isis::Histogram::BinMiddle()</a>, <a class="el" href="class_isis_1_1_histogram.html#afb7c01039ecff16d4692e6a994a9dc10">Isis::Histogram::BinRange()</a>, <a class="el" href="class_isis_1_1_image_histogram.html#ab0a49517f49afb48678d1a47a4d500bd">Isis::ImageHistogram::BinRange()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#a4f757442ef38fffae9a9858bab09030b">Isis::PvlKeyword::comment()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a29980505ccab03cacec964af00cb0548">Isis::PvlObject::group()</a>, <a class="el" href="class_isis_1_1_buffer.html#ade618f5f53149a99db4ae72d16635a4f">Isis::Buffer::Index()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#acf40759d6b3136403f64d3d5a2c2018d">Isis::PvlKeyword::isEquivalent()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#a355a5a1c9a1a5a7a391c7a13e4194708">Isis::PvlKeyword::isNull()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a7fa8ba89de242fe5390df9290f58e078">Isis::PvlObject::object()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a270a271a48c9af4d62b0cb9de64a1190">Isis::PvlContainer::operator[]()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#af13d97d60e054976cad336a1f137034f">Isis::PvlKeyword::operator[]()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#a43578f7c6e4c2acf41957b827718d856">Isis::PvlKeyword::unit()</a>, <a class="el" href="class_isis_1_1_pvl_token.html#a9dd1be35d405d0a6b7c1b81ed22429c3">Isis::PvlToken::value()</a>, and <a class="el" href="class_isis_1_1_pvl_token.html#a49d674db75bf681dfa77819b9871be67">Isis::PvlToken::valueUpper()</a>.</p>
+
+</div>
+</div>
+<a id="a8461e0416f3ebb896989280496234e43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8461e0416f3ebb896989280496234e43">&#9670;&nbsp;</a></span>FileCreate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::FileCreate </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when a file could not be created. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>- The name of the file</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl.html#a459537cb2fc4e4a259ca917f2d37ec2e">Isis::Pvl::write()</a>.</p>
+
+</div>
+</div>
+<a id="a41ec635b0f5e412c360455c48c2e79cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41ec635b0f5e412c360455c48c2e79cb">&#9670;&nbsp;</a></span>FileOpen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::FileOpen </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when a file could not be opened. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>- The name of the file</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl.html#a7a9af10563a89f743481f2d9fd584904">Isis::Pvl::append()</a>, <a class="el" href="class_isis_1_1_application.html#ad9a3bb3d94d6a996f26a72a32e86522b">Isis::Application::Application()</a>, <a class="el" href="class_isis_1_1_pvl.html#a869e6c9dccd4603617236927d09f96ab">Isis::Pvl::read()</a>, <a class="el" href="class_isis_1_1_blob.html#a79ad9a21cfb856b42ce11112fd6a48a8">Isis::Blob::Read()</a>, <a class="el" href="class_isis_1_1_file_list.html#a29189fefc7530d365821da46be3c86c4">Isis::FileList::read()</a>, and <a class="el" href="class_isis_1_1_file_list.html#aa3d227e2c13c5cc07d46f821e5412e87">Isis::FileList::write()</a>.</p>
+
+</div>
+</div>
+<a id="ab15f477d96f8c7a9460c1d7e7c2dd8d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab15f477d96f8c7a9460c1d7e7c2dd8d4">&#9670;&nbsp;</a></span>FileRead()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::FileRead </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when an error accrues during a read of a file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>- The name of the file</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="a0876cd5c70ce3efd4b14d1cd12c6d512"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0876cd5c70ce3efd4b14d1cd12c6d512">&#9670;&nbsp;</a></span>FileWrite()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::FileWrite </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when an error accrues during a write to a file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>- The name of the file</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="a1c40323c7f50bb4f713bfa39e95c1cd5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c40323c7f50bb4f713bfa39e95c1cd5">&#9670;&nbsp;</a></span>KeywordAmbiguous()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordAmbiguous </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when a supplied keyword for an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> application parameter does not contain enough characters to distinguish it from another keyword. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- The name of the keyword which is ambiguous</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="a35149089d1dcdd5583a3c28b9e6c202c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35149089d1dcdd5583a3c28b9e6c202c">&#9670;&nbsp;</a></span>KeywordBlockEndMissing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordBlockEndMissing </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>found</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error has been deprecated and should not be used in new code. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">block</td><td>- The name of the block with the missing end tag </td></tr>
+    <tr><td class="paramname">found</td><td>- The QString found in the place of the missing block end</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="ae535ec14ebc6b81561e318432bfacfd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae535ec14ebc6b81561e318432bfacfd0">&#9670;&nbsp;</a></span>KeywordBlockInvalid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordBlockInvalid </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>block</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error has been deprecated and should not be used in new code. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">block</td><td>- The name of the invalid keyword block</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="a086808c512cb0ba2f7e4af41b436a992"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a086808c512cb0ba2f7e4af41b436a992">&#9670;&nbsp;</a></span>KeywordBlockStartMissing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordBlockStartMissing </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>found</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error has been deprecated and should not be used in new code. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">block</td><td>- The name of the block with the missing start tag </td></tr>
+    <tr><td class="paramname">found</td><td>- The QString found in the place of the missing block start</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="afe3288cd60c1d7d4d3a736e076fccbaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe3288cd60c1d7d4d3a736e076fccbaa">&#9670;&nbsp;</a></span>KeywordDuplicated()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordDuplicated </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when a supplied keyword for an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> application parameter is the same as one previously supplied. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- The name of the keyword which has been duplicated</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="add71d86a525223c3eaf16fd79e5cad18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add71d86a525223c3eaf16fd79e5cad18">&#9670;&nbsp;</a></span>KeywordNotArray()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordNotArray </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when a supplied keyword is being used as an array (i.e., with a subscript) but is only a scaler entity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- The name of the keyword which is not an array</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="a81ec7fa1fe0ae5bcc1bd0946a85b35a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81ec7fa1fe0ae5bcc1bd0946a85b35a3">&#9670;&nbsp;</a></span>KeywordNotFound()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordNotFound </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when a supplied keyword is not defined in the application. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- The name of the keyword which was not found</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="a11464b68ddd63a1d0bc04db72686d952"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11464b68ddd63a1d0bc04db72686d952">&#9670;&nbsp;</a></span>KeywordUnrecognized()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordUnrecognized </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when a supplied keyword for an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> application parameter does not match any of the parameters for that application. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- The name of the keyword which is unrecognized</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="a7a69de37cc02ac13dbf0f78432ca1433"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a69de37cc02ac13dbf0f78432ca1433">&#9670;&nbsp;</a></span>KeywordValueBad() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordValueBad </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when a supplied keyword does not appear in the list (e.g., an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> cube label). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- The name of the keyword which is bad</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_tokenizer.html#aefb9b63b685d8de4f2120dff39bb76ff">Isis::PvlTokenizer::Load()</a>.</p>
+
+</div>
+</div>
+<a id="ad320f435d05e5ab220dc4ae94ccf560e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad320f435d05e5ab220dc4ae94ccf560e">&#9670;&nbsp;</a></span>KeywordValueBad() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordValueBad </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when the value of a supplied keyword is incorrect. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- The keyword name which is bad </td></tr>
+    <tr><td class="paramname">value</td><td>- The value of the keyword which is bad</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="a062a36dbcca47f25890a713a0b0b01de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a062a36dbcca47f25890a713a0b0b01de">&#9670;&nbsp;</a></span>KeywordValueExpected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordValueExpected </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when the value of a supplied keyword was expected but not present. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- The keyword name which is bad</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="a6cf9a02a3a1427b2dd183aee863c2706"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cf9a02a3a1427b2dd183aee863c2706">&#9670;&nbsp;</a></span>KeywordValueNotInList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordValueNotInList </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; QString &gt; &amp;&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when the value of a supplied keyword is not one of a specific list of possible values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- The keyword name which has a bad value </td></tr>
+    <tr><td class="paramname">value</td><td>- The value of the keyword </td></tr>
+    <tr><td class="paramname">list</td><td>- A vector of all the legal values for the keyword</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="a39466bc3cefb12119e8bc2cfba415e6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39466bc3cefb12119e8bc2cfba415e6a">&#9670;&nbsp;</a></span>KeywordValueNotInRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::KeywordValueNotInRange </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>range</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when the value of a supplied keyword is not within a specific range. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- The keyword name which has a bad value </td></tr>
+    <tr><td class="paramname">value</td><td>- The value of the keyword </td></tr>
+    <tr><td class="paramname">range</td><td>- The minimum and maximum allowed values for the keyword formatted and inserted into a QString</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+</div>
+</div>
+<a id="ae0f312e6dae4d74c883394a27051d65a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0f312e6dae4d74c883394a27051d65a">&#9670;&nbsp;</a></span>MemoryAllocationFailed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::MemoryAllocationFailed </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when an error accrues during a memory allocation such as "new". </p>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#a5f5de5f82cc920ea1d587eb02c07f576">Isis::Buffer::Allocate()</a>.</p>
+
+</div>
+</div>
+<a id="a74180ce7352f1e2143f2e29d4e9adf7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74180ce7352f1e2143f2e29d4e9adf7a">&#9670;&nbsp;</a></span>MissingDelimiter() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::MissingDelimiter </td>
+          <td>(</td>
+          <td class="paramtype">const char&#160;</td>
+          <td class="paramname"><em>delimiter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when a delimiter is missing. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">delimiter</td><td>- The delimiter that is missing</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_tokenizer.html#a45e5c73bbfafd47152c332dd795a775b">Isis::PvlTokenizer::ReadToBrace()</a>, <a class="el" href="class_isis_1_1_pvl_tokenizer.html#a663dad65267d4d04ef59679d1fd04002">Isis::PvlTokenizer::ReadToDoubleQuote()</a>, <a class="el" href="class_isis_1_1_pvl_tokenizer.html#a631f86a256fed11dacdd820453b81def">Isis::PvlTokenizer::ReadToParen()</a>, and <a class="el" href="class_isis_1_1_pvl_tokenizer.html#a3da6a7ca14b0f186397b01a583722bdc">Isis::PvlTokenizer::ReadToSingleQuote()</a>.</p>
+
+</div>
+</div>
+<a id="aabfc73b46076000cf1cc38321f58ed84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabfc73b46076000cf1cc38321f58ed84">&#9670;&nbsp;</a></span>MissingDelimiter() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Message::MissingDelimiter </td>
+          <td>(</td>
+          <td class="paramtype">const char&#160;</td>
+          <td class="paramname"><em>delimiter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>near</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This error should be used when a delimiter is missing. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">delimiter</td><td>- The delimiter that is missing </td></tr>
+    <tr><td class="paramname">near</td><td>- The value the missing delimiter is near</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString - A standardized <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> error message with the parameter inserted </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="namespace_isis_1_1_message.html">Message</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

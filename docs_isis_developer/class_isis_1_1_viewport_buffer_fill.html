@@ -1,0 +1,929 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ViewportBufferFill Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_viewport_buffer_fill.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_viewport_buffer_fill-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ViewportBufferFill Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_viewport_buffer_fill_8h_source.html">ViewportBufferFill.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ViewportBufferFill:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_viewport_buffer_fill__inherit__graph.png" border="0" usemap="#a_isis_1_1_viewport_buffer_fill_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_viewport_buffer_fill_inherit__map" id="a_isis_1_1_viewport_buffer_fill_inherit__map">
+<area shape="rect" title=" " alt="" coords="14,215,170,456"/>
+<area shape="rect" href="class_isis_1_1_viewport_buffer_action.html" title=" " alt="" coords="5,5,179,167"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ViewportBufferFill:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_viewport_buffer_fill__coll__graph.png" border="0" usemap="#a_isis_1_1_viewport_buffer_fill_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_viewport_buffer_fill_coll__map" id="a_isis_1_1_viewport_buffer_fill_coll__map">
+<area shape="rect" title=" " alt="" coords="14,215,170,456"/>
+<area shape="rect" href="class_isis_1_1_viewport_buffer_action.html" title=" " alt="" coords="5,5,179,167"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a0a504dda9b37edd3de0ae8cfecaad3cf"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_action.html#a0a504dda9b37edd3de0ae8cfecaad3cf">ActionType</a> { <a class="el" href="class_isis_1_1_viewport_buffer_action.html#a0a504dda9b37edd3de0ae8cfecaad3cfa9aa982ea5ab5e3859c59328e86c1a46d">none</a>
+, <a class="el" href="class_isis_1_1_viewport_buffer_action.html#a0a504dda9b37edd3de0ae8cfecaad3cfa81a3bc1693ad841bd07a31ad375da5fb">transform</a>
+, <a class="el" href="class_isis_1_1_viewport_buffer_action.html#a0a504dda9b37edd3de0ae8cfecaad3cfa29c7056e646eaf1cd864eb720800fc74">fill</a>
+, <a class="el" href="class_isis_1_1_viewport_buffer_action.html#a0a504dda9b37edd3de0ae8cfecaad3cfab510454d30c8eeb5bc321075cbc6809a">stretch</a>
+ }</td></tr>
+<tr class="memdesc:a0a504dda9b37edd3de0ae8cfecaad3cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">This uniquely identifies which child is instantiated.  <a href="class_isis_1_1_viewport_buffer_action.html#a0a504dda9b37edd3de0ae8cfecaad3cf">More...</a><br /></td></tr>
+<tr class="separator:a0a504dda9b37edd3de0ae8cfecaad3cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ad2e6d09ac1b87ecc174c0e79b78b22ed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#ad2e6d09ac1b87ecc174c0e79b78b22ed">ViewportBufferFill</a> (const QRect &amp;rect, const int &amp;xCoef, const double &amp;xScale, const int &amp;yCoef, const double &amp;yScale, const QPoint &amp;topLeftPixel)</td></tr>
+<tr class="memdesc:ad2e6d09ac1b87ecc174c0e79b78b22ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_isis_1_1_viewport_buffer_fill.html#ad2e6d09ac1b87ecc174c0e79b78b22ed">More...</a><br /></td></tr>
+<tr class="separator:ad2e6d09ac1b87ecc174c0e79b78b22ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad67c79f9a643600abd6213ae59cf7102"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#ad67c79f9a643600abd6213ae59cf7102">~ViewportBufferFill</a> ()</td></tr>
+<tr class="memdesc:ad67c79f9a643600abd6213ae59cf7102"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_viewport_buffer_fill.html#ad67c79f9a643600abd6213ae59cf7102">More...</a><br /></td></tr>
+<tr class="separator:ad67c79f9a643600abd6213ae59cf7102"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a236f227c02cd4998b90817fac1442070"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_viewport_buffer_action.html#a0a504dda9b37edd3de0ae8cfecaad3cf">ViewportBufferAction::ActionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#a236f227c02cd4998b90817fac1442070">getActionType</a> ()</td></tr>
+<tr class="memdesc:a236f227c02cd4998b90817fac1442070"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type of this class.  <a href="class_isis_1_1_viewport_buffer_fill.html#a236f227c02cd4998b90817fac1442070">More...</a><br /></td></tr>
+<tr class="separator:a236f227c02cd4998b90817fac1442070"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0f73073797ea95f4ce7b67ad0004653"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#ad0f73073797ea95f4ce7b67ad0004653">viewportToSample</a> (int x)</td></tr>
+<tr class="memdesc:ad0f73073797ea95f4ce7b67ad0004653"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts screen x position to cube sample position.  <a href="class_isis_1_1_viewport_buffer_fill.html#ad0f73073797ea95f4ce7b67ad0004653">More...</a><br /></td></tr>
+<tr class="separator:ad0f73073797ea95f4ce7b67ad0004653"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12eff7c2e55f4c538e74c59ee80a4cb9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#a12eff7c2e55f4c538e74c59ee80a4cb9">viewportToLine</a> (int y)</td></tr>
+<tr class="memdesc:a12eff7c2e55f4c538e74c59ee80a4cb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts screen y position to cube line position.  <a href="class_isis_1_1_viewport_buffer_fill.html#a12eff7c2e55f4c538e74c59ee80a4cb9">More...</a><br /></td></tr>
+<tr class="separator:a12eff7c2e55f4c538e74c59ee80a4cb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13952f2c14878436b81f83c3c9054972"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#a13952f2c14878436b81f83c3c9054972">getRequestPosition</a> () const</td></tr>
+<tr class="memdesc:a13952f2c14878436b81f83c3c9054972"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current request position (&gt;= read position)  <a href="class_isis_1_1_viewport_buffer_fill.html#a13952f2c14878436b81f83c3c9054972">More...</a><br /></td></tr>
+<tr class="separator:a13952f2c14878436b81f83c3c9054972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa752e76f5aa20105fe829da34abf0324"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#aa752e76f5aa20105fe829da34abf0324">getReadPosition</a> () const</td></tr>
+<tr class="memdesc:aa752e76f5aa20105fe829da34abf0324"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current read position.  <a href="class_isis_1_1_viewport_buffer_fill.html#aa752e76f5aa20105fe829da34abf0324">More...</a><br /></td></tr>
+<tr class="separator:aa752e76f5aa20105fe829da34abf0324"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fd8291070428fb481a7fa171584e30a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#a6fd8291070428fb481a7fa171584e30a">incReadPosition</a> ()</td></tr>
+<tr class="memdesc:a6fd8291070428fb481a7fa171584e30a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increment read position.  <a href="class_isis_1_1_viewport_buffer_fill.html#a6fd8291070428fb481a7fa171584e30a">More...</a><br /></td></tr>
+<tr class="separator:a6fd8291070428fb481a7fa171584e30a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63e66ff87e52dcd1dc7d5c3b21813ab7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#a63e66ff87e52dcd1dc7d5c3b21813ab7">incRequestPosition</a> ()</td></tr>
+<tr class="memdesc:a63e66ff87e52dcd1dc7d5c3b21813ab7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increment request position.  <a href="class_isis_1_1_viewport_buffer_fill.html#a63e66ff87e52dcd1dc7d5c3b21813ab7">More...</a><br /></td></tr>
+<tr class="separator:a63e66ff87e52dcd1dc7d5c3b21813ab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8442727d9195bdded1b95c19133de2e0"><td class="memItemLeft" align="right" valign="top">QRect *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#a8442727d9195bdded1b95c19133de2e0">getRect</a> ()</td></tr>
+<tr class="memdesc:a8442727d9195bdded1b95c19133de2e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the rect that this action is filling in screen pixels.  <a href="class_isis_1_1_viewport_buffer_fill.html#a8442727d9195bdded1b95c19133de2e0">More...</a><br /></td></tr>
+<tr class="separator:a8442727d9195bdded1b95c19133de2e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16c3feb27e9bf83b6768fe118fc08e2b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#a16c3feb27e9bf83b6768fe118fc08e2b">getTopmostPixelPosition</a> ()</td></tr>
+<tr class="memdesc:a16c3feb27e9bf83b6768fe118fc08e2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the top of the X/Y bounding rect for this fill.  <a href="class_isis_1_1_viewport_buffer_fill.html#a16c3feb27e9bf83b6768fe118fc08e2b">More...</a><br /></td></tr>
+<tr class="separator:a16c3feb27e9bf83b6768fe118fc08e2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3de848dbfaf4eb2453045e0e0da83d72"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#a3de848dbfaf4eb2453045e0e0da83d72">getLeftmostPixelPosition</a> ()</td></tr>
+<tr class="memdesc:a3de848dbfaf4eb2453045e0e0da83d72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the left of the X/Y bounding rect for this fill.  <a href="class_isis_1_1_viewport_buffer_fill.html#a3de848dbfaf4eb2453045e0e0da83d72">More...</a><br /></td></tr>
+<tr class="separator:a3de848dbfaf4eb2453045e0e0da83d72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd14a0a26fdf220132986ca851c37594"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#acd14a0a26fdf220132986ca851c37594">doneReading</a> ()</td></tr>
+<tr class="memdesc:acd14a0a26fdf220132986ca851c37594"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if read position is past the end of the fill.  <a href="class_isis_1_1_viewport_buffer_fill.html#acd14a0a26fdf220132986ca851c37594">More...</a><br /></td></tr>
+<tr class="separator:acd14a0a26fdf220132986ca851c37594"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc234784d43bb679c0eba801330f15f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#acc234784d43bb679c0eba801330f15f4">shouldRequestMore</a> ()</td></tr>
+<tr class="memdesc:acc234784d43bb679c0eba801330f15f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if request position is past the end of the fill.  <a href="class_isis_1_1_viewport_buffer_fill.html#acc234784d43bb679c0eba801330f15f4">More...</a><br /></td></tr>
+<tr class="separator:acc234784d43bb679c0eba801330f15f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac586686b4c1c83c7c5e8af88ddfd47dc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#ac586686b4c1c83c7c5e8af88ddfd47dc">shouldPaint</a> (int &amp;linesToPaint)</td></tr>
+<tr class="memdesc:ac586686b4c1c83c7c5e8af88ddfd47dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if it is recommended to paint the fill area so far.  <a href="class_isis_1_1_viewport_buffer_fill.html#ac586686b4c1c83c7c5e8af88ddfd47dc">More...</a><br /></td></tr>
+<tr class="separator:ac586686b4c1c83c7c5e8af88ddfd47dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6af0e5a6c82418d818a351d65ce7039b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html#a6af0e5a6c82418d818a351d65ce7039b">stop</a> ()</td></tr>
+<tr class="memdesc:a6af0e5a6c82418d818a351d65ce7039b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cancels the current operation.  <a href="class_isis_1_1_viewport_buffer_fill.html#a6af0e5a6c82418d818a351d65ce7039b">More...</a><br /></td></tr>
+<tr class="separator:a6af0e5a6c82418d818a351d65ce7039b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a364cf0e3196524166d1f4227fc13d2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_action.html#a1a364cf0e3196524166d1f4227fc13d2">started</a> ()</td></tr>
+<tr class="memdesc:a1a364cf0e3196524166d1f4227fc13d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this is an action that takes time and has begun.  <a href="class_isis_1_1_viewport_buffer_action.html#a1a364cf0e3196524166d1f4227fc13d2">More...</a><br /></td></tr>
+<tr class="separator:a1a364cf0e3196524166d1f4227fc13d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae83b05eaf3bda0002c26797d5d6e4a27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_viewport_buffer_action.html#ae83b05eaf3bda0002c26797d5d6e4a27">started</a> (bool started)</td></tr>
+<tr class="memdesc:ae83b05eaf3bda0002c26797d5d6e4a27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets started.  <a href="class_isis_1_1_viewport_buffer_action.html#ae83b05eaf3bda0002c26797d5d6e4a27">More...</a><br /></td></tr>
+<tr class="separator:ae83b05eaf3bda0002c26797d5d6e4a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="section author"><dt>Author</dt><dd>????-??-?? Unknown </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a0a504dda9b37edd3de0ae8cfecaad3cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a504dda9b37edd3de0ae8cfecaad3cf">&#9670;&nbsp;</a></span>ActionType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_viewport_buffer_action.html#a0a504dda9b37edd3de0ae8cfecaad3cf">Isis::ViewportBufferAction::ActionType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This uniquely identifies which child is instantiated. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a0a504dda9b37edd3de0ae8cfecaad3cfa9aa982ea5ab5e3859c59328e86c1a46d"></a>none&#160;</td><td class="fielddoc"><p>Parent was instantiated. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0a504dda9b37edd3de0ae8cfecaad3cfa81a3bc1693ad841bd07a31ad375da5fb"></a>transform&#160;</td><td class="fielddoc"><p><a class="el" href="class_isis_1_1_viewport_buffer_transform.html">ViewportBufferTransform</a>. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0a504dda9b37edd3de0ae8cfecaad3cfa29c7056e646eaf1cd864eb720800fc74"></a>fill&#160;</td><td class="fielddoc"><p><a class="el" href="class_isis_1_1_viewport_buffer_fill.html">ViewportBufferFill</a>. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0a504dda9b37edd3de0ae8cfecaad3cfab510454d30c8eeb5bc321075cbc6809a"></a>stretch&#160;</td><td class="fielddoc"><p><a class="el" href="class_isis_1_1_viewport_buffer_stretch.html">ViewportBufferStretch</a>. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad2e6d09ac1b87ecc174c0e79b78b22ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2e6d09ac1b87ecc174c0e79b78b22ed">&#9670;&nbsp;</a></span>ViewportBufferFill()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ViewportBufferFill::ViewportBufferFill </td>
+          <td>(</td>
+          <td class="paramtype">const QRect &amp;&#160;</td>
+          <td class="paramname"><em>rect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>xCoef</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>xScale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>yCoef</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>yScale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QPoint &amp;&#160;</td>
+          <td class="paramname"><em>topLeftPixel</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rect</td><td></td></tr>
+    <tr><td class="paramname">xCoef</td><td></td></tr>
+    <tr><td class="paramname">xScale</td><td></td></tr>
+    <tr><td class="paramname">yCoef</td><td></td></tr>
+    <tr><td class="paramname">yScale</td><td></td></tr>
+    <tr><td class="paramname">topLeftPixel</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad67c79f9a643600abd6213ae59cf7102"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad67c79f9a643600abd6213ae59cf7102">&#9670;&nbsp;</a></span>~ViewportBufferFill()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ViewportBufferFill::~ViewportBufferFill </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="acd14a0a26fdf220132986ca851c37594"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd14a0a26fdf220132986ca851c37594">&#9670;&nbsp;</a></span>doneReading()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ViewportBufferFill::doneReading </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if read position is past the end of the fill. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, and <a class="el" href="class_isis_1_1_viewport_buffer_fill.html#ac586686b4c1c83c7c5e8af88ddfd47dc">shouldPaint()</a>.</p>
+
+</div>
+</div>
+<a id="a236f227c02cd4998b90817fac1442070"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a236f227c02cd4998b90817fac1442070">&#9670;&nbsp;</a></span>getActionType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="class_isis_1_1_viewport_buffer_action.html#a0a504dda9b37edd3de0ae8cfecaad3cf">ViewportBufferAction::ActionType</a> Isis::ViewportBufferFill::getActionType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the type of this class. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_viewport_buffer_action.html#a0a504dda9b37edd3de0ae8cfecaad3cf" title="This uniquely identifies which child is instantiated.">ViewportBufferAction::ActionType</a> </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_viewport_buffer_action.html#aa06d41233b8a5bebef2edcf91e9848dd">Isis::ViewportBufferAction</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_viewport_buffer_action.html#a0a504dda9b37edd3de0ae8cfecaad3cfa29c7056e646eaf1cd864eb720800fc74">Isis::ViewportBufferAction::fill</a>.</p>
+
+</div>
+</div>
+<a id="a3de848dbfaf4eb2453045e0e0da83d72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3de848dbfaf4eb2453045e0e0da83d72">&#9670;&nbsp;</a></span>getLeftmostPixelPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ViewportBufferFill::getLeftmostPixelPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the left of the X/Y bounding rect for this fill. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, and <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>.</p>
+
+</div>
+</div>
+<a id="aa752e76f5aa20105fe829da34abf0324"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa752e76f5aa20105fe829da34abf0324">&#9670;&nbsp;</a></span>getReadPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ViewportBufferFill::getReadPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the current read position. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, and <a class="el" href="class_isis_1_1_viewport_buffer.html#a42028accef2df535a5c3a5e57b8942c0">Isis::ViewportBuffer::totalUnfilledArea()</a>.</p>
+
+</div>
+</div>
+<a id="a8442727d9195bdded1b95c19133de2e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8442727d9195bdded1b95c19133de2e0">&#9670;&nbsp;</a></span>getRect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QRect* Isis::ViewportBufferFill::getRect </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the rect that this action is filling in screen pixels. </p>
+<dl class="section return"><dt>Returns</dt><dd>QRect* </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, and <a class="el" href="class_isis_1_1_viewport_buffer.html#a42028accef2df535a5c3a5e57b8942c0">Isis::ViewportBuffer::totalUnfilledArea()</a>.</p>
+
+</div>
+</div>
+<a id="a13952f2c14878436b81f83c3c9054972"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13952f2c14878436b81f83c3c9054972">&#9670;&nbsp;</a></span>getRequestPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ViewportBufferFill::getRequestPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the current request position (&gt;= read position) </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>.</p>
+
+</div>
+</div>
+<a id="a16c3feb27e9bf83b6768fe118fc08e2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16c3feb27e9bf83b6768fe118fc08e2b">&#9670;&nbsp;</a></span>getTopmostPixelPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ViewportBufferFill::getTopmostPixelPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the top of the X/Y bounding rect for this fill. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, and <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>.</p>
+
+</div>
+</div>
+<a id="a6fd8291070428fb481a7fa171584e30a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fd8291070428fb481a7fa171584e30a">&#9670;&nbsp;</a></span>incReadPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ViewportBufferFill::incReadPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Increment read position. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, and <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>.</p>
+
+</div>
+</div>
+<a id="a63e66ff87e52dcd1dc7d5c3b21813ab7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63e66ff87e52dcd1dc7d5c3b21813ab7">&#9670;&nbsp;</a></span>incRequestPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ViewportBufferFill::incRequestPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Increment request position. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>.</p>
+
+</div>
+</div>
+<a id="ac586686b4c1c83c7c5e8af88ddfd47dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac586686b4c1c83c7c5e8af88ddfd47dc">&#9670;&nbsp;</a></span>shouldPaint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ViewportBufferFill::shouldPaint </td>
+          <td>(</td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>linesToPaint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if it is recommended to paint the fill area so far. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">linesToPaint</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_viewport_buffer_fill.html#acd14a0a26fdf220132986ca851c37594">doneReading()</a>.</p>
+
+</div>
+</div>
+<a id="acc234784d43bb679c0eba801330f15f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc234784d43bb679c0eba801330f15f4">&#9670;&nbsp;</a></span>shouldRequestMore()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ViewportBufferFill::shouldRequestMore </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if request position is past the end of the fill. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, and <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>.</p>
+
+</div>
+</div>
+<a id="a1a364cf0e3196524166d1f4227fc13d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a364cf0e3196524166d1f4227fc13d2">&#9670;&nbsp;</a></span>started() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ViewportBufferAction::started </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if this is an action that takes time and has begun. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, and <a class="el" href="class_isis_1_1_viewport_buffer_action.html#ae83b05eaf3bda0002c26797d5d6e4a27">Isis::ViewportBufferAction::started()</a>.</p>
+
+</div>
+</div>
+<a id="ae83b05eaf3bda0002c26797d5d6e4a27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae83b05eaf3bda0002c26797d5d6e4a27">&#9670;&nbsp;</a></span>started() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ViewportBufferAction::started </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>started</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets started. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">started</td><td>True if starting </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_viewport_buffer_action.html#a1a364cf0e3196524166d1f4227fc13d2">Isis::ViewportBufferAction::started()</a>.</p>
+
+</div>
+</div>
+<a id="a6af0e5a6c82418d818a351d65ce7039b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6af0e5a6c82418d818a351d65ce7039b">&#9670;&nbsp;</a></span>stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ViewportBufferFill::stop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cancels the current operation. </p>
+<p>Stops filling ASAP. </p>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_viewport_buffer_action.html#adda0aa7edf256cb84979df6332210763">Isis::ViewportBufferAction</a>.</p>
+
+</div>
+</div>
+<a id="a12eff7c2e55f4c538e74c59ee80a4cb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12eff7c2e55f4c538e74c59ee80a4cb9">&#9670;&nbsp;</a></span>viewportToLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ViewportBufferFill::viewportToLine </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts screen y position to cube line position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, and <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>.</p>
+
+</div>
+</div>
+<a id="ad0f73073797ea95f4ce7b67ad0004653"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0f73073797ea95f4ce7b67ad0004653">&#9670;&nbsp;</a></span>viewportToSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ViewportBufferFill::viewportToSample </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts screen x position to cube sample position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, and <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CubeViewport/<a class="el" href="_viewport_buffer_fill_8h_source.html">ViewportBufferFill.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CubeViewport/<a class="el" href="_viewport_buffer_fill_8cpp.html">ViewportBufferFill.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_viewport_buffer_fill.html">ViewportBufferFill</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

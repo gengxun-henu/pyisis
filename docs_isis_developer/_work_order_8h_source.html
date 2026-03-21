@@ -1,0 +1,616 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/WorkOrder/WorkOrder.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_work_order_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">WorkOrder.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_work_order_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef WorkOrder_H</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define WorkOrder_H</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QAction&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QDateTime&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// This is needed for the QVariant macro</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;QMetaType&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;QPointer&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;QUndoCommand&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;QXmlStreamReader&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;QElapsedTimer&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_correlation_matrix_8h.html">CorrelationMatrix.h</a>&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_file_item_8h.html">FileItem.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_gui_camera_8h.html">GuiCamera.h</a>&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_target_body_8h.html">TargetBody.h</a>&quot;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="keyword">class </span><a class="code" href="class_q_future_watcher.html">QFutureWatcher</a>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">class </span>QMutex;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">class </span>QXmlStreamWriter;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <span class="keyword">class </span>Control;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keyword">class </span>ControlList;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keyword">class </span>Directory;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keyword">class </span>ImageList;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <span class="keyword">class </span>ProgressBar;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <span class="keyword">class </span>Project;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keyword">class </span>ProjectItem;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  <span class="keyword">class </span>ShapeList;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keyword">class </span>Template;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00311"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html">  311</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> : <span class="keyword">public</span> <a class="code" href="class_q_action.html">QAction</a>, <span class="keyword">public</span> <a class="code" href="class_q_undo_command.html">QUndoCommand</a> {</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    Q_OBJECT</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160; </div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160; </div>
+<div class="line"><a name="l00321"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2">  321</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2">WorkOrderStatus</a> {</div>
+<div class="line"><a name="l00322"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a46036c6588cba645bbcf9e96d98f2cc9">  322</a></span>&#160;        <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a46036c6588cba645bbcf9e96d98f2cc9">WorkOrderUnknownStatus</a> = 0,</div>
+<div class="line"><a name="l00323"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a5349bc741b4da46819050fbb1b2c4c61">  323</a></span>&#160;        <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a5349bc741b4da46819050fbb1b2c4c61">WorkOrderNotStarted</a>,</div>
+<div class="line"><a name="l00324"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a78951fbe5c4426a31b6a183661915759">  324</a></span>&#160;        <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a78951fbe5c4426a31b6a183661915759">WorkOrderRedoing</a>,</div>
+<div class="line"><a name="l00325"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2ae28789c81db248bca5ae382338f0d8ec">  325</a></span>&#160;        <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2ae28789c81db248bca5ae382338f0d8ec">WorkOrderRedone</a>,</div>
+<div class="line"><a name="l00326"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a97378f6e0496ed74cafc729b9cdea947">  326</a></span>&#160;        <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a97378f6e0496ed74cafc729b9cdea947">WorkOrderUndoing</a>,</div>
+<div class="line"><a name="l00327"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a67b6ca06abf8ef831f3e15b2581cbad5">  327</a></span>&#160;        <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a67b6ca06abf8ef831f3e15b2581cbad5">WorkOrderUndone</a>,</div>
+<div class="line"><a name="l00331"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2aa73def77932e208f7995e15705a4c918">  331</a></span>&#160;        <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2aa73def77932e208f7995e15705a4c918">WorkOrderFinished</a>,</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2ab3a3b37b194dfd49470a191d692b3bf6">WorkOrderLastStatus</a> = <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2aa73def77932e208f7995e15705a4c918">WorkOrderFinished</a></div>
+<div class="line"><a name="l00333"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2ab3a3b37b194dfd49470a191d692b3bf6">  333</a></span>&#160;      };</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
+<div class="line"><a name="l00339"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943">  339</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943">Context</a> {</div>
+<div class="line"><a name="l00340"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943a2338e775586b0cdea787d2aab2fca22d">  340</a></span>&#160;        <a class="code" href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943a2338e775586b0cdea787d2aab2fca22d">NoContext</a>,</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        <a class="code" href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943a53383503b563661b9c02d74a16b2410b">ProjectContext</a></div>
+<div class="line"><a name="l00342"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943a53383503b563661b9c02d74a16b2410b">  342</a></span>&#160;      };</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;      <a class="code" href="class_isis_1_1_work_order.html#afbc0dc282380156200eb4bcc850e354e">WorkOrder</a>(<a class="code" href="class_isis_1_1_project.html">Project</a> *<a class="code" href="class_isis_1_1_work_order.html#aba48b35a2329e2bc3dd3f7cc98e36ccc">project</a>);</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_work_order.html#ac1ba93d19536fa30cdcc1242ca8ca994">~WorkOrder</a>();</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
+<div class="line"><a name="l00347"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a28408117bc4978ee5f120f8d6da71618">  347</a></span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> *<a class="code" href="class_isis_1_1_work_order.html#a28408117bc4978ee5f120f8d6da71618">clone</a>() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160; </div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aa8e93680e53ae2fedf6c6f97a0ececfc">isExecutable</a>(<a class="code" href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943">Context</a>);</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aa8e93680e53ae2fedf6c6f97a0ececfc">isExecutable</a>(<a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *images);</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aa8e93680e53ae2fedf6c6f97a0ececfc">isExecutable</a>(<a class="code" href="class_isis_1_1_shape_list.html">ShapeList</a> *shapes);</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aa8e93680e53ae2fedf6c6f97a0ececfc">isExecutable</a>(<a class="code" href="class_isis_1_1_control_list.html">ControlList</a> *controls);</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aa8e93680e53ae2fedf6c6f97a0ececfc">isExecutable</a>(<a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a>);</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aa8e93680e53ae2fedf6c6f97a0ececfc">isExecutable</a>(<a class="code" href="class_q_shared_pointer.html">TargetBodyQsp</a> <a class="code" href="class_isis_1_1_work_order.html#aac46bab86f4ebd8b7348d95dba0efbf8">targetBody</a>);</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aa8e93680e53ae2fedf6c6f97a0ececfc">isExecutable</a>(<a class="code" href="class_isis_1_1_template.html">Template</a> *currentTemplate);</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aa8e93680e53ae2fedf6c6f97a0ececfc">isExecutable</a>(<a class="code" href="class_q_shared_pointer.html">GuiCameraQsp</a> <a class="code" href="class_isis_1_1_work_order.html#a95b0411c69715223f7a1048ecc4fef15">guiCamera</a>);</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aa8e93680e53ae2fedf6c6f97a0ececfc">isExecutable</a>(<a class="code" href="class_q_shared_pointer.html">FileItemQsp</a> <a class="code" href="class_isis_1_1_work_order.html#afa48e3807a3054f9cfb1dd5ff5523215">fileItem</a>);</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aa8e93680e53ae2fedf6c6f97a0ececfc">isExecutable</a>(<a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> *item);</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160; </div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a4aa5df68e1553b97f63d4a06f93919e1">save</a>(QXmlStreamWriter &amp;stream) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160; </div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">setData</a>(<a class="code" href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943">Context</a>);</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">setData</a>(QString data);</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">setData</a>(<a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *images);</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">setData</a>(<a class="code" href="class_isis_1_1_shape_list.html">ShapeList</a> *shapes);</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">setData</a>(<a class="code" href="class_isis_1_1_control_list.html">ControlList</a> *controls);</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">setData</a>(<a class="code" href="class_isis_1_1_template.html">Template</a> *currentTemplate);</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">setData</a>(<a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a>);</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">setData</a>(<a class="code" href="class_q_shared_pointer.html">TargetBodyQsp</a> <a class="code" href="class_isis_1_1_work_order.html#aac46bab86f4ebd8b7348d95dba0efbf8">targetBody</a>);</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">setData</a>(<a class="code" href="class_q_shared_pointer.html">GuiCameraQsp</a> <a class="code" href="class_isis_1_1_work_order.html#a95b0411c69715223f7a1048ecc4fef15">guiCamera</a>);</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">setData</a>(<a class="code" href="class_q_shared_pointer.html">FileItemQsp</a> <a class="code" href="class_isis_1_1_work_order.html#afa48e3807a3054f9cfb1dd5ff5523215">fileItem</a>);</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">setData</a>(<a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> *item);</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160; </div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160; </div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a14268ebc16e510b10ddc702b3e7a8b8c">setNext</a>(<a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> *nextWorkOrder);</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#aa83aaca3b1b6b10075beebafb25620ae">setPrevious</a>(<a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> *previousWorkOrder);</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160; </div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;      QString <a class="code" href="class_isis_1_1_work_order.html#ae11df4c7c474603dbe297b91a0acf20e">bestText</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#a629369d4d628b08cd4d4da71233c7aad">isUndoable</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#a77d4fd06b5b94b4d270c05fab514aac6">isSavedToHistory</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#addf7a9fa604c42a0e329aa6e3a6f671c">isSynchronous</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aac299e40e6e38323bfd8c4128db236db">createsCleanState</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;      QDateTime <a class="code" href="class_isis_1_1_work_order.html#aa20d9b5d4ee67c2d166060437153d06b">executionTime</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#ae70b1d484ff5e3a13f5b378f0fb1476b">isFinished</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#a877c870abf1ad020b3e762bda0f40c50">isRedoing</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#a551caf6cb756eef1d28ced37865e8468">isRedone</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#a2eb982ebf2a75e1967599121d8e371f6">isUndoing</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#a72e912fb45189a3f9af05354ad20a69b">isUndone</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#a2b7daeaaaebf0a6d78d577933bcd2bed">modifiesDiskState</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;      <a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> *<a class="code" href="class_isis_1_1_work_order.html#a28547319e68baf145c908ffa3a863e21">next</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;      <a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> *<a class="code" href="class_isis_1_1_work_order.html#a6b2213eeaa03455af4d6ee8a7627b366">previous</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;      QString <a class="code" href="class_isis_1_1_work_order.html#aa1942c30b0dd44b161295eff726f396a">statusText</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160; </div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;      <a class="code" href="class_isis_1_1_progress_bar.html">ProgressBar</a> *<a class="code" href="class_isis_1_1_work_order.html#ac90ffa848ce29dd788d049c8ecf23bbb">progressBar</a>();</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160; </div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2">WorkOrderStatus</a> <a class="code" href="class_isis_1_1_work_order.html#a857b801eb306ba3beb7d18bd6a954170">fromStatusString</a>(QString);</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;      <span class="keyword">static</span> QString <a class="code" href="class_isis_1_1_work_order.html#a6d53d1481a5a801a372c2648993639f1">toString</a>(<a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2">WorkOrderStatus</a>);</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160; </div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    signals:</div>
+<div class="line"><a name="l00401"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a010a88689ae37625df91e401e1a4da67">  401</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a010a88689ae37625df91e401e1a4da67">creatingProgress</a>(<a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> *);</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;      <span class="comment">// This is necessary because QTreeWidget doesn&#39;t support us just deleting the progress bar..</span></div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;      <span class="comment">//   HistoryWidget relies on this signal.</span></div>
+<div class="line"><a name="l00404"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#aebba9e3d58038ae3ac6c5a01e18429bc">  404</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#aebba9e3d58038ae3ac6c5a01e18429bc">deletingProgress</a>(<a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> *);</div>
+<div class="line"><a name="l00405"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a18ac2cc697c8cfcea5f2f54ef98b50c4">  405</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a18ac2cc697c8cfcea5f2f54ef98b50c4">finished</a>(<a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> *);</div>
+<div class="line"><a name="l00406"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a73968f5c77d22a4972a3f16c66f20bbf">  406</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a73968f5c77d22a4972a3f16c66f20bbf">statusChanged</a>(<a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> *);</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160; </div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a02ae520ae6b3f76f94363066dd5e4f41">enableWorkOrder</a>();</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#aaa18f01471690633d512af00ea33656f">disableWorkOrder</a>();</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160; </div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#a73919ffd90744cbd1dd5b4ba4015e991">setupExecution</a>();</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160; </div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#aa29452870c13f7a33e5191532d8af272">execute</a>();</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160; </div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a5722b6d9121808e82b7aa93421347fea">redo</a>();</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a5c81397c2d05e61d556ce48b52ed3e5c">undo</a>();</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160; </div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;      <a class="code" href="class_isis_1_1_work_order.html#afbc0dc282380156200eb4bcc850e354e">WorkOrder</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> &amp;other);</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160; </div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;      <a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *<a class="code" href="class_isis_1_1_work_order.html#addc3bc0b387702f21244239fd767a8c7">imageList</a>();</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *<a class="code" href="class_isis_1_1_work_order.html#addc3bc0b387702f21244239fd767a8c7">imageList</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160; </div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;      <a class="code" href="class_isis_1_1_shape_list.html">ShapeList</a> *<a class="code" href="class_isis_1_1_work_order.html#a1a62278468130c3137d9c3ff090c7723">shapeList</a>();</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_shape_list.html">ShapeList</a> *<a class="code" href="class_isis_1_1_work_order.html#a1a62278468130c3137d9c3ff090c7723">shapeList</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160; </div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;      <a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a> <a class="code" href="class_isis_1_1_work_order.html#af6e24503243a6a56da898fd25891e0d2">correlationMatrix</a>();</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160; </div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;      QPointer&lt;ControlList&gt; <a class="code" href="class_isis_1_1_work_order.html#a8f4d41326b07e8f6615cad9fc115184f">controlList</a>();</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160; </div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;      <a class="code" href="class_isis_1_1_template.html">Template</a> *<a class="code" href="class_isis_1_1_work_order.html#a49ad092f33d8fd5859d7b57cea5c4b67">getTemplate</a>();</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160; </div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;      <a class="code" href="class_q_shared_pointer.html">TargetBodyQsp</a> <a class="code" href="class_isis_1_1_work_order.html#aac46bab86f4ebd8b7348d95dba0efbf8">targetBody</a>();</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160; </div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;      <a class="code" href="class_q_shared_pointer.html">GuiCameraQsp</a> <a class="code" href="class_isis_1_1_work_order.html#a95b0411c69715223f7a1048ecc4fef15">guiCamera</a>();</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160; </div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;      <a class="code" href="class_q_shared_pointer.html">FileItemQsp</a> <a class="code" href="class_isis_1_1_work_order.html#afa48e3807a3054f9cfb1dd5ff5523215">fileItem</a>();</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160; </div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#ab516f5ef325266489207e3ea0600757e">dependsOn</a>(<a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> *other) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160; </div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;      <a class="code" href="class_isis_1_1_directory.html">Directory</a> *<a class="code" href="class_isis_1_1_work_order.html#a9090489d8721b3aa76be5ce9909a83ee">directory</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;      <a class="code" href="class_isis_1_1_project.html">Project</a> *<a class="code" href="class_isis_1_1_work_order.html#aba48b35a2329e2bc3dd3f7cc98e36ccc">project</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160; </div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a9c29cfad3f2c15263324fec9347b7450">setCreatesCleanState</a>(<span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#aac299e40e6e38323bfd8c4128db236db">createsCleanState</a>);</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#aa69339c5a480012a592be02b62c53ac9">setModifiesDiskState</a>(<span class="keywordtype">bool</span> changesProjectOnDisk);</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#aaff8bf2e612dd4aaee208ee5fc114213">setInternalData</a>(QStringList data);</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160; </div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_work_order.html#a5f5d3e414b13b590f333c654a22fc604">progressMin</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_work_order.html#a23dfec69dfd9ce6a85fdddf89f48e525">progressMax</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_work_order.html#ae5bb14f47554261c0730a38236d93bfc">progressValue</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a1e82e17f72afbd551ef1612a258d0f5c">setProgressRange</a>(<span class="keywordtype">int</span>, <span class="keywordtype">int</span>);</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a6c47f2b16821b30a343e842ae3bfc80f">setProgressValue</a>(<span class="keywordtype">int</span>);</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160; </div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;      QStringList <a class="code" href="class_isis_1_1_work_order.html#a8e531fa32c1a0753e54305e1ae75f13d">internalData</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#aeeed994fe13551a20a445650bbf01179">postExecution</a>();</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a42e4c3c75a15311f01f0fe0db6da42ef">undoExecution</a>();</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#a436e56c87001b7b2fc58cbc726bfd715">postUndoExecution</a>();</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160; </div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;    <span class="keyword">protected</span> slots:</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_work_order.html#ad209afdce1aa22d6f869fe9cbf7ceca3">addCloneToProject</a>();</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160; </div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;      <span class="keywordtype">bool</span> isInStableState() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;      <span class="keywordtype">void</span> listenForImageDestruction();</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;      <span class="keywordtype">void</span> listenForShapeDestruction();</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;      <span class="keywordtype">void</span> resetProgressBar();</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;      <span class="keywordtype">void</span> setProgressToFinalText();</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160; </div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;    <span class="keyword">private</span> slots:</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;      <span class="keywordtype">void</span> attemptQueuedAction();</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;      <span class="keywordtype">void</span> executionFinished();</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;      <span class="keywordtype">void</span> clearImageList();</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;      <span class="keywordtype">void</span> clearShapeList();</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;      <span class="keywordtype">void</span> updateProgress();</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;      <span class="keywordtype">void</span> startRedo();</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160; </div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;      <span class="keyword">enum</span> QueuedWorkOrderAction {</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        NoQueuedAction,</div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        RedoQueuedAction,</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;        UndoQueuedAction</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;      };</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160; </div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00497"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a6bfaa8ab429f56a2af563a16e9acf44b">  497</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#a6bfaa8ab429f56a2af563a16e9acf44b">m_isUndoable</a>;</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160; </div>
+<div class="line"><a name="l00504"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a2d903b17f6238f2ddd44d14a162efc91">  504</a></span>&#160;       <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#a2d903b17f6238f2ddd44d14a162efc91">m_isSynchronous</a>;</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160; </div>
+<div class="line"><a name="l00511"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a1ad1a04bd58dde101d0c518640cbac6d">  511</a></span>&#160;       <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_work_order.html#a1ad1a04bd58dde101d0c518640cbac6d">m_isSavedToHistory</a>;</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160; </div>
+<div class="line"><a name="l00513"></a><span class="lineno"><a class="line" href="class_isis_1_1_work_order.html#a5b3afdd0e5ccd516c1f9fc85f7d0e3c3">  513</a></span>&#160;       <a class="code" href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2">WorkOrderStatus</a> <a class="code" href="class_isis_1_1_work_order.html#a5b3afdd0e5ccd516c1f9fc85f7d0e3c3">m_status</a>;</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160; </div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;      <a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> &amp;operator=(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> &amp;rhs);</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160; </div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;      <span class="keywordtype">bool</span> m_createsCleanState;</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160; </div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;      <span class="keywordtype">bool</span> m_modifiesDiskState;</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160; </div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;      QueuedWorkOrderAction m_queuedAction;</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160; </div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;      <span class="keywordtype">int</span> m_progressRangeMinValue;</div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;      <span class="keywordtype">int</span> m_progressRangeMaxValue;</div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;      <span class="keywordtype">int</span> m_progressValue;</div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160; </div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;      <a class="code" href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943">Context</a> m_context;</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;      QString m_data;</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;      QPointer&lt;ImageList&gt; m_imageList;</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;      QPointer&lt;ShapeList&gt; m_shapeList;</div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;      QPointer&lt;ControlList&gt; m_controlList;</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;      <a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a> m_correlationMatrix;</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;      <a class="code" href="class_q_shared_pointer.html">GuiCameraQsp</a> m_guiCamera;</div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160; </div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160; </div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;      <a class="code" href="class_isis_1_1_template.html">Template</a> *m_template;</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160; </div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160; </div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;      <a class="code" href="class_q_shared_pointer.html">TargetBodyQsp</a> m_targetBody;</div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160; </div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160; </div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;      <a class="code" href="class_q_shared_pointer.html">FileItemQsp</a> m_fileItem;</div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160; </div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160; </div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;      QStringList m_imageIds;</div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160; </div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;      QStringList m_shapeIds;</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160; </div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;      QStringList m_internalData;</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160; </div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;      QPointer&lt;WorkOrder&gt; m_nextWorkOrder;</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160; </div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;      QPointer&lt;WorkOrder&gt; m_previousWorkOrder;</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160; </div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;      QPointer&lt;Project&gt; m_project;</div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160; </div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;      QMutex *m_transparentConstMutex;</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160; </div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;      QDateTime m_executionTime;</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160; </div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;      QPointer&lt; QFutureWatcher&lt;void&gt; &gt; m_futureWatcher;</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160; </div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160; </div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160; </div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;      QPointer&lt;ProgressBar&gt; m_progressBar;</div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160; </div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;      QPointer&lt;QTimer&gt; m_progressBarUpdateTimer;</div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160; </div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;      QPointer&lt;QTimer&gt; m_progressBarDeletionTimer;</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160; </div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160; </div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;      QElapsedTimer *m_elapsedTimer;</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160; </div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;      <span class="keywordtype">double</span> m_secondsElapsed;</div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;  };</div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;}</div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160; </div>
+<div class="line"><a name="l00661"></a><span class="lineno"><a class="line" href="_work_order_8h.html#a45f41407f6edd036bb1d39f28c69abc8">  661</a></span>&#160;<a class="code" href="_work_order_8h.html#a45f41407f6edd036bb1d39f28c69abc8">Q_DECLARE_METATYPE</a>(<a class="code" href="class_isis_1_1_work_order.html">Isis::WorkOrder</a> *);</div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160; </div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_correlation_matrix_8h_html"><div class="ttname"><a href="_correlation_matrix_8h.html">CorrelationMatrix.h</a></div></div>
+<div class="ttc" id="a_file_item_8h_html"><div class="ttname"><a href="_file_item_8h.html">FileItem.h</a></div></div>
+<div class="ttc" id="a_gui_camera_8h_html"><div class="ttname"><a href="_gui_camera_8h.html">GuiCamera.h</a></div></div>
+<div class="ttc" id="a_target_body_8h_html"><div class="ttname"><a href="_target_body_8h.html">TargetBody.h</a></div></div>
+<div class="ttc" id="a_work_order_8h_html_a45f41407f6edd036bb1d39f28c69abc8"><div class="ttname"><a href="_work_order_8h.html#a45f41407f6edd036bb1d39f28c69abc8">Q_DECLARE_METATYPE</a></div><div class="ttdeci">Q_DECLARE_METATYPE(Isis::WorkOrder *)</div><div class="ttdoc">This allows WorkOrder *'s to be stored in a QVariant.</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_list_html"><div class="ttname"><a href="class_isis_1_1_control_list.html">Isis::ControlList</a></div><div class="ttdoc">Maintains a list of Controls so that control nets can easily be copied from one Project to another,...</div><div class="ttdef"><b>Definition:</b> ControlList.h:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_correlation_matrix_html"><div class="ttname"><a href="class_isis_1_1_correlation_matrix.html">Isis::CorrelationMatrix</a></div><div class="ttdoc">This is a container for the correlation matrix that comes from a bundle adjust.</div><div class="ttdef"><b>Definition:</b> CorrelationMatrix.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_directory_html"><div class="ttname"><a href="class_isis_1_1_directory.html">Isis::Directory</a></div><div class="ttdef"><b>Definition:</b> Directory.h:271</div></div>
+<div class="ttc" id="aclass_isis_1_1_image_list_html"><div class="ttname"><a href="class_isis_1_1_image_list.html">Isis::ImageList</a></div><div class="ttdoc">Internalizes a list of images and allows for operations on the entire list.</div><div class="ttdef"><b>Definition:</b> ImageList.h:53</div></div>
+<div class="ttc" id="aclass_isis_1_1_progress_bar_html"><div class="ttname"><a href="class_isis_1_1_progress_bar.html">Isis::ProgressBar</a></div><div class="ttdef"><b>Definition:</b> ProgressBar.h:15</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_html"><div class="ttname"><a href="class_isis_1_1_project.html">Isis::Project</a></div><div class="ttdoc">The main project for ipce.</div><div class="ttdef"><b>Definition:</b> Project.h:287</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html"><div class="ttname"><a href="class_isis_1_1_project_item.html">Isis::ProjectItem</a></div><div class="ttdoc">Represents an item of a ProjectItemModel in Qt's model-view framework.</div><div class="ttdef"><b>Definition:</b> ProjectItem.h:134</div></div>
+<div class="ttc" id="aclass_isis_1_1_shape_list_html"><div class="ttname"><a href="class_isis_1_1_shape_list.html">Isis::ShapeList</a></div><div class="ttdoc">Internalizes a list of shapes and allows for operations on the entire list.</div><div class="ttdef"><b>Definition:</b> ShapeList.h:31</div></div>
+<div class="ttc" id="aclass_isis_1_1_template_html"><div class="ttname"><a href="class_isis_1_1_template.html">Isis::Template</a></div><div class="ttdef"><b>Definition:</b> Template.h:30</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html"><div class="ttname"><a href="class_isis_1_1_work_order.html">Isis::WorkOrder</a></div><div class="ttdoc">Provide Undo/redo abilities, serialization, and history for an operation.</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:311</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a010a88689ae37625df91e401e1a4da67"><div class="ttname"><a href="class_isis_1_1_work_order.html#a010a88689ae37625df91e401e1a4da67">Isis::WorkOrder::creatingProgress</a></div><div class="ttdeci">void creatingProgress(WorkOrder *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a02ae520ae6b3f76f94363066dd5e4f41"><div class="ttname"><a href="class_isis_1_1_work_order.html#a02ae520ae6b3f76f94363066dd5e4f41">Isis::WorkOrder::enableWorkOrder</a></div><div class="ttdeci">void enableWorkOrder()</div><div class="ttdoc">Enables the work order.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1206</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a14268ebc16e510b10ddc702b3e7a8b8c"><div class="ttname"><a href="class_isis_1_1_work_order.html#a14268ebc16e510b10ddc702b3e7a8b8c">Isis::WorkOrder::setNext</a></div><div class="ttdeci">void setNext(WorkOrder *nextWorkOrder)</div><div class="ttdoc">Sets the next WorkOrder in the sequence.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:601</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a18ac2cc697c8cfcea5f2f54ef98b50c4"><div class="ttname"><a href="class_isis_1_1_work_order.html#a18ac2cc697c8cfcea5f2f54ef98b50c4">Isis::WorkOrder::finished</a></div><div class="ttdeci">void finished(WorkOrder *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a1a62278468130c3137d9c3ff090c7723"><div class="ttname"><a href="class_isis_1_1_work_order.html#a1a62278468130c3137d9c3ff090c7723">Isis::WorkOrder::shapeList</a></div><div class="ttdeci">ShapeList * shapeList()</div><div class="ttdoc">@briefReturns a pointer to the ShapeList for this WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:651</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a1ad1a04bd58dde101d0c518640cbac6d"><div class="ttname"><a href="class_isis_1_1_work_order.html#a1ad1a04bd58dde101d0c518640cbac6d">Isis::WorkOrder::m_isSavedToHistory</a></div><div class="ttdeci">bool m_isSavedToHistory</div><div class="ttdoc">Set the work order to be shown in the HistoryTreeWidget.</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:511</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a1e82e17f72afbd551ef1612a258d0f5c"><div class="ttname"><a href="class_isis_1_1_work_order.html#a1e82e17f72afbd551ef1612a258d0f5c">Isis::WorkOrder::setProgressRange</a></div><div class="ttdeci">void setProgressRange(int, int)</div><div class="ttdoc">Sets the progress range of the WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1346</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a23dfec69dfd9ce6a85fdddf89f48e525"><div class="ttname"><a href="class_isis_1_1_work_order.html#a23dfec69dfd9ce6a85fdddf89f48e525">Isis::WorkOrder::progressMax</a></div><div class="ttdeci">int progressMax() const</div><div class="ttdoc">Gets the maximum value of the progress range of the WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1325</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a25beb9fe596084a46e70f192d86d68d7"><div class="ttname"><a href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">Isis::WorkOrder::setData</a></div><div class="ttdeci">virtual void setData(Context)</div><div class="ttdoc">Sets the context data for this WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:245</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a28408117bc4978ee5f120f8d6da71618"><div class="ttname"><a href="class_isis_1_1_work_order.html#a28408117bc4978ee5f120f8d6da71618">Isis::WorkOrder::clone</a></div><div class="ttdeci">virtual WorkOrder * clone() const =0</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a28547319e68baf145c908ffa3a863e21"><div class="ttname"><a href="class_isis_1_1_work_order.html#a28547319e68baf145c908ffa3a863e21">Isis::WorkOrder::next</a></div><div class="ttdeci">WorkOrder * next() const</div><div class="ttdoc">Gets the next WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:922</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a2b7daeaaaebf0a6d78d577933bcd2bed"><div class="ttname"><a href="class_isis_1_1_work_order.html#a2b7daeaaaebf0a6d78d577933bcd2bed">Isis::WorkOrder::modifiesDiskState</a></div><div class="ttdeci">bool modifiesDiskState() const</div><div class="ttdoc">Returns the modified disk state.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:912</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a2d903b17f6238f2ddd44d14a162efc91"><div class="ttname"><a href="class_isis_1_1_work_order.html#a2d903b17f6238f2ddd44d14a162efc91">Isis::WorkOrder::m_isSynchronous</a></div><div class="ttdeci">bool m_isSynchronous</div><div class="ttdoc">This is defaulted to true.</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:504</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a2eb982ebf2a75e1967599121d8e371f6"><div class="ttname"><a href="class_isis_1_1_work_order.html#a2eb982ebf2a75e1967599121d8e371f6">Isis::WorkOrder::isUndoing</a></div><div class="ttdeci">bool isUndoing() const</div><div class="ttdoc">Returns the WorkOrderUndoing state.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:891</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a42e4c3c75a15311f01f0fe0db6da42ef"><div class="ttname"><a href="class_isis_1_1_work_order.html#a42e4c3c75a15311f01f0fe0db6da42ef">Isis::WorkOrder::undoExecution</a></div><div class="ttdeci">virtual void undoExecution()</div><div class="ttdoc">Execute the steps necessary to undo this workorder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1422</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a436e56c87001b7b2fc58cbc726bfd715"><div class="ttname"><a href="class_isis_1_1_work_order.html#a436e56c87001b7b2fc58cbc726bfd715">Isis::WorkOrder::postUndoExecution</a></div><div class="ttdeci">virtual void postUndoExecution()</div><div class="ttdoc">Perform any steps necessary after an undo of a workorder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1433</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a49ad092f33d8fd5859d7b57cea5c4b67"><div class="ttname"><a href="class_isis_1_1_work_order.html#a49ad092f33d8fd5859d7b57cea5c4b67">Isis::WorkOrder::getTemplate</a></div><div class="ttdeci">Template * getTemplate()</div><div class="ttdoc">WorkOrder::getTemplate.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:724</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a4aa5df68e1553b97f63d4a06f93919e1"><div class="ttname"><a href="class_isis_1_1_work_order.html#a4aa5df68e1553b97f63d4a06f93919e1">Isis::WorkOrder::save</a></div><div class="ttdeci">void save(QXmlStreamWriter &amp;stream) const</div><div class="ttdoc">: Saves a WorkOrder to a data stream.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:532</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a551caf6cb756eef1d28ced37865e8468"><div class="ttname"><a href="class_isis_1_1_work_order.html#a551caf6cb756eef1d28ced37865e8468">Isis::WorkOrder::isRedone</a></div><div class="ttdeci">bool isRedone() const</div><div class="ttdoc">Returns the WorkOrder redone status.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:881</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a5722b6d9121808e82b7aa93421347fea"><div class="ttname"><a href="class_isis_1_1_work_order.html#a5722b6d9121808e82b7aa93421347fea">Isis::WorkOrder::redo</a></div><div class="ttdeci">virtual void redo()</div><div class="ttdoc">Starts (or enqueues) a redo.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1031</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a59e7fb3f0c32243ec1d99a53821530a2"><div class="ttname"><a href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2">Isis::WorkOrder::WorkOrderStatus</a></div><div class="ttdeci">WorkOrderStatus</div><div class="ttdoc">This enumeration is used by other functions to set and retrieve the current state of the WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:321</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a59e7fb3f0c32243ec1d99a53821530a2a46036c6588cba645bbcf9e96d98f2cc9"><div class="ttname"><a href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a46036c6588cba645bbcf9e96d98f2cc9">Isis::WorkOrder::WorkOrderUnknownStatus</a></div><div class="ttdeci">@ WorkOrderUnknownStatus</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:322</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a59e7fb3f0c32243ec1d99a53821530a2a5349bc741b4da46819050fbb1b2c4c61"><div class="ttname"><a href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a5349bc741b4da46819050fbb1b2c4c61">Isis::WorkOrder::WorkOrderNotStarted</a></div><div class="ttdeci">@ WorkOrderNotStarted</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:323</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a59e7fb3f0c32243ec1d99a53821530a2a67b6ca06abf8ef831f3e15b2581cbad5"><div class="ttname"><a href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a67b6ca06abf8ef831f3e15b2581cbad5">Isis::WorkOrder::WorkOrderUndone</a></div><div class="ttdeci">@ WorkOrderUndone</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:327</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a59e7fb3f0c32243ec1d99a53821530a2a78951fbe5c4426a31b6a183661915759"><div class="ttname"><a href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a78951fbe5c4426a31b6a183661915759">Isis::WorkOrder::WorkOrderRedoing</a></div><div class="ttdeci">@ WorkOrderRedoing</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:324</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a59e7fb3f0c32243ec1d99a53821530a2a97378f6e0496ed74cafc729b9cdea947"><div class="ttname"><a href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2a97378f6e0496ed74cafc729b9cdea947">Isis::WorkOrder::WorkOrderUndoing</a></div><div class="ttdeci">@ WorkOrderUndoing</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:326</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a59e7fb3f0c32243ec1d99a53821530a2aa73def77932e208f7995e15705a4c918"><div class="ttname"><a href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2aa73def77932e208f7995e15705a4c918">Isis::WorkOrder::WorkOrderFinished</a></div><div class="ttdeci">@ WorkOrderFinished</div><div class="ttdoc">This is used for work orders that will not undo or redo (See createsCleanState())</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:331</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a59e7fb3f0c32243ec1d99a53821530a2ab3a3b37b194dfd49470a191d692b3bf6"><div class="ttname"><a href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2ab3a3b37b194dfd49470a191d692b3bf6">Isis::WorkOrder::WorkOrderLastStatus</a></div><div class="ttdeci">@ WorkOrderLastStatus</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:332</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a59e7fb3f0c32243ec1d99a53821530a2ae28789c81db248bca5ae382338f0d8ec"><div class="ttname"><a href="class_isis_1_1_work_order.html#a59e7fb3f0c32243ec1d99a53821530a2ae28789c81db248bca5ae382338f0d8ec">Isis::WorkOrder::WorkOrderRedone</a></div><div class="ttdeci">@ WorkOrderRedone</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:325</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a5b3afdd0e5ccd516c1f9fc85f7d0e3c3"><div class="ttname"><a href="class_isis_1_1_work_order.html#a5b3afdd0e5ccd516c1f9fc85f7d0e3c3">Isis::WorkOrder::m_status</a></div><div class="ttdeci">WorkOrderStatus m_status</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:513</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a5c81397c2d05e61d556ce48b52ed3e5c"><div class="ttname"><a href="class_isis_1_1_work_order.html#a5c81397c2d05e61d556ce48b52ed3e5c">Isis::WorkOrder::undo</a></div><div class="ttdeci">virtual void undo()</div><div class="ttdoc">Starts (or enqueues) an undo.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1134</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a5f5d3e414b13b590f333c654a22fc604"><div class="ttname"><a href="class_isis_1_1_work_order.html#a5f5d3e414b13b590f333c654a22fc604">Isis::WorkOrder::progressMin</a></div><div class="ttdeci">int progressMin() const</div><div class="ttdoc">Gets the minimum value of the progress range of the WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1315</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a629369d4d628b08cd4d4da71233c7aad"><div class="ttname"><a href="class_isis_1_1_work_order.html#a629369d4d628b08cd4d4da71233c7aad">Isis::WorkOrder::isUndoable</a></div><div class="ttdeci">bool isUndoable() const</div><div class="ttdoc">Returns true if this work order is undoable, otherwise false.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:807</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a6b2213eeaa03455af4d6ee8a7627b366"><div class="ttname"><a href="class_isis_1_1_work_order.html#a6b2213eeaa03455af4d6ee8a7627b366">Isis::WorkOrder::previous</a></div><div class="ttdeci">WorkOrder * previous() const</div><div class="ttdoc">Gets the previous WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:932</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a6bfaa8ab429f56a2af563a16e9acf44b"><div class="ttname"><a href="class_isis_1_1_work_order.html#a6bfaa8ab429f56a2af563a16e9acf44b">Isis::WorkOrder::m_isUndoable</a></div><div class="ttdeci">bool m_isUndoable</div><div class="ttdoc">Set the workorder to be undoable/redoable This is defaulted to true - his will allow the workorder to...</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:497</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a6c47f2b16821b30a343e842ae3bfc80f"><div class="ttname"><a href="class_isis_1_1_work_order.html#a6c47f2b16821b30a343e842ae3bfc80f">Isis::WorkOrder::setProgressValue</a></div><div class="ttdeci">void setProgressValue(int)</div><div class="ttdoc">Sets the current progress value for the WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1356</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a6d53d1481a5a801a372c2648993639f1"><div class="ttname"><a href="class_isis_1_1_work_order.html#a6d53d1481a5a801a372c2648993639f1">Isis::WorkOrder::toString</a></div><div class="ttdeci">static QString toString(WorkOrderStatus)</div><div class="ttdoc">Gets the current status of the WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:997</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a72e912fb45189a3f9af05354ad20a69b"><div class="ttname"><a href="class_isis_1_1_work_order.html#a72e912fb45189a3f9af05354ad20a69b">Isis::WorkOrder::isUndone</a></div><div class="ttdeci">bool isUndone() const</div><div class="ttdoc">Returns the WorkOrder undo status.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:901</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a73919ffd90744cbd1dd5b4ba4015e991"><div class="ttname"><a href="class_isis_1_1_work_order.html#a73919ffd90744cbd1dd5b4ba4015e991">Isis::WorkOrder::setupExecution</a></div><div class="ttdeci">virtual bool setupExecution()</div><div class="ttdoc">This sets up the state for the work order.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1249</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a73968f5c77d22a4972a3f16c66f20bbf"><div class="ttname"><a href="class_isis_1_1_work_order.html#a73968f5c77d22a4972a3f16c66f20bbf">Isis::WorkOrder::statusChanged</a></div><div class="ttdeci">void statusChanged(WorkOrder *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a77d4fd06b5b94b4d270c05fab514aac6"><div class="ttname"><a href="class_isis_1_1_work_order.html#a77d4fd06b5b94b4d270c05fab514aac6">Isis::WorkOrder::isSavedToHistory</a></div><div class="ttdeci">bool isSavedToHistory() const</div><div class="ttdoc">Returns true if this work order is to be shown in History, otherwise false.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:818</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a857b801eb306ba3beb7d18bd6a954170"><div class="ttname"><a href="class_isis_1_1_work_order.html#a857b801eb306ba3beb7d18bd6a954170">Isis::WorkOrder::fromStatusString</a></div><div class="ttdeci">static WorkOrderStatus fromStatusString(QString)</div><div class="ttdoc">Attempts to query the current status of the WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:976</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a877c870abf1ad020b3e762bda0f40c50"><div class="ttname"><a href="class_isis_1_1_work_order.html#a877c870abf1ad020b3e762bda0f40c50">Isis::WorkOrder::isRedoing</a></div><div class="ttdeci">bool isRedoing() const</div><div class="ttdoc">Returns the redoing status of this WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:871</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a8e531fa32c1a0753e54305e1ae75f13d"><div class="ttname"><a href="class_isis_1_1_work_order.html#a8e531fa32c1a0753e54305e1ae75f13d">Isis::WorkOrder::internalData</a></div><div class="ttdeci">QStringList internalData() const</div><div class="ttdoc">Gets the internal data for this WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1365</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a8f4d41326b07e8f6615cad9fc115184f"><div class="ttname"><a href="class_isis_1_1_work_order.html#a8f4d41326b07e8f6615cad9fc115184f">Isis::WorkOrder::controlList</a></div><div class="ttdeci">QPointer&lt; ControlList &gt; controlList()</div><div class="ttdoc">Returns the Control List for this WorkOrder (a list of control networks).</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:694</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a9090489d8721b3aa76be5ce9909a83ee"><div class="ttname"><a href="class_isis_1_1_work_order.html#a9090489d8721b3aa76be5ce9909a83ee">Isis::WorkOrder::directory</a></div><div class="ttdeci">Directory * directory() const</div><div class="ttdoc">return the workorder project directory Returns the Directory object of the Project this WorkOrder is ...</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1278</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a95b0411c69715223f7a1048ecc4fef15"><div class="ttname"><a href="class_isis_1_1_work_order.html#a95b0411c69715223f7a1048ecc4fef15">Isis::WorkOrder::guiCamera</a></div><div class="ttdeci">GuiCameraQsp guiCamera()</div><div class="ttdoc">WorkOrder::guiCamera.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:744</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_a9c29cfad3f2c15263324fec9347b7450"><div class="ttname"><a href="class_isis_1_1_work_order.html#a9c29cfad3f2c15263324fec9347b7450">Isis::WorkOrder::setCreatesCleanState</a></div><div class="ttdeci">void setCreatesCleanState(bool createsCleanState)</div><div class="ttdoc">Declare that this work order is saving the project.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1651</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aa1942c30b0dd44b161295eff726f396a"><div class="ttname"><a href="class_isis_1_1_work_order.html#aa1942c30b0dd44b161295eff726f396a">Isis::WorkOrder::statusText</a></div><div class="ttdeci">QString statusText() const</div><div class="ttdoc">WorkOrder::statusText.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:942</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aa20d9b5d4ee67c2d166060437153d06b"><div class="ttname"><a href="class_isis_1_1_work_order.html#aa20d9b5d4ee67c2d166060437153d06b">Isis::WorkOrder::executionTime</a></div><div class="ttdeci">QDateTime executionTime() const</div><div class="ttdoc">Gets the execution time of this WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:852</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aa29452870c13f7a33e5191532d8af272"><div class="ttname"><a href="class_isis_1_1_work_order.html#aa29452870c13f7a33e5191532d8af272">Isis::WorkOrder::execute</a></div><div class="ttdeci">virtual void execute()</div><div class="ttdoc">Execute the workorder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1391</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aa69339c5a480012a592be02b62c53ac9"><div class="ttname"><a href="class_isis_1_1_work_order.html#aa69339c5a480012a592be02b62c53ac9">Isis::WorkOrder::setModifiesDiskState</a></div><div class="ttdeci">void setModifiesDiskState(bool changesProjectOnDisk)</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1662</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aa83aaca3b1b6b10075beebafb25620ae"><div class="ttname"><a href="class_isis_1_1_work_order.html#aa83aaca3b1b6b10075beebafb25620ae">Isis::WorkOrder::setPrevious</a></div><div class="ttdeci">void setPrevious(WorkOrder *previousWorkOrder)</div><div class="ttdoc">Sets the previous WorkOrder in the sequence.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:610</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aa8e93680e53ae2fedf6c6f97a0ececfc"><div class="ttname"><a href="class_isis_1_1_work_order.html#aa8e93680e53ae2fedf6c6f97a0ececfc">Isis::WorkOrder::isExecutable</a></div><div class="ttdeci">virtual bool isExecutable(Context)</div><div class="ttdoc">Re-implement this method if your work order utilizes controls for data in order to operate.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:179</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aaa18f01471690633d512af00ea33656f"><div class="ttname"><a href="class_isis_1_1_work_order.html#aaa18f01471690633d512af00ea33656f">Isis::WorkOrder::disableWorkOrder</a></div><div class="ttdeci">void disableWorkOrder()</div><div class="ttdoc">Disables the work order.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1218</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aac299e40e6e38323bfd8c4128db236db"><div class="ttname"><a href="class_isis_1_1_work_order.html#aac299e40e6e38323bfd8c4128db236db">Isis::WorkOrder::createsCleanState</a></div><div class="ttdeci">bool createsCleanState() const</div><div class="ttdoc">Returns the CleanState status (whether the Project has been saved to disk or not).</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:842</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aac46bab86f4ebd8b7348d95dba0efbf8"><div class="ttname"><a href="class_isis_1_1_work_order.html#aac46bab86f4ebd8b7348d95dba0efbf8">Isis::WorkOrder::targetBody</a></div><div class="ttdeci">TargetBodyQsp targetBody()</div><div class="ttdoc">WorkOrder::targetBody.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:734</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aaff8bf2e612dd4aaee208ee5fc114213"><div class="ttname"><a href="class_isis_1_1_work_order.html#aaff8bf2e612dd4aaee208ee5fc114213">Isis::WorkOrder::setInternalData</a></div><div class="ttdeci">void setInternalData(QStringList data)</div><div class="ttdoc">Sets the internal data for this WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1306</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_ab516f5ef325266489207e3ea0600757e"><div class="ttname"><a href="class_isis_1_1_work_order.html#ab516f5ef325266489207e3ea0600757e">Isis::WorkOrder::dependsOn</a></div><div class="ttdeci">virtual bool dependsOn(WorkOrder *other) const</div><div class="ttdoc">Indicate workorder dependency This is a virtual function whose role in child classes is to determine ...</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:769</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aba48b35a2329e2bc3dd3f7cc98e36ccc"><div class="ttname"><a href="class_isis_1_1_work_order.html#aba48b35a2329e2bc3dd3f7cc98e36ccc">Isis::WorkOrder::project</a></div><div class="ttdeci">Project * project() const</div><div class="ttdoc">Returns the Project this WorkOrder is attached to.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1288</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_ac1ba93d19536fa30cdcc1242ca8ca994"><div class="ttname"><a href="class_isis_1_1_work_order.html#ac1ba93d19536fa30cdcc1242ca8ca994">Isis::WorkOrder::~WorkOrder</a></div><div class="ttdeci">virtual ~WorkOrder()</div><div class="ttdoc">The Destructor.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:154</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_ac90ffa848ce29dd788d049c8ecf23bbb"><div class="ttname"><a href="class_isis_1_1_work_order.html#ac90ffa848ce29dd788d049c8ecf23bbb">Isis::WorkOrder::progressBar</a></div><div class="ttdeci">ProgressBar * progressBar()</div><div class="ttdoc">Returns the ProgressBar.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:963</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_ad209afdce1aa22d6f869fe9cbf7ceca3"><div class="ttname"><a href="class_isis_1_1_work_order.html#ad209afdce1aa22d6f869fe9cbf7ceca3">Isis::WorkOrder::addCloneToProject</a></div><div class="ttdeci">void addCloneToProject()</div><div class="ttdoc">Runs a copy of the current WorkOrder and stores it in the project.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1440</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_addc3bc0b387702f21244239fd767a8c7"><div class="ttname"><a href="class_isis_1_1_work_order.html#addc3bc0b387702f21244239fd767a8c7">Isis::WorkOrder::imageList</a></div><div class="ttdeci">ImageList * imageList()</div><div class="ttdoc">Returns a pointer to the ImageList for this WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:619</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_addf7a9fa604c42a0e329aa6e3a6f671c"><div class="ttname"><a href="class_isis_1_1_work_order.html#addf7a9fa604c42a0e329aa6e3a6f671c">Isis::WorkOrder::isSynchronous</a></div><div class="ttdeci">bool isSynchronous() const</div><div class="ttdoc">Returns true if this work order is run synchronously, otherwise false.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:829</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_ae03e9646119eafab379028eda6cd2943"><div class="ttname"><a href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943">Isis::WorkOrder::Context</a></div><div class="ttdeci">Context</div><div class="ttdoc">This enumeration is for recording the context of the current Workorder (whether it is part of a proje...</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:339</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_ae03e9646119eafab379028eda6cd2943a2338e775586b0cdea787d2aab2fca22d"><div class="ttname"><a href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943a2338e775586b0cdea787d2aab2fca22d">Isis::WorkOrder::NoContext</a></div><div class="ttdeci">@ NoContext</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:340</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_ae03e9646119eafab379028eda6cd2943a53383503b563661b9c02d74a16b2410b"><div class="ttname"><a href="class_isis_1_1_work_order.html#ae03e9646119eafab379028eda6cd2943a53383503b563661b9c02d74a16b2410b">Isis::WorkOrder::ProjectContext</a></div><div class="ttdeci">@ ProjectContext</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:341</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_ae11df4c7c474603dbe297b91a0acf20e"><div class="ttname"><a href="class_isis_1_1_work_order.html#ae11df4c7c474603dbe297b91a0acf20e">Isis::WorkOrder::bestText</a></div><div class="ttdeci">QString bestText() const</div><div class="ttdoc">Generate unique action names We don't use action text anymore because Directory likes to rename our a...</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:783</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_ae5bb14f47554261c0730a38236d93bfc"><div class="ttname"><a href="class_isis_1_1_work_order.html#ae5bb14f47554261c0730a38236d93bfc">Isis::WorkOrder::progressValue</a></div><div class="ttdeci">int progressValue() const</div><div class="ttdoc">Gets the current progress value of the WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1335</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_ae70b1d484ff5e3a13f5b378f0fb1476b"><div class="ttname"><a href="class_isis_1_1_work_order.html#ae70b1d484ff5e3a13f5b378f0fb1476b">Isis::WorkOrder::isFinished</a></div><div class="ttdeci">bool isFinished() const</div><div class="ttdoc">Returns the finished state of this WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:862</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aebba9e3d58038ae3ac6c5a01e18429bc"><div class="ttname"><a href="class_isis_1_1_work_order.html#aebba9e3d58038ae3ac6c5a01e18429bc">Isis::WorkOrder::deletingProgress</a></div><div class="ttdeci">void deletingProgress(WorkOrder *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aeeed994fe13551a20a445650bbf01179"><div class="ttname"><a href="class_isis_1_1_work_order.html#aeeed994fe13551a20a445650bbf01179">Isis::WorkOrder::postExecution</a></div><div class="ttdeci">virtual void postExecution()</div><div class="ttdoc">Perform any necessary actions after execution of a workorder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1402</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_af6e24503243a6a56da898fd25891e0d2"><div class="ttname"><a href="class_isis_1_1_work_order.html#af6e24503243a6a56da898fd25891e0d2">Isis::WorkOrder::correlationMatrix</a></div><div class="ttdeci">CorrelationMatrix correlationMatrix()</div><div class="ttdoc">Returns the CorrleationMatrix for this WorkOrder.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:684</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_afa48e3807a3054f9cfb1dd5ff5523215"><div class="ttname"><a href="class_isis_1_1_work_order.html#afa48e3807a3054f9cfb1dd5ff5523215">Isis::WorkOrder::fileItem</a></div><div class="ttdeci">FileItemQsp fileItem()</div><div class="ttdoc">WorkOrder::fileItem.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:754</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_afbc0dc282380156200eb4bcc850e354e"><div class="ttname"><a href="class_isis_1_1_work_order.html#afbc0dc282380156200eb4bcc850e354e">Isis::WorkOrder::WorkOrder</a></div><div class="ttdeci">WorkOrder(Project *project)</div><div class="ttdoc">Create a work order that will work with the given project.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:38</div></div>
+<div class="ttc" id="aclass_q_action_html"><div class="ttname"><a href="class_q_action.html">QAction</a></div></div>
+<div class="ttc" id="aclass_q_future_watcher_html"><div class="ttname"><a href="class_q_future_watcher.html">QFutureWatcher</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> AbstractTableModel.h:24</div></div>
+<div class="ttc" id="aclass_q_shared_pointer_html"><div class="ttname"><a href="class_q_shared_pointer.html">QSharedPointer&lt; TargetBody &gt;</a></div></div>
+<div class="ttc" id="aclass_q_undo_command_html"><div class="ttname"><a href="class_q_undo_command.html">QUndoCommand</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_9b65fff89ee2ef76342b94cd93a279d6.html">WorkOrder</a></li><li class="navelem"><a class="el" href="_work_order_8h.html">WorkOrder.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

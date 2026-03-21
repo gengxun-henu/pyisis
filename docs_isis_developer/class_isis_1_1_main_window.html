@@ -1,0 +1,518 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::MainWindow Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_main_window.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_main_window-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::MainWindow Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Base class for the <a class="el" href="namespace_qisis.html" title="Namespace for the Isis visualazation objects.">Qisis</a> main windows.  
+ <a href="class_isis_1_1_main_window.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_main_window_8h_source.html">MainWindow.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::MainWindow:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_main_window__inherit__graph.png" border="0" usemap="#a_isis_1_1_main_window_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_main_window_inherit__map" id="a_isis_1_1_main_window_inherit__map">
+<area shape="rect" title="Base class for the Qisis main windows." alt="" coords="339,135,482,296"/>
+<area shape="rect" href="class_isis_1_1_mosaic_main_window.html" title=" " alt="" coords="41,480,209,801"/>
+<area shape="rect" href="class_isis_1_1_plot_window.html" title=" " alt="" coords="233,352,401,929"/>
+<area shape="rect" href="class_isis_1_1_table_main_window.html" title="a subclass of the qisis mainwindow, tablemainwindow handles all of the table tasks." alt="" coords="424,344,583,937"/>
+<area shape="rect" href="class_isis_1_1_viewport_main_window.html" title="This was called the Qisis MainWindow." alt="" coords="607,520,784,761"/>
+<area shape="rect" href="class_q_main_window.html" title=" " alt="" coords="357,5,463,87"/>
+<area shape="rect" href="class_isis_1_1_histogram_plot_window.html" title=" " alt="" coords="5,1049,186,1211"/>
+<area shape="rect" href="class_isis_1_1_scatter_plot_window.html" title="Scatter Plot Window." alt="" coords="210,985,424,1275"/>
+<area shape="rect" href="class_isis_1_1_spectral_plot_window.html" title=" " alt="" coords="448,1049,623,1211"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::MainWindow:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_main_window__coll__graph.png" border="0" usemap="#a_isis_1_1_main_window_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_main_window_coll__map" id="a_isis_1_1_main_window_coll__map">
+<area shape="rect" title="Base class for the Qisis main windows." alt="" coords="5,135,149,296"/>
+<area shape="rect" href="class_q_main_window.html" title=" " alt="" coords="24,5,130,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a16ead0c9ba7e75adfb54802a1873b669"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_main_window.html#a16ead0c9ba7e75adfb54802a1873b669">MainWindow</a> (QString title, <a class="el" href="class_q_widget.html">QWidget</a> *parent=0, Qt::WindowFlags flags=Qt::WindowFlags())</td></tr>
+<tr class="memdesc:a16ead0c9ba7e75adfb54802a1873b669"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mainwindow constructor.  <a href="class_isis_1_1_main_window.html#a16ead0c9ba7e75adfb54802a1873b669">More...</a><br /></td></tr>
+<tr class="separator:a16ead0c9ba7e75adfb54802a1873b669"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fed9a7da34ab1af4878b30c6dc0a560"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_main_window.html#a5fed9a7da34ab1af4878b30c6dc0a560">~MainWindow</a> ()</td></tr>
+<tr class="memdesc:a5fed9a7da34ab1af4878b30c6dc0a560"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free allocated memory by from this instance.  <a href="class_isis_1_1_main_window.html#a5fed9a7da34ab1af4878b30c6dc0a560">More...</a><br /></td></tr>
+<tr class="separator:a5fed9a7da34ab1af4878b30c6dc0a560"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a9b9b2fa9774f1d0e7a8292697711f05e"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_main_window.html#a9b9b2fa9774f1d0e7a8292697711f05e">settingsFileName</a> (QString objectTitle)</td></tr>
+<tr class="separator:a9b9b2fa9774f1d0e7a8292697711f05e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a3eec3c168ee91af32a103c642034de82"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_main_window.html#a3eec3c168ee91af32a103c642034de82">closeEvent</a> (QCloseEvent *event)</td></tr>
+<tr class="memdesc:a3eec3c168ee91af32a103c642034de82"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is overridden so that we can be sure to write the current settings of the Main window.  <a href="class_isis_1_1_main_window.html#a3eec3c168ee91af32a103c642034de82">More...</a><br /></td></tr>
+<tr class="separator:a3eec3c168ee91af32a103c642034de82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7a32f7ed14371dbf3308ea50639e0b9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_main_window.html#ad7a32f7ed14371dbf3308ea50639e0b9">readSettings</a> (QSize defaultSize=QSize())</td></tr>
+<tr class="memdesc:ad7a32f7ed14371dbf3308ea50639e0b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method ensure that the settings get written even if the Main window was only hidden, not closed.  <a href="class_isis_1_1_main_window.html#ad7a32f7ed14371dbf3308ea50639e0b9">More...</a><br /></td></tr>
+<tr class="separator:ad7a32f7ed14371dbf3308ea50639e0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc6c9eb5249b09092bd3aa607fcb91a7"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_main_window.html#adc6c9eb5249b09092bd3aa607fcb91a7">settingsFileName</a> () const</td></tr>
+<tr class="separator:adc6c9eb5249b09092bd3aa607fcb91a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Base class for the <a class="el" href="namespace_qisis.html" title="Namespace for the Isis visualazation objects.">Qisis</a> main windows. </p>
+<dl class="section author"><dt>Author</dt><dd>????-??-?? Stacy Alley </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a16ead0c9ba7e75adfb54802a1873b669"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16ead0c9ba7e75adfb54802a1873b669">&#9670;&nbsp;</a></span>MainWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::MainWindow::MainWindow </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>title</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::WindowFlags&#160;</td>
+          <td class="paramname"><em>flags</em> = <code>Qt::WindowFlags()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Mainwindow constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">title</td><td></td></tr>
+    <tr><td class="paramname">parent</td><td></td></tr>
+    <tr><td class="paramname">flags</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5fed9a7da34ab1af4878b30c6dc0a560"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fed9a7da34ab1af4878b30c6dc0a560">&#9670;&nbsp;</a></span>~MainWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::MainWindow::~MainWindow </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Free allocated memory by from this instance. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3eec3c168ee91af32a103c642034de82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3eec3c168ee91af32a103c642034de82">&#9670;&nbsp;</a></span>closeEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MainWindow::closeEvent </td>
+          <td>(</td>
+          <td class="paramtype">QCloseEvent *&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method is overridden so that we can be sure to write the current settings of the Main window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_viewport_main_window.html#a5c81c61b4e76caff118d28cdbfb0e14c">Isis::ViewportMainWindow</a>, and <a class="el" href="class_isis_1_1_table_main_window.html#abcd8c8c829ecfe7060f5ae5c00296dad">Isis::TableMainWindow</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_main_window.html#abcd8c8c829ecfe7060f5ae5c00296dad">Isis::TableMainWindow::closeEvent()</a>, and <a class="el" href="class_isis_1_1_viewport_main_window.html#a5c81c61b4e76caff118d28cdbfb0e14c">Isis::ViewportMainWindow::closeEvent()</a>.</p>
+
+</div>
+</div>
+<a id="ad7a32f7ed14371dbf3308ea50639e0b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7a32f7ed14371dbf3308ea50639e0b9">&#9670;&nbsp;</a></span>readSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MainWindow::readSettings </td>
+          <td>(</td>
+          <td class="paramtype">QSize&#160;</td>
+          <td class="paramname"><em>defaultSize</em> = <code>QSize()</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method ensure that the settings get written even if the Main window was only hidden, not closed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>This method is called from the constructor so that when the Main window is created, it know's it's size and location. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_main_window.html#adc6c9eb5249b09092bd3aa607fcb91a7">settingsFileName()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>, <a class="el" href="class_isis_1_1_table_main_window.html#ad583fb099027dcf93411eecff6fdee8f">Isis::TableMainWindow::TableMainWindow()</a>, and <a class="el" href="class_isis_1_1_viewport_main_window.html#a9d0d80bea57b87adb0c6d645200a0414">Isis::ViewportMainWindow::ViewportMainWindow()</a>.</p>
+
+</div>
+</div>
+<a id="adc6c9eb5249b09092bd3aa607fcb91a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc6c9eb5249b09092bd3aa607fcb91a7">&#9670;&nbsp;</a></span>settingsFileName() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::MainWindow::settingsFileName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_main_window.html#a756bcc3836fbf1070e585ffbb395f57c">Isis::TableMainWindow::readColumnSettings()</a>, <a class="el" href="class_isis_1_1_table_main_window.html#acbbc5c742336407060d4a8b7d7428f57">Isis::TableMainWindow::readItemSettings()</a>, <a class="el" href="class_isis_1_1_blink_tool.html#ad1b4de14f926c0d46fe384ae7cb7f561">Isis::BlinkTool::readSettings()</a>, <a class="el" href="class_isis_1_1_main_window.html#ad7a32f7ed14371dbf3308ea50639e0b9">readSettings()</a>, <a class="el" href="class_isis_1_1_blink_tool.html#ab63c1508c93eb1d9052144536abe9cbb">Isis::BlinkTool::writeSettings()</a>, and <a class="el" href="class_isis_1_1_table_main_window.html#a5656986431759816378b7ec1fbf00106">Isis::TableMainWindow::writeSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a9b9b2fa9774f1d0e7a8292697711f05e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b9b2fa9774f1d0e7a8292697711f05e">&#9670;&nbsp;</a></span>settingsFileName() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::MainWindow::settingsFileName </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>objectTitle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/MainWindow/<a class="el" href="_main_window_8h_source.html">MainWindow.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/MainWindow/<a class="el" href="_main_window_8cpp.html">MainWindow.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_main_window.html">MainWindow</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

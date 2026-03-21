@@ -1,0 +1,406 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/ImportPdsTable/ImportPdsTable.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_import_pds_table_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">ImportPdsTable.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_import_pds_table_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef ImportPdsTable_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define ImportPdsTable_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;QList&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QStringList&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">class </span>QString;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <span class="keyword">class </span>Table;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keyword">class </span>TableField;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keyword">class </span>TableRecord;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keyword">class </span>PvlObject;</div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="class_isis_1_1_import_pds_table.html">  101</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_import_pds_table.html">ImportPdsTable</a> {</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <a class="code" href="class_isis_1_1_import_pds_table.html#ad6d00a4efc9a112cbfa476a8e92ab58c">ImportPdsTable</a>();</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <a class="code" href="class_isis_1_1_import_pds_table.html#ad6d00a4efc9a112cbfa476a8e92ab58c">ImportPdsTable</a>(<span class="keyword">const</span> QString &amp;pdsLabFile,</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                     <span class="keyword">const</span> QString &amp;pdsTabFile=<span class="stringliteral">&quot;&quot;</span>,</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                     <span class="keyword">const</span> QString &amp;pdsTableName =<span class="stringliteral">&quot;TABLE&quot;</span>);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_import_pds_table.html#aadf6a22457d447f5b2ae45c53ed17dae">~ImportPdsTable</a>();</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      QString <a class="code" href="class_isis_1_1_import_pds_table.html#a155f46574770d009db6bc0eaafe499a9">name</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_import_pds_table.html#a0fe752e86e0196b5c85657fed2c99b74">setName</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_import_pds_table.html#a155f46574770d009db6bc0eaafe499a9">name</a> = <span class="stringliteral">&quot;TABLE&quot;</span>);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_import_pds_table.html#af35a54b6ad4794fb54240c45e69bd8b1">columns</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_import_pds_table.html#a1d62ae392cc51641cd3977c3ebac9b87">rows</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_import_pds_table.html#a4a8eea6f15571dfc7c98fe2e2b351099">load</a>(<span class="keyword">const</span> QString &amp;pdsLabFile, <span class="keyword">const</span> QString &amp;pdsTabFile = <span class="stringliteral">&quot;&quot;</span>,</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                <span class="keyword">const</span> QString &amp;pdsTableName = <span class="stringliteral">&quot;TABLE&quot;</span>);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_import_pds_table.html#ae54ef197918e3ca5884fa2dfe2a9de14">hasColumn</a>(<span class="keyword">const</span> QString &amp;colName) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;      QString <a class="code" href="class_isis_1_1_import_pds_table.html#aed7287cfca69e50c7fdf6ccd5172eb13">getColumnName</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> &amp;index = 0,</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                                <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;formatted = <span class="keyword">true</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;      QStringList <a class="code" href="class_isis_1_1_import_pds_table.html#aebe90ad98cea76afd6aeb208172b732e">getColumnNames</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;formatted = <span class="keyword">true</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;      QString <a class="code" href="class_isis_1_1_import_pds_table.html#a1974103d9c24e05e004136eb40675c71">getFormattedName</a>(<span class="keyword">const</span> QString &amp;colname) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      QString <a class="code" href="class_isis_1_1_import_pds_table.html#ae3be1c76b3370503c6dfdc5e7fe9bebe">getType</a>(<span class="keyword">const</span> QString &amp;colName) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_import_pds_table.html#abc48f1e51f68a0328e7a007f4b4146d0">setType</a>(<span class="keyword">const</span> QString &amp;colName, <span class="keyword">const</span> QString &amp;dataType);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;      <a class="code" href="class_isis_1_1_table.html">Table</a> <a class="code" href="class_isis_1_1_import_pds_table.html#a3b1c922152dae002f02c7a26da609ea1">importTable</a>(<span class="keyword">const</span> QString &amp;isisTableName);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;      <a class="code" href="class_isis_1_1_table.html">Table</a> <a class="code" href="class_isis_1_1_import_pds_table.html#a3b1c922152dae002f02c7a26da609ea1">importTable</a>(<span class="keyword">const</span> QString &amp;colNames,</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                        <span class="keyword">const</span> QString &amp;isisTableName);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      <a class="code" href="class_isis_1_1_table.html">Table</a> <a class="code" href="class_isis_1_1_import_pds_table.html#a3b1c922152dae002f02c7a26da609ea1">importTable</a>(<span class="keyword">const</span> QStringList &amp;colNames,</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                        <span class="keyword">const</span> QString &amp;isisTableName);</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;  <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00135"></a><span class="lineno"><a class="line" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">  135</a></span>&#160;      <span class="keyword">struct </span><a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> {</div>
+<div class="line"><a name="l00136"></a><span class="lineno"><a class="line" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#ad99ae1114c1642e867111354c0fda026">  136</a></span>&#160;        QString <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#ad99ae1114c1642e867111354c0fda026">m_name</a>;       </div>
+<div class="line"><a name="l00137"></a><span class="lineno"><a class="line" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a5f97d347f68cb72d6257d6b76edbcdf9">  137</a></span>&#160;        <span class="keywordtype">int</span>     <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a5f97d347f68cb72d6257d6b76edbcdf9">m_colnum</a>;     </div>
+<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a95d2df56385e2564c04ea665f0d0ffe3">  138</a></span>&#160;        QString <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a95d2df56385e2564c04ea665f0d0ffe3">m_dataType</a>;   </div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a684b28e18baa9fe12796af86fe89bd44">  139</a></span>&#160;        <span class="keywordtype">int</span>     <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a684b28e18baa9fe12796af86fe89bd44">m_startByte</a>;  </div>
+<div class="line"><a name="l00140"></a><span class="lineno"><a class="line" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a861059d5870de2c23ac9cc0e831d29fe">  140</a></span>&#160;        <span class="keywordtype">int</span>     <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a861059d5870de2c23ac9cc0e831d29fe">m_numBytes</a>;   </div>
+<div class="line"><a name="l00141"></a><span class="lineno"><a class="line" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a980484e67a484ae8f006cb3dce1150f4">  141</a></span>&#160;        <span class="keywordtype">int</span>     <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a980484e67a484ae8f006cb3dce1150f4">m_itemBytes</a>;  </div>
+<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a9c1198785280b61542ff17853e2eea8c">  142</a></span>&#160;        <span class="keywordtype">int</span>     <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a9c1198785280b61542ff17853e2eea8c">m_items</a>;      </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;      };</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;      <span class="comment">// Internal types</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno"><a class="line" href="class_isis_1_1_import_pds_table.html#a97d70921221fb945bfeb3b0c7ffd04b5">  146</a></span>&#160;      <span class="keyword">typedef</span> <a class="code" href="class_q_list.html">QList&lt;ColumnDescr&gt;</a> <a class="code" href="class_isis_1_1_import_pds_table.html#a97d70921221fb945bfeb3b0c7ffd04b5">ColumnTypes</a>;</div>
+<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="class_isis_1_1_import_pds_table.html#ab474f0d7282cd589315b3cb89287e211">  147</a></span>&#160;      <span class="keyword">typedef</span> QStringList        <a class="code" href="class_isis_1_1_import_pds_table.html#ab474f0d7282cd589315b3cb89287e211">Columns</a>;</div>
+<div class="line"><a name="l00148"></a><span class="lineno"><a class="line" href="class_isis_1_1_import_pds_table.html#abc789eb499588dd647c68220dcb938e3">  148</a></span>&#160;      <span class="keyword">typedef</span> <a class="code" href="class_q_list.html">QList&lt;Columns&gt;</a>     <a class="code" href="class_isis_1_1_import_pds_table.html#abc789eb499588dd647c68220dcb938e3">Rows</a>;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;      <span class="keyword">const</span> <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &amp;<a class="code" href="class_isis_1_1_import_pds_table.html#a225ade7ff6b8c609f605392d1ba65371">getColumnDescriptor</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> &amp;nth) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;      <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> *<a class="code" href="class_isis_1_1_import_pds_table.html#a07f56e659c4e4f90ef0e2f82a3d4c50f">findColumn</a>(<span class="keyword">const</span> QString &amp;colName);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;      <span class="keyword">const</span> <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> *<a class="code" href="class_isis_1_1_import_pds_table.html#a07f56e659c4e4f90ef0e2f82a3d4c50f">findColumn</a>(<span class="keyword">const</span> QString &amp;colName) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      QString <a class="code" href="class_isis_1_1_import_pds_table.html#a409c51f24644dbf3ded539a965ed813c">getColumnValue</a>(<span class="keyword">const</span> QString &amp;tline,</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                             <span class="keyword">const</span> <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &amp;cdesc,</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                             <span class="keyword">const</span> QString &amp;delimiter = <span class="stringliteral">&quot;&quot;</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;      QStringList <a class="code" href="class_isis_1_1_import_pds_table.html#afd456c5a47a7d7eb166d2b6bde24f9cc">getColumnFields</a>(<span class="keyword">const</span> QString &amp;tline,</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                                  <span class="keyword">const</span> <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &amp;cdesc,</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                                  <span class="keyword">const</span> QString &amp;delimiter = <span class="stringliteral">&quot;&quot;</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      QString <a class="code" href="class_isis_1_1_import_pds_table.html#acc06433dd8ac84046fe3a9e3b708a129">getGenericType</a>(<span class="keyword">const</span> QString &amp;ttype) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_import_pds_table.html#a0bfb8e7863a78e99a59610df8bf5d639">processRow</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> &amp;row, <span class="keyword">const</span> QString &amp;rowdata);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;      <span class="keywordtype">void</span> init();</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;      <span class="keywordtype">void</span> loadLabel(<span class="keyword">const</span> QString &amp;labfile, QString &amp;tblfile,</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                     <span class="keyword">const</span> QString &amp;tblname = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;      <span class="keywordtype">void</span> loadTable(<span class="keyword">const</span> QString &amp;tabfile);</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;      <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> getColumnDescription(<a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;colobj, <span class="keywordtype">int</span> nth) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      <a class="code" href="class_isis_1_1_table_record.html">TableRecord</a> makeRecord(<span class="keyword">const</span> <a class="code" href="class_q_list.html">ColumnTypes</a> &amp;ctypes);</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;      <a class="code" href="class_isis_1_1_table_field.html">TableField</a> makeField(<span class="keyword">const</span> <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &amp;cdesc);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;      <a class="code" href="class_isis_1_1_table_field.html">TableField</a> makeFieldFromBinaryTable(<span class="keyword">const</span> <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &amp;cdesc);</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;      <span class="keywordtype">void</span> setPdsByteOrder(QString byteOrder);</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;      <a class="code" href="class_isis_1_1_table_field.html">TableField</a> &amp;extract(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_import_pds_table.html#ab474f0d7282cd589315b3cb89287e211">Columns</a> &amp;<a class="code" href="class_isis_1_1_import_pds_table.html#af35a54b6ad4794fb54240c45e69bd8b1">columns</a>, <span class="keyword">const</span> <a class="code" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &amp;cdesc,</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                          <a class="code" href="class_isis_1_1_table_field.html">TableField</a> &amp;field) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;      <a class="code" href="class_isis_1_1_table_record.html">TableRecord</a> &amp;extract(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_import_pds_table.html#ab474f0d7282cd589315b3cb89287e211">Columns</a> &amp;<a class="code" href="class_isis_1_1_import_pds_table.html#af35a54b6ad4794fb54240c45e69bd8b1">columns</a>, <span class="keyword">const</span> <a class="code" href="class_q_list.html">ColumnTypes</a> &amp;ctypes,</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;                           <a class="code" href="class_isis_1_1_table_record.html">TableRecord</a> &amp;record) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;      <a class="code" href="class_isis_1_1_table_record.html">TableRecord</a> extractBinary(<span class="keywordtype">char</span> *rowBuffer, <a class="code" href="class_isis_1_1_table_record.html">TableRecord</a> &amp;record) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;      <span class="keywordtype">void</span> fillTable(<a class="code" href="class_isis_1_1_table.html">Table</a> &amp;table, <span class="keyword">const</span> <a class="code" href="class_q_list.html">ColumnTypes</a> &amp;<a class="code" href="class_isis_1_1_import_pds_table.html#af35a54b6ad4794fb54240c45e69bd8b1">columns</a>,</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                     <a class="code" href="class_isis_1_1_table_record.html">TableRecord</a> &amp;record) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;      <span class="comment">//private instance variables</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;      <span class="keywordtype">int</span>         m_trows;      </div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;      <a class="code" href="class_q_list.html">ColumnTypes</a> m_coldesc;    </div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;      <a class="code" href="class_q_list.html">Rows</a>        m_rows;       </div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;      QString  m_pdsTableType;  </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;      <span class="keywordtype">int</span>      m_rowBytes;      </div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;      <span class="keywordtype">int</span>      m_recordBytes;   </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;      QString  m_tableName;     </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;      QString  m_pdsTableFile;  </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;      <span class="keywordtype">int</span>      m_pdsTableStart; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;      QString  m_byteOrder;     </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;  };</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;}</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html">Isis::ImportPdsTable</a></div><div class="ttdoc">Import a PDS table file with a label description.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:101</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_a07f56e659c4e4f90ef0e2f82a3d4c50f"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#a07f56e659c4e4f90ef0e2f82a3d4c50f">Isis::ImportPdsTable::findColumn</a></div><div class="ttdeci">ColumnDescr * findColumn(const QString &amp;colName)</div><div class="ttdoc">Searches internal column descriptors for a named column.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:642</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_a0bfb8e7863a78e99a59610df8bf5d639"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#a0bfb8e7863a78e99a59610df8bf5d639">Isis::ImportPdsTable::processRow</a></div><div class="ttdeci">virtual bool processRow(const int &amp;row, const QString &amp;rowdata)</div><div class="ttdoc">Process a freshly read PDS table line of data.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:1212</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_a0fe752e86e0196b5c85657fed2c99b74"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#a0fe752e86e0196b5c85657fed2c99b74">Isis::ImportPdsTable::setName</a></div><div class="ttdeci">void setName(const QString &amp;name=&quot;TABLE&quot;)</div><div class="ttdoc">Set the name of the PDS table object.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:98</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_a155f46574770d009db6bc0eaafe499a9"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#a155f46574770d009db6bc0eaafe499a9">Isis::ImportPdsTable::name</a></div><div class="ttdeci">QString name() const</div><div class="ttdoc">Return the name of the PDS table.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:89</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_a1974103d9c24e05e004136eb40675c71"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#a1974103d9c24e05e004136eb40675c71">Isis::ImportPdsTable::getFormattedName</a></div><div class="ttdeci">QString getFormattedName(const QString &amp;colname) const</div><div class="ttdoc">Converts a column name to a camel-case after it has been cleansed.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:759</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_a1d62ae392cc51641cd3977c3ebac9b87"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#a1d62ae392cc51641cd3977c3ebac9b87">Isis::ImportPdsTable::rows</a></div><div class="ttdeci">int rows() const</div><div class="ttdoc">Returns the number of rows in the table.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:1011</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_a225ade7ff6b8c609f605392d1ba65371"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#a225ade7ff6b8c609f605392d1ba65371">Isis::ImportPdsTable::getColumnDescriptor</a></div><div class="ttdeci">const ColumnDescr &amp; getColumnDescriptor(const int &amp;nth) const</div><div class="ttdoc">Retrieve a column description by index.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:614</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_a3b1c922152dae002f02c7a26da609ea1"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#a3b1c922152dae002f02c7a26da609ea1">Isis::ImportPdsTable::importTable</a></div><div class="ttdeci">Table importTable(const QString &amp;isisTableName)</div><div class="ttdoc">Populate a Table object with the PDS table and return it.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:318</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_a409c51f24644dbf3ded539a965ed813c"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#a409c51f24644dbf3ded539a965ed813c">Isis::ImportPdsTable::getColumnValue</a></div><div class="ttdeci">QString getColumnValue(const QString &amp;tline, const ColumnDescr &amp;cdesc, const QString &amp;delimiter=&quot;&quot;) const</div><div class="ttdoc">Extracts a column from a QString based upon a description.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:690</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_a4a8eea6f15571dfc7c98fe2e2b351099"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#a4a8eea6f15571dfc7c98fe2e2b351099">Isis::ImportPdsTable::load</a></div><div class="ttdeci">void load(const QString &amp;pdsLabFile, const QString &amp;pdsTabFile=&quot;&quot;, const QString &amp;pdsTableName=&quot;TABLE&quot;)</div><div class="ttdoc">Loads a PDS table label and (optional) data file.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:132</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_a97d70921221fb945bfeb3b0c7ffd04b5"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#a97d70921221fb945bfeb3b0c7ffd04b5">Isis::ImportPdsTable::ColumnTypes</a></div><div class="ttdeci">QList&lt; ColumnDescr &gt; ColumnTypes</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:146</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_aadf6a22457d447f5b2ae45c53ed17dae"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#aadf6a22457d447f5b2ae45c53ed17dae">Isis::ImportPdsTable::~ImportPdsTable</a></div><div class="ttdeci">virtual ~ImportPdsTable()</div><div class="ttdoc">Destructs the ImportPdsTable object.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:84</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_ab474f0d7282cd589315b3cb89287e211"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#ab474f0d7282cd589315b3cb89287e211">Isis::ImportPdsTable::Columns</a></div><div class="ttdeci">QStringList Columns</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:147</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_abc48f1e51f68a0328e7a007f4b4146d0"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#abc48f1e51f68a0328e7a007f4b4146d0">Isis::ImportPdsTable::setType</a></div><div class="ttdeci">bool setType(const QString &amp;colName, const QString &amp;dataType)</div><div class="ttdoc">Change the datatype for a column.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:295</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_abc789eb499588dd647c68220dcb938e3"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#abc789eb499588dd647c68220dcb938e3">Isis::ImportPdsTable::Rows</a></div><div class="ttdeci">QList&lt; Columns &gt; Rows</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:148</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_acc06433dd8ac84046fe3a9e3b708a129"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#acc06433dd8ac84046fe3a9e3b708a129">Isis::ImportPdsTable::getGenericType</a></div><div class="ttdeci">QString getGenericType(const QString &amp;ttype) const</div><div class="ttdoc">Determine generic data type of a column.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:798</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_ad6d00a4efc9a112cbfa476a8e92ab58c"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#ad6d00a4efc9a112cbfa476a8e92ab58c">Isis::ImportPdsTable::ImportPdsTable</a></div><div class="ttdeci">ImportPdsTable()</div><div class="ttdoc">Default constructor.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:43</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_ae3be1c76b3370503c6dfdc5e7fe9bebe"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#ae3be1c76b3370503c6dfdc5e7fe9bebe">Isis::ImportPdsTable::getType</a></div><div class="ttdeci">QString getType(const QString &amp;colName) const</div><div class="ttdoc">Get the type associated with the specified column.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:268</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_ae54ef197918e3ca5884fa2dfe2a9de14"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#ae54ef197918e3ca5884fa2dfe2a9de14">Isis::ImportPdsTable::hasColumn</a></div><div class="ttdeci">bool hasColumn(const QString &amp;colName) const</div><div class="ttdoc">This method determines whether the PDS table has a column with the given name.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:186</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_aebe90ad98cea76afd6aeb208172b732e"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#aebe90ad98cea76afd6aeb208172b732e">Isis::ImportPdsTable::getColumnNames</a></div><div class="ttdeci">QStringList getColumnNames(const bool &amp;formatted=true) const</div><div class="ttdoc">Return the names of all the columns.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:242</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_aed7287cfca69e50c7fdf6ccd5172eb13"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#aed7287cfca69e50c7fdf6ccd5172eb13">Isis::ImportPdsTable::getColumnName</a></div><div class="ttdeci">QString getColumnName(const unsigned int &amp;index=0, const bool &amp;formatted=true) const</div><div class="ttdoc">Returns the name of the specifed column.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:211</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_af35a54b6ad4794fb54240c45e69bd8b1"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#af35a54b6ad4794fb54240c45e69bd8b1">Isis::ImportPdsTable::columns</a></div><div class="ttdeci">int columns() const</div><div class="ttdoc">Returns the number of columns in the table.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:999</div></div>
+<div class="ttc" id="aclass_isis_1_1_import_pds_table_html_afd456c5a47a7d7eb166d2b6bde24f9cc"><div class="ttname"><a href="class_isis_1_1_import_pds_table.html#afd456c5a47a7d7eb166d2b6bde24f9cc">Isis::ImportPdsTable::getColumnFields</a></div><div class="ttdeci">QStringList getColumnFields(const QString &amp;tline, const ColumnDescr &amp;cdesc, const QString &amp;delimiter=&quot;&quot;) const</div><div class="ttdoc">Extracts column fields from a QString based upon a description.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.cpp:712</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html"><div class="ttname"><a href="class_isis_1_1_pvl_object.html">Isis::PvlObject</a></div><div class="ttdoc">Contains Pvl Groups and Pvl Objects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_table_field_html"><div class="ttname"><a href="class_isis_1_1_table_field.html">Isis::TableField</a></div><div class="ttdoc">Class for storing an Isis::Table's field information.</div><div class="ttdef"><b>Definition:</b> TableField.h:47</div></div>
+<div class="ttc" id="aclass_isis_1_1_table_html"><div class="ttname"><a href="class_isis_1_1_table.html">Isis::Table</a></div><div class="ttdoc">Class for storing Table blobs information.</div><div class="ttdef"><b>Definition:</b> Table.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_table_record_html"><div class="ttname"><a href="class_isis_1_1_table_record.html">Isis::TableRecord</a></div><div class="ttdef"><b>Definition:</b> TableRecord.h:38</div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList&lt; ColumnDescr &gt;</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="astruct_isis_1_1_import_pds_table_1_1_column_descr_html"><div class="ttname"><a href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">Isis::ImportPdsTable::ColumnDescr</a></div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:135</div></div>
+<div class="ttc" id="astruct_isis_1_1_import_pds_table_1_1_column_descr_html_a5f97d347f68cb72d6257d6b76edbcdf9"><div class="ttname"><a href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a5f97d347f68cb72d6257d6b76edbcdf9">Isis::ImportPdsTable::ColumnDescr::m_colnum</a></div><div class="ttdeci">int m_colnum</div><div class="ttdoc">Column number.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:137</div></div>
+<div class="ttc" id="astruct_isis_1_1_import_pds_table_1_1_column_descr_html_a684b28e18baa9fe12796af86fe89bd44"><div class="ttname"><a href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a684b28e18baa9fe12796af86fe89bd44">Isis::ImportPdsTable::ColumnDescr::m_startByte</a></div><div class="ttdeci">int m_startByte</div><div class="ttdoc">Starting byte of data.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:139</div></div>
+<div class="ttc" id="astruct_isis_1_1_import_pds_table_1_1_column_descr_html_a861059d5870de2c23ac9cc0e831d29fe"><div class="ttname"><a href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a861059d5870de2c23ac9cc0e831d29fe">Isis::ImportPdsTable::ColumnDescr::m_numBytes</a></div><div class="ttdeci">int m_numBytes</div><div class="ttdoc">Number bytes in column.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:140</div></div>
+<div class="ttc" id="astruct_isis_1_1_import_pds_table_1_1_column_descr_html_a95d2df56385e2564c04ea665f0d0ffe3"><div class="ttname"><a href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a95d2df56385e2564c04ea665f0d0ffe3">Isis::ImportPdsTable::ColumnDescr::m_dataType</a></div><div class="ttdeci">QString m_dataType</div><div class="ttdoc">PDS table DATA_TYPE of column.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:138</div></div>
+<div class="ttc" id="astruct_isis_1_1_import_pds_table_1_1_column_descr_html_a980484e67a484ae8f006cb3dce1150f4"><div class="ttname"><a href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a980484e67a484ae8f006cb3dce1150f4">Isis::ImportPdsTable::ColumnDescr::m_itemBytes</a></div><div class="ttdeci">int m_itemBytes</div><div class="ttdoc">Number bytes per item.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:141</div></div>
+<div class="ttc" id="astruct_isis_1_1_import_pds_table_1_1_column_descr_html_a9c1198785280b61542ff17853e2eea8c"><div class="ttname"><a href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a9c1198785280b61542ff17853e2eea8c">Isis::ImportPdsTable::ColumnDescr::m_items</a></div><div class="ttdeci">int m_items</div><div class="ttdoc">Number of items in column.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:142</div></div>
+<div class="ttc" id="astruct_isis_1_1_import_pds_table_1_1_column_descr_html_ad99ae1114c1642e867111354c0fda026"><div class="ttname"><a href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#ad99ae1114c1642e867111354c0fda026">Isis::ImportPdsTable::ColumnDescr::m_name</a></div><div class="ttdeci">QString m_name</div><div class="ttdoc">Name of column.</div><div class="ttdef"><b>Definition:</b> ImportPdsTable.h:136</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_9e36a8cbe74e5a82f4cf684d9e4ee1e1.html">ImportPdsTable</a></li><li class="navelem"><a class="el" href="_import_pds_table_8h.html">ImportPdsTable.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

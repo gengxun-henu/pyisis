@@ -1,0 +1,8 @@
+<map id="Isis::Planar" name="Isis::Planar">
+<area shape="rect" id="node1" title="Planar Map Projection." alt="" coords="314,1019,495,1308"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_ring_plane_projection.html" title="Base class for Map Projections of plane shapes." alt="" coords="299,648,510,969"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_projection.html" title="Base class for Map Projections." alt="" coords="236,199,381,584"/>
+<area shape="rect" id="node4" title=" " alt="" coords="35,5,94,87"/>
+<area shape="rect" id="node5" title=" " alt="" coords="405,351,561,432"/>
+<area shape="rect" id="node6" title=" " alt="" coords="619,351,657,432"/>
+</map>

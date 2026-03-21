@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_q_vector.html" title=" " alt="" coords="5,32,199,60"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment." alt="" coords="247,32,407,60"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_csm_bundle_observation.html" title="Class for observations that use CSM camera models in bundle adjustment." alt="" coords="455,5,643,33"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_isis_bundle_observation.html" title="Class for observations that use ISIS camera models in bundle adjustment." alt="" coords="459,57,640,85"/>
+</map>

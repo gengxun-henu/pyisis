@@ -1,0 +1,810 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ControlMeasureLogData Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_control_measure_log_data.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="class_isis_1_1_control_measure_log_data-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ControlMeasureLogData Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Statistical and similar <a class="el" href="class_isis_1_1_control_measure.html" title="a control measurement">ControlMeasure</a> associated information.  
+ <a href="class_isis_1_1_control_measure_log_data.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_control_measure_log_data_8h_source.html">ControlMeasureLogData.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::ControlMeasureLogData:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_control_measure_log_data__coll__graph.png" border="0" usemap="#a_isis_1_1_control_measure_log_data_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_control_measure_log_data_coll__map" id="a_isis_1_1_control_measure_log_data_coll__map">
+<area shape="rect" title="Statistical and similar ControlMeasure associated information." alt="" coords="5,151,197,456"/>
+<area shape="rect" title=" " alt="" coords="82,5,120,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a89a47e377f531cc59cd0d25dd2d4850b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">NumericLogDataType</a> { <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba2f3accf7da4e7e71d7506f0947191e63">InvalidNumericLogDataType</a> = 0
+, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba83c27f106888c91e67afe7358ff1b41b">Obsolete_Eccentricity</a> = 1
+, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba60e8439f8911894b450b221203551968">GoodnessOfFit</a> = 2
+, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba49e8b7b62db198dbd1b8ac72521280fe">MinimumPixelZScore</a> = 3
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba1d6ab8ac4c7c3489cf73a140cdd40d04">MaximumPixelZScore</a> = 4
+, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba8687af387d6be32c8abf4d6a63e2bc32">PixelShift</a> = 5
+, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba3f840aadd0063cb5bd4df1cdf1d00161">WholePixelCorrelation</a> = 6
+, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850bae2fc0726fd93edd984a3f6f203932160">SubPixelCorrelation</a> = 7
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850baf169b787104973d65ac87c825fd5a78a">Obsolete_AverageResidual</a> = 8
+<br />
+ }</td></tr>
+<tr class="memdesc:a89a47e377f531cc59cd0d25dd2d4850b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Please do not change existing values in this list except the size - it will break backwards compadibility.  <a href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">More...</a><br /></td></tr>
+<tr class="separator:a89a47e377f531cc59cd0d25dd2d4850b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aa9f767af67e14d5a8549e757a1e822d3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#aa9f767af67e14d5a8549e757a1e822d3">ControlMeasureLogData</a> ()</td></tr>
+<tr class="memdesc:aa9f767af67e14d5a8549e757a1e822d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">This creates an empty, invalid (<a class="el" href="class_isis_1_1_control_measure_log_data.html#acf4d336a98c6a16c7f9faae03e1a6f80" title="This tests if the log data is complete and valid.">IsValid()</a> will return false), instance.  <a href="class_isis_1_1_control_measure_log_data.html#aa9f767af67e14d5a8549e757a1e822d3">More...</a><br /></td></tr>
+<tr class="separator:aa9f767af67e14d5a8549e757a1e822d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9f3e0dab4e18664fab7eca8de622e2a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#ae9f3e0dab4e18664fab7eca8de622e2a">ControlMeasureLogData</a> (<a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">NumericLogDataType</a> dataType)</td></tr>
+<tr class="memdesc:ae9f3e0dab4e18664fab7eca8de622e2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This creates an instance with the given type but no value yet.  <a href="class_isis_1_1_control_measure_log_data.html#ae9f3e0dab4e18664fab7eca8de622e2a">More...</a><br /></td></tr>
+<tr class="separator:ae9f3e0dab4e18664fab7eca8de622e2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3aaca3e4deffc4c5efcc1c7a4e3466b7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a3aaca3e4deffc4c5efcc1c7a4e3466b7">ControlMeasureLogData</a> (<a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> keywordRep)</td></tr>
+<tr class="memdesc:a3aaca3e4deffc4c5efcc1c7a4e3466b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This creates an instance while attempting to interpret keywordRep.  <a href="class_isis_1_1_control_measure_log_data.html#a3aaca3e4deffc4c5efcc1c7a4e3466b7">More...</a><br /></td></tr>
+<tr class="separator:a3aaca3e4deffc4c5efcc1c7a4e3466b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6d47926fb2907ab6b61c71c94bd7b15"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#ab6d47926fb2907ab6b61c71c94bd7b15">ControlMeasureLogData</a> (<a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">NumericLogDataType</a> dataType, double value)</td></tr>
+<tr class="memdesc:ab6d47926fb2907ab6b61c71c94bd7b15"><td class="mdescLeft">&#160;</td><td class="mdescRight">This creates an instance with the given type and value for that type.  <a href="class_isis_1_1_control_measure_log_data.html#ab6d47926fb2907ab6b61c71c94bd7b15">More...</a><br /></td></tr>
+<tr class="separator:ab6d47926fb2907ab6b61c71c94bd7b15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae631ef7ff999c2271347656427410d6c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#ae631ef7ff999c2271347656427410d6c">ControlMeasureLogData</a> (const <a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a> &amp;other)</td></tr>
+<tr class="memdesc:ae631ef7ff999c2271347656427410d6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="class_isis_1_1_control_measure_log_data.html#ae631ef7ff999c2271347656427410d6c">More...</a><br /></td></tr>
+<tr class="separator:ae631ef7ff999c2271347656427410d6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd2d219e24521e48bcb3f99ed4e075bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#abd2d219e24521e48bcb3f99ed4e075bb">~ControlMeasureLogData</a> ()</td></tr>
+<tr class="memdesc:abd2d219e24521e48bcb3f99ed4e075bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_control_measure_log_data.html#abd2d219e24521e48bcb3f99ed4e075bb">More...</a><br /></td></tr>
+<tr class="separator:abd2d219e24521e48bcb3f99ed4e075bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa95427f7dec5b69a0507e675873a75b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#aa95427f7dec5b69a0507e675873a75b1">SetNumericalValue</a> (double value)</td></tr>
+<tr class="memdesc:aa95427f7dec5b69a0507e675873a75b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This updates the value associated with a NumericLogDataType.  <a href="class_isis_1_1_control_measure_log_data.html#aa95427f7dec5b69a0507e675873a75b1">More...</a><br /></td></tr>
+<tr class="separator:aa95427f7dec5b69a0507e675873a75b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac0fccd3ff202c36e5690e8211c52c26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#aac0fccd3ff202c36e5690e8211c52c26">SetDataType</a> (<a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">NumericLogDataType</a> newDataType)</td></tr>
+<tr class="memdesc:aac0fccd3ff202c36e5690e8211c52c26"><td class="mdescLeft">&#160;</td><td class="mdescRight">This changes the type of this log data.  <a href="class_isis_1_1_control_measure_log_data.html#aac0fccd3ff202c36e5690e8211c52c26">More...</a><br /></td></tr>
+<tr class="separator:aac0fccd3ff202c36e5690e8211c52c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a119a3d952007e2f26db1c1f947b6c8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a8a119a3d952007e2f26db1c1f947b6c8">GetNumericalValue</a> () const</td></tr>
+<tr class="memdesc:a8a119a3d952007e2f26db1c1f947b6c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value associated with this log data.  <a href="class_isis_1_1_control_measure_log_data.html#a8a119a3d952007e2f26db1c1f947b6c8">More...</a><br /></td></tr>
+<tr class="separator:a8a119a3d952007e2f26db1c1f947b6c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5693eeb081e3c2a1e1319ab821f2553c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">NumericLogDataType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a5693eeb081e3c2a1e1319ab821f2553c">GetDataType</a> () const</td></tr>
+<tr class="memdesc:a5693eeb081e3c2a1e1319ab821f2553c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the data type associated with this log data.  <a href="class_isis_1_1_control_measure_log_data.html#a5693eeb081e3c2a1e1319ab821f2553c">More...</a><br /></td></tr>
+<tr class="separator:a5693eeb081e3c2a1e1319ab821f2553c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb28aa91105c3ce796d397f3553ebe1d"><td class="memItemLeft" align="right" valign="top">QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#afb28aa91105c3ce796d397f3553ebe1d">GetValue</a> () const</td></tr>
+<tr class="memdesc:afb28aa91105c3ce796d397f3553ebe1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the data type associated with this log data.  <a href="class_isis_1_1_control_measure_log_data.html#afb28aa91105c3ce796d397f3553ebe1d">More...</a><br /></td></tr>
+<tr class="separator:afb28aa91105c3ce796d397f3553ebe1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf4d336a98c6a16c7f9faae03e1a6f80"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#acf4d336a98c6a16c7f9faae03e1a6f80">IsValid</a> () const</td></tr>
+<tr class="memdesc:acf4d336a98c6a16c7f9faae03e1a6f80"><td class="mdescLeft">&#160;</td><td class="mdescRight">This tests if the log data is complete and valid.  <a href="class_isis_1_1_control_measure_log_data.html#acf4d336a98c6a16c7f9faae03e1a6f80">More...</a><br /></td></tr>
+<tr class="separator:acf4d336a98c6a16c7f9faae03e1a6f80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e820b843d16cab74036990275cb3a09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a4e820b843d16cab74036990275cb3a09">ToKeyword</a> () const</td></tr>
+<tr class="memdesc:a4e820b843d16cab74036990275cb3a09"><td class="mdescLeft">&#160;</td><td class="mdescRight">This converts the log data to a <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a>.  <a href="class_isis_1_1_control_measure_log_data.html#a4e820b843d16cab74036990275cb3a09">More...</a><br /></td></tr>
+<tr class="separator:a4e820b843d16cab74036990275cb3a09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a3400bbb35ecc6b3e41afab99780cd0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">NumericLogDataType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a4a3400bbb35ecc6b3e41afab99780cd0">NameToDataType</a> (QString name) const</td></tr>
+<tr class="memdesc:a4a3400bbb35ecc6b3e41afab99780cd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">This converts a string to a log data type and is useful for converting <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> keywords to Numeric Log Data Type.  <a href="class_isis_1_1_control_measure_log_data.html#a4a3400bbb35ecc6b3e41afab99780cd0">More...</a><br /></td></tr>
+<tr class="separator:a4a3400bbb35ecc6b3e41afab99780cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae9a96432a2fec6d8447f505948d9763"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#aae9a96432a2fec6d8447f505948d9763">DataTypeToName</a> (<a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">NumericLogDataType</a> type) const</td></tr>
+<tr class="memdesc:aae9a96432a2fec6d8447f505948d9763"><td class="mdescLeft">&#160;</td><td class="mdescRight">This converts the log data type to a string and is used internally for convertions to and from <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a>.  <a href="class_isis_1_1_control_measure_log_data.html#aae9a96432a2fec6d8447f505948d9763">More...</a><br /></td></tr>
+<tr class="separator:aae9a96432a2fec6d8447f505948d9763"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a052c4fd0a6dc8943611960d22524e2c6"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a052c4fd0a6dc8943611960d22524e2c6">MaximumNumericLogDataType</a> = 9</td></tr>
+<tr class="memdesc:a052c4fd0a6dc8943611960d22524e2c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">This value must be &gt; the largest enumerated value in this type or convertions to and from <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> will not work.  <a href="class_isis_1_1_control_measure_log_data.html#a052c4fd0a6dc8943611960d22524e2c6">More...</a><br /></td></tr>
+<tr class="separator:a052c4fd0a6dc8943611960d22524e2c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Statistical and similar <a class="el" href="class_isis_1_1_control_measure.html" title="a control measurement">ControlMeasure</a> associated information. </p>
+<p>This class represents information that is related to, or associated with, a control measure but is not part of the measure itself.</p>
+<dl class="section author"><dt>Author</dt><dd>2010-12-22 Steven Lambright</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_measure.html" title="a control measurement">ControlMeasure</a> </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a89a47e377f531cc59cd0d25dd2d4850b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89a47e377f531cc59cd0d25dd2d4850b">&#9670;&nbsp;</a></span>NumericLogDataType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">Isis::ControlMeasureLogData::NumericLogDataType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Please do not change existing values in this list except the size - it will break backwards compadibility. </p>
+<p>This is the list of log data for control measures. To add a new element, put it in the list (anywhere), assign it a value one greater than the current maximum, and increase the maximum's value. Then add a case to <a class="el" href="class_isis_1_1_control_measure_log_data.html#aae9a96432a2fec6d8447f505948d9763" title="This converts the log data type to a string and is used internally for convertions to and from Pvl.">ControlMeasureLogData::DataTypeToName</a>. Once you've done that, you're done! :) </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a89a47e377f531cc59cd0d25dd2d4850ba2f3accf7da4e7e71d7506f0947191e63"></a>InvalidNumericLogDataType&#160;</td><td class="fielddoc"><p>This is a placeholder for unset values. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a89a47e377f531cc59cd0d25dd2d4850ba83c27f106888c91e67afe7358ff1b41b"></a>Obsolete_Eccentricity&#160;</td><td class="fielddoc"><p>Deprecated keyword kept for backwards compatability with older <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Networks. </p>
+<p>DO NOT USE!! </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a89a47e377f531cc59cd0d25dd2d4850ba60e8439f8911894b450b221203551968"></a>GoodnessOfFit&#160;</td><td class="fielddoc"><p>GoodnessOfFit is pointreg information for reference measures. </p>
+<p>This measures how well the computed fit area matches the pattern area. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a89a47e377f531cc59cd0d25dd2d4850ba49e8b7b62db198dbd1b8ac72521280fe"></a>MinimumPixelZScore&#160;</td><td class="fielddoc"><p><a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> measures store z-scores in pairs. </p>
+<p>A pair contains the z-scores of the minimum and maximum pixels in the pattern chip generated for the given measure during point registration. Each z-score indicates how many standard deviations the given pixel value is above or below the mean DN. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a89a47e377f531cc59cd0d25dd2d4850ba1d6ab8ac4c7c3489cf73a140cdd40d04"></a>MaximumPixelZScore&#160;</td><td class="fielddoc"><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba49e8b7b62db198dbd1b8ac72521280fe" title="Control measures store z-scores in pairs.">MinimumPixelZScore</a> </dd></dl>
+</td></tr>
+<tr><td class="fieldname"><a id="a89a47e377f531cc59cd0d25dd2d4850ba8687af387d6be32c8abf4d6a63e2bc32"></a>PixelShift&#160;</td><td class="fielddoc"><p>Deprecated keyword kept for backwards compatability with older <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Networks. </p>
+<p>DO NOT USE!! </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a89a47e377f531cc59cd0d25dd2d4850ba3f840aadd0063cb5bd4df1cdf1d00161"></a>WholePixelCorrelation&#160;</td><td class="fielddoc"><p>Deprecated keyword kept for backwards compatability with older <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Networks. </p>
+<p>DO NOT USE!! </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a89a47e377f531cc59cd0d25dd2d4850bae2fc0726fd93edd984a3f6f203932160"></a>SubPixelCorrelation&#160;</td><td class="fielddoc"><p>Deprecated keyword kept for backwards compatability with older <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Networks. </p>
+<p>DO NOT USE!! </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a89a47e377f531cc59cd0d25dd2d4850baf169b787104973d65ac87c825fd5a78a"></a>Obsolete_AverageResidual&#160;</td><td class="fielddoc"><p>Deprecated keyword kept for backwards compatability with older <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Networks. </p>
+<p>DO NOT USE!! </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa9f767af67e14d5a8549e757a1e822d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9f767af67e14d5a8549e757a1e822d3">&#9670;&nbsp;</a></span>ControlMeasureLogData() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlMeasureLogData::ControlMeasureLogData </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This creates an empty, invalid (<a class="el" href="class_isis_1_1_control_measure_log_data.html#acf4d336a98c6a16c7f9faae03e1a6f80" title="This tests if the log data is complete and valid.">IsValid()</a> will return false), instance. </p>
+
+</div>
+</div>
+<a id="ae9f3e0dab4e18664fab7eca8de622e2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9f3e0dab4e18664fab7eca8de622e2a">&#9670;&nbsp;</a></span>ControlMeasureLogData() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlMeasureLogData::ControlMeasureLogData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">NumericLogDataType</a>&#160;</td>
+          <td class="paramname"><em>dataType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This creates an instance with the given type but no value yet. </p>
+<p><a class="el" href="class_isis_1_1_control_measure_log_data.html#acf4d336a98c6a16c7f9faae03e1a6f80" title="This tests if the log data is complete and valid.">IsValid()</a> will return false until a value is set.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dataType</td><td>What the instance is describing (the field) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3aaca3e4deffc4c5efcc1c7a4e3466b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3aaca3e4deffc4c5efcc1c7a4e3466b7">&#9670;&nbsp;</a></span>ControlMeasureLogData() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlMeasureLogData::ControlMeasureLogData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a>&#160;</td>
+          <td class="paramname"><em>keywordRep</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This creates an instance while attempting to interpret keywordRep. </p>
+<p>On failure, the <a class="el" href="class_isis_1_1_control_measure_log_data.html#acf4d336a98c6a16c7f9faae03e1a6f80" title="This tests if the log data is complete and valid.">IsValid()</a> test will return false.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">keywordRep</td><td>The <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> representing log data </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba2f3accf7da4e7e71d7506f0947191e63">InvalidNumericLogDataType</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#a297f07b8935a1f8752a45a5c77ee7ffa">Isis::PvlKeyword::name()</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a4a3400bbb35ecc6b3e41afab99780cd0">NameToDataType()</a>, and <a class="el" href="namespace_isis.html#ad7233a0dfd589ede203db382294b286c">Isis::toDouble()</a>.</p>
+
+</div>
+</div>
+<a id="ab6d47926fb2907ab6b61c71c94bd7b15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6d47926fb2907ab6b61c71c94bd7b15">&#9670;&nbsp;</a></span>ControlMeasureLogData() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlMeasureLogData::ControlMeasureLogData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">NumericLogDataType</a>&#160;</td>
+          <td class="paramname"><em>dataType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This creates an instance with the given type and value for that type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dataType</td><td>What the value is describing (the field) </td></tr>
+    <tr><td class="paramname">value</td><td>The numerical value of this field </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae631ef7ff999c2271347656427410d6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae631ef7ff999c2271347656427410d6c">&#9670;&nbsp;</a></span>ControlMeasureLogData() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlMeasureLogData::ControlMeasureLogData </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The instance to copy into this one. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abd2d219e24521e48bcb3f99ed4e075bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd2d219e24521e48bcb3f99ed4e075bb">&#9670;&nbsp;</a></span>~ControlMeasureLogData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlMeasureLogData::~ControlMeasureLogData </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+<p>This frees allocated memory by the instance of this class. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aae9a96432a2fec6d8447f505948d9763"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae9a96432a2fec6d8447f505948d9763">&#9670;&nbsp;</a></span>DataTypeToName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ControlMeasureLogData::DataTypeToName </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">NumericLogDataType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This converts the log data type to a string and is used internally for convertions to and from <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a>. </p>
+<p>This is also useful for GUI programs that need to display log information.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>The data type to convert to a string </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba60e8439f8911894b450b221203551968">GoodnessOfFit</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba2f3accf7da4e7e71d7506f0947191e63">InvalidNumericLogDataType</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba1d6ab8ac4c7c3489cf73a140cdd40d04">MaximumPixelZScore</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba49e8b7b62db198dbd1b8ac72521280fe">MinimumPixelZScore</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850baf169b787104973d65ac87c825fd5a78a">Obsolete_AverageResidual</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba83c27f106888c91e67afe7358ff1b41b">Obsolete_Eccentricity</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba8687af387d6be32c8abf4d6a63e2bc32">PixelShift</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850bae2fc0726fd93edd984a3f6f203932160">SubPixelCorrelation</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, and <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba3f840aadd0063cb5bd4df1cdf1d00161">WholePixelCorrelation</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_measure_log_data.html#a4a3400bbb35ecc6b3e41afab99780cd0">NameToDataType()</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a4e820b843d16cab74036990275cb3a09">ToKeyword()</a>, and <a class="el" href="class_isis_1_1_control_measure.html#ac7537d4d7a2de3495127a96c36438ea8">Isis::ControlMeasure::UpdateLogData()</a>.</p>
+
+</div>
+</div>
+<a id="a5693eeb081e3c2a1e1319ab821f2553c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5693eeb081e3c2a1e1319ab821f2553c">&#9670;&nbsp;</a></span>GetDataType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">ControlMeasureLogData::NumericLogDataType</a> Isis::ControlMeasureLogData::GetDataType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the data type associated with this log data. </p>
+<p>The return value is InvalidNumericLogDataType is no value has been set..</p>
+<dl class="section return"><dt>Returns</dt><dd>A numerical representation of the current DataType </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_v0003.html#a2a8bb60a5a39ee28ef1c825cbac7134d">Isis::ControlPointV0003::ControlPointV0003()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a57d5776b6174ea0ff20d28e911d8d706">Isis::ControlMeasure::DeleteLogData()</a>, <a class="el" href="class_isis_1_1_control_measure.html#abcfdefadfd0575cf8a7211e1080f5108">Isis::ControlMeasure::GetLogData()</a>, <a class="el" href="class_isis_1_1_control_measure.html#ab95b95d4d258f4f57308da889c062980">Isis::ControlMeasure::GetLogValue()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a3f22cd219af3b56a8ab7af8e409faf66">Isis::ControlMeasure::HasLogData()</a>, <a class="el" href="class_isis_1_1_control_measure.html#ab0fa43e7be6d19f5dba6b3cecbe4a690">Isis::ControlMeasure::SetLogData()</a>, and <a class="el" href="class_isis_1_1_control_measure.html#ac7537d4d7a2de3495127a96c36438ea8">Isis::ControlMeasure::UpdateLogData()</a>.</p>
+
+</div>
+</div>
+<a id="a8a119a3d952007e2f26db1c1f947b6c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a119a3d952007e2f26db1c1f947b6c8">&#9670;&nbsp;</a></span>GetNumericalValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasureLogData::GetNumericalValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the value associated with this log data. </p>
+<p>Returns Null is <a class="el" href="class_isis_1_1_control_measure_log_data.html#acf4d336a98c6a16c7f9faae03e1a6f80" title="This tests if the log data is complete and valid.">IsValid()</a> if false.</p>
+<dl class="section return"><dt>Returns</dt><dd>A numerical representation of the current DataType </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_v0003.html#a2a8bb60a5a39ee28ef1c825cbac7134d">Isis::ControlPointV0003::ControlPointV0003()</a>, <a class="el" href="class_isis_1_1_goodness_of_fit_filter.html#a7060c90487a4ca8e2769fd900b2cafb4">Isis::GoodnessOfFitFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_control_point.html#a9dfc07d2063814a500d1996e0b593c48">Isis::ControlPoint::GetStatistic()</a>, and <a class="el" href="class_isis_1_1_control_net_filter.html#a26cc39c076117ab05959653ab99e20de">Isis::ControlNetFilter::PointGoodnessOfFitFilter()</a>.</p>
+
+</div>
+</div>
+<a id="afb28aa91105c3ce796d397f3553ebe1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb28aa91105c3ce796d397f3553ebe1d">&#9670;&nbsp;</a></span>GetValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariant Isis::ControlMeasureLogData::GetValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the data type associated with this log data. </p>
+<p>The return value is an invalid variant type if the value is not set. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_measure.html#ab95b95d4d258f4f57308da889c062980">Isis::ControlMeasure::GetLogValue()</a>.</p>
+
+</div>
+</div>
+<a id="acf4d336a98c6a16c7f9faae03e1a6f80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf4d336a98c6a16c7f9faae03e1a6f80">&#9670;&nbsp;</a></span>IsValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasureLogData::IsValid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This tests if the log data is complete and valid. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if type and value are known, false otherwise </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba2f3accf7da4e7e71d7506f0947191e63">InvalidNumericLogDataType</a>, and <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_v0003.html#a2a8bb60a5a39ee28ef1c825cbac7134d">Isis::ControlPointV0003::ControlPointV0003()</a>, <a class="el" href="class_isis_1_1_control_measure.html#ab0fa43e7be6d19f5dba6b3cecbe4a690">Isis::ControlMeasure::SetLogData()</a>, and <a class="el" href="class_isis_1_1_control_measure_log_data.html#a4e820b843d16cab74036990275cb3a09">ToKeyword()</a>.</p>
+
+</div>
+</div>
+<a id="a4a3400bbb35ecc6b3e41afab99780cd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a3400bbb35ecc6b3e41afab99780cd0">&#9670;&nbsp;</a></span>NameToDataType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">ControlMeasureLogData::NumericLogDataType</a> Isis::ControlMeasureLogData::NameToDataType </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This converts a string to a log data type and is useful for converting <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> keywords to Numeric Log Data Type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The string to convert to data type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The data type converted from a string </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_measure_log_data.html#aae9a96432a2fec6d8447f505948d9763">DataTypeToName()</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850ba2f3accf7da4e7e71d7506f0947191e63">InvalidNumericLogDataType</a>, and <a class="el" href="class_isis_1_1_control_measure_log_data.html#a052c4fd0a6dc8943611960d22524e2c6">MaximumNumericLogDataType</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_measure_log_data.html#a3aaca3e4deffc4c5efcc1c7a4e3466b7">ControlMeasureLogData()</a>.</p>
+
+</div>
+</div>
+<a id="aac0fccd3ff202c36e5690e8211c52c26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac0fccd3ff202c36e5690e8211c52c26">&#9670;&nbsp;</a></span>SetDataType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlMeasureLogData::SetDataType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b">NumericLogDataType</a>&#160;</td>
+          <td class="paramname"><em>newDataType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This changes the type of this log data. </p>
+<p>This will reset the value of the log data also.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newDataType</td><td>The data type this log data should represent </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa95427f7dec5b69a0507e675873a75b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa95427f7dec5b69a0507e675873a75b1">&#9670;&nbsp;</a></span>SetNumericalValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlMeasureLogData::SetNumericalValue </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This updates the value associated with a NumericLogDataType. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The new value for this log data </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4e820b843d16cab74036990275cb3a09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e820b843d16cab74036990275cb3a09">&#9670;&nbsp;</a></span>ToKeyword()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> Isis::ControlMeasureLogData::ToKeyword </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This converts the log data to a <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a>. </p>
+<p>These should be understandable by the constructor.</p>
+<dl class="section return"><dt>Returns</dt><dd>A PVL representation of this log data </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_measure_log_data.html#aae9a96432a2fec6d8447f505948d9763">DataTypeToName()</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#acf4d336a98c6a16c7f9faae03e1a6f80">IsValid()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a052c4fd0a6dc8943611960d22524e2c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a052c4fd0a6dc8943611960d22524e2c6">&#9670;&nbsp;</a></span>MaximumNumericLogDataType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int Isis::ControlMeasureLogData::MaximumNumericLogDataType = 9</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This value must be &gt; the largest enumerated value in this type or convertions to and from <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> will not work. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_measure_log_data.html#a4a3400bbb35ecc6b3e41afab99780cd0">NameToDataType()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/ControlMeasureLogData/<a class="el" href="_control_measure_log_data_8h_source.html">ControlMeasureLogData.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/ControlMeasureLogData/<a class="el" href="_control_measure_log_data_8cpp.html">ControlMeasureLogData.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

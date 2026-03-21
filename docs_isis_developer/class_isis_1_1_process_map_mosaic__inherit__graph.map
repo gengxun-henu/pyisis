@@ -1,0 +1,5 @@
+<map id="Isis::ProcessMapMosaic" name="Isis::ProcessMapMosaic">
+<area shape="rect" id="node1" title="Mosaic two cubs together." alt="" coords="42,840,207,1129"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_process_mosaic.html" title="Mosaic two cubes together." alt="" coords="5,455,244,792"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_process.html" title="Base class for all cube processing derivatives." alt="" coords="35,5,214,407"/>
+</map>

@@ -1,0 +1,8 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+TiffExporter,High Level Cube I/O,isis/src/base/objs/TiffExporter/TiffExporter.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,TiffExporter,isis_pybind.TiffExporter,N,Python class symbol not found in current binding files
+Construction/Enum,TiffExporter(),isis_pybind.TiffExporter(),N,Constructor binding not detected in current binding files
+Read/Write IO,"virtual void write(FileName outputName, int quality=100, QString compression=""none"", UserInterface *ui = nullptr)",isis_pybind.TiffExporter.write,N,Method not found in current binding files
+Static/Factory,static bool canWriteFormat(QString format),isis_pybind.TiffExporter.can_write_format,N,Method not found in current binding files

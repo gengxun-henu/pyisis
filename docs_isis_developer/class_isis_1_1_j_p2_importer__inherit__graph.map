@@ -1,0 +1,4 @@
+<map id="Isis::JP2Importer" name="Isis::JP2Importer">
+<area shape="rect" id="node1" title="Imports JPEG 2000 images as Isis cubes." alt="" coords="9,503,151,776"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_image_importer.html" title="Imports images with standard formats into Isis as cubes." alt="" coords="5,5,155,455"/>
+</map>

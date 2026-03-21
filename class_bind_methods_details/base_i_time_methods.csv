@@ -1,0 +1,27 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+iTime,Parsing,isis/src/base/objs/iTime/iTime.h,isis_pybind_standalone/src/base/bind_base_support.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,iTime,isis_pybind.iTime,Y,Python class symbol is exported
+Construction/Enum,iTime(),isis_pybind.iTime(),Y,Constructor is explicitly bound
+Public API,QString YearString() const,isis_pybind.iTime.year_string,Y,Current Python name
+Public API,int Year() const,isis_pybind.iTime.year,Y,Current Python name
+Public API,QString MonthString() const,isis_pybind.iTime.month_string,Y,Current Python name
+Public API,int Month() const,isis_pybind.iTime.month,Y,Current Python name
+Public API,QString DayString() const,isis_pybind.iTime.day_string,Y,Current Python name
+Public API,int Day() const,isis_pybind.iTime.day,Y,Current Python name
+Public API,QString HourString() const,isis_pybind.iTime.hour_string,Y,Current Python name
+Public API,int Hour() const,isis_pybind.iTime.hour,Y,Current Python name
+Public API,QString MinuteString() const,isis_pybind.iTime.minute_string,Y,Current Python name
+Public API,int Minute() const,isis_pybind.iTime.minute,Y,Current Python name
+Public API,QString SecondString(int precision=8) const,isis_pybind.iTime.second_string,Y,Current Python name
+Public API,double Second() const,isis_pybind.iTime.second,Y,Current Python name
+Public API,QString DayOfYearString() const,isis_pybind.iTime.day_of_year_string,Y,Current Python name
+Public API,int DayOfYear() const,isis_pybind.iTime.day_of_year,Y,Current Python name
+Public API,QString EtString() const,isis_pybind.iTime.et_string,Y,Current Python name
+Public API,double Et() const { return p_et,isis_pybind.iTime.et,Y,Current Python name
+Public API,QString UTC(int precision=8) const,isis_pybind.iTime.utc,Y,Current Python name
+Static/Factory,static QString CurrentGMT(),isis_pybind.iTime.current_gmt,N,Method not found in current binding files
+Static/Factory,static QString CurrentLocalTime(),isis_pybind.iTime.current_local_time,N,Method not found in current binding files
+Mutation/Configuration,void setEt(double et),isis_pybind.iTime.set_et,Y,Current Python name
+Mutation/Configuration,void setUtc(QString utcString),isis_pybind.iTime.set_utc,Y,Current Python name

@@ -1,0 +1,341 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Blob/Blob.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_blob_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">Blob.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_blob_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef Blob_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define Blob_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;QList&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QPair&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_object_8h.html">PvlObject.h</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="namespace_isis.html#a45f0794ad8f0153fea7d351fc4dda107">IsBlob</a>(PvlObject &amp;obj);</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keyword">class </span>Pvl;</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="class_isis_1_1_blob.html">   51</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_blob.html">Blob</a> {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      <a class="code" href="class_isis_1_1_blob.html#a4e0b25ddb3147c6049f882277658afcd">Blob</a>(<span class="keyword">const</span> QString &amp;name, <span class="keyword">const</span> QString &amp;type);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      <a class="code" href="class_isis_1_1_blob.html#a4e0b25ddb3147c6049f882277658afcd">Blob</a>(<span class="keyword">const</span> QString &amp;name, <span class="keyword">const</span> QString &amp;type,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;           <span class="keyword">const</span> QString &amp;file);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <a class="code" href="class_isis_1_1_blob.html#a4e0b25ddb3147c6049f882277658afcd">Blob</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_blob.html">Blob</a> &amp;other);</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="class_isis_1_1_blob.html#a4e0b25ddb3147c6049f882277658afcd">   57</a></span>&#160;      <a class="code" href="class_isis_1_1_blob.html#a4e0b25ddb3147c6049f882277658afcd">Blob</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;      <a class="code" href="class_isis_1_1_blob.html">Blob</a> &amp;<a class="code" href="class_isis_1_1_blob.html#ace9f44753671ca49df0c368237ac9d32">operator=</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_blob.html">Blob</a> &amp;other);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_blob.html#ad0568a5a69dd1817412791bc58418c17">~Blob</a>();</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      QString <a class="code" href="class_isis_1_1_blob.html#a3191e38379830e0308bfbbf5d1ca1953">Type</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      QString <a class="code" href="class_isis_1_1_blob.html#a7dcf578350a69ef8c43fe9b79355d8e1">Name</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_blob.html#a16662f05507a1588be13ba6d3d95f9bb">Size</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<a class="code" href="class_isis_1_1_blob.html#aa69259b4d285f0aaa420928d178677de">Label</a>();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#a2aecac6b9db7ca6d49ed9b2cb5be4686">Read</a>(<span class="keyword">const</span> QString &amp;file, <span class="keyword">const</span> std::vector&lt;PvlKeyword&gt;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                keywords=std::vector&lt;PvlKeyword&gt;());</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#a2aecac6b9db7ca6d49ed9b2cb5be4686">Read</a>(<span class="keyword">const</span> QString &amp;file, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvlLabels,</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                <span class="keyword">const</span> std::vector&lt;PvlKeyword&gt; keywords = std::vector&lt;PvlKeyword&gt;());</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#a2aecac6b9db7ca6d49ed9b2cb5be4686">Read</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl, std::istream &amp;is,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                        <span class="keyword">const</span> std::vector&lt;PvlKeyword&gt; keywords = std::vector&lt;PvlKeyword&gt;());</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#a2f20e981cbbe097ca9e80d0818b8760e">Write</a>(<span class="keyword">const</span> QString &amp;file);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#a2f20e981cbbe097ca9e80d0818b8760e">Write</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl, std::fstream &amp;stm,</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                 <span class="keyword">const</span> QString &amp;detachedFileName = <span class="stringliteral">&quot;&quot;</span>, <span class="keywordtype">bool</span> overwrite=<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <span class="keywordtype">char</span> *<a class="code" href="class_isis_1_1_blob.html#a94b47499d612bfe24689b093f1269634">getBuffer</a>();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#a1de009b123e8a1ccbda1ddd5b0f9b6db">setData</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *buffer, <span class="keywordtype">int</span> nbytes);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#ace146898182a896c5ceae22f4f50c8fc">takeData</a>(<span class="keywordtype">char</span> *buffer, <span class="keywordtype">int</span> nbytes);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#a3730e36e7c8eb90ebc9df34efc07c0da">Find</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl, <span class="keyword">const</span> std::vector&lt;PvlKeyword&gt; keywords = std::vector&lt;PvlKeyword&gt;());</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#a503702ee9ec050f7250fdbbe18581af0">ReadInit</a>();</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#ae551aba3e7cf0bcf443b255a72614fdc">ReadData</a>(std::istream &amp;is);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#a39f8e7466692d8a857dbe41395deb83e">WriteInit</a>();</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_blob.html#a9883df1f64ebb6bf10f41bd8288d1158">WriteData</a>(std::fstream &amp;os);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="class_isis_1_1_blob.html#a0fbf2d56b2ac9709410df5fc5372ccea">   90</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> <a class="code" href="class_isis_1_1_blob.html#a0fbf2d56b2ac9709410df5fc5372ccea">p_blobPvl</a>;     </div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="class_isis_1_1_blob.html#afa2a544371baaa3bd2511c22fbfa3398">   91</a></span>&#160;      QString <a class="code" href="class_isis_1_1_blob.html#afa2a544371baaa3bd2511c22fbfa3398">p_blobName</a>;  </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="class_isis_1_1_blob.html#ad8d5102f4a3ad02bcf5d96aae14521c7">   93</a></span>&#160;      <span class="keywordtype">char</span> *<a class="code" href="class_isis_1_1_blob.html#ad8d5102f4a3ad02bcf5d96aae14521c7">p_buffer</a>;          </div>
+<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="class_isis_1_1_blob.html#a394b8fb6da206032caf4740f85df84f0">   94</a></span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_blob.html#a394b8fb6da206032caf4740f85df84f0">p_startByte</a>;      </div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="class_isis_1_1_blob.html#acb93c2a8275c91a9329de8c126088565">   95</a></span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_blob.html#acb93c2a8275c91a9329de8c126088565">p_nbytes</a>;            </div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="class_isis_1_1_blob.html#aba98aca80965d02f7ebd5ccbe6b283a7">   96</a></span>&#160;      QString <a class="code" href="class_isis_1_1_blob.html#aba98aca80965d02f7ebd5ccbe6b283a7">p_type</a>;      </div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="class_isis_1_1_blob.html#abc7764763e32460668899d1286a10d66">   97</a></span>&#160;      QString <a class="code" href="class_isis_1_1_blob.html#abc7764763e32460668899d1286a10d66">p_detached</a>;  </div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="class_isis_1_1_blob.html#a2be6c670c257367d5eff707f54ab8ebf">   98</a></span>&#160;      QString <a class="code" href="class_isis_1_1_blob.html#a2be6c670c257367d5eff707f54ab8ebf">p_labelFile</a>; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  };</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;};</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_pvl_object_8h_html"><div class="ttname"><a href="_pvl_object_8h.html">PvlObject.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html"><div class="ttname"><a href="class_isis_1_1_blob.html">Isis::Blob</a></div><div class="ttdef"><b>Definition:</b> Blob.h:51</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a0fbf2d56b2ac9709410df5fc5372ccea"><div class="ttname"><a href="class_isis_1_1_blob.html#a0fbf2d56b2ac9709410df5fc5372ccea">Isis::Blob::p_blobPvl</a></div><div class="ttdeci">PvlObject p_blobPvl</div><div class="ttdoc">Pvl Blob object.</div><div class="ttdef"><b>Definition:</b> Blob.h:90</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a16662f05507a1588be13ba6d3d95f9bb"><div class="ttname"><a href="class_isis_1_1_blob.html#a16662f05507a1588be13ba6d3d95f9bb">Isis::Blob::Size</a></div><div class="ttdeci">int Size() const</div><div class="ttdoc">Accessor method that returns the number of bytes in the blob data.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:142</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a1de009b123e8a1ccbda1ddd5b0f9b6db"><div class="ttname"><a href="class_isis_1_1_blob.html#a1de009b123e8a1ccbda1ddd5b0f9b6db">Isis::Blob::setData</a></div><div class="ttdeci">void setData(const char *buffer, int nbytes)</div><div class="ttdoc">Set the data stored in the BLOB.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:382</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a2aecac6b9db7ca6d49ed9b2cb5be4686"><div class="ttname"><a href="class_isis_1_1_blob.html#a2aecac6b9db7ca6d49ed9b2cb5be4686">Isis::Blob::Read</a></div><div class="ttdeci">void Read(const QString &amp;file, const std::vector&lt; PvlKeyword &gt; keywords=std::vector&lt; PvlKeyword &gt;())</div><div class="ttdoc">This method reads Pvl values from a specified file.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:255</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a2be6c670c257367d5eff707f54ab8ebf"><div class="ttname"><a href="class_isis_1_1_blob.html#a2be6c670c257367d5eff707f54ab8ebf">Isis::Blob::p_labelFile</a></div><div class="ttdeci">QString p_labelFile</div><div class="ttdoc">The file containing the labels.</div><div class="ttdef"><b>Definition:</b> Blob.h:98</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a2f20e981cbbe097ca9e80d0818b8760e"><div class="ttname"><a href="class_isis_1_1_blob.html#a2f20e981cbbe097ca9e80d0818b8760e">Isis::Blob::Write</a></div><div class="ttdeci">void Write(const QString &amp;file)</div><div class="ttdoc">Write the blob data out to a file.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:417</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a3191e38379830e0308bfbbf5d1ca1953"><div class="ttname"><a href="class_isis_1_1_blob.html#a3191e38379830e0308bfbbf5d1ca1953">Isis::Blob::Type</a></div><div class="ttdeci">QString Type() const</div><div class="ttdoc">Accessor method that returns a string containing the Blob type.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:124</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a3730e36e7c8eb90ebc9df34efc07c0da"><div class="ttname"><a href="class_isis_1_1_blob.html#a3730e36e7c8eb90ebc9df34efc07c0da">Isis::Blob::Find</a></div><div class="ttdeci">void Find(const Pvl &amp;pvl, const std::vector&lt; PvlKeyword &gt; keywords=std::vector&lt; PvlKeyword &gt;())</div><div class="ttdoc">This method searches the given Pvl for the Blob by the Blob's type and name.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:167</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a394b8fb6da206032caf4740f85df84f0"><div class="ttname"><a href="class_isis_1_1_blob.html#a394b8fb6da206032caf4740f85df84f0">Isis::Blob::p_startByte</a></div><div class="ttdeci">BigInt p_startByte</div><div class="ttdoc">Byte blob data starts at in buffer.</div><div class="ttdef"><b>Definition:</b> Blob.h:94</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a39f8e7466692d8a857dbe41395deb83e"><div class="ttname"><a href="class_isis_1_1_blob.html#a39f8e7466692d8a857dbe41395deb83e">Isis::Blob::WriteInit</a></div><div class="ttdeci">virtual void WriteInit()</div><div class="ttdoc">This virtual method for classes that inherit Blob.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:554</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a4e0b25ddb3147c6049f882277658afcd"><div class="ttname"><a href="class_isis_1_1_blob.html#a4e0b25ddb3147c6049f882277658afcd">Isis::Blob::Blob</a></div><div class="ttdeci">Blob()=default</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a503702ee9ec050f7250fdbbe18581af0"><div class="ttname"><a href="class_isis_1_1_blob.html#a503702ee9ec050f7250fdbbe18581af0">Isis::Blob::ReadInit</a></div><div class="ttdeci">virtual void ReadInit()</div><div class="ttdoc">This virtual method for classes that inherit Blob.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:341</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a7dcf578350a69ef8c43fe9b79355d8e1"><div class="ttname"><a href="class_isis_1_1_blob.html#a7dcf578350a69ef8c43fe9b79355d8e1">Isis::Blob::Name</a></div><div class="ttdeci">QString Name() const</div><div class="ttdoc">Accessor method that returns a string containing the Blob name.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:133</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a94b47499d612bfe24689b093f1269634"><div class="ttname"><a href="class_isis_1_1_blob.html#a94b47499d612bfe24689b093f1269634">Isis::Blob::getBuffer</a></div><div class="ttdeci">char * getBuffer()</div><div class="ttdoc">Get the internal data buff of the Blob.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:546</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_a9883df1f64ebb6bf10f41bd8288d1158"><div class="ttname"><a href="class_isis_1_1_blob.html#a9883df1f64ebb6bf10f41bd8288d1158">Isis::Blob::WriteData</a></div><div class="ttdeci">virtual void WriteData(std::fstream &amp;os)</div><div class="ttdoc">Writes blob data to a stream.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:564</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_aa69259b4d285f0aaa420928d178677de"><div class="ttname"><a href="class_isis_1_1_blob.html#aa69259b4d285f0aaa420928d178677de">Isis::Blob::Label</a></div><div class="ttdeci">PvlObject &amp; Label()</div><div class="ttdoc">Accessor method that returns a PvlObject containing the Blob label.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:151</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_aba98aca80965d02f7ebd5ccbe6b283a7"><div class="ttname"><a href="class_isis_1_1_blob.html#aba98aca80965d02f7ebd5ccbe6b283a7">Isis::Blob::p_type</a></div><div class="ttdeci">QString p_type</div><div class="ttdoc">Type of data stored in the buffer.</div><div class="ttdef"><b>Definition:</b> Blob.h:96</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_abc7764763e32460668899d1286a10d66"><div class="ttname"><a href="class_isis_1_1_blob.html#abc7764763e32460668899d1286a10d66">Isis::Blob::p_detached</a></div><div class="ttdeci">QString p_detached</div><div class="ttdoc">Used for reading detached blobs.</div><div class="ttdef"><b>Definition:</b> Blob.h:97</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_acb93c2a8275c91a9329de8c126088565"><div class="ttname"><a href="class_isis_1_1_blob.html#acb93c2a8275c91a9329de8c126088565">Isis::Blob::p_nbytes</a></div><div class="ttdeci">int p_nbytes</div><div class="ttdoc">Size of blob data (in bytes)</div><div class="ttdef"><b>Definition:</b> Blob.h:95</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_ace146898182a896c5ceae22f4f50c8fc"><div class="ttname"><a href="class_isis_1_1_blob.html#ace146898182a896c5ceae22f4f50c8fc">Isis::Blob::takeData</a></div><div class="ttdeci">void takeData(char *buffer, int nbytes)</div><div class="ttdoc">Set the data stored in the BLOB without copying it.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:398</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_ace9f44753671ca49df0c368237ac9d32"><div class="ttname"><a href="class_isis_1_1_blob.html#ace9f44753671ca49df0c368237ac9d32">Isis::Blob::operator=</a></div><div class="ttdeci">Blob &amp; operator=(const Blob &amp;other)</div><div class="ttdoc">This makes the two blob objects exactly the same (copies the blob)</div><div class="ttdef"><b>Definition:</b> Blob.cpp:92</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_ad0568a5a69dd1817412791bc58418c17"><div class="ttname"><a href="class_isis_1_1_blob.html#ad0568a5a69dd1817412791bc58418c17">Isis::Blob::~Blob</a></div><div class="ttdeci">virtual ~Blob()</div><div class="ttdoc">Destroys the Blob object.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:115</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_ad8d5102f4a3ad02bcf5d96aae14521c7"><div class="ttname"><a href="class_isis_1_1_blob.html#ad8d5102f4a3ad02bcf5d96aae14521c7">Isis::Blob::p_buffer</a></div><div class="ttdeci">char * p_buffer</div><div class="ttdoc">Buffer blob data is stored in.</div><div class="ttdef"><b>Definition:</b> Blob.h:93</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_ae551aba3e7cf0bcf443b255a72614fdc"><div class="ttname"><a href="class_isis_1_1_blob.html#ae551aba3e7cf0bcf443b255a72614fdc">Isis::Blob::ReadData</a></div><div class="ttdeci">virtual void ReadData(std::istream &amp;is)</div><div class="ttdoc">Read binary data from an input stream into the Blob object.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:351</div></div>
+<div class="ttc" id="aclass_isis_1_1_blob_html_afa2a544371baaa3bd2511c22fbfa3398"><div class="ttname"><a href="class_isis_1_1_blob.html#afa2a544371baaa3bd2511c22fbfa3398">Isis::Blob::p_blobName</a></div><div class="ttdeci">QString p_blobName</div><div class="ttdoc">Name of the Blob object.</div><div class="ttdef"><b>Definition:</b> Blob.h:91</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_html"><div class="ttname"><a href="class_isis_1_1_pvl.html">Isis::Pvl</a></div><div class="ttdoc">Container for cube-like labels.</div><div class="ttdef"><b>Definition:</b> Pvl.h:119</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html"><div class="ttname"><a href="class_isis_1_1_pvl_object.html">Isis::PvlObject</a></div><div class="ttdoc">Contains Pvl Groups and Pvl Objects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:61</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a45f0794ad8f0153fea7d351fc4dda107"><div class="ttname"><a href="namespace_isis.html#a45f0794ad8f0153fea7d351fc4dda107">Isis::IsBlob</a></div><div class="ttdeci">bool IsBlob(PvlObject &amp;obj)</div><div class="ttdoc">Checks pvl object and returns whether or not it is a Blob.</div><div class="ttdef"><b>Definition:</b> Blob.cpp:580</div></div>
+<div class="ttc" id="anamespace_isis_html_a840d3fb673563756fc704318d9528188"><div class="ttname"><a href="namespace_isis.html#a840d3fb673563756fc704318d9528188">Isis::BigInt</a></div><div class="ttdeci">long long int BigInt</div><div class="ttdoc">Big int.</div><div class="ttdef"><b>Definition:</b> Constants.h:49</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_d16f0ecb2a5b93d5767bffa8aa28ac7b.html">Blob</a></li><li class="navelem"><a class="el" href="_blob_8h.html">Blob.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+<map id="Isis::ImportShapesWorkOrder" name="Isis::ImportShapesWorkOrder">
+<area shape="rect" id="node1" title="Add shape model cubes to a project." alt="" coords="5,792,199,1017"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_work_order.html" title="Provide Undo/redo abilities, serialization, and history for an operation." alt="" coords="25,135,179,744"/>
+<area shape="rect" id="node3" href="$class_q_action.html" title=" " alt="" coords="8,5,76,87"/>
+<area shape="rect" id="node4" href="$class_q_undo_command.html" title=" " alt="" coords="101,5,223,87"/>
+</map>

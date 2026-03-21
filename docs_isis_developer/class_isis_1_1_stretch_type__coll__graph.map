@@ -1,0 +1,12 @@
+<map id="Isis::StretchType" name="Isis::StretchType">
+<area shape="rect" id="node1" title="This is the base class for advanced stretches." alt="" coords="302,616,451,809"/>
+<area shape="rect" id="node2" href="$class_q_widget.html" title=" " alt="" coords="5,391,78,472"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_stretch.html" title="Pixel value mapper." alt="" coords="102,311,221,552"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_histogram.html" title="Container of a cube histogram." alt="" coords="245,311,355,552"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays." alt="" coords="168,5,289,247"/>
+<area shape="rect" id="node6" title=" " alt="" coords="313,85,429,167"/>
+<area shape="rect" id="node7" title=" " alt="" coords="379,391,483,472"/>
+<area shape="rect" id="node8" title=" " alt="" coords="507,391,619,472"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_histogram_widget.html" title="Histogram widget used by AdvancedStretchTool." alt="" coords="643,359,795,504"/>
+<area shape="rect" id="node10" href="$class_qwt_plot.html" title=" " alt="" coords="685,85,753,167"/>
+</map>

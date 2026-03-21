@@ -1,0 +1,9 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+CameraFactory,"Spice, Instruments, and Cameras",isis/src/base/objs/CameraFactory/CameraFactory.h,isis_pybind_standalone/src/bind_camera_factory.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,CameraFactory,isis_pybind.CameraFactory,Y,Python class symbol is exported; constructor exposure may be limited; 工厂类，静态创建接口较多；第五批已补基础单测与失败路径
+Static/Factory,static Camera *Create(Cube &cube),isis_pybind.CameraFactory.create,N,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
+Static/Factory,static int CameraVersion(Cube &cube),isis_pybind.CameraFactory.camera_version,N,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
+Static/Factory,static int CameraVersion(Pvl &lab),isis_pybind.CameraFactory.camera_version,N,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
+Static/Factory,static void initPlugin(),isis_pybind.CameraFactory.init_plugin,N,工厂类，静态创建接口较多；第五批已补基础单测与失败路径

@@ -1,0 +1,4 @@
+<map id="Isis::LimitPolygonSeeder" name="Isis::LimitPolygonSeeder">
+<area shape="rect" id="node1" title="Seed points using a grid." alt="" coords="5,311,172,456"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_polygon_seeder.html" title="This class is used as the base class for all PolygonSeeder objects." alt="" coords="11,5,166,263"/>
+</map>

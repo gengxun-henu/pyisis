@@ -1,0 +1,6 @@
+<map id="Isis::RollingShutterCamera" name="Isis::RollingShutterCamera">
+<area shape="rect" id="node1" title="Generic class for Rolling Shutter Cameras." alt="" coords="25,824,204,937"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_clipper_nac_rolling_shutter_camera.html" title="Clipper EIS Camera model." alt="" coords="16,985,213,1179"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_camera.html" title=" " alt="" coords="5,311,224,776"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_sensor.html" title="Class for computing sensor ground coordinates." alt="" coords="5,5,224,263"/>
+</map>

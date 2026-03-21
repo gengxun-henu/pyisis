@@ -1,0 +1,46 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Statistics,Statistics,isis/src/base/objs/Statistics/Statistics.h,isis_pybind_standalone/src/bind_statistics.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Statistics,isis_pybind.GaussianDistribution,Y,Python class symbol is exported; Qt 类型/信号槽较多
+Construction/Enum,Statistics(),isis_pybind.GaussianDistribution(),Y,Constructor is explicitly bound
+Read/Write IO,void readStatistics(QXmlStreamReader *xmlReader),isis_pybind.GaussianDistribution.read_statistics,N,Qt 类型/信号槽较多
+Public API,void Reset(),isis_pybind.GaussianDistribution.reset,Y,Current Python name
+Mutation/Configuration,"void AddData(const double *data, const unsigned int count)",isis_pybind.GaussianDistribution.add_data,Y,Current Python name
+Mutation/Configuration,void AddData(const double data),isis_pybind.GaussianDistribution.add_data,Y,Current Python name
+Mutation/Configuration,"void RemoveData(const double *data, const unsigned int count)",isis_pybind.GaussianDistribution.remove_data,Y,Current Python name
+Mutation/Configuration,void RemoveData(const double data),isis_pybind.GaussianDistribution.remove_data,Y,Current Python name
+Mutation/Configuration,"void SetValidRange(const double minimum = Isis::ValidMinimum, const double maximum = Isis::ValidMaximum)",isis_pybind.GaussianDistribution.set_valid_range,Y,Current Python name
+Query,double ValidMinimum() const,isis_pybind.GaussianDistribution.valid_minimum,Y,Current Python name
+Query,double ValidMaximum() const,isis_pybind.GaussianDistribution.valid_maximum,Y,Current Python name
+Public API,bool InRange(const double value),isis_pybind.GaussianDistribution.in_range,Y,Current Python name
+Public API,bool AboveRange(const double value),isis_pybind.GaussianDistribution.above_range,Y,Current Python name
+Public API,bool BelowRange(const double value),isis_pybind.GaussianDistribution.below_range,Y,Current Python name
+Public API,double Average() const,isis_pybind.GaussianDistribution.average,Y,Current Python name
+Public API,double StandardDeviation() const,isis_pybind.GaussianDistribution.standard_deviation,Y,Current Python name
+Public API,double Variance() const,isis_pybind.GaussianDistribution.variance,Y,Current Python name
+Public API,double Sum() const,isis_pybind.GaussianDistribution.sum,Y,Current Python name
+Public API,double SumSquare() const,isis_pybind.GaussianDistribution.sum_square,Y,Current Python name
+Public API,double Rms() const,isis_pybind.GaussianDistribution.rms,Y,Current Python name
+Public API,double Minimum() const,isis_pybind.GaussianDistribution.minimum,Y,Current Python name
+Public API,double Maximum() const,isis_pybind.GaussianDistribution.maximum,Y,Current Python name
+Public API,double ChebyshevMinimum(const double percent = 99.5) const,isis_pybind.GaussianDistribution.chebyshev_minimum,Y,Current Python name
+Public API,double ChebyshevMaximum(const double percent = 99.5) const,isis_pybind.GaussianDistribution.chebyshev_maximum,Y,Current Python name
+Public API,double BestMinimum(const double percent = 99.5) const,isis_pybind.GaussianDistribution.best_minimum,Y,Current Python name
+Public API,double BestMaximum(const double percent = 99.5) const,isis_pybind.GaussianDistribution.best_maximum,Y,Current Python name
+Public API,double ZScore(const double value) const,isis_pybind.GaussianDistribution.z_score,Y,Current Python name
+Public API,BigInt TotalPixels() const,isis_pybind.GaussianDistribution.total_pixels,Y,Current Python name
+Query,BigInt ValidPixels() const,isis_pybind.GaussianDistribution.valid_pixels,Y,Current Python name
+Public API,BigInt OverRangePixels() const,isis_pybind.GaussianDistribution.over_range_pixels,Y,Current Python name
+Public API,BigInt UnderRangePixels() const,isis_pybind.GaussianDistribution.under_range_pixels,Y,Current Python name
+Public API,BigInt NullPixels() const,isis_pybind.GaussianDistribution.null_pixels,Y,Current Python name
+Public API,BigInt LisPixels() const,isis_pybind.GaussianDistribution.lis_pixels,Y,Current Python name
+Public API,BigInt LrsPixels() const,isis_pybind.GaussianDistribution.lrs_pixels,Y,Current Python name
+Public API,BigInt HisPixels() const,isis_pybind.GaussianDistribution.his_pixels,Y,Current Python name
+Public API,BigInt HrsPixels() const,isis_pybind.GaussianDistribution.hrs_pixels,Y,Current Python name
+Public API,BigInt OutOfRangePixels() const,isis_pybind.GaussianDistribution.out_of_range_pixels,Y,Current Python name
+Mutation/Configuration,bool RemovedData() const,isis_pybind.GaussianDistribution.removed_data,Y,Current Python name
+Public API,"PvlGroup toPvl(QString name = ""Statistics"") const",isis_pybind.GaussianDistribution.to_pvl,Y,Current Python name
+Read/Write IO,"void save(QXmlStreamWriter &stream, const Project *project) const",isis_pybind.GaussianDistribution.save,N,Qt 类型/信号槽较多
+Read/Write IO,QDataStream &write(QDataStream &stream) const,isis_pybind.GaussianDistribution.write,N,Qt 类型/信号槽较多
+Read/Write IO,QDataStream &read(QDataStream &stream),isis_pybind.GaussianDistribution.read,N,Qt 类型/信号槽较多

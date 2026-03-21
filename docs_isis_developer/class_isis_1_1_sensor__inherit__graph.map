@@ -1,0 +1,13 @@
+<map id="Isis::Sensor" name="Isis::Sensor">
+<area shape="rect" id="node1" title="Class for computing sensor ground coordinates." alt="" coords="676,455,894,712"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="676,760,894,1225"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft." alt="" coords="679,5,891,407"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_c_s_m_camera.html" title=" " alt="" coords="5,1273,194,1579"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_framing_camera.html" title="Generic class for Framing Cameras." alt="" coords="218,1361,402,1491"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_ideal_camera.html" title="Ideal Camera Model." alt="" coords="426,1297,594,1555"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_line_scan_camera.html" title="Generic class for Line Scan Cameras." alt="" coords="619,1353,769,1499"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_push_frame_camera.html" title="Generic class for Push Frame Cameras." alt="" coords="794,1361,957,1491"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_radar_camera.html" title="Generic class for Radar Cameras." alt="" coords="981,1377,1117,1475"/>
+<area shape="rect" id="node10" href="$class_isis_1_1_rolling_shutter_camera.html" title="Generic class for Rolling Shutter Cameras." alt="" coords="1141,1369,1319,1483"/>
+<area shape="rect" id="node11" href="$class_isis_1_1_vims_camera.html" title="Cassini Vims camera model." alt="" coords="1343,1337,1480,1515"/>
+</map>

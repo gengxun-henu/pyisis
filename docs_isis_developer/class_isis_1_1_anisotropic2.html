@@ -1,0 +1,3198 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Anisotropic2 Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_anisotropic2.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_anisotropic2-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Anisotropic2 Class Reference<div class="ingroups"><a class="el" href="group___radiometric_and_photometric_correction.html">Radiometric And Photometric Correction</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_anisotropic2_8h_source.html">Anisotropic2.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::Anisotropic2:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_anisotropic2__inherit__graph.png" border="0" usemap="#a_isis_1_1_anisotropic2_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_anisotropic2_inherit__map" id="a_isis_1_1_anisotropic2_inherit__map">
+<area shape="rect" title=" " alt="" coords="27,679,194,792"/>
+<area shape="rect" href="class_isis_1_1_atmos_model.html" title="Isotropic atmos scattering model." alt="" coords="5,5,216,631"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::Anisotropic2:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_anisotropic2__coll__graph.png" border="0" usemap="#a_isis_1_1_anisotropic2_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_anisotropic2_coll__map" id="a_isis_1_1_anisotropic2_coll__map">
+<area shape="rect" title=" " alt="" coords="195,1435,363,1548"/>
+<area shape="rect" href="class_isis_1_1_atmos_model.html" title="Isotropic atmos scattering model." alt="" coords="174,728,384,1385"/>
+<area shape="rect" title=" " alt="" coords="53,5,113,87"/>
+<area shape="rect" href="class_isis_1_1_numerical_approximation.html" title="NumericalApproximation provides various numerical analysis methods of interpolation,..." alt="" coords="423,215,615,632"/>
+<area shape="rect" title=" " alt="" coords="154,383,193,464"/>
+<area shape="rect" title=" " alt="" coords="280,5,326,87"/>
+<area shape="rect" title=" " alt="" coords="523,5,643,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ab357bb0f92c2482b7bc09d03df09818d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_anisotropic2.html#ab357bb0f92c2482b7bc09d03df09818d">Anisotropic2</a> (<a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl, <a class="el" href="class_isis_1_1_photo_model.html">PhotoModel</a> &amp;pmodel)</td></tr>
+<tr class="memdesc:ab357bb0f92c2482b7bc09d03df09818d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empty constructor.  <a href="class_isis_1_1_anisotropic2.html#ab357bb0f92c2482b7bc09d03df09818d">More...</a><br /></td></tr>
+<tr class="separator:ab357bb0f92c2482b7bc09d03df09818d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7349df87f08e8cc25ac017227886c18"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_anisotropic2.html#ad7349df87f08e8cc25ac017227886c18">~Anisotropic2</a> ()</td></tr>
+<tr class="separator:ad7349df87f08e8cc25ac017227886c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdb1c6206d51f854118d79c3ef0d74b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#abdb1c6206d51f854118d79c3ef0d74b8">CalcAtmEffect</a> (double pha, double inc, double ema, double *pstd, double *trans, double *trans0, double *sbar, double *transs)</td></tr>
+<tr class="memdesc:abdb1c6206d51f854118d79c3ef0d74b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the atmospheric scattering effect using photometric angle information.  <a href="class_isis_1_1_atmos_model.html#abdb1c6206d51f854118d79c3ef0d74b8">More...</a><br /></td></tr>
+<tr class="separator:abdb1c6206d51f854118d79c3ef0d74b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa599e0d081febbbd4e43d8e2cc012808"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#aa599e0d081febbbd4e43d8e2cc012808">SetStandardConditions</a> (bool standard)</td></tr>
+<tr class="memdesc:aa599e0d081febbbd4e43d8e2cc012808"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to calculate atmosphere at standard conditions.  <a href="class_isis_1_1_atmos_model.html#aa599e0d081febbbd4e43d8e2cc012808">More...</a><br /></td></tr>
+<tr class="separator:aa599e0d081febbbd4e43d8e2cc012808"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a906f5bb492fb3a011bc7480f93617774"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a906f5bb492fb3a011bc7480f93617774">GenerateAhTable</a> ()</td></tr>
+<tr class="memdesc:a906f5bb492fb3a011bc7480f93617774"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method computes the values of the atmospheric Ah table and sets the properties of the atmospheric Ah spline.  <a href="class_isis_1_1_atmos_model.html#a906f5bb492fb3a011bc7480f93617774">More...</a><br /></td></tr>
+<tr class="separator:a906f5bb492fb3a011bc7480f93617774"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae918ba694bc5befd56ee7ceac9f75737"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ae918ba694bc5befd56ee7ceac9f75737">GenerateHahgTables</a> ()</td></tr>
+<tr class="memdesc:ae918ba694bc5befd56ee7ceac9f75737"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method computes the values of the atmospheric Hahg and Hahg0 tables and sets the properties of the atmospheric Hahg and Hahg0 splines.  <a href="class_isis_1_1_atmos_model.html#ae918ba694bc5befd56ee7ceac9f75737">More...</a><br /></td></tr>
+<tr class="separator:ae918ba694bc5befd56ee7ceac9f75737"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9a3a7cee3bf30a3c14109ae4e4511e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#aa9a3a7cee3bf30a3c14109ae4e4511e3">GenerateHahgTablesShadow</a> ()</td></tr>
+<tr class="memdesc:aa9a3a7cee3bf30a3c14109ae4e4511e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is a modified version of the GenerateHahgTables method and is used solely for shadow modeling.  <a href="class_isis_1_1_atmos_model.html#aa9a3a7cee3bf30a3c14109ae4e4511e3">More...</a><br /></td></tr>
+<tr class="separator:aa9a3a7cee3bf30a3c14109ae4e4511e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e2e1db1ec0e435ff727e64eac1edd14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a9e2e1db1ec0e435ff727e64eac1edd14">SetAtmosAtmSwitch</a> (const int atmswitch)</td></tr>
+<tr class="memdesc:a9e2e1db1ec0e435ff727e64eac1edd14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the switch that controls the function that will be integrated.  <a href="class_isis_1_1_atmos_model.html#a9e2e1db1ec0e435ff727e64eac1edd14">More...</a><br /></td></tr>
+<tr class="separator:a9e2e1db1ec0e435ff727e64eac1edd14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e7dabc01d8627b5bb660e898d1367c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a6e7dabc01d8627b5bb660e898d1367c0">SetAtmosBha</a> (const double bha)</td></tr>
+<tr class="memdesc:a6e7dabc01d8627b5bb660e898d1367c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Anisotropic Atmospheric function parameter.  <a href="class_isis_1_1_atmos_model.html#a6e7dabc01d8627b5bb660e898d1367c0">More...</a><br /></td></tr>
+<tr class="separator:a6e7dabc01d8627b5bb660e898d1367c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05aade1c4b7575c78099ebdaa85422e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a05aade1c4b7575c78099ebdaa85422e7">SetAtmosHga</a> (const double hga)</td></tr>
+<tr class="memdesc:a05aade1c4b7575c78099ebdaa85422e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <a class="el" href="class_isis_1_1_hapke.html" title="Hapke-Henyey-Greenstein photometric model.">Hapke</a> atmospheric function parameter.  <a href="class_isis_1_1_atmos_model.html#a05aade1c4b7575c78099ebdaa85422e7">More...</a><br /></td></tr>
+<tr class="separator:a05aade1c4b7575c78099ebdaa85422e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c8c2ab819fedba738a3d4f2ce875c94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a2c8c2ab819fedba738a3d4f2ce875c94">SetAtmosInc</a> (const double inc)</td></tr>
+<tr class="memdesc:a2c8c2ab819fedba738a3d4f2ce875c94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the incidence angle.  <a href="class_isis_1_1_atmos_model.html#a2c8c2ab819fedba738a3d4f2ce875c94">More...</a><br /></td></tr>
+<tr class="separator:a2c8c2ab819fedba738a3d4f2ce875c94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3ae7a267ec2c26e5980cea73c0e6664"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ab3ae7a267ec2c26e5980cea73c0e6664">SetAtmosNulneg</a> (const string nulneg)</td></tr>
+<tr class="memdesc:ab3ae7a267ec2c26e5980cea73c0e6664"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Atmospheric function parameter.  <a href="class_isis_1_1_atmos_model.html#ab3ae7a267ec2c26e5980cea73c0e6664">More...</a><br /></td></tr>
+<tr class="separator:ab3ae7a267ec2c26e5980cea73c0e6664"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1afa0839764ce684b87f1cc2c6f8e63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ab1afa0839764ce684b87f1cc2c6f8e63">SetAtmosPhi</a> (const double phi)</td></tr>
+<tr class="memdesc:ab1afa0839764ce684b87f1cc2c6f8e63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the azimuth angle.  <a href="class_isis_1_1_atmos_model.html#ab1afa0839764ce684b87f1cc2c6f8e63">More...</a><br /></td></tr>
+<tr class="separator:ab1afa0839764ce684b87f1cc2c6f8e63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b142d65e245fd94dc6773bf8895866d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a6b142d65e245fd94dc6773bf8895866d">SetAtmosTau</a> (const double tau)</td></tr>
+<tr class="memdesc:a6b142d65e245fd94dc6773bf8895866d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Atmospheric function parameter.  <a href="class_isis_1_1_atmos_model.html#a6b142d65e245fd94dc6773bf8895866d">More...</a><br /></td></tr>
+<tr class="separator:a6b142d65e245fd94dc6773bf8895866d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8d4b3208e1edffc515412b5c5f2a2e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#af8d4b3208e1edffc515412b5c5f2a2e8">SetAtmosTauref</a> (const double tauref)</td></tr>
+<tr class="memdesc:af8d4b3208e1edffc515412b5c5f2a2e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Atmospheric function parameter.  <a href="class_isis_1_1_atmos_model.html#af8d4b3208e1edffc515412b5c5f2a2e8">More...</a><br /></td></tr>
+<tr class="separator:af8d4b3208e1edffc515412b5c5f2a2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ce66fc840457dad2a5ea3e57ea2f5c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a4ce66fc840457dad2a5ea3e57ea2f5c1">SetAtmosWha</a> (const double wha)</td></tr>
+<tr class="memdesc:a4ce66fc840457dad2a5ea3e57ea2f5c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Atmospheric function parameter.  <a href="class_isis_1_1_atmos_model.html#a4ce66fc840457dad2a5ea3e57ea2f5c1">More...</a><br /></td></tr>
+<tr class="separator:a4ce66fc840457dad2a5ea3e57ea2f5c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96d72a967b5c54a8aa9908c4728a15c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a96d72a967b5c54a8aa9908c4728a15c8">SetAtmosHnorm</a> (const double hnorm)</td></tr>
+<tr class="memdesc:a96d72a967b5c54a8aa9908c4728a15c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Atmospheric function parameter.  <a href="class_isis_1_1_atmos_model.html#a96d72a967b5c54a8aa9908c4728a15c8">More...</a><br /></td></tr>
+<tr class="separator:a96d72a967b5c54a8aa9908c4728a15c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c60bbe2498e7f46aba6e590c7005855"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a7c60bbe2498e7f46aba6e590c7005855">SetAtmosIord</a> (const string offset)</td></tr>
+<tr class="memdesc:a7c60bbe2498e7f46aba6e590c7005855"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set additive offset in fit.  <a href="class_isis_1_1_atmos_model.html#a7c60bbe2498e7f46aba6e590c7005855">More...</a><br /></td></tr>
+<tr class="separator:a7c60bbe2498e7f46aba6e590c7005855"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36b298cb584bec404c32235ba81c184f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a36b298cb584bec404c32235ba81c184f">SetAtmosEstTau</a> (const string esttau)</td></tr>
+<tr class="memdesc:a36b298cb584bec404c32235ba81c184f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimate the optical depth tau using shadows.  <a href="class_isis_1_1_atmos_model.html#a36b298cb584bec404c32235ba81c184f">More...</a><br /></td></tr>
+<tr class="separator:a36b298cb584bec404c32235ba81c184f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2cbef7f74b6146057c592052503cb46"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#af2cbef7f74b6146057c592052503cb46">AlgorithmName</a> () const</td></tr>
+<tr class="memdesc:af2cbef7f74b6146057c592052503cb46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric algorithm name.  <a href="class_isis_1_1_atmos_model.html#af2cbef7f74b6146057c592052503cb46">More...</a><br /></td></tr>
+<tr class="separator:af2cbef7f74b6146057c592052503cb46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac117da42b90214b8ada5efecdba66d4f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ac117da42b90214b8ada5efecdba66d4f">AtmosAdditiveOffset</a> () const</td></tr>
+<tr class="memdesc:ac117da42b90214b8ada5efecdba66d4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allow additive offset in fit?  <a href="class_isis_1_1_atmos_model.html#ac117da42b90214b8ada5efecdba66d4f">More...</a><br /></td></tr>
+<tr class="separator:ac117da42b90214b8ada5efecdba66d4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f970b469e841738889f9336fd8e4b35"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a2f970b469e841738889f9336fd8e4b35">AtmosHnorm</a> () const</td></tr>
+<tr class="memdesc:a2f970b469e841738889f9336fd8e4b35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Hnorm value.  <a href="class_isis_1_1_atmos_model.html#a2f970b469e841738889f9336fd8e4b35">More...</a><br /></td></tr>
+<tr class="separator:a2f970b469e841738889f9336fd8e4b35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cd8f2aae88d040558d5d4ef0ac86a5a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a3cd8f2aae88d040558d5d4ef0ac86a5a">AtmosBha</a> () const</td></tr>
+<tr class="memdesc:a3cd8f2aae88d040558d5d4ef0ac86a5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Bha value.  <a href="class_isis_1_1_atmos_model.html#a3cd8f2aae88d040558d5d4ef0ac86a5a">More...</a><br /></td></tr>
+<tr class="separator:a3cd8f2aae88d040558d5d4ef0ac86a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a445dffa934884b173626a302bd40a966"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a445dffa934884b173626a302bd40a966">AtmosTau</a> () const</td></tr>
+<tr class="memdesc:a445dffa934884b173626a302bd40a966"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Tau value.  <a href="class_isis_1_1_atmos_model.html#a445dffa934884b173626a302bd40a966">More...</a><br /></td></tr>
+<tr class="separator:a445dffa934884b173626a302bd40a966"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad309f489c49915895dbe31455f90183d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ad309f489c49915895dbe31455f90183d">AtmosWha</a> () const</td></tr>
+<tr class="memdesc:ad309f489c49915895dbe31455f90183d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Wha value.  <a href="class_isis_1_1_atmos_model.html#ad309f489c49915895dbe31455f90183d">More...</a><br /></td></tr>
+<tr class="separator:ad309f489c49915895dbe31455f90183d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af42f9596d6607920ee25d27c1e8dbcd3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#af42f9596d6607920ee25d27c1e8dbcd3">AtmosHga</a> () const</td></tr>
+<tr class="memdesc:af42f9596d6607920ee25d27c1e8dbcd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Hga value.  <a href="class_isis_1_1_atmos_model.html#af42f9596d6607920ee25d27c1e8dbcd3">More...</a><br /></td></tr>
+<tr class="separator:af42f9596d6607920ee25d27c1e8dbcd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89a7d3438294f299919b26116950d535"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a89a7d3438294f299919b26116950d535">AtmosTauref</a> () const</td></tr>
+<tr class="memdesc:a89a7d3438294f299919b26116950d535"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Tauref value.  <a href="class_isis_1_1_atmos_model.html#a89a7d3438294f299919b26116950d535">More...</a><br /></td></tr>
+<tr class="separator:a89a7d3438294f299919b26116950d535"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4999efc81c3d861c40d48b03ca51d29"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ae4999efc81c3d861c40d48b03ca51d29">AtmosNulneg</a> () const</td></tr>
+<tr class="memdesc:ae4999efc81c3d861c40d48b03ca51d29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Nulneg value.  <a href="class_isis_1_1_atmos_model.html#ae4999efc81c3d861c40d48b03ca51d29">More...</a><br /></td></tr>
+<tr class="separator:ae4999efc81c3d861c40d48b03ca51d29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fe2e4cee5deb00fea2b1c2709df88ca"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a8fe2e4cee5deb00fea2b1c2709df88ca">AtmosAb</a> () const</td></tr>
+<tr class="memdesc:a8fe2e4cee5deb00fea2b1c2709df88ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Ab value.  <a href="class_isis_1_1_atmos_model.html#a8fe2e4cee5deb00fea2b1c2709df88ca">More...</a><br /></td></tr>
+<tr class="separator:a8fe2e4cee5deb00fea2b1c2709df88ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d1323a3fe9ccd487d71a7e939049829"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a1d1323a3fe9ccd487d71a7e939049829">AtmosHahgsb</a> () const</td></tr>
+<tr class="memdesc:a1d1323a3fe9ccd487d71a7e939049829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Hahgsb value.  <a href="class_isis_1_1_atmos_model.html#a1d1323a3fe9ccd487d71a7e939049829">More...</a><br /></td></tr>
+<tr class="separator:a1d1323a3fe9ccd487d71a7e939049829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad08d69e0680058cfbf478cd66e2b5ec1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ad08d69e0680058cfbf478cd66e2b5ec1">AtmosNinc</a> () const</td></tr>
+<tr class="memdesc:ad08d69e0680058cfbf478cd66e2b5ec1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Ninc value.  <a href="class_isis_1_1_atmos_model.html#ad08d69e0680058cfbf478cd66e2b5ec1">More...</a><br /></td></tr>
+<tr class="separator:ad08d69e0680058cfbf478cd66e2b5ec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c257ac2a87d3b8e7826522c0dbb53af"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a4c257ac2a87d3b8e7826522c0dbb53af">AtmosMunot</a> () const</td></tr>
+<tr class="memdesc:a4c257ac2a87d3b8e7826522c0dbb53af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Munot value.  <a href="class_isis_1_1_atmos_model.html#a4c257ac2a87d3b8e7826522c0dbb53af">More...</a><br /></td></tr>
+<tr class="separator:a4c257ac2a87d3b8e7826522c0dbb53af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30df96a4c850ffd403004ddec4ed097f"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a30df96a4c850ffd403004ddec4ed097f">AtmosIncTable</a> ()</td></tr>
+<tr class="memdesc:a30df96a4c850ffd403004ddec4ed097f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric IncTable value.  <a href="class_isis_1_1_atmos_model.html#a30df96a4c850ffd403004ddec4ed097f">More...</a><br /></td></tr>
+<tr class="separator:a30df96a4c850ffd403004ddec4ed097f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d29efd88d889aa0414d54fa919872fa"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a8d29efd88d889aa0414d54fa919872fa">AtmosAhTable</a> ()</td></tr>
+<tr class="memdesc:a8d29efd88d889aa0414d54fa919872fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric AhTable value.  <a href="class_isis_1_1_atmos_model.html#a8d29efd88d889aa0414d54fa919872fa">More...</a><br /></td></tr>
+<tr class="separator:a8d29efd88d889aa0414d54fa919872fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f3e5b5b2d4d976124032ece2da218a7"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a7f3e5b5b2d4d976124032ece2da218a7">AtmosHahgtTable</a> ()</td></tr>
+<tr class="memdesc:a7f3e5b5b2d4d976124032ece2da218a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric HahgtTable value.  <a href="class_isis_1_1_atmos_model.html#a7f3e5b5b2d4d976124032ece2da218a7">More...</a><br /></td></tr>
+<tr class="separator:a7f3e5b5b2d4d976124032ece2da218a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a928cd2eaf75b4646df0ce2cf31e30ecd"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a928cd2eaf75b4646df0ce2cf31e30ecd">AtmosHahgt0Table</a> ()</td></tr>
+<tr class="memdesc:a928cd2eaf75b4646df0ce2cf31e30ecd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return atmospheric Hahgt0Table value.  <a href="class_isis_1_1_atmos_model.html#a928cd2eaf75b4646df0ce2cf31e30ecd">More...</a><br /></td></tr>
+<tr class="separator:a928cd2eaf75b4646df0ce2cf31e30ecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73ee58062858e34e5b4e6c474ad982d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a73ee58062858e34e5b4e6c474ad982d1">AtmosAhSpline</a> ()</td></tr>
+<tr class="memdesc:a73ee58062858e34e5b4e6c474ad982d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <a class="el" href="class_isis_1_1_atmos_model.html#a906f5bb492fb3a011bc7480f93617774" title="This method computes the values of the atmospheric Ah table and sets the properties of the atmospheri...">GenerateAhTable()</a> has been called this returns a clamped cubic spline of the data set (<em>p_atmosIncTable</em>, <em>p_atmosAhTable</em>) with first derivatives of the endpoints equal to 1.0e30.  <a href="class_isis_1_1_atmos_model.html#a73ee58062858e34e5b4e6c474ad982d1">More...</a><br /></td></tr>
+<tr class="separator:a73ee58062858e34e5b4e6c474ad982d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a108f43682ae27ed87dfae2c8e5497b53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a108f43682ae27ed87dfae2c8e5497b53">AtmosHahgtSpline</a> ()</td></tr>
+<tr class="memdesc:a108f43682ae27ed87dfae2c8e5497b53"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <a class="el" href="class_isis_1_1_atmos_model.html#ae918ba694bc5befd56ee7ceac9f75737" title="This method computes the values of the atmospheric Hahg and Hahg0 tables and sets the properties of t...">GenerateHahgTables()</a> has been called this returns a clamped cubic spline of the data set (<em>p_atmosIncTable</em>, <em>p_atmosHahgtTable</em>) with first derivatives of the endpoints equal to 1.0e30.  <a href="class_isis_1_1_atmos_model.html#a108f43682ae27ed87dfae2c8e5497b53">More...</a><br /></td></tr>
+<tr class="separator:a108f43682ae27ed87dfae2c8e5497b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fa179b1fc7ed1686fdd4696f86ec9b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a1fa179b1fc7ed1686fdd4696f86ec9b6">AtmosHahgt0Spline</a> ()</td></tr>
+<tr class="memdesc:a1fa179b1fc7ed1686fdd4696f86ec9b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <a class="el" href="class_isis_1_1_atmos_model.html#ae918ba694bc5befd56ee7ceac9f75737" title="This method computes the values of the atmospheric Hahg and Hahg0 tables and sets the properties of t...">GenerateHahgTables()</a> has been called this returns a clamped cubic spline of the data set (<em>p_atmosIncTable</em>, <em>p_atmosHahgt0Table</em>) with first derivatives of the endpoints equal to 1.0e30.  <a href="class_isis_1_1_atmos_model.html#a1fa179b1fc7ed1686fdd4696f86ec9b6">More...</a><br /></td></tr>
+<tr class="separator:a1fa179b1fc7ed1686fdd4696f86ec9b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a4659ee469025ef8ec73496dfdceb72e7"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a4659ee469025ef8ec73496dfdceb72e7">G11Prime</a> (double tau)</td></tr>
+<tr class="memdesc:a4659ee469025ef8ec73496dfdceb72e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform Chandra and Van de Hulst's series approximation for the g'11 function needed in second order scattering theory.  <a href="class_isis_1_1_atmos_model.html#a4659ee469025ef8ec73496dfdceb72e7">More...</a><br /></td></tr>
+<tr class="separator:a4659ee469025ef8ec73496dfdceb72e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b95b0210b589bd0abca78daff7b76f1"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a7b95b0210b589bd0abca78daff7b76f1">Ei</a> (double x)</td></tr>
+<tr class="memdesc:a7b95b0210b589bd0abca78daff7b76f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This routine computes the exponential integral, <em>Ei(x)</em>.  <a href="class_isis_1_1_atmos_model.html#a7b95b0210b589bd0abca78daff7b76f1">More...</a><br /></td></tr>
+<tr class="separator:a7b95b0210b589bd0abca78daff7b76f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02d7c81288b5feab8d9d998e17e08e43"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a02d7c81288b5feab8d9d998e17e08e43">En</a> (unsigned int n, double x)</td></tr>
+<tr class="memdesc:a02d7c81288b5feab8d9d998e17e08e43"><td class="mdescLeft">&#160;</td><td class="mdescRight">This routine evaluates the generalized exponential integral, <em>E<sub>n</sub></em>(x).  <a href="class_isis_1_1_atmos_model.html#a02d7c81288b5feab8d9d998e17e08e43">More...</a><br /></td></tr>
+<tr class="separator:a02d7c81288b5feab8d9d998e17e08e43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a6ca399ccdfba0e5005c693a95722d056"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm</a> (double phase, double incidence, double emission)</td></tr>
+<tr class="memdesc:a6ca399ccdfba0e5005c693a95722d056"><td class="mdescLeft">&#160;</td><td class="mdescRight">Anisotropic atmospheric scattering with P1 single-particle phase fn, in the second approximation.  <a href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">More...</a><br /></td></tr>
+<tr class="separator:a6ca399ccdfba0e5005c693a95722d056"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a87fb464123530cb1eff7fc05a876f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a7a87fb464123530cb1eff7fc05a876f1">SetAtmosNulneg</a> (bool nulneg)</td></tr>
+<tr class="separator:a7a87fb464123530cb1eff7fc05a876f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a354f2b46c1366f182960da9a1b086c42"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a354f2b46c1366f182960da9a1b086c42">SetAtmosIord</a> (bool offset)</td></tr>
+<tr class="separator:a354f2b46c1366f182960da9a1b086c42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac872c1560ec9a1c16f60721b7526a7c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ac872c1560ec9a1c16f60721b7526a7c2">SetAtmosEstTau</a> (bool esttau)</td></tr>
+<tr class="separator:ac872c1560ec9a1c16f60721b7526a7c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa916fe4a0131539459918765ee991422"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#aa916fe4a0131539459918765ee991422">SetAlgorithmName</a> (string name)</td></tr>
+<tr class="separator:aa916fe4a0131539459918765ee991422"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5917fd4a80889fb6a74894615680b20b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a5917fd4a80889fb6a74894615680b20b">SetOldTau</a> (double tau)</td></tr>
+<tr class="separator:a5917fd4a80889fb6a74894615680b20b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3308874245bc1ecdff0cb6732e2b9a7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a3308874245bc1ecdff0cb6732e2b9a7b">SetOldWha</a> (double wha)</td></tr>
+<tr class="separator:a3308874245bc1ecdff0cb6732e2b9a7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3f4ca09de179347e47d9eadb958f915"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_photo_model.html">PhotoModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ab3f4ca09de179347e47d9eadb958f915">GetPhotoModel</a> () const</td></tr>
+<tr class="separator:ab3f4ca09de179347e47d9eadb958f915"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af47f086a63ed69716a37e24034fa110c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#af47f086a63ed69716a37e24034fa110c">StandardConditions</a> () const</td></tr>
+<tr class="separator:af47f086a63ed69716a37e24034fa110c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe16a5c8518e9354eca41786ca863c88"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#afe16a5c8518e9354eca41786ca863c88">TauOrWhaChanged</a> () const</td></tr>
+<tr class="memdesc:afe16a5c8518e9354eca41786ca863c88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether tau or wha have changed.  <a href="class_isis_1_1_atmos_model.html#afe16a5c8518e9354eca41786ca863c88">More...</a><br /></td></tr>
+<tr class="separator:afe16a5c8518e9354eca41786ca863c88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acacd1e96b0ad66084453b8ce0e98f30e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#acacd1e96b0ad66084453b8ce0e98f30e">Eulgam</a> () const</td></tr>
+<tr class="separator:acacd1e96b0ad66084453b8ce0e98f30e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a33a9552caf63a607e7ff5c48eaa71fad"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a33a9552caf63a607e7ff5c48eaa71fad">p_atmosAtmSwitch</a></td></tr>
+<tr class="separator:a33a9552caf63a607e7ff5c48eaa71fad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab60fa23f307262751d578546e40c12d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#aab60fa23f307262751d578546e40c12d">p_atmosNinc</a></td></tr>
+<tr class="separator:aab60fa23f307262751d578546e40c12d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61e46973f18de6695790da9ac5c26ad1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a61e46973f18de6695790da9ac5c26ad1">p_atmosBha</a></td></tr>
+<tr class="separator:a61e46973f18de6695790da9ac5c26ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe1d4cd10404e6b1fcb748605b70f291"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#abe1d4cd10404e6b1fcb748605b70f291">p_atmosBhasave</a></td></tr>
+<tr class="separator:abe1d4cd10404e6b1fcb748605b70f291"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a241a545ba2bf65b6095efa95360cf23b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a241a545ba2bf65b6095efa95360cf23b">p_atmosHgasave</a></td></tr>
+<tr class="separator:a241a545ba2bf65b6095efa95360cf23b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f90b0841b757ce731ad3cdbdec115d1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a3f90b0841b757ce731ad3cdbdec115d1">p_atmosTauref</a></td></tr>
+<tr class="separator:a3f90b0841b757ce731ad3cdbdec115d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d9e558750dc81a0e913e4a0286b4b17"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a3d9e558750dc81a0e913e4a0286b4b17">p_atmosTausave</a></td></tr>
+<tr class="separator:a3d9e558750dc81a0e913e4a0286b4b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6751b8a9b4ddfd0e98f6ba005ee03f62"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a6751b8a9b4ddfd0e98f6ba005ee03f62">p_atmosWhasave</a></td></tr>
+<tr class="separator:a6751b8a9b4ddfd0e98f6ba005ee03f62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1873050f5e53372367ccb7c10dc97bb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ab1873050f5e53372367ccb7c10dc97bb">p_pstd</a></td></tr>
+<tr class="memdesc:ab1873050f5e53372367ccb7c10dc97bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pure atmospheric-scattering term.  <a href="class_isis_1_1_atmos_model.html#ab1873050f5e53372367ccb7c10dc97bb">More...</a><br /></td></tr>
+<tr class="separator:ab1873050f5e53372367ccb7c10dc97bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0277cd76c0adafdfd0fe02107563b86b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a0277cd76c0adafdfd0fe02107563b86b">p_trans</a></td></tr>
+<tr class="memdesc:a0277cd76c0adafdfd0fe02107563b86b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transmission of surface reflected light through the atmosphere overall.  <a href="class_isis_1_1_atmos_model.html#a0277cd76c0adafdfd0fe02107563b86b">More...</a><br /></td></tr>
+<tr class="separator:a0277cd76c0adafdfd0fe02107563b86b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab79a607c46f7b419f91abf737080445f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ab79a607c46f7b419f91abf737080445f">p_trans0</a></td></tr>
+<tr class="memdesc:ab79a607c46f7b419f91abf737080445f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transmission of surface reflected light through the atmosphere with no scatterings in the atmosphere.  <a href="class_isis_1_1_atmos_model.html#ab79a607c46f7b419f91abf737080445f">More...</a><br /></td></tr>
+<tr class="separator:ab79a607c46f7b419f91abf737080445f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ec6a9a4107f79ca39258338ab89ad54"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a6ec6a9a4107f79ca39258338ab89ad54">p_transs</a></td></tr>
+<tr class="memdesc:a6ec6a9a4107f79ca39258338ab89ad54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transmission of light that must be subtracted from the flat surface model to get the shadow model.  <a href="class_isis_1_1_atmos_model.html#a6ec6a9a4107f79ca39258338ab89ad54">More...</a><br /></td></tr>
+<tr class="separator:a6ec6a9a4107f79ca39258338ab89ad54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e0f23d9468357cfd1c651527da04898"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a1e0f23d9468357cfd1c651527da04898">p_sbar</a></td></tr>
+<tr class="memdesc:a1e0f23d9468357cfd1c651527da04898"><td class="mdescLeft">&#160;</td><td class="mdescRight">Illumination of the ground by the sky.  <a href="class_isis_1_1_atmos_model.html#a1e0f23d9468357cfd1c651527da04898">More...</a><br /></td></tr>
+<tr class="separator:a1e0f23d9468357cfd1c651527da04898"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4f2998801ca4c90b11872e8cc5dfb03"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ab4f2998801ca4c90b11872e8cc5dfb03">p_atmosHga</a></td></tr>
+<tr class="separator:ab4f2998801ca4c90b11872e8cc5dfb03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1df675478315ef9082af5f9e43ca9418"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a1df675478315ef9082af5f9e43ca9418">p_atmosTau</a></td></tr>
+<tr class="separator:a1df675478315ef9082af5f9e43ca9418"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec13d0efaa6ed2c605ac2d3c8091f399"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#aec13d0efaa6ed2c605ac2d3c8091f399">p_atmosWha</a></td></tr>
+<tr class="separator:aec13d0efaa6ed2c605ac2d3c8091f399"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fe0af04adb34b3525fca1d6b0480aa2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a7fe0af04adb34b3525fca1d6b0480aa2">p_atmosAb</a></td></tr>
+<tr class="separator:a7fe0af04adb34b3525fca1d6b0480aa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09bb78756ef7e82ce5a060fc607028e3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a09bb78756ef7e82ce5a060fc607028e3">p_atmosHnorm</a></td></tr>
+<tr class="memdesc:a09bb78756ef7e82ce5a060fc607028e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Atmospheric shell thickness normalized to planet radius.  <a href="class_isis_1_1_atmos_model.html#a09bb78756ef7e82ce5a060fc607028e3">More...</a><br /></td></tr>
+<tr class="separator:a09bb78756ef7e82ce5a060fc607028e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a657f84cab76a5017ff8bbc63e5b35770"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a657f84cab76a5017ff8bbc63e5b35770">p_atmosAddOffset</a></td></tr>
+<tr class="memdesc:a657f84cab76a5017ff8bbc63e5b35770"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allow additive offset in fit.  <a href="class_isis_1_1_atmos_model.html#a657f84cab76a5017ff8bbc63e5b35770">More...</a><br /></td></tr>
+<tr class="separator:a657f84cab76a5017ff8bbc63e5b35770"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25fcfb2380ed4ae3beb3500d6fe50a5e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a25fcfb2380ed4ae3beb3500d6fe50a5e">p_atmosEstTau</a></td></tr>
+<tr class="memdesc:a25fcfb2380ed4ae3beb3500d6fe50a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimate optical depth tau using shadows.  <a href="class_isis_1_1_atmos_model.html#a25fcfb2380ed4ae3beb3500d6fe50a5e">More...</a><br /></td></tr>
+<tr class="separator:a25fcfb2380ed4ae3beb3500d6fe50a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb0f719d960012f2b6332feb80599378"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#afb0f719d960012f2b6332feb80599378">p_atmosIncTable</a></td></tr>
+<tr class="separator:afb0f719d960012f2b6332feb80599378"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2803ef3444b9fcb3d10267143ade797c"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a2803ef3444b9fcb3d10267143ade797c">p_atmosAhTable</a></td></tr>
+<tr class="separator:a2803ef3444b9fcb3d10267143ade797c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1ff8637d713298bf2e08b7dcd346d49"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ae1ff8637d713298bf2e08b7dcd346d49">p_atmosHahgsb</a></td></tr>
+<tr class="separator:ae1ff8637d713298bf2e08b7dcd346d49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f011437f1aaff923835c9ace6ef5f10"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a8f011437f1aaff923835c9ace6ef5f10">p_atmosHahgtTable</a></td></tr>
+<tr class="separator:a8f011437f1aaff923835c9ace6ef5f10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c6384f59e29a6edb1e75e4cba871899"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a9c6384f59e29a6edb1e75e4cba871899">p_atmosHahgt0Table</a></td></tr>
+<tr class="separator:a9c6384f59e29a6edb1e75e4cba871899"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab42af5f61e7a0fb8e8d847317e8f0931"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ab42af5f61e7a0fb8e8d847317e8f0931">p_atmosInc</a></td></tr>
+<tr class="separator:ab42af5f61e7a0fb8e8d847317e8f0931"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ea385a4233179f837b0abfe3d936b02"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a8ea385a4233179f837b0abfe3d936b02">p_atmosPhi</a></td></tr>
+<tr class="separator:a8ea385a4233179f837b0abfe3d936b02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7bdec266628001389dbeba2a8fd469a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ac7bdec266628001389dbeba2a8fd469a">p_atmosMunot</a></td></tr>
+<tr class="separator:ac7bdec266628001389dbeba2a8fd469a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad4a144c11fbf30ad7a997c4c8fade43"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#aad4a144c11fbf30ad7a997c4c8fade43">p_atmosSini</a></td></tr>
+<tr class="separator:aad4a144c11fbf30ad7a997c4c8fade43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42f16af2ca5bd999b2c197d6a3ecf5c1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a42f16af2ca5bd999b2c197d6a3ecf5c1">p_atmosCosphi</a></td></tr>
+<tr class="separator:a42f16af2ca5bd999b2c197d6a3ecf5c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07786ad289adb758737fa3bc0310b0e4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a07786ad289adb758737fa3bc0310b0e4">p_atmosEulgam</a></td></tr>
+<tr class="separator:a07786ad289adb758737fa3bc0310b0e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36f3e125f3c9f874cec62aaf31dcc071"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a36f3e125f3c9f874cec62aaf31dcc071">p_atmosAhSpline</a></td></tr>
+<tr class="memdesc:a36f3e125f3c9f874cec62aaf31dcc071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spline object for the atmospheric Ah <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a>. Properties are set in <a class="el" href="class_isis_1_1_atmos_model.html#a906f5bb492fb3a011bc7480f93617774" title="This method computes the values of the atmospheric Ah table and sets the properties of the atmospheri...">GenerateAhTable()</a>.  <a href="class_isis_1_1_atmos_model.html#a36f3e125f3c9f874cec62aaf31dcc071">More...</a><br /></td></tr>
+<tr class="separator:a36f3e125f3c9f874cec62aaf31dcc071"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac35f1885464f83240736ae0ab68f0962"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#ac35f1885464f83240736ae0ab68f0962">p_atmosHahgtSpline</a></td></tr>
+<tr class="memdesc:ac35f1885464f83240736ae0ab68f0962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spline object for the atmospheric Hahg <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a>. Properties are set in <a class="el" href="class_isis_1_1_atmos_model.html#ae918ba694bc5befd56ee7ceac9f75737" title="This method computes the values of the atmospheric Hahg and Hahg0 tables and sets the properties of t...">GenerateHahgTables()</a>.  <a href="class_isis_1_1_atmos_model.html#ac35f1885464f83240736ae0ab68f0962">More...</a><br /></td></tr>
+<tr class="separator:ac35f1885464f83240736ae0ab68f0962"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a750334b522484d8328cdf5e3e12bccec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_atmos_model.html#a750334b522484d8328cdf5e3e12bccec">p_atmosHahgt0Spline</a></td></tr>
+<tr class="memdesc:a750334b522484d8328cdf5e3e12bccec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spline object for the atmospheric Hahg0 <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a>. Properties are set in <a class="el" href="class_isis_1_1_atmos_model.html#ae918ba694bc5befd56ee7ceac9f75737" title="This method computes the values of the atmospheric Hahg and Hahg0 tables and sets the properties of t...">GenerateHahgTables()</a>.  <a href="class_isis_1_1_atmos_model.html#a750334b522484d8328cdf5e3e12bccec">More...</a><br /></td></tr>
+<tr class="separator:a750334b522484d8328cdf5e3e12bccec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="section author"><dt>Author</dt><dd>1998-12-21 Randy Kirk </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ab357bb0f92c2482b7bc09d03df09818d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab357bb0f92c2482b7bc09d03df09818d">&#9670;&nbsp;</a></span>Anisotropic2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Anisotropic2::Anisotropic2 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_photo_model.html">PhotoModel</a> &amp;&#160;</td>
+          <td class="paramname"><em>pmodel</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Empty constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td><a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> object containing a valid <a class="el" href="class_isis_1_1_anisotropic2.html">Anisotropic2</a> specification </td></tr>
+    <tr><td class="paramname">pmodel</td><td><a class="el" href="class_isis_1_1_photo_model.html">PhotoModel</a> object containing valid <a class="el" href="class_isis_1_1_anisotropic2.html">Anisotropic2</a> data </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad7349df87f08e8cc25ac017227886c18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7349df87f08e8cc25ac017227886c18">&#9670;&nbsp;</a></span>~Anisotropic2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::Anisotropic2::~Anisotropic2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af2cbef7f74b6146057c592052503cb46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2cbef7f74b6146057c592052503cb46">&#9670;&nbsp;</a></span>AlgorithmName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string Isis::AtmosModel::AlgorithmName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric algorithm name. </p>
+
+</div>
+</div>
+<a id="a8fe2e4cee5deb00fea2b1c2709df88ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fe2e4cee5deb00fea2b1c2709df88ca">&#9670;&nbsp;</a></span>AtmosAb()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::AtmosAb </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Ab value. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_albedo_atm.html#a6345d689d09fbbb39cc01a640daeaace">Isis::AlbedoAtm::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_shade_atm.html#a60e6abc535dc32806af99c420f3da936">Isis::ShadeAtm::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_topo_atm.html#a25714f3a61adb32b634582bb55e128c1">Isis::TopoAtm::NormModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_topo_atm.html#af1b05b3751ae39daaea912d1162a085e">Isis::TopoAtm::TopoAtm()</a>.</p>
+
+</div>
+</div>
+<a id="ac117da42b90214b8ada5efecdba66d4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac117da42b90214b8ada5efecdba66d4f">&#9670;&nbsp;</a></span>AtmosAdditiveOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AtmosModel::AtmosAdditiveOffset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Allow additive offset in fit? </p>
+
+</div>
+</div>
+<a id="a73ee58062858e34e5b4e6c474ad982d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73ee58062858e34e5b4e6c474ad982d1">&#9670;&nbsp;</a></span>AtmosAhSpline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a> Isis::AtmosModel::AtmosAhSpline </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If <a class="el" href="class_isis_1_1_atmos_model.html#a906f5bb492fb3a011bc7480f93617774" title="This method computes the values of the atmospheric Ah table and sets the properties of the atmospheri...">GenerateAhTable()</a> has been called this returns a clamped cubic spline of the data set (<em>p_atmosIncTable</em>, <em>p_atmosAhTable</em>) with first derivatives of the endpoints equal to 1.0e30. </p>
+<p>Otherwise, it is a natural cubic spline with an empty data set.</p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_numerical_approximation.html" title="NumericalApproximation provides various numerical analysis methods of interpolation,...">NumericalApproximation</a></b> Cubic spline </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_albedo_atm.html#ab95fdd4ee9d179f6cfe06c76a48c7f80">Isis::AlbedoAtm::AlbedoAtm()</a>, <a class="el" href="class_isis_1_1_albedo_atm.html#a6345d689d09fbbb39cc01a640daeaace">Isis::AlbedoAtm::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_shade_atm.html#a60e6abc535dc32806af99c420f3da936">Isis::ShadeAtm::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_topo_atm.html#a25714f3a61adb32b634582bb55e128c1">Isis::TopoAtm::NormModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_topo_atm.html#af1b05b3751ae39daaea912d1162a085e">Isis::TopoAtm::TopoAtm()</a>.</p>
+
+</div>
+</div>
+<a id="a8d29efd88d889aa0414d54fa919872fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d29efd88d889aa0414d54fa919872fa">&#9670;&nbsp;</a></span>AtmosAhTable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Isis::AtmosModel::AtmosAhTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric AhTable value. </p>
+
+</div>
+</div>
+<a id="a3cd8f2aae88d040558d5d4ef0ac86a5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cd8f2aae88d040558d5d4ef0ac86a5a">&#9670;&nbsp;</a></span>AtmosBha()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::AtmosBha </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Bha value. </p>
+
+</div>
+</div>
+<a id="a1d1323a3fe9ccd487d71a7e939049829"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d1323a3fe9ccd487d71a7e939049829">&#9670;&nbsp;</a></span>AtmosHahgsb()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::AtmosHahgsb </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Hahgsb value. </p>
+
+</div>
+</div>
+<a id="a1fa179b1fc7ed1686fdd4696f86ec9b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fa179b1fc7ed1686fdd4696f86ec9b6">&#9670;&nbsp;</a></span>AtmosHahgt0Spline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a> Isis::AtmosModel::AtmosHahgt0Spline </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If <a class="el" href="class_isis_1_1_atmos_model.html#ae918ba694bc5befd56ee7ceac9f75737" title="This method computes the values of the atmospheric Hahg and Hahg0 tables and sets the properties of t...">GenerateHahgTables()</a> has been called this returns a clamped cubic spline of the data set (<em>p_atmosIncTable</em>, <em>p_atmosHahgt0Table</em>) with first derivatives of the endpoints equal to 1.0e30. </p>
+<p>Otherwise, it is a natural cubic spline with an empty data set.</p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_numerical_approximation.html" title="NumericalApproximation provides various numerical analysis methods of interpolation,...">NumericalApproximation</a></b> Cubic spline </dd></dl>
+
+</div>
+</div>
+<a id="a928cd2eaf75b4646df0ce2cf31e30ecd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a928cd2eaf75b4646df0ce2cf31e30ecd">&#9670;&nbsp;</a></span>AtmosHahgt0Table()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Isis::AtmosModel::AtmosHahgt0Table </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Hahgt0Table value. </p>
+
+</div>
+</div>
+<a id="a108f43682ae27ed87dfae2c8e5497b53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a108f43682ae27ed87dfae2c8e5497b53">&#9670;&nbsp;</a></span>AtmosHahgtSpline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a> Isis::AtmosModel::AtmosHahgtSpline </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If <a class="el" href="class_isis_1_1_atmos_model.html#ae918ba694bc5befd56ee7ceac9f75737" title="This method computes the values of the atmospheric Hahg and Hahg0 tables and sets the properties of t...">GenerateHahgTables()</a> has been called this returns a clamped cubic spline of the data set (<em>p_atmosIncTable</em>, <em>p_atmosHahgtTable</em>) with first derivatives of the endpoints equal to 1.0e30. </p>
+<p>Otherwise, it is a natural cubic spline with an empty data set.</p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_numerical_approximation.html" title="NumericalApproximation provides various numerical analysis methods of interpolation,...">NumericalApproximation</a></b> Cubic spline </dd></dl>
+
+</div>
+</div>
+<a id="a7f3e5b5b2d4d976124032ece2da218a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f3e5b5b2d4d976124032ece2da218a7">&#9670;&nbsp;</a></span>AtmosHahgtTable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Isis::AtmosModel::AtmosHahgtTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric HahgtTable value. </p>
+
+</div>
+</div>
+<a id="af42f9596d6607920ee25d27c1e8dbcd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af42f9596d6607920ee25d27c1e8dbcd3">&#9670;&nbsp;</a></span>AtmosHga()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::AtmosHga </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Hga value. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#a00cf708f1323dfa441de8f8384563873">Isis::NumericalAtmosApprox::InrFunc2Bint()</a>.</p>
+
+</div>
+</div>
+<a id="a2f970b469e841738889f9336fd8e4b35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f970b469e841738889f9336fd8e4b35">&#9670;&nbsp;</a></span>AtmosHnorm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::AtmosHnorm </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Hnorm value. </p>
+
+</div>
+</div>
+<a id="a30df96a4c850ffd403004ddec4ed097f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30df96a4c850ffd403004ddec4ed097f">&#9670;&nbsp;</a></span>AtmosIncTable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Isis::AtmosModel::AtmosIncTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric IncTable value. </p>
+
+</div>
+</div>
+<a id="a6ca399ccdfba0e5005c693a95722d056"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ca399ccdfba0e5005c693a95722d056">&#9670;&nbsp;</a></span>AtmosModelAlgorithm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Anisotropic2::AtmosModelAlgorithm </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>phase</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>incidence</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>emission</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Anisotropic atmospheric scattering with P1 single-particle phase fn, in the second approximation. </p>
+<p>This subroutine goes through much of the derivation twice, once for the axisymmetric (m=0) and once for the m=1 parts of scattered light.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">phase</td><td>Value of the phase angle. </td></tr>
+    <tr><td class="paramname">incidence</td><td>Value of the incidence angle. </td></tr>
+    <tr><td class="paramname">emission</td><td>Value of the emission angle.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="history"><dt><b><a class="el" href="history.html#_history000002">History:</a></b></dt><dd><p class="startdd">1998-12-21 Randy Kirk - USGS, Flagstaff - Original code </p>
+<p class="interdd">1999-03-12 K Teal Thompson Port to Unix/ISIS; declare vars; add implicit none. </p>
+<p class="interdd">2007-02-20 Janet Barrett - Imported from Isis2 pht_atm_functions to Isis3. </p>
+<p class="interdd">2008-11-05 Jeannie Walldren - Replaced NumericalMethods::r8expint() with <a class="el" href="class_isis_1_1_atmos_model.html#a02d7c81288b5feab8d9d998e17e08e43" title="This routine evaluates the generalized exponential integral, En(x).">AtmosModel::En()</a>, NumericalMethods::G11Prime() with <a class="el" href="class_isis_1_1_atmos_model.html#a4659ee469025ef8ec73496dfdceb72e7" title="Perform Chandra and Van de Hulst&#39;s series approximation for the g&#39;11 function needed in second order ...">AtmosModel::G11Prime()</a>, and NumericalMethods::r8ei() with <a class="el" href="class_isis_1_1_atmos_model.html#a7b95b0210b589bd0abca78daff7b76f1" title="This routine computes the exponential integral, Ei(x).">AtmosModel::Ei()</a>. Replaced <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c" title="The mathematical constant PI.">Isis::PI</a> with PI since this is in <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> namespace. </p>
+<p class="enddd">2011-12-19 Janet Barrett - Added code to estimate the shadow brightness value (transs). Also got rid of unnecessary check for identical photometric angle values between successive calls. This check should only be made in the photometric models. </p>
+</dd></dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_atmos_model.html#aaaa1a140f846314fbca28c5eeba62d7d">Isis::AtmosModel</a>.</p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a7b95b0210b589bd0abca78daff7b76f1">Isis::AtmosModel::Ei()</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a02d7c81288b5feab8d9d998e17e08e43">Isis::AtmosModel::En()</a>, <a class="el" href="class_isis_1_1_atmos_model.html#acacd1e96b0ad66084453b8ce0e98f30e">Isis::AtmosModel::Eulgam()</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a4659ee469025ef8ec73496dfdceb72e7">Isis::AtmosModel::G11Prime()</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a61e46973f18de6695790da9ac5c26ad1">Isis::AtmosModel::p_atmosBha</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a09bb78756ef7e82ce5a060fc607028e3">Isis::AtmosModel::p_atmosHnorm</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a1df675478315ef9082af5f9e43ca9418">Isis::AtmosModel::p_atmosTau</a>, <a class="el" href="class_isis_1_1_atmos_model.html#aec13d0efaa6ed2c605ac2d3c8091f399">Isis::AtmosModel::p_atmosWha</a>, <a class="el" href="class_isis_1_1_atmos_model.html#ab1873050f5e53372367ccb7c10dc97bb">Isis::AtmosModel::p_pstd</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a1e0f23d9468357cfd1c651527da04898">Isis::AtmosModel::p_sbar</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a0277cd76c0adafdfd0fe02107563b86b">Isis::AtmosModel::p_trans</a>, <a class="el" href="class_isis_1_1_atmos_model.html#ab79a607c46f7b419f91abf737080445f">Isis::AtmosModel::p_trans0</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a6ec6a9a4107f79ca39258338ab89ad54">Isis::AtmosModel::p_transs</a>, <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a5917fd4a80889fb6a74894615680b20b">Isis::AtmosModel::SetOldTau()</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a3308874245bc1ecdff0cb6732e2b9a7b">Isis::AtmosModel::SetOldWha()</a>, <a class="el" href="class_isis_1_1_atmos_model.html#afe16a5c8518e9354eca41786ca863c88">Isis::AtmosModel::TauOrWhaChanged()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78">Isis::IException::Unknown</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>.</p>
+
+</div>
+</div>
+<a id="a4c257ac2a87d3b8e7826522c0dbb53af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c257ac2a87d3b8e7826522c0dbb53af">&#9670;&nbsp;</a></span>AtmosMunot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::AtmosMunot </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Munot value. </p>
+
+</div>
+</div>
+<a id="ad08d69e0680058cfbf478cd66e2b5ec1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad08d69e0680058cfbf478cd66e2b5ec1">&#9670;&nbsp;</a></span>AtmosNinc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::AtmosModel::AtmosNinc </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Ninc value. </p>
+
+</div>
+</div>
+<a id="ae4999efc81c3d861c40d48b03ca51d29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4999efc81c3d861c40d48b03ca51d29">&#9670;&nbsp;</a></span>AtmosNulneg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AtmosModel::AtmosNulneg </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Nulneg value. </p>
+
+</div>
+</div>
+<a id="a445dffa934884b173626a302bd40a966"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a445dffa934884b173626a302bd40a966">&#9670;&nbsp;</a></span>AtmosTau()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::AtmosTau </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Tau value. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#a00cf708f1323dfa441de8f8384563873">Isis::NumericalAtmosApprox::InrFunc2Bint()</a>.</p>
+
+</div>
+</div>
+<a id="a89a7d3438294f299919b26116950d535"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89a7d3438294f299919b26116950d535">&#9670;&nbsp;</a></span>AtmosTauref()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::AtmosTauref </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Tauref value. </p>
+
+</div>
+</div>
+<a id="ad309f489c49915895dbe31455f90183d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad309f489c49915895dbe31455f90183d">&#9670;&nbsp;</a></span>AtmosWha()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::AtmosWha </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return atmospheric Wha value. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="abdb1c6206d51f854118d79c3ef0d74b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdb1c6206d51f854118d79c3ef0d74b8">&#9670;&nbsp;</a></span>CalcAtmEffect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::CalcAtmEffect </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>pha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>inc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>ema</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>pstd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>trans</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>trans0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>sbar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>transs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculate the atmospheric scattering effect using photometric angle information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pha</td><td>phase angle </td></tr>
+    <tr><td class="paramname">inc</td><td>incidence angle </td></tr>
+    <tr><td class="paramname">ema</td><td>emission angle </td></tr>
+    <tr><td class="paramname">pstd</td><td>pure atmospheric-scattering term </td></tr>
+    <tr><td class="paramname">trans</td><td>transmission of surface reflected light through the atmosphere overall </td></tr>
+    <tr><td class="paramname">trans0</td><td>transmission of surface reflected light through the atmosphere with no scatterings in the atmosphere </td></tr>
+    <tr><td class="paramname">sbar</td><td>illumination of the ground by the sky </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>"Invalid photometric angles" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_albedo_atm.html#ab95fdd4ee9d179f6cfe06c76a48c7f80">Isis::AlbedoAtm::AlbedoAtm()</a>, <a class="el" href="class_isis_1_1_albedo_atm.html#a6345d689d09fbbb39cc01a640daeaace">Isis::AlbedoAtm::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_shade_atm.html#a60e6abc535dc32806af99c420f3da936">Isis::ShadeAtm::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_topo_atm.html#a25714f3a61adb32b634582bb55e128c1">Isis::TopoAtm::NormModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_topo_atm.html#af1b05b3751ae39daaea912d1162a085e">Isis::TopoAtm::TopoAtm()</a>.</p>
+
+</div>
+</div>
+<a id="a7b95b0210b589bd0abca78daff7b76f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b95b0210b589bd0abca78daff7b76f1">&#9670;&nbsp;</a></span>Ei()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::Ei </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This routine computes the exponential integral, <em>Ei(x)</em>. </p>
+<p>This is defined as </p><p class="formulaDsp">
+\[ Ei(x) = - \int_{-x}^{\infty} \frac{e^{-t}}{t}\mathrm{d}t = \int_{-\infty}^{x} \frac{e^{t}}{t}\mathrm{d}t \]
+</p>
+<p> for <em>x</em> &gt; 0.</p>
+<p>For small <em>x</em>, this method uses the power series, </p><p class="formulaDsp">
+\[ Ei(x) = \gamma + \ln x + \frac{x}{1*1!} + \frac{x^2}{2*2!} + ... \]
+</p>
+<p> where \( \gamma = 0.5772156649... \) is Euler's constant, and for large <em>x</em>, the asymptotic series is used, </p><p class="formulaDsp">
+\[ Ei(x) \sim \frac{e^x}{x} (1 + \frac{1!}{x} + \frac{2!}{x^2} + ...) \]
+</p>
+<dl class="section see"><dt>See also</dt><dd>mathworld.wolfram.com/ExponentialIntegral.html</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Value at which the exponential integral will be computed, <em>x</em> &gt; 0.0 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> The exponential integral for the given <em>x</em>. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">Isis::IException::Programmer</a></td><td>"Invalid arguments.
+            Definition requires x &gt; 0.0." </td></tr>
+    <tr><td class="paramname">Isis::IException::Math</td><td>"Power series failed to
+            converge" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a02d7c81288b5feab8d9d998e17e08e43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02d7c81288b5feab8d9d998e17e08e43">&#9670;&nbsp;</a></span>En()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::En </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This routine evaluates the generalized exponential integral, <em>E<sub>n</sub></em>(x). </p>
+<p>This is defined as </p><p class="formulaDsp">
+\[ E_n(x) = \int_{1}^{\infty} \frac{e^{-xt}}{t^n}\mathrm{d}t \mathrm{ for } x \in \mathbb{R }, n \in \mathbb{Z } \mathrm{such that } x \ge 0.0, n \ge 0 \]
+</p>
+<p> Notice that if <em>x</em> = 0, then the equation is not defined for <em>n</em> = 0 or <em>n</em> = 1, as these will result in \( E_n(x) = \infty \).</p>
+<p>This method uses the following for cases: </p><ul>
+<li>
+<p class="startli">For n &gt; 1 and x = 0.0, </p><p class="formulaDsp">
+\[ E_n(0) = \frac{1}{n-1} \]
+</p>
+<p class="endli"></p>
+</li>
+<li>
+<p class="startli">For n = 0 and x &gt; 0.0, </p><p class="formulaDsp">
+\[ E_0(x) = \frac{e^{-x}}{x} \]
+</p>
+<p class="endli"></p>
+</li>
+<li>
+<p class="startli">For \( x &gt;\sim 1.0 \), Lentz's continued fraction algorithm is used, </p><p class="formulaDsp">
+\[ E_n(x) = e^{-x}(\frac{1}{x + n - \frac{1*n}{x + n + 2 - \frac{2(n+1)}{x + n + 4 - ...}}}) \]
+</p>
+<p class="endli"></p>
+</li>
+<li>
+For \( 0.0 &lt; x &lt;\sim 1.0 \), series representation is used, <p class="formulaDsp">
+\[ E_n(x) = \frac{(-x)^{n-1}}{(n-1)!}[- \ln x + \psi (n)] - \sum_{m=0, m \neq n-1}^{\infty}\frac{(-x)^m}{(m-n+1)m!} \]
+</p>
+ where \( \psi (1) = \gamma \) and \( \psi (n) = - \gamma + \sum_{m=1}^{n-1} \frac{1}{m}\) and \( \gamma = 0.5772156649... \) is Euler's constant. </li>
+</ul>
+<p>The parameter <em>n</em> is of type <b>unsigned</b> <b>int</b> since <em>n</em> cannot be negative.</p>
+<p>The routine allows fast evaluation of <em>E<sub>n</sub></em>(x) to any accuracy, \(\epsilon\), within the reach of your machine's word length for floating-point numbers. The only modification required for increased accuracy is to supply Euler's constant with enough significant digits.</p>
+<dl class="section see"><dt>See also</dt><dd>mathworld.wolfram.com/En-Function.html</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Integer value at which the exponential integral will be evaluated (n &gt;= 0) </td></tr>
+    <tr><td class="paramname">x</td><td>The exponential integral En(x) will be evaluated </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> Value of the exponential integral for the give n and x. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">Isis::IException::Programmer</a></td><td>"Invalid arguments. Definition requires (x &gt; 0.0 and n &gt;=0 ) or (x &gt;= 0.0 and n &gt; 1)."
+@throws Isis::IException::Math "Continued fraction failed to converge"
+@throws Isis::IException::Math "Series representation failed to converge" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="acacd1e96b0ad66084453b8ce0e98f30e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acacd1e96b0ad66084453b8ce0e98f30e">&#9670;&nbsp;</a></span>Eulgam()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::Eulgam </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a4659ee469025ef8ec73496dfdceb72e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4659ee469025ef8ec73496dfdceb72e7">&#9670;&nbsp;</a></span>G11Prime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::G11Prime </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tau</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Perform Chandra and Van de Hulst's series approximation for the g'11 function needed in second order scattering theory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tau</td><td>normal optical depth of atmosphere </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> Value of the g'11 function evaluated at the given <b>tau</b> </dd></dl>
+
+<p class="reference">References <a class="el" href="_atmos_model_8cpp.html#aacc3ee1a7f283f8ef65cea31f4436a95">MAX</a>, and <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a906f5bb492fb3a011bc7480f93617774"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a906f5bb492fb3a011bc7480f93617774">&#9670;&nbsp;</a></span>GenerateAhTable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::GenerateAhTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method computes the values of the atmospheric Ah table and sets the properties of the atmospheric Ah spline. </p>
+<p>It obtains the hemispheric albedo by integrating the photometric function times mu over mu = 0 to 1 and then over phi = 0 to 2*pi to calculate the hemispheric reflectance Ah needed for the photometric model with atmosphere. The Trapezoid rule is applied to the table of Ah to obtain bihemispheric albedo Ab. The parameter <em>p_atmosAtmSwitch</em> is set to 0 to integrate Ah. </p>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>, <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#a200cdc331c4075ab2ea06e6444e12b83">Isis::NumericalAtmosApprox::RombergsMethod()</a>, and <a class="el" href="class_isis_1_1_i_string.html#a69f44966f3c629e79aec55ba5b921d75">Isis::IString::UpCase()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_albedo_atm.html#ab95fdd4ee9d179f6cfe06c76a48c7f80">Isis::AlbedoAtm::AlbedoAtm()</a>, <a class="el" href="class_isis_1_1_shade_atm.html#a60e6abc535dc32806af99c420f3da936">Isis::ShadeAtm::NormModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_topo_atm.html#af1b05b3751ae39daaea912d1162a085e">Isis::TopoAtm::TopoAtm()</a>.</p>
+
+</div>
+</div>
+<a id="ae918ba694bc5befd56ee7ceac9f75737"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae918ba694bc5befd56ee7ceac9f75737">&#9670;&nbsp;</a></span>GenerateHahgTables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::GenerateHahgTables </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method computes the values of the atmospheric Hahg and Hahg0 tables and sets the properties of the atmospheric Hahg and Hahg0 splines. </p>
+<p>It integrates functions involving the single particle phase function (assumed to be <a class="el" href="class_isis_1_1_hapke.html" title="Hapke-Henyey-Greenstein photometric model.">Hapke</a> Henyey-Greenstein) over mu = 0 to 1 and then over phi = 0 to 2*pi to calculate the corrections needed for the anisotropic photometric model with atmosphere. The Trapezoid rule is applied to the table of Ah to obtain bihemispheric albedo Ab. The parameter <em>p_atmosAtmSwitch</em> is set to 1, 2, 3 to evaluate the 3 required integrals. </p>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>, <a class="el" href="class_isis_1_1_numerical_approximation.html#a8f394302b46edb1fcdba241abcd673fd">Isis::NumericalApproximation::Reset()</a>, and <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#a200cdc331c4075ab2ea06e6444e12b83">Isis::NumericalAtmosApprox::RombergsMethod()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="aa9a3a7cee3bf30a3c14109ae4e4511e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9a3a7cee3bf30a3c14109ae4e4511e3">&#9670;&nbsp;</a></span>GenerateHahgTablesShadow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::GenerateHahgTablesShadow </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method is a modified version of the GenerateHahgTables method and is used solely for shadow modeling. </p>
+<p>Unlike the GenerateHahgTables method, this method does not tabulate the first or third integrals. It only evaluates the middle integral that corrects the sbar variable (illumination of the ground by the sky). </p>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>, <a class="el" href="class_isis_1_1_numerical_approximation.html#a8f394302b46edb1fcdba241abcd673fd">Isis::NumericalApproximation::Reset()</a>, and <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#a200cdc331c4075ab2ea06e6444e12b83">Isis::NumericalAtmosApprox::RombergsMethod()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="ab3f4ca09de179347e47d9eadb958f915"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3f4ca09de179347e47d9eadb958f915">&#9670;&nbsp;</a></span>GetPhotoModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_photo_model.html">PhotoModel</a>* Isis::AtmosModel::GetPhotoModel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa916fe4a0131539459918765ee991422"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa916fe4a0131539459918765ee991422">&#9670;&nbsp;</a></span>SetAlgorithmName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAlgorithmName </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9e2e1db1ec0e435ff727e64eac1edd14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e2e1db1ec0e435ff727e64eac1edd14">&#9670;&nbsp;</a></span>SetAtmosAtmSwitch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosAtmSwitch </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>atmswitch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the switch that controls the function that will be integrated. </p>
+<p>This method is only used for testing the methods in this class. This parameter is limited to the values 0, 1, 2, and 3.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">atmswitch</td><td>Internal atmospheric function parameter, there is no default </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>"Invalid value of atmospheric
+       atmswitch" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a6e7dabc01d8627b5bb660e898d1367c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e7dabc01d8627b5bb660e898d1367c0">&#9670;&nbsp;</a></span>SetAtmosBha()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosBha </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>bha</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the Anisotropic Atmospheric function parameter. </p>
+<p>This is the coefficient of the single particle Legendre phase function. This parameter is limited to values that are &gt;=-1 and &lt;=1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bha</td><td>Anisotropic atmospheric function parameter, default is 0.85 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>"Invalid value of atmospheric
+       bha" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="ac872c1560ec9a1c16f60721b7526a7c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac872c1560ec9a1c16f60721b7526a7c2">&#9670;&nbsp;</a></span>SetAtmosEstTau() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosEstTau </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>esttau</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a36b298cb584bec404c32235ba81c184f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36b298cb584bec404c32235ba81c184f">&#9670;&nbsp;</a></span>SetAtmosEstTau() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosEstTau </td>
+          <td>(</td>
+          <td class="paramtype">const string&#160;</td>
+          <td class="paramname"><em>esttau</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Estimate the optical depth tau using shadows. </p>
+<dl class="section author"><dt>Author</dt><dd>Janet Barrett (12/16/2011)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">esttau</td><td>true/false </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_string.html#a69f44966f3c629e79aec55ba5b921d75">Isis::IString::UpCase()</a>.</p>
+
+</div>
+</div>
+<a id="a05aade1c4b7575c78099ebdaa85422e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05aade1c4b7575c78099ebdaa85422e7">&#9670;&nbsp;</a></span>SetAtmosHga()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosHga </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>hga</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the <a class="el" href="class_isis_1_1_hapke.html" title="Hapke-Henyey-Greenstein photometric model.">Hapke</a> atmospheric function parameter. </p>
+<p>This is the coefficient of the single particle Henyey-Greenstein phase function. This parameter is limited to values that are &gt;-1 and &lt;1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hga</td><td><a class="el" href="class_isis_1_1_hapke.html" title="Hapke-Henyey-Greenstein photometric model.">Hapke</a> atmospheric function parameter, default is 0.68 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>"Invalid value of atmospheric
+       hga" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a96d72a967b5c54a8aa9908c4728a15c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96d72a967b5c54a8aa9908c4728a15c8">&#9670;&nbsp;</a></span>SetAtmosHnorm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosHnorm </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>hnorm</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the Atmospheric function parameter. </p>
+<p>This is the atmospheric shell thickness normalized to the planet radius and is used to modify angles to get more accurate path lengths near the terminator (ratio of scale height to the planetary radius). This parameter is limited to values that are &gt;=0.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hnorm</td><td>Atmospheric function parameter, default is 0.003 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a2c8c2ab819fedba738a3d4f2ce875c94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c8c2ab819fedba738a3d4f2ce875c94">&#9670;&nbsp;</a></span>SetAtmosInc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosInc </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>inc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the incidence angle. </p>
+<p>This method is only used for testing the methods in this class. This parameter is limited to values &gt;=0 and &lt;=90.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inc</td><td>Internal atmospheric function parameter, there is no default </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>"Invalid value of atmospheric
+       inc" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>.</p>
+
+</div>
+</div>
+<a id="a354f2b46c1366f182960da9a1b086c42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a354f2b46c1366f182960da9a1b086c42">&#9670;&nbsp;</a></span>SetAtmosIord() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosIord </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7c60bbe2498e7f46aba6e590c7005855"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c60bbe2498e7f46aba6e590c7005855">&#9670;&nbsp;</a></span>SetAtmosIord() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosIord </td>
+          <td>(</td>
+          <td class="paramtype">const string&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set additive offset in fit. </p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (8/18/2011)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offset</td><td>true/false </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_string.html#a69f44966f3c629e79aec55ba5b921d75">Isis::IString::UpCase()</a>.</p>
+
+</div>
+</div>
+<a id="a7a87fb464123530cb1eff7fc05a876f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a87fb464123530cb1eff7fc05a876f1">&#9670;&nbsp;</a></span>SetAtmosNulneg() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosNulneg </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>nulneg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab3ae7a267ec2c26e5980cea73c0e6664"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3ae7a267ec2c26e5980cea73c0e6664">&#9670;&nbsp;</a></span>SetAtmosNulneg() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosNulneg </td>
+          <td>(</td>
+          <td class="paramtype">const string&#160;</td>
+          <td class="paramname"><em>nulneg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the Atmospheric function parameter. </p>
+<p>This determines if negative values after removal of atmospheric effects will be set to NULL. This parameter is limited to values of YES or NO.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nulneg</td><td>Atmospheric function parameter, default is NO </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>"Invalid value of atmospheric
+       nulneg" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_string.html#a69f44966f3c629e79aec55ba5b921d75">Isis::IString::UpCase()</a>.</p>
+
+</div>
+</div>
+<a id="ab1afa0839764ce684b87f1cc2c6f8e63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1afa0839764ce684b87f1cc2c6f8e63">&#9670;&nbsp;</a></span>SetAtmosPhi()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosPhi </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>phi</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the azimuth angle. </p>
+<p>This method is only used for testing the methods in this class. This parameter is limited to values &gt;=0 and &lt;=360.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">phi</td><td>Internal atmospheric function parameter, there is no default </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>"Invalid value of atmospheric
+       phi" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>.</p>
+
+</div>
+</div>
+<a id="a6b142d65e245fd94dc6773bf8895866d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b142d65e245fd94dc6773bf8895866d">&#9670;&nbsp;</a></span>SetAtmosTau()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosTau </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>tau</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the Atmospheric function parameter. </p>
+<p>This specifies the normal optical depth of the atmosphere. This parameter is limited to values that are &gt;=0.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tau</td><td>Atmospheric function parameter, default is 0.28 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>"Invalid value of atmospheric
+       tau" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="af8d4b3208e1edffc515412b5c5f2a2e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8d4b3208e1edffc515412b5c5f2a2e8">&#9670;&nbsp;</a></span>SetAtmosTauref()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosTauref </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>tauref</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the Atmospheric function parameter. </p>
+<p>This specifies the reference optical depth of the atmosphere to which the image will be normalized. This parameter is limited to values that are &gt;=0.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tauref</td><td>Atmospheric function parameter, default is 0.0 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>"Invalid value of atmospheric
+       tauref" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a4ce66fc840457dad2a5ea3e57ea2f5c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ce66fc840457dad2a5ea3e57ea2f5c1">&#9670;&nbsp;</a></span>SetAtmosWha()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetAtmosWha </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>wha</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the Atmospheric function parameter. </p>
+<p>This is the single- scattering albedo of atmospheric particles. This parameter is limited to values that are &gt;0 and &lt;=1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">wha</td><td>Atmospheric function parameter, default is 0.95 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>"Invalid value of atmospheric
+       wha" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a5917fd4a80889fb6a74894615680b20b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5917fd4a80889fb6a74894615680b20b">&#9670;&nbsp;</a></span>SetOldTau()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetOldTau </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tau</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a3308874245bc1ecdff0cb6732e2b9a7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3308874245bc1ecdff0cb6732e2b9a7b">&#9670;&nbsp;</a></span>SetOldWha()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetOldWha </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>wha</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="aa599e0d081febbbd4e43d8e2cc012808"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa599e0d081febbbd4e43d8e2cc012808">&#9670;&nbsp;</a></span>SetStandardConditions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AtmosModel::SetStandardConditions </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>standard</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Used to calculate atmosphere at standard conditions. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_albedo_atm.html#ab95fdd4ee9d179f6cfe06c76a48c7f80">Isis::AlbedoAtm::AlbedoAtm()</a>, and <a class="el" href="class_isis_1_1_topo_atm.html#af1b05b3751ae39daaea912d1162a085e">Isis::TopoAtm::TopoAtm()</a>.</p>
+
+</div>
+</div>
+<a id="af47f086a63ed69716a37e24034fa110c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af47f086a63ed69716a37e24034fa110c">&#9670;&nbsp;</a></span>StandardConditions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AtmosModel::StandardConditions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afe16a5c8518e9354eca41786ca863c88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe16a5c8518e9354eca41786ca863c88">&#9670;&nbsp;</a></span>TauOrWhaChanged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AtmosModel::TauOrWhaChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks whether tau or wha have changed. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> True if either have changed. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a7fe0af04adb34b3525fca1d6b0480aa2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fe0af04adb34b3525fca1d6b0480aa2">&#9670;&nbsp;</a></span>p_atmosAb</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosAb</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a657f84cab76a5017ff8bbc63e5b35770"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a657f84cab76a5017ff8bbc63e5b35770">&#9670;&nbsp;</a></span>p_atmosAddOffset</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AtmosModel::p_atmosAddOffset</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Allow additive offset in fit. </p>
+
+</div>
+</div>
+<a id="a36f3e125f3c9f874cec62aaf31dcc071"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36f3e125f3c9f874cec62aaf31dcc071">&#9670;&nbsp;</a></span>p_atmosAhSpline</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a> Isis::AtmosModel::p_atmosAhSpline</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Spline object for the atmospheric Ah <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a>. Properties are set in <a class="el" href="class_isis_1_1_atmos_model.html#a906f5bb492fb3a011bc7480f93617774" title="This method computes the values of the atmospheric Ah table and sets the properties of the atmospheri...">GenerateAhTable()</a>. </p>
+
+</div>
+</div>
+<a id="a2803ef3444b9fcb3d10267143ade797c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2803ef3444b9fcb3d10267143ade797c">&#9670;&nbsp;</a></span>p_atmosAhTable</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Isis::AtmosModel::p_atmosAhTable</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a33a9552caf63a607e7ff5c48eaa71fad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33a9552caf63a607e7ff5c48eaa71fad">&#9670;&nbsp;</a></span>p_atmosAtmSwitch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::AtmosModel::p_atmosAtmSwitch</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#a00cf708f1323dfa441de8f8384563873">Isis::NumericalAtmosApprox::InrFunc2Bint()</a>.</p>
+
+</div>
+</div>
+<a id="a61e46973f18de6695790da9ac5c26ad1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61e46973f18de6695790da9ac5c26ad1">&#9670;&nbsp;</a></span>p_atmosBha</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosBha</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="abe1d4cd10404e6b1fcb748605b70f291"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe1d4cd10404e6b1fcb748605b70f291">&#9670;&nbsp;</a></span>p_atmosBhasave</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosBhasave</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a42f16af2ca5bd999b2c197d6a3ecf5c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42f16af2ca5bd999b2c197d6a3ecf5c1">&#9670;&nbsp;</a></span>p_atmosCosphi</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosCosphi</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#a00cf708f1323dfa441de8f8384563873">Isis::NumericalAtmosApprox::InrFunc2Bint()</a>, and <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#aba741ef5a12c225306776081542bc408">Isis::NumericalAtmosApprox::OutrFunc2Bint()</a>.</p>
+
+</div>
+</div>
+<a id="a25fcfb2380ed4ae3beb3500d6fe50a5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25fcfb2380ed4ae3beb3500d6fe50a5e">&#9670;&nbsp;</a></span>p_atmosEstTau</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AtmosModel::p_atmosEstTau</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Estimate optical depth tau using shadows. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a07786ad289adb758737fa3bc0310b0e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07786ad289adb758737fa3bc0310b0e4">&#9670;&nbsp;</a></span>p_atmosEulgam</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosEulgam</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae1ff8637d713298bf2e08b7dcd346d49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1ff8637d713298bf2e08b7dcd346d49">&#9670;&nbsp;</a></span>p_atmosHahgsb</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosHahgsb</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a750334b522484d8328cdf5e3e12bccec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a750334b522484d8328cdf5e3e12bccec">&#9670;&nbsp;</a></span>p_atmosHahgt0Spline</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a> Isis::AtmosModel::p_atmosHahgt0Spline</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Spline object for the atmospheric Hahg0 <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a>. Properties are set in <a class="el" href="class_isis_1_1_atmos_model.html#ae918ba694bc5befd56ee7ceac9f75737" title="This method computes the values of the atmospheric Hahg and Hahg0 tables and sets the properties of t...">GenerateHahgTables()</a>. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a9c6384f59e29a6edb1e75e4cba871899"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c6384f59e29a6edb1e75e4cba871899">&#9670;&nbsp;</a></span>p_atmosHahgt0Table</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Isis::AtmosModel::p_atmosHahgt0Table</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac35f1885464f83240736ae0ab68f0962"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac35f1885464f83240736ae0ab68f0962">&#9670;&nbsp;</a></span>p_atmosHahgtSpline</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a> Isis::AtmosModel::p_atmosHahgtSpline</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Spline object for the atmospheric Hahg <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a>. Properties are set in <a class="el" href="class_isis_1_1_atmos_model.html#ae918ba694bc5befd56ee7ceac9f75737" title="This method computes the values of the atmospheric Hahg and Hahg0 tables and sets the properties of t...">GenerateHahgTables()</a>. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a8f011437f1aaff923835c9ace6ef5f10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f011437f1aaff923835c9ace6ef5f10">&#9670;&nbsp;</a></span>p_atmosHahgtTable</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Isis::AtmosModel::p_atmosHahgtTable</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab4f2998801ca4c90b11872e8cc5dfb03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4f2998801ca4c90b11872e8cc5dfb03">&#9670;&nbsp;</a></span>p_atmosHga</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosHga</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a241a545ba2bf65b6095efa95360cf23b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a241a545ba2bf65b6095efa95360cf23b">&#9670;&nbsp;</a></span>p_atmosHgasave</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosHgasave</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a09bb78756ef7e82ce5a060fc607028e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09bb78756ef7e82ce5a060fc607028e3">&#9670;&nbsp;</a></span>p_atmosHnorm</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosHnorm</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Atmospheric shell thickness normalized to planet radius. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="ab42af5f61e7a0fb8e8d847317e8f0931"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab42af5f61e7a0fb8e8d847317e8f0931">&#9670;&nbsp;</a></span>p_atmosInc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosInc</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#a00cf708f1323dfa441de8f8384563873">Isis::NumericalAtmosApprox::InrFunc2Bint()</a>.</p>
+
+</div>
+</div>
+<a id="afb0f719d960012f2b6332feb80599378"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb0f719d960012f2b6332feb80599378">&#9670;&nbsp;</a></span>p_atmosIncTable</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;double&gt; Isis::AtmosModel::p_atmosIncTable</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac7bdec266628001389dbeba2a8fd469a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7bdec266628001389dbeba2a8fd469a">&#9670;&nbsp;</a></span>p_atmosMunot</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosMunot</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#a00cf708f1323dfa441de8f8384563873">Isis::NumericalAtmosApprox::InrFunc2Bint()</a>.</p>
+
+</div>
+</div>
+<a id="aab60fa23f307262751d578546e40c12d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab60fa23f307262751d578546e40c12d">&#9670;&nbsp;</a></span>p_atmosNinc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::AtmosModel::p_atmosNinc</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8ea385a4233179f837b0abfe3d936b02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ea385a4233179f837b0abfe3d936b02">&#9670;&nbsp;</a></span>p_atmosPhi</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosPhi</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#aba741ef5a12c225306776081542bc408">Isis::NumericalAtmosApprox::OutrFunc2Bint()</a>.</p>
+
+</div>
+</div>
+<a id="aad4a144c11fbf30ad7a997c4c8fade43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad4a144c11fbf30ad7a997c4c8fade43">&#9670;&nbsp;</a></span>p_atmosSini</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosSini</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#a00cf708f1323dfa441de8f8384563873">Isis::NumericalAtmosApprox::InrFunc2Bint()</a>.</p>
+
+</div>
+</div>
+<a id="a1df675478315ef9082af5f9e43ca9418"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1df675478315ef9082af5f9e43ca9418">&#9670;&nbsp;</a></span>p_atmosTau</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosTau</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a3f90b0841b757ce731ad3cdbdec115d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f90b0841b757ce731ad3cdbdec115d1">&#9670;&nbsp;</a></span>p_atmosTauref</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosTauref</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3d9e558750dc81a0e913e4a0286b4b17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d9e558750dc81a0e913e4a0286b4b17">&#9670;&nbsp;</a></span>p_atmosTausave</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosTausave</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aec13d0efaa6ed2c605ac2d3c8091f399"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec13d0efaa6ed2c605ac2d3c8091f399">&#9670;&nbsp;</a></span>p_atmosWha</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosWha</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a6751b8a9b4ddfd0e98f6ba005ee03f62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6751b8a9b4ddfd0e98f6ba005ee03f62">&#9670;&nbsp;</a></span>p_atmosWhasave</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_atmosWhasave</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab1873050f5e53372367ccb7c10dc97bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1873050f5e53372367ccb7c10dc97bb">&#9670;&nbsp;</a></span>p_pstd</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_pstd</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pure atmospheric-scattering term. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a1e0f23d9468357cfd1c651527da04898"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e0f23d9468357cfd1c651527da04898">&#9670;&nbsp;</a></span>p_sbar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_sbar</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Illumination of the ground by the sky. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a0277cd76c0adafdfd0fe02107563b86b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0277cd76c0adafdfd0fe02107563b86b">&#9670;&nbsp;</a></span>p_trans</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_trans</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Transmission of surface reflected light through the atmosphere overall. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="ab79a607c46f7b419f91abf737080445f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab79a607c46f7b419f91abf737080445f">&#9670;&nbsp;</a></span>p_trans0</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_trans0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Transmission of surface reflected light through the atmosphere with no scatterings in the atmosphere. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a6ec6a9a4107f79ca39258338ab89ad54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ec6a9a4107f79ca39258338ab89ad54">&#9670;&nbsp;</a></span>p_transs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AtmosModel::p_transs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Transmission of light that must be subtracted from the flat surface model to get the shadow model. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_anisotropic1.html#a4bc9aa2014ffc2842afe4a02d122ad91">Isis::Anisotropic1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_anisotropic2.html#a6ca399ccdfba0e5005c693a95722d056">AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm1.html#a2f8338b8fb2c91fdf660ac575eaa6204">Isis::HapkeAtm1::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke_atm2.html#a906006cc48bec23670ca2b1e3fbc0aa0">Isis::HapkeAtm2::AtmosModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_isotropic1.html#aa8422fab76ed69236051d20ac3846c2a">Isis::Isotropic1::AtmosModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_isotropic2.html#ab73535df838ee0dc2c1e8e7690c515f1">Isis::Isotropic2::AtmosModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Anisotropic2/<a class="el" href="_anisotropic2_8h_source.html">Anisotropic2.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Anisotropic2/<a class="el" href="_anisotropic2_8cpp.html">Anisotropic2.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_anisotropic2.html">Anisotropic2</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

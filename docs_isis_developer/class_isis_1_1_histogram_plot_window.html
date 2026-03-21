@@ -1,0 +1,2551 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::HistogramPlotWindow Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_histogram_plot_window.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_histogram_plot_window-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::HistogramPlotWindow Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_histogram_plot_window_8h_source.html">HistogramPlotWindow.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::HistogramPlotWindow:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_histogram_plot_window__inherit__graph.png" border="0" usemap="#a_isis_1_1_histogram_plot_window_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_histogram_plot_window_inherit__map" id="a_isis_1_1_histogram_plot_window_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,840,186,1001"/>
+<area shape="rect" href="class_isis_1_1_plot_window.html" title=" " alt="" coords="12,215,179,792"/>
+<area shape="rect" href="class_isis_1_1_main_window.html" title="Base class for the Qisis main windows." alt="" coords="24,5,167,167"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::HistogramPlotWindow:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_histogram_plot_window__coll__graph.png" border="0" usemap="#a_isis_1_1_histogram_plot_window_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_histogram_plot_window_coll__map" id="a_isis_1_1_histogram_plot_window_coll__map">
+<area shape="rect" title=" " alt="" coords="5,840,186,1001"/>
+<area shape="rect" href="class_isis_1_1_plot_window.html" title=" " alt="" coords="12,215,179,792"/>
+<area shape="rect" href="class_isis_1_1_main_window.html" title="Base class for the Qisis main windows." alt="" coords="24,5,167,167"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a66fdb299d8e1aff1529174b11a41c253"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253">MenuOptions</a> { <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a45ab984fc7ae3aa4fcb19972e7fe3942">ShowHideMarkersMenuOption</a> = 1
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ad37605aa618edff03b666f1c302a3dce">ShowHideCurvesMenuOption</a> = 2
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a7cf52e5efd76cdfebb876b1a19fed93a">ShowTableMenuOption</a> = 4
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a5ce909e5dc4094ca7797ad8ece3d6a45">SaveMenuOption</a> = 8
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a32fcb1a04b482b33b919a8956ad4cfd8">PrintMenuOption</a> = 16
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ac1ab21e93748c7588436fe035d6ba7c9">TrackMenuOption</a> = 32
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253aec300dd5ba9ce0fb23dea1d71f039717">BackgroundSwitchMenuOption</a> = 64
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a60138a5ae48c6aca3172eea427d9715b">ShowHideGridMenuOption</a> = 128
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a9ddd9ad86b988c44a5d216fc7de0c497">RenameLabelsMenuOption</a> = 256
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253aed575c08bc67526a9f6946d069b7ba63">SetDisplayRangeMenuOption</a> = 512
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a449771d1c611f657fac8da807befb725">ResetScaleMenuOption</a> = 1024
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a8af57eec7eb79534755dd0f94ceca411">ClearPlotMenuOption</a> = 2048
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ab1681b3cdc8ae6d3b604e12ee7aa1094">DefaultHelpMenuOption</a> = 4096
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a1b1eb18acbcc28fb5ad40e69a324c944">LineFitMenuOption</a> = 8192
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a54d4d997f2261ec8b613cf6d432f8d9d">ConfigurePlotMenuOption</a> = 16384
+, <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a7de984a3379095fb0db75c6e66aef211">AllMenuOptions</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a66fdb299d8e1aff1529174b11a41c253"><td class="mdescLeft">&#160;</td><td class="mdescRight">There is a menu option for everything in the plot window's menu.  <a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253">More...</a><br /></td></tr>
+<tr class="separator:a66fdb299d8e1aff1529174b11a41c253"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:ad407116247e4204328a2aa39fea4854c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ad407116247e4204328a2aa39fea4854c">clearPlot</a> ()</td></tr>
+<tr class="memdesc:ad407116247e4204328a2aa39fea4854c"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method completely clears the plot of all plot items.  <a href="class_isis_1_1_plot_window.html#ad407116247e4204328a2aa39fea4854c">More...</a><br /></td></tr>
+<tr class="separator:ad407116247e4204328a2aa39fea4854c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8a44666f23edb8ce000d4e7373f6d72"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ab8a44666f23edb8ce000d4e7373f6d72">configurePlotCurves</a> ()</td></tr>
+<tr class="memdesc:ab8a44666f23edb8ce000d4e7373f6d72"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method creates a <a class="el" href="class_isis_1_1_cube_plot_curve_configure_dialog.html" title="This should be an inner class for CubePlotCurve, but Qt doesn&#39;t support having a QObject as an inner ...">CubePlotCurveConfigureDialog</a> object.  <a href="class_isis_1_1_plot_window.html#ab8a44666f23edb8ce000d4e7373f6d72">More...</a><br /></td></tr>
+<tr class="separator:ab8a44666f23edb8ce000d4e7373f6d72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7359044c465debc7ead9b5b3dd8f97a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a7359044c465debc7ead9b5b3dd8f97a0">createBestFitLine</a> ()</td></tr>
+<tr class="memdesc:a7359044c465debc7ead9b5b3dd8f97a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method prompts the user to select the best fit line criterea.  <a href="class_isis_1_1_plot_window.html#a7359044c465debc7ead9b5b3dd8f97a0">More...</a><br /></td></tr>
+<tr class="separator:a7359044c465debc7ead9b5b3dd8f97a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b24be449660be00e502095927b4fb44"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a5b24be449660be00e502095927b4fb44">printPlot</a> ()</td></tr>
+<tr class="memdesc:a5b24be449660be00e502095927b4fb44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides printing support of the plot image.  <a href="class_isis_1_1_plot_window.html#a5b24be449660be00e502095927b4fb44">More...</a><br /></td></tr>
+<tr class="separator:a5b24be449660be00e502095927b4fb44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3523b7d159239eab9e2a3ca20f9a69a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ab3523b7d159239eab9e2a3ca20f9a69a">changePlotLabels</a> ()</td></tr>
+<tr class="memdesc:ab3523b7d159239eab9e2a3ca20f9a69a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method creates the dialog box which allows the user to relabel the plot window.  <a href="class_isis_1_1_plot_window.html#ab3523b7d159239eab9e2a3ca20f9a69a">More...</a><br /></td></tr>
+<tr class="separator:ab3523b7d159239eab9e2a3ca20f9a69a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac472cc980b7983df541ac061e03b96f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ac472cc980b7983df541ac061e03b96f1">savePlot</a> ()</td></tr>
+<tr class="memdesc:ac472cc980b7983df541ac061e03b96f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method allows the user to save the plot as a png, jpg, or tif image file.  <a href="class_isis_1_1_plot_window.html#ac472cc980b7983df541ac061e03b96f1">More...</a><br /></td></tr>
+<tr class="separator:ac472cc980b7983df541ac061e03b96f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace0ef2ff3c63efd135fe83b74c43f5f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ace0ef2ff3c63efd135fe83b74c43f5f9">setDefaultRange</a> ()</td></tr>
+<tr class="memdesc:ace0ef2ff3c63efd135fe83b74c43f5f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the x/y min/max to the defaults.  <a href="class_isis_1_1_plot_window.html#ace0ef2ff3c63efd135fe83b74c43f5f9">More...</a><br /></td></tr>
+<tr class="separator:ace0ef2ff3c63efd135fe83b74c43f5f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf826950c797c3d2c4201214a72d84b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#adf826950c797c3d2c4201214a72d84b2">setLabels</a> ()</td></tr>
+<tr class="memdesc:adf826950c797c3d2c4201214a72d84b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes the user specified changes to the plot labels.  <a href="class_isis_1_1_plot_window.html#adf826950c797c3d2c4201214a72d84b2">More...</a><br /></td></tr>
+<tr class="separator:adf826950c797c3d2c4201214a72d84b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab46b97e88358b87c1d3049b002e04e41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ab46b97e88358b87c1d3049b002e04e41">setUserValues</a> ()</td></tr>
+<tr class="memdesc:ab46b97e88358b87c1d3049b002e04e41"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method sets the scale for the axis according to the user specified numbers.  <a href="class_isis_1_1_plot_window.html#ab46b97e88358b87c1d3049b002e04e41">More...</a><br /></td></tr>
+<tr class="separator:ab46b97e88358b87c1d3049b002e04e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35de4042278437b82b3a70bca0c0a192"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a35de4042278437b82b3a70bca0c0a192">showHideAllMarkers</a> ()</td></tr>
+<tr class="memdesc:a35de4042278437b82b3a70bca0c0a192"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows/Hides all the markers(symbols)  <a href="class_isis_1_1_plot_window.html#a35de4042278437b82b3a70bca0c0a192">More...</a><br /></td></tr>
+<tr class="separator:a35de4042278437b82b3a70bca0c0a192"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54ba786ce00eed09e41d316aad08b1e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a54ba786ce00eed09e41d316aad08b1e1">showHideAllCurves</a> ()</td></tr>
+<tr class="memdesc:a54ba786ce00eed09e41d316aad08b1e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method shows or hides all of the curves in the plotWindow.  <a href="class_isis_1_1_plot_window.html#a54ba786ce00eed09e41d316aad08b1e1">More...</a><br /></td></tr>
+<tr class="separator:a54ba786ce00eed09e41d316aad08b1e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a725fe44507b14f09ad37544b2ff68644"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a725fe44507b14f09ad37544b2ff68644">resetScale</a> ()</td></tr>
+<tr class="memdesc:a725fe44507b14f09ad37544b2ff68644"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets plot scale back to the defaults.  <a href="class_isis_1_1_plot_window.html#a725fe44507b14f09ad37544b2ff68644">More...</a><br /></td></tr>
+<tr class="separator:a725fe44507b14f09ad37544b2ff68644"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab66d63f544a9c3cb52b224e4bcfe974d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ab66d63f544a9c3cb52b224e4bcfe974d">showHideGrid</a> ()</td></tr>
+<tr class="memdesc:ab66d63f544a9c3cb52b224e4bcfe974d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method hides/shows the grid on the plotWindow and changes the text for the action.  <a href="class_isis_1_1_plot_window.html#ab66d63f544a9c3cb52b224e4bcfe974d">More...</a><br /></td></tr>
+<tr class="separator:ab66d63f544a9c3cb52b224e4bcfe974d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8e6464f0e7deb141e45bbe600f85f21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ac8e6464f0e7deb141e45bbe600f85f21">showHelp</a> ()</td></tr>
+<tr class="memdesc:ac8e6464f0e7deb141e45bbe600f85f21"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method creates and shows the help dialog box for the plot window.  <a href="class_isis_1_1_plot_window.html#ac8e6464f0e7deb141e45bbe600f85f21">More...</a><br /></td></tr>
+<tr class="separator:ac8e6464f0e7deb141e45bbe600f85f21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb661187b7487bbedff08f54509f57b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#acb661187b7487bbedff08f54509f57b7">showTable</a> ()</td></tr>
+<tr class="memdesc:acb661187b7487bbedff08f54509f57b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is called from the showTable action on the tool bar There are some checks done to make sure there are data to fill the table.  <a href="class_isis_1_1_plot_window.html#acb661187b7487bbedff08f54509f57b7">More...</a><br /></td></tr>
+<tr class="separator:acb661187b7487bbedff08f54509f57b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae99c66332b13604b2d2c5b6a402a85b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ae99c66332b13604b2d2c5b6a402a85b6">switchBackground</a> ()</td></tr>
+<tr class="memdesc:ae99c66332b13604b2d2c5b6a402a85b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method toggles the plot background color between black and white.  <a href="class_isis_1_1_plot_window.html#ae99c66332b13604b2d2c5b6a402a85b6">More...</a><br /></td></tr>
+<tr class="separator:ae99c66332b13604b2d2c5b6a402a85b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9985dd86077cd0cc8d03b98f1b6d5891"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a9985dd86077cd0cc8d03b98f1b6d5891">trackerEnabled</a> ()</td></tr>
+<tr class="memdesc:a9985dd86077cd0cc8d03b98f1b6d5891"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the plot mouse tracker.  <a href="class_isis_1_1_plot_window.html#a9985dd86077cd0cc8d03b98f1b6d5891">More...</a><br /></td></tr>
+<tr class="separator:a9985dd86077cd0cc8d03b98f1b6d5891"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed6ee3f4a97149e7e3b56d61ffbb7c01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#aed6ee3f4a97149e7e3b56d61ffbb7c01">scheduleFillTable</a> ()</td></tr>
+<tr class="memdesc:aed6ee3f4a97149e7e3b56d61ffbb7c01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills in the table with the data from the current curves in the plotWindow once all current actions/activations are done.  <a href="class_isis_1_1_plot_window.html#aed6ee3f4a97149e7e3b56d61ffbb7c01">More...</a><br /></td></tr>
+<tr class="separator:aed6ee3f4a97149e7e3b56d61ffbb7c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbe679fce33fb74c4b7f1889e4f1a17d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#abbe679fce33fb74c4b7f1889e4f1a17d">fillTable</a> ()</td></tr>
+<tr class="memdesc:abbe679fce33fb74c4b7f1889e4f1a17d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills in the table with the data from the current curves in the plotWindow immediately.  <a href="class_isis_1_1_plot_window.html#abbe679fce33fb74c4b7f1889e4f1a17d">More...</a><br /></td></tr>
+<tr class="separator:abbe679fce33fb74c4b7f1889e4f1a17d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a1f1292ce1cb99f8df7a53f19a91f6e82"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a1f1292ce1cb99f8df7a53f19a91f6e82">closed</a> ()</td></tr>
+<tr class="memdesc:a1f1292ce1cb99f8df7a53f19a91f6e82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when there is a close event on this window that will be accepted.  <a href="class_isis_1_1_plot_window.html#a1f1292ce1cb99f8df7a53f19a91f6e82">More...</a><br /></td></tr>
+<tr class="separator:a1f1292ce1cb99f8df7a53f19a91f6e82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3668e0aa24a111bd867c5aa9ed978625"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a3668e0aa24a111bd867c5aa9ed978625">plotChanged</a> ()</td></tr>
+<tr class="memdesc:a3668e0aa24a111bd867c5aa9ed978625"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted every time there is a change to the plot window.  <a href="class_isis_1_1_plot_window.html#a3668e0aa24a111bd867c5aa9ed978625">More...</a><br /></td></tr>
+<tr class="separator:a3668e0aa24a111bd867c5aa9ed978625"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6180e2cc61fa46413a859c04b0bb1f0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a6180e2cc61fa46413a859c04b0bb1f0d">requestFillTable</a> ()</td></tr>
+<tr class="separator:a6180e2cc61fa46413a859c04b0bb1f0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a535855616aab42a9ea38e0cbc4cee941"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_histogram_plot_window.html#a535855616aab42a9ea38e0cbc4cee941">HistogramPlotWindow</a> (QString title, <a class="el" href="class_q_widget.html">QWidget</a> *parent)</td></tr>
+<tr class="memdesc:a535855616aab42a9ea38e0cbc4cee941"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, creates a new <a class="el" href="class_isis_1_1_histogram_plot_window.html">HistogramPlotWindow</a>.  <a href="class_isis_1_1_histogram_plot_window.html#a535855616aab42a9ea38e0cbc4cee941">More...</a><br /></td></tr>
+<tr class="separator:a535855616aab42a9ea38e0cbc4cee941"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0c1071b9b223f4c4ef1d2bc8ef80cc9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_histogram_plot_window.html#aa0c1071b9b223f4c4ef1d2bc8ef80cc9">add</a> (<a class="el" href="class_isis_1_1_histogram_item.html">HistogramItem</a> *)</td></tr>
+<tr class="memdesc:aa0c1071b9b223f4c4ef1d2bc8ef80cc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a <a class="el" href="class_isis_1_1_histogram_item.html" title="This is the (qwt) plot item for a histogram.">HistogramItem</a> to the plot.  <a href="class_isis_1_1_histogram_plot_window.html#aa0c1071b9b223f4c4ef1d2bc8ef80cc9">More...</a><br /></td></tr>
+<tr class="separator:aa0c1071b9b223f4c4ef1d2bc8ef80cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d275888c03656ff21ff64e698acd668"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_histogram_plot_window.html#a7d275888c03656ff21ff64e698acd668">getNumItems</a> ()</td></tr>
+<tr class="separator:a7d275888c03656ff21ff64e698acd668"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1f145c3ba07aa51835c7af064a1e816"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_histogram_item.html">HistogramItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_histogram_plot_window.html#ad1f145c3ba07aa51835c7af064a1e816">getHistItem</a> (int index)</td></tr>
+<tr class="separator:ad1f145c3ba07aa51835c7af064a1e816"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc5f743d8aad1c0325b6de8e9595f466"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_dock_widget.html">QDockWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_histogram_plot_window.html#afc5f743d8aad1c0325b6de8e9595f466">getDockWidget</a> ()</td></tr>
+<tr class="separator:afc5f743d8aad1c0325b6de8e9595f466"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a242faec0c197bc53e3a92af754cb688c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_histogram_plot_window.html#a242faec0c197bc53e3a92af754cb688c">add</a> (<a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> *pc)</td></tr>
+<tr class="memdesc:a242faec0c197bc53e3a92af754cb688c"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method adds the curves to the plot.  <a href="class_isis_1_1_histogram_plot_window.html#a242faec0c197bc53e3a92af754cb688c">More...</a><br /></td></tr>
+<tr class="separator:a242faec0c197bc53e3a92af754cb688c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a242faec0c197bc53e3a92af754cb688c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a242faec0c197bc53e3a92af754cb688c">add</a> (<a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> *pc)</td></tr>
+<tr class="memdesc:a242faec0c197bc53e3a92af754cb688c"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method adds the curves to the plot.  <a href="class_isis_1_1_plot_window.html#a242faec0c197bc53e3a92af754cb688c">More...</a><br /></td></tr>
+<tr class="separator:a242faec0c197bc53e3a92af754cb688c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9bb72c47b7783bc0f51aafff774ad61"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ad9bb72c47b7783bc0f51aafff774ad61">clearPlotCurves</a> ()</td></tr>
+<tr class="memdesc:ad9bb72c47b7783bc0f51aafff774ad61"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method also clears the plot of all plot items, but does not call the table delete stuff This method is called from plotTool each time the changePlot() method is called.  <a href="class_isis_1_1_plot_window.html#ad9bb72c47b7783bc0f51aafff774ad61">More...</a><br /></td></tr>
+<tr class="separator:ad9bb72c47b7783bc0f51aafff774ad61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbcf32608418b80b3719e0bbf939e351"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#abbcf32608418b80b3719e0bbf939e351">canAdd</a> (<a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> *curveToTest) const</td></tr>
+<tr class="memdesc:abbcf32608418b80b3719e0bbf939e351"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method tests whethere or not a <a class="el" href="class_isis_1_1_cube_plot_curve.html" title="This is a plot curve with information relating it to a particular cube or region of a cube.">CubePlotCurve</a> can be successfully added to this window.  <a href="class_isis_1_1_plot_window.html#abbcf32608418b80b3719e0bbf939e351">More...</a><br /></td></tr>
+<tr class="separator:abbcf32608418b80b3719e0bbf939e351"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d351dc1ebbab7b55e74ebcc0f860530"><td class="memItemLeft" align="right" valign="top">QColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a7d351dc1ebbab7b55e74ebcc0f860530">plotBackgroundColor</a> () const</td></tr>
+<tr class="memdesc:a7d351dc1ebbab7b55e74ebcc0f860530"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the plot's background color.  <a href="class_isis_1_1_plot_window.html#a7d351dc1ebbab7b55e74ebcc0f860530">More...</a><br /></td></tr>
+<tr class="separator:a7d351dc1ebbab7b55e74ebcc0f860530"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ab7d8d3c7065e1085fd15a3e5c4214a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a0ab7d8d3c7065e1085fd15a3e5c4214a">plotCurves</a> ()</td></tr>
+<tr class="memdesc:a0ab7d8d3c7065e1085fd15a3e5c4214a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a comprehensive list of the plot curves inside of this plot window, excluding plot curves that are in the process of being removed.  <a href="class_isis_1_1_plot_window.html#a0ab7d8d3c7065e1085fd15a3e5c4214a">More...</a><br /></td></tr>
+<tr class="separator:a0ab7d8d3c7065e1085fd15a3e5c4214a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4463cfa30c932fcb1b6402c1c539a381"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; const <a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a4463cfa30c932fcb1b6402c1c539a381">plotCurves</a> () const</td></tr>
+<tr class="memdesc:a4463cfa30c932fcb1b6402c1c539a381"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a comprehensive const list of the plot curves inside of this plot window, excluding plot curves that are in the process of being removed.  <a href="class_isis_1_1_plot_window.html#a4463cfa30c932fcb1b6402c1c539a381">More...</a><br /></td></tr>
+<tr class="separator:a4463cfa30c932fcb1b6402c1c539a381"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3e7e2fe1abf02e5701d7058697bc614"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; QwtPlotSpectrogram * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#af3e7e2fe1abf02e5701d7058697bc614">plotSpectrograms</a> ()</td></tr>
+<tr class="memdesc:af3e7e2fe1abf02e5701d7058697bc614"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a comprehensive list of the scatter plots (spectrograms) inside of this plot window.  <a href="class_isis_1_1_plot_window.html#af3e7e2fe1abf02e5701d7058697bc614">More...</a><br /></td></tr>
+<tr class="separator:af3e7e2fe1abf02e5701d7058697bc614"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac51bcb7d7deb529f0d8cafb3cbcda718"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; const QwtPlotSpectrogram * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ac51bcb7d7deb529f0d8cafb3cbcda718">plotSpectrograms</a> () const</td></tr>
+<tr class="memdesc:ac51bcb7d7deb529f0d8cafb3cbcda718"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a comprehensive const list of the scatter plots (spectrograms) inside of this plot window.  <a href="class_isis_1_1_plot_window.html#ac51bcb7d7deb529f0d8cafb3cbcda718">More...</a><br /></td></tr>
+<tr class="separator:ac51bcb7d7deb529f0d8cafb3cbcda718"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cffc8e55603cb318c9a93ed6d76be99"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a4cffc8e55603cb318c9a93ed6d76be99">plotTitle</a> () const</td></tr>
+<tr class="memdesc:a4cffc8e55603cb318c9a93ed6d76be99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the plot title.  <a href="class_isis_1_1_plot_window.html#a4cffc8e55603cb318c9a93ed6d76be99">More...</a><br /></td></tr>
+<tr class="separator:a4cffc8e55603cb318c9a93ed6d76be99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9a0b5c19eb950e8fb68c4f956d588b0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ad9a0b5c19eb950e8fb68c4f956d588b0">userCanAddCurves</a> () const</td></tr>
+<tr class="memdesc:ad9a0b5c19eb950e8fb68c4f956d588b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ask if a user action can add this curve to this window in general.  <a href="class_isis_1_1_plot_window.html#ad9a0b5c19eb950e8fb68c4f956d588b0">More...</a><br /></td></tr>
+<tr class="separator:ad9a0b5c19eb950e8fb68c4f956d588b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ee1761f68265dae806679991d95e390"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a9ee1761f68265dae806679991d95e390">xAxisUnits</a> () const</td></tr>
+<tr class="memdesc:a9ee1761f68265dae806679991d95e390"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the data-type of the curves' x data in this plot window.  <a href="class_isis_1_1_plot_window.html#a9ee1761f68265dae806679991d95e390">More...</a><br /></td></tr>
+<tr class="separator:a9ee1761f68265dae806679991d95e390"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3480eb0a6e8f20807c5c45e07a41801"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ad3480eb0a6e8f20807c5c45e07a41801">yAxisUnits</a> () const</td></tr>
+<tr class="memdesc:ad3480eb0a6e8f20807c5c45e07a41801"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the data-type of the curves' y data in this plot window.  <a href="class_isis_1_1_plot_window.html#ad3480eb0a6e8f20807c5c45e07a41801">More...</a><br /></td></tr>
+<tr class="separator:ad3480eb0a6e8f20807c5c45e07a41801"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2193b2ae278b909ec62e665eff1e784"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ad2193b2ae278b909ec62e665eff1e784">paint</a> (<a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *vp, QPainter *painter)</td></tr>
+<tr class="memdesc:ad2193b2ae278b909ec62e665eff1e784"><td class="mdescLeft">&#160;</td><td class="mdescRight">Paint plot curve information onto the viewport.  <a href="class_isis_1_1_plot_window.html#ad2193b2ae278b909ec62e665eff1e784">More...</a><br /></td></tr>
+<tr class="separator:ad2193b2ae278b909ec62e665eff1e784"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90b34418afd9596d7f7815dfbdfacbea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a90b34418afd9596d7f7815dfbdfacbea">replot</a> ()</td></tr>
+<tr class="memdesc:a90b34418afd9596d7f7815dfbdfacbea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the scale of the plot, replot it and emit plot changed.  <a href="class_isis_1_1_plot_window.html#a90b34418afd9596d7f7815dfbdfacbea">More...</a><br /></td></tr>
+<tr class="separator:a90b34418afd9596d7f7815dfbdfacbea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24042f6f580c85519868532394726943"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a24042f6f580c85519868532394726943">setAxisLabel</a> (int axisId, QString title)</td></tr>
+<tr class="memdesc:a24042f6f580c85519868532394726943"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the plots given axis title to the given string.  <a href="class_isis_1_1_plot_window.html#a24042f6f580c85519868532394726943">More...</a><br /></td></tr>
+<tr class="separator:a24042f6f580c85519868532394726943"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ee83e7b69458e35da3a59f59e3cee83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a5ee83e7b69458e35da3a59f59e3cee83">setPlotBackground</a> (QColor c)</td></tr>
+<tr class="memdesc:a5ee83e7b69458e35da3a59f59e3cee83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the plot background color to the given color.  <a href="class_isis_1_1_plot_window.html#a5ee83e7b69458e35da3a59f59e3cee83">More...</a><br /></td></tr>
+<tr class="separator:a5ee83e7b69458e35da3a59f59e3cee83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa127a67725d26d88576e14590d413801"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#aa127a67725d26d88576e14590d413801">setPlotTitle</a> (QString pt)</td></tr>
+<tr class="memdesc:aa127a67725d26d88576e14590d413801"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the plot title to the given string.  <a href="class_isis_1_1_plot_window.html#aa127a67725d26d88576e14590d413801">More...</a><br /></td></tr>
+<tr class="separator:aa127a67725d26d88576e14590d413801"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabe9ef1090339889e7bea51aea421eb3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#aabe9ef1090339889e7bea51aea421eb3">setUserCanAddCurves</a> (bool)</td></tr>
+<tr class="memdesc:aabe9ef1090339889e7bea51aea421eb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allow or disallow users from manually putting curves into this plot window through either copy-and-paste or drag-and-drop.  <a href="class_isis_1_1_plot_window.html#aabe9ef1090339889e7bea51aea421eb3">More...</a><br /></td></tr>
+<tr class="separator:aabe9ef1090339889e7bea51aea421eb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bfd46278c4429a99ead4593bef62ca1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a6bfd46278c4429a99ead4593bef62ca1">showWindow</a> ()</td></tr>
+<tr class="memdesc:a6bfd46278c4429a99ead4593bef62ca1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows the plot window, and raises it to the front of any overlapping sibling widgets.  <a href="class_isis_1_1_plot_window.html#a6bfd46278c4429a99ead4593bef62ca1">More...</a><br /></td></tr>
+<tr class="separator:a6bfd46278c4429a99ead4593bef62ca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4e77a26ff2038943618d9d76c303ca4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#ab4e77a26ff2038943618d9d76c303ca4">update</a> (<a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *activeViewport)</td></tr>
+<tr class="memdesc:ab4e77a26ff2038943618d9d76c303ca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is provided to allow children to react to tool updates.  <a href="class_isis_1_1_plot_window.html#ab4e77a26ff2038943618d9d76c303ca4">More...</a><br /></td></tr>
+<tr class="separator:ab4e77a26ff2038943618d9d76c303ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a6a7a8780e96476963be651bb3ded5ad0"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a6a7a8780e96476963be651bb3ded5ad0">defaultWindowTitle</a> ()</td></tr>
+<tr class="memdesc:a6a7a8780e96476963be651bb3ded5ad0"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the typical suffix for plot windows, it's here in case we want to update all plot windows to have a different ending than just 'Plot' on them (for example, 'Plot Window').  <a href="class_isis_1_1_plot_window.html#a6a7a8780e96476963be651bb3ded5ad0">More...</a><br /></td></tr>
+<tr class="separator:a6a7a8780e96476963be651bb3ded5ad0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b9b2fa9774f1d0e7a8292697711f05e"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_main_window.html#a9b9b2fa9774f1d0e7a8292697711f05e">settingsFileName</a> (QString objectTitle)</td></tr>
+<tr class="separator:a9b9b2fa9774f1d0e7a8292697711f05e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a17c4c2e2c5e42a922bc6ab0922f4cfb7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a17c4c2e2c5e42a922bc6ab0922f4cfb7">createWidgets</a> (<a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253">MenuOptions</a> optionsToProvide)</td></tr>
+<tr class="memdesc:a17c4c2e2c5e42a922bc6ab0922f4cfb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is called by the constructor to create the plot, legend.  <a href="class_isis_1_1_plot_window.html#a17c4c2e2c5e42a922bc6ab0922f4cfb7">More...</a><br /></td></tr>
+<tr class="separator:a17c4c2e2c5e42a922bc6ab0922f4cfb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeef3198639e34b0983fe516c653f0537"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#aeef3198639e34b0983fe516c653f0537">disableAxisAutoScale</a> ()</td></tr>
+<tr class="memdesc:aeef3198639e34b0983fe516c653f0537"><td class="mdescLeft">&#160;</td><td class="mdescRight">This turns off scaling the x/y axes automatically.  <a href="class_isis_1_1_plot_window.html#aeef3198639e34b0983fe516c653f0537">More...</a><br /></td></tr>
+<tr class="separator:aeef3198639e34b0983fe516c653f0537"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29ef1afe5d6463dff97da4fb620a6840"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a29ef1afe5d6463dff97da4fb620a6840">dragEnterEvent</a> (QDragEnterEvent *event)</td></tr>
+<tr class="memdesc:a29ef1afe5d6463dff97da4fb620a6840"><td class="mdescLeft">&#160;</td><td class="mdescRight">When a user drags data into our plot window, we need to indicate whether or not this data is compatible with this window.  <a href="class_isis_1_1_plot_window.html#a29ef1afe5d6463dff97da4fb620a6840">More...</a><br /></td></tr>
+<tr class="separator:a29ef1afe5d6463dff97da4fb620a6840"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88b37e0d2ca3956720e277e7c9e93ca7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#a88b37e0d2ca3956720e277e7c9e93ca7">dropEvent</a> (QDropEvent *event)</td></tr>
+<tr class="memdesc:a88b37e0d2ca3956720e277e7c9e93ca7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is called when a user drops data into our window.  <a href="class_isis_1_1_plot_window.html#a88b37e0d2ca3956720e277e7c9e93ca7">More...</a><br /></td></tr>
+<tr class="separator:a88b37e0d2ca3956720e277e7c9e93ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae02a33ef7936759301f28af8d5eb82b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#aae02a33ef7936759301f28af8d5eb82b">eventFilter</a> (<a class="el" href="class_q_object.html">QObject</a> *o, QEvent *e)</td></tr>
+<tr class="memdesc:aae02a33ef7936759301f28af8d5eb82b"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method filters the events of the objects it is connected to.  <a href="class_isis_1_1_plot_window.html#aae02a33ef7936759301f28af8d5eb82b">More...</a><br /></td></tr>
+<tr class="separator:aae02a33ef7936759301f28af8d5eb82b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec4f3e174de8a3d73dce93a801b68add"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#aec4f3e174de8a3d73dce93a801b68add">mousePressEvent</a> (<a class="el" href="class_q_object.html">QObject</a> *object, QMouseEvent *e)</td></tr>
+<tr class="memdesc:aec4f3e174de8a3d73dce93a801b68add"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a helper method for the <a class="el" href="class_isis_1_1_plot_window.html#aae02a33ef7936759301f28af8d5eb82b" title="This method filters the events of the objects it is connected to.">eventFilter()</a> method.  <a href="class_isis_1_1_plot_window.html#aec4f3e174de8a3d73dce93a801b68add">More...</a><br /></td></tr>
+<tr class="separator:aec4f3e174de8a3d73dce93a801b68add"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af31a894315675e6d544674ad9f5e55d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_qwt_plot.html">QwtPlot</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#af31a894315675e6d544674ad9f5e55d9">plot</a> ()</td></tr>
+<tr class="memdesc:af31a894315675e6d544674ad9f5e55d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the plot encapsulated by this <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a>.  <a href="class_isis_1_1_plot_window.html#af31a894315675e6d544674ad9f5e55d9">More...</a><br /></td></tr>
+<tr class="separator:af31a894315675e6d544674ad9f5e55d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4b1656a0612c5a388b00599d6308850"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#af4b1656a0612c5a388b00599d6308850">setMenus</a> (<a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_menu.html">QMenu</a> * &gt; menus, <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt; actions)</td></tr>
+<tr class="memdesc:af4b1656a0612c5a388b00599d6308850"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up the menus added from a parent object.  <a href="class_isis_1_1_plot_window.html#af4b1656a0612c5a388b00599d6308850">More...</a><br /></td></tr>
+<tr class="separator:af4b1656a0612c5a388b00599d6308850"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af42d3de47ae735960e58c94f11d1724d"><td class="memItemLeft" align="right" valign="top">QwtPlotZoomer *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_plot_window.html#af42d3de47ae735960e58c94f11d1724d">zoomer</a> ()</td></tr>
+<tr class="memdesc:af42d3de47ae735960e58c94f11d1724d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get this window's plot's zoomer.  <a href="class_isis_1_1_plot_window.html#af42d3de47ae735960e58c94f11d1724d">More...</a><br /></td></tr>
+<tr class="separator:af42d3de47ae735960e58c94f11d1724d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc6c9eb5249b09092bd3aa607fcb91a7"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_main_window.html#adc6c9eb5249b09092bd3aa607fcb91a7">settingsFileName</a> () const</td></tr>
+<tr class="separator:adc6c9eb5249b09092bd3aa607fcb91a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3eec3c168ee91af32a103c642034de82"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_main_window.html#a3eec3c168ee91af32a103c642034de82">closeEvent</a> (QCloseEvent *event)</td></tr>
+<tr class="memdesc:a3eec3c168ee91af32a103c642034de82"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is overridden so that we can be sure to write the current settings of the Main window.  <a href="class_isis_1_1_main_window.html#a3eec3c168ee91af32a103c642034de82">More...</a><br /></td></tr>
+<tr class="separator:a3eec3c168ee91af32a103c642034de82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7a32f7ed14371dbf3308ea50639e0b9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_main_window.html#ad7a32f7ed14371dbf3308ea50639e0b9">readSettings</a> (QSize defaultSize=QSize())</td></tr>
+<tr class="memdesc:ad7a32f7ed14371dbf3308ea50639e0b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method ensure that the settings get written even if the Main window was only hidden, not closed.  <a href="class_isis_1_1_main_window.html#ad7a32f7ed14371dbf3308ea50639e0b9">More...</a><br /></td></tr>
+<tr class="separator:ad7a32f7ed14371dbf3308ea50639e0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="section author"><dt>Author</dt><dd>????-??-?? Unknown </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a66fdb299d8e1aff1529174b11a41c253"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66fdb299d8e1aff1529174b11a41c253">&#9670;&nbsp;</a></span>MenuOptions</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253">Isis::PlotWindow::MenuOptions</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>There is a menu option for everything in the plot window's menu. </p>
+<p>This is provided so that you can enable/disable any given option. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253a45ab984fc7ae3aa4fcb19972e7fe3942"></a>ShowHideMarkersMenuOption&#160;</td><td class="fielddoc"><p>This option is titled 'Hide All Symbols' which hides all markers. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253ad37605aa618edff03b666f1c302a3dce"></a>ShowHideCurvesMenuOption&#160;</td><td class="fielddoc"><p>This option is titled 'Hide All Curves' which makes all curves invisible. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253a7cf52e5efd76cdfebb876b1a19fed93a"></a>ShowTableMenuOption&#160;</td><td class="fielddoc"><p>This option brings up the table. </p>
+<p>No table will be available without this option. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253a5ce909e5dc4094ca7797ad8ece3d6a45"></a>SaveMenuOption&#160;</td><td class="fielddoc"><p>This option exports the plot into a standard image format. </p>
+<p>No conversion to a standard image format file will be available without this option, but printing will still be available. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253a32fcb1a04b482b33b919a8956ad4cfd8"></a>PrintMenuOption&#160;</td><td class="fielddoc"><p>This option sends the plot to a printer. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253ac1ab21e93748c7588436fe035d6ba7c9"></a>TrackMenuOption&#160;</td><td class="fielddoc"><p>This option enables mouse tracking on the plot area (displays next to the mouse which x/y point you are hovering over). </p>
+<p>This option is by default disabled. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253aec300dd5ba9ce0fb23dea1d71f039717"></a>BackgroundSwitchMenuOption&#160;</td><td class="fielddoc"><p>This option enables the ability for a user to change the background color of the plot from black to white. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253a60138a5ae48c6aca3172eea427d9715b"></a>ShowHideGridMenuOption&#160;</td><td class="fielddoc"><p>This option enables the ability for a user to enable a grid over the plot area. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253a9ddd9ad86b988c44a5d216fc7de0c497"></a>RenameLabelsMenuOption&#160;</td><td class="fielddoc"><p>This option enables the ability for a user to change the x/y axis labels and plot title. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253aed575c08bc67526a9f6946d069b7ba63"></a>SetDisplayRangeMenuOption&#160;</td><td class="fielddoc"><p>This option allows the user to set the x/y axis display value ranges. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253a449771d1c611f657fac8da807befb725"></a>ResetScaleMenuOption&#160;</td><td class="fielddoc"><p>This option provides the user with an alternative zoom out button. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253a8af57eec7eb79534755dd0f94ceca411"></a>ClearPlotMenuOption&#160;</td><td class="fielddoc"><p>This option allows the user to delete all of the data inside the plot. </p>
+<p>If you don't want the user deleting a custom plot item, you should disable this option. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253ab1681b3cdc8ae6d3b604e12ee7aa1094"></a>DefaultHelpMenuOption&#160;</td><td class="fielddoc"><p>Not implemented. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253a1b1eb18acbcc28fb5ad40e69a324c944"></a>LineFitMenuOption&#160;</td><td class="fielddoc"><p>This option allows the user to create a best fit line for any of the scatter plot data or cube plot curve data in the window. </p>
+<p>This allows the user to create new plot curves. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253a54d4d997f2261ec8b613cf6d432f8d9d"></a>ConfigurePlotMenuOption&#160;</td><td class="fielddoc"><p>This option allows the user to change the curve name, color, style size, and symbol of the curve. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a66fdb299d8e1aff1529174b11a41c253a7de984a3379095fb0db75c6e66aef211"></a>AllMenuOptions&#160;</td><td class="fielddoc"><p>This is all of the available menu options. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a535855616aab42a9ea38e0cbc4cee941"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a535855616aab42a9ea38e0cbc4cee941">&#9670;&nbsp;</a></span>HistogramPlotWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::HistogramPlotWindow::HistogramPlotWindow </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>title</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor, creates a new <a class="el" href="class_isis_1_1_histogram_plot_window.html">HistogramPlotWindow</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">title</td><td></td></tr>
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#af31a894315675e6d544674ad9f5e55d9">Isis::PlotWindow::plot()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#a5ee83e7b69458e35da3a59f59e3cee83">Isis::PlotWindow::setPlotBackground()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a242faec0c197bc53e3a92af754cb688c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a242faec0c197bc53e3a92af754cb688c">&#9670;&nbsp;</a></span>add() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::add</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method adds the curves to the plot. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pc</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a242faec0c197bc53e3a92af754cb688c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a242faec0c197bc53e3a92af754cb688c">&#9670;&nbsp;</a></span>add() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::add </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> *&#160;</td>
+          <td class="paramname"><em>pc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method adds the curves to the plot. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pc</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_curve.html#aa80911b42d14bf36686e754d461b4968">Isis::PlotCurve::attachMarkers()</a>, <a class="el" href="class_isis_1_1_plot_window.html#abbcf32608418b80b3719e0bbf939e351">Isis::PlotWindow::canAdd()</a>, <a class="el" href="class_isis_1_1_plot_window.html#abbe679fce33fb74c4b7f1889e4f1a17d">Isis::PlotWindow::fillTable()</a>, <a class="el" href="class_isis_1_1_plot_window.html#af31a894315675e6d544674ad9f5e55d9">Isis::PlotWindow::plot()</a>, <a class="el" href="class_isis_1_1_plot_window.html#a3668e0aa24a111bd867c5aa9ed978625">Isis::PlotWindow::plotChanged()</a>, <a class="el" href="class_isis_1_1_plot_window.html#a90b34418afd9596d7f7815dfbdfacbea">Isis::PlotWindow::replot()</a>, <a class="el" href="class_isis_1_1_plot_window.html#a725fe44507b14f09ad37544b2ff68644">Isis::PlotWindow::resetScale()</a>, and <a class="el" href="class_isis_1_1_cube_plot_curve.html#addb9123a188fd24dd90db07e6c0190e8">Isis::CubePlotCurve::updateLegendItemWidget()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#a88b37e0d2ca3956720e277e7c9e93ca7">Isis::PlotWindow::dropEvent()</a>.</p>
+
+</div>
+</div>
+<a id="aa0c1071b9b223f4c4ef1d2bc8ef80cc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0c1071b9b223f4c4ef1d2bc8ef80cc9">&#9670;&nbsp;</a></span>add() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::HistogramPlotWindow::add </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_histogram_item.html">HistogramItem</a> *&#160;</td>
+          <td class="paramname"><em>hi</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add a <a class="el" href="class_isis_1_1_histogram_item.html" title="This is the (qwt) plot item for a histogram.">HistogramItem</a> to the plot. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hi</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#af31a894315675e6d544674ad9f5e55d9">Isis::PlotWindow::plot()</a>.</p>
+
+</div>
+</div>
+<a id="abbcf32608418b80b3719e0bbf939e351"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbcf32608418b80b3719e0bbf939e351">&#9670;&nbsp;</a></span>canAdd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::PlotWindow::canAdd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> *&#160;</td>
+          <td class="paramname"><em>curveToTest</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method tests whethere or not a <a class="el" href="class_isis_1_1_cube_plot_curve.html" title="This is a plot curve with information relating it to a particular cube or region of a cube.">CubePlotCurve</a> can be successfully added to this window. </p>
+<p>Plot curves with mismatched X/Y data from the plot's x/y axis types can not be added to the window. This does not test whether or not a user is allowed to add the curve manually, just if the curve can be added programatically.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">curveToTest</td><td>The plot curve to test for compatibility with this window </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the curve is compatible with this window, false otherwise </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_curve.html#a8414c7492e4758c8670aff5cfdc044ed">Isis::PlotCurve::xUnits()</a>, and <a class="el" href="class_isis_1_1_plot_curve.html#a431f80528cb4666946326ef84619434a">Isis::PlotCurve::yUnits()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#a242faec0c197bc53e3a92af754cb688c">Isis::PlotWindow::add()</a>.</p>
+
+</div>
+</div>
+<a id="ab3523b7d159239eab9e2a3ca20f9a69a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3523b7d159239eab9e2a3ca20f9a69a">&#9670;&nbsp;</a></span>changePlotLabels</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::changePlotLabels </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method creates the dialog box which allows the user to relabel the plot window. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#af31a894315675e6d544674ad9f5e55d9">Isis::PlotWindow::plot()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#adf826950c797c3d2c4201214a72d84b2">Isis::PlotWindow::setLabels()</a>.</p>
+
+</div>
+</div>
+<a id="ad407116247e4204328a2aa39fea4854c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad407116247e4204328a2aa39fea4854c">&#9670;&nbsp;</a></span>clearPlot</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::clearPlot </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method completely clears the plot of all plot items. </p>
+<p>i.e. curves and markers, which also deletes the legend also calls the necessary method to delete the table stuff </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#ad9bb72c47b7783bc0f51aafff774ad61">Isis::PlotWindow::clearPlotCurves()</a>, and <a class="el" href="class_isis_1_1_table_main_window.html#aea80a8b49c1e367eff6875bc57dcd1e0">Isis::TableMainWindow::table()</a>.</p>
+
+</div>
+</div>
+<a id="ad9bb72c47b7783bc0f51aafff774ad61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9bb72c47b7783bc0f51aafff774ad61">&#9670;&nbsp;</a></span>clearPlotCurves()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::clearPlotCurves </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method also clears the plot of all plot items, but does not call the table delete stuff This method is called from plotTool each time the changePlot() method is called. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#a90b34418afd9596d7f7815dfbdfacbea">Isis::PlotWindow::replot()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#ad407116247e4204328a2aa39fea4854c">Isis::PlotWindow::clearPlot()</a>.</p>
+
+</div>
+</div>
+<a id="a1f1292ce1cb99f8df7a53f19a91f6e82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f1292ce1cb99f8df7a53f19a91f6e82">&#9670;&nbsp;</a></span>closed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::closed </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Emitted when there is a close event on this window that will be accepted. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#aae02a33ef7936759301f28af8d5eb82b">Isis::PlotWindow::eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="a3eec3c168ee91af32a103c642034de82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3eec3c168ee91af32a103c642034de82">&#9670;&nbsp;</a></span>closeEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MainWindow::closeEvent </td>
+          <td>(</td>
+          <td class="paramtype">QCloseEvent *&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method is overridden so that we can be sure to write the current settings of the Main window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_viewport_main_window.html#a5c81c61b4e76caff118d28cdbfb0e14c">Isis::ViewportMainWindow</a>, and <a class="el" href="class_isis_1_1_table_main_window.html#abcd8c8c829ecfe7060f5ae5c00296dad">Isis::TableMainWindow</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_main_window.html#abcd8c8c829ecfe7060f5ae5c00296dad">Isis::TableMainWindow::closeEvent()</a>, and <a class="el" href="class_isis_1_1_viewport_main_window.html#a5c81c61b4e76caff118d28cdbfb0e14c">Isis::ViewportMainWindow::closeEvent()</a>.</p>
+
+</div>
+</div>
+<a id="ab8a44666f23edb8ce000d4e7373f6d72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8a44666f23edb8ce000d4e7373f6d72">&#9670;&nbsp;</a></span>configurePlotCurves</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::configurePlotCurves </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method creates a <a class="el" href="class_isis_1_1_cube_plot_curve_configure_dialog.html" title="This should be an inner class for CubePlotCurve, but Qt doesn&#39;t support having a QObject as an inner ...">CubePlotCurveConfigureDialog</a> object. </p>
+<p>When there are no curves in this <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a>, the dialog will not be created. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#a3668e0aa24a111bd867c5aa9ed978625">Isis::PlotWindow::plotChanged()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#a0ab7d8d3c7065e1085fd15a3e5c4214a">Isis::PlotWindow::plotCurves()</a>.</p>
+
+</div>
+</div>
+<a id="a7359044c465debc7ead9b5b3dd8f97a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7359044c465debc7ead9b5b3dd8f97a0">&#9670;&nbsp;</a></span>createBestFitLine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::createBestFitLine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method prompts the user to select the best fit line criterea. </p>
+<p>The <a class="el" href="class_isis_1_1_plot_window_best_fit_dialog.html">PlotWindowBestFitDialog</a> will create the best fit line automatically when the user asks for one, so we don't need to worry about doing any more than showing a dialog here. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#af31a894315675e6d544674ad9f5e55d9">Isis::PlotWindow::plot()</a>.</p>
+
+</div>
+</div>
+<a id="a17c4c2e2c5e42a922bc6ab0922f4cfb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17c4c2e2c5e42a922bc6ab0922f4cfb7">&#9670;&nbsp;</a></span>createWidgets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::createWidgets </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253">MenuOptions</a>&#160;</td>
+          <td class="paramname"><em>optionsToProvide</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method is called by the constructor to create the plot, legend. </p>
+<p>zoomer, and main window.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">optionsToProvide</td><td>This is a bit-flag containing information on which menu options to give the user/put in the GUI. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>.</p>
+
+</div>
+</div>
+<a id="a6a7a8780e96476963be651bb3ded5ad0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a7a8780e96476963be651bb3ded5ad0">&#9670;&nbsp;</a></span>defaultWindowTitle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PlotWindow::defaultWindowTitle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is the typical suffix for plot windows, it's here in case we want to update all plot windows to have a different ending than just 'Plot' on them (for example, 'Plot Window'). </p>
+<dl class="section return"><dt>Returns</dt><dd>A string to be appended to your window title </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_histogram_tool.html#afe917955f1ecf808f6bfdcdfa94e3c9a">Isis::HistogramTool::createWindow()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#a89d7a397f1bfa229c059a313166b1c5f">Isis::SpatialPlotTool::createWindow()</a>, and <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a963e6a9e6085503a3742af20358d3cc8">Isis::SpectralPlotTool::createWindow()</a>.</p>
+
+</div>
+</div>
+<a id="aeef3198639e34b0983fe516c653f0537"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeef3198639e34b0983fe516c653f0537">&#9670;&nbsp;</a></span>disableAxisAutoScale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::disableAxisAutoScale </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This turns off scaling the x/y axes automatically. </p>
+<p>Use this if you have a very specific axis range you want to use, but keep in mind that users (potentially) have an option to re-enable axis auto scaling if they want to. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_scatter_plot_window.html#a0e6d7e30c00cfeaac8d0142850eb00bf">Isis::ScatterPlotWindow::ScatterPlotWindow()</a>.</p>
+
+</div>
+</div>
+<a id="a29ef1afe5d6463dff97da4fb620a6840"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29ef1afe5d6463dff97da4fb620a6840">&#9670;&nbsp;</a></span>dragEnterEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::dragEnterEvent </td>
+          <td>(</td>
+          <td class="paramtype">QDragEnterEvent *&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>When a user drags data into our plot window, we need to indicate whether or not this data is compatible with this window. </p>
+<p>This checks userCanAddCurve() on the drag &amp; drop data and allows or disallowed the event accordingly.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>The drag event to test </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a88b37e0d2ca3956720e277e7c9e93ca7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88b37e0d2ca3956720e277e7c9e93ca7">&#9670;&nbsp;</a></span>dropEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::dropEvent </td>
+          <td>(</td>
+          <td class="paramtype">QDropEvent *&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is called when a user drops data into our window. </p>
+<p>The <a class="el" href="class_isis_1_1_plot_window.html#a29ef1afe5d6463dff97da4fb620a6840" title="When a user drags data into our plot window, we need to indicate whether or not this data is compatib...">dragEnterEvent()</a> must have said that this curve is compatible with this window. This provides all of the available options to the user (if any) set by the creator of the drag &amp; drop event (i.e. whether or not we can move or just copy). If there are options, we create a context menu - otherwise the default action is taken.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>The drop event containing the curve to put into the current window. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#a242faec0c197bc53e3a92af754cb688c">Isis::PlotWindow::add()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#a3668e0aa24a111bd867c5aa9ed978625">Isis::PlotWindow::plotChanged()</a>.</p>
+
+</div>
+</div>
+<a id="aae02a33ef7936759301f28af8d5eb82b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae02a33ef7936759301f28af8d5eb82b">&#9670;&nbsp;</a></span>eventFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::PlotWindow::eventFilter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>o</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QEvent *&#160;</td>
+          <td class="paramname"><em>e</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method filters the events of the objects it is connected to. </p>
+<p>In this case, the eventFilter has been installed on the m_plot and m_legend. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">o</td><td></td></tr>
+    <tr><td class="paramname">e</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_scatter_plot_window.html#a959b168285b378c0b7d0a2c3c86a6d8e">Isis::ScatterPlotWindow</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#a1f1292ce1cb99f8df7a53f19a91f6e82">Isis::PlotWindow::closed()</a>, <a class="el" href="class_isis_1_1_plot_window.html#aec4f3e174de8a3d73dce93a801b68add">Isis::PlotWindow::mousePressEvent()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#af31a894315675e6d544674ad9f5e55d9">Isis::PlotWindow::plot()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_scatter_plot_window.html#a959b168285b378c0b7d0a2c3c86a6d8e">Isis::ScatterPlotWindow::eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="abbe679fce33fb74c4b7f1889e4f1a17d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbe679fce33fb74c4b7f1889e4f1a17d">&#9670;&nbsp;</a></span>fillTable</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::fillTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Fills in the table with the data from the current curves in the plotWindow immediately. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_table_main_window.html#a0eaae6c20a5f21feab29757e8206a2b4">Isis::TableMainWindow::addToTable()</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_table_main_window.html#ad0081fb5463288aa60f03bb2f77fc03a">Isis::TableMainWindow::listWidget()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_plot_window.html#a0ab7d8d3c7065e1085fd15a3e5c4214a">Isis::PlotWindow::plotCurves()</a>, <a class="el" href="class_isis_1_1_table_main_window.html#aea80a8b49c1e367eff6875bc57dcd1e0">Isis::TableMainWindow::table()</a>, <a class="el" href="namespace_isis.html#ad7233a0dfd589ede203db382294b286c">Isis::toDouble()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#a242faec0c197bc53e3a92af754cb688c">Isis::PlotWindow::add()</a>, <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#acb661187b7487bbedff08f54509f57b7">Isis::PlotWindow::showTable()</a>.</p>
+
+</div>
+</div>
+<a id="afc5f743d8aad1c0325b6de8e9595f466"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc5f743d8aad1c0325b6de8e9595f466">&#9670;&nbsp;</a></span>getDockWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_dock_widget.html">QDockWidget</a>* Isis::HistogramPlotWindow::getDockWidget </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_histogram_tool.html#ad7354352a9a02070d3ed8031f8eb505f">Isis::HistogramTool::refreshPlot()</a>.</p>
+
+</div>
+</div>
+<a id="ad1f145c3ba07aa51835c7af064a1e816"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1f145c3ba07aa51835c7af064a1e816">&#9670;&nbsp;</a></span>getHistItem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_histogram_item.html">HistogramItem</a>* Isis::HistogramPlotWindow::getHistItem </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7d275888c03656ff21ff64e698acd668"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d275888c03656ff21ff64e698acd668">&#9670;&nbsp;</a></span>getNumItems()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::HistogramPlotWindow::getNumItems </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aec4f3e174de8a3d73dce93a801b68add"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec4f3e174de8a3d73dce93a801b68add">&#9670;&nbsp;</a></span>mousePressEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::mousePressEvent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>object</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QMouseEvent *&#160;</td>
+          <td class="paramname"><em>event</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is a helper method for the <a class="el" href="class_isis_1_1_plot_window.html#aae02a33ef7936759301f28af8d5eb82b" title="This method filters the events of the objects it is connected to.">eventFilter()</a> method. </p>
+<p>When a mouse press event is seen, this handles it. For example, if the user right clicks and the clipboard contains compatible data then this will give a paste option.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">object</td><td>The object which was pressed </td></tr>
+    <tr><td class="paramname">event</td><td>The mouse event which contains button information </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#aae02a33ef7936759301f28af8d5eb82b">Isis::PlotWindow::eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="ad2193b2ae278b909ec62e665eff1e784"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2193b2ae278b909ec62e665eff1e784">&#9670;&nbsp;</a></span>paint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::paint </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td>
+          <td class="paramname"><em>vp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QPainter *&#160;</td>
+          <td class="paramname"><em>painter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Paint plot curve information onto the viewport. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vp</td><td>The cube viewport to paint onto </td></tr>
+    <tr><td class="paramname">painter</td><td>The painter to use for painting </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_scatter_plot_window.html#a1b8a83358ccc40a99e827b9f235d1feb">Isis::ScatterPlotWindow</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_plot_curve.html#a3baaa9533b97bab3729a59c23008493d">Isis::CubePlotCurve::paint()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#a0ab7d8d3c7065e1085fd15a3e5c4214a">Isis::PlotWindow::plotCurves()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_scatter_plot_window.html#a1b8a83358ccc40a99e827b9f235d1feb">Isis::ScatterPlotWindow::paint()</a>, and <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a4da829c85b00c9fa3f8fa49faee5249d">Isis::AbstractPlotTool::paintViewport()</a>.</p>
+
+</div>
+</div>
+<a id="af31a894315675e6d544674ad9f5e55d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af31a894315675e6d544674ad9f5e55d9">&#9670;&nbsp;</a></span>plot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_qwt_plot.html">QwtPlot</a> * Isis::PlotWindow::plot </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the plot encapsulated by this <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="class_qwt_plot.html">QwtPlot</a> that this window encapsulates. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#a242faec0c197bc53e3a92af754cb688c">Isis::PlotWindow::add()</a>, <a class="el" href="class_isis_1_1_histogram_plot_window.html#aa0c1071b9b223f4c4ef1d2bc8ef80cc9">add()</a>, <a class="el" href="class_isis_1_1_plot_window.html#ab3523b7d159239eab9e2a3ca20f9a69a">Isis::PlotWindow::changePlotLabels()</a>, <a class="el" href="class_isis_1_1_scatter_plot_window.html#a56d5b2ff36c5caf51fc3c0a7ecc11834">Isis::ScatterPlotWindow::colorPlot()</a>, <a class="el" href="class_isis_1_1_plot_window.html#a7359044c465debc7ead9b5b3dd8f97a0">Isis::PlotWindow::createBestFitLine()</a>, <a class="el" href="class_isis_1_1_plot_window.html#aae02a33ef7936759301f28af8d5eb82b">Isis::PlotWindow::eventFilter()</a>, <a class="el" href="class_isis_1_1_scatter_plot_window.html#a959b168285b378c0b7d0a2c3c86a6d8e">Isis::ScatterPlotWindow::eventFilter()</a>, <a class="el" href="class_isis_1_1_histogram_plot_window.html#a535855616aab42a9ea38e0cbc4cee941">HistogramPlotWindow()</a>, <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>, <a class="el" href="class_isis_1_1_scatter_plot_window.html#a0e6d7e30c00cfeaac8d0142850eb00bf">Isis::ScatterPlotWindow::ScatterPlotWindow()</a>, <a class="el" href="class_isis_1_1_plot_window.html#ace0ef2ff3c63efd135fe83b74c43f5f9">Isis::PlotWindow::setDefaultRange()</a>, and <a class="el" href="class_isis_1_1_scatter_plot_window.html#a6c70e4021fffccc9e22a9b5a2a58158e">Isis::ScatterPlotWindow::setMousePosition()</a>.</p>
+
+</div>
+</div>
+<a id="a7d351dc1ebbab7b55e74ebcc0f860530"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d351dc1ebbab7b55e74ebcc0f860530">&#9670;&nbsp;</a></span>plotBackgroundColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QColor Isis::PlotWindow::plotBackgroundColor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the plot's background color. </p>
+<dl class="section return"><dt>Returns</dt><dd>QColor </dd></dl>
+
+</div>
+</div>
+<a id="a3668e0aa24a111bd867c5aa9ed978625"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3668e0aa24a111bd867c5aa9ed978625">&#9670;&nbsp;</a></span>plotChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::plotChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Emitted every time there is a change to the plot window. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#a242faec0c197bc53e3a92af754cb688c">Isis::PlotWindow::add()</a>, <a class="el" href="class_isis_1_1_plot_window.html#ab8a44666f23edb8ce000d4e7373f6d72">Isis::PlotWindow::configurePlotCurves()</a>, <a class="el" href="class_isis_1_1_plot_window.html#a88b37e0d2ca3956720e277e7c9e93ca7">Isis::PlotWindow::dropEvent()</a>, <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#a90b34418afd9596d7f7815dfbdfacbea">Isis::PlotWindow::replot()</a>.</p>
+
+</div>
+</div>
+<a id="a0ab7d8d3c7065e1085fd15a3e5c4214a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ab7d8d3c7065e1085fd15a3e5c4214a">&#9670;&nbsp;</a></span>plotCurves() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> * &gt; Isis::PlotWindow::plotCurves </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a comprehensive list of the plot curves inside of this plot window, excluding plot curves that are in the process of being removed. </p>
+<dl class="section return"><dt>Returns</dt><dd>The plot curves contained inside of this plot window </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_curve.html#a07815eb6a88775ddccfc90a3222008c1">Isis::PlotCurve::color()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#ab8a44666f23edb8ce000d4e7373f6d72">Isis::PlotWindow::configurePlotCurves()</a>, <a class="el" href="class_isis_1_1_plot_window.html#abbe679fce33fb74c4b7f1889e4f1a17d">Isis::PlotWindow::fillTable()</a>, <a class="el" href="class_isis_1_1_plot_window.html#ad2193b2ae278b909ec62e665eff1e784">Isis::PlotWindow::paint()</a>, <a class="el" href="class_isis_1_1_plot_window.html#acb661187b7487bbedff08f54509f57b7">Isis::PlotWindow::showTable()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#afb28c461abe0fd49c94aa80ec074de1f">Isis::PlotWindow::~PlotWindow()</a>.</p>
+
+</div>
+</div>
+<a id="a4463cfa30c932fcb1b6402c1c539a381"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4463cfa30c932fcb1b6402c1c539a381">&#9670;&nbsp;</a></span>plotCurves() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; const <a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> * &gt; Isis::PlotWindow::plotCurves </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a comprehensive const list of the plot curves inside of this plot window, excluding plot curves that are in the process of being removed. </p>
+<dl class="section return"><dt>Returns</dt><dd>The const plot curves contained inside of this plot window </dd></dl>
+
+</div>
+</div>
+<a id="af3e7e2fe1abf02e5701d7058697bc614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3e7e2fe1abf02e5701d7058697bc614">&#9670;&nbsp;</a></span>plotSpectrograms() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; QwtPlotSpectrogram * &gt; Isis::PlotWindow::plotSpectrograms </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a comprehensive list of the scatter plots (spectrograms) inside of this plot window. </p>
+<dl class="section return"><dt>Returns</dt><dd>The spectrograms (scatter plots) contained inside of this plot window </dd></dl>
+
+</div>
+</div>
+<a id="ac51bcb7d7deb529f0d8cafb3cbcda718"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac51bcb7d7deb529f0d8cafb3cbcda718">&#9670;&nbsp;</a></span>plotSpectrograms() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; const QwtPlotSpectrogram * &gt; Isis::PlotWindow::plotSpectrograms </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a comprehensive const list of the scatter plots (spectrograms) inside of this plot window. </p>
+<dl class="section return"><dt>Returns</dt><dd>The const spectrograms (scatter plots) contained inside of this plot window </dd></dl>
+
+</div>
+</div>
+<a id="a4cffc8e55603cb318c9a93ed6d76be99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cffc8e55603cb318c9a93ed6d76be99">&#9670;&nbsp;</a></span>plotTitle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PlotWindow::plotTitle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the plot title. </p>
+<dl class="section return"><dt>Returns</dt><dd>QwtText </dd></dl>
+
+</div>
+</div>
+<a id="a5b24be449660be00e502095927b4fb44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b24be449660be00e502095927b4fb44">&#9670;&nbsp;</a></span>printPlot</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::printPlot </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Provides printing support of the plot image. </p>
+
+</div>
+</div>
+<a id="ad7a32f7ed14371dbf3308ea50639e0b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7a32f7ed14371dbf3308ea50639e0b9">&#9670;&nbsp;</a></span>readSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MainWindow::readSettings </td>
+          <td>(</td>
+          <td class="paramtype">QSize&#160;</td>
+          <td class="paramname"><em>defaultSize</em> = <code>QSize()</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method ensure that the settings get written even if the Main window was only hidden, not closed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>This method is called from the constructor so that when the Main window is created, it know's it's size and location. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_main_window.html#adc6c9eb5249b09092bd3aa607fcb91a7">Isis::MainWindow::settingsFileName()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>, <a class="el" href="class_isis_1_1_table_main_window.html#ad583fb099027dcf93411eecff6fdee8f">Isis::TableMainWindow::TableMainWindow()</a>, and <a class="el" href="class_isis_1_1_viewport_main_window.html#a9d0d80bea57b87adb0c6d645200a0414">Isis::ViewportMainWindow::ViewportMainWindow()</a>.</p>
+
+</div>
+</div>
+<a id="a90b34418afd9596d7f7815dfbdfacbea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90b34418afd9596d7f7815dfbdfacbea">&#9670;&nbsp;</a></span>replot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::replot </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reset the scale of the plot, replot it and emit plot changed. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#a3668e0aa24a111bd867c5aa9ed978625">Isis::PlotWindow::plotChanged()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#a725fe44507b14f09ad37544b2ff68644">Isis::PlotWindow::resetScale()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#a242faec0c197bc53e3a92af754cb688c">Isis::PlotWindow::add()</a>, <a class="el" href="class_isis_1_1_plot_window.html#ad9bb72c47b7783bc0f51aafff774ad61">Isis::PlotWindow::clearPlotCurves()</a>, <a class="el" href="class_isis_1_1_scatter_plot_window.html#a56d5b2ff36c5caf51fc3c0a7ecc11834">Isis::ScatterPlotWindow::colorPlot()</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#ad7354352a9a02070d3ed8031f8eb505f">Isis::HistogramTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aef3783202967d8913df6d5a9f1921637">Isis::SpatialPlotTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a61ba135b941bbebd623fdd1f0dec3012">Isis::SpectralPlotTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_scatter_plot_window.html#a0e6d7e30c00cfeaac8d0142850eb00bf">Isis::ScatterPlotWindow::ScatterPlotWindow()</a>, <a class="el" href="class_isis_1_1_spectral_plot_window.html#a93e445668b577ac4a25088e9d24e7c2f">Isis::SpectralPlotWindow::setBandMarkersVisible()</a>, <a class="el" href="class_isis_1_1_plot_window.html#ab46b97e88358b87c1d3049b002e04e41">Isis::PlotWindow::setUserValues()</a>, and <a class="el" href="class_isis_1_1_scatter_plot_window.html#aa9e33291ba8479b92568285e82c8567d">Isis::ScatterPlotWindow::showHideContour()</a>.</p>
+
+</div>
+</div>
+<a id="a6180e2cc61fa46413a859c04b0bb1f0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6180e2cc61fa46413a859c04b0bb1f0d">&#9670;&nbsp;</a></span>requestFillTable</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::requestFillTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#aed6ee3f4a97149e7e3b56d61ffbb7c01">Isis::PlotWindow::scheduleFillTable()</a>.</p>
+
+</div>
+</div>
+<a id="a725fe44507b14f09ad37544b2ff68644"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a725fe44507b14f09ad37544b2ff68644">&#9670;&nbsp;</a></span>resetScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::resetScale </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets plot scale back to the defaults. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928a008f48a03bf3709cf514c567b383caf7">Isis::PlotCurve::Band</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#a242faec0c197bc53e3a92af754cb688c">Isis::PlotWindow::add()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#a90b34418afd9596d7f7815dfbdfacbea">Isis::PlotWindow::replot()</a>.</p>
+
+</div>
+</div>
+<a id="ac472cc980b7983df541ac061e03b96f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac472cc980b7983df541ac061e03b96f1">&#9670;&nbsp;</a></span>savePlot</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::savePlot </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method allows the user to save the plot as a png, jpg, or tif image file. </p>
+
+</div>
+</div>
+<a id="aed6ee3f4a97149e7e3b56d61ffbb7c01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed6ee3f4a97149e7e3b56d61ffbb7c01">&#9670;&nbsp;</a></span>scheduleFillTable</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::scheduleFillTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Fills in the table with the data from the current curves in the plotWindow once all current actions/activations are done. </p>
+<p>This is provided for performance reasons - re-plotting 4 curves only requires one fillTable at the end, instead of after each curve change. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#a6180e2cc61fa46413a859c04b0bb1f0d">Isis::PlotWindow::requestFillTable()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>.</p>
+
+</div>
+</div>
+<a id="a24042f6f580c85519868532394726943"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24042f6f580c85519868532394726943">&#9670;&nbsp;</a></span>setAxisLabel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::setAxisLabel </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axisId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>title</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the plots given axis title to the given string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">axisId</td><td></td></tr>
+    <tr><td class="paramname">title</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ace0ef2ff3c63efd135fe83b74c43f5f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace0ef2ff3c63efd135fe83b74c43f5f9">&#9670;&nbsp;</a></span>setDefaultRange</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::setDefaultRange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Resets the x/y min/max to the defaults. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#af31a894315675e6d544674ad9f5e55d9">Isis::PlotWindow::plot()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#ab46b97e88358b87c1d3049b002e04e41">Isis::PlotWindow::setUserValues()</a>.</p>
+
+</div>
+</div>
+<a id="adf826950c797c3d2c4201214a72d84b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf826950c797c3d2c4201214a72d84b2">&#9670;&nbsp;</a></span>setLabels</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::setLabels </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Makes the user specified changes to the plot labels. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#ab3523b7d159239eab9e2a3ca20f9a69a">Isis::PlotWindow::changePlotLabels()</a>.</p>
+
+</div>
+</div>
+<a id="af4b1656a0612c5a388b00599d6308850"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4b1656a0612c5a388b00599d6308850">&#9670;&nbsp;</a></span>setMenus()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::setMenus </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_menu.html">QMenu</a> * &gt;&#160;</td>
+          <td class="paramname"><em>menu</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt;&#160;</td>
+          <td class="paramname"><em>actions</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets up the menus added from a parent object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">menu</td><td></td></tr>
+    <tr><td class="paramname">actions</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5ee83e7b69458e35da3a59f59e3cee83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ee83e7b69458e35da3a59f59e3cee83">&#9670;&nbsp;</a></span>setPlotBackground()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::setPlotBackground </td>
+          <td>(</td>
+          <td class="paramtype">QColor&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the plot background color to the given color. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_histogram_plot_window.html#a535855616aab42a9ea38e0cbc4cee941">HistogramPlotWindow()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>.</p>
+
+</div>
+</div>
+<a id="aa127a67725d26d88576e14590d413801"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa127a67725d26d88576e14590d413801">&#9670;&nbsp;</a></span>setPlotTitle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::setPlotTitle </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>pt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the plot title to the given string. </p>
+<p>This does not update the window title.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pt</td><td>The plot title to use </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>.</p>
+
+</div>
+</div>
+<a id="adc6c9eb5249b09092bd3aa607fcb91a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc6c9eb5249b09092bd3aa607fcb91a7">&#9670;&nbsp;</a></span>settingsFileName() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::MainWindow::settingsFileName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_main_window.html#a756bcc3836fbf1070e585ffbb395f57c">Isis::TableMainWindow::readColumnSettings()</a>, <a class="el" href="class_isis_1_1_table_main_window.html#acbbc5c742336407060d4a8b7d7428f57">Isis::TableMainWindow::readItemSettings()</a>, <a class="el" href="class_isis_1_1_blink_tool.html#ad1b4de14f926c0d46fe384ae7cb7f561">Isis::BlinkTool::readSettings()</a>, <a class="el" href="class_isis_1_1_main_window.html#ad7a32f7ed14371dbf3308ea50639e0b9">Isis::MainWindow::readSettings()</a>, <a class="el" href="class_isis_1_1_blink_tool.html#ab63c1508c93eb1d9052144536abe9cbb">Isis::BlinkTool::writeSettings()</a>, and <a class="el" href="class_isis_1_1_table_main_window.html#a5656986431759816378b7ec1fbf00106">Isis::TableMainWindow::writeSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a9b9b2fa9774f1d0e7a8292697711f05e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b9b2fa9774f1d0e7a8292697711f05e">&#9670;&nbsp;</a></span>settingsFileName() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::MainWindow::settingsFileName </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>objectTitle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+</div>
+</div>
+<a id="aabe9ef1090339889e7bea51aea421eb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabe9ef1090339889e7bea51aea421eb3">&#9670;&nbsp;</a></span>setUserCanAddCurves()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::setUserCanAddCurves </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>userHasControl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Allow or disallow users from manually putting curves into this plot window through either copy-and-paste or drag-and-drop. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">userHasControl</td><td>True if users can add curves manually, false otherwise </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab46b97e88358b87c1d3049b002e04e41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab46b97e88358b87c1d3049b002e04e41">&#9670;&nbsp;</a></span>setUserValues</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::setUserValues </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method sets the scale for the axis according to the user specified numbers. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#a90b34418afd9596d7f7815dfbdfacbea">Isis::PlotWindow::replot()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#ace0ef2ff3c63efd135fe83b74c43f5f9">Isis::PlotWindow::setDefaultRange()</a>.</p>
+
+</div>
+</div>
+<a id="ac8e6464f0e7deb141e45bbe600f85f21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8e6464f0e7deb141e45bbe600f85f21">&#9670;&nbsp;</a></span>showHelp</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::showHelp </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method creates and shows the help dialog box for the plot window. </p>
+<p>this is called from the Help--&gt;Basic Help menu. </p>
+
+</div>
+</div>
+<a id="a54ba786ce00eed09e41d316aad08b1e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54ba786ce00eed09e41d316aad08b1e1">&#9670;&nbsp;</a></span>showHideAllCurves</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::showHideAllCurves </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method shows or hides all of the curves in the plotWindow. </p>
+
+</div>
+</div>
+<a id="a35de4042278437b82b3a70bca0c0a192"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35de4042278437b82b3a70bca0c0a192">&#9670;&nbsp;</a></span>showHideAllMarkers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::showHideAllMarkers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Shows/Hides all the markers(symbols) </p>
+
+</div>
+</div>
+<a id="ab66d63f544a9c3cb52b224e4bcfe974d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab66d63f544a9c3cb52b224e4bcfe974d">&#9670;&nbsp;</a></span>showHideGrid</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::showHideGrid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method hides/shows the grid on the plotWindow and changes the text for the action. </p>
+
+</div>
+</div>
+<a id="acb661187b7487bbedff08f54509f57b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb661187b7487bbedff08f54509f57b7">&#9670;&nbsp;</a></span>showTable</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::showTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method is called from the showTable action on the tool bar There are some checks done to make sure there are data to fill the table. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#abbe679fce33fb74c4b7f1889e4f1a17d">Isis::PlotWindow::fillTable()</a>, <a class="el" href="class_isis_1_1_plot_window.html#a0ab7d8d3c7065e1085fd15a3e5c4214a">Isis::PlotWindow::plotCurves()</a>, <a class="el" href="class_isis_1_1_table_main_window.html#a8fbeb281e24d3b3506e0b9cd7f0bd11e">Isis::TableMainWindow::setTrackListItems()</a>, and <a class="el" href="class_isis_1_1_table_main_window.html#a872b365c50d75ea7ff51238723bbdbf8">Isis::TableMainWindow::syncColumns()</a>.</p>
+
+</div>
+</div>
+<a id="a6bfd46278c4429a99ead4593bef62ca1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bfd46278c4429a99ead4593bef62ca1">&#9670;&nbsp;</a></span>showWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::showWindow </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Shows the plot window, and raises it to the front of any overlapping sibling widgets. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a9a22ce58ca14cb72ea374bb81e7162c2">Isis::AbstractPlotTool::showPlotWindow()</a>.</p>
+
+</div>
+</div>
+<a id="ae99c66332b13604b2d2c5b6a402a85b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae99c66332b13604b2d2c5b6a402a85b6">&#9670;&nbsp;</a></span>switchBackground</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::switchBackground </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method toggles the plot background color between black and white. </p>
+
+</div>
+</div>
+<a id="a9985dd86077cd0cc8d03b98f1b6d5891"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9985dd86077cd0cc8d03b98f1b6d5891">&#9670;&nbsp;</a></span>trackerEnabled</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::trackerEnabled </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enables the plot mouse tracker. </p>
+
+</div>
+</div>
+<a id="ab4e77a26ff2038943618d9d76c303ca4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4e77a26ff2038943618d9d76c303ca4">&#9670;&nbsp;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PlotWindow::update </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td>
+          <td class="paramname"><em>activeViewport</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is provided to allow children to react to tool updates. </p>
+<p>This is useful for example for band markers in the spectral plots.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">activeViewport</td><td>The currently selected viewport </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_spectral_plot_window.html#af13f1014fecfc74e830be5347e9d8670">Isis::SpectralPlotWindow</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_plot_tool.html#abc485e45e96f564af7bbb50c3d86c076">Isis::AbstractPlotTool::updateTool()</a>.</p>
+
+</div>
+</div>
+<a id="ad9a0b5c19eb950e8fb68c4f956d588b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9a0b5c19eb950e8fb68c4f956d588b0">&#9670;&nbsp;</a></span>userCanAddCurves()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::PlotWindow::userCanAddCurves </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Ask if a user action can add this curve to this window in general. </p>
+<p>This verifies that the user is allowed to add curves to this window but not that a particular curve is compatible with this window.</p>
+<dl class="section return"><dt>Returns</dt><dd>True if the user should be allowed to paste/drop curves in general into this window </dd></dl>
+
+</div>
+</div>
+<a id="a9ee1761f68265dae806679991d95e390"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ee1761f68265dae806679991d95e390">&#9670;&nbsp;</a></span>xAxisUnits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a> Isis::PlotWindow::xAxisUnits </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is the data-type of the curves' x data in this plot window. </p>
+<p>All of the cube plot curves must have the same units for x axis data or the display will not make sense.</p>
+<dl class="section return"><dt>Returns</dt><dd>X-Axis Curve Data Units </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aef3783202967d8913df6d5a9f1921637">Isis::SpatialPlotTool::refreshPlot()</a>, and <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a61ba135b941bbebd623fdd1f0dec3012">Isis::SpectralPlotTool::refreshPlot()</a>.</p>
+
+</div>
+</div>
+<a id="ad3480eb0a6e8f20807c5c45e07a41801"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3480eb0a6e8f20807c5c45e07a41801">&#9670;&nbsp;</a></span>yAxisUnits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a> Isis::PlotWindow::yAxisUnits </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is the data-type of the curves' y data in this plot window. </p>
+<p>All of the cube plot curves must have the same units for y-left axis data (y-right sometimes has different units) or the display will not make sense.</p>
+<dl class="section return"><dt>Returns</dt><dd>Left Y-Axis Data Units </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow()</a>.</p>
+
+</div>
+</div>
+<a id="af42d3de47ae735960e58c94f11d1724d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af42d3de47ae735960e58c94f11d1724d">&#9670;&nbsp;</a></span>zoomer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QwtPlotZoomer * Isis::PlotWindow::zoomer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get this window's plot's zoomer. </p>
+<dl class="section return"><dt>Returns</dt><dd>A QwtPlotZoomer which is associated with this <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a>'s <a class="el" href="class_qwt_plot.html">QwtPlot</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_scatter_plot_window.html#a0e6d7e30c00cfeaac8d0142850eb00bf">Isis::ScatterPlotWindow::ScatterPlotWindow()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/HistogramTool/<a class="el" href="_histogram_plot_window_8h_source.html">HistogramPlotWindow.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/HistogramTool/<a class="el" href="_histogram_plot_window_8cpp.html">HistogramPlotWindow.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_histogram_plot_window.html">HistogramPlotWindow</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

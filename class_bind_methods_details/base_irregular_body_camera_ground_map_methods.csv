@@ -1,0 +1,7 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+IrregularBodyCameraGroundMap,"Spice, Instruments, and Cameras",isis/src/base/objs/IrregularBodyCameraGroundMap/IrregularBodyCameraGroundMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,IrregularBodyCameraGroundMap,isis_pybind.IrregularBodyCameraGroundMap,N,Python class symbol not found in current binding files
+Construction/Enum,IrregularBodyCameraGroundMap(),isis_pybind.IrregularBodyCameraGroundMap(),N,Constructor binding not detected in current binding files
+Public API,"virtual bool GetXY(const SurfacePoint &spoint, double *cudx, double *cudy)",isis_pybind.IrregularBodyCameraGroundMap.get_xy,N,Method not found in current binding files

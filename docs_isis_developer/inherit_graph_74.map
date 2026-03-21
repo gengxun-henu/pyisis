@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$struct_isis_1_1_default_copy.html" title="(Default) Policy for copying map elements" alt="" coords="10,164,166,192"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_collector_map.html" title=" " alt="" coords="232,89,404,149"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_collector_map.html" title=" " alt="" coords="232,173,404,233"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_collector_map.html" title=" " alt="" coords="232,257,404,317"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_collector_map.html" title=" " alt="" coords="247,341,389,385"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_collector_map.html" title="Collector/container for arbitrary items." alt="" coords="219,5,417,65"/>
+<area shape="rect" id="node7" href="$struct_isis_1_1_noop_removal.html" title="Supplies a NOOP default for removal of a CollectorMap entry." alt="" coords="5,216,171,244"/>
+</map>

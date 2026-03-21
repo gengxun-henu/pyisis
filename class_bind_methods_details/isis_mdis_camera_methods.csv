@@ -1,0 +1,11 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+MdisCamera,Messenger,isis/src/messenger/objs/MdisCamera/MdisCamera.h,isis_pybind_standalone/src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,MdisCamera,isis_pybind.MdisCamera,Y,Python class symbol is exported; constructor exposure may be limited; 第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖
+Construction/Enum,MdisCamera(),isis_pybind.MdisCamera(),N,第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖
+Public API,"virtual std::pair <iTime, iTime> ShutterOpenCloseTimes(double time, double exposureDuration)",isis_pybind.MdisCamera.shutter_open_close_times,N,第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖
+Public API,virtual int CkFrameId() const { return (-236000); },isis_pybind.MdisCamera.ck_frame_id,N,第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖
+Public API,virtual int CkReferenceId() const { return (1); },isis_pybind.MdisCamera.ck_reference_id,N,第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖
+Public API,virtual int SpkTargetId() const { return (-236); },isis_pybind.MdisCamera.spk_target_id,N,第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖
+Public API,virtual int SpkReferenceId() const { return (1); },isis_pybind.MdisCamera.spk_reference_id,N,第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖

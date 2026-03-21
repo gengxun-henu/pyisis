@@ -1,0 +1,1008 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::HiBlob Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_hi_blob.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_hi_blob-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::HiBlob Class Reference<div class="ingroups"><a class="el" href="group___mission.html">Mission Specific Objects</a> &raquo; <a class="el" href="group___mars_reconnaissance_orbiter.html">Mars Reconnaissance Orbiter</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>BLOB extraction class.  
+ <a href="class_isis_1_1_hi_blob.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_hi_blob_8h_source.html">HiBlob.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::HiBlob:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_hi_blob__inherit__graph.png" border="0" usemap="#a_isis_1_1_hi_blob_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_hi_blob_inherit__map" id="a_isis_1_1_hi_blob_inherit__map">
+<area shape="rect" title="BLOB extraction class." alt="" coords="22,311,111,440"/>
+<area shape="rect" href="class_isis_1_1_blobber.html" title="Base class for accessing ISIS blobs." alt="" coords="5,5,128,263"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::HiBlob:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_hi_blob__coll__graph.png" border="0" usemap="#a_isis_1_1_hi_blob_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_hi_blob_coll__map" id="a_isis_1_1_hi_blob_coll__map">
+<area shape="rect" title="BLOB extraction class." alt="" coords="22,311,111,440"/>
+<area shape="rect" href="class_isis_1_1_blobber.html" title="Base class for accessing ISIS blobs." alt="" coords="5,5,128,263"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a5818d9b61f06192b9e8c15f2c885d8a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_hi_blob.html#a5818d9b61f06192b9e8c15f2c885d8a2">HiBlob</a> ()</td></tr>
+<tr class="memdesc:a5818d9b61f06192b9e8c15f2c885d8a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default, mostly useless constructor.  <a href="class_isis_1_1_hi_blob.html#a5818d9b61f06192b9e8c15f2c885d8a2">More...</a><br /></td></tr>
+<tr class="separator:a5818d9b61f06192b9e8c15f2c885d8a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8af98a4e7a57dd9851ed33e4aaef437a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_hi_blob.html#a8af98a4e7a57dd9851ed33e4aaef437a">HiBlob</a> (<a class="el" href="class_isis_1_1_cube.html">Cube</a> &amp;cube, const QString &amp;tblname, const QString &amp;field, const QString &amp;name=&quot;HiBlob&quot;)</td></tr>
+<tr class="memdesc:a8af98a4e7a57dd9851ed33e4aaef437a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor providing interface to an ISIS <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> object.  <a href="class_isis_1_1_hi_blob.html#a8af98a4e7a57dd9851ed33e4aaef437a">More...</a><br /></td></tr>
+<tr class="separator:a8af98a4e7a57dd9851ed33e4aaef437a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2362531008de641eb6f6635f21503de0"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_hi_blob.html#a2362531008de641eb6f6635f21503de0">~HiBlob</a> ()</td></tr>
+<tr class="memdesc:a2362531008de641eb6f6635f21503de0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_hi_blob.html#a2362531008de641eb6f6635f21503de0">More...</a><br /></td></tr>
+<tr class="separator:a2362531008de641eb6f6635f21503de0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad83a541a1364a7b612d16a41cca8f7ca"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_isis.html#a62fc9c73b6f1c50de9cd715ac68df3e2">HiMatrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_hi_blob.html#ad83a541a1364a7b612d16a41cca8f7ca">buffer</a> () const</td></tr>
+<tr class="memdesc:ad83a541a1364a7b612d16a41cca8f7ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a reference to the data.  <a href="class_isis_1_1_hi_blob.html#ad83a541a1364a7b612d16a41cca8f7ca">More...</a><br /></td></tr>
+<tr class="separator:ad83a541a1364a7b612d16a41cca8f7ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a590f84a18e15ea1c6d4be3aaadec95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_blobber.html">Blobber</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a7a590f84a18e15ea1c6d4be3aaadec95">deepcopy</a> () const</td></tr>
+<tr class="memdesc:a7a590f84a18e15ea1c6d4be3aaadec95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a unique copy of this blob.  <a href="class_isis_1_1_blobber.html#a7a590f84a18e15ea1c6d4be3aaadec95">More...</a><br /></td></tr>
+<tr class="separator:a7a590f84a18e15ea1c6d4be3aaadec95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e203894f1329b0d10c0c46fe62a7ebe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a9e203894f1329b0d10c0c46fe62a7ebe">setName</a> (const QString &amp;name)</td></tr>
+<tr class="memdesc:a9e203894f1329b0d10c0c46fe62a7ebe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the name of this class instantiation.  <a href="class_isis_1_1_blobber.html#a9e203894f1329b0d10c0c46fe62a7ebe">More...</a><br /></td></tr>
+<tr class="separator:a9e203894f1329b0d10c0c46fe62a7ebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44f2fbd2b978d4cf5f49867faf8f8ae3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a44f2fbd2b978d4cf5f49867faf8f8ae3">setBlobName</a> (const QString &amp;bname)</td></tr>
+<tr class="memdesc:a44f2fbd2b978d4cf5f49867faf8f8ae3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the name of the ISIS BLOB object that contains the data.  <a href="class_isis_1_1_blobber.html#a44f2fbd2b978d4cf5f49867faf8f8ae3">More...</a><br /></td></tr>
+<tr class="separator:a44f2fbd2b978d4cf5f49867faf8f8ae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2271d51683121c5daab8b135eeffd59d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a2271d51683121c5daab8b135eeffd59d">setFieldName</a> (const QString &amp;fname)</td></tr>
+<tr class="memdesc:a2271d51683121c5daab8b135eeffd59d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets field name in the ISIS BLOB object that contains data.  <a href="class_isis_1_1_blobber.html#a2271d51683121c5daab8b135eeffd59d">More...</a><br /></td></tr>
+<tr class="separator:a2271d51683121c5daab8b135eeffd59d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bbecd7e7878ae9fb86053d29a7dbefe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a3bbecd7e7878ae9fb86053d29a7dbefe">size</a> () const</td></tr>
+<tr class="memdesc:a3bbecd7e7878ae9fb86053d29a7dbefe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total number of elements (rows * columns) in blob.  <a href="class_isis_1_1_blobber.html#a3bbecd7e7878ae9fb86053d29a7dbefe">More...</a><br /></td></tr>
+<tr class="separator:a3bbecd7e7878ae9fb86053d29a7dbefe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afac7926da97a462e3f4e6f6cc93fb891"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#afac7926da97a462e3f4e6f6cc93fb891">Lines</a> () const</td></tr>
+<tr class="memdesc:afac7926da97a462e3f4e6f6cc93fb891"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of rows or lines in the BLOB.  <a href="class_isis_1_1_blobber.html#afac7926da97a462e3f4e6f6cc93fb891">More...</a><br /></td></tr>
+<tr class="separator:afac7926da97a462e3f4e6f6cc93fb891"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51f4e8f620ab39d0db97ed25d8fd472f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a51f4e8f620ab39d0db97ed25d8fd472f">Samples</a> () const</td></tr>
+<tr class="memdesc:a51f4e8f620ab39d0db97ed25d8fd472f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of columns or samples in the BLOB.  <a href="class_isis_1_1_blobber.html#a51f4e8f620ab39d0db97ed25d8fd472f">More...</a><br /></td></tr>
+<tr class="separator:a51f4e8f620ab39d0db97ed25d8fd472f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa69b9becda1907d6ea761a98c57e2862"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#aa69b9becda1907d6ea761a98c57e2862">getName</a> () const</td></tr>
+<tr class="memdesc:aa69b9becda1907d6ea761a98c57e2862"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the BLOB given to refer to this instantiation.  <a href="class_isis_1_1_blobber.html#aa69b9becda1907d6ea761a98c57e2862">More...</a><br /></td></tr>
+<tr class="separator:aa69b9becda1907d6ea761a98c57e2862"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e1af81d749e631928a9f6f45507121d"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a5e1af81d749e631928a9f6f45507121d">getBlobName</a> () const</td></tr>
+<tr class="memdesc:a5e1af81d749e631928a9f6f45507121d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the name of the <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object.  <a href="class_isis_1_1_blobber.html#a5e1af81d749e631928a9f6f45507121d">More...</a><br /></td></tr>
+<tr class="separator:a5e1af81d749e631928a9f6f45507121d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f1734ef3e5036705b6acc1517015165"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a0f1734ef3e5036705b6acc1517015165">getFieldName</a> () const</td></tr>
+<tr class="memdesc:a0f1734ef3e5036705b6acc1517015165"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retreive the name of the field in the Tabel object BLOB.  <a href="class_isis_1_1_blobber.html#a0f1734ef3e5036705b6acc1517015165">More...</a><br /></td></tr>
+<tr class="separator:a0f1734ef3e5036705b6acc1517015165"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5231c4aedc02626444edc36b24b575e8"><td class="memItemLeft" align="right" valign="top">double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a5231c4aedc02626444edc36b24b575e8">operator[]</a> (int i)</td></tr>
+<tr class="memdesc:a5231c4aedc02626444edc36b24b575e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ith row/line in the BLOB that can be further referenced into samples.  <a href="class_isis_1_1_blobber.html#a5231c4aedc02626444edc36b24b575e8">More...</a><br /></td></tr>
+<tr class="separator:a5231c4aedc02626444edc36b24b575e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8530a979f22454a38c7e01093ca7b67"><td class="memItemLeft" align="right" valign="top">double const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#ad8530a979f22454a38c7e01093ca7b67">operator[]</a> (int i) const</td></tr>
+<tr class="memdesc:ad8530a979f22454a38c7e01093ca7b67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ith row/line in the BLOB that can be further referenced into samples.  <a href="class_isis_1_1_blobber.html#ad8530a979f22454a38c7e01093ca7b67">More...</a><br /></td></tr>
+<tr class="separator:ad8530a979f22454a38c7e01093ca7b67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bd956a084be9baadd86dd2382ef2948"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a6bd956a084be9baadd86dd2382ef2948">load</a> (const QString &amp;filename)</td></tr>
+<tr class="memdesc:a6bd956a084be9baadd86dd2382ef2948"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the contents of a BLOB from a cube file.  <a href="class_isis_1_1_blobber.html#a6bd956a084be9baadd86dd2382ef2948">More...</a><br /></td></tr>
+<tr class="separator:a6bd956a084be9baadd86dd2382ef2948"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a653ba7cf5124d077afba742fc7b5343a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a653ba7cf5124d077afba742fc7b5343a">load</a> (<a class="el" href="class_isis_1_1_cube.html">Cube</a> &amp;cube)</td></tr>
+<tr class="memdesc:a653ba7cf5124d077afba742fc7b5343a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the contents of a BLOB from a <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> object.  <a href="class_isis_1_1_blobber.html#a653ba7cf5124d077afba742fc7b5343a">More...</a><br /></td></tr>
+<tr class="separator:a653ba7cf5124d077afba742fc7b5343a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:a75773818d71815fac33b880b105e16b1"><td class="memItemLeft" align="right" valign="top">typedef TNT::Array2D&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#a75773818d71815fac33b880b105e16b1">BlobBuf</a></td></tr>
+<tr class="memdesc:a75773818d71815fac33b880b105e16b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal buffer uses TNT.  <a href="class_isis_1_1_blobber.html#a75773818d71815fac33b880b105e16b1">More...</a><br /></td></tr>
+<tr class="separator:a75773818d71815fac33b880b105e16b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:aa08f34412c2d9a2800032e9b1a18d9b6"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_blobber.html#a75773818d71815fac33b880b105e16b1">BlobBuf</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_blobber.html#aa08f34412c2d9a2800032e9b1a18d9b6">ref</a> () const</td></tr>
+<tr class="memdesc:aa08f34412c2d9a2800032e9b1a18d9b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a const reference to the internal buffer for ease of use to derived objects.  <a href="class_isis_1_1_blobber.html#aa08f34412c2d9a2800032e9b1a18d9b6">More...</a><br /></td></tr>
+<tr class="separator:aa08f34412c2d9a2800032e9b1a18d9b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>BLOB extraction class. </p>
+<p>This class provides access and processing of HiRISE data as stored in an ISIS BLOB (<a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a>).</p>
+<p>Note that the file provided must be a HiRISE ISIS cube file that is freshly converted from a PDS compatable EDR (hi2isis). It must contain an ISIS <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> named "HiRISE
+Calibration Image". From that table, data is extracted from the "Calibration" field.</p>
+<dl class="section author"><dt>Author</dt><dd>2007-10-09 Kris Becker </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_blobber.html" title="Base class for accessing ISIS blobs.">Blobber</a> </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a75773818d71815fac33b880b105e16b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75773818d71815fac33b880b105e16b1">&#9670;&nbsp;</a></span>BlobBuf</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef TNT::Array2D&lt;double&gt; <a class="el" href="class_isis_1_1_blobber.html#a75773818d71815fac33b880b105e16b1">Isis::Blobber::BlobBuf</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Internal buffer uses TNT. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a5818d9b61f06192b9e8c15f2c885d8a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5818d9b61f06192b9e8c15f2c885d8a2">&#9670;&nbsp;</a></span>HiBlob() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::HiBlob::HiBlob </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Default, mostly useless constructor. </p>
+
+</div>
+</div>
+<a id="a8af98a4e7a57dd9851ed33e4aaef437a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8af98a4e7a57dd9851ed33e4aaef437a">&#9670;&nbsp;</a></span>HiBlob() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::HiBlob::HiBlob </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> &amp;&#160;</td>
+          <td class="paramname"><em>cube</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>tblname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>field</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em> = <code>&quot;HiBlob&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor providing interface to an ISIS <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> object. </p>
+
+</div>
+</div>
+<a id="a2362531008de641eb6f6635f21503de0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2362531008de641eb6f6635f21503de0">&#9670;&nbsp;</a></span>~HiBlob()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::HiBlob::~HiBlob </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad83a541a1364a7b612d16a41cca8f7ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad83a541a1364a7b612d16a41cca8f7ca">&#9670;&nbsp;</a></span>buffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespace_isis.html#a62fc9c73b6f1c50de9cd715ac68df3e2">HiMatrix</a>&amp; Isis::HiBlob::buffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return a reference to the data. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_blobber.html#aa08f34412c2d9a2800032e9b1a18d9b6">Isis::Blobber::ref()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hi_cal_data.html#a8b240dc1321486fa2b8601f1ae2611e0">Isis::HiCalData::load()</a>.</p>
+
+</div>
+</div>
+<a id="a7a590f84a18e15ea1c6d4be3aaadec95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a590f84a18e15ea1c6d4be3aaadec95">&#9670;&nbsp;</a></span>deepcopy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_blobber.html">Blobber</a> Isis::Blobber::deepcopy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a unique copy of this blob. </p>
+<p>This method creates a fully new copy of this object. The default copy constructors/methods create a reference to the data read from the <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object. For example, the following code fragment will result in two Blobbers that refer to the same memory location that stores the BLOB data:</p>
+<div class="fragment"><div class="line"><a class="code" href="class_isis_1_1_blobber.html#aa801c9aa106f49099ca7a30e83f2c487">Blobber</a> myblob = yourblob;</div>
+<div class="ttc" id="aclass_isis_1_1_blobber_html_aa801c9aa106f49099ca7a30e83f2c487"><div class="ttname"><a href="class_isis_1_1_blobber.html#aa801c9aa106f49099ca7a30e83f2c487">Isis::Blobber::Blobber</a></div><div class="ttdeci">Blobber()</div><div class="ttdoc">Default basic constructor that is mostly not useful.</div><div class="ttdef"><b>Definition:</b> Blobber.cpp:27</div></div>
+</div><!-- fragment --><p>To ensure you have two unique storage areas of the BLOB data so they can change independantly, use:</p>
+<div class="fragment"><div class="line"><a class="code" href="class_isis_1_1_blobber.html#aa801c9aa106f49099ca7a30e83f2c487">Blobber</a> myblob = yourblob.deepcopy();</div>
+</div><!-- fragment --><dl class="section return"><dt>Returns</dt><dd>(<a class="el" href="class_isis_1_1_blobber.html" title="Base class for accessing ISIS blobs.">Blobber</a>) Returns a completely new copy, including data, to caller. </dd></dl>
+
+</div>
+</div>
+<a id="a5e1af81d749e631928a9f6f45507121d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e1af81d749e631928a9f6f45507121d">&#9670;&nbsp;</a></span>getBlobName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Blobber::getBlobName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the name of the <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object. </p>
+<dl class="section return"><dt>Returns</dt><dd>(string) Name of the <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_blobber.html#a653ba7cf5124d077afba742fc7b5343a">Isis::Blobber::load()</a>.</p>
+
+</div>
+</div>
+<a id="a0f1734ef3e5036705b6acc1517015165"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f1734ef3e5036705b6acc1517015165">&#9670;&nbsp;</a></span>getFieldName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Blobber::getFieldName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retreive the name of the field in the Tabel object BLOB. </p>
+<dl class="section return"><dt>Returns</dt><dd>(string) Name of the BLOB field </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_blobber.html#a653ba7cf5124d077afba742fc7b5343a">Isis::Blobber::load()</a>.</p>
+
+</div>
+</div>
+<a id="aa69b9becda1907d6ea761a98c57e2862"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa69b9becda1907d6ea761a98c57e2862">&#9670;&nbsp;</a></span>getName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Blobber::getName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the name of the BLOB given to refer to this instantiation. </p>
+<dl class="section return"><dt>Returns</dt><dd>Name of BLOB instance </dd></dl>
+
+</div>
+</div>
+<a id="afac7926da97a462e3f4e6f6cc93fb891"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afac7926da97a462e3f4e6f6cc93fb891">&#9670;&nbsp;</a></span>Lines()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Blobber::Lines </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of rows or lines in the BLOB. </p>
+<dl class="section return"><dt>Returns</dt><dd>The lines or rows </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_blobber.html#a3bbecd7e7878ae9fb86053d29a7dbefe">Isis::Blobber::size()</a>.</p>
+
+</div>
+</div>
+<a id="a6bd956a084be9baadd86dd2382ef2948"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bd956a084be9baadd86dd2382ef2948">&#9670;&nbsp;</a></span>load() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Blobber::load </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads the contents of a BLOB from a cube file. </p>
+<p>Provides the I/O interface for ISIS cube files.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>(string&amp;) Name of ISIS cube file to read </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube.html#aa05a4870a3d19b9a5b57f12ede21ca86">Isis::Cube::open()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_blobber.html#a4f82e5686cdcf63fb56e94d33aae1ac2">Isis::Blobber::Blobber()</a>.</p>
+
+</div>
+</div>
+<a id="a653ba7cf5124d077afba742fc7b5343a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a653ba7cf5124d077afba742fc7b5343a">&#9670;&nbsp;</a></span>load() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Blobber::load </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> &amp;&#160;</td>
+          <td class="paramname"><em>cube</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads the contents of a BLOB from a <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> object. </p>
+<p>Provides the I/O interface for the <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> object. One thing to note here is that it creates a CubeInfo object from the <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> object and then calls the CubeInfo load method. Hence, this method is required as an intermediary method that cascades to the actual method that does the real work.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">cube</td><td>(<a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a>&amp;) Reference to an ISIS cube file that has been opened or created in the <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_blobber.html#a5e1af81d749e631928a9f6f45507121d">Isis::Blobber::getBlobName()</a>, <a class="el" href="class_isis_1_1_blobber.html#a0f1734ef3e5036705b6acc1517015165">Isis::Blobber::getFieldName()</a>, <a class="el" href="class_isis_1_1_table_field.html#a30382740e598bafef2e39b6f692d1080">Isis::TableField::isDouble()</a>, <a class="el" href="class_isis_1_1_table_field.html#a199fb4cf963788e0fb3934da4974c431">Isis::TableField::isInteger()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_cube.html#ab9ad5585f8588fd44e58a65a68d29115">Isis::Cube::readTable()</a>.</p>
+
+</div>
+</div>
+<a id="a5231c4aedc02626444edc36b24b575e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5231c4aedc02626444edc36b24b575e8">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double* Isis::Blobber::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the ith row/line in the BLOB that can be further referenced into samples. </p>
+<p>To access the 2nd sample in the 10th line use: </p><div class="fragment"><div class="line"><span class="keywordtype">double</span> sample = blobber[9][1];</div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>Index</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the ith row in the BLOB </dd></dl>
+
+</div>
+</div>
+<a id="ad8530a979f22454a38c7e01093ca7b67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8530a979f22454a38c7e01093ca7b67">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double const* Isis::Blobber::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the ith row/line in the BLOB that can be further referenced into samples. </p>
+<p>This method provides const access to the data in row matrix form. To access the 2nd sample in the 10th line use: </p><div class="fragment"><div class="line"><span class="keywordtype">double</span> sample = blobber[9][1];</div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>Index</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Const pointer to the ith row in the BLOB </dd></dl>
+
+</div>
+</div>
+<a id="aa08f34412c2d9a2800032e9b1a18d9b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa08f34412c2d9a2800032e9b1a18d9b6">&#9670;&nbsp;</a></span>ref()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_blobber.html#a75773818d71815fac33b880b105e16b1">BlobBuf</a>&amp; Isis::Blobber::ref </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a const reference to the internal buffer for ease of use to derived objects. </p>
+<dl class="section return"><dt>Returns</dt><dd>Const reference to BLOB buffer </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hi_blob.html#ad83a541a1364a7b612d16a41cca8f7ca">buffer()</a>.</p>
+
+</div>
+</div>
+<a id="a51f4e8f620ab39d0db97ed25d8fd472f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51f4e8f620ab39d0db97ed25d8fd472f">&#9670;&nbsp;</a></span>Samples()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Blobber::Samples </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of columns or samples in the BLOB. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of samples or columns </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_blobber.html#a3bbecd7e7878ae9fb86053d29a7dbefe">Isis::Blobber::size()</a>.</p>
+
+</div>
+</div>
+<a id="a44f2fbd2b978d4cf5f49867faf8f8ae3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44f2fbd2b978d4cf5f49867faf8f8ae3">&#9670;&nbsp;</a></span>setBlobName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Blobber::setBlobName </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>bname</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the name of the ISIS BLOB object that contains the data. </p>
+<p>This is name of a ISIS <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object that contains one or more fields that make up the BLOB. This is the value of the [i]Name[/i] keyword in the <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bname</td><td><a class="el" href="class_isis_1_1_blobber.html" title="Base class for accessing ISIS blobs.">Blobber</a> name </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2271d51683121c5daab8b135eeffd59d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2271d51683121c5daab8b135eeffd59d">&#9670;&nbsp;</a></span>setFieldName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Blobber::setFieldName </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>fname</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets field name in the ISIS BLOB object that contains data. </p>
+<p>This method sets the name of the field contained within the <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object BLOB from which the data is extracted.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fname</td><td>Field name </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9e203894f1329b0d10c0c46fe62a7ebe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e203894f1329b0d10c0c46fe62a7ebe">&#9670;&nbsp;</a></span>setName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Blobber::setName </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Specifies the name of this class instantiation. </p>
+<p>This is just an additional name that can be used to identify instantiations of this class. It provides a way to uniquely identify each object.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Unique name </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3bbecd7e7878ae9fb86053d29a7dbefe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bbecd7e7878ae9fb86053d29a7dbefe">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Blobber::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the total number of elements (rows * columns) in blob. </p>
+<dl class="section return"><dt>Returns</dt><dd>The product of rows and columns </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_blobber.html#afac7926da97a462e3f4e6f6cc93fb891">Isis::Blobber::Lines()</a>, and <a class="el" href="class_isis_1_1_blobber.html#a51f4e8f620ab39d0db97ed25d8fd472f">Isis::Blobber::Samples()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/mro/objs/HiCal/<a class="el" href="_hi_blob_8h_source.html">HiBlob.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_hi_blob.html">HiBlob</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Matrix,SensorUtilities,isis/src/base/objs/Matrix/Matrix.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,ISIS 同级 SensorUtilities 库；轻量值类型
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Matrix,isis_pybind.Matrix,N,Python class symbol not found in current binding files; ISIS 同级 SensorUtilities 库；轻量值类型
+Construction/Enum,Matrix(),isis_pybind.Matrix(),N,ISIS 同级 SensorUtilities 库；轻量值类型
+Static/Factory,static Matrix Identity(const int n),isis_pybind.Matrix.identity,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,inline int Rows() { return p_matrix.dim1(),isis_pybind.Matrix.rows,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,inline int Columns() { return p_matrix.dim2(),isis_pybind.Matrix.columns,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,double Determinant(),isis_pybind.Matrix.determinant,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,double Trace(),isis_pybind.Matrix.trace,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,std::vector<double> Eigenvalues(),isis_pybind.Matrix.eigenvalues,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Mutation/Configuration,Matrix Add(Matrix &matrix),isis_pybind.Matrix.add,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,Matrix Subtract(Matrix &matrix),isis_pybind.Matrix.subtract,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,Matrix Multiply(Matrix &matrix),isis_pybind.Matrix.multiply,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,Matrix Multiply(double scalar),isis_pybind.Matrix.multiply,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,Matrix MultiplyElementWise(Matrix &matrix),isis_pybind.Matrix.multiply_element_wise,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,Matrix Transpose(),isis_pybind.Matrix.transpose,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,Matrix Inverse(),isis_pybind.Matrix.inverse,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,Matrix Eigenvectors(),isis_pybind.Matrix.eigenvectors,N,ISIS 同级 SensorUtilities 库；轻量值类型

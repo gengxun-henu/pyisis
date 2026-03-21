@@ -1,0 +1,467 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::SubArea Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_sub_area.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_sub_area-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::SubArea Class Reference<div class="ingroups"><a class="el" href="group___high_level_cube_i_o.html">High Level Cube I/O</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Apply corrections to a cube label for subarea extraction.  
+ <a href="class_isis_1_1_sub_area.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_sub_area_8h_source.html">SubArea.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::SubArea:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_sub_area__coll__graph.png" border="0" usemap="#a_isis_1_1_sub_area_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_sub_area_coll__map" id="a_isis_1_1_sub_area_coll__map">
+<area shape="rect" title="Apply corrections to a cube label for subarea extraction." alt="" coords="5,5,120,135"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a957ed9b2101d22db2278822b16b0c624"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sub_area.html#a957ed9b2101d22db2278822b16b0c624">SubArea</a> ()</td></tr>
+<tr class="separator:a957ed9b2101d22db2278822b16b0c624"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad98eef8e02f8b8faf37285bf62113004"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sub_area.html#ad98eef8e02f8b8faf37285bf62113004">~SubArea</a> ()</td></tr>
+<tr class="separator:ad98eef8e02f8b8faf37285bf62113004"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9f5f64b42816697b6542c8d78fc76c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sub_area.html#ae9f5f64b42816697b6542c8d78fc76c2">SetSubArea</a> (const int orignl, const int origns, const int sl, const int ss, const int el, const int es, const double linc, const double sinc)</td></tr>
+<tr class="memdesc:ae9f5f64b42816697b6542c8d78fc76c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the subarea.  <a href="class_isis_1_1_sub_area.html#ae9f5f64b42816697b6542c8d78fc76c2">More...</a><br /></td></tr>
+<tr class="separator:ae9f5f64b42816697b6542c8d78fc76c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad16f422d6ffac7aff5f5c31ebbbda638"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sub_area.html#ad16f422d6ffac7aff5f5c31ebbbda638">UpdateLabel</a> (<a class="el" href="class_isis_1_1_cube.html">Cube</a> *icube, <a class="el" href="class_isis_1_1_cube.html">Cube</a> *ocube, <a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;results)</td></tr>
+<tr class="memdesc:ad16f422d6ffac7aff5f5c31ebbbda638"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modifies a label for a file containing a subarea.  <a href="class_isis_1_1_sub_area.html#ad16f422d6ffac7aff5f5c31ebbbda638">More...</a><br /></td></tr>
+<tr class="separator:ad16f422d6ffac7aff5f5c31ebbbda638"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Apply corrections to a cube label for subarea extraction. </p>
+<p>This class is used to apply corrections to a cube label when a subarea has been extracted. It is a base class which will take the cube label from the original cube file along with subarea information and generate a corrected cube label for the output cube file.</p>
+<p>If you would like to see <a class="el" href="class_isis_1_1_sub_area.html" title="Apply corrections to a cube label for subarea extraction.">SubArea</a> being used in implementation, see crop, reduce, enlarge, cropspecial, or pad.</p>
+<dl class="section author"><dt>Author</dt><dd>2009-10-02 Janet Barrett </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a957ed9b2101d22db2278822b16b0c624"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a957ed9b2101d22db2278822b16b0c624">&#9670;&nbsp;</a></span>SubArea()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SubArea::SubArea </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad98eef8e02f8b8faf37285bf62113004"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad98eef8e02f8b8faf37285bf62113004">&#9670;&nbsp;</a></span>~SubArea()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SubArea::~SubArea </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae9f5f64b42816697b6542c8d78fc76c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9f5f64b42816697b6542c8d78fc76c2">&#9670;&nbsp;</a></span>SetSubArea()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SubArea::SetSubArea </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>orignl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>origns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>sl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>ss</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>el</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>es</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>linc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>sinc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Defines the subarea. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">orignl</td><td>This is the number of lines in the original image.</td></tr>
+    <tr><td class="paramname">origns</td><td>This is the number of samples in the original image.</td></tr>
+    <tr><td class="paramname">sl</td><td>This is the line in the original image where the subarea will start at. This value must be greater than or equal to 1 and less than or equal to the number of lines in the original image.</td></tr>
+    <tr><td class="paramname">ss</td><td>This is the sample in the original image where the subarea will start at. This value must be greater than or equal to 1 and less than or equal to the number of samples in the original image.</td></tr>
+    <tr><td class="paramname">el</td><td>This is the ending line of the subarea to extract from the original image. This value must be greater than or equal to sl and less than or equal to the number of lines in the original image. The actual number of lines that will be in the subarea will be (el-sl+1)/linc.</td></tr>
+    <tr><td class="paramname">es</td><td>This is the ending sample of the subarea to extract from the original image. This value must be greater than or equal to ss and less than or equal to the number of samples in the original image. The actual number of samples that will be in the subarea will be (es-ss+1)/sinc.</td></tr>
+    <tr><td class="paramname">linc</td><td>This is the line increment that will be used to extract the subarea from the original image. It must be greater than 0.</td></tr>
+    <tr><td class="paramname">sinc</td><td>This is the sample increment that will be used to extract the subarea from the original image. It must be greater than 0. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_enlarge.html#af1d848cdfeda261c27d1eefd44aec13f">Isis::Enlarge::UpdateOutputLabel()</a>, and <a class="el" href="class_isis_1_1_reduce.html#a83f06d7b857e08441d58aaf7ff29b33c">Isis::Reduce::UpdateOutputLabel()</a>.</p>
+
+</div>
+</div>
+<a id="ad16f422d6ffac7aff5f5c31ebbbda638"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad16f422d6ffac7aff5f5c31ebbbda638">&#9670;&nbsp;</a></span>UpdateLabel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SubArea::UpdateLabel </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td>
+          <td class="paramname"><em>icube</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td>
+          <td class="paramname"><em>ocube</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;&#160;</td>
+          <td class="paramname"><em>results</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Modifies a label for a file containing a subarea. </p>
+<p>The <a class="el" href="class_isis_1_1_alpha_cube.html" title="This class is used to rewrite the &quot;alpha&quot; keywords out of the AlphaCube group or Instrument group.">AlphaCube</a>, Mapping, and Instrument groups are all affected when a subarea is extracted from another file. If the linc is not equal to the sinc, then the Instrument and Mapping groups will be removed from the label because they will no longer be valid. If the linc is equal to the sinc and they are not equal to 1, then the map scale and resolution in the Mapping group needs to be updated. The latitude and longitude ranges become invalid when the subarea does not cover the entire sample and line range of the original cube. Update the upper left corner x,y values if the projection is still valid and the starting line and/or starting sample have been changed from their location in the original file.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">icube</td><td>This is the input cube that will have the subarea extracted from it. The label of this cube will be used to create updated Mapping, Instrument, and <a class="el" href="class_isis_1_1_alpha_cube.html" title="This class is used to rewrite the &quot;alpha&quot; keywords out of the AlphaCube group or Instrument group.">AlphaCube</a> groups for the label of the output cube containing the subarea.</td></tr>
+    <tr><td class="paramname">ocube</td><td>This is the output cube file containing the subarea. The label of this cube will be modified by extracting the Mapping, Instrument, and <a class="el" href="class_isis_1_1_alpha_cube.html" title="This class is used to rewrite the &quot;alpha&quot; keywords out of the AlphaCube group or Instrument group.">AlphaCube</a> groups from the input label and putting them in this label.</td></tr>
+    <tr><td class="paramname">results</td><td>This is the Results group that will go into the application log file. This group must be created by the calling application. Information will be added to it if the Mapping or Instrument groups are deleted from the output image label. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_container.html#ad23c104f285206b85e42d1faf50eb171">Isis::PvlContainer::addKeyword()</a>, <a class="el" href="class_isis_1_1_cube.html#a1d6fc63d02e299e3d1aad1406a8e7998">Isis::Cube::deleteGroup()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#addebfb8ede51d12d0cb694ee15ae2e28">Isis::PvlContainer::deleteKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a4c09ebe5d216cb7711fccfe3f7ffac37">Isis::PvlObject::findObject()</a>, <a class="el" href="class_isis_1_1_t_projection.html#a3e7808d8ad0a018e34c0386c6eaac28e">Isis::TProjection::Has180Domain()</a>, <a class="el" href="class_isis_1_1_t_projection.html#ac34a297a023be0bfb62222debb632758">Isis::TProjection::Has360Domain()</a>, <a class="el" href="class_isis_1_1_cube.html#abeb3d6fa27be54a40451296a182fcdd1">Isis::Cube::hasGroup()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>, <a class="el" href="class_isis_1_1_t_projection.html#ac0b70f4257d2ca9eaf2a05a79fdad5d7">Isis::TProjection::IsEquatorialCylindrical()</a>, <a class="el" href="class_isis_1_1_projection.html#ad3951fb6f7b680483f71d620512db7b9">Isis::Projection::IsGood()</a>, <a class="el" href="class_isis_1_1_t_projection.html#ab257cb493253d841beef7a01349d5917">Isis::TProjection::IsPlanetographic()</a>, <a class="el" href="class_isis_1_1_t_projection.html#ae6595a81c2ee8e0d651e12bb83942b75">Isis::TProjection::IsPositiveEast()</a>, <a class="el" href="class_isis_1_1_cube.html#aed7cb063ce8a14d742b468eec69c21b7">Isis::Cube::label()</a>, <a class="el" href="class_isis_1_1_cube.html#a35280cce6e0301a9bbde9c2dac9a2dcd">Isis::Cube::lineCount()</a>, <a class="el" href="class_isis_1_1_t_projection.html#af5a2c37ea973c7295cc4bdbd1984161a">Isis::TProjection::Longitude()</a>, <a class="el" href="class_isis_1_1_cube.html#ae3c443e87b7ca5bf4856a693050ed750">Isis::Cube::projection()</a>, <a class="el" href="class_isis_1_1_cube.html#a64905e4a6708ca9b5f764f3ec1e78b36">Isis::Cube::putGroup()</a>, <a class="el" href="class_isis_1_1_cube.html#a6336fc0d356682258017972eeaf49c12">Isis::Cube::sampleCount()</a>, <a class="el" href="class_isis_1_1_projection.html#a293a2c433ebb72c53725631d5e27b879">Isis::Projection::SetWorld()</a>, <a class="el" href="class_isis_1_1_t_projection.html#a1f1564033fe545f03d0b9f9cbef3b67b">Isis::TProjection::To180Domain()</a>, <a class="el" href="namespace_isis.html#ad7233a0dfd589ede203db382294b286c">Isis::toDouble()</a>, <a class="el" href="class_isis_1_1_t_projection.html#af99ee3a2b5a98e899761506a171e66e2">Isis::TProjection::ToPlanetographic()</a>, <a class="el" href="class_isis_1_1_t_projection.html#aa99ba64bfc1d21c1685dd3333c4383de">Isis::TProjection::ToPositiveWest()</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, <a class="el" href="class_isis_1_1_t_projection.html#ada27261a5b3a46d568dcffcc9a6f341f">Isis::TProjection::UniversalLatitude()</a>, <a class="el" href="class_isis_1_1_t_projection.html#a4cc777bcc817995dd343dafcf82eb69f">Isis::TProjection::UniversalLongitude()</a>, <a class="el" href="class_isis_1_1_alpha_cube.html#a05dd7164a525064fef62e3625ac3886a">Isis::AlphaCube::UpdateGroup()</a>, <a class="el" href="class_isis_1_1_projection.html#a1c8c36a58d5bb65176a9fe5c76a5e86f">Isis::Projection::XCoord()</a>, and <a class="el" href="class_isis_1_1_projection.html#a676904683c2294f79181e0d359636b35">Isis::Projection::YCoord()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_enlarge.html#af1d848cdfeda261c27d1eefd44aec13f">Isis::Enlarge::UpdateOutputLabel()</a>, and <a class="el" href="class_isis_1_1_reduce.html#a83f06d7b857e08441d58aaf7ff29b33c">Isis::Reduce::UpdateOutputLabel()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/SubArea/<a class="el" href="_sub_area_8h_source.html">SubArea.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/SubArea/<a class="el" href="_sub_area_8cpp.html">SubArea.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_sub_area.html">SubArea</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

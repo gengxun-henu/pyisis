@@ -1,0 +1,2035 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Longitude Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_longitude.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_longitude-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Longitude Class Reference<div class="ingroups"><a class="el" href="group___utility.html">Utility</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This class is designed to encapsulate the concept of a <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a>.  
+ <a href="class_isis_1_1_longitude.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_longitude_8h_source.html">Longitude.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::Longitude:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_longitude__inherit__graph.png" border="0" usemap="#a_isis_1_1_longitude_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_longitude_inherit__map" id="a_isis_1_1_longitude_inherit__map">
+<area shape="rect" title="This class is designed to encapsulate the concept of a Longitude." alt="" coords="5,311,142,616"/>
+<area shape="rect" href="class_isis_1_1_angle.html" title="Defines an angle and provides unit conversions." alt="" coords="20,5,127,263"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::Longitude:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_longitude__coll__graph.png" border="0" usemap="#a_isis_1_1_longitude_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_longitude_coll__map" id="a_isis_1_1_longitude_coll__map">
+<area shape="rect" title="This class is designed to encapsulate the concept of a Longitude." alt="" coords="5,311,142,616"/>
+<area shape="rect" href="class_isis_1_1_angle.html" title="Defines an angle and provides unit conversions." alt="" coords="20,5,127,263"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a53b57c9b683cc524c2ece80870ef9783"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783">Direction</a> { <a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783a78b7729e805441d85d0168dcf4634b6a">PositiveEast</a>
+, <a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783a0f5508d9eef4261703b698c67a24099c">PositiveWest</a>
+ }</td></tr>
+<tr class="memdesc:a53b57c9b683cc524c2ece80870ef9783"><td class="mdescLeft">&#160;</td><td class="mdescRight">Possible longitude directions: Is a positive longitude towards east or towards west?  <a href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783">More...</a><br /></td></tr>
+<tr class="separator:a53b57c9b683cc524c2ece80870ef9783"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a720bd4b603936c49945ea1643e4f3a23"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23">Domain</a> { <a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23a80dec1e96c367bd3ee273e9bd7b18983">Domain360</a>
+, <a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23a46175809f9beb160e1ea932ad3cb5c34">Domain180</a>
+ }</td></tr>
+<tr class="memdesc:a720bd4b603936c49945ea1643e4f3a23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use LongitudeDomain360 if 0-360 is the primary range of the longitude values with 180 being the 'center'.  <a href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23">More...</a><br /></td></tr>
+<tr class="separator:a720bd4b603936c49945ea1643e4f3a23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab85b3fa4ca45c6daeb787f9a9bfa65d4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Units</a> { <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Degrees</a>
+, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Radians</a>
+ }</td></tr>
+<tr class="memdesc:ab85b3fa4ca45c6daeb787f9a9bfa65d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The set of usable angle measurement units.  <a href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">More...</a><br /></td></tr>
+<tr class="separator:ab85b3fa4ca45c6daeb787f9a9bfa65d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a656443e5e75447b6096263e0dbc642c4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#a656443e5e75447b6096263e0dbc642c4">Longitude</a> ()</td></tr>
+<tr class="memdesc:a656443e5e75447b6096263e0dbc642c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a blank <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> object with 0-360 domain.  <a href="class_isis_1_1_longitude.html#a656443e5e75447b6096263e0dbc642c4">More...</a><br /></td></tr>
+<tr class="separator:a656443e5e75447b6096263e0dbc642c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af05ebd7896ea4452708843e50443c7c5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#af05ebd7896ea4452708843e50443c7c5">Longitude</a> (double longitude, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a> longitudeUnits, <a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783">Direction</a> lonDir=<a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783a78b7729e805441d85d0168dcf4634b6a">PositiveEast</a>, <a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23">Domain</a> lonDomain=<a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23a80dec1e96c367bd3ee273e9bd7b18983">Domain360</a>)</td></tr>
+<tr class="memdesc:af05ebd7896ea4452708843e50443c7c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create and initialize a <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> value.  <a href="class_isis_1_1_longitude.html#af05ebd7896ea4452708843e50443c7c5">More...</a><br /></td></tr>
+<tr class="separator:af05ebd7896ea4452708843e50443c7c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aded4b82e7820c552534bec783a60ba0c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#aded4b82e7820c552534bec783a60ba0c">Longitude</a> (<a class="el" href="class_isis_1_1_angle.html">Angle</a> longitude, <a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783">Direction</a> lonDir=<a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783a78b7729e805441d85d0168dcf4634b6a">PositiveEast</a>, <a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23">Domain</a> lonDomain=<a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23a80dec1e96c367bd3ee273e9bd7b18983">Domain360</a>)</td></tr>
+<tr class="memdesc:aded4b82e7820c552534bec783a60ba0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create and initialize a <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> value.  <a href="class_isis_1_1_longitude.html#aded4b82e7820c552534bec783a60ba0c">More...</a><br /></td></tr>
+<tr class="separator:aded4b82e7820c552534bec783a60ba0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada5a6c0255c7e64aa353eb5c4213f00a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#ada5a6c0255c7e64aa353eb5c4213f00a">Longitude</a> (double longitude, <a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> mapping, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a> longitudeUnits)</td></tr>
+<tr class="memdesc:ada5a6c0255c7e64aa353eb5c4213f00a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create and initialize a <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> value.  <a href="class_isis_1_1_longitude.html#ada5a6c0255c7e64aa353eb5c4213f00a">More...</a><br /></td></tr>
+<tr class="separator:ada5a6c0255c7e64aa353eb5c4213f00a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad64bfe329e8b17eb86a69b357f2f117c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#ad64bfe329e8b17eb86a69b357f2f117c">Longitude</a> (const <a class="el" href="class_isis_1_1_longitude.html">Longitude</a> &amp;longitudeToCopy)</td></tr>
+<tr class="memdesc:ad64bfe329e8b17eb86a69b357f2f117c"><td class="mdescLeft">&#160;</td><td class="mdescRight">This copies the given longitude exactly.  <a href="class_isis_1_1_longitude.html#ad64bfe329e8b17eb86a69b357f2f117c">More...</a><br /></td></tr>
+<tr class="separator:ad64bfe329e8b17eb86a69b357f2f117c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72073a77778ff5483a40ccc390a9122f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#a72073a77778ff5483a40ccc390a9122f">~Longitude</a> ()</td></tr>
+<tr class="memdesc:a72073a77778ff5483a40ccc390a9122f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This cleans up the <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> class.  <a href="class_isis_1_1_longitude.html#a72073a77778ff5483a40ccc390a9122f">More...</a><br /></td></tr>
+<tr class="separator:a72073a77778ff5483a40ccc390a9122f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dc057f58b3af37e591a0091ad44b531"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#a9dc057f58b3af37e591a0091ad44b531">positiveEast</a> (<a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a> units=<a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Angle::Radians</a>) const</td></tr>
+<tr class="memdesc:a9dc057f58b3af37e591a0091ad44b531"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the longitude in the PositiveEast coordinate system.  <a href="class_isis_1_1_longitude.html#a9dc057f58b3af37e591a0091ad44b531">More...</a><br /></td></tr>
+<tr class="separator:a9dc057f58b3af37e591a0091ad44b531"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b4c2aaf6355b2db53f3ba52451c5e26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#a3b4c2aaf6355b2db53f3ba52451c5e26">setPositiveEast</a> (double longitude, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a> units=<a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Angle::Radians</a>)</td></tr>
+<tr class="memdesc:a3b4c2aaf6355b2db53f3ba52451c5e26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the longitude given a value in the PositiveEast longitude system.  <a href="class_isis_1_1_longitude.html#a3b4c2aaf6355b2db53f3ba52451c5e26">More...</a><br /></td></tr>
+<tr class="separator:a3b4c2aaf6355b2db53f3ba52451c5e26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bdf91aaed6d1ec485a242c7f4459e69"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#a1bdf91aaed6d1ec485a242c7f4459e69">positiveWest</a> (<a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a> units=<a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Angle::Radians</a>) const</td></tr>
+<tr class="memdesc:a1bdf91aaed6d1ec485a242c7f4459e69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the longitude in the PositiveWest coordinate system.  <a href="class_isis_1_1_longitude.html#a1bdf91aaed6d1ec485a242c7f4459e69">More...</a><br /></td></tr>
+<tr class="separator:a1bdf91aaed6d1ec485a242c7f4459e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59c09e14260791f0fdee1225975400d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#a59c09e14260791f0fdee1225975400d9">setPositiveWest</a> (double longitude, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a> units=<a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Angle::Radians</a>)</td></tr>
+<tr class="memdesc:a59c09e14260791f0fdee1225975400d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the longitude given a value in the PositiveWest longitude system.  <a href="class_isis_1_1_longitude.html#a59c09e14260791f0fdee1225975400d9">More...</a><br /></td></tr>
+<tr class="separator:a59c09e14260791f0fdee1225975400d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a722ebae483049f7d5415d9fb7188d0dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#a722ebae483049f7d5415d9fb7188d0dd">force180Domain</a> () const</td></tr>
+<tr class="memdesc:a722ebae483049f7d5415d9fb7188d0dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns a longitude that is constricted to -180 to 180 degrees.  <a href="class_isis_1_1_longitude.html#a722ebae483049f7d5415d9fb7188d0dd">More...</a><br /></td></tr>
+<tr class="separator:a722ebae483049f7d5415d9fb7188d0dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a896b32e21f37e69dd074cb1229555873"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#a896b32e21f37e69dd074cb1229555873">force360Domain</a> () const</td></tr>
+<tr class="memdesc:a896b32e21f37e69dd074cb1229555873"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns a longitude that is constricted to 0-360 degrees.  <a href="class_isis_1_1_longitude.html#a896b32e21f37e69dd074cb1229555873">More...</a><br /></td></tr>
+<tr class="separator:a896b32e21f37e69dd074cb1229555873"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff290e4cd92f8747b01ad7543e65ba8e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#aff290e4cd92f8747b01ad7543e65ba8e">inRange</a> (<a class="el" href="class_isis_1_1_longitude.html">Longitude</a> min, <a class="el" href="class_isis_1_1_longitude.html">Longitude</a> max) const</td></tr>
+<tr class="memdesc:aff290e4cd92f8747b01ad7543e65ba8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if this longitude value is within the given range.  <a href="class_isis_1_1_longitude.html#aff290e4cd92f8747b01ad7543e65ba8e">More...</a><br /></td></tr>
+<tr class="separator:aff290e4cd92f8747b01ad7543e65ba8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accccf5286a3968279891f3d8aa7233aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#accccf5286a3968279891f3d8aa7233aa">operator=</a> (const <a class="el" href="class_isis_1_1_longitude.html">Longitude</a> &amp;longitudeToCopy)</td></tr>
+<tr class="memdesc:accccf5286a3968279891f3d8aa7233aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as positiveEast.  <a href="class_isis_1_1_longitude.html#accccf5286a3968279891f3d8aa7233aa">More...</a><br /></td></tr>
+<tr class="separator:accccf5286a3968279891f3d8aa7233aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11eca91d53d344ec50b4d6ab0aaeae3b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">isValid</a> () const</td></tr>
+<tr class="memdesc:a11eca91d53d344ec50b4d6ab0aaeae3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">This indicates whether we have a legitimate angle stored or are in an unset, or invalid, state.  <a href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">More...</a><br /></td></tr>
+<tr class="separator:a11eca91d53d344ec50b4d6ab0aaeae3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9979629334ee312e17b5dce2f9762449"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a9979629334ee312e17b5dce2f9762449">operator+</a> (const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;angle2) const</td></tr>
+<tr class="memdesc:a9979629334ee312e17b5dce2f9762449"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add angle value to another.  <a href="class_isis_1_1_angle.html#a9979629334ee312e17b5dce2f9762449">More...</a><br /></td></tr>
+<tr class="separator:a9979629334ee312e17b5dce2f9762449"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b408553968c25ab5eee2cbaf86e35fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a1b408553968c25ab5eee2cbaf86e35fd">operator-</a> (const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;angle2) const</td></tr>
+<tr class="memdesc:a1b408553968c25ab5eee2cbaf86e35fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract angle value from another and return the resulting angle.  <a href="class_isis_1_1_angle.html#a1b408553968c25ab5eee2cbaf86e35fd">More...</a><br /></td></tr>
+<tr class="separator:a1b408553968c25ab5eee2cbaf86e35fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a1171c8fa9bd0e92b48d109945a4a1a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a7a1171c8fa9bd0e92b48d109945a4a1a">operator*</a> (double value) const</td></tr>
+<tr class="memdesc:a7a1171c8fa9bd0e92b48d109945a4a1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply this angle by a double and return the resulting angle.  <a href="class_isis_1_1_angle.html#a7a1171c8fa9bd0e92b48d109945a4a1a">More...</a><br /></td></tr>
+<tr class="separator:a7a1171c8fa9bd0e92b48d109945a4a1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4691984eae5bda40e32c5d1a1550435b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a4691984eae5bda40e32c5d1a1550435b">operator*</a> (int value) const</td></tr>
+<tr class="memdesc:a4691984eae5bda40e32c5d1a1550435b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply this angle by an integer and return the resulting angle.  <a href="class_isis_1_1_angle.html#a4691984eae5bda40e32c5d1a1550435b">More...</a><br /></td></tr>
+<tr class="separator:a4691984eae5bda40e32c5d1a1550435b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab07ef85c4905b166fc48aec3a7aa8742"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#ab07ef85c4905b166fc48aec3a7aa8742">operator/</a> (double value) const</td></tr>
+<tr class="memdesc:ab07ef85c4905b166fc48aec3a7aa8742"><td class="mdescLeft">&#160;</td><td class="mdescRight">Divide this angle by a double.  <a href="class_isis_1_1_angle.html#ab07ef85c4905b166fc48aec3a7aa8742">More...</a><br /></td></tr>
+<tr class="separator:ab07ef85c4905b166fc48aec3a7aa8742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4eada0daf7ae7413375198d8d3d9ea80"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a4eada0daf7ae7413375198d8d3d9ea80">operator/</a> (<a class="el" href="class_isis_1_1_angle.html">Angle</a> value) const</td></tr>
+<tr class="memdesc:a4eada0daf7ae7413375198d8d3d9ea80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Divide this angle by another angle and return the ratio.  <a href="class_isis_1_1_angle.html#a4eada0daf7ae7413375198d8d3d9ea80">More...</a><br /></td></tr>
+<tr class="separator:a4eada0daf7ae7413375198d8d3d9ea80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdaeb19ed9b2a6215004377543cf92fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#afdaeb19ed9b2a6215004377543cf92fb">operator/</a> (int value) const</td></tr>
+<tr class="memdesc:afdaeb19ed9b2a6215004377543cf92fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Divide this angle by an integer and return the resulting angle.  <a href="class_isis_1_1_angle.html#afdaeb19ed9b2a6215004377543cf92fb">More...</a><br /></td></tr>
+<tr class="separator:afdaeb19ed9b2a6215004377543cf92fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49035d79a1e1b7648bec5349aa60c755"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a49035d79a1e1b7648bec5349aa60c755">operator&lt;</a> (const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;angle2) const</td></tr>
+<tr class="memdesc:a49035d79a1e1b7648bec5349aa60c755"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if the other angle is less than the current angle.  <a href="class_isis_1_1_angle.html#a49035d79a1e1b7648bec5349aa60c755">More...</a><br /></td></tr>
+<tr class="separator:a49035d79a1e1b7648bec5349aa60c755"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0eadf529e2352408308fde88ef539bcf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a0eadf529e2352408308fde88ef539bcf">operator&gt;</a> (const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;angle2) const</td></tr>
+<tr class="memdesc:a0eadf529e2352408308fde88ef539bcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if the other angle is greater than the current angle.  <a href="class_isis_1_1_angle.html#a0eadf529e2352408308fde88ef539bcf">More...</a><br /></td></tr>
+<tr class="separator:a0eadf529e2352408308fde88ef539bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa9b3dcf31ddd583849d0b56e8c3644b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#aaa9b3dcf31ddd583849d0b56e8c3644b">operator+=</a> (const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;angle2)</td></tr>
+<tr class="memdesc:aaa9b3dcf31ddd583849d0b56e8c3644b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add angle value to another as double and replace original.  <a href="class_isis_1_1_angle.html#aaa9b3dcf31ddd583849d0b56e8c3644b">More...</a><br /></td></tr>
+<tr class="separator:aaa9b3dcf31ddd583849d0b56e8c3644b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97c94a13243076932800520296003384"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a97c94a13243076932800520296003384">operator-=</a> (const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;angle2)</td></tr>
+<tr class="memdesc:a97c94a13243076932800520296003384"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract angle value from another and set this instance to the resulting angle.  <a href="class_isis_1_1_angle.html#a97c94a13243076932800520296003384">More...</a><br /></td></tr>
+<tr class="separator:a97c94a13243076932800520296003384"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27f0c7e69366ee57dd3b2f3a4f0a3a5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a27f0c7e69366ee57dd3b2f3a4f0a3a5c">operator*=</a> (double value)</td></tr>
+<tr class="memdesc:a27f0c7e69366ee57dd3b2f3a4f0a3a5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply this angle by a double and set this instance to the resulting angle.  <a href="class_isis_1_1_angle.html#a27f0c7e69366ee57dd3b2f3a4f0a3a5c">More...</a><br /></td></tr>
+<tr class="separator:a27f0c7e69366ee57dd3b2f3a4f0a3a5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a6c01086a7d48a00ff768d5ea90a28e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a2a6c01086a7d48a00ff768d5ea90a28e">operator/=</a> (double value)</td></tr>
+<tr class="memdesc:a2a6c01086a7d48a00ff768d5ea90a28e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Divide this angle by a double and return the resulting angle.  <a href="class_isis_1_1_angle.html#a2a6c01086a7d48a00ff768d5ea90a28e">More...</a><br /></td></tr>
+<tr class="separator:a2a6c01086a7d48a00ff768d5ea90a28e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a737d40e65a7e85bbb3ba343b6c750df8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a737d40e65a7e85bbb3ba343b6c750df8">operator==</a> (const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;angle2) const</td></tr>
+<tr class="memdesc:a737d40e65a7e85bbb3ba343b6c750df8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if another angle is equal to this angle.  <a href="class_isis_1_1_angle.html#a737d40e65a7e85bbb3ba343b6c750df8">More...</a><br /></td></tr>
+<tr class="separator:a737d40e65a7e85bbb3ba343b6c750df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2c941243713d8d5bfbeaad981c21e18"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#ad2c941243713d8d5bfbeaad981c21e18">operator!=</a> (const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;angle2) const</td></tr>
+<tr class="memdesc:ad2c941243713d8d5bfbeaad981c21e18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if another angle is not equal to this angle.  <a href="class_isis_1_1_angle.html#ad2c941243713d8d5bfbeaad981c21e18">More...</a><br /></td></tr>
+<tr class="separator:ad2c941243713d8d5bfbeaad981c21e18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11cf04ea1f9ff819033b41fdf7ef3f66"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a11cf04ea1f9ff819033b41fdf7ef3f66">operator&lt;=</a> (const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;angle2) const</td></tr>
+<tr class="memdesc:a11cf04ea1f9ff819033b41fdf7ef3f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if the other angle is less than or equal to the current angle.  <a href="class_isis_1_1_angle.html#a11cf04ea1f9ff819033b41fdf7ef3f66">More...</a><br /></td></tr>
+<tr class="separator:a11cf04ea1f9ff819033b41fdf7ef3f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6c8e1dfbe879db0f46fd583e5daaa61"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#aa6c8e1dfbe879db0f46fd583e5daaa61">operator&gt;=</a> (const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;angle2) const</td></tr>
+<tr class="memdesc:aa6c8e1dfbe879db0f46fd583e5daaa61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if the other angle is greater than or equal to the current angle.  <a href="class_isis_1_1_angle.html#aa6c8e1dfbe879db0f46fd583e5daaa61">More...</a><br /></td></tr>
+<tr class="separator:aa6c8e1dfbe879db0f46fd583e5daaa61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a540094df5ef34039be5e146b7281145a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">radians</a> () const</td></tr>
+<tr class="memdesc:a540094df5ef34039be5e146b7281145a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert an angle to a double.  <a href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">More...</a><br /></td></tr>
+<tr class="separator:a540094df5ef34039be5e146b7281145a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69a6b1d46b95904456ab57dc9693ab00"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">degrees</a> () const</td></tr>
+<tr class="memdesc:a69a6b1d46b95904456ab57dc9693ab00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the angle in units of Degrees.  <a href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">More...</a><br /></td></tr>
+<tr class="separator:a69a6b1d46b95904456ab57dc9693ab00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f20360ae9131b74d506b405d7ea9ad8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a5f20360ae9131b74d506b405d7ea9ad8">setRadians</a> (double <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">radians</a>)</td></tr>
+<tr class="memdesc:a5f20360ae9131b74d506b405d7ea9ad8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the angle in units of Radians.  <a href="class_isis_1_1_angle.html#a5f20360ae9131b74d506b405d7ea9ad8">More...</a><br /></td></tr>
+<tr class="separator:a5f20360ae9131b74d506b405d7ea9ad8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b848ff9326830d38402a299f9086bb1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a5b848ff9326830d38402a299f9086bb1">setDegrees</a> (double <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">degrees</a>)</td></tr>
+<tr class="memdesc:a5b848ff9326830d38402a299f9086bb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the angle in units of Degrees.  <a href="class_isis_1_1_angle.html#a5b848ff9326830d38402a299f9086bb1">More...</a><br /></td></tr>
+<tr class="separator:a5b848ff9326830d38402a299f9086bb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4a3dc25641b766bf1236aace7cb9deb"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#ae4a3dc25641b766bf1236aace7cb9deb">toString</a> (bool includeUnits=true) const</td></tr>
+<tr class="memdesc:ae4a3dc25641b766bf1236aace7cb9deb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the angle in human-readable form.  <a href="class_isis_1_1_angle.html#ae4a3dc25641b766bf1236aace7cb9deb">More...</a><br /></td></tr>
+<tr class="separator:ae4a3dc25641b766bf1236aace7cb9deb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49cffc1d2b8c071ff7dd51440a7b8cb0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a49cffc1d2b8c071ff7dd51440a7b8cb0">unitWrapValue</a> (const <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Units</a> &amp;unit) const</td></tr>
+<tr class="memdesc:a49cffc1d2b8c071ff7dd51440a7b8cb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return wrap value in desired units.  <a href="class_isis_1_1_angle.html#a49cffc1d2b8c071ff7dd51440a7b8cb0">More...</a><br /></td></tr>
+<tr class="separator:a49cffc1d2b8c071ff7dd51440a7b8cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab54c26b26b5e76f06030174745f38c3f"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">angle</a> (const <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Units</a> &amp;unit) const</td></tr>
+<tr class="memdesc:ab54c26b26b5e76f06030174745f38c3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return angle value in desired units.  <a href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">More...</a><br /></td></tr>
+<tr class="separator:ab54c26b26b5e76f06030174745f38c3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3abfa303524543c6b6a3990a228c1a8b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a3abfa303524543c6b6a3990a228c1a8b">setAngle</a> (const double &amp;<a class="el" href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">angle</a>, const <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Units</a> &amp;unit)</td></tr>
+<tr class="memdesc:a3abfa303524543c6b6a3990a228c1a8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set angle value in desired units.  <a href="class_isis_1_1_angle.html#a3abfa303524543c6b6a3990a228c1a8b">More...</a><br /></td></tr>
+<tr class="separator:a3abfa303524543c6b6a3990a228c1a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a7313794f434d0adf2054bb59879dd4ae"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="struct_q_pair.html">QPair</a>&lt; <a class="el" href="class_isis_1_1_longitude.html">Longitude</a>, <a class="el" href="class_isis_1_1_longitude.html">Longitude</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_longitude.html#a7313794f434d0adf2054bb59879dd4ae">to360Range</a> (<a class="el" href="class_isis_1_1_longitude.html">Longitude</a> startLon, <a class="el" href="class_isis_1_1_longitude.html">Longitude</a> endLon)</td></tr>
+<tr class="memdesc:a7313794f434d0adf2054bb59879dd4ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates where the longitude range is in 0-360.  <a href="class_isis_1_1_longitude.html#a7313794f434d0adf2054bb59879dd4ae">More...</a><br /></td></tr>
+<tr class="separator:a7313794f434d0adf2054bb59879dd4ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96df030bbb239ef71cbe498851f46bf5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_angle.html#a96df030bbb239ef71cbe498851f46bf5">fullRotation</a> ()</td></tr>
+<tr class="memdesc:a96df030bbb239ef71cbe498851f46bf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes an angle to represent a full rotation (0-360 or 0-2pi).  <a href="class_isis_1_1_angle.html#a96df030bbb239ef71cbe498851f46bf5">More...</a><br /></td></tr>
+<tr class="separator:a96df030bbb239ef71cbe498851f46bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class is designed to encapsulate the concept of a <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a>. </p>
+<p>This is used primary for surface points but is also a general purpose class. This class accepts values past the longitude domain limits. This adds the concept of longitude direction to the <a class="el" href="class_isis_1_1_angle.html" title="Defines an angle and provides unit conversions.">Angle</a> class.</p>
+<dl class="section author"><dt>Author</dt><dd>2010-10-12 Steven Lambright </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a53b57c9b683cc524c2ece80870ef9783"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53b57c9b683cc524c2ece80870ef9783">&#9670;&nbsp;</a></span>Direction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783">Isis::Longitude::Direction</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Possible longitude directions: Is a positive longitude towards east or towards west? </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a53b57c9b683cc524c2ece80870ef9783a78b7729e805441d85d0168dcf4634b6a"></a>PositiveEast&#160;</td><td class="fielddoc"><p>As the longitude increases the actual position is more east. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a53b57c9b683cc524c2ece80870ef9783a0f5508d9eef4261703b698c67a24099c"></a>PositiveWest&#160;</td><td class="fielddoc"><p>As the longitude increases the actual position is more west. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a720bd4b603936c49945ea1643e4f3a23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a720bd4b603936c49945ea1643e4f3a23">&#9670;&nbsp;</a></span>Domain</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23">Isis::Longitude::Domain</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Use LongitudeDomain360 if 0-360 is the primary range of the longitude values with 180 being the 'center'. </p>
+<p>use LongitudeDomain180 if 0 is the 'center' longitude. This is used for converting between longitude directions, because a 'center' longitude of 0 (-180 to 180) implies negation is all that needs done to reverse the longitude direction, whereas if you are in the 360 domain, where 180 is the center, more needs done. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a720bd4b603936c49945ea1643e4f3a23a80dec1e96c367bd3ee273e9bd7b18983"></a>Domain360&#160;</td><td class="fielddoc"><p>As the longitude increases the actual position is more east. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a720bd4b603936c49945ea1643e4f3a23a46175809f9beb160e1ea932ad3cb5c34"></a>Domain180&#160;</td><td class="fielddoc"><p>As the longitude increases the actual position is more west. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="ab85b3fa4ca45c6daeb787f9a9bfa65d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab85b3fa4ca45c6daeb787f9a9bfa65d4">&#9670;&nbsp;</a></span>Units</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Isis::Angle::Units</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The set of usable angle measurement units. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0"></a>Degrees&#160;</td><td class="fielddoc"><p>Degrees are generally considered more human readable, 0-360 is one circle, however most math does not use this unit. </p>
+<p>Use these for displaying to the user and accepting input from the user. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0"></a>Radians&#160;</td><td class="fielddoc"><p>Radians are generally used in mathematical equations, 0-2*PI is one circle, however these are more difficult for users to understand when displayed since they have PI in them. </p>
+<p>This is the default unit and is necessary for most math library calls. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a656443e5e75447b6096263e0dbc642c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a656443e5e75447b6096263e0dbc642c4">&#9670;&nbsp;</a></span>Longitude() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Longitude::Longitude </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a blank <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> object with 0-360 domain. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23a80dec1e96c367bd3ee273e9bd7b18983">Domain360</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_longitude.html#a722ebae483049f7d5415d9fb7188d0dd">force180Domain()</a>, <a class="el" href="class_isis_1_1_longitude.html#a896b32e21f37e69dd074cb1229555873">force360Domain()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a7313794f434d0adf2054bb59879dd4ae">to360Range()</a>.</p>
+
+</div>
+</div>
+<a id="af05ebd7896ea4452708843e50443c7c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af05ebd7896ea4452708843e50443c7c5">&#9670;&nbsp;</a></span>Longitude() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Longitude::Longitude </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>longitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a>&#160;</td>
+          <td class="paramname"><em>longitudeUnits</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783">Direction</a>&#160;</td>
+          <td class="paramname"><em>lonDir</em> = <code><a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783a78b7729e805441d85d0168dcf4634b6a">PositiveEast</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23">Domain</a>&#160;</td>
+          <td class="paramname"><em>lonDomain</em> = <code><a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23a80dec1e96c367bd3ee273e9bd7b18983">Domain360</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create and initialize a <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> value. </p>
+<p>This value can wrap the planet any number of times regardless of the domain.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">longitude</td><td>The longitude value this instance will represent </td></tr>
+    <tr><td class="paramname">longitudeUnits</td><td>The angular units of the longitude value (degs, rads) </td></tr>
+    <tr><td class="paramname">lonDir</td><td>True if moving east means an increase in longitude </td></tr>
+    <tr><td class="paramname">lonDomain</td><td>Domain of the given longitude value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783a78b7729e805441d85d0168dcf4634b6a">PositiveEast</a>, <a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783a0f5508d9eef4261703b698c67a24099c">PositiveWest</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_longitude.html#a3b4c2aaf6355b2db53f3ba52451c5e26">setPositiveEast()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a59c09e14260791f0fdee1225975400d9">setPositiveWest()</a>.</p>
+
+</div>
+</div>
+<a id="aded4b82e7820c552534bec783a60ba0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aded4b82e7820c552534bec783a60ba0c">&#9670;&nbsp;</a></span>Longitude() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Longitude::Longitude </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>longitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783">Direction</a>&#160;</td>
+          <td class="paramname"><em>lonDir</em> = <code><a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783a78b7729e805441d85d0168dcf4634b6a">PositiveEast</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23">Domain</a>&#160;</td>
+          <td class="paramname"><em>lonDomain</em> = <code><a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23a80dec1e96c367bd3ee273e9bd7b18983">Domain360</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create and initialize a <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> value. </p>
+<p>This value can wrap the planet any number of times regardless of the domain.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">longitude</td><td>The longitude value this instance will represent </td></tr>
+    <tr><td class="paramname">lonDir</td><td>True if moving east means an increase in longitude </td></tr>
+    <tr><td class="paramname">lonDomain</td><td>Domain of the given longitude value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783a78b7729e805441d85d0168dcf4634b6a">PositiveEast</a>, <a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783a0f5508d9eef4261703b698c67a24099c">PositiveWest</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>, <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>, <a class="el" href="class_isis_1_1_longitude.html#a3b4c2aaf6355b2db53f3ba52451c5e26">setPositiveEast()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a59c09e14260791f0fdee1225975400d9">setPositiveWest()</a>.</p>
+
+</div>
+</div>
+<a id="ada5a6c0255c7e64aa353eb5c4213f00a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada5a6c0255c7e64aa353eb5c4213f00a">&#9670;&nbsp;</a></span>Longitude() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Longitude::Longitude </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>longitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a>&#160;</td>
+          <td class="paramname"><em>mapping</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a>&#160;</td>
+          <td class="paramname"><em>longitudeUnits</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create and initialize a <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> value. </p>
+<p>This value can wrap the planet any number of times regardless of the domain. The longitude domain and direction are read from the mapping group.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">longitude</td><td>The longitude value this instance will represent </td></tr>
+    <tr><td class="paramname">mapping</td><td>The mapping group containing the longitude direction and domain </td></tr>
+    <tr><td class="paramname">longitudeUnits</td><td>The angular units of the longitude value (degs, rads) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23a46175809f9beb160e1ea932ad3cb5c34">Domain180</a>, <a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23a80dec1e96c367bd3ee273e9bd7b18983">Domain360</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_longitude.html#a3b4c2aaf6355b2db53f3ba52451c5e26">setPositiveEast()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a59c09e14260791f0fdee1225975400d9">setPositiveWest()</a>.</p>
+
+</div>
+</div>
+<a id="ad64bfe329e8b17eb86a69b357f2f117c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad64bfe329e8b17eb86a69b357f2f117c">&#9670;&nbsp;</a></span>Longitude() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Longitude::Longitude </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_longitude.html">Longitude</a> &amp;&#160;</td>
+          <td class="paramname"><em>longitudeToCopy</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This copies the given longitude exactly. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">longitudeToCopy</td><td>The latitude we're duplicating </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a72073a77778ff5483a40ccc390a9122f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72073a77778ff5483a40ccc390a9122f">&#9670;&nbsp;</a></span>~Longitude()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Longitude::~Longitude </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This cleans up the <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> class. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab54c26b26b5e76f06030174745f38c3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab54c26b26b5e76f06030174745f38c3f">&#9670;&nbsp;</a></span>angle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Angle::angle </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Units</a> &amp;&#160;</td>
+          <td class="paramname"><em>unit</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return angle value in desired units. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">unit</td><td>Desired units of the angle (see <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4" title="The set of usable angle measurement units.">Angle::Units</a>) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>angle value in specified units </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="namespace_isis.html#ab34c61c8c6c42fbb79b3ff40e954da21">Isis::RAD2DEG</a>, and <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_angle.html#a35c5789e89a571b643b7ba609cf53e1f">Isis::Angle::Angle()</a>, <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">Isis::Angle::degrees()</a>, <a class="el" href="class_isis_1_1_longitude.html#a896b32e21f37e69dd074cb1229555873">force360Domain()</a>, <a class="el" href="class_isis_1_1_angle.html#a49035d79a1e1b7648bec5349aa60c755">Isis::Angle::operator&lt;()</a>, <a class="el" href="class_isis_1_1_angle.html#a737d40e65a7e85bbb3ba343b6c750df8">Isis::Angle::operator==()</a>, <a class="el" href="class_isis_1_1_angle.html#a0eadf529e2352408308fde88ef539bcf">Isis::Angle::operator&gt;()</a>, <a class="el" href="class_isis_1_1_latitude.html#ac8d454fc896b14c94c894afeb15af5d5">Isis::Latitude::planetocentric()</a>, <a class="el" href="class_isis_1_1_longitude.html#a9dc057f58b3af37e591a0091ad44b531">positiveEast()</a>, <a class="el" href="class_isis_1_1_longitude.html#a1bdf91aaed6d1ec485a242c7f4459e69">positiveWest()</a>, <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>, <a class="el" href="class_isis_1_1_latitude.html#af241a41c27e4577dfae30cb4cea45462">Isis::Latitude::setAngle()</a>, and <a class="el" href="class_isis_1_1_angle.html#a3abfa303524543c6b6a3990a228c1a8b">Isis::Angle::setAngle()</a>.</p>
+
+</div>
+</div>
+<a id="a69a6b1d46b95904456ab57dc9693ab00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69a6b1d46b95904456ab57dc9693ab00">&#9670;&nbsp;</a></span>degrees()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Angle::degrees </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the angle in units of Degrees. </p>
+<dl class="section return"><dt>Returns</dt><dd>A double-value representing this angle. Null if not valid. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">Isis::Angle::angle()</a>, and <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_angle.html#a9634d425ce3616ca793d7b67a3b6be01">Isis::Angle::Angle()</a>, <a class="el" href="class_isis_1_1_cube.html#a7d88bec371a50983975212fdda989255">Isis::Cube::attachSpiceFromIsd()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#ad143ab369ad4ddde8ee7386a0a41b537">Isis::MosaicGridTool::autoGrid()</a>, <a class="el" href="class_isis_1_1_photometric_function.html#a45f9eb1a0a3c037b9ac2fd6567a91829">Isis::PhotometricFunction::compute()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#aacf9ef69c8404ea7bb17c1db57fc74ba">Isis::MosaicGridTool::drawGrid()</a>, <a class="el" href="class_isis_1_1_adjusted_latitude_filter.html#a7a4627f4acb3875eb5bd86cdb9e899bc">Isis::AdjustedLatitudeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_longitude_filter.html#a66a094abbe7b29783dec5db4e41d0445">Isis::AdjustedLongitudeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_latitude_filter.html#a85353ca7f9fe117abe1f2ab5a4fe1693">Isis::APrioriLatitudeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_longitude_filter.html#afc374c1bb84f20952fb42c23a72e29cc">Isis::APrioriLongitudeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_longitude.html#a722ebae483049f7d5415d9fb7188d0dd">force180Domain()</a>, <a class="el" href="class_isis_1_1_longitude.html#a896b32e21f37e69dd074cb1229555873">force360Domain()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">Isis::BundleControlPoint::formatBundleLatitudinalOutputDetailString()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">Isis::BundleTargetBody::formatBundleOutputString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">Isis::BundleControlPoint::formatBundleRectangularOutputDetailString()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#a3090d3bed1f4ff3eeefbba05eb180ac4">Isis::AbstractPointItem::getData()</a>, <a class="el" href="class_isis_1_1_grid_graphics_item.html#a4f8eb8dac5c313f1a5b5f99a43ad4ee1">Isis::GridGraphicsItem::GridGraphicsItem()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ace94c742084e9c6181a236b32b335a65">Isis::ImageTreeWidgetItem::ImageTreeWidgetItem()</a>, <a class="el" href="class_isis_1_1_dem_shape.html#a8cfc22369b4ddd6304355e5b51182773">Isis::DemShape::localRadius()</a>, <a class="el" href="class_isis_1_1_mosaic_control_net_tool.html#af93e358a029aa13f969038601290a989">Isis::MosaicControlNetTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_camera.html#ad23e674974963ff0b18ba4e52cca2d95">Isis::Camera::ObliqueDetectorResolution()</a>, <a class="el" href="_angle_8cpp.html#a429e763e73672c442070910930101597">operator&lt;&lt;()</a>, <a class="el" href="class_isis_1_1_bundle_solution_info.html#a9c4122eec4d3bdbfc5c6ad0978be9b98">Isis::BundleSolutionInfo::outputPointsCSV()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a2bb87194721a98c127e9954d5ee0f51b">Isis::ControlNetFilter::PointLatLonFilter()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad27b4fb69924b943881347acd083acf3">Isis::MosaicGridToolConfigDialog::readSettings()</a>, <a class="el" href="class_isis_1_1_latitude.html#af241a41c27e4577dfae30cb4cea45462">Isis::Latitude::setAngle()</a>, <a class="el" href="class_isis_1_1_angle.html#a5b848ff9326830d38402a299f9086bb1">Isis::Angle::setDegrees()</a>, <a class="el" href="class_isis_1_1_camera_ground_map.html#a0b73d4543025e9ad4630bc0ddad5263d">Isis::CameraGroundMap::SetGround()</a>, <a class="el" href="class_isis_1_1_vims_ground_map.html#a3f3562584637b85df598ead4665812d8">Isis::VimsGroundMap::SetGround()</a>, <a class="el" href="class_isis_1_1_universal_ground_map.html#ad4bdc77df033961c48eac6ef45f0aa3b">Isis::UniversalGroundMap::SetGround()</a>, <a class="el" href="class_isis_1_1_camera.html#ac6b03615f3223c63d8f16fb352887455">Isis::Camera::SetGround()</a>, <a class="el" href="class_isis_1_1_c_s_m_camera.html#ae589c47da51f4b39d954f9fca1512597">Isis::CSMCamera::SetGround()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0">Isis::BundleTargetBody::setSolveSettings()</a>, <a class="el" href="class_isis_1_1_universal_ground_map.html#a8a660a02464650596b132ae13a89e39a">Isis::UniversalGroundMap::SetUnboundGround()</a>, <a class="el" href="class_isis_1_1_c_s_m_camera.html#abcca9cb8feeb653cf1006f14d6855596">Isis::CSMCamera::subSpacecraftPoint()</a>, <a class="el" href="class_isis_1_1_ring_plane_projection.html#a6fc83a15254d51dfcb097c15413a2975">Isis::RingPlaneProjection::To180Domain()</a>, <a class="el" href="class_isis_1_1_t_projection.html#a1f1564033fe545f03d0b9f9cbef3b67b">Isis::TProjection::To180Domain()</a>, <a class="el" href="class_isis_1_1_ring_plane_projection.html#a1f04edbe886c2a9e432ff554da843651">Isis::RingPlaneProjection::To360Domain()</a>, <a class="el" href="class_isis_1_1_t_projection.html#aac2d505e571c2bb3ae6e20278121c06c">Isis::TProjection::To360Domain()</a>, <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a295b3569c689d52e9308078ba2a9221f">Isis::MosaicGridTool::toPvl()</a>, <a class="el" href="class_isis_1_1_angle.html#ae4a3dc25641b766bf1236aace7cb9deb">Isis::Angle::toString()</a>, <a class="el" href="class_isis_1_1_sensor.html#a3ebb0970f605513f5392a17e3fd6c465">Isis::Sensor::UniversalLatitude()</a>, and <a class="el" href="class_isis_1_1_sensor.html#ad09da3318eafd758e862828e4b8d6f05">Isis::Sensor::UniversalLongitude()</a>.</p>
+
+</div>
+</div>
+<a id="a722ebae483049f7d5415d9fb7188d0dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a722ebae483049f7d5415d9fb7188d0dd">&#9670;&nbsp;</a></span>force180Domain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a> Isis::Longitude::force180Domain </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns a longitude that is constricted to -180 to 180 degrees. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> with an angular value between -180 and 180 inclusive </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#a336e63f1b8fbd0276a701e6c523b70c6">Isis::Angle::Angle()</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">Isis::Angle::degrees()</a>, <a class="el" href="class_isis_1_1_longitude.html#a896b32e21f37e69dd074cb1229555873">force360Domain()</a>, <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a656443e5e75447b6096263e0dbc642c4">Longitude()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_ring_plane_projection.html#a6fc83a15254d51dfcb097c15413a2975">Isis::RingPlaneProjection::To180Domain()</a>, and <a class="el" href="class_isis_1_1_t_projection.html#a1f1564033fe545f03d0b9f9cbef3b67b">Isis::TProjection::To180Domain()</a>.</p>
+
+</div>
+</div>
+<a id="a896b32e21f37e69dd074cb1229555873"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a896b32e21f37e69dd074cb1229555873">&#9670;&nbsp;</a></span>force360Domain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a> Isis::Longitude::force360Domain </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns a longitude that is constricted to 0-360 degrees. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> with an angular value between 0 and 360 inclusive </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">Isis::Angle::angle()</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">Isis::Angle::degrees()</a>, <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a656443e5e75447b6096263e0dbc642c4">Longitude()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice.html#a4566eff137aaadd65210250838f6ba15">Isis::Spice::computeSolarLongitude()</a>, <a class="el" href="class_isis_1_1_longitude.html#a722ebae483049f7d5415d9fb7188d0dd">force180Domain()</a>, <a class="el" href="class_isis_1_1_longitude.html#aff290e4cd92f8747b01ad7543e65ba8e">inRange()</a>, <a class="el" href="class_isis_1_1_ring_plane_projection.html#a1f04edbe886c2a9e432ff554da843651">Isis::RingPlaneProjection::To360Domain()</a>, and <a class="el" href="class_isis_1_1_t_projection.html#aac2d505e571c2bb3ae6e20278121c06c">Isis::TProjection::To360Domain()</a>.</p>
+
+</div>
+</div>
+<a id="a96df030bbb239ef71cbe498851f46bf5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96df030bbb239ef71cbe498851f46bf5">&#9670;&nbsp;</a></span>fullRotation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_angle.html">Angle</a> Isis::Angle::fullRotation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Makes an angle to represent a full rotation (0-360 or 0-2pi). </p>
+<dl class="section return"><dt>Returns</dt><dd>the angle of 1 full rotation </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#a336e63f1b8fbd0276a701e6c523b70c6">Isis::Angle::Angle()</a>, and <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hillshade.html#aefe842b24eba9f436962bc4f7a51677b">Isis::Hillshade::shadedValue()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a7313794f434d0adf2054bb59879dd4ae">to360Range()</a>.</p>
+
+</div>
+</div>
+<a id="aff290e4cd92f8747b01ad7543e65ba8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff290e4cd92f8747b01ad7543e65ba8e">&#9670;&nbsp;</a></span>inRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Longitude::inRange </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a>&#160;</td>
+          <td class="paramname"><em>min</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a>&#160;</td>
+          <td class="paramname"><em>max</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if this longitude value is within the given range. </p>
+<p>Defines the range as the change from the minimum longitude to the maximum longitude (an angle), and returns whether the change from the minimum longitude to this longitude is less than or equal to the maximum change allowed (the range).</p>
+<p>All longitude values are restricted to a 0-360 range for the sake of comparison. If the provided min and max longitude values are nominally different, but resolve to the same value when clamped to the 0-360 range, (for example: min=0 and max=360 =&gt; adjustedMin=0 and adjustedMax=0), then every point will be considered valid (because the whole planet is the range).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">min</td><td>The beginning of the valid longitude range </td></tr>
+    <tr><td class="paramname">max</td><td>The end of the valid longitude range</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether the longitude is in the given range </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_longitude.html#a896b32e21f37e69dd074cb1229555873">force360Domain()</a>, <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>, <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a7313794f434d0adf2054bb59879dd4ae">to360Range()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_qnet_point_range_filter.html#a19c92cb784cb8540211756dffca07515">Isis::QnetPointRangeFilter::filter()</a>.</p>
+
+</div>
+</div>
+<a id="a11eca91d53d344ec50b4d6ab0aaeae3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11eca91d53d344ec50b4d6ab0aaeae3b">&#9670;&nbsp;</a></span>isValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Angle::isValid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This indicates whether we have a legitimate angle stored or are in an unset, or invalid, state. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if we have a legitimate angle value, false if not initialized </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_ground_grid.html#aeedd06a92ce0ceb1146e528ac95d8465">Isis::GroundGrid::CreateGrid()</a>, <a class="el" href="class_isis_1_1_longitude.html#a722ebae483049f7d5415d9fb7188d0dd">force180Domain()</a>, <a class="el" href="class_isis_1_1_longitude.html#a896b32e21f37e69dd074cb1229555873">force360Domain()</a>, <a class="el" href="class_isis_1_1_universal_ground_map.html#af5c20b33f37ba18305bbb01b6a872fe6">Isis::UniversalGroundMap::GroundRange()</a>, <a class="el" href="class_isis_1_1_dem_shape.html#a8cfc22369b4ddd6304355e5b51182773">Isis::DemShape::localRadius()</a>, <a class="el" href="class_isis_1_1_sun_shadow_tool.html#aa1f3834e97610e08e061c16083223e5c">Isis::SunShadowTool::mouseMove()</a>, <a class="el" href="class_isis_1_1_angle.html#a7a1171c8fa9bd0e92b48d109945a4a1a">Isis::Angle::operator*()</a>, <a class="el" href="class_isis_1_1_angle.html#a9979629334ee312e17b5dce2f9762449">Isis::Angle::operator+()</a>, <a class="el" href="class_isis_1_1_angle.html#a1b408553968c25ab5eee2cbaf86e35fd">Isis::Angle::operator-()</a>, <a class="el" href="class_isis_1_1_angle.html#ab07ef85c4905b166fc48aec3a7aa8742">Isis::Angle::operator/()</a>, <a class="el" href="class_isis_1_1_angle.html#a49035d79a1e1b7648bec5349aa60c755">Isis::Angle::operator&lt;()</a>, <a class="el" href="class_isis_1_1_angle.html#a0eadf529e2352408308fde88ef539bcf">Isis::Angle::operator&gt;()</a>, <a class="el" href="class_isis_1_1_latitude.html#a86c19225315ad4647ebb7c7c51785e48">Isis::Latitude::planetographic()</a>, <a class="el" href="class_isis_1_1_naif_dsk_plate_model.html#af7dc55f51e7b698e16ac79e1b0a8e62b">Isis::NaifDskPlateModel::point()</a>, <a class="el" href="class_isis_1_1_image.html#a7e991dfc0e52ae33d3f216215eca3167">Isis::Image::save()</a>, <a class="el" href="class_isis_1_1_shape.html#a69682744743694a571524d071f85654e">Isis::Shape::save()</a>, <a class="el" href="class_isis_1_1_control_point.html#a2e8dd93156b49719baf185abd5f3fe86">Isis::ControlPoint::SetAprioriSurfacePoint()</a>, <a class="el" href="class_isis_1_1_hillshade.html#a2b70c82c4a60e71c6e608ca6186a9e23">Isis::Hillshade::setAzimuth()</a>, <a class="el" href="class_isis_1_1_ground_grid.html#a4779d22c0dab36da0ac773d17fc1d2b0">Isis::GroundGrid::SetGroundLimits()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a57662ff3795043bb81de6687d0509c79">Isis::SurfacePoint::SetSpherical()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a5658ac0bcd6d5952d0d422d03c868b67">Isis::SurfacePoint::SetSphericalSigmas()</a>, <a class="el" href="class_isis_1_1_hillshade.html#aed354ee20ce1036b55d48b0a612626b9">Isis::Hillshade::setZenith()</a>, <a class="el" href="class_isis_1_1_longitude.html#a7313794f434d0adf2054bb59879dd4ae">to360Range()</a>, and <a class="el" href="class_isis_1_1_angle.html#ae4a3dc25641b766bf1236aace7cb9deb">Isis::Angle::toString()</a>.</p>
+
+</div>
+</div>
+<a id="ad2c941243713d8d5bfbeaad981c21e18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2c941243713d8d5bfbeaad981c21e18">&#9670;&nbsp;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Angle::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;&#160;</td>
+          <td class="paramname"><em>angle2</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Test if another angle is not equal to this angle. </p>
+<p>Takes the negated result of the '==' operator.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle2</td><td>The comparison angle (on right-hand-side of != operator) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the angle does not equal the comparision angle </dd></dl>
+
+</div>
+</div>
+<a id="a7a1171c8fa9bd0e92b48d109945a4a1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a1171c8fa9bd0e92b48d109945a4a1a">&#9670;&nbsp;</a></span>operator*() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_angle.html">Angle</a> Isis::Angle::operator* </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Multiply this angle by a double and return the resulting angle. </p>
+<p>If this is an invalid angle, then the result will be an invalid angle.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to multiply to this angle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Multiplied angle </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#a336e63f1b8fbd0276a701e6c523b70c6">Isis::Angle::Angle()</a>, <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>, and <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>.</p>
+
+</div>
+</div>
+<a id="a4691984eae5bda40e32c5d1a1550435b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4691984eae5bda40e32c5d1a1550435b">&#9670;&nbsp;</a></span>operator*() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_angle.html">Angle</a> Isis::Angle::operator* </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Multiply this angle by an integer and return the resulting angle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The integer value to multiply with this angle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Product of the angles </dd></dl>
+
+</div>
+</div>
+<a id="a27f0c7e69366ee57dd3b2f3a4f0a3a5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27f0c7e69366ee57dd3b2f3a4f0a3a5c">&#9670;&nbsp;</a></span>operator*=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Angle::operator*= </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Multiply this angle by a double and set this instance to the resulting angle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The double value to multiply with this angle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9979629334ee312e17b5dce2f9762449"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9979629334ee312e17b5dce2f9762449">&#9670;&nbsp;</a></span>operator+()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_angle.html">Angle</a> Isis::Angle::operator+ </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;&#160;</td>
+          <td class="paramname"><em>angle2</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add angle value to another. </p>
+<p>If either of these are invalid angles, then the result will be an invalid angle.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle2</td><td>The angle to add to this angle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>sum angle </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#a336e63f1b8fbd0276a701e6c523b70c6">Isis::Angle::Angle()</a>, <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>, and <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>.</p>
+
+</div>
+</div>
+<a id="aaa9b3dcf31ddd583849d0b56e8c3644b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa9b3dcf31ddd583849d0b56e8c3644b">&#9670;&nbsp;</a></span>operator+=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Angle::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;&#160;</td>
+          <td class="paramname"><em>angle2</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add angle value to another as double and replace original. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle2</td><td>The angle to add to this angle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>sum angle, replaces original </dd></dl>
+
+</div>
+</div>
+<a id="a1b408553968c25ab5eee2cbaf86e35fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b408553968c25ab5eee2cbaf86e35fd">&#9670;&nbsp;</a></span>operator-()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_angle.html">Angle</a> Isis::Angle::operator- </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;&#160;</td>
+          <td class="paramname"><em>angle2</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Subtract angle value from another and return the resulting angle. </p>
+<p>If either of these are invalid angles, then the result will be an invalid angle.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle2</td><td>The angle to subtract from this angle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>difference angle </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#a336e63f1b8fbd0276a701e6c523b70c6">Isis::Angle::Angle()</a>, <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>, and <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>.</p>
+
+</div>
+</div>
+<a id="a97c94a13243076932800520296003384"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97c94a13243076932800520296003384">&#9670;&nbsp;</a></span>operator-=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Angle::operator-= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;&#160;</td>
+          <td class="paramname"><em>angle2</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Subtract angle value from another and set this instance to the resulting angle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle2</td><td>The angle to subtract from this angle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4eada0daf7ae7413375198d8d3d9ea80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eada0daf7ae7413375198d8d3d9ea80">&#9670;&nbsp;</a></span>operator/() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Angle::operator/ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Divide this angle by another angle and return the ratio. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The ratio, Null if invalid </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Quotient of the angles </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, and <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>.</p>
+
+</div>
+</div>
+<a id="ab07ef85c4905b166fc48aec3a7aa8742"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab07ef85c4905b166fc48aec3a7aa8742">&#9670;&nbsp;</a></span>operator/() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_angle.html">Angle</a> Isis::Angle::operator/ </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Divide this angle by a double. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The double value to use as the divisor </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Quotient of the angles </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#a336e63f1b8fbd0276a701e6c523b70c6">Isis::Angle::Angle()</a>, <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>, and <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>.</p>
+
+</div>
+</div>
+<a id="afdaeb19ed9b2a6215004377543cf92fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdaeb19ed9b2a6215004377543cf92fb">&#9670;&nbsp;</a></span>operator/() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_angle.html">Angle</a> Isis::Angle::operator/ </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Divide this angle by an integer and return the resulting angle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The double value to use as the divisor </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Quotient of the angles </dd></dl>
+
+</div>
+</div>
+<a id="a2a6c01086a7d48a00ff768d5ea90a28e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a6c01086a7d48a00ff768d5ea90a28e">&#9670;&nbsp;</a></span>operator/=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Angle::operator/= </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Divide this angle by a double and return the resulting angle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The double value to use as the divisor </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a49035d79a1e1b7648bec5349aa60c755"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49035d79a1e1b7648bec5349aa60c755">&#9670;&nbsp;</a></span>operator&lt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Angle::operator&lt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;&#160;</td>
+          <td class="paramname"><em>angle2</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Test if the other angle is less than the current angle. </p>
+<p>If either is invalid, then an exception will be thrown.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle2</td><td>The comparison angle (on right-hand-side of &lt; operator) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the angle is less than the comparision angle </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">Isis::Angle::angle()</a>, <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>.</p>
+
+</div>
+</div>
+<a id="a11cf04ea1f9ff819033b41fdf7ef3f66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11cf04ea1f9ff819033b41fdf7ef3f66">&#9670;&nbsp;</a></span>operator&lt;=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Angle::operator&lt;= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;&#160;</td>
+          <td class="paramname"><em>angle2</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Test if the other angle is less than or equal to the current angle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle2</td><td>The comparison angle (on right-hand-side of &lt; operator) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the angle is less than or equal to the comparision angle </dd></dl>
+
+</div>
+</div>
+<a id="accccf5286a3968279891f3d8aa7233aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accccf5286a3968279891f3d8aa7233aa">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a> &amp; Isis::Longitude::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_longitude.html">Longitude</a> &amp;&#160;</td>
+          <td class="paramname"><em>longitudeToCopy</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Same as positiveEast. </p>
+<p>Assign the values in the given longitude to ourselves.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_longitude.html#a9dc057f58b3af37e591a0091ad44b531" title="Get the longitude in the PositiveEast coordinate system.">positiveEast</a></dd></dl>
+<p>operator double() const { return <a class="el" href="class_isis_1_1_longitude.html#a9dc057f58b3af37e591a0091ad44b531" title="Get the longitude in the PositiveEast coordinate system.">positiveEast()</a>; }</p>
+<p>This will make an exact duplicate.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">longitudeToCopy</td><td>The longitude we're duplicating with the current instance </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_longitude.html#a9dc057f58b3af37e591a0091ad44b531">positiveEast()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a3b4c2aaf6355b2db53f3ba52451c5e26">setPositiveEast()</a>.</p>
+
+</div>
+</div>
+<a id="a737d40e65a7e85bbb3ba343b6c750df8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a737d40e65a7e85bbb3ba343b6c750df8">&#9670;&nbsp;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Angle::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;&#160;</td>
+          <td class="paramname"><em>angle2</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Test if another angle is equal to this angle. </p>
+<p>This does not compensate for going around a circle: Angle(360, Angle::Degrees) does not equal Angle(0, Angle::Degrees)</p>
+<p>Invalid angles are equal to each other.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle2</td><td>The comparison angle (on right-hand-side of == operator) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the angle equals the comparision angle </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">Isis::Angle::angle()</a>, and <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>.</p>
+
+</div>
+</div>
+<a id="a0eadf529e2352408308fde88ef539bcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0eadf529e2352408308fde88ef539bcf">&#9670;&nbsp;</a></span>operator&gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Angle::operator&gt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;&#160;</td>
+          <td class="paramname"><em>angle2</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Test if the other angle is greater than the current angle. </p>
+<p>If either is invalid, then an exception will be thrown.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle2</td><td>The comparison angle (on right-hand-side of &gt; operator) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the angle is greater than the comparision angle </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">Isis::Angle::angle()</a>, <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>.</p>
+
+</div>
+</div>
+<a id="aa6c8e1dfbe879db0f46fd583e5daaa61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6c8e1dfbe879db0f46fd583e5daaa61">&#9670;&nbsp;</a></span>operator&gt;=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Angle::operator&gt;= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html">Angle</a> &amp;&#160;</td>
+          <td class="paramname"><em>angle2</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Test if the other angle is greater than or equal to the current angle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle2</td><td>The comparison angle (on right-hand-side of &lt; operator) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the angle is greater than or equal to the comparision angle </dd></dl>
+
+</div>
+</div>
+<a id="a9dc057f58b3af37e591a0091ad44b531"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dc057f58b3af37e591a0091ad44b531">&#9670;&nbsp;</a></span>positiveEast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Longitude::positiveEast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a>&#160;</td>
+          <td class="paramname"><em>units</em> = <code><a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Angle::Radians</a></code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the longitude in the PositiveEast coordinate system. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">units</td><td>The angular units to get the longitude in </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783" title="Possible longitude directions: Is a positive longitude towards east or towards west?">Direction</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The PositiveEast longitude value </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">Isis::Angle::angle()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_longitude.html#accccf5286a3968279891f3d8aa7233aa">operator=()</a>, <a class="el" href="class_isis_1_1_naif_dsk_plate_model.html#af7dc55f51e7b698e16ac79e1b0a8e62b">Isis::NaifDskPlateModel::point()</a>, and <a class="el" href="class_isis_1_1_lidar_data.html#a94701c09ffdad264d0febba2ae9b1913">Isis::LidarData::write()</a>.</p>
+
+</div>
+</div>
+<a id="a1bdf91aaed6d1ec485a242c7f4459e69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bdf91aaed6d1ec485a242c7f4459e69">&#9670;&nbsp;</a></span>positiveWest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Longitude::positiveWest </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a>&#160;</td>
+          <td class="paramname"><em>units</em> = <code><a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Angle::Radians</a></code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the longitude in the PositiveWest coordinate system. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">units</td><td>The angular units to get the longitude in </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_longitude.html#a53b57c9b683cc524c2ece80870ef9783" title="Possible longitude directions: Is a positive longitude towards east or towards west?">Direction</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The PositiveWest longitude value </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">Isis::Angle::angle()</a>, <a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23a80dec1e96c367bd3ee273e9bd7b18983">Domain360</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, and <a class="el" href="class_isis_1_1_angle.html#a49cffc1d2b8c071ff7dd51440a7b8cb0">Isis::Angle::unitWrapValue()</a>.</p>
+
+</div>
+</div>
+<a id="a540094df5ef34039be5e146b7281145a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a540094df5ef34039be5e146b7281145a">&#9670;&nbsp;</a></span>radians()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Angle::radians </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convert an angle to a double. </p>
+<p>This will return the radians version of the angle.</p>
+<dl class="section return"><dt>Returns</dt><dd>The angle value in radians</dd></dl>
+<p>operator double() const { return angle(Radians); } Get the angle in units of Radians. </p><dl class="section return"><dt>Returns</dt><dd>A double-value representing this angle. Null if not valid. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">Isis::Angle::angle()</a>, and <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_latitude.html#a044922c21bc5d64bbe908473cb90d8b0">Isis::Latitude::add()</a>, <a class="el" href="class_isis_1_1_bundle_lidar_range_constraint.html#a6a412404812e6b223106dd0bda76ea1c">Isis::BundleLidarRangeConstraint::applyConstraint()</a>, <a class="el" href="class_isis_1_1_camera_ground_map.html#aa7012658b20bc6f5eff7b1091c57cd18">Isis::CameraGroundMap::EllipsoidPartial()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a1417ca755642e0c11ad175c524177a29">Isis::SurfacePoint::GetDistanceToPoint()</a>, <a class="el" href="class_isis_1_1_camera.html#abd95e49357606c5254b285a1c27b61c5">Isis::Camera::GetLocalNormal()</a>, <a class="el" href="class_isis_1_1_grid_graphics_item.html#a4f8eb8dac5c313f1a5b5f99a43ad4ee1">Isis::GridGraphicsItem::GridGraphicsItem()</a>, <a class="el" href="class_isis_1_1_longitude.html#aff290e4cd92f8747b01ad7543e65ba8e">inRange()</a>, <a class="el" href="class_isis_1_1_latitude.html#afea35e359ef189e5b916dfb1c124ebfa">Isis::Latitude::Latitude()</a>, <a class="el" href="class_isis_1_1_ellipsoid_shape.html#ab505042e9e1239a5b93021c2800ca1c8">Isis::EllipsoidShape::localRadius()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#aa5bf5c6feef902ab806513bfd0a36a29">Isis::BundleTargetBody::localRadius()</a>, <a class="el" href="class_isis_1_1_longitude.html#aded4b82e7820c552534bec783a60ba0c">Longitude()</a>, <a class="el" href="class_isis_1_1_sun_shadow_tool.html#aa1f3834e97610e08e061c16083223e5c">Isis::SunShadowTool::mouseMove()</a>, <a class="el" href="class_isis_1_1_angle.html#a7a1171c8fa9bd0e92b48d109945a4a1a">Isis::Angle::operator*()</a>, <a class="el" href="class_isis_1_1_angle.html#a9979629334ee312e17b5dce2f9762449">Isis::Angle::operator+()</a>, <a class="el" href="class_isis_1_1_angle.html#a1b408553968c25ab5eee2cbaf86e35fd">Isis::Angle::operator-()</a>, <a class="el" href="class_isis_1_1_angle.html#ab07ef85c4905b166fc48aec3a7aa8742">Isis::Angle::operator/()</a>, <a class="el" href="_angle_8cpp.html#a429e763e73672c442070910930101597">operator&lt;&lt;()</a>, <a class="el" href="class_isis_1_1_angle.html#a19e88fdabde07c880c1adbf04d771f5b">Isis::Angle::operator=()</a>, <a class="el" href="class_isis_1_1_latitude.html#a86c19225315ad4647ebb7c7c51785e48">Isis::Latitude::planetographic()</a>, <a class="el" href="class_isis_1_1_camera_ground_map.html#ac50247e89aed4bc064cac5e79adacbea">Isis::CameraGroundMap::PointPartial()</a>, <a class="el" href="class_isis_1_1_surface_point.html#ae71b3f7d8f924750e370cbdb91395d2f">Isis::SurfacePoint::ResetLocalRadius()</a>, <a class="el" href="class_isis_1_1_linear_algebra.html#a80cec9ff7d6422af64c13e198921eb29">Isis::LinearAlgebra::rotate()</a>, <a class="el" href="class_isis_1_1_image.html#a7e991dfc0e52ae33d3f216215eca3167">Isis::Image::save()</a>, <a class="el" href="class_isis_1_1_shape.html#a69682744743694a571524d071f85654e">Isis::Shape::save()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a289f0b54880610038bff3505e8c46357">Isis::SpiceRotation::setEphemerisTimePckPolyFunction()</a>, <a class="el" href="class_isis_1_1_vims_ground_map.html#a3f3562584637b85df598ead4665812d8">Isis::VimsGroundMap::SetGround()</a>, <a class="el" href="class_isis_1_1_latitude.html#a09c19eb0b52466bc1869f64b097523ba">Isis::Latitude::setPlanetographic()</a>, <a class="el" href="class_isis_1_1_angle.html#a5f20360ae9131b74d506b405d7ea9ad8">Isis::Angle::setRadians()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0">Isis::BundleTargetBody::setSolveSettings()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a83e01ef8544903d665fe22befe02f65a">Isis::SurfacePoint::SetSphericalMatrix()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a5658ac0bcd6d5952d0d422d03c868b67">Isis::SurfacePoint::SetSphericalSigmas()</a>, and <a class="el" href="class_isis_1_1_hillshade.html#aefe842b24eba9f436962bc4f7a51677b">Isis::Hillshade::shadedValue()</a>.</p>
+
+</div>
+</div>
+<a id="a3abfa303524543c6b6a3990a228c1a8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3abfa303524543c6b6a3990a228c1a8b">&#9670;&nbsp;</a></span>setAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Angle::setAngle </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>angle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Units</a> &amp;&#160;</td>
+          <td class="paramname"><em>unit</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set angle value in desired units. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle</td><td>The angle value in units of the unit parameter </td></tr>
+    <tr><td class="paramname">unit</td><td>Desired units of the angle (see <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4" title="The set of usable angle measurement units.">Angle::Units</a>) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_latitude.html#af241a41c27e4577dfae30cb4cea45462">Isis::Latitude</a>.</p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_angle.html#ab54c26b26b5e76f06030174745f38c3f">Isis::Angle::angle()</a>, <a class="el" href="namespace_isis.html#a75c1877cbfaa3d1055461a967972bed7">Isis::DEG2RAD</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_angle.html#a35c5789e89a571b643b7ba609cf53e1f">Isis::Angle::Angle()</a>, <a class="el" href="class_isis_1_1_angle.html#a19e88fdabde07c880c1adbf04d771f5b">Isis::Angle::operator=()</a>, <a class="el" href="class_isis_1_1_latitude.html#af241a41c27e4577dfae30cb4cea45462">Isis::Latitude::setAngle()</a>, <a class="el" href="class_isis_1_1_angle.html#a5b848ff9326830d38402a299f9086bb1">Isis::Angle::setDegrees()</a>, <a class="el" href="class_isis_1_1_longitude.html#a3b4c2aaf6355b2db53f3ba52451c5e26">setPositiveEast()</a>, <a class="el" href="class_isis_1_1_longitude.html#a59c09e14260791f0fdee1225975400d9">setPositiveWest()</a>, and <a class="el" href="class_isis_1_1_angle.html#a5f20360ae9131b74d506b405d7ea9ad8">Isis::Angle::setRadians()</a>.</p>
+
+</div>
+</div>
+<a id="a5b848ff9326830d38402a299f9086bb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b848ff9326830d38402a299f9086bb1">&#9670;&nbsp;</a></span>setDegrees()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Angle::setDegrees </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>degrees</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the angle in units of Degrees. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">degrees</td><td>The new angle value, Null for invalid angle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">Isis::Angle::degrees()</a>, and <a class="el" href="class_isis_1_1_angle.html#a3abfa303524543c6b6a3990a228c1a8b">Isis::Angle::setAngle()</a>.</p>
+
+</div>
+</div>
+<a id="a3b4c2aaf6355b2db53f3ba52451c5e26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b4c2aaf6355b2db53f3ba52451c5e26">&#9670;&nbsp;</a></span>setPositiveEast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Longitude::setPositiveEast </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>longitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a>&#160;</td>
+          <td class="paramname"><em>units</em> = <code><a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Angle::Radians</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the longitude given a value in the PositiveEast longitude system. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">longitude</td><td>The positive east longitude to set ourselves to </td></tr>
+    <tr><td class="paramname">units</td><td>The angular units longitude is in </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#a3abfa303524543c6b6a3990a228c1a8b">Isis::Angle::setAngle()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_longitude.html#ada5a6c0255c7e64aa353eb5c4213f00a">Longitude()</a>, and <a class="el" href="class_isis_1_1_longitude.html#accccf5286a3968279891f3d8aa7233aa">operator=()</a>.</p>
+
+</div>
+</div>
+<a id="a59c09e14260791f0fdee1225975400d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59c09e14260791f0fdee1225975400d9">&#9670;&nbsp;</a></span>setPositiveWest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Longitude::setPositiveWest </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>longitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Angle::Units</a>&#160;</td>
+          <td class="paramname"><em>units</em> = <code><a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Angle::Radians</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the longitude given a value in the PositiveWest longitude system. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">longitude</td><td>The positive west longitude to set ourselves to </td></tr>
+    <tr><td class="paramname">units</td><td>The angular units longitude is in </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_longitude.html#a720bd4b603936c49945ea1643e4f3a23a80dec1e96c367bd3ee273e9bd7b18983">Domain360</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_angle.html#a3abfa303524543c6b6a3990a228c1a8b">Isis::Angle::setAngle()</a>, and <a class="el" href="class_isis_1_1_angle.html#a49cffc1d2b8c071ff7dd51440a7b8cb0">Isis::Angle::unitWrapValue()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_longitude.html#ada5a6c0255c7e64aa353eb5c4213f00a">Longitude()</a>.</p>
+
+</div>
+</div>
+<a id="a5f20360ae9131b74d506b405d7ea9ad8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f20360ae9131b74d506b405d7ea9ad8">&#9670;&nbsp;</a></span>setRadians()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Angle::setRadians </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>radians</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the angle in units of Radians. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">radians</td><td>The new angle value, Null for invalid angle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>, <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>, and <a class="el" href="class_isis_1_1_angle.html#a3abfa303524543c6b6a3990a228c1a8b">Isis::Angle::setAngle()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_linear_algebra.html#a0876aef6438bea53f3a1d909dbcfd1a2">Isis::LinearAlgebra::toAxisAngle()</a>, and <a class="el" href="class_isis_1_1_linear_algebra.html#afe3e81b264d0d39a8b396e646e5678fd">Isis::LinearAlgebra::toEulerAngles()</a>.</p>
+
+</div>
+</div>
+<a id="a7313794f434d0adf2054bb59879dd4ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7313794f434d0adf2054bb59879dd4ae">&#9670;&nbsp;</a></span>to360Range()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="struct_q_pair.html">QPair</a>&lt; <a class="el" href="class_isis_1_1_longitude.html">Longitude</a>, <a class="el" href="class_isis_1_1_longitude.html">Longitude</a> &gt; &gt; Isis::Longitude::to360Range </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a>&#160;</td>
+          <td class="paramname"><em>startLon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a>&#160;</td>
+          <td class="paramname"><em>endLon</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates where the longitude range is in 0-360. </p>
+<p>This method will return 2 subranges if the total range intersects the 0/360 line. For instance, if the input range is -10-10, the output ranges will be 350-360 and 0-10. If the longitude range is invalid then an empty list will result.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">startLon</td><td>the western edge of the longitude range </td></tr>
+    <tr><td class="paramname">endLon</td><td>the eastern edge of the range</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a list of longitude pairs (first is the start and second is the end) that represent the calculated range(s). </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="class_isis_1_1_angle.html#a96df030bbb239ef71cbe498851f46bf5">Isis::Angle::fullRotation()</a>, <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a656443e5e75447b6096263e0dbc642c4">Longitude()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_longitude.html#aff290e4cd92f8747b01ad7543e65ba8e">inRange()</a>, and <a class="el" href="class_isis_1_1_feature_nomenclature.html#adc26586ced866a8924e54372becbadc6">Isis::FeatureNomenclature::queryFeatures()</a>.</p>
+
+</div>
+</div>
+<a id="ae4a3dc25641b766bf1236aace7cb9deb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4a3dc25641b766bf1236aace7cb9deb">&#9670;&nbsp;</a></span>toString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Angle::toString </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>includeUnits</em> = <code>true</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the angle in human-readable form. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">includeUnits</td><td>Include the angle's units in the text. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A user-displayable angle string. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">Isis::Angle::degrees()</a>, <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_latitude.html#a59e35176e58c3f306013b1435938d9da">Isis::Latitude::inRange()</a>, <a class="el" href="class_isis_1_1_latitude.html#a008c4a766f63b6374a4784d7e500ec6e">Isis::Latitude::Latitude()</a>, <a class="el" href="namespace_isis.html#ae89a575c21f490200c6fba70c9127263">Isis::operator&lt;&lt;()</a>, <a class="el" href="class_isis_1_1_latitude.html#a86c19225315ad4647ebb7c7c51785e48">Isis::Latitude::planetographic()</a>, and <a class="el" href="class_isis_1_1_hillshade.html#aefe842b24eba9f436962bc4f7a51677b">Isis::Hillshade::shadedValue()</a>.</p>
+
+</div>
+</div>
+<a id="a49cffc1d2b8c071ff7dd51440a7b8cb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49cffc1d2b8c071ff7dd51440a7b8cb0">&#9670;&nbsp;</a></span>unitWrapValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Angle::unitWrapValue </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Units</a> &amp;&#160;</td>
+          <td class="paramname"><em>unit</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return wrap value in desired units. </p>
+<p>The 'wrap' value is the value where one circle occurs - angles greater than this are conceptually 'wrapping' back to zero. For example, this is 2*PI in radians because 2*PI == 0 on a circle. Please keep in mind we still differentiate those two angles.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">unit</td><td>Desired units of the <a class="el" href="class_isis_1_1_angle.html" title="Defines an angle and provides unit conversions.">Angle</a> wrap constant (see <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4" title="The set of usable angle measurement units.">Angle::Units</a>) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Wrap value in specified units </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_longitude.html#a1bdf91aaed6d1ec485a242c7f4459e69">positiveWest()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a59c09e14260791f0fdee1225975400d9">setPositiveWest()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Longitude/<a class="el" href="_longitude_8h_source.html">Longitude.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Longitude/<a class="el" href="_longitude_8cpp.html">Longitude.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,4 @@
+<map id="Isis::CSMSkyMap" name="Isis::CSMSkyMap">
+<area shape="rect" id="node1" title="Convert between undistorted focal plane and ra/dec coordinates." alt="" coords="13,263,142,360"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_camera_sky_map.html" title="Convert between undistorted focal plane and ra/dec coordinates." alt="" coords="5,5,150,215"/>
+</map>

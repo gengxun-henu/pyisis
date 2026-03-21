@@ -1,0 +1,1737 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::CameraFocalPlaneMap Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_camera_focal_plane_map.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_camera_focal_plane_map-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::CameraFocalPlaneMap Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Convert between distorted focal plane and detector coordinates.  
+ <a href="class_isis_1_1_camera_focal_plane_map.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_camera_focal_plane_map_8h_source.html">CameraFocalPlaneMap.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::CameraFocalPlaneMap:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_camera_focal_plane_map__inherit__graph.png" border="0" usemap="#a_isis_1_1_camera_focal_plane_map_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_camera_focal_plane_map_inherit__map" id="a_isis_1_1_camera_focal_plane_map_inherit__map">
+<area shape="rect" title="Convert between distorted focal plane and detector coordinates." alt="" coords="139,5,329,503"/>
+<area shape="rect" href="class_isis_1_1_lro_wide_angle_camera_focal_plane_map.html" title="Distort/undistort focal plane coordinates." alt="" coords="5,551,231,728"/>
+<area shape="rect" href="class_isis_1_1_radar_ground_range_map.html" title="Construct a mapping between image sample and Radar ground range." alt="" coords="255,591,445,688"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::CameraFocalPlaneMap:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_camera_focal_plane_map__coll__graph.png" border="0" usemap="#a_isis_1_1_camera_focal_plane_map_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_camera_focal_plane_map_coll__map" id="a_isis_1_1_camera_focal_plane_map_coll__map">
+<area shape="rect" title="Convert between distorted focal plane and detector coordinates." alt="" coords="5,969,192,1291"/>
+<area shape="rect" title=" " alt="" coords="70,255,130,336"/>
+<area shape="rect" href="class_isis_1_1_camera.html" title=" " alt="" coords="319,568,537,905"/>
+<area shape="rect" href="class_isis_1_1_sensor.html" title="Class for computing sensor ground coordinates." alt="" coords="371,175,589,416"/>
+<area shape="rect" title=" " alt="" coords="232,5,277,87"/>
+<area shape="rect" title=" " alt="" coords="613,255,678,336"/>
+<area shape="rect" href="class_isis_1_1_alpha_cube.html" title="This class is used to rewrite the &quot;alpha&quot; keywords out of the AlphaCube group or Instrument group." alt="" coords="734,151,858,440"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ab2b4e67b672af76748563f3472d071fd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fd">FocalPlaneXDependencyType</a> { <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fdacdc7441cfddbc819180f1a935a61dc44">Sample</a> = 1
+, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fda10c241138cbd3f241769f88026fd9e03">Line</a> = 2
+ }</td></tr>
+<tr class="memdesc:ab2b4e67b672af76748563f3472d071fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Focal plane x dependency indicates whether the x value of the focal plane coordinate maps to a sample or a line.  <a href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fd">More...</a><br /></td></tr>
+<tr class="separator:ab2b4e67b672af76748563f3472d071fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aecb97fecfa5fe621f5afe7f1b0bfce5b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aecb97fecfa5fe621f5afe7f1b0bfce5b">CameraFocalPlaneMap</a> (<a class="el" href="class_isis_1_1_camera.html">Camera</a> *parent, const int naifIkCode)</td></tr>
+<tr class="memdesc:aecb97fecfa5fe621f5afe7f1b0bfce5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct mapping between detectors and focal plane x/y.  <a href="class_isis_1_1_camera_focal_plane_map.html#aecb97fecfa5fe621f5afe7f1b0bfce5b">More...</a><br /></td></tr>
+<tr class="separator:aecb97fecfa5fe621f5afe7f1b0bfce5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af58da2945549bf8c077156fd6522ecdd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#af58da2945549bf8c077156fd6522ecdd">CameraFocalPlaneMap</a> (const int naifIkCode)</td></tr>
+<tr class="memdesc:af58da2945549bf8c077156fd6522ecdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct mapping between detectors and focal plane x/y.  <a href="class_isis_1_1_camera_focal_plane_map.html#af58da2945549bf8c077156fd6522ecdd">More...</a><br /></td></tr>
+<tr class="separator:af58da2945549bf8c077156fd6522ecdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cc7a674aa6783a38387245245d75c36"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">CameraFocalPlaneMap</a> (<a class="el" href="class_isis_1_1_camera.html">Camera</a> *parent, <a class="el" href="class_isis_1_1_affine.html">Affine</a> &amp;affine)</td></tr>
+<tr class="memdesc:a3cc7a674aa6783a38387245245d75c36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Added new method to allow programmer to pass in affine coefficients.  <a href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">More...</a><br /></td></tr>
+<tr class="separator:a3cc7a674aa6783a38387245245d75c36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac48c2a927c2b75013e2dfd97a51c3b13"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac48c2a927c2b75013e2dfd97a51c3b13">~CameraFocalPlaneMap</a> ()</td></tr>
+<tr class="memdesc:ac48c2a927c2b75013e2dfd97a51c3b13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_camera_focal_plane_map.html#ac48c2a927c2b75013e2dfd97a51c3b13">More...</a><br /></td></tr>
+<tr class="separator:ac48c2a927c2b75013e2dfd97a51c3b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7aac4edc4145e7b2c44784ef9cb0f2f4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">SetDetector</a> (const double sample, const double line)</td></tr>
+<tr class="memdesc:a7aac4edc4145e7b2c44784ef9cb0f2f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute distorted focal plane coordinate from detector position (sampel,line)  <a href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">More...</a><br /></td></tr>
+<tr class="separator:a7aac4edc4145e7b2c44784ef9cb0f2f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6c8215c92ee4585403839fd114e7d53"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac6c8215c92ee4585403839fd114e7d53">SetFocalPlane</a> (const double dx, const double dy)</td></tr>
+<tr class="memdesc:ac6c8215c92ee4585403839fd114e7d53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute detector position (sample,line) from focal plane coordinates.  <a href="class_isis_1_1_camera_focal_plane_map.html#ac6c8215c92ee4585403839fd114e7d53">More...</a><br /></td></tr>
+<tr class="separator:ac6c8215c92ee4585403839fd114e7d53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea7639f61c49fdfd81e3e7e1061bcb34"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aea7639f61c49fdfd81e3e7e1061bcb34">FocalPlaneX</a> () const</td></tr>
+<tr class="separator:aea7639f61c49fdfd81e3e7e1061bcb34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05ad59a4c3d491052fcdc55e0826d8c0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a05ad59a4c3d491052fcdc55e0826d8c0">FocalPlaneY</a> () const</td></tr>
+<tr class="separator:a05ad59a4c3d491052fcdc55e0826d8c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03aea9d8598133eb80e88fdbb58082bf"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a03aea9d8598133eb80e88fdbb58082bf">DetectorSample</a> () const</td></tr>
+<tr class="separator:a03aea9d8598133eb80e88fdbb58082bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1d7ac60e59eee33a17c878d6ae11478"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aa1d7ac60e59eee33a17c878d6ae11478">DetectorLine</a> () const</td></tr>
+<tr class="separator:aa1d7ac60e59eee33a17c878d6ae11478"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a170d1535a0171d6338a778bc7e84ebb8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a170d1535a0171d6338a778bc7e84ebb8">CenteredDetectorSample</a> () const</td></tr>
+<tr class="separator:a170d1535a0171d6338a778bc7e84ebb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a942a438fa43c1b280758b7df951e57"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7a942a438fa43c1b280758b7df951e57">CenteredDetectorLine</a> () const</td></tr>
+<tr class="separator:a7a942a438fa43c1b280758b7df951e57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8eb60b5f3c9d471052b75e53c27dfc8c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a8eb60b5f3c9d471052b75e53c27dfc8c">SetDetectorOrigin</a> (const double sample, const double line)</td></tr>
+<tr class="memdesc:a8eb60b5f3c9d471052b75e53c27dfc8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the detector origin.  <a href="class_isis_1_1_camera_focal_plane_map.html#a8eb60b5f3c9d471052b75e53c27dfc8c">More...</a><br /></td></tr>
+<tr class="separator:a8eb60b5f3c9d471052b75e53c27dfc8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af35e3acd816adf081c6021363b928366"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#af35e3acd816adf081c6021363b928366">DetectorLineOrigin</a> () const</td></tr>
+<tr class="separator:af35e3acd816adf081c6021363b928366"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af189e8038de5bcbeb366e93a4f52db7c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#af189e8038de5bcbeb366e93a4f52db7c">DetectorSampleOrigin</a> () const</td></tr>
+<tr class="separator:af189e8038de5bcbeb366e93a4f52db7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1be10c7510d14950c9390570ddae8242"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a1be10c7510d14950c9390570ddae8242">SetDetectorOffset</a> (const double sampleOffset, const double lineOffset)</td></tr>
+<tr class="memdesc:a1be10c7510d14950c9390570ddae8242"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the detector offset.  <a href="class_isis_1_1_camera_focal_plane_map.html#a1be10c7510d14950c9390570ddae8242">More...</a><br /></td></tr>
+<tr class="separator:a1be10c7510d14950c9390570ddae8242"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd45fc29861198441fb343f122ef0560"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afd45fc29861198441fb343f122ef0560">DetectorLineOffset</a> () const</td></tr>
+<tr class="separator:afd45fc29861198441fb343f122ef0560"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a5d2aec161ffb85228ef6e998dc83cb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9a5d2aec161ffb85228ef6e998dc83cb">DetectorSampleOffset</a> () const</td></tr>
+<tr class="separator:a9a5d2aec161ffb85228ef6e998dc83cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70e2d0250b7f0d4a2606333facb4a748"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a70e2d0250b7f0d4a2606333facb4a748">SetTransL</a> (const <a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; transL)</td></tr>
+<tr class="memdesc:a70e2d0250b7f0d4a2606333facb4a748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the affine coefficients for converting destorted (x,y) to a detector Line.  <a href="class_isis_1_1_camera_focal_plane_map.html#a70e2d0250b7f0d4a2606333facb4a748">More...</a><br /></td></tr>
+<tr class="separator:a70e2d0250b7f0d4a2606333facb4a748"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b0236f1d263f379bdeca060628a0417"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a6b0236f1d263f379bdeca060628a0417">SetTransS</a> (const <a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; transS)</td></tr>
+<tr class="memdesc:a6b0236f1d263f379bdeca060628a0417"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the affine coefficients for converting destorted (x,y) to a detector Sample.  <a href="class_isis_1_1_camera_focal_plane_map.html#a6b0236f1d263f379bdeca060628a0417">More...</a><br /></td></tr>
+<tr class="separator:a6b0236f1d263f379bdeca060628a0417"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90567ee839d43055c2497927e8eaa731"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a90567ee839d43055c2497927e8eaa731">SetTransX</a> (const <a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; transX)</td></tr>
+<tr class="memdesc:a90567ee839d43055c2497927e8eaa731"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the affine coefficients for converting detector (sample,line) to a distorted X.  <a href="class_isis_1_1_camera_focal_plane_map.html#a90567ee839d43055c2497927e8eaa731">More...</a><br /></td></tr>
+<tr class="separator:a90567ee839d43055c2497927e8eaa731"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a3079b6ca28db7475fa91bfb03e508d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9a3079b6ca28db7475fa91bfb03e508d">SetTransY</a> (const <a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; transY)</td></tr>
+<tr class="memdesc:a9a3079b6ca28db7475fa91bfb03e508d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the affine coefficients for converting detector (sample,line) to a distorted Y.  <a href="class_isis_1_1_camera_focal_plane_map.html#a9a3079b6ca28db7475fa91bfb03e508d">More...</a><br /></td></tr>
+<tr class="separator:a9a3079b6ca28db7475fa91bfb03e508d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34ddcda50620c0c8195eb4c346157929"><td class="memItemLeft" align="right" valign="top">const double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a34ddcda50620c0c8195eb4c346157929">TransL</a> () const</td></tr>
+<tr class="separator:a34ddcda50620c0c8195eb4c346157929"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad65a1c0cd5c8af839371b6c314048f92"><td class="memItemLeft" align="right" valign="top">const double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ad65a1c0cd5c8af839371b6c314048f92">TransS</a> () const</td></tr>
+<tr class="separator:ad65a1c0cd5c8af839371b6c314048f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acadeb721f9a368d017248835bab17278"><td class="memItemLeft" align="right" valign="top">const double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#acadeb721f9a368d017248835bab17278">TransX</a> () const</td></tr>
+<tr class="separator:acadeb721f9a368d017248835bab17278"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac620d64b9297912d2b4d1670912c8046"><td class="memItemLeft" align="right" valign="top">const double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac620d64b9297912d2b4d1670912c8046">TransY</a> () const</td></tr>
+<tr class="separator:ac620d64b9297912d2b4d1670912c8046"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0504cee7c8b1d860978dca17c21f9292"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a0504cee7c8b1d860978dca17c21f9292">FocalPlaneXDependency</a> ()</td></tr>
+<tr class="memdesc:a0504cee7c8b1d860978dca17c21f9292"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the focal plane x dependency variable.  <a href="class_isis_1_1_camera_focal_plane_map.html#a0504cee7c8b1d860978dca17c21f9292">More...</a><br /></td></tr>
+<tr class="separator:a0504cee7c8b1d860978dca17c21f9292"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6731df3b35e663f6f25ba9ab060c14e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ae6731df3b35e663f6f25ba9ab060c14e">SignMostSigX</a> ()</td></tr>
+<tr class="memdesc:ae6731df3b35e663f6f25ba9ab060c14e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the sign of the p_transx coefficient with the greatest magnitude.  <a href="class_isis_1_1_camera_focal_plane_map.html#ae6731df3b35e663f6f25ba9ab060c14e">More...</a><br /></td></tr>
+<tr class="separator:ae6731df3b35e663f6f25ba9ab060c14e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3585d8fea9e1d8b5dbcb9ffc9fc39804"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3585d8fea9e1d8b5dbcb9ffc9fc39804">SignMostSigY</a> ()</td></tr>
+<tr class="memdesc:a3585d8fea9e1d8b5dbcb9ffc9fc39804"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the sign of the p_transy coefficient with the greatest magnitude.  <a href="class_isis_1_1_camera_focal_plane_map.html#a3585d8fea9e1d8b5dbcb9ffc9fc39804">More...</a><br /></td></tr>
+<tr class="separator:a3585d8fea9e1d8b5dbcb9ffc9fc39804"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ae9ca189f994c7ef06cbd779621c3dcbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ae9ca189f994c7ef06cbd779621c3dcbd">ComputeCentered</a> ()</td></tr>
+<tr class="memdesc:ae9ca189f994c7ef06cbd779621c3dcbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience method to center detector origin (use when inheriting)  <a href="class_isis_1_1_camera_focal_plane_map.html#ae9ca189f994c7ef06cbd779621c3dcbd">More...</a><br /></td></tr>
+<tr class="separator:ae9ca189f994c7ef06cbd779621c3dcbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09c2c3943a097b3d6f28989a6aa37b0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a09c2c3943a097b3d6f28989a6aa37b0a">ComputeUncentered</a> ()</td></tr>
+<tr class="memdesc:a09c2c3943a097b3d6f28989a6aa37b0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience method to center detector origin (use when inheriting)  <a href="class_isis_1_1_camera_focal_plane_map.html#a09c2c3943a097b3d6f28989a6aa37b0a">More...</a><br /></td></tr>
+<tr class="separator:a09c2c3943a097b3d6f28989a6aa37b0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a17e39bc8a2a0476ae194458f31b6f3fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a17e39bc8a2a0476ae194458f31b6f3fc">p_camera</a></td></tr>
+<tr class="memdesc:a17e39bc8a2a0476ae194458f31b6f3fc"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_camera.html">Camera</a> of the image.  <a href="class_isis_1_1_camera_focal_plane_map.html#a17e39bc8a2a0476ae194458f31b6f3fc">More...</a><br /></td></tr>
+<tr class="separator:a17e39bc8a2a0476ae194458f31b6f3fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f361612d8bcf9e3dd6a4610feab7600"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a4f361612d8bcf9e3dd6a4610feab7600">p_detectorLineOrigin</a></td></tr>
+<tr class="memdesc:a4f361612d8bcf9e3dd6a4610feab7600"><td class="mdescLeft">&#160;</td><td class="mdescRight">The origin line of the detector.  <a href="class_isis_1_1_camera_focal_plane_map.html#a4f361612d8bcf9e3dd6a4610feab7600">More...</a><br /></td></tr>
+<tr class="separator:a4f361612d8bcf9e3dd6a4610feab7600"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa18a13ea76fb7e743c14983aecb58126"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aa18a13ea76fb7e743c14983aecb58126">p_detectorSampleOrigin</a></td></tr>
+<tr class="memdesc:aa18a13ea76fb7e743c14983aecb58126"><td class="mdescLeft">&#160;</td><td class="mdescRight">The origin sample of the detector.  <a href="class_isis_1_1_camera_focal_plane_map.html#aa18a13ea76fb7e743c14983aecb58126">More...</a><br /></td></tr>
+<tr class="separator:aa18a13ea76fb7e743c14983aecb58126"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc2c7b010a0d6a03e987071fdf2bd1f3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#adc2c7b010a0d6a03e987071fdf2bd1f3">p_focalPlaneX</a></td></tr>
+<tr class="memdesc:adc2c7b010a0d6a03e987071fdf2bd1f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">x value of focal plane coordinate  <a href="class_isis_1_1_camera_focal_plane_map.html#adc2c7b010a0d6a03e987071fdf2bd1f3">More...</a><br /></td></tr>
+<tr class="separator:adc2c7b010a0d6a03e987071fdf2bd1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab586ae896d5113b21083020147fde54"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aab586ae896d5113b21083020147fde54">p_focalPlaneY</a></td></tr>
+<tr class="memdesc:aab586ae896d5113b21083020147fde54"><td class="mdescLeft">&#160;</td><td class="mdescRight">y value of focal plane coordinate  <a href="class_isis_1_1_camera_focal_plane_map.html#aab586ae896d5113b21083020147fde54">More...</a><br /></td></tr>
+<tr class="separator:aab586ae896d5113b21083020147fde54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdc93edb030e5d12cd3b563a194c6300"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afdc93edb030e5d12cd3b563a194c6300">p_detectorLine</a></td></tr>
+<tr class="memdesc:afdc93edb030e5d12cd3b563a194c6300"><td class="mdescLeft">&#160;</td><td class="mdescRight">line value of the detector  <a href="class_isis_1_1_camera_focal_plane_map.html#afdc93edb030e5d12cd3b563a194c6300">More...</a><br /></td></tr>
+<tr class="separator:afdc93edb030e5d12cd3b563a194c6300"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e062107f2a884378457f86813486061"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a6e062107f2a884378457f86813486061">p_detectorSample</a></td></tr>
+<tr class="memdesc:a6e062107f2a884378457f86813486061"><td class="mdescLeft">&#160;</td><td class="mdescRight">sample value of the detector  <a href="class_isis_1_1_camera_focal_plane_map.html#a6e062107f2a884378457f86813486061">More...</a><br /></td></tr>
+<tr class="separator:a6e062107f2a884378457f86813486061"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb3b411422f8d737d233d5537b8c22bd"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afb3b411422f8d737d233d5537b8c22bd">p_centeredDetectorSample</a></td></tr>
+<tr class="memdesc:afb3b411422f8d737d233d5537b8c22bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detector sample position.  <a href="class_isis_1_1_camera_focal_plane_map.html#afb3b411422f8d737d233d5537b8c22bd">More...</a><br /></td></tr>
+<tr class="separator:afb3b411422f8d737d233d5537b8c22bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8195ca59fa852eaafbe4e8300f82ac07"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a8195ca59fa852eaafbe4e8300f82ac07">p_centeredDetectorLine</a></td></tr>
+<tr class="memdesc:a8195ca59fa852eaafbe4e8300f82ac07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detector line position.  <a href="class_isis_1_1_camera_focal_plane_map.html#a8195ca59fa852eaafbe4e8300f82ac07">More...</a><br /></td></tr>
+<tr class="separator:a8195ca59fa852eaafbe4e8300f82ac07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4c83c1bfa976e960a7bb9900cd277a5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac4c83c1bfa976e960a7bb9900cd277a5">p_detectorLineOffset</a></td></tr>
+<tr class="memdesc:ac4c83c1bfa976e960a7bb9900cd277a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset of the detector origin line from the average.  <a href="class_isis_1_1_camera_focal_plane_map.html#ac4c83c1bfa976e960a7bb9900cd277a5">More...</a><br /></td></tr>
+<tr class="separator:ac4c83c1bfa976e960a7bb9900cd277a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad0a6986718cc9e2fb65080f0acf419c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aad0a6986718cc9e2fb65080f0acf419c">p_detectorSampleOffset</a></td></tr>
+<tr class="memdesc:aad0a6986718cc9e2fb65080f0acf419c"><td class="mdescLeft">&#160;</td><td class="mdescRight">offset of the detector origin sample from the average  <a href="class_isis_1_1_camera_focal_plane_map.html#aad0a6986718cc9e2fb65080f0acf419c">More...</a><br /></td></tr>
+<tr class="separator:aad0a6986718cc9e2fb65080f0acf419c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45b78587a50a4298c58240dbb62dee84"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a45b78587a50a4298c58240dbb62dee84">p_transx</a> [3]</td></tr>
+<tr class="memdesc:a45b78587a50a4298c58240dbb62dee84"><td class="mdescLeft">&#160;</td><td class="mdescRight">The x transition from detector to distorted.  <a href="class_isis_1_1_camera_focal_plane_map.html#a45b78587a50a4298c58240dbb62dee84">More...</a><br /></td></tr>
+<tr class="separator:a45b78587a50a4298c58240dbb62dee84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ad5c95efc393c924f9fb4b524c64309"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9ad5c95efc393c924f9fb4b524c64309">p_transy</a> [3]</td></tr>
+<tr class="memdesc:a9ad5c95efc393c924f9fb4b524c64309"><td class="mdescLeft">&#160;</td><td class="mdescRight">The y transition from detector to distorted.  <a href="class_isis_1_1_camera_focal_plane_map.html#a9ad5c95efc393c924f9fb4b524c64309">More...</a><br /></td></tr>
+<tr class="separator:a9ad5c95efc393c924f9fb4b524c64309"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19c854aaf2dd9377dc87dea1e4e5b5d3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a19c854aaf2dd9377dc87dea1e4e5b5d3">p_itranss</a> [3]</td></tr>
+<tr class="memdesc:a19c854aaf2dd9377dc87dea1e4e5b5d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The x transition from distorted to detector.  <a href="class_isis_1_1_camera_focal_plane_map.html#a19c854aaf2dd9377dc87dea1e4e5b5d3">More...</a><br /></td></tr>
+<tr class="separator:a19c854aaf2dd9377dc87dea1e4e5b5d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9584f565d92261fb551a32dd5d006bda"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9584f565d92261fb551a32dd5d006bda">p_itransl</a> [3]</td></tr>
+<tr class="memdesc:a9584f565d92261fb551a32dd5d006bda"><td class="mdescLeft">&#160;</td><td class="mdescRight">The y transition from distorted to detector.  <a href="class_isis_1_1_camera_focal_plane_map.html#a9584f565d92261fb551a32dd5d006bda">More...</a><br /></td></tr>
+<tr class="separator:a9584f565d92261fb551a32dd5d006bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Convert between distorted focal plane and detector coordinates. </p>
+<p>This base class is used to convert between distorted focal plane coordinates (x/y) in millimeters and detector coordinates in pixels. The class expects to find a set of coefficients in the naif instrument (or instrument addendum) kernel that describe the transform from detector to focal plane and vice versa. The transform from detector to focal plane is:</p>
+<div class="fragment"><div class="line">x = transx[0] + sample * transx[1] + line * transx[2];</div>
+<div class="line">y = transy[0] + sample * transy[1] + line * transy[2];</div>
+<div class="line"> </div>
+<div class="line">where, transx and transy are the coefficients from the naif kernel.</div>
+<div class="line">The should be in the form of:</div>
+<div class="line"> </div>
+<div class="line">INSxxxxxx_TRANSX = ( a, b, c)</div>
+<div class="line">INSxxxxxx_TRANSY = ( d, e, f)</div>
+<div class="line"> </div>
+<div class="line">where, xxxxxx is the NAIF instrument <span class="keywordtype">id</span> code.</div>
+</div><!-- fragment --><p>Likewise, the inverse transform is:</p>
+<div class="fragment"><div class="line">samp = itranss[0] + x * itranss[1] + y * itranss[2];</div>
+<div class="line">line = itransl[0] + x * itransl[1] + y * itransl[2];</div>
+<div class="line"> </div>
+<div class="line">where, itranss and itranss are the coefficients from the naif kernel.</div>
+<div class="line">The should be in the form of:</div>
+<div class="line"> </div>
+<div class="line">INSxxxxxx_ITRANSS = ( a, b, c)</div>
+<div class="line">INSxxxxxx_ITRANSL = ( d, e, f)</div>
+<div class="line"> </div>
+<div class="line">where, xxxxxx is the NAIF instrument <span class="keywordtype">id</span> code.</div>
+</div><!-- fragment --><dl class="section author"><dt>Author</dt><dd>2005-02-05 Jeff Anderson</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_camera.html">Camera</a> </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="ab2b4e67b672af76748563f3472d071fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2b4e67b672af76748563f3472d071fd">&#9670;&nbsp;</a></span>FocalPlaneXDependencyType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fd">Isis::CameraFocalPlaneMap::FocalPlaneXDependencyType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Focal plane x dependency indicates whether the x value of the focal plane coordinate maps to a sample or a line. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab2b4e67b672af76748563f3472d071fdacdc7441cfddbc819180f1a935a61dc44"></a>Sample&#160;</td><td class="fielddoc"><p>The x value of the focal plane maps to a sample. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab2b4e67b672af76748563f3472d071fda10c241138cbd3f241769f88026fd9e03"></a>Line&#160;</td><td class="fielddoc"><p>The x value of the focal plane maps to a line. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aecb97fecfa5fe621f5afe7f1b0bfce5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecb97fecfa5fe621f5afe7f1b0bfce5b">&#9670;&nbsp;</a></span>CameraFocalPlaneMap() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CameraFocalPlaneMap::CameraFocalPlaneMap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>naifIkCode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct mapping between detectors and focal plane x/y. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>parent camera that will use this map </td></tr>
+    <tr><td class="paramname">naifIkCode</td><td>code of the naif instrument for reading coefficients </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af58da2945549bf8c077156fd6522ecdd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af58da2945549bf8c077156fd6522ecdd">&#9670;&nbsp;</a></span>CameraFocalPlaneMap() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CameraFocalPlaneMap::CameraFocalPlaneMap </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>naifIkCode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct mapping between detectors and focal plane x/y. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">naifIkCode</td><td>code of the naif instrument for reading coefficients </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3cc7a674aa6783a38387245245d75c36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cc7a674aa6783a38387245245d75c36">&#9670;&nbsp;</a></span>CameraFocalPlaneMap() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CameraFocalPlaneMap::CameraFocalPlaneMap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_affine.html">Affine</a> &amp;&#160;</td>
+          <td class="paramname"><em>affine</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Added new method to allow programmer to pass in affine coefficients. </p>
+<dl class="section author"><dt>Author</dt><dd>janderson (3/25/2014)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>Parent camera </td></tr>
+    <tr><td class="paramname">affine</td><td><a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> transform containing the coefficients for both transforms to (samp,line) to (x,y) and reverse </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_affine.html#a12418f798e531380da3266bf5ec359cf">Isis::Affine::Coefficients()</a>, <a class="el" href="class_isis_1_1_affine.html#aea7c471f1bcda0267fd5c75eafb3a1a5">Isis::Affine::InverseCoefficients()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a17e39bc8a2a0476ae194458f31b6f3fc">p_camera</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac4c83c1bfa976e960a7bb9900cd277a5">p_detectorLineOffset</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a4f361612d8bcf9e3dd6a4610feab7600">p_detectorLineOrigin</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aad0a6986718cc9e2fb65080f0acf419c">p_detectorSampleOffset</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aa18a13ea76fb7e743c14983aecb58126">p_detectorSampleOrigin</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9584f565d92261fb551a32dd5d006bda">p_itransl</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a19c854aaf2dd9377dc87dea1e4e5b5d3">p_itranss</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a45b78587a50a4298c58240dbb62dee84">p_transx</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9ad5c95efc393c924f9fb4b524c64309">p_transy</a>, and <a class="el" href="class_isis_1_1_camera.html#aace251ecddff44e5fa558b6421e93580">Isis::Camera::SetFocalPlaneMap()</a>.</p>
+
+</div>
+</div>
+<a id="ac48c2a927c2b75013e2dfd97a51c3b13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac48c2a927c2b75013e2dfd97a51c3b13">&#9670;&nbsp;</a></span>~CameraFocalPlaneMap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CameraFocalPlaneMap::~CameraFocalPlaneMap </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7a942a438fa43c1b280758b7df951e57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a942a438fa43c1b280758b7df951e57">&#9670;&nbsp;</a></span>CenteredDetectorLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::CenteredDetectorLine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The centered detector line </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a8195ca59fa852eaafbe4e8300f82ac07">p_centeredDetectorLine</a>.</p>
+
+</div>
+</div>
+<a id="a170d1535a0171d6338a778bc7e84ebb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a170d1535a0171d6338a778bc7e84ebb8">&#9670;&nbsp;</a></span>CenteredDetectorSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::CenteredDetectorSample </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The centered detector sample </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afb3b411422f8d737d233d5537b8c22bd">p_centeredDetectorSample</a>.</p>
+
+</div>
+</div>
+<a id="ae9ca189f994c7ef06cbd779621c3dcbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9ca189f994c7ef06cbd779621c3dcbd">&#9670;&nbsp;</a></span>ComputeCentered()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraFocalPlaneMap::ComputeCentered </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convenience method to center detector origin (use when inheriting) </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a8195ca59fa852eaafbe4e8300f82ac07">p_centeredDetectorLine</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afb3b411422f8d737d233d5537b8c22bd">p_centeredDetectorSample</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afdc93edb030e5d12cd3b563a194c6300">p_detectorLine</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a4f361612d8bcf9e3dd6a4610feab7600">p_detectorLineOrigin</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a6e062107f2a884378457f86813486061">p_detectorSample</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aa18a13ea76fb7e743c14983aecb58126">p_detectorSampleOrigin</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">SetDetector()</a>.</p>
+
+</div>
+</div>
+<a id="a09c2c3943a097b3d6f28989a6aa37b0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09c2c3943a097b3d6f28989a6aa37b0a">&#9670;&nbsp;</a></span>ComputeUncentered()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraFocalPlaneMap::ComputeUncentered </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convenience method to center detector origin (use when inheriting) </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a8195ca59fa852eaafbe4e8300f82ac07">p_centeredDetectorLine</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afb3b411422f8d737d233d5537b8c22bd">p_centeredDetectorSample</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afdc93edb030e5d12cd3b563a194c6300">p_detectorLine</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a4f361612d8bcf9e3dd6a4610feab7600">p_detectorLineOrigin</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a6e062107f2a884378457f86813486061">p_detectorSample</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aa18a13ea76fb7e743c14983aecb58126">p_detectorSampleOrigin</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac6c8215c92ee4585403839fd114e7d53">SetFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="aa1d7ac60e59eee33a17c878d6ae11478"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1d7ac60e59eee33a17c878d6ae11478">&#9670;&nbsp;</a></span>DetectorLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::DetectorLine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The detector line </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afdc93edb030e5d12cd3b563a194c6300">p_detectorLine</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#aa5e29e7dfedb1a8a4ac170e041f3bcb7">Isis::LoMediumDistortionMap::SetDistortion()</a>, <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a952654c1abd8c9176f2abaef5070f5e9">Isis::LoMediumDistortionMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_distortion_map.html#a255ec56bc76ce271ada01e3a8fdb53ca">Isis::OsirisRexOcamsDistortionMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_camera.html#af0cd6af4d555f46d623e91d397389df3">Isis::Camera::SetRightAscensionDeclination()</a>, <a class="el" href="class_isis_1_1_line_scan_camera_sky_map.html#a2b3db0250485bde39141681491ea2f12">Isis::LineScanCameraSkyMap::SetSky()</a>, <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a63558e7c0d7d2b140203894ca36f099f">Isis::LoMediumDistortionMap::SetUndistortedFocalPlane()</a>, and <a class="el" href="class_isis_1_1_osiris_rex_ocams_distortion_map.html#ae7899b722bd5bf0d634b1fbce3f9d131">Isis::OsirisRexOcamsDistortionMap::SetUndistortedFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="afd45fc29861198441fb343f122ef0560"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd45fc29861198441fb343f122ef0560">&#9670;&nbsp;</a></span>DetectorLineOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::DetectorLineOffset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The detector line offset </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac4c83c1bfa976e960a7bb9900cd277a5">p_detectorLineOffset</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_line_scan_camera_detector_map.html#acd1622954dd2167aca66e8410defa8be">Isis::LineScanCameraDetectorMap::SetParent()</a>, <a class="el" href="class_isis_1_1_variable_line_scan_camera_detector_map.html#aad24f2d6698b9a86daba5b530dffedf2">Isis::VariableLineScanCameraDetectorMap::SetParent()</a>, and <a class="el" href="class_isis_1_1_line_scan_camera_sky_map.html#a2b3db0250485bde39141681491ea2f12">Isis::LineScanCameraSkyMap::SetSky()</a>.</p>
+
+</div>
+</div>
+<a id="af35e3acd816adf081c6021363b928366"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af35e3acd816adf081c6021363b928366">&#9670;&nbsp;</a></span>DetectorLineOrigin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::DetectorLineOrigin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The detector line origin </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a4f361612d8bcf9e3dd6a4610feab7600">p_detectorLineOrigin</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_osiris_rex_distortion_map.html#a26d50c4904851b5329129800c4c03e7e">Isis::OsirisRexDistortionMap::OsirisRexDistortionMap()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_distortion_map.html#aee006ccf99712d7fd677967aa225caee">Isis::OsirisRexOcamsDistortionMap::OsirisRexOcamsDistortionMap()</a>, <a class="el" href="class_isis_1_1_reseau_distortion_map.html#a82f19d1234c7920159cc7e2b26fb83d5">Isis::ReseauDistortionMap::SetFocalPlane()</a>, and <a class="el" href="class_isis_1_1_reseau_distortion_map.html#ace5ff8c21e0f970e52c8a6e42874e1f5">Isis::ReseauDistortionMap::SetUndistortedFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="a03aea9d8598133eb80e88fdbb58082bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03aea9d8598133eb80e88fdbb58082bf">&#9670;&nbsp;</a></span>DetectorSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::DetectorSample </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The detector sample </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a6e062107f2a884378457f86813486061">p_detectorSample</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#aa5e29e7dfedb1a8a4ac170e041f3bcb7">Isis::LoMediumDistortionMap::SetDistortion()</a>, <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a952654c1abd8c9176f2abaef5070f5e9">Isis::LoMediumDistortionMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_distortion_map.html#a255ec56bc76ce271ada01e3a8fdb53ca">Isis::OsirisRexOcamsDistortionMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_camera.html#af0cd6af4d555f46d623e91d397389df3">Isis::Camera::SetRightAscensionDeclination()</a>, <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a63558e7c0d7d2b140203894ca36f099f">Isis::LoMediumDistortionMap::SetUndistortedFocalPlane()</a>, and <a class="el" href="class_isis_1_1_osiris_rex_ocams_distortion_map.html#ae7899b722bd5bf0d634b1fbce3f9d131">Isis::OsirisRexOcamsDistortionMap::SetUndistortedFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="a9a5d2aec161ffb85228ef6e998dc83cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a5d2aec161ffb85228ef6e998dc83cb">&#9670;&nbsp;</a></span>DetectorSampleOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::DetectorSampleOffset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The detector sample offset </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aad0a6986718cc9e2fb65080f0acf419c">p_detectorSampleOffset</a>.</p>
+
+</div>
+</div>
+<a id="af189e8038de5bcbeb366e93a4f52db7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af189e8038de5bcbeb366e93a4f52db7c">&#9670;&nbsp;</a></span>DetectorSampleOrigin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::DetectorSampleOrigin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The detector sample origin </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aa18a13ea76fb7e743c14983aecb58126">p_detectorSampleOrigin</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_osiris_rex_distortion_map.html#a26d50c4904851b5329129800c4c03e7e">Isis::OsirisRexDistortionMap::OsirisRexDistortionMap()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_distortion_map.html#aee006ccf99712d7fd677967aa225caee">Isis::OsirisRexOcamsDistortionMap::OsirisRexOcamsDistortionMap()</a>, <a class="el" href="class_isis_1_1_reseau_distortion_map.html#a82f19d1234c7920159cc7e2b26fb83d5">Isis::ReseauDistortionMap::SetFocalPlane()</a>, and <a class="el" href="class_isis_1_1_reseau_distortion_map.html#ace5ff8c21e0f970e52c8a6e42874e1f5">Isis::ReseauDistortionMap::SetUndistortedFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="aea7639f61c49fdfd81e3e7e1061bcb34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea7639f61c49fdfd81e3e7e1061bcb34">&#9670;&nbsp;</a></span>FocalPlaneX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::FocalPlaneX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The distorted focal plane x </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#adc2c7b010a0d6a03e987071fdf2bd1f3">p_focalPlaneX</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a952654c1abd8c9176f2abaef5070f5e9">Isis::LoMediumDistortionMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_camera.html#a8c77ac87c62e4a9cd168966ede042b04">Isis::Camera::SetImage()</a>, and <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a63558e7c0d7d2b140203894ca36f099f">Isis::LoMediumDistortionMap::SetUndistortedFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="a0504cee7c8b1d860978dca17c21f9292"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0504cee7c8b1d860978dca17c21f9292">&#9670;&nbsp;</a></span>FocalPlaneXDependency()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::CameraFocalPlaneMap::FocalPlaneXDependency </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the focal plane x dependency variable. </p>
+<p>This method returns the image variable (sample or line) on which the focal plane x depends.</p>
+<dl class="section return"><dt>Returns</dt><dd>dependency variable </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fda10c241138cbd3f241769f88026fd9e03">Line</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a45b78587a50a4298c58240dbb62dee84">p_transx</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fdacdc7441cfddbc819180f1a935a61dc44">Sample</a>.</p>
+
+</div>
+</div>
+<a id="a05ad59a4c3d491052fcdc55e0826d8c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05ad59a4c3d491052fcdc55e0826d8c0">&#9670;&nbsp;</a></span>FocalPlaneY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::FocalPlaneY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The distorted focal plane y </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aab586ae896d5113b21083020147fde54">p_focalPlaneY</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a952654c1abd8c9176f2abaef5070f5e9">Isis::LoMediumDistortionMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_camera.html#a8c77ac87c62e4a9cd168966ede042b04">Isis::Camera::SetImage()</a>, and <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a63558e7c0d7d2b140203894ca36f099f">Isis::LoMediumDistortionMap::SetUndistortedFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="a7aac4edc4145e7b2c44784ef9cb0f2f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7aac4edc4145e7b2c44784ef9cb0f2f4">&#9670;&nbsp;</a></span>SetDetector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::CameraFocalPlaneMap::SetDetector </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>sample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>line</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute distorted focal plane coordinate from detector position (sampel,line) </p>
+<p>This method will compute both the distorted focal plane x/y and centered detector position given a detector position</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sample</td><td>undistorted focal plane x in millimeters </td></tr>
+    <tr><td class="paramname">line</td><td>undistorted focal plane y in millimeters</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>conversion was successful </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ae9ca189f994c7ef06cbd779621c3dcbd">ComputeCentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a8195ca59fa852eaafbe4e8300f82ac07">p_centeredDetectorLine</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afb3b411422f8d737d233d5537b8c22bd">p_centeredDetectorSample</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afdc93edb030e5d12cd3b563a194c6300">p_detectorLine</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a6e062107f2a884378457f86813486061">p_detectorSample</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#adc2c7b010a0d6a03e987071fdf2bd1f3">p_focalPlaneX</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aab586ae896d5113b21083020147fde54">p_focalPlaneY</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a45b78587a50a4298c58240dbb62dee84">p_transx</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9ad5c95efc393c924f9fb4b524c64309">p_transy</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a952654c1abd8c9176f2abaef5070f5e9">Isis::LoMediumDistortionMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_camera.html#a8c77ac87c62e4a9cd168966ede042b04">Isis::Camera::SetImage()</a>, and <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a63558e7c0d7d2b140203894ca36f099f">Isis::LoMediumDistortionMap::SetUndistortedFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="a1be10c7510d14950c9390570ddae8242"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1be10c7510d14950c9390570ddae8242">&#9670;&nbsp;</a></span>SetDetectorOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraFocalPlaneMap::SetDetectorOffset </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>sampleOffset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>lineOffset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the detector offset. </p>
+<p>This is used to set the offset between the detector origin and the average location in detector pixels where the image is being viewed. If not set the offset are both 0.0</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sampleOffset</td><td>sample offset in pixels </td></tr>
+    <tr><td class="paramname">lineOffset</td><td>sample offset in lines </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac4c83c1bfa976e960a7bb9900cd277a5">p_detectorLineOffset</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aad0a6986718cc9e2fb65080f0acf419c">p_detectorSampleOffset</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_apollo_panoramic_camera.html#a52fb369695f66297180758c198b71413">Isis::ApolloPanoramicCamera::ApolloPanoramicCamera()</a>, <a class="el" href="group___mars_reconnaissance_orbiter.html#gaa2961a0d1b22ff4c863afb9186ff0338">Isis::Chandrayaan1M3Camera::Chandrayaan1M3Camera()</a>, <a class="el" href="class_isis_1_1_clipper_push_broom_camera.html#a25a29b46174884c9df0f635f780eb0e1">Isis::ClipperPushBroomCamera::ClipperPushBroomCamera()</a>, <a class="el" href="class_isis_1_1_crism_camera.html#a140a2397a1035544a59f584df5228ea6">Isis::CrismCamera::CrismCamera()</a>, <a class="el" href="class_isis_1_1_c_t_x_camera.html#a57b1a9eb8d72daab7e1d22000ce818a0">Isis::CTXCamera::CTXCamera()</a>, <a class="el" href="class_isis_1_1_hirise_camera.html#a034da3530dce257d36fa71c34ee6605e">Isis::HiriseCamera::HiriseCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_mi_camera.html#aff13b02798fc8d4ada958ec542d8c832">Isis::KaguyaMiCamera::KaguyaMiCamera()</a>, <a class="el" href="class_isis_1_1_lro_narrow_angle_camera.html#a7e310784f7229b84c9e5cdaa8a7487dd">Isis::LroNarrowAngleCamera::LroNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_moc_narrow_angle_camera.html#afd8e7c069fbe9162dfae5f5cc0389124">Isis::MocNarrowAngleCamera::MocNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_moc_wide_angle_camera.html#a03c12a9dfe9b300937e1944311955351">Isis::MocWideAngleCamera::MocWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_themis_ir_camera.html#a92a5cbd95cffd5c69e2c69688307952e">Isis::ThemisIrCamera::SetBand()</a>, and <a class="el" href="class_isis_1_1_themis_ir_camera.html#ad6d3d29693ab5150652d6b7431e6cf94">Isis::ThemisIrCamera::ThemisIrCamera()</a>.</p>
+
+</div>
+</div>
+<a id="a8eb60b5f3c9d471052b75e53c27dfc8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8eb60b5f3c9d471052b75e53c27dfc8c">&#9670;&nbsp;</a></span>SetDetectorOrigin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraFocalPlaneMap::SetDetectorOrigin </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>sample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>line</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the detector origin. </p>
+<p>This is used to set the origin of the detector. Typically the middle of the detector. For example, a 512x512 dectector would have the origin at (256.5,256.5). If not set both are 0.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sample</td><td>detector sample at the origin </td></tr>
+    <tr><td class="paramname">line</td><td>detector line at the origin </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a4f361612d8bcf9e3dd6a4610feab7600">p_detectorLineOrigin</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aa18a13ea76fb7e743c14983aecb58126">p_detectorSampleOrigin</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_apollo_metric_camera.html#a992e6c71d34b6d66c7b3243bcec5891c">Isis::ApolloMetricCamera::ApolloMetricCamera()</a>, <a class="el" href="class_isis_1_1_apollo_panoramic_camera.html#a52fb369695f66297180758c198b71413">Isis::ApolloPanoramicCamera::ApolloPanoramicCamera()</a>, <a class="el" href="group___mars_reconnaissance_orbiter.html#gaa2961a0d1b22ff4c863afb9186ff0338">Isis::Chandrayaan1M3Camera::Chandrayaan1M3Camera()</a>, <a class="el" href="class_isis_1_1_clipper_nac_rolling_shutter_camera.html#aa04790bb0966aa885f45b93497768bdb">Isis::ClipperNacRollingShutterCamera::ClipperNacRollingShutterCamera()</a>, <a class="el" href="class_isis_1_1_clipper_push_broom_camera.html#a25a29b46174884c9df0f635f780eb0e1">Isis::ClipperPushBroomCamera::ClipperPushBroomCamera()</a>, <a class="el" href="class_isis_1_1_clipper_wac_fc_camera.html#a3d9ff3ecf2a7580875a23c6a6d8d6dc9">Isis::ClipperWacFcCamera::ClipperWacFcCamera()</a>, <a class="el" href="class_isis_1_1_crism_camera.html#a140a2397a1035544a59f584df5228ea6">Isis::CrismCamera::CrismCamera()</a>, <a class="el" href="class_isis_1_1_c_t_x_camera.html#a57b1a9eb8d72daab7e1d22000ce818a0">Isis::CTXCamera::CTXCamera()</a>, <a class="el" href="class_isis_1_1_dawn_fc_camera.html#a681968ed3697a89997d9ce3742f56fcc">Isis::DawnFcCamera::DawnFcCamera()</a>, <a class="el" href="class_isis_1_1_dawn_vir_camera.html#ae0948d667521b2d159056ffb8a0133bc">Isis::DawnVirCamera::DawnVirCamera()</a>, <a class="el" href="class_isis_1_1_hires_camera.html#a180c7e99246c852d64b1841e720d8259">Isis::HiresCamera::HiresCamera()</a>, <a class="el" href="class_isis_1_1_hirise_camera.html#a034da3530dce257d36fa71c34ee6605e">Isis::HiriseCamera::HiriseCamera()</a>, <a class="el" href="class_isis_1_1_hrsc_camera.html#a1cf946326322a023facb7584c9fa9a7d">Isis::HrscCamera::HrscCamera()</a>, <a class="el" href="class_isis_1_1_ideal_camera.html#ace59957190731b4e77dd4e7c1a6932bd">Isis::IdealCamera::IdealCamera()</a>, <a class="el" href="class_isis_1_1_iss_n_a_camera.html#ae1379469ffc23988311c1f281c6a4be4">Isis::IssNACamera::IssNACamera()</a>, <a class="el" href="class_isis_1_1_iss_w_a_camera.html#a40939367de14f4ceab92e63cbac5483f">Isis::IssWACamera::IssWACamera()</a>, <a class="el" href="class_isis_1_1_juno_camera.html#a96ed76797e1ab321f76904fcdf0ab3be">Isis::JunoCamera::JunoCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_mi_camera.html#aff13b02798fc8d4ada958ec542d8c832">Isis::KaguyaMiCamera::KaguyaMiCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_tc_camera.html#aa3a277ae3b92dd76f39e3afcb2259ad0">Isis::KaguyaTcCamera::KaguyaTcCamera()</a>, <a class="el" href="class_isis_1_1_lo_high_camera.html#a5d1c553aa0747b7e8278fe7c04710368">Isis::LoHighCamera::LoHighCamera()</a>, <a class="el" href="class_isis_1_1_lo_medium_camera.html#a867c099f83e4b758eedc59e08208c573">Isis::LoMediumCamera::LoMediumCamera()</a>, <a class="el" href="class_isis_1_1_lro_narrow_angle_camera.html#a7e310784f7229b84c9e5cdaa8a7487dd">Isis::LroNarrowAngleCamera::LroNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_lwir_camera.html#a3de974cfebf81e9d0e8418af30ca0dae">Isis::LwirCamera::LwirCamera()</a>, <a class="el" href="class_isis_1_1_marci_camera.html#ab1c614622a0615f3e54eaad3e99e818e">Isis::MarciCamera::MarciCamera()</a>, <a class="el" href="class_isis_1_1_mariner10_camera.html#a95bd2fc9a70874bd764329b0e5df5a73">Isis::Mariner10Camera::Mariner10Camera()</a>, <a class="el" href="class_isis_1_1_mdis_camera.html#a331991f68a867ffff37b127416143d44">Isis::MdisCamera::MdisCamera()</a>, <a class="el" href="class_isis_1_1_mex_hrsc_src_camera.html#a9af85539cb0e18ac9d840bc902b10559">Isis::MexHrscSrcCamera::MexHrscSrcCamera()</a>, <a class="el" href="class_isis_1_1_moc_narrow_angle_camera.html#afd8e7c069fbe9162dfae5f5cc0389124">Isis::MocNarrowAngleCamera::MocNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_moc_wide_angle_camera.html#a03c12a9dfe9b300937e1944311955351">Isis::MocWideAngleCamera::MocWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_msi_camera.html#a26cd32f4b430371dac263ae065a336ea">Isis::MsiCamera::MsiCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a1f6437c5488c941495cea26ae543ffb5">Isis::NewHorizonsLeisaCamera::NewHorizonsLeisaCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_lorri_camera.html#a7c9ad07352411bdec6111ffb87088528">Isis::NewHorizonsLorriCamera::NewHorizonsLorriCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_frame_camera.html#aa48c3e21156c83a7d54963f0240b501a">Isis::NewHorizonsMvicFrameCamera::NewHorizonsMvicFrameCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_tdi_camera.html#acd1c6614f017d336ba407044aa76526f">Isis::NewHorizonsMvicTdiCamera::NewHorizonsMvicTdiCamera()</a>, <a class="el" href="class_isis_1_1_nir_camera.html#ab4115fe38276b4964d91c60b20765efe">Isis::NirCamera::NirCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_camera.html#a04a1d8ee6e5f7a0b894bea4c632c723a">Isis::OsirisRexOcamsCamera::OsirisRexOcamsCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_tagcams_camera.html#abfe161a325a14b8ee463f4bf36f2e8fd">Isis::OsirisRexTagcamsCamera::OsirisRexTagcamsCamera()</a>, <a class="el" href="class_isis_1_1_rosetta_osiris_camera.html#a07c6aefe99418ce646206f2e97b6ee30">Isis::RosettaOsirisCamera::RosettaOsirisCamera()</a>, <a class="el" href="class_isis_1_1_rosetta_virtis_camera.html#a454546ac29834b333a4e361bf4a1ac03">Isis::RosettaVirtisCamera::RosettaVirtisCamera()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera.html#ab0c7b7ff51e26f55e2c9cd974e8a93ee">Isis::LroWideAngleCamera::SetBand()</a>, <a class="el" href="class_isis_1_1_themis_ir_camera.html#a92a5cbd95cffd5c69e2c69688307952e">Isis::ThemisIrCamera::SetBand()</a>, <a class="el" href="class_isis_1_1_ssi_camera.html#a9dcb28e566215656e1983c90bf316651">Isis::SsiCamera::SsiCamera()</a>, <a class="el" href="class_isis_1_1_tgo_cassis_camera.html#a940ab5649ac6aa069be36821efa52409">Isis::TgoCassisCamera::TgoCassisCamera()</a>, <a class="el" href="class_isis_1_1_themis_ir_camera.html#ad6d3d29693ab5150652d6b7431e6cf94">Isis::ThemisIrCamera::ThemisIrCamera()</a>, <a class="el" href="class_isis_1_1_themis_vis_camera.html#abadb84893241b18757bec392b81d63c4">Isis::ThemisVisCamera::ThemisVisCamera()</a>, <a class="el" href="class_isis_1_1_uvvis_camera.html#aad2dd78ca84967f7d8817576805ad2ea">Isis::UvvisCamera::UvvisCamera()</a>, <a class="el" href="class_isis_1_1_viking_camera.html#a2a1a860e2ca961eb38e8f08361708875">Isis::VikingCamera::VikingCamera()</a>, and <a class="el" href="class_isis_1_1_voyager_camera.html#afe52641e45e4a3845a056d32bbf5740a">Isis::VoyagerCamera::VoyagerCamera()</a>.</p>
+
+</div>
+</div>
+<a id="ac6c8215c92ee4585403839fd114e7d53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6c8215c92ee4585403839fd114e7d53">&#9670;&nbsp;</a></span>SetFocalPlane()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::CameraFocalPlaneMap::SetFocalPlane </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>dx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>dy</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute detector position (sample,line) from focal plane coordinates. </p>
+<p>NOTE: This is detector (sample, line) not necessarily image (sample, line). If the image was reformatted from what was collected the two differ. See the New Horizons LEISA camera for an example (LEISA is a frame camera being treated as a line scan camera).</p>
+<p>This method will compute both the centered and normal detector position given a distorted focal plane coordinate.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dx</td><td>distorted focal plane x in millimeters </td></tr>
+    <tr><td class="paramname">dy</td><td>distorted focal plane y in millimeters</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>conversion was successful </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a09c2c3943a097b3d6f28989a6aa37b0a">ComputeUncentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a8195ca59fa852eaafbe4e8300f82ac07">p_centeredDetectorLine</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afb3b411422f8d737d233d5537b8c22bd">p_centeredDetectorSample</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#adc2c7b010a0d6a03e987071fdf2bd1f3">p_focalPlaneX</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aab586ae896d5113b21083020147fde54">p_focalPlaneY</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9584f565d92261fb551a32dd5d006bda">p_itransl</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a19c854aaf2dd9377dc87dea1e4e5b5d3">p_itranss</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#aa5e29e7dfedb1a8a4ac170e041f3bcb7">Isis::LoMediumDistortionMap::SetDistortion()</a>, <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a952654c1abd8c9176f2abaef5070f5e9">Isis::LoMediumDistortionMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_camera.html#af0cd6af4d555f46d623e91d397389df3">Isis::Camera::SetRightAscensionDeclination()</a>, <a class="el" href="class_isis_1_1_line_scan_camera_sky_map.html#a2b3db0250485bde39141681491ea2f12">Isis::LineScanCameraSkyMap::SetSky()</a>, and <a class="el" href="class_isis_1_1_lo_medium_distortion_map.html#a63558e7c0d7d2b140203894ca36f099f">Isis::LoMediumDistortionMap::SetUndistortedFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="a70e2d0250b7f0d4a2606333facb4a748"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70e2d0250b7f0d4a2606333facb4a748">&#9670;&nbsp;</a></span>SetTransL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraFocalPlaneMap::SetTransL </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt;&#160;</td>
+          <td class="paramname"><em>transL</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the affine coefficients for converting destorted (x,y) to a detector Line. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transL</td><td>Vector of the affine coefficients </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9584f565d92261fb551a32dd5d006bda">p_itransl</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a31faf13248e505f34457c35c952d2fb6">Isis::NewHorizonsLeisaCamera::SetBand()</a>.</p>
+
+</div>
+</div>
+<a id="a6b0236f1d263f379bdeca060628a0417"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b0236f1d263f379bdeca060628a0417">&#9670;&nbsp;</a></span>SetTransS()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraFocalPlaneMap::SetTransS </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt;&#160;</td>
+          <td class="paramname"><em>transS</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the affine coefficients for converting destorted (x,y) to a detector Sample. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transS</td><td>Vector of the affine coefficients </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a19c854aaf2dd9377dc87dea1e4e5b5d3">p_itranss</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a31faf13248e505f34457c35c952d2fb6">Isis::NewHorizonsLeisaCamera::SetBand()</a>.</p>
+
+</div>
+</div>
+<a id="a90567ee839d43055c2497927e8eaa731"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90567ee839d43055c2497927e8eaa731">&#9670;&nbsp;</a></span>SetTransX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraFocalPlaneMap::SetTransX </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt;&#160;</td>
+          <td class="paramname"><em>transX</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the affine coefficients for converting detector (sample,line) to a distorted X. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transX</td><td>Vector of the affine coefficients </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a45b78587a50a4298c58240dbb62dee84">p_transx</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a31faf13248e505f34457c35c952d2fb6">Isis::NewHorizonsLeisaCamera::SetBand()</a>.</p>
+
+</div>
+</div>
+<a id="a9a3079b6ca28db7475fa91bfb03e508d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a3079b6ca28db7475fa91bfb03e508d">&#9670;&nbsp;</a></span>SetTransY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraFocalPlaneMap::SetTransY </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt;&#160;</td>
+          <td class="paramname"><em>transY</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the affine coefficients for converting detector (sample,line) to a distorted Y. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transY</td><td>Vector of the affine coefficients </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9ad5c95efc393c924f9fb4b524c64309">p_transy</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a31faf13248e505f34457c35c952d2fb6">Isis::NewHorizonsLeisaCamera::SetBand()</a>.</p>
+
+</div>
+</div>
+<a id="ae6731df3b35e663f6f25ba9ab060c14e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6731df3b35e663f6f25ba9ab060c14e">&#9670;&nbsp;</a></span>SignMostSigX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::SignMostSigX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the sign of the p_transx coefficient with the greatest magnitude. </p>
+<p>This method returns a +1. or -1. based on the sign of the p_transx coefficient with the greatest magnitude. Only p_transx[1] and p_transx[2] are compared since p_transx[0] is used as a constant in the affine transformation.</p>
+<dl class="section return"><dt>Returns</dt><dd>sign of most significant coefficient </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a45b78587a50a4298c58240dbb62dee84">p_transx</a>.</p>
+
+</div>
+</div>
+<a id="a3585d8fea9e1d8b5dbcb9ffc9fc39804"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3585d8fea9e1d8b5dbcb9ffc9fc39804">&#9670;&nbsp;</a></span>SignMostSigY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::SignMostSigY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the sign of the p_transy coefficient with the greatest magnitude. </p>
+<p>This method returns a +1 or -1 based on the sign of the p_transy coefficient with the greatest magnitude. Only p_transy[1] and p_transy[2] are compared since p_transy[0] is used as a constant in the affine transformation.</p>
+<dl class="section return"><dt>Returns</dt><dd>sign of most significant coefficient </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9ad5c95efc393c924f9fb4b524c64309">p_transy</a>.</p>
+
+</div>
+</div>
+<a id="a34ddcda50620c0c8195eb4c346157929"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34ddcda50620c0c8195eb4c346157929">&#9670;&nbsp;</a></span>TransL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const double * Isis::CameraFocalPlaneMap::TransL </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The affine coefficients for converting distorted (x,y) to a detector Line </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9584f565d92261fb551a32dd5d006bda">p_itransl</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a1f6437c5488c941495cea26ae543ffb5">Isis::NewHorizonsLeisaCamera::NewHorizonsLeisaCamera()</a>.</p>
+
+</div>
+</div>
+<a id="ad65a1c0cd5c8af839371b6c314048f92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad65a1c0cd5c8af839371b6c314048f92">&#9670;&nbsp;</a></span>TransS()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const double * Isis::CameraFocalPlaneMap::TransS </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The affine coefficients for converting distorted (x,y) to a detector Sample </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a19c854aaf2dd9377dc87dea1e4e5b5d3">p_itranss</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a1f6437c5488c941495cea26ae543ffb5">Isis::NewHorizonsLeisaCamera::NewHorizonsLeisaCamera()</a>.</p>
+
+</div>
+</div>
+<a id="acadeb721f9a368d017248835bab17278"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acadeb721f9a368d017248835bab17278">&#9670;&nbsp;</a></span>TransX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const double * Isis::CameraFocalPlaneMap::TransX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The affine coefficients for converting detector (sample,line) to a distorted X </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a45b78587a50a4298c58240dbb62dee84">p_transx</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a1f6437c5488c941495cea26ae543ffb5">Isis::NewHorizonsLeisaCamera::NewHorizonsLeisaCamera()</a>.</p>
+
+</div>
+</div>
+<a id="ac620d64b9297912d2b4d1670912c8046"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac620d64b9297912d2b4d1670912c8046">&#9670;&nbsp;</a></span>TransY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const double * Isis::CameraFocalPlaneMap::TransY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The affine coefficients for converting detector (sample,line) to distorted Y </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9ad5c95efc393c924f9fb4b524c64309">p_transy</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a1f6437c5488c941495cea26ae543ffb5">Isis::NewHorizonsLeisaCamera::NewHorizonsLeisaCamera()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a17e39bc8a2a0476ae194458f31b6f3fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17e39bc8a2a0476ae194458f31b6f3fc">&#9670;&nbsp;</a></span>p_camera</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_camera.html">Camera</a>* Isis::CameraFocalPlaneMap::p_camera</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_camera.html">Camera</a> of the image. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lro_wide_angle_camera_focal_plane_map.html#a7511c04e4308a7abb3025ad88707dc78">Isis::LroWideAngleCameraFocalPlaneMap::addFilter()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">CameraFocalPlaneMap()</a>.</p>
+
+</div>
+</div>
+<a id="a8195ca59fa852eaafbe4e8300f82ac07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8195ca59fa852eaafbe4e8300f82ac07">&#9670;&nbsp;</a></span>p_centeredDetectorLine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_centeredDetectorLine</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Detector line position. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7a942a438fa43c1b280758b7df951e57">CenteredDetectorLine()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ae9ca189f994c7ef06cbd779621c3dcbd">ComputeCentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a09c2c3943a097b3d6f28989a6aa37b0a">ComputeUncentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">SetDetector()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac6c8215c92ee4585403839fd114e7d53">SetFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="afb3b411422f8d737d233d5537b8c22bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb3b411422f8d737d233d5537b8c22bd">&#9670;&nbsp;</a></span>p_centeredDetectorSample</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_centeredDetectorSample</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Detector sample position. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a170d1535a0171d6338a778bc7e84ebb8">CenteredDetectorSample()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ae9ca189f994c7ef06cbd779621c3dcbd">ComputeCentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a09c2c3943a097b3d6f28989a6aa37b0a">ComputeUncentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">SetDetector()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac6c8215c92ee4585403839fd114e7d53">SetFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="afdc93edb030e5d12cd3b563a194c6300"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdc93edb030e5d12cd3b563a194c6300">&#9670;&nbsp;</a></span>p_detectorLine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_detectorLine</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>line value of the detector </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ae9ca189f994c7ef06cbd779621c3dcbd">ComputeCentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a09c2c3943a097b3d6f28989a6aa37b0a">ComputeUncentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aa1d7ac60e59eee33a17c878d6ae11478">DetectorLine()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">SetDetector()</a>.</p>
+
+</div>
+</div>
+<a id="ac4c83c1bfa976e960a7bb9900cd277a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4c83c1bfa976e960a7bb9900cd277a5">&#9670;&nbsp;</a></span>p_detectorLineOffset</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_detectorLineOffset</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Offset of the detector origin line from the average. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">CameraFocalPlaneMap()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#afd45fc29861198441fb343f122ef0560">DetectorLineOffset()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a1be10c7510d14950c9390570ddae8242">SetDetectorOffset()</a>.</p>
+
+</div>
+</div>
+<a id="a4f361612d8bcf9e3dd6a4610feab7600"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f361612d8bcf9e3dd6a4610feab7600">&#9670;&nbsp;</a></span>p_detectorLineOrigin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_detectorLineOrigin</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The origin line of the detector. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">CameraFocalPlaneMap()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ae9ca189f994c7ef06cbd779621c3dcbd">ComputeCentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a09c2c3943a097b3d6f28989a6aa37b0a">ComputeUncentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#af35e3acd816adf081c6021363b928366">DetectorLineOrigin()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a8eb60b5f3c9d471052b75e53c27dfc8c">SetDetectorOrigin()</a>.</p>
+
+</div>
+</div>
+<a id="a6e062107f2a884378457f86813486061"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e062107f2a884378457f86813486061">&#9670;&nbsp;</a></span>p_detectorSample</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_detectorSample</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>sample value of the detector </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ae9ca189f994c7ef06cbd779621c3dcbd">ComputeCentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a09c2c3943a097b3d6f28989a6aa37b0a">ComputeUncentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a03aea9d8598133eb80e88fdbb58082bf">DetectorSample()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">SetDetector()</a>.</p>
+
+</div>
+</div>
+<a id="aad0a6986718cc9e2fb65080f0acf419c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad0a6986718cc9e2fb65080f0acf419c">&#9670;&nbsp;</a></span>p_detectorSampleOffset</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_detectorSampleOffset</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>offset of the detector origin sample from the average </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">CameraFocalPlaneMap()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9a5d2aec161ffb85228ef6e998dc83cb">DetectorSampleOffset()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a1be10c7510d14950c9390570ddae8242">SetDetectorOffset()</a>.</p>
+
+</div>
+</div>
+<a id="aa18a13ea76fb7e743c14983aecb58126"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa18a13ea76fb7e743c14983aecb58126">&#9670;&nbsp;</a></span>p_detectorSampleOrigin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_detectorSampleOrigin</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The origin sample of the detector. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">CameraFocalPlaneMap()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ae9ca189f994c7ef06cbd779621c3dcbd">ComputeCentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a09c2c3943a097b3d6f28989a6aa37b0a">ComputeUncentered()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#af189e8038de5bcbeb366e93a4f52db7c">DetectorSampleOrigin()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a8eb60b5f3c9d471052b75e53c27dfc8c">SetDetectorOrigin()</a>.</p>
+
+</div>
+</div>
+<a id="adc2c7b010a0d6a03e987071fdf2bd1f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc2c7b010a0d6a03e987071fdf2bd1f3">&#9670;&nbsp;</a></span>p_focalPlaneX</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_focalPlaneX</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>x value of focal plane coordinate </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#aea7639f61c49fdfd81e3e7e1061bcb34">FocalPlaneX()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">SetDetector()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac6c8215c92ee4585403839fd114e7d53">SetFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="aab586ae896d5113b21083020147fde54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab586ae896d5113b21083020147fde54">&#9670;&nbsp;</a></span>p_focalPlaneY</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_focalPlaneY</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>y value of focal plane coordinate </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a05ad59a4c3d491052fcdc55e0826d8c0">FocalPlaneY()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">SetDetector()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac6c8215c92ee4585403839fd114e7d53">SetFocalPlane()</a>.</p>
+
+</div>
+</div>
+<a id="a9584f565d92261fb551a32dd5d006bda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9584f565d92261fb551a32dd5d006bda">&#9670;&nbsp;</a></span>p_itransl</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_itransl[3]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The y transition from distorted to detector. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">CameraFocalPlaneMap()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera_focal_plane_map.html#a8558a48a85cfb8c9c0be7a44363734de">Isis::LroWideAngleCameraFocalPlaneMap::setBand()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac6c8215c92ee4585403839fd114e7d53">SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a70e2d0250b7f0d4a2606333facb4a748">SetTransL()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a34ddcda50620c0c8195eb4c346157929">TransL()</a>.</p>
+
+</div>
+</div>
+<a id="a19c854aaf2dd9377dc87dea1e4e5b5d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19c854aaf2dd9377dc87dea1e4e5b5d3">&#9670;&nbsp;</a></span>p_itranss</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_itranss[3]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The x transition from distorted to detector. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">CameraFocalPlaneMap()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera_focal_plane_map.html#a8558a48a85cfb8c9c0be7a44363734de">Isis::LroWideAngleCameraFocalPlaneMap::setBand()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac6c8215c92ee4585403839fd114e7d53">SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a6b0236f1d263f379bdeca060628a0417">SetTransS()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ad65a1c0cd5c8af839371b6c314048f92">TransS()</a>.</p>
+
+</div>
+</div>
+<a id="a45b78587a50a4298c58240dbb62dee84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45b78587a50a4298c58240dbb62dee84">&#9670;&nbsp;</a></span>p_transx</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_transx[3]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The x transition from detector to distorted. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">CameraFocalPlaneMap()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a0504cee7c8b1d860978dca17c21f9292">FocalPlaneXDependency()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera_focal_plane_map.html#a8558a48a85cfb8c9c0be7a44363734de">Isis::LroWideAngleCameraFocalPlaneMap::setBand()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">SetDetector()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a90567ee839d43055c2497927e8eaa731">SetTransX()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ae6731df3b35e663f6f25ba9ab060c14e">SignMostSigX()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#acadeb721f9a368d017248835bab17278">TransX()</a>.</p>
+
+</div>
+</div>
+<a id="a9ad5c95efc393c924f9fb4b524c64309"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ad5c95efc393c924f9fb4b524c64309">&#9670;&nbsp;</a></span>p_transy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CameraFocalPlaneMap::p_transy[3]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The y transition from detector to distorted. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">CameraFocalPlaneMap()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera_focal_plane_map.html#a8558a48a85cfb8c9c0be7a44363734de">Isis::LroWideAngleCameraFocalPlaneMap::setBand()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">SetDetector()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a9a3079b6ca28db7475fa91bfb03e508d">SetTransY()</a>, <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3585d8fea9e1d8b5dbcb9ffc9fc39804">SignMostSigY()</a>, and <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#ac620d64b9297912d2b4d1670912c8046">TransY()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CameraFocalPlaneMap/<a class="el" href="_camera_focal_plane_map_8h_source.html">CameraFocalPlaneMap.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CameraFocalPlaneMap/<a class="el" href="_camera_focal_plane_map_8cpp.html">CameraFocalPlaneMap.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_camera_focal_plane_map.html">CameraFocalPlaneMap</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

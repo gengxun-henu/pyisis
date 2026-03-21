@@ -1,0 +1,64 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ProcessByBrick,High Level Cube I/O,isis/src/base/objs/ProcessByBrick/ProcessByBrick.h,isis_pybind_standalone/src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口；流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ProcessByBrick,isis_pybind.ProcessByTile,Y,Python class symbol is exported; 抽象基类/纯虚接口；流程/回调接口较多
+Construction/Enum,"IOCubes enum (InPlace, InputOutput, InputOutputList)",isis_pybind.ProcessByTile.IOCubes,N,抽象基类/纯虚接口；流程/回调接口较多
+Construction/Enum,"ProcessingDirection enum (LinesFirst, BandsFirst)",isis_pybind.ProcessByTile.ProcessingDirection,N,抽象基类/纯虚接口；流程/回调接口较多
+Construction/Enum,ProcessByBrick(),isis_pybind.ProcessByTile(),Y,Constructor is explicitly bound
+Mutation/Configuration,"Cube *SetInputCube(const QString &parameter, int requirements = 0)",isis_pybind.ProcessByTile.set_input_cube,Y,Current Python name
+Mutation/Configuration,"Cube *SetInputCube(const QString &fname, const CubeAttributeInput &att, int requirements = 0)",isis_pybind.ProcessByTile.set_input_cube,Y,Current Python name
+Mutation/Configuration,virtual void SetBricks(IOCubes cn),isis_pybind.ProcessByTile.set_bricks,Y,Current Python name
+Public API,void VerifyCubes(IOCubes cn),isis_pybind.ProcessByTile.verify_cubes,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"void SetBrickSize(int ns, int nl, int nb)",isis_pybind.ProcessByTile.set_brick_size,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"void SetInputBrickSize(int ns, int nl, int nb)",isis_pybind.ProcessByTile.set_input_brick_size,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"void SetInputBrickSize(int ns, int nl, int nb, int cube)",isis_pybind.ProcessByTile.set_input_brick_size,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"void SetOutputBrickSize(int ns, int nl, int nb)",isis_pybind.ProcessByTile.set_output_brick_size,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"void SetOutputBrickSize(int ns, int nl, int nb, int cube)",isis_pybind.ProcessByTile.set_output_brick_size,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"virtual Cube *SetOutputCube(const QString &fname, const CubeAttributeOutput &att)",isis_pybind.ProcessByTile.set_output_cube,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetProcessingDirection(ProcessingDirection direction),isis_pybind.ProcessByTile.set_processing_direction,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,ProcessingDirection GetProcessingDirection(),isis_pybind.ProcessByTile.get_processing_direction,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetOutputRequirements(int outputRequirements),isis_pybind.ProcessByTile.set_output_requirements,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetWrap(bool wrap),isis_pybind.ProcessByTile.set_wrap,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,bool Wraps(),isis_pybind.ProcessByTile.wraps,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,void EndProcess(),isis_pybind.ProcessByTile.end_process,Y,Current Python name
+Public API,void Finalize(),isis_pybind.ProcessByTile.finalize,Y,Current Python name
+Public API,"template <typename Functor> void ProcessCubeInPlace( const Functor & functor, bool threaded = true) { Cube *cube = NULL",isis_pybind.ProcessByTile.process_cube_in_place,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"bool haveInput = PrepProcessCubeInPlace(&cube, &brick)",isis_pybind.ProcessByTile.prep_process_cube_in_place,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"ProcessCubeInPlaceFunctor<Functor> wrapperFunctor( cube, brick, haveInput, writeOutput, functor)",isis_pybind.ProcessByTile.wrapper_functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"template <typename Functor> void ProcessCube(const Functor & functor, bool threaded = true) { Brick *inputCubeData = NULL",isis_pybind.ProcessByTile.process_cube,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"int numBricks = PrepProcessCube(&inputCubeData, &outputCubeData)",isis_pybind.ProcessByTile.prep_process_cube,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"ProcessCubeFunctor<Functor> wrapperFunctor(InputCubes[0], inputCubeData, OutputCubes[0], outputCubeData, functor)",isis_pybind.ProcessByTile.wrapper_functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"RunProcess(wrapperFunctor, numBricks, threaded)",isis_pybind.ProcessByTile.run_process,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"template <typename Functor> void ProcessCubes(const Functor & functor, bool threaded = true) { std::vector<Brick *> inputCubeData",isis_pybind.ProcessByTile.process_cubes,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"int numBricks = PrepProcessCubes( inputCubeDataParents, outputCubeDataParents, inputCubeData, outputCubeData)",isis_pybind.ProcessByTile.prep_process_cubes,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"ProcessCubeInPlaceFunctor(Cube *cube, const Brick *templateBrick, bool readInput, bool writeOutput, const T &processingFunctor) : m_cube(cube), m_templateBrick(templateBrick), m_readInput(readInput), m_writeOutput(writeOutput), m_processingFunctor(processingFunctor) { }",isis_pybind.ProcessByTile.process_cube_in_place_functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"ProcessCubeInPlaceFunctor(const ProcessCubeInPlaceFunctor &other) : m_cube(other.m_cube), m_templateBrick(other.m_templateBrick), m_readInput(other.m_readInput), m_writeOutput(other.m_writeOutput), m_processingFunctor(other.m_processingFunctor) { }",isis_pybind.ProcessByTile.process_cube_in_place_functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,cubeData.setpos(brickPosition),isis_pybind.ProcessByTile.setpos,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,if (m_readInput) m_cube->read(cubeData),isis_pybind.ProcessByTile.if,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,m_processingFunctor(cubeData),isis_pybind.ProcessByTile.m_processing_functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,if (m_writeOutput) m_cube->write(cubeData),isis_pybind.ProcessByTile.if,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"ProcessCubeFunctor(Cube *inputCube, const Brick *inputTemplateBrick, Cube *outputCube, const Brick *outputTemplateBrick, const T &processingFunctor) : m_inputCube(inputCube), m_inputTemplateBrick(inputTemplateBrick), m_outputCube(outputCube), m_outputTemplateBrick(outputTemplateBrick), m_processingFunctor(processingFunctor) { }",isis_pybind.ProcessByTile.process_cube_functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"ProcessCubeFunctor(const ProcessCubeFunctor &other) : m_inputCube(other.m_inputCube), m_inputTemplateBrick(other.m_inputTemplateBrick), m_outputCube(other.m_outputCube), m_outputTemplateBrick(other.m_outputTemplateBrick), m_processingFunctor(other.m_processingFunctor) { }",isis_pybind.ProcessByTile.process_cube_functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,Brick outputCubeData(*m_outputTemplateBrick),isis_pybind.ProcessByTile.output_cube_data,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,inputCubeData.setpos(brickPosition),isis_pybind.ProcessByTile.setpos,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,outputCubeData.setpos(brickPosition),isis_pybind.ProcessByTile.setpos,N,抽象基类/纯虚接口；流程/回调接口较多
+Read/Write IO,m_inputCube->read(inputCubeData),isis_pybind.ProcessByTile.read,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"m_processingFunctor(inputCubeData, outputCubeData)",isis_pybind.ProcessByTile.m_processing_functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Read/Write IO,m_outputCube->write(outputCubeData),isis_pybind.ProcessByTile.write,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"ProcessCubesFunctor(std::vector<Cube *> &inputCubes, std::vector<Brick *> &inputTemplateBricks, std::vector<Cube *> &outputCubes, std::vector<Brick *> &outputTemplateBricks, bool wraps, const T &processingFunctor) : m_inputCubes(inputCubes), m_inputTemplateBricks(inputTemplateBricks), m_outputCubes(outputCubes), m_outputTemplateBricks(outputTemplateBricks), m_wraps(wraps), m_processingFunctor(processingFunctor) { }",isis_pybind.ProcessByTile.process_cubes_functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"ProcessCubesFunctor(const ProcessCubesFunctor &other) : m_inputCubes(other.m_inputCubes), m_inputTemplateBricks(other.m_inputTemplateBricks), m_outputCubes(other.m_outputCubes), m_outputTemplateBricks(other.m_outputTemplateBricks), m_wraps(other.m_wraps), m_processingFunctor(other.m_processingFunctor) { }",isis_pybind.ProcessByTile.process_cubes_functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,for (int i = 0; i < (int)m_inputTemplateBricks.size(); i++) { Brick *inputBrick = new Brick(*m_inputTemplateBricks[i]),isis_pybind.ProcessByTile.for,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,functorBricks.first.push_back(inputBrick),isis_pybind.ProcessByTile.push_back,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,if (m_wraps) { inputBrick->setpos(brickPosition % inputBrick->Bricks()),isis_pybind.ProcessByTile.if,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,else { inputBrick->setpos(brickPosition),isis_pybind.ProcessByTile.setpos,N,抽象基类/纯虚接口；流程/回调接口较多
+Read/Write IO,m_inputCubes[i]->read(*inputBrick),isis_pybind.ProcessByTile.read,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,for (int i = 0; i < (int)m_outputTemplateBricks.size(); i++) { Brick *outputBrick = new Brick(*m_outputTemplateBricks[i]),isis_pybind.ProcessByTile.for,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,functorBricks.second.push_back(outputBrick),isis_pybind.ProcessByTile.push_back,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,outputBrick->setpos(brickPosition),isis_pybind.ProcessByTile.setpos,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"m_processingFunctor(functorBricks.first, functorBricks.second)",isis_pybind.ProcessByTile.m_processing_functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,for (int i = 0; i < (int)functorBricks.second.size(); i++) { m_outputCubes[i]->write(*functorBricks.second[i]),isis_pybind.ProcessByTile.for,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,ProcessIterator(int position),isis_pybind.ProcessByTile.process_iterator,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,ProcessIterator(const ProcessIterator &other),isis_pybind.ProcessByTile.process_iterator,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"void swap(ProcessIterator &other) { std::swap(m_currentPosition, other.m_currentPosition)",isis_pybind.ProcessByTile.swap,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,swap(copy),isis_pybind.ProcessByTile.swap,N,抽象基类/纯虚接口；流程/回调接口较多

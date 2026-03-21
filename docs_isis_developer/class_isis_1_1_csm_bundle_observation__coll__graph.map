@@ -1,0 +1,10 @@
+<map id="Isis::CsmBundleObservation" name="Isis::CsmBundleObservation">
+<area shape="rect" id="node1" title="Class for observations that use CSM camera models in bundle adjustment." alt="" coords="420,489,619,731"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment." alt="" coords="418,199,621,440"/>
+<area shape="rect" id="node3" href="$class_q_vector.html" title=" " alt="" coords="5,5,199,87"/>
+<area shape="rect" id="node4" title=" " alt="" coords="222,5,342,87"/>
+<area shape="rect" id="node5" title=" " alt="" coords="403,5,468,87"/>
+<area shape="rect" id="node6" title=" " alt="" coords="585,5,624,87"/>
+<area shape="rect" id="node7" title=" " alt="" coords="652,5,739,87"/>
+<area shape="rect" id="node8" href="$class_q_map.html" title=" " alt="" coords="763,5,988,87"/>
+</map>

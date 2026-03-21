@@ -1,0 +1,62 @@
+
+/**
+ * @brief Bindings for the Isis::Cube class
+ * This function creates Python bindings for the Isis::Cube class using pybind11. The Cube
+ * class provides functionality for working with ISIS image cubes, including opening and closing cube files, accessing cube dimensions, and retrieving the associated camera model. These bindings allow Python users to utilize the powerful cube handling capabilities of the Isis::Cube class in their Python code when working with ISIS image cubes.
+ * @see Isis::Cube
+ * @param m The pybind11 module to which the bindings will be added.
+ * @author Geng Xun
+ * @date 2024-06-01
+ */
+void bind_cube(py::module_ &m) {
+  py::class_<Isis::Cube>(m, "Cube")
+      .def(py::init<>())
+      .def("open",
+           [](Isis::Cube &self, const std::string &path, const std::string &access) {
+             self.open(QString::fromStdString(path), QString::fromStdString(access));
+           },
+           py::arg("path"), py::arg("access") = "r")
+      .def("close", &Isis::Cube::close, py::arg("remove") = false)
+      .def("is_open", &Isis::Cube::isOpen)
+      .def("is_projected", &Isis::Cube::isProjected)
+      .def("is_read_only", &Isis::Cube::isReadOnly)
+      .def("sample_count", &Isis::Cube::sampleCount)
+      .def("line_count", &Isis::Cube::lineCount)
+      .def("band_count", &Isis::Cube::bandCount)
+      .def("file_name", [](Isis::Cube &self) { return qStringToStdString(self.fileName()); })
+      .def("camera",
+           [](Isis::Cube &self) -> Isis::Camera * { return self.camera(); },
+           py::return_value_policy::reference_internal);
+}
+
+对于上面这个Pybind11绑定，下面是涉及字符串转换处理的，
+ .def("open",
+           [](Isis::Cube &self, const std::string &path, const std::string &access) {
+             self.open(QString::fromStdString(path), QString::fromStdString(access));
+           },
+           py::arg("path"), py::arg("access") = "r")
+它对应的C++源码部分为：
+void open(const QString &cfile, QString access = "r");
+
+
+这个相机部分为什么这样转？
+      .def("camera",
+           [](Isis::Cube &self) -> Isis::Camera * { return self.camera(); },
+           py::return_value_policy::reference_internal);
+
+
+最后给你一个判断原则
+以后你在 pybind11 里看到 lambda，通常优先怀疑这几件事：
+
+参数/返回值类型 pybind11 不直接支持
+例如 QString、QList、ISIS 自定义类型
+
+存在重载，需要手工选中某个版本
+
+返回的是引用/裸指针，需要指定生命周期策略
+例如 reference_internal、reference、take_ownership
+
+要顺手改成更 Python 友好的接口
+例如把 C++ 命名或参数风格包装一下
+
+你这里正好各占一个典型案例。

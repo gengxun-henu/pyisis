@@ -1,0 +1,395 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleUtilities/BundleObservation.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_bundle_observation_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">BundleObservation.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_bundle_observation_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef BundleObservation_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define BundleObservation_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QStringList&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QVector&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_bundle_image_8h.html">BundleImage.h</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_bundle_observation_solve_settings_8h.html">BundleObservationSolveSettings.h</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_bundle_settings_8h.html">BundleSettings.h</a>&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_bundle_target_body_8h.html">BundleTargetBody.h</a>&quot;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_linear_algebra_8h.html">LinearAlgebra.h</a>&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_bundle_measure_8h.html">BundleMeasure.h</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_surface_point_8h.html">SurfacePoint.h</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html">   35</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> : <span class="keyword">public</span> <a class="code" href="class_q_vector.html">QVector</a>&lt;BundleImageQsp&gt; {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;      <span class="comment">// default constructor</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;      <a class="code" href="class_isis_1_1_bundle_observation.html#ad5879e44bc7c468b32dab0fcc6fb87b6">BundleObservation</a>();</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;      <span class="comment">// constructor</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;      <a class="code" href="class_isis_1_1_bundle_observation.html#ad5879e44bc7c468b32dab0fcc6fb87b6">BundleObservation</a>(<a class="code" href="class_q_shared_pointer.html">BundleImageQsp</a> image, QString observationNumber, QString <a class="code" href="class_isis_1_1_bundle_observation.html#a649d44da23038a73f4ef407cbf60234f">instrumentId</a>,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                        <a class="code" href="class_q_shared_pointer.html">BundleTargetBodyQsp</a> bundleTargetBody);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;      <span class="comment">// copy constructor</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;      <a class="code" href="class_isis_1_1_bundle_observation.html#ad5879e44bc7c468b32dab0fcc6fb87b6">BundleObservation</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp;src);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;      <span class="comment">// destructor</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a56f01cd50148f2ef33363412d4604bcb">~BundleObservation</a>();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="comment">// equals operator</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp;<a class="code" href="class_isis_1_1_bundle_observation.html#adfd3d12c3fe0b459a95dd92ff6dcdcab">operator=</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp;src);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      <span class="comment">// copy method</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a1fe0244b4cc5ae507e3a39855139a6a6">   56</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a1fe0244b4cc5ae507e3a39855139a6a6">copy</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp;src);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a910ae8857484ef6ce97bff4c4dbcd5c3">   58</a></span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a910ae8857484ef6ce97bff4c4dbcd5c3">setSolveSettings</a>(<a class="code" href="class_isis_1_1_bundle_observation_solve_settings.html">BundleObservationSolveSettings</a> <a class="code" href="class_isis_1_1_bundle_observation.html#a8d018818bc0a1a418ccaf87dbbe96cdf">solveSettings</a>) = 0;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a5f6a9251fe96b5ecde4264aefb0b2686">append</a>(<span class="keyword">const</span> <a class="code" href="class_q_shared_pointer.html">BundleImageQsp</a> &amp;value);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      <a class="code" href="class_q_shared_pointer.html">BundleImageQsp</a> <a class="code" href="class_isis_1_1_bundle_observation.html#ab84c7129b3ee26e9f81a24e6f25054c3">imageByCubeSerialNumber</a>(QString cubeSerialNumber);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a1efd26bfad080909c76c28ba191236b1">setIndex</a>(<span class="keywordtype">int</span> n);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a49f9d958cae2c5d80b305c4990e62d8b">index</a>();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      QString <a class="code" href="class_isis_1_1_bundle_observation.html#a649d44da23038a73f4ef407cbf60234f">instrumentId</a>();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_observation.html#ae9eb9bba44385120873a4a7c818ed4e6">vtpv</a>();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;<a class="code" href="class_isis_1_1_bundle_observation.html#a0afb6d12413170b8fd9f6ac6c4bdff34">parameterWeights</a>();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;<a class="code" href="class_isis_1_1_bundle_observation.html#aabe9bbe306beaf86be3152fb48c5b825">parameterCorrections</a>();</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;<a class="code" href="class_isis_1_1_bundle_observation.html#a3c621423e3326b56addfd2ea927f8dca">aprioriSigmas</a>();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;<a class="code" href="class_isis_1_1_bundle_observation.html#a27ed45fac38b6a876862086ec5c73cb9">adjustedSigmas</a>();</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a8d018818bc0a1a418ccaf87dbbe96cdf">   77</a></span>&#160;      <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="class_q_shared_pointer.html">BundleObservationSolveSettingsQsp</a> <a class="code" href="class_isis_1_1_bundle_observation.html#a8d018818bc0a1a418ccaf87dbbe96cdf">solveSettings</a>() = 0;</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a33a43d04688693aa04153257d77c7237">   78</a></span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a33a43d04688693aa04153257d77c7237">numberParameters</a>() = 0;</div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a5fe70bae2bc0dd0f4ea6a4046c740d5a">   79</a></span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a5fe70bae2bc0dd0f4ea6a4046c740d5a">applyParameterCorrections</a>(<a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> corrections) = 0;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#af31b59c974381897708151b43f9c8bdc">   81</a></span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_observation.html#af31b59c974381897708151b43f9c8bdc">bundleOutputString</a>(std::ostream &amp;fpOut,<span class="keywordtype">bool</span> errorPropagation) = 0;</div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a81d8e3e8a674bc4ea0321e6d86280fac">   82</a></span>&#160;      <span class="keyword">virtual</span> QString <a class="code" href="class_isis_1_1_bundle_observation.html#a81d8e3e8a674bc4ea0321e6d86280fac">bundleOutputCSV</a>(<span class="keywordtype">bool</span> errorPropagation) = 0;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#ac922b410d95c12fe8227a2da462f84c9">   84</a></span>&#160;      <span class="keyword">virtual</span> QStringList <a class="code" href="class_isis_1_1_bundle_observation.html#ac922b410d95c12fe8227a2da462f84c9">parameterList</a>() = 0;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <span class="keyword">virtual</span> QStringList <a class="code" href="class_isis_1_1_bundle_observation.html#a82c5fa11a165e8e32aeac288ae234927">imageNames</a>();</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#adafa32f6ca93e7a222319abb5db5e559">   87</a></span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bundle_observation.html#adafa32f6ca93e7a222319abb5db5e559">computeTargetPartials</a>(<a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">LinearAlgebra::Matrix</a> &amp;coeffTarget, <a class="code" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;measure,</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                                         <a class="code" href="class_q_shared_pointer.html">BundleSettingsQsp</a> &amp;bundleSettings, <a class="code" href="class_q_shared_pointer.html">BundleTargetBodyQsp</a> &amp;bundleTargetBody) = 0;</div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a6752612da5a6c7df63ecd05e885d900e">   89</a></span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a6752612da5a6c7df63ecd05e885d900e">computeImagePartials</a>(<a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">LinearAlgebra::Matrix</a> &amp;coeffImage, <a class="code" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;measure) = 0;</div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#ac6845474757d8c04ca2aeecbf6557ea7">   90</a></span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bundle_observation.html#ac6845474757d8c04ca2aeecbf6557ea7">computePoint3DPartials</a>(<a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">LinearAlgebra::Matrix</a> &amp;coeffPoint3D, <a class="code" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;measure, <a class="code" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a> coordType = <a class="code" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223aff75c0a79b627c5f3926eb325e582139">SurfacePoint::Rectangular</a>) = 0;</div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a7d38346921f0f47a491e2c4b4250540b">   91</a></span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a7d38346921f0f47a491e2c4b4250540b">computeRHSPartials</a>(<a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;coeffRHS, <a class="code" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;measure) = 0;</div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a0644f9ba4117030ad853d430b961235e">   92</a></span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a0644f9ba4117030ad853d430b961235e">computeObservationValue</a>(<a class="code" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;measure, <span class="keywordtype">double</span> deltaVal) = 0;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a376c9875ec246de01a175a7bc4c8bae5">   95</a></span>&#160;      QString <a class="code" href="class_isis_1_1_bundle_observation.html#a376c9875ec246de01a175a7bc4c8bae5">m_observationNumber</a>; </div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a74df11a74339c982e0161c96b81b0771">   97</a></span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_bundle_observation.html#a74df11a74339c982e0161c96b81b0771">m_index</a>; </div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#ac950cb1cbd139622f5b0f6778ffee106">   99</a></span>&#160;      <a class="code" href="class_q_map.html">QMap&lt;QString, BundleImageQsp&gt;</a> <a class="code" href="class_isis_1_1_bundle_observation.html#ac950cb1cbd139622f5b0f6778ffee106">m_cubeSerialNumberToBundleImageMap</a>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a55720ade56a7b67b71b14ec97b256f41">  100</a></span>&#160;      QStringList <a class="code" href="class_isis_1_1_bundle_observation.html#a55720ade56a7b67b71b14ec97b256f41">m_serialNumbers</a>;      </div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a7f0a74ab8b043b0b6916959c741fc112">  101</a></span>&#160;      QStringList <a class="code" href="class_isis_1_1_bundle_observation.html#a7f0a74ab8b043b0b6916959c741fc112">m_imageNames</a>;         </div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a4ced0285d38f9182d5c818ccf6248bb5">  102</a></span>&#160;      QString <a class="code" href="class_isis_1_1_bundle_observation.html#a4ced0285d38f9182d5c818ccf6248bb5">m_instrumentId</a>;           </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#ac812a71040c7232c79771d7e62e4d19c">  104</a></span>&#160;      <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> <a class="code" href="class_isis_1_1_bundle_observation.html#ac812a71040c7232c79771d7e62e4d19c">m_weights</a>;     </div>
+<div class="line"><a name="l00106"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a5bd6919f2640c8f23b2146734e492ecc">  106</a></span>&#160;      <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> <a class="code" href="class_isis_1_1_bundle_observation.html#a5bd6919f2640c8f23b2146734e492ecc">m_corrections</a>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a76d129f68316a41e40176638d092b169">  108</a></span>&#160;      <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> <a class="code" href="class_isis_1_1_bundle_observation.html#a76d129f68316a41e40176638d092b169">m_aprioriSigmas</a>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_observation.html#a84b15413946e9ee703931eb02473ace6">  110</a></span>&#160;      <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> <a class="code" href="class_isis_1_1_bundle_observation.html#a84b15413946e9ee703931eb02473ace6">m_adjustedSigmas</a>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  };</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="namespace_isis.html#a43cc1d18d3ea0f38bb84d0dab255b2ce">  114</a></span>&#160;  <span class="keyword">typedef</span> <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;BundleObservation&gt;</a> <a class="code" href="namespace_isis.html#a43cc1d18d3ea0f38bb84d0dab255b2ce">BundleObservationQsp</a>;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;}</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// BundleObservation_h</span></div>
+<div class="ttc" id="a_bundle_image_8h_html"><div class="ttname"><a href="_bundle_image_8h.html">BundleImage.h</a></div></div>
+<div class="ttc" id="a_bundle_measure_8h_html"><div class="ttname"><a href="_bundle_measure_8h.html">BundleMeasure.h</a></div></div>
+<div class="ttc" id="a_bundle_observation_solve_settings_8h_html"><div class="ttname"><a href="_bundle_observation_solve_settings_8h.html">BundleObservationSolveSettings.h</a></div></div>
+<div class="ttc" id="a_bundle_settings_8h_html"><div class="ttname"><a href="_bundle_settings_8h.html">BundleSettings.h</a></div></div>
+<div class="ttc" id="a_bundle_target_body_8h_html"><div class="ttname"><a href="_bundle_target_body_8h.html">BundleTargetBody.h</a></div></div>
+<div class="ttc" id="a_linear_algebra_8h_html"><div class="ttname"><a href="_linear_algebra_8h.html">LinearAlgebra.h</a></div></div>
+<div class="ttc" id="a_surface_point_8h_html"><div class="ttname"><a href="_surface_point_8h.html">SurfacePoint.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html">Isis::BundleMeasure</a></div><div class="ttdoc">A container class for a ControlMeasure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.h:55</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html">Isis::BundleObservation</a></div><div class="ttdoc">Abstract base class for an observation in bundle adjustment.</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:35</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a0644f9ba4117030ad853d430b961235e"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a0644f9ba4117030ad853d430b961235e">Isis::BundleObservation::computeObservationValue</a></div><div class="ttdeci">virtual double computeObservationValue(BundleMeasure &amp;measure, double deltaVal)=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a0afb6d12413170b8fd9f6ac6c4bdff34"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a0afb6d12413170b8fd9f6ac6c4bdff34">Isis::BundleObservation::parameterWeights</a></div><div class="ttdeci">virtual LinearAlgebra::Vector &amp; parameterWeights()</div><div class="ttdoc">Accesses the solve parameter weights.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:177</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a1efd26bfad080909c76c28ba191236b1"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a1efd26bfad080909c76c28ba191236b1">Isis::BundleObservation::setIndex</a></div><div class="ttdeci">void setIndex(int n)</div><div class="ttdoc">Sets the index for the observation.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:217</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a1fe0244b4cc5ae507e3a39855139a6a6"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a1fe0244b4cc5ae507e3a39855139a6a6">Isis::BundleObservation::copy</a></div><div class="ttdeci">void copy(const BundleObservation &amp;src)</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a27ed45fac38b6a876862086ec5c73cb9"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a27ed45fac38b6a876862086ec5c73cb9">Isis::BundleObservation::adjustedSigmas</a></div><div class="ttdeci">virtual LinearAlgebra::Vector &amp; adjustedSigmas()</div><div class="ttdoc">Accesses the adjusted sigmas.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:207</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a33a43d04688693aa04153257d77c7237"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a33a43d04688693aa04153257d77c7237">Isis::BundleObservation::numberParameters</a></div><div class="ttdeci">virtual int numberParameters()=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a376c9875ec246de01a175a7bc4c8bae5"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a376c9875ec246de01a175a7bc4c8bae5">Isis::BundleObservation::m_observationNumber</a></div><div class="ttdeci">QString m_observationNumber</div><div class="ttdoc">The shared portion of the serial numbers of all images in the observation.</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:95</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a3c621423e3326b56addfd2ea927f8dca"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a3c621423e3326b56addfd2ea927f8dca">Isis::BundleObservation::aprioriSigmas</a></div><div class="ttdeci">virtual LinearAlgebra::Vector &amp; aprioriSigmas()</div><div class="ttdoc">Accesses the a priori sigmas.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:197</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a49f9d958cae2c5d80b305c4990e62d8b"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a49f9d958cae2c5d80b305c4990e62d8b">Isis::BundleObservation::index</a></div><div class="ttdeci">int index()</div><div class="ttdoc">Accesses the observation's index.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:227</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a4ced0285d38f9182d5c818ccf6248bb5"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a4ced0285d38f9182d5c818ccf6248bb5">Isis::BundleObservation::m_instrumentId</a></div><div class="ttdeci">QString m_instrumentId</div><div class="ttdoc">Spacecraft instrument id.</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:102</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a55720ade56a7b67b71b14ec97b256f41"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a55720ade56a7b67b71b14ec97b256f41">Isis::BundleObservation::m_serialNumbers</a></div><div class="ttdeci">QStringList m_serialNumbers</div><div class="ttdoc">List of all cube serial numbers in observation.</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:100</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a56f01cd50148f2ef33363412d4604bcb"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a56f01cd50148f2ef33363412d4604bcb">Isis::BundleObservation::~BundleObservation</a></div><div class="ttdeci">virtual ~BundleObservation()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:98</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a5bd6919f2640c8f23b2146734e492ecc"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a5bd6919f2640c8f23b2146734e492ecc">Isis::BundleObservation::m_corrections</a></div><div class="ttdeci">LinearAlgebra::Vector m_corrections</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:106</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a5f6a9251fe96b5ecde4264aefb0b2686"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a5f6a9251fe96b5ecde4264aefb0b2686">Isis::BundleObservation::append</a></div><div class="ttdeci">virtual void append(const BundleImageQsp &amp;value)</div><div class="ttdoc">Appends a BundleImage shared pointer to the BundleObservation.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:135</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a5fe70bae2bc0dd0f4ea6a4046c740d5a"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a5fe70bae2bc0dd0f4ea6a4046c740d5a">Isis::BundleObservation::applyParameterCorrections</a></div><div class="ttdeci">virtual bool applyParameterCorrections(LinearAlgebra::Vector corrections)=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a649d44da23038a73f4ef407cbf60234f"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a649d44da23038a73f4ef407cbf60234f">Isis::BundleObservation::instrumentId</a></div><div class="ttdeci">QString instrumentId()</div><div class="ttdoc">Accesses the instrument id.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:167</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a6752612da5a6c7df63ecd05e885d900e"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a6752612da5a6c7df63ecd05e885d900e">Isis::BundleObservation::computeImagePartials</a></div><div class="ttdeci">virtual bool computeImagePartials(LinearAlgebra::Matrix &amp;coeffImage, BundleMeasure &amp;measure)=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a74df11a74339c982e0161c96b81b0771"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a74df11a74339c982e0161c96b81b0771">Isis::BundleObservation::m_index</a></div><div class="ttdeci">int m_index</div><div class="ttdoc">Index of this observation in the set of observations. Map between cube serial number and BundleImage ...</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:97</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a76d129f68316a41e40176638d092b169"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a76d129f68316a41e40176638d092b169">Isis::BundleObservation::m_aprioriSigmas</a></div><div class="ttdeci">LinearAlgebra::Vector m_aprioriSigmas</div><div class="ttdoc">A posteriori (adjusted) parameter sigmas.</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:108</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a7d38346921f0f47a491e2c4b4250540b"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a7d38346921f0f47a491e2c4b4250540b">Isis::BundleObservation::computeRHSPartials</a></div><div class="ttdeci">virtual bool computeRHSPartials(LinearAlgebra::Vector &amp;coeffRHS, BundleMeasure &amp;measure)=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a7f0a74ab8b043b0b6916959c741fc112"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a7f0a74ab8b043b0b6916959c741fc112">Isis::BundleObservation::m_imageNames</a></div><div class="ttdeci">QStringList m_imageNames</div><div class="ttdoc">List of all cube names.</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:101</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a81d8e3e8a674bc4ea0321e6d86280fac"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a81d8e3e8a674bc4ea0321e6d86280fac">Isis::BundleObservation::bundleOutputCSV</a></div><div class="ttdeci">virtual QString bundleOutputCSV(bool errorPropagation)=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a82c5fa11a165e8e32aeac288ae234927"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a82c5fa11a165e8e32aeac288ae234927">Isis::BundleObservation::imageNames</a></div><div class="ttdeci">virtual QStringList imageNames()</div><div class="ttdoc">Access to image names for CorrelationMatrix to use.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:237</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a84b15413946e9ee703931eb02473ace6"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a84b15413946e9ee703931eb02473ace6">Isis::BundleObservation::m_adjustedSigmas</a></div><div class="ttdeci">LinearAlgebra::Vector m_adjustedSigmas</div><div class="ttdoc">A posteriori (adjusted) parameter sigmas.</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:110</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a8d018818bc0a1a418ccaf87dbbe96cdf"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a8d018818bc0a1a418ccaf87dbbe96cdf">Isis::BundleObservation::solveSettings</a></div><div class="ttdeci">virtual const BundleObservationSolveSettingsQsp solveSettings()=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_a910ae8857484ef6ce97bff4c4dbcd5c3"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#a910ae8857484ef6ce97bff4c4dbcd5c3">Isis::BundleObservation::setSolveSettings</a></div><div class="ttdeci">virtual bool setSolveSettings(BundleObservationSolveSettings solveSettings)=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_aabe9bbe306beaf86be3152fb48c5b825"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#aabe9bbe306beaf86be3152fb48c5b825">Isis::BundleObservation::parameterCorrections</a></div><div class="ttdeci">virtual LinearAlgebra::Vector &amp; parameterCorrections()</div><div class="ttdoc">Accesses the parameter corrections.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:187</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_ab84c7129b3ee26e9f81a24e6f25054c3"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#ab84c7129b3ee26e9f81a24e6f25054c3">Isis::BundleObservation::imageByCubeSerialNumber</a></div><div class="ttdeci">BundleImageQsp imageByCubeSerialNumber(QString cubeSerialNumber)</div><div class="ttdoc">Returns the BundleImage shared pointer associated with the given serial number.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:151</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_ac6845474757d8c04ca2aeecbf6557ea7"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#ac6845474757d8c04ca2aeecbf6557ea7">Isis::BundleObservation::computePoint3DPartials</a></div><div class="ttdeci">virtual bool computePoint3DPartials(LinearAlgebra::Matrix &amp;coeffPoint3D, BundleMeasure &amp;measure, SurfacePoint::CoordinateType coordType=SurfacePoint::Rectangular)=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_ac812a71040c7232c79771d7e62e4d19c"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#ac812a71040c7232c79771d7e62e4d19c">Isis::BundleObservation::m_weights</a></div><div class="ttdeci">LinearAlgebra::Vector m_weights</div><div class="ttdoc">Parameter weights. Cumulative parameter correction vector.</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:104</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_ac922b410d95c12fe8227a2da462f84c9"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#ac922b410d95c12fe8227a2da462f84c9">Isis::BundleObservation::parameterList</a></div><div class="ttdeci">virtual QStringList parameterList()=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_ac950cb1cbd139622f5b0f6778ffee106"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#ac950cb1cbd139622f5b0f6778ffee106">Isis::BundleObservation::m_cubeSerialNumberToBundleImageMap</a></div><div class="ttdeci">QMap&lt; QString, BundleImageQsp &gt; m_cubeSerialNumberToBundleImageMap</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:99</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_ad5879e44bc7c468b32dab0fcc6fb87b6"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#ad5879e44bc7c468b32dab0fcc6fb87b6">Isis::BundleObservation::BundleObservation</a></div><div class="ttdeci">BundleObservation()</div><div class="ttdoc">Constructs a BundleObservation initialized to a default state.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:31</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_adafa32f6ca93e7a222319abb5db5e559"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#adafa32f6ca93e7a222319abb5db5e559">Isis::BundleObservation::computeTargetPartials</a></div><div class="ttdeci">virtual bool computeTargetPartials(LinearAlgebra::Matrix &amp;coeffTarget, BundleMeasure &amp;measure, BundleSettingsQsp &amp;bundleSettings, BundleTargetBodyQsp &amp;bundleTargetBody)=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_adfd3d12c3fe0b459a95dd92ff6dcdcab"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#adfd3d12c3fe0b459a95dd92ff6dcdcab">Isis::BundleObservation::operator=</a></div><div class="ttdeci">virtual BundleObservation &amp; operator=(const BundleObservation &amp;src)</div><div class="ttdoc">Assignment operator.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:112</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_ae9eb9bba44385120873a4a7c818ed4e6"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#ae9eb9bba44385120873a4a7c818ed4e6">Isis::BundleObservation::vtpv</a></div><div class="ttdeci">double vtpv()</div><div class="ttdoc">Compute vtpv, the weighted sum of squares of constrained image parameter residuals.</div><div class="ttdef"><b>Definition:</b> BundleObservation.cpp:247</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_html_af31b59c974381897708151b43f9c8bdc"><div class="ttname"><a href="class_isis_1_1_bundle_observation.html#af31b59c974381897708151b43f9c8bdc">Isis::BundleObservation::bundleOutputString</a></div><div class="ttdeci">virtual void bundleOutputString(std::ostream &amp;fpOut, bool errorPropagation)=0</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_observation_solve_settings_html"><div class="ttname"><a href="class_isis_1_1_bundle_observation_solve_settings.html">Isis::BundleObservationSolveSettings</a></div><div class="ttdoc">This class is used to modify and manage solve settings for 1 to many BundleObservations.</div><div class="ttdef"><b>Definition:</b> BundleObservationSolveSettings.h:81</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_aa7ba18358ac6636bb34d9efc9484d54a"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Isis::LinearAlgebra::Vector</a></div><div class="ttdeci">boost::numeric::ublas::vector&lt; double &gt; Vector</div><div class="ttdoc">Definition for an Isis::LinearAlgebra::Vector of doubles.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.h:132</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_add4b4c7e71647477557284ab470498e5"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Isis::LinearAlgebra::Matrix</a></div><div class="ttdeci">boost::numeric::ublas::matrix&lt; double &gt; Matrix</div><div class="ttdoc">Definition for an Isis::LinearAlgebra::Matrix of doubles.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.h:102</div></div>
+<div class="ttc" id="aclass_isis_1_1_surface_point_html_a01c0bdeea31281dc1eac1589adbab223"><div class="ttname"><a href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">Isis::SurfacePoint::CoordinateType</a></div><div class="ttdeci">CoordinateType</div><div class="ttdoc">Defines the coordinate typ, units, and coordinate index for some of the output methods.</div><div class="ttdef"><b>Definition:</b> SurfacePoint.h:139</div></div>
+<div class="ttc" id="aclass_isis_1_1_surface_point_html_a01c0bdeea31281dc1eac1589adbab223aff75c0a79b627c5f3926eb325e582139"><div class="ttname"><a href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223aff75c0a79b627c5f3926eb325e582139">Isis::SurfacePoint::Rectangular</a></div><div class="ttdeci">@ Rectangular</div><div class="ttdoc">Body-fixed rectangular x/y/z coordinates.</div><div class="ttdef"><b>Definition:</b> SurfacePoint.h:141</div></div>
+<div class="ttc" id="aclass_q_map_html"><div class="ttname"><a href="class_q_map.html">QMap</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> CubeIoHandler.h:22</div></div>
+<div class="ttc" id="aclass_q_shared_pointer_html"><div class="ttname"><a href="class_q_shared_pointer.html">QSharedPointer</a></div><div class="ttdef"><b>Definition:</b> JigsawWorkOrder.h:28</div></div>
+<div class="ttc" id="aclass_q_vector_html"><div class="ttname"><a href="class_q_vector.html">QVector</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Calculator.h:18</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a43cc1d18d3ea0f38bb84d0dab255b2ce"><div class="ttname"><a href="namespace_isis.html#a43cc1d18d3ea0f38bb84d0dab255b2ce">Isis::BundleObservationQsp</a></div><div class="ttdeci">QSharedPointer&lt; BundleObservation &gt; BundleObservationQsp</div><div class="ttdoc">Typdef for BundleObservation QSharedPointer.</div><div class="ttdef"><b>Definition:</b> BundleObservation.h:114</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_a576af9f1f3bb26b082d16585a91e73c.html">control</a></li><li class="navelem"><a class="el" href="dir_8e87adfb2431123dc47fe3f2bd06feca.html">objs</a></li><li class="navelem"><a class="el" href="dir_f1b2b15c0fdc7941b318316dd9deb5c1.html">BundleUtilities</a></li><li class="navelem"><a class="el" href="_bundle_observation_8h.html">BundleObservation.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

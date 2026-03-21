@@ -1,0 +1,1011 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::EmbreeTargetShape Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_embree_target_shape.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_embree_target_shape-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::EmbreeTargetShape Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Embree <a class="el" href="class_isis_1_1_target.html" title="This class is used to create and store valid Isis targets.">Target</a> <a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> for planetary bodies.  
+ <a href="class_isis_1_1_embree_target_shape.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_embree_target_shape_8h_source.html">EmbreeTargetShape.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::EmbreeTargetShape:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_embree_target_shape__coll__graph.png" border="0" usemap="#a_isis_1_1_embree_target_shape_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_embree_target_shape_coll__map" id="a_isis_1_1_embree_target_shape_coll__map">
+<area shape="rect" title="Embree Target Shape for planetary bodies." alt="" coords="5,5,193,391"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aee7ad1d694552b18ff1bbaf03ecdc9bf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#aee7ad1d694552b18ff1bbaf03ecdc9bf">EmbreeTargetShape</a> ()</td></tr>
+<tr class="memdesc:aee7ad1d694552b18ff1bbaf03ecdc9bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default empty constructor.  <a href="class_isis_1_1_embree_target_shape.html#aee7ad1d694552b18ff1bbaf03ecdc9bf">More...</a><br /></td></tr>
+<tr class="separator:aee7ad1d694552b18ff1bbaf03ecdc9bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc49c5cca9745954c7f4ce1e9a6e7653"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#abc49c5cca9745954c7f4ce1e9a6e7653">EmbreeTargetShape</a> (pcl::PolygonMesh::Ptr mesh, const QString &amp;<a class="el" href="class_isis_1_1_embree_target_shape.html#af373bc9e6c8e1b1ec7a7c0983ae7d0db">name</a>=&quot;&quot;)</td></tr>
+<tr class="memdesc:abc49c5cca9745954c7f4ce1e9a6e7653"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an <a class="el" href="class_isis_1_1_embree_target_shape.html" title="Embree Target Shape for planetary bodies.">EmbreeTargetShape</a> from a PointCloudLibrary polygon mesh.  <a href="class_isis_1_1_embree_target_shape.html#abc49c5cca9745954c7f4ce1e9a6e7653">More...</a><br /></td></tr>
+<tr class="separator:abc49c5cca9745954c7f4ce1e9a6e7653"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1900829958e3b55d1ff2bd1346de0ec4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#a1900829958e3b55d1ff2bd1346de0ec4">EmbreeTargetShape</a> (const QString &amp;dem, const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> *conf=0)</td></tr>
+<tr class="memdesc:a1900829958e3b55d1ff2bd1346de0ec4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an <a class="el" href="class_isis_1_1_embree_target_shape.html" title="Embree Target Shape for planetary bodies.">EmbreeTargetShape</a> from a file.  <a href="class_isis_1_1_embree_target_shape.html#a1900829958e3b55d1ff2bd1346de0ec4">More...</a><br /></td></tr>
+<tr class="separator:a1900829958e3b55d1ff2bd1346de0ec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d171f753e49fae049ed3040d599c44a"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#a4d171f753e49fae049ed3040d599c44a">~EmbreeTargetShape</a> ()</td></tr>
+<tr class="memdesc:a4d171f753e49fae049ed3040d599c44a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Desctructor.  <a href="class_isis_1_1_embree_target_shape.html#a4d171f753e49fae049ed3040d599c44a">More...</a><br /></td></tr>
+<tr class="separator:a4d171f753e49fae049ed3040d599c44a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af373bc9e6c8e1b1ec7a7c0983ae7d0db"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#af373bc9e6c8e1b1ec7a7c0983ae7d0db">name</a> () const</td></tr>
+<tr class="memdesc:af373bc9e6c8e1b1ec7a7c0983ae7d0db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name of the target shape.  <a href="class_isis_1_1_embree_target_shape.html#af373bc9e6c8e1b1ec7a7c0983ae7d0db">More...</a><br /></td></tr>
+<tr class="separator:af373bc9e6c8e1b1ec7a7c0983ae7d0db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7363e76527ffe21b34414b9cbe991920"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#a7363e76527ffe21b34414b9cbe991920">isValid</a> () const</td></tr>
+<tr class="memdesc:a7363e76527ffe21b34414b9cbe991920"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return if a valid mesh is internalized and ready for use.  <a href="class_isis_1_1_embree_target_shape.html#a7363e76527ffe21b34414b9cbe991920">More...</a><br /></td></tr>
+<tr class="separator:a7363e76527ffe21b34414b9cbe991920"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4003189715f8fa7c13cd9790e8cd4d83"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#a4003189715f8fa7c13cd9790e8cd4d83">numberOfPolygons</a> () const</td></tr>
+<tr class="memdesc:a4003189715f8fa7c13cd9790e8cd4d83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of polygons in the target shape.  <a href="class_isis_1_1_embree_target_shape.html#a4003189715f8fa7c13cd9790e8cd4d83">More...</a><br /></td></tr>
+<tr class="separator:a4003189715f8fa7c13cd9790e8cd4d83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a453739b737752ed6a272acc154bd0668"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#a453739b737752ed6a272acc154bd0668">numberOfVertices</a> () const</td></tr>
+<tr class="memdesc:a453739b737752ed6a272acc154bd0668"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of vertices in the target shape.  <a href="class_isis_1_1_embree_target_shape.html#a453739b737752ed6a272acc154bd0668">More...</a><br /></td></tr>
+<tr class="separator:a453739b737752ed6a272acc154bd0668"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae479fae8434b5db8c3f5c4bb215a1fee"><td class="memItemLeft" align="right" valign="top">RTCBounds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#ae479fae8434b5db8c3f5c4bb215a1fee">sceneBounds</a> () const</td></tr>
+<tr class="memdesc:ae479fae8434b5db8c3f5c4bb215a1fee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the bounds of the Embree scene.  <a href="class_isis_1_1_embree_target_shape.html#ae479fae8434b5db8c3f5c4bb215a1fee">More...</a><br /></td></tr>
+<tr class="separator:ae479fae8434b5db8c3f5c4bb215a1fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7ebe0c43dcb855f4e421e0a342df890"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#af7ebe0c43dcb855f4e421e0a342df890">maximumSceneDistance</a> () const</td></tr>
+<tr class="memdesc:af7ebe0c43dcb855f4e421e0a342df890"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the maximum distance within the scene.  <a href="class_isis_1_1_embree_target_shape.html#af7ebe0c43dcb855f4e421e0a342df890">More...</a><br /></td></tr>
+<tr class="separator:af7ebe0c43dcb855f4e421e0a342df890"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee753751349b41e145b44bf1332b5ab0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#aee753751349b41e145b44bf1332b5ab0">intersectRay</a> (<a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html">RTCMultiHitRay</a> &amp;ray)</td></tr>
+<tr class="memdesc:aee753751349b41e145b44bf1332b5ab0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intersect a ray with the target shape.  <a href="class_isis_1_1_embree_target_shape.html#aee753751349b41e145b44bf1332b5ab0">More...</a><br /></td></tr>
+<tr class="separator:aee753751349b41e145b44bf1332b5ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a168f191c2f9c60030dc7b1267cbaddd0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#a168f191c2f9c60030dc7b1267cbaddd0">isOccluded</a> (<a class="el" href="struct_isis_1_1_r_t_c_occlusion_ray.html">RTCOcclusionRay</a> &amp;ray)</td></tr>
+<tr class="memdesc:a168f191c2f9c60030dc7b1267cbaddd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a ray intersects the target body.  <a href="class_isis_1_1_embree_target_shape.html#a168f191c2f9c60030dc7b1267cbaddd0">More...</a><br /></td></tr>
+<tr class="separator:a168f191c2f9c60030dc7b1267cbaddd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3ca0f150c907b7e10c8a0496cf7a84f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_isis_1_1_ray_hit_information.html">RayHitInformation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#ae3ca0f150c907b7e10c8a0496cf7a84f">getHitInformation</a> (<a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html">RTCMultiHitRay</a> &amp;ray, int hitIndex)</td></tr>
+<tr class="memdesc:ae3ca0f150c907b7e10c8a0496cf7a84f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the intersection point and unit surface normal from an <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html" title="Struct for capturing multiple intersections when using embree::rtcintersectscene.">RTCMultiHitRay</a> that has been intersected with the target shape.  <a href="class_isis_1_1_embree_target_shape.html#ae3ca0f150c907b7e10c8a0496cf7a84f">More...</a><br /></td></tr>
+<tr class="separator:ae3ca0f150c907b7e10c8a0496cf7a84f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ac82a006c92ea447246f86c532d0d87ba"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#ac82a006c92ea447246f86c532d0d87ba">multiHitFilter</a> (const RTCFilterFunctionNArguments *args)</td></tr>
+<tr class="memdesc:ac82a006c92ea447246f86c532d0d87ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Filter function for collecting multiple hits during ray intersection.  <a href="class_isis_1_1_embree_target_shape.html#ac82a006c92ea447246f86c532d0d87ba">More...</a><br /></td></tr>
+<tr class="separator:ac82a006c92ea447246f86c532d0d87ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3876aa57b0c97f5178f46e47c076384e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#a3876aa57b0c97f5178f46e47c076384e">occlusionFilter</a> (const RTCFilterFunctionNArguments *args)</td></tr>
+<tr class="memdesc:a3876aa57b0c97f5178f46e47c076384e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Filter function for collecting multiple primitiveIDs This function is called by the Embree library during ray tracing.  <a href="class_isis_1_1_embree_target_shape.html#a3876aa57b0c97f5178f46e47c076384e">More...</a><br /></td></tr>
+<tr class="separator:a3876aa57b0c97f5178f46e47c076384e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a34e368a80193d32d1f58dbaf9eb930ed"><td class="memItemLeft" align="right" valign="top">pcl::PolygonMesh::Ptr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#a34e368a80193d32d1f58dbaf9eb930ed">readDSK</a> (<a class="el" href="class_isis_1_1_file_name.html">FileName</a> file)</td></tr>
+<tr class="memdesc:a34e368a80193d32d1f58dbaf9eb930ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a NAIF type 2 DSK file into a PointCloudLibrary polygon mesh.  <a href="class_isis_1_1_embree_target_shape.html#a34e368a80193d32d1f58dbaf9eb930ed">More...</a><br /></td></tr>
+<tr class="separator:a34e368a80193d32d1f58dbaf9eb930ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9192e86acb461714a2d815250461bc8"><td class="memItemLeft" align="right" valign="top">pcl::PolygonMesh::Ptr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#ac9192e86acb461714a2d815250461bc8">readPC</a> (<a class="el" href="class_isis_1_1_file_name.html">FileName</a> file)</td></tr>
+<tr class="memdesc:ac9192e86acb461714a2d815250461bc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a PointCloudLibrary file into a PointCloudLibrary polygon mesh.  <a href="class_isis_1_1_embree_target_shape.html#ac9192e86acb461714a2d815250461bc8">More...</a><br /></td></tr>
+<tr class="separator:ac9192e86acb461714a2d815250461bc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21e10c0f2c63ea142b1e6b987183b484"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#a21e10c0f2c63ea142b1e6b987183b484">initMesh</a> (pcl::PolygonMesh::Ptr mesh)</td></tr>
+<tr class="memdesc:a21e10c0f2c63ea142b1e6b987183b484"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internalize a PointCloudLibrary polygon mesh in the target shape.  <a href="class_isis_1_1_embree_target_shape.html#a21e10c0f2c63ea142b1e6b987183b484">More...</a><br /></td></tr>
+<tr class="separator:a21e10c0f2c63ea142b1e6b987183b484"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3dd7c928233c6a3bcfd5628a303a931"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#ac3dd7c928233c6a3bcfd5628a303a931">addVertices</a> (int geomID)</td></tr>
+<tr class="memdesc:ac3dd7c928233c6a3bcfd5628a303a931"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the vertices from the internalized vertex point cloud to the Embree scene.  <a href="class_isis_1_1_embree_target_shape.html#ac3dd7c928233c6a3bcfd5628a303a931">More...</a><br /></td></tr>
+<tr class="separator:ac3dd7c928233c6a3bcfd5628a303a931"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3722032178ba2918d1b0492822e2a54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_embree_target_shape.html#ae3722032178ba2918d1b0492822e2a54">addIndices</a> (int geomID)</td></tr>
+<tr class="memdesc:ae3722032178ba2918d1b0492822e2a54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the polygon vertex indices from the internalized polygon mesh to the Embree scene.  <a href="class_isis_1_1_embree_target_shape.html#ae3722032178ba2918d1b0492822e2a54">More...</a><br /></td></tr>
+<tr class="separator:ae3722032178ba2918d1b0492822e2a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Embree <a class="el" href="class_isis_1_1_target.html" title="This class is used to create and store valid Isis targets.">Target</a> <a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> for planetary bodies. </p>
+<p>This class holds the Embree representation of a target body. All vectors are expected to be in the body-fixed reference frame for the target and all positions are expected to be in kilometers.</p>
+<dl class="section author"><dt>Author</dt><dd>2017-05-11 Jeannie Backer &amp; Jesse Mapel </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aee7ad1d694552b18ff1bbaf03ecdc9bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee7ad1d694552b18ff1bbaf03ecdc9bf">&#9670;&nbsp;</a></span>EmbreeTargetShape() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::EmbreeTargetShape::EmbreeTargetShape </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default empty constructor. </p>
+<p>The filename defaults to an empty string and the file handle defaults to 0. Counts default to 0 and the cache size defaults to 0. </p>
+
+</div>
+</div>
+<a id="abc49c5cca9745954c7f4ce1e9a6e7653"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc49c5cca9745954c7f4ce1e9a6e7653">&#9670;&nbsp;</a></span>EmbreeTargetShape() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::EmbreeTargetShape::EmbreeTargetShape </td>
+          <td>(</td>
+          <td class="paramtype">pcl::PolygonMesh::Ptr&#160;</td>
+          <td class="paramname"><em>mesh</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an <a class="el" href="class_isis_1_1_embree_target_shape.html" title="Embree Target Shape for planetary bodies.">EmbreeTargetShape</a> from a PointCloudLibrary polygon mesh. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mesh</td><td>The polygon mesh to construct the scene from. </td></tr>
+    <tr><td class="paramname">name</td><td>The name of the target being represented. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_embree_target_shape.html#a21e10c0f2c63ea142b1e6b987183b484">initMesh()</a>.</p>
+
+</div>
+</div>
+<a id="a1900829958e3b55d1ff2bd1346de0ec4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1900829958e3b55d1ff2bd1346de0ec4">&#9670;&nbsp;</a></span>EmbreeTargetShape() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::EmbreeTargetShape::EmbreeTargetShape </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>dem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> *&#160;</td>
+          <td class="paramname"><em>conf</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an <a class="el" href="class_isis_1_1_embree_target_shape.html" title="Embree Target Shape for planetary bodies.">EmbreeTargetShape</a> from a file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dem</td><td>The file to construct the target shape from. The file type is determined based on the file extension. </td></tr>
+    <tr><td class="paramname">conf</td><td><a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> containing configuration settings for the target shape. Currently unused.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5" title="A type of error that occurred when performing an actual I/O operation.">IException::Io</a></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_file_name.html#a5596aba89aab7d88ff1b67c1637145a3">Isis::FileName::baseName()</a>, <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>, <a class="el" href="class_isis_1_1_file_name.html#ac1133bf6e26f1e6ff79831e9bca21467">Isis::FileName::extension()</a>, <a class="el" href="class_isis_1_1_embree_target_shape.html#a21e10c0f2c63ea142b1e6b987183b484">initMesh()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>, <a class="el" href="class_isis_1_1_embree_target_shape.html#a34e368a80193d32d1f58dbaf9eb930ed">readDSK()</a>, and <a class="el" href="class_isis_1_1_embree_target_shape.html#ac9192e86acb461714a2d815250461bc8">readPC()</a>.</p>
+
+</div>
+</div>
+<a id="a4d171f753e49fae049ed3040d599c44a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d171f753e49fae049ed3040d599c44a">&#9670;&nbsp;</a></span>~EmbreeTargetShape()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::EmbreeTargetShape::~EmbreeTargetShape </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Desctructor. </p>
+<p>The PointCloudLibrary objects are automatically cleaned up, but the Embree scene and device must be manually cleaned up. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae3722032178ba2918d1b0492822e2a54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3722032178ba2918d1b0492822e2a54">&#9670;&nbsp;</a></span>addIndices()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::EmbreeTargetShape::addIndices </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>geomID</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds the polygon vertex indices from the internalized polygon mesh to the Embree scene. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geomID</td><td>The Embree geometry <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> of the Embree geometry that the indices will be stored in.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_embree_target_shape.html#a21e10c0f2c63ea142b1e6b987183b484" title="Internalize a PointCloudLibrary polygon mesh in the target shape.">EmbreeTargetShape::initMesh</a> </dd></dl>
+
+</div>
+</div>
+<a id="ac3dd7c928233c6a3bcfd5628a303a931"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3dd7c928233c6a3bcfd5628a303a931">&#9670;&nbsp;</a></span>addVertices()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::EmbreeTargetShape::addVertices </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>geomID</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds the vertices from the internalized vertex point cloud to the Embree scene. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geomID</td><td>The Embree geometry <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> of the Embree geometry that the vertices will be stored in.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_embree_target_shape.html#a21e10c0f2c63ea142b1e6b987183b484" title="Internalize a PointCloudLibrary polygon mesh in the target shape.">EmbreeTargetShape::initMesh</a> </dd></dl>
+
+</div>
+</div>
+<a id="ae3ca0f150c907b7e10c8a0496cf7a84f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3ca0f150c907b7e10c8a0496cf7a84f">&#9670;&nbsp;</a></span>getHitInformation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_isis_1_1_ray_hit_information.html">RayHitInformation</a> Isis::EmbreeTargetShape::getHitInformation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html">RTCMultiHitRay</a> &amp;&#160;</td>
+          <td class="paramname"><em>ray</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>hitIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Extract the intersection point and unit surface normal from an <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html" title="Struct for capturing multiple intersections when using embree::rtcintersectscene.">RTCMultiHitRay</a> that has been intersected with the target shape. </p>
+<p>This method performs two calculations. First, it converts the intersection point from barycentric coordinates relative to the intersected polygon to the body-fixed (x, y, z) coordinates. Second, it computes the unit normal vector of the intersected polygon. The polygon vertices are assumed to be ordered counter-clockwise about the exterior surface normal as they are in NAIF type 2 DSK files.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ray</td><td>The ray to extract intersection information from. </td></tr>
+    <tr><td class="paramname">hitIndex</td><td>The index of the intersection to extract.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="struct_isis_1_1_ray_hit_information.html" title="Container that holds the body fixed intersection point and unit surface normal for a hit.">RayHitInformation</a></b> The body-fixed intersection coordinate in kilometers and the unit surface normal at the intersection.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html#a1914a38fb54737b2925a6a6f2a2c20a6">Isis::RTCMultiHitRay::hitGeomIDs</a>, <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html#a2a0ecaecbfe2a7ffa06bc8204b041001">Isis::RTCMultiHitRay::hitPrimIDs</a>, <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html#a0a3286406365cd34f7d3937f5db2af2f">Isis::RTCMultiHitRay::hitUs</a>, <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html#a23d737a768622959a1d4e011788d64cb">Isis::RTCMultiHitRay::hitVs</a>, <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html#ab33929075eea4a4e88f7cc36fdabad1f">Isis::RTCMultiHitRay::lastHit</a>, <a class="el" href="class_isis_1_1_linear_algebra.html#aff156efa237b28f4d6ec3ce8029d3350">Isis::LinearAlgebra::normalize()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_shape_model.html#a4db8567851acff6e1b959934c59ad93f">Isis::EmbreeShapeModel::intersectSurface()</a>, <a class="el" href="class_isis_1_1_embree_shape_model.html#a13309f4ce6890d133b7c27abc81827f5">Isis::EmbreeShapeModel::isVisibleFrom()</a>, and <a class="el" href="class_isis_1_1_embree_shape_model.html#a580493819a271c18d9acd0cef5bdf2ae">Isis::EmbreeShapeModel::localRadius()</a>.</p>
+
+</div>
+</div>
+<a id="a21e10c0f2c63ea142b1e6b987183b484"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21e10c0f2c63ea142b1e6b987183b484">&#9670;&nbsp;</a></span>initMesh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::EmbreeTargetShape::initMesh </td>
+          <td>(</td>
+          <td class="paramtype">pcl::PolygonMesh::Ptr&#160;</td>
+          <td class="paramname"><em>mesh</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Internalize a PointCloudLibrary polygon mesh in the target shape. </p>
+<p>The mesh itself is stored along with a duplicate of the vertex point cloud because the point cloud stored in the polygon mesh cannot be read without Robot Operating System routines. The mesh is loaded into the internal Embree scene and the scene is commited. Any changes made to the Embree scene after this method is called will not take effect until embree::rtcCommit is called again.</p>
+<dl class="section note"><dt>Note</dt><dd>This method is NOT reentrant. Calling this again with a new mesh will remove the PointCloudLibrary representation of the old mesh but the Embree scene will contain all previous meshes along with the new mesh. Use embree::rtcDeleteGeometry to remove an old mesh from the scene.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mesh</td><td>The mesh to be internalized. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_embree_target_shape.html#a7363e76527ffe21b34414b9cbe991920">isValid()</a>, <a class="el" href="class_isis_1_1_embree_target_shape.html#ac82a006c92ea447246f86c532d0d87ba">multiHitFilter()</a>, <a class="el" href="class_isis_1_1_embree_target_shape.html#a4003189715f8fa7c13cd9790e8cd4d83">numberOfPolygons()</a>, <a class="el" href="class_isis_1_1_embree_target_shape.html#a453739b737752ed6a272acc154bd0668">numberOfVertices()</a>, and <a class="el" href="class_isis_1_1_embree_target_shape.html#a3876aa57b0c97f5178f46e47c076384e">occlusionFilter()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_target_shape.html#abc49c5cca9745954c7f4ce1e9a6e7653">EmbreeTargetShape()</a>.</p>
+
+</div>
+</div>
+<a id="aee753751349b41e145b44bf1332b5ab0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee753751349b41e145b44bf1332b5ab0">&#9670;&nbsp;</a></span>intersectRay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::EmbreeTargetShape::intersectRay </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html">RTCMultiHitRay</a> &amp;&#160;</td>
+          <td class="paramname"><em>ray</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Intersect a ray with the target shape. </p>
+<p>After calling, up to 16 intersections will be stored within the <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html" title="Struct for capturing multiple intersections when using embree::rtcintersectscene.">RTCMultiHitRay</a>. The intersection information will be stored in the following arrays: </p><ul>
+<li>
+<b>hitGeomIDs:</b> The Embree Geometry <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> of the intersected geometry  </li>
+<li>
+<b>hitPrimIDs:</b> The index of the intersected polygon  </li>
+<li>
+<b>hitUs:</b> The Barycentric u coordinate of the intersection relative to the intersected polygon  </li>
+<li>
+<b>hitVs:</b> The Barycentric V coordinate of the intersection relative to the intersected polygon  </li>
+</ul>
+<p>The index of the last intersection is stored in <b>lastHit</b>.</p>
+<dl class="section note"><dt>Note</dt><dd>The intersection information is stored in the order that Embree finds them. This is not necessarily their order along the ray. Only the first intersection is guaranteed to be in the correct order. Other intersections may be swapped with the next, or previous, intersection relative to their order along the ray.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">ray</td><td>The ray to intersect with the scene. After calling, The intersection information will be stored in the ray.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>embree::rtcIntersect </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_embree_target_shape.html#a7363e76527ffe21b34414b9cbe991920">isValid()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_shape_model.html#a4db8567851acff6e1b959934c59ad93f">Isis::EmbreeShapeModel::intersectSurface()</a>, <a class="el" href="class_isis_1_1_embree_shape_model.html#a13309f4ce6890d133b7c27abc81827f5">Isis::EmbreeShapeModel::isVisibleFrom()</a>, and <a class="el" href="class_isis_1_1_embree_shape_model.html#a580493819a271c18d9acd0cef5bdf2ae">Isis::EmbreeShapeModel::localRadius()</a>.</p>
+
+</div>
+</div>
+<a id="a168f191c2f9c60030dc7b1267cbaddd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a168f191c2f9c60030dc7b1267cbaddd0">&#9670;&nbsp;</a></span>isOccluded()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::EmbreeTargetShape::isOccluded </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_isis_1_1_r_t_c_occlusion_ray.html">RTCOcclusionRay</a> &amp;&#160;</td>
+          <td class="paramname"><em>ray</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if a ray intersects the target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If the ray intersects anything.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>embree::rtcOccluded </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_shape_model.html#a20261e349de6c5f3b29e707a6675e1d8">Isis::EmbreeShapeModel::intersectSurface()</a>.</p>
+
+</div>
+</div>
+<a id="a7363e76527ffe21b34414b9cbe991920"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7363e76527ffe21b34414b9cbe991920">&#9670;&nbsp;</a></span>isValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::EmbreeTargetShape::isValid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return if a valid mesh is internalized and ready for use. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If a mesh is internalized and the Embree scene is ready. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_target_shape.html#a21e10c0f2c63ea142b1e6b987183b484">initMesh()</a>, <a class="el" href="class_isis_1_1_embree_target_shape.html#aee753751349b41e145b44bf1332b5ab0">intersectRay()</a>, <a class="el" href="class_isis_1_1_embree_target_shape.html#a4003189715f8fa7c13cd9790e8cd4d83">numberOfPolygons()</a>, <a class="el" href="class_isis_1_1_embree_target_shape.html#a453739b737752ed6a272acc154bd0668">numberOfVertices()</a>, and <a class="el" href="class_isis_1_1_embree_target_shape.html#ae479fae8434b5db8c3f5c4bb215a1fee">sceneBounds()</a>.</p>
+
+</div>
+</div>
+<a id="af7ebe0c43dcb855f4e421e0a342df890"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7ebe0c43dcb855f4e421e0a342df890">&#9670;&nbsp;</a></span>maximumSceneDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::EmbreeTargetShape::maximumSceneDistance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the maximum distance within the scene. </p>
+<p>This is computed as the length of the diagonal from once corner of the scene to the opposite.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> The maximum distance within the Embree scene in kilometers. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_linear_algebra.html#a831e4e851b273ae307488f259253b4b7">Isis::LinearAlgebra::magnitude()</a>, and <a class="el" href="class_isis_1_1_embree_target_shape.html#ae479fae8434b5db8c3f5c4bb215a1fee">sceneBounds()</a>.</p>
+
+</div>
+</div>
+<a id="ac82a006c92ea447246f86c532d0d87ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac82a006c92ea447246f86c532d0d87ba">&#9670;&nbsp;</a></span>multiHitFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::EmbreeTargetShape::multiHitFilter </td>
+          <td>(</td>
+          <td class="paramtype">const RTCFilterFunctionNArguments *&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Filter function for collecting multiple hits during ray intersection. </p>
+<p>This function is called by the Embree library during ray tracing. Each time an intersection is found, this method is called.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">userDataPtr</td><td>Data pointer from the geometry hit. Not used. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">ray</td><td>The ray being traced. Information about the intersection will be stored in the ray. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html#a1914a38fb54737b2925a6a6f2a2c20a6">Isis::RTCMultiHitRay::hitGeomIDs</a>, <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html#a2a0ecaecbfe2a7ffa06bc8204b041001">Isis::RTCMultiHitRay::hitPrimIDs</a>, <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html#a0a3286406365cd34f7d3937f5db2af2f">Isis::RTCMultiHitRay::hitUs</a>, <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html#a23d737a768622959a1d4e011788d64cb">Isis::RTCMultiHitRay::hitVs</a>, and <a class="el" href="struct_isis_1_1_r_t_c_multi_hit_ray.html#ab33929075eea4a4e88f7cc36fdabad1f">Isis::RTCMultiHitRay::lastHit</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_target_shape.html#a21e10c0f2c63ea142b1e6b987183b484">initMesh()</a>.</p>
+
+</div>
+</div>
+<a id="af373bc9e6c8e1b1ec7a7c0983ae7d0db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af373bc9e6c8e1b1ec7a7c0983ae7d0db">&#9670;&nbsp;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::EmbreeTargetShape::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the name of the target shape. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The name of the target. </dd></dl>
+
+</div>
+</div>
+<a id="a4003189715f8fa7c13cd9790e8cd4d83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4003189715f8fa7c13cd9790e8cd4d83">&#9670;&nbsp;</a></span>numberOfPolygons()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::EmbreeTargetShape::numberOfPolygons </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the number of polygons in the target shape. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The number of polygons in the polygon mesh representation of the target. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_embree_target_shape.html#a7363e76527ffe21b34414b9cbe991920">isValid()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_target_shape.html#a21e10c0f2c63ea142b1e6b987183b484">initMesh()</a>.</p>
+
+</div>
+</div>
+<a id="a453739b737752ed6a272acc154bd0668"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a453739b737752ed6a272acc154bd0668">&#9670;&nbsp;</a></span>numberOfVertices()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::EmbreeTargetShape::numberOfVertices </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the number of vertices in the target shape. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The number of vertices in the polygon mesh representation of the target. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_embree_target_shape.html#a7363e76527ffe21b34414b9cbe991920">isValid()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_target_shape.html#a21e10c0f2c63ea142b1e6b987183b484">initMesh()</a>.</p>
+
+</div>
+</div>
+<a id="a3876aa57b0c97f5178f46e47c076384e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3876aa57b0c97f5178f46e47c076384e">&#9670;&nbsp;</a></span>occlusionFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::EmbreeTargetShape::occlusionFilter </td>
+          <td>(</td>
+          <td class="paramtype">const RTCFilterFunctionNArguments *&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Filter function for collecting multiple primitiveIDs This function is called by the Embree library during ray tracing. </p>
+<p>Each time an intersection is found, this method is called.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">userDataPtr</td><td>Data pointer from the geometry hit. Not used. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">ray</td><td>The ray being traced. Information about the intersection will be stored in the ray. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="struct_isis_1_1_r_t_c_occlusion_ray.html#a239336f30aba4ca5e263658002a4efd6">Isis::RTCOcclusionRay::ignorePrimID</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_target_shape.html#a21e10c0f2c63ea142b1e6b987183b484">initMesh()</a>.</p>
+
+</div>
+</div>
+<a id="a34e368a80193d32d1f58dbaf9eb930ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34e368a80193d32d1f58dbaf9eb930ed">&#9670;&nbsp;</a></span>readDSK()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">pcl::PolygonMesh::Ptr Isis::EmbreeTargetShape::readDSK </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read a NAIF type 2 DSK file into a PointCloudLibrary polygon mesh. </p>
+<p>The vertex and plate ordering in the DSK file is maintained in the polygon mesh.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>The DSK file to load.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>pcl::PolygonMesh::Ptr</b> A boost shared pointer to the mesh.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td></td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5" title="A type of error that occurred when performing an actual I/O operation.">IException::Io</a></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_naif_status.html#af872fa8bfc3f0012f157cbaef4066d25">Isis::NaifStatus::CheckErrors()</a>, <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>, <a class="el" href="class_isis_1_1_file_name.html#a4aa9747da045728a69b21b7dfa8048a1">Isis::FileName::fileExists()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_target_shape.html#a1900829958e3b55d1ff2bd1346de0ec4">EmbreeTargetShape()</a>.</p>
+
+</div>
+</div>
+<a id="ac9192e86acb461714a2d815250461bc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9192e86acb461714a2d815250461bc8">&#9670;&nbsp;</a></span>readPC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">pcl::PolygonMesh::Ptr Isis::EmbreeTargetShape::readPC </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read a PointCloudLibrary file into a PointCloudLibrary polygon mesh. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>The PointCloudLibrary file to load.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>pcl::PolygonMesh::Ptr</b> A boost shared pointer to the mesh.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5" title="A type of error that occurred when performing an actual I/O operation.">IException::Io</a></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_target_shape.html#a1900829958e3b55d1ff2bd1346de0ec4">EmbreeTargetShape()</a>.</p>
+
+</div>
+</div>
+<a id="ae479fae8434b5db8c3f5c4bb215a1fee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae479fae8434b5db8c3f5c4bb215a1fee">&#9670;&nbsp;</a></span>sceneBounds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RTCBounds Isis::EmbreeTargetShape::sceneBounds </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the bounds of the Embree scene. </p>
+<p>If the scene has not been initialized, then all bounds are returned as 0.0.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>RTCBounds</b> Struct containing the upper and lower bounds on each dimension of the scene. Bounds are stored as floats in lower_x, upper_x, lower_y, upper_y, lower_z, and upper_z. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_embree_target_shape.html#a7363e76527ffe21b34414b9cbe991920">isValid()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_target_shape.html#af7ebe0c43dcb855f4e421e0a342df890">maximumSceneDistance()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/EmbreeTargetShape/<a class="el" href="_embree_target_shape_8h_source.html">EmbreeTargetShape.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/EmbreeTargetShape/<a class="el" href="_embree_target_shape_8cpp.html">EmbreeTargetShape.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_embree_target_shape.html">EmbreeTargetShape</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

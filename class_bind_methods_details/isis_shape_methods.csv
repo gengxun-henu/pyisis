@@ -1,0 +1,36 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Shape,SensorUtilities,isis/src/qisis/objs/Shape/Shape.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Shape,isis_pybind.Shape,N,Python class symbol not found in current binding files; ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Construction/Enum,"ShapeType enum (Dem, Basemap, Unprojected, Unknown)",isis_pybind.Shape.ShapeType,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Construction/Enum,Shape(),isis_pybind.Shape(),N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,void fromPvl(const PvlObject &pvl),isis_pybind.Shape.from_pvl,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,PvlObject toPvl() const,isis_pybind.Shape.to_pvl,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Query,bool isFootprintable() const,isis_pybind.Shape.is_footprintable,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,Cube *cube(),isis_pybind.Shape.cube,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Read/Write IO,void closeCube(),isis_pybind.Shape.close_cube,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,ControlPoint::SurfacePointSource::Source surfacePointSource(),isis_pybind.Shape.surface_point_source,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,ControlPoint::RadiusSource::Source radiusSource(),isis_pybind.Shape.radius_source,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,ShapeDisplayProperties *displayProperties(),isis_pybind.Shape.display_properties,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,ShapeType shapeType(),isis_pybind.Shape.shape_type,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,const ShapeDisplayProperties *displayProperties() const,isis_pybind.Shape.display_properties,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,QString fileName() const,isis_pybind.Shape.file_name,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,QString serialNumber(),isis_pybind.Shape.serial_number,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,geos::geom::MultiPolygon *footprint(),isis_pybind.Shape.footprint,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,const geos::geom::MultiPolygon *footprint() const,isis_pybind.Shape.footprint,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Mutation/Configuration,void setId(QString id),isis_pybind.Shape.set_id,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,bool initFootprint(QMutex *cameraMutex),isis_pybind.Shape.init_footprint,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,double aspectRatio() const,isis_pybind.Shape.aspect_ratio,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,QString id() const,isis_pybind.Shape.id,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,double resolution() const,isis_pybind.Shape.resolution,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,Angle emissionAngle() const,isis_pybind.Shape.emission_angle,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,Angle incidenceAngle() const,isis_pybind.Shape.incidence_angle,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,double lineResolution() const,isis_pybind.Shape.line_resolution,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,Distance localRadius() const,isis_pybind.Shape.local_radius,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,Angle northAzimuth() const,isis_pybind.Shape.north_azimuth,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,Angle phaseAngle() const,isis_pybind.Shape.phase_angle,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,double sampleResolution() const,isis_pybind.Shape.sample_resolution,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Public API,"void copyToNewProjectRoot(const Project *project, FileName newProjectRoot)",isis_pybind.Shape.copy_to_new_project_root,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Mutation/Configuration,void deleteFromDisk(),isis_pybind.Shape.delete_from_disk,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+Read/Write IO,"void save(QXmlStreamWriter &stream, const Project *project, FileName newProjectRoot) const",isis_pybind.Shape.save,N,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口

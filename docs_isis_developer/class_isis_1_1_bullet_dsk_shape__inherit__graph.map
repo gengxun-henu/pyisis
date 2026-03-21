@@ -1,0 +1,4 @@
+<map id="Isis::BulletDskShape" name="Isis::BulletDskShape">
+<area shape="rect" id="node1" title="Bullet Target Shape for NAIF type 2 DSK models." alt="" coords="17,327,161,504"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_bullet_target_shape.html" title="Bullet Target Shape for planetary bodies." alt="" coords="5,5,173,279"/>
+</map>

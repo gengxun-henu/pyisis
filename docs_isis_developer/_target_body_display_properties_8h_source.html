@@ -1,0 +1,347 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/TargetBodyDisplayProperties/TargetBodyDisplayProperties.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_target_body_display_properties_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">TargetBodyDisplayProperties.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_target_body_display_properties_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef TargetBodyDisplayProperties_H</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define TargetBodyDisplayProperties_H</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QColor&gt;</span> <span class="comment">// This is required since QColor is in a slot</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QMetaType&gt;</span> <span class="comment">// required since we&#39;re adding to QVariant</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QObject&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_display_properties_8h.html">DisplayProperties.h</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_action.html">QAction</a>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">class </span>QXmlStreamWriter;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keyword">class </span>FileName;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keyword">class </span>Project;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keyword">class </span>Pvl;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <span class="keyword">class </span>PvlObject;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="class_isis_1_1_target_body_display_properties.html">   61</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_target_body_display_properties.html">TargetBodyDisplayProperties</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_display_properties.html">DisplayProperties</a> {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91">   67</a></span>&#160;        <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91">Property</a> {</div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91a6194f63c03a068f9090fc4ef6276b952">   69</a></span>&#160;          <a class="code" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91a6194f63c03a068f9090fc4ef6276b952">None</a>             = 0,</div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91ad3af779dedd37b1997b439a3e5d611db">   71</a></span>&#160;          <a class="code" href="class_isis_1_1_color.html">Color</a>            = 1,</div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91a00d3e4fa947febe592eecd6ed309c675">   73</a></span>&#160;          <a class="code" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91a00d3e4fa947febe592eecd6ed309c675">Selected</a>         = 2,</div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91a7e13bedcc883d9fc5956aab04ed57504">   75</a></span>&#160;          <a class="code" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91a7e13bedcc883d9fc5956aab04ed57504">ShowLabel</a>        = 16,</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        };</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <a class="code" href="class_isis_1_1_target_body_display_properties.html#a3cf9587b63300e23105fbed80d34ce29">TargetBodyDisplayProperties</a>(QString <a class="code" href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">displayName</a>, <a class="code" href="class_q_object.html">QObject</a> *parent = NULL);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html#a89505f2755b334d1455560cedbda6002">~TargetBodyDisplayProperties</a>();</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">//      void fromPvl(const PvlObject &amp;pvl);</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment">//      PvlObject toPvl() const;</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html#ae62504bc3e3d0e604fee3b4a7e2812b4">addSupport</a>(<a class="code" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91">Property</a> prop);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html#a655dd8a096204b7d85a0baf9f3f1a9a9">supports</a>(<a class="code" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91">Property</a> prop);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      QVariant <a class="code" href="class_isis_1_1_target_body_display_properties.html#a78d92b5a948c83e55d8c6db18391e3b6">getValue</a>(<a class="code" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91">Property</a> prop) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      <span class="keyword">static</span> QColor <a class="code" href="class_isis_1_1_target_body_display_properties.html#aca66b3e2cb220b11941a48666e6dee30">randomColor</a>();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html#a1ee3ff5a70bd0c9bdae16b8c557dfb5d">save</a>(QXmlStreamWriter &amp;stream, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_project.html">Project</a> *project, <a class="code" href="class_isis_1_1_file_name.html">FileName</a> newProjectRoot) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    signals:</div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="class_isis_1_1_target_body_display_properties.html#aab1c8389d6f00a61bbe4cf22b1d32c24">   95</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html#aab1c8389d6f00a61bbe4cf22b1d32c24">propertyChanged</a>(<a class="code" href="class_isis_1_1_target_body_display_properties.html">TargetBodyDisplayProperties</a> *);</div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="class_isis_1_1_target_body_display_properties.html#a719ce1127f282e68b54bf03e4d41359c">   96</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html#a719ce1127f282e68b54bf03e4d41359c">supportAdded</a>(<a class="code" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91">Property</a>);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html#a985165d9012fd4c61d8995cad9c46995">setColor</a>(QColor newColor);</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html#abdcc2b15223e6bed6a23ac5d902a3bca">setShowLabel</a>(<span class="keywordtype">bool</span>);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html#ad8faab675ac7be5d50f93e689f4f9d46">setSelected</a>(<span class="keywordtype">bool</span>);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keyword">private</span> slots:</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keywordtype">void</span> toggleShowLabel();</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <a class="code" href="class_isis_1_1_target_body_display_properties.html#a3cf9587b63300e23105fbed80d34ce29">TargetBodyDisplayProperties</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html">TargetBodyDisplayProperties</a> &amp;);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <a class="code" href="class_isis_1_1_target_body_display_properties.html">TargetBodyDisplayProperties</a> &amp;operator=(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html">TargetBodyDisplayProperties</a> &amp;);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      <span class="keywordtype">void</span> setValue(<a class="code" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91">Property</a> prop, QVariant value);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_q_list.html">QList&lt;TargetBodyDisplayProperties *&gt;</a> senderToData(<a class="code" href="class_q_object.html">QObject</a> *sender);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;      <a class="code" href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91">Property</a> m_propertiesUsed;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      <a class="code" href="class_q_map.html">QMap&lt;int, QVariant&gt;</a> *m_propertyValues;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  };</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;}</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno"><a class="line" href="_target_body_display_properties_8h.html#a3a90e6e0578e237512353ef6aa12ef01">  128</a></span>&#160;<a class="code" href="_target_body_display_properties_8h.html#a3a90e6e0578e237512353ef6aa12ef01">Q_DECLARE_METATYPE</a>(<a class="code" href="class_q_list.html">QList&lt;Isis::TargetBodyDisplayProperties *&gt;</a>);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_display_properties_8h_html"><div class="ttname"><a href="_display_properties_8h.html">DisplayProperties.h</a></div></div>
+<div class="ttc" id="a_target_body_display_properties_8h_html_a3a90e6e0578e237512353ef6aa12ef01"><div class="ttname"><a href="_target_body_display_properties_8h.html#a3a90e6e0578e237512353ef6aa12ef01">Q_DECLARE_METATYPE</a></div><div class="ttdeci">Q_DECLARE_METATYPE(QList&lt; Isis::TargetBodyDisplayProperties * &gt;)</div></div>
+<div class="ttc" id="aclass_isis_1_1_color_html"><div class="ttname"><a href="class_isis_1_1_color.html">Isis::Color</a></div><div class="ttdoc">This class is designed to serialize QColor in a human-readable form.</div><div class="ttdef"><b>Definition:</b> Color.h:26</div></div>
+<div class="ttc" id="aclass_isis_1_1_display_properties_html"><div class="ttname"><a href="class_isis_1_1_display_properties.html">Isis::DisplayProperties</a></div><div class="ttdef"><b>Definition:</b> DisplayProperties.h:32</div></div>
+<div class="ttc" id="aclass_isis_1_1_display_properties_html_a142d239a553918e48f67df7f3bf7b62e"><div class="ttname"><a href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">Isis::DisplayProperties::displayName</a></div><div class="ttdeci">QString displayName() const</div><div class="ttdoc">Returns the display name.</div><div class="ttdef"><b>Definition:</b> DisplayProperties.cpp:79</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_name_html"><div class="ttname"><a href="class_isis_1_1_file_name.html">Isis::FileName</a></div><div class="ttdoc">File name manipulation and expansion.</div><div class="ttdef"><b>Definition:</b> FileName.h:100</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_html"><div class="ttname"><a href="class_isis_1_1_project.html">Isis::Project</a></div><div class="ttdoc">The main project for ipce.</div><div class="ttdef"><b>Definition:</b> Project.h:287</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html">Isis::TargetBodyDisplayProperties</a></div><div class="ttdoc">This is the GUI communication mechanism for target body objects.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_a038f54c40310a33a34d9b77ef1d35b91"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91">Isis::TargetBodyDisplayProperties::Property</a></div><div class="ttdeci">Property</div><div class="ttdoc">This is a list of properties and actions that are possible.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.h:67</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_a038f54c40310a33a34d9b77ef1d35b91a00d3e4fa947febe592eecd6ed309c675"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91a00d3e4fa947febe592eecd6ed309c675">Isis::TargetBodyDisplayProperties::Selected</a></div><div class="ttdeci">@ Selected</div><div class="ttdoc">The selection state of this control net (bool)</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.h:73</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_a038f54c40310a33a34d9b77ef1d35b91a6194f63c03a068f9090fc4ef6276b952"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91a6194f63c03a068f9090fc4ef6276b952">Isis::TargetBodyDisplayProperties::None</a></div><div class="ttdeci">@ None</div><div class="ttdoc">Null display property for bit-flag purposes.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.h:69</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_a038f54c40310a33a34d9b77ef1d35b91a7e13bedcc883d9fc5956aab04ed57504"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#a038f54c40310a33a34d9b77ef1d35b91a7e13bedcc883d9fc5956aab04ed57504">Isis::TargetBodyDisplayProperties::ShowLabel</a></div><div class="ttdeci">@ ShowLabel</div><div class="ttdoc">True if the control net should show its display name (bool)</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.h:75</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_a1ee3ff5a70bd0c9bdae16b8c557dfb5d"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#a1ee3ff5a70bd0c9bdae16b8c557dfb5d">Isis::TargetBodyDisplayProperties::save</a></div><div class="ttdeci">void save(QXmlStreamWriter &amp;stream, const Project *project, FileName newProjectRoot) const</div><div class="ttdoc">Saves this object to an XML file.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.cpp:138</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_a3cf9587b63300e23105fbed80d34ce29"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#a3cf9587b63300e23105fbed80d34ce29">Isis::TargetBodyDisplayProperties::TargetBodyDisplayProperties</a></div><div class="ttdeci">TargetBodyDisplayProperties(QString displayName, QObject *parent=NULL)</div><div class="ttdoc">TargetBodyDisplayProperties constructor.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.cpp:23</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_a655dd8a096204b7d85a0baf9f3f1a9a9"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#a655dd8a096204b7d85a0baf9f3f1a9a9">Isis::TargetBodyDisplayProperties::supports</a></div><div class="ttdeci">bool supports(Property prop)</div><div class="ttdoc">Support for this may come later.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.cpp:94</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_a719ce1127f282e68b54bf03e4d41359c"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#a719ce1127f282e68b54bf03e4d41359c">Isis::TargetBodyDisplayProperties::supportAdded</a></div><div class="ttdeci">void supportAdded(Property)</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_a78d92b5a948c83e55d8c6db18391e3b6"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#a78d92b5a948c83e55d8c6db18391e3b6">Isis::TargetBodyDisplayProperties::getValue</a></div><div class="ttdeci">QVariant getValue(Property prop) const</div><div class="ttdoc">Get a property's associated data.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.cpp:105</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_a89505f2755b334d1455560cedbda6002"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#a89505f2755b334d1455560cedbda6002">Isis::TargetBodyDisplayProperties::~TargetBodyDisplayProperties</a></div><div class="ttdeci">virtual ~TargetBodyDisplayProperties()</div><div class="ttdoc">The destructor.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.cpp:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_a985165d9012fd4c61d8995cad9c46995"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#a985165d9012fd4c61d8995cad9c46995">Isis::TargetBodyDisplayProperties::setColor</a></div><div class="ttdeci">void setColor(QColor newColor)</div><div class="ttdoc">Change the color associated with this target.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.cpp:162</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_aab1c8389d6f00a61bbe4cf22b1d32c24"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#aab1c8389d6f00a61bbe4cf22b1d32c24">Isis::TargetBodyDisplayProperties::propertyChanged</a></div><div class="ttdeci">void propertyChanged(TargetBodyDisplayProperties *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_abdcc2b15223e6bed6a23ac5d902a3bca"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#abdcc2b15223e6bed6a23ac5d902a3bca">Isis::TargetBodyDisplayProperties::setShowLabel</a></div><div class="ttdeci">void setShowLabel(bool)</div><div class="ttdoc">Change the visibility of the display name associated with this target.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.cpp:182</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_aca66b3e2cb220b11941a48666e6dee30"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#aca66b3e2cb220b11941a48666e6dee30">Isis::TargetBodyDisplayProperties::randomColor</a></div><div class="ttdeci">static QColor randomColor()</div><div class="ttdoc">Creates and returns a random color for the initial color of the footprint polygon.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.cpp:115</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_ad8faab675ac7be5d50f93e689f4f9d46"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#ad8faab675ac7be5d50f93e689f4f9d46">Isis::TargetBodyDisplayProperties::setSelected</a></div><div class="ttdeci">void setSelected(bool)</div><div class="ttdoc">Change the selected state associated with this target.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.cpp:172</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html_ae62504bc3e3d0e604fee3b4a7e2812b4"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html#ae62504bc3e3d0e604fee3b4a7e2812b4">Isis::TargetBodyDisplayProperties::addSupport</a></div><div class="ttdeci">void addSupport(Property prop)</div><div class="ttdoc">Call this with every property you support, otherwise they will not communicate properly between widge...</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.cpp:81</div></div>
+<div class="ttc" id="aclass_q_action_html"><div class="ttname"><a href="class_q_action.html">QAction</a></div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="aclass_q_map_html"><div class="ttname"><a href="class_q_map.html">QMap&lt; int, QVariant &gt;</a></div></div>
+<div class="ttc" id="aclass_q_object_html"><div class="ttname"><a href="class_q_object.html">QObject</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_6156e7b60aaa4759fe0dcb0e7ea9b464.html">TargetBodyDisplayProperties</a></li><li class="navelem"><a class="el" href="_target_body_display_properties_8h.html">TargetBodyDisplayProperties.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

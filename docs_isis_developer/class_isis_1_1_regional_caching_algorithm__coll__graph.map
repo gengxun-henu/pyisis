@@ -1,0 +1,4 @@
+<map id="Isis::RegionalCachingAlgorithm" name="Isis::RegionalCachingAlgorithm">
+<area shape="rect" id="node1" title="This algorithm recommends chunks to be freed that are not within the last IO." alt="" coords="5,167,210,248"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_cube_caching_algorithm.html" title="This is the parent of the caching algorithms." alt="" coords="10,5,205,119"/>
+</map>

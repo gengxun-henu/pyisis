@@ -1,0 +1,5 @@
+<map id="Isis::StripPolygonSeeder" name="Isis::StripPolygonSeeder">
+<area shape="rect" id="node1" title="Seed points using a grid with a staggered pattern." alt="" coords="5,665,171,811"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_polygon_seeder.html" title="This class is used as the base class for all PolygonSeeder objects." alt="" coords="11,359,165,616"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_pvl.html" title="Container for cube&#45;like labels." alt="" coords="11,5,165,295"/>
+</map>

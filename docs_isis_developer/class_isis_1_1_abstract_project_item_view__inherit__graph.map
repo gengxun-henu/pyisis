@@ -1,0 +1,11 @@
+<map id="Isis::AbstractProjectItemView" name="Isis::AbstractProjectItemView">
+<area shape="rect" id="node1" title="AbstractProjectItemView is a base class for views of a ProjectItemModel in Qt&#39;s model&#45;view framework." alt="" coords="600,135,795,456"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_bundle_observation_view.html" title="View for displaying BundleObservation CSV files." alt="" coords="5,544,195,641"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_cnet_editor_view.html" title="Ipce view containing the CnetEditorWidget." alt="" coords="219,520,360,665"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_control_health_monitor_view.html" title="View for the Control Net Health Monitor." alt="" coords="384,504,587,681"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_control_point_edit_view.html" title="View for editing a single ControlPoint." alt="" coords="610,536,785,649"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_cube_dn_view.html" title="View that displays cubes in a QView&#45;like way." alt="" coords="809,512,988,673"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_footprint2_d_view.html" title="View for displaying footprints of images in a QMos like way." alt="" coords="1013,504,1179,681"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_project_item_tree_view.html" title="A ProjectItemTreeView displays items from a ProjectItemProxyModel in a tree structure." alt="" coords="1203,512,1376,673"/>
+<area shape="rect" id="node2" href="$class_q_main_window.html" title=" " alt="" coords="644,5,751,87"/>
+</map>

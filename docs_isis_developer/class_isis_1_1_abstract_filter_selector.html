@@ -1,0 +1,828 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::AbstractFilterSelector Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_abstract_filter_selector.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-slots">Protected Slots</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_abstract_filter_selector-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::AbstractFilterSelector Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Base class for filter selectors.  
+ <a href="class_isis_1_1_abstract_filter_selector.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_abstract_filter_selector_8h_source.html">AbstractFilterSelector.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::AbstractFilterSelector:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_abstract_filter_selector__inherit__graph.png" border="0" usemap="#a_isis_1_1_abstract_filter_selector_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_abstract_filter_selector_inherit__map" id="a_isis_1_1_abstract_filter_selector_inherit__map">
+<area shape="rect" title="Base class for filter selectors." alt="" coords="237,135,413,456"/>
+<area shape="rect" href="class_isis_1_1_image_image_filter_selector.html" title="Allows users to choose filters for filtering connected images." alt="" coords="5,512,205,673"/>
+<area shape="rect" href="class_isis_1_1_image_point_filter_selector.html" title="Allows users to choose filters for filtering images and points." alt="" coords="228,512,422,673"/>
+<area shape="rect" href="class_isis_1_1_point_measure_filter_selector.html" title="Allows users to choose filters for filtering points and measures." alt="" coords="446,504,652,681"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="289,5,361,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::AbstractFilterSelector:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_abstract_filter_selector__coll__graph.png" border="0" usemap="#a_isis_1_1_abstract_filter_selector_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_abstract_filter_selector_coll__map" id="a_isis_1_1_abstract_filter_selector_coll__map">
+<area shape="rect" title="Base class for filter selectors." alt="" coords="5,135,182,456"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="57,5,130,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a9055b809f803e57a65b2a10df957302b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a9055b809f803e57a65b2a10df957302b">sendClose</a> ()</td></tr>
+<tr class="separator:a9055b809f803e57a65b2a10df957302b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:ad2235e77ff1b08d775cb96c7c4e5be53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#ad2235e77ff1b08d775cb96c7c4e5be53">close</a> (<a class="el" href="class_isis_1_1_abstract_filter_selector.html">AbstractFilterSelector</a> *)</td></tr>
+<tr class="separator:ad2235e77ff1b08d775cb96c7c4e5be53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a678220b7c449a4ffc2af0eae9e757ae5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a678220b7c449a4ffc2af0eae9e757ae5">filterChanged</a> ()</td></tr>
+<tr class="separator:a678220b7c449a4ffc2af0eae9e757ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92528bf1eed4e2758f160fa4f3e5e9c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a92528bf1eed4e2758f160fa4f3e5e9c8">sizeChanged</a> ()</td></tr>
+<tr class="separator:a92528bf1eed4e2758f160fa4f3e5e9c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a511db1f99856f2db4d299a7537bbbddd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a511db1f99856f2db4d299a7537bbbddd">AbstractFilterSelector</a> ()</td></tr>
+<tr class="separator:a511db1f99856f2db4d299a7537bbbddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bc11e055a90306d960a80d7f122959c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a8bc11e055a90306d960a80d7f122959c">~AbstractFilterSelector</a> ()</td></tr>
+<tr class="separator:a8bc11e055a90306d960a80d7f122959c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8ca936ab0f46d99d20625d13ef9a620"><td class="memTemplParams" colspan="2">template&lt;typename Evaluatable &gt; </td></tr>
+<tr class="memitem:ae8ca936ab0f46d99d20625d13ef9a620"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#ae8ca936ab0f46d99d20625d13ef9a620">evaluate</a> (const Evaluatable *evaluatable) const</td></tr>
+<tr class="separator:ae8ca936ab0f46d99d20625d13ef9a620"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5acf22cc2d75eb6729e27f69c66cca07"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a5acf22cc2d75eb6729e27f69c66cca07">hasFilter</a> () const</td></tr>
+<tr class="separator:a5acf22cc2d75eb6729e27f69c66cca07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc533764526e4b9f24b62f3641c263a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#acc533764526e4b9f24b62f3641c263a0">hasFilter</a> (bool(AbstractFilter::*)() const) const</td></tr>
+<tr class="separator:acc533764526e4b9f24b62f3641c263a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e5e21eebb931c60962f8e51e9da0a94"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a9e5e21eebb931c60962f8e51e9da0a94">getDescription</a> (QString(AbstractFilter::*)() const) const</td></tr>
+<tr class="separator:a9e5e21eebb931c60962f8e51e9da0a94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3703443426e9faeffebb1c6d3a084edb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_abstract_filter_selector.html">AbstractFilterSelector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a3703443426e9faeffebb1c6d3a084edb">operator=</a> (const <a class="el" href="class_isis_1_1_abstract_filter_selector.html">AbstractFilterSelector</a> &amp;other)</td></tr>
+<tr class="separator:a3703443426e9faeffebb1c6d3a084edb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-slots"></a>
+Protected Slots</h2></td></tr>
+<tr class="memitem:a08410045189431dc6fc3a5bf04cc08a1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a08410045189431dc6fc3a5bf04cc08a1">changeFilter</a> (int index)=0</td></tr>
+<tr class="separator:a08410045189431dc6fc3a5bf04cc08a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0767a62ac2da398791b4ccbbac97315e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a0767a62ac2da398791b4ccbbac97315e">deleteFilter</a> ()</td></tr>
+<tr class="separator:a0767a62ac2da398791b4ccbbac97315e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a53952da2f7b67d0c9c99e2e94ef4d854"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a53952da2f7b67d0c9c99e2e94ef4d854">nullify</a> ()</td></tr>
+<tr class="separator:a53952da2f7b67d0c9c99e2e94ef4d854"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae351b9ea6d9132a18bb6645bb9428adf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#ae351b9ea6d9132a18bb6645bb9428adf">createSelector</a> ()</td></tr>
+<tr class="separator:ae351b9ea6d9132a18bb6645bb9428adf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbc23a81aeb33a62290b4b9a3e8e7758"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_combo_box.html">QComboBox</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#afbc23a81aeb33a62290b4b9a3e8e7758">getSelector</a> () const</td></tr>
+<tr class="separator:afbc23a81aeb33a62290b4b9a3e8e7758"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf05ba75eca2bb8efde7fed8f2a7239d"><td class="memItemLeft" align="right" valign="top">QHBoxLayout *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#adf05ba75eca2bb8efde7fed8f2a7239d">getMainLayout</a> () const</td></tr>
+<tr class="separator:adf05ba75eca2bb8efde7fed8f2a7239d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a107ce217cebd30d970c3fb9e8849c3cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_abstract_filter.html">AbstractFilter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a107ce217cebd30d970c3fb9e8849c3cb">getFilter</a> () const</td></tr>
+<tr class="separator:a107ce217cebd30d970c3fb9e8849c3cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b3930d76b5e6d1d8d610221753ce140"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter_selector.html#a2b3930d76b5e6d1d8d610221753ce140">setFilter</a> (<a class="el" href="class_isis_1_1_abstract_filter.html">AbstractFilter</a> *)</td></tr>
+<tr class="separator:a2b3930d76b5e6d1d8d610221753ce140"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Base class for filter selectors. </p>
+<p>Filter selectors are combo boxes with filters as elements. A filter selector has only one active filter at a time. These allow the user to choose which filter to apply to the control net.</p>
+<dl class="section author"><dt>Author</dt><dd>????-??-?? Eric Hyer </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a511db1f99856f2db4d299a7537bbbddd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a511db1f99856f2db4d299a7537bbbddd">&#9670;&nbsp;</a></span>AbstractFilterSelector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::AbstractFilterSelector::AbstractFilterSelector </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a53952da2f7b67d0c9c99e2e94ef4d854">nullify()</a>.</p>
+
+</div>
+</div>
+<a id="a8bc11e055a90306d960a80d7f122959c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8bc11e055a90306d960a80d7f122959c">&#9670;&nbsp;</a></span>~AbstractFilterSelector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::AbstractFilterSelector::~AbstractFilterSelector </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a0767a62ac2da398791b4ccbbac97315e">deleteFilter()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a08410045189431dc6fc3a5bf04cc08a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08410045189431dc6fc3a5bf04cc08a1">&#9670;&nbsp;</a></span>changeFilter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::AbstractFilterSelector::changeFilter </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#a0acfefd74fd56ceb5972525c291c4b01">Isis::PointMeasureFilterSelector</a>, <a class="el" href="class_isis_1_1_image_point_filter_selector.html#a208e811370a464b493487dc64831ad32">Isis::ImagePointFilterSelector</a>, and <a class="el" href="class_isis_1_1_image_image_filter_selector.html#a5b988574b27f98297a301b61dc6c05c8">Isis::ImageImageFilterSelector</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_filter_selector.html#ae351b9ea6d9132a18bb6645bb9428adf">createSelector()</a>.</p>
+
+</div>
+</div>
+<a id="ad2235e77ff1b08d775cb96c7c4e5be53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2235e77ff1b08d775cb96c7c4e5be53">&#9670;&nbsp;</a></span>close</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractFilterSelector::close </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_abstract_filter_selector.html">AbstractFilterSelector</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a9055b809f803e57a65b2a10df957302b">sendClose()</a>.</p>
+
+</div>
+</div>
+<a id="ae351b9ea6d9132a18bb6645bb9428adf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae351b9ea6d9132a18bb6645bb9428adf">&#9670;&nbsp;</a></span>createSelector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractFilterSelector::createSelector </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#aca0b63e1e10807df9ef360ff3867635e">Isis::PointMeasureFilterSelector</a>, <a class="el" href="class_isis_1_1_image_point_filter_selector.html#a75ee9a7c9561d8b7a91fb2f7a0dd434e">Isis::ImagePointFilterSelector</a>, and <a class="el" href="class_isis_1_1_image_image_filter_selector.html#a5487418c87c7931aecba90dc5ca0b6b4">Isis::ImageImageFilterSelector</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a08410045189431dc6fc3a5bf04cc08a1">changeFilter()</a>, and <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a9055b809f803e57a65b2a10df957302b">sendClose()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_image_filter_selector.html#a5487418c87c7931aecba90dc5ca0b6b4">Isis::ImageImageFilterSelector::createSelector()</a>, <a class="el" href="class_isis_1_1_image_point_filter_selector.html#a75ee9a7c9561d8b7a91fb2f7a0dd434e">Isis::ImagePointFilterSelector::createSelector()</a>, and <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#aca0b63e1e10807df9ef360ff3867635e">Isis::PointMeasureFilterSelector::createSelector()</a>.</p>
+
+</div>
+</div>
+<a id="a0767a62ac2da398791b4ccbbac97315e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0767a62ac2da398791b4ccbbac97315e">&#9670;&nbsp;</a></span>deleteFilter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractFilterSelector::deleteFilter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_image_filter_selector.html#a5b988574b27f98297a301b61dc6c05c8">Isis::ImageImageFilterSelector::changeFilter()</a>, <a class="el" href="class_isis_1_1_image_point_filter_selector.html#a208e811370a464b493487dc64831ad32">Isis::ImagePointFilterSelector::changeFilter()</a>, <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#a0acfefd74fd56ceb5972525c291c4b01">Isis::PointMeasureFilterSelector::changeFilter()</a>, and <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a8bc11e055a90306d960a80d7f122959c">~AbstractFilterSelector()</a>.</p>
+
+</div>
+</div>
+<a id="ae8ca936ab0f46d99d20625d13ef9a620"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8ca936ab0f46d99d20625d13ef9a620">&#9670;&nbsp;</a></span>evaluate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Evaluatable &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilterSelector::evaluate </td>
+          <td>(</td>
+          <td class="paramtype">const Evaluatable *&#160;</td>
+          <td class="paramname"><em>evaluatable</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#a4c5373e6fbef644e6bd0b7dafe2b4d8e">Isis::AbstractFilter::evaluate()</a>.</p>
+
+</div>
+</div>
+<a id="a678220b7c449a4ffc2af0eae9e757ae5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a678220b7c449a4ffc2af0eae9e757ae5">&#9670;&nbsp;</a></span>filterChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractFilterSelector::filterChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_point_filter_selector.html#a208e811370a464b493487dc64831ad32">Isis::ImagePointFilterSelector::changeFilter()</a>, <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#a0acfefd74fd56ceb5972525c291c4b01">Isis::PointMeasureFilterSelector::changeFilter()</a>, and <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a2b3930d76b5e6d1d8d610221753ce140">setFilter()</a>.</p>
+
+</div>
+</div>
+<a id="a9e5e21eebb931c60962f8e51e9da0a94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e5e21eebb931c60962f8e51e9da0a94">&#9670;&nbsp;</a></span>getDescription()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::AbstractFilterSelector::getDescription </td>
+          <td>(</td>
+          <td class="paramtype">QString(AbstractFilter::*)() const&#160;</td>
+          <td class="paramname"><em>meth</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a107ce217cebd30d970c3fb9e8849c3cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a107ce217cebd30d970c3fb9e8849c3cb">&#9670;&nbsp;</a></span>getFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_abstract_filter.html">AbstractFilter</a> * Isis::AbstractFilterSelector::getFilter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_image_filter_selector.html#a7f593ed2583958ac825331ca51fa952c">Isis::ImageImageFilterSelector::ImageImageFilterSelector()</a>, <a class="el" href="class_isis_1_1_image_point_filter_selector.html#ad8926929b192f7aa13463ec3e986b77f">Isis::ImagePointFilterSelector::ImagePointFilterSelector()</a>, <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#a86b27a706d9dfb6f632f7faebd1adb9a">Isis::PointMeasureFilterSelector::PointMeasureFilterSelector()</a>, and <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a2b3930d76b5e6d1d8d610221753ce140">setFilter()</a>.</p>
+
+</div>
+</div>
+<a id="adf05ba75eca2bb8efde7fed8f2a7239d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf05ba75eca2bb8efde7fed8f2a7239d">&#9670;&nbsp;</a></span>getMainLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHBoxLayout * Isis::AbstractFilterSelector::getMainLayout </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a2b3930d76b5e6d1d8d610221753ce140">setFilter()</a>.</p>
+
+</div>
+</div>
+<a id="afbc23a81aeb33a62290b4b9a3e8e7758"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbc23a81aeb33a62290b4b9a3e8e7758">&#9670;&nbsp;</a></span>getSelector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_combo_box.html">QComboBox</a> * Isis::AbstractFilterSelector::getSelector </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_point_filter_selector.html#a75ee9a7c9561d8b7a91fb2f7a0dd434e">Isis::ImagePointFilterSelector::createSelector()</a>, <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#aca0b63e1e10807df9ef360ff3867635e">Isis::PointMeasureFilterSelector::createSelector()</a>, <a class="el" href="class_isis_1_1_image_image_filter_selector.html#a7f593ed2583958ac825331ca51fa952c">Isis::ImageImageFilterSelector::ImageImageFilterSelector()</a>, <a class="el" href="class_isis_1_1_image_point_filter_selector.html#ad8926929b192f7aa13463ec3e986b77f">Isis::ImagePointFilterSelector::ImagePointFilterSelector()</a>, <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a3703443426e9faeffebb1c6d3a084edb">operator=()</a>, and <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#a86b27a706d9dfb6f632f7faebd1adb9a">Isis::PointMeasureFilterSelector::PointMeasureFilterSelector()</a>.</p>
+
+</div>
+</div>
+<a id="a5acf22cc2d75eb6729e27f69c66cca07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5acf22cc2d75eb6729e27f69c66cca07">&#9670;&nbsp;</a></span>hasFilter() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilterSelector::hasFilter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc533764526e4b9f24b62f3641c263a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc533764526e4b9f24b62f3641c263a0">&#9670;&nbsp;</a></span>hasFilter() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilterSelector::hasFilter </td>
+          <td>(</td>
+          <td class="paramtype">bool(AbstractFilter::*)() const&#160;</td>
+          <td class="paramname"><em>meth</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a53952da2f7b67d0c9c99e2e94ef4d854"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53952da2f7b67d0c9c99e2e94ef4d854">&#9670;&nbsp;</a></span>nullify()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractFilterSelector::nullify </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a511db1f99856f2db4d299a7537bbbddd">AbstractFilterSelector()</a>, <a class="el" href="class_isis_1_1_image_image_filter_selector.html#addd7cc5e161def45c71a38206b0cbf74">Isis::ImageImageFilterSelector::ImageImageFilterSelector()</a>, and <a class="el" href="class_isis_1_1_image_point_filter_selector.html#a9357460bc5fe6c3550aee3a917e8e1b3">Isis::ImagePointFilterSelector::ImagePointFilterSelector()</a>.</p>
+
+</div>
+</div>
+<a id="a3703443426e9faeffebb1c6d3a084edb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3703443426e9faeffebb1c6d3a084edb">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_abstract_filter_selector.html">AbstractFilterSelector</a> &amp; Isis::AbstractFilterSelector::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_abstract_filter_selector.html">AbstractFilterSelector</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#a776a971a0a552050b3d8d68f7c9939f9">Isis::AbstractFilter::clone()</a>, <a class="el" href="class_isis_1_1_abstract_filter_selector.html#afbc23a81aeb33a62290b4b9a3e8e7758">getSelector()</a>, and <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a2b3930d76b5e6d1d8d610221753ce140">setFilter()</a>.</p>
+
+</div>
+</div>
+<a id="a9055b809f803e57a65b2a10df957302b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9055b809f803e57a65b2a10df957302b">&#9670;&nbsp;</a></span>sendClose</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractFilterSelector::sendClose </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter_selector.html#ad2235e77ff1b08d775cb96c7c4e5be53">close()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_filter_selector.html#ae351b9ea6d9132a18bb6645bb9428adf">createSelector()</a>.</p>
+
+</div>
+</div>
+<a id="a2b3930d76b5e6d1d8d610221753ce140"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b3930d76b5e6d1d8d610221753ce140">&#9670;&nbsp;</a></span>setFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractFilterSelector::setFilter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_abstract_filter.html">AbstractFilter</a> *&#160;</td>
+          <td class="paramname"><em>someFilter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a678220b7c449a4ffc2af0eae9e757ae5">filterChanged()</a>, <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a107ce217cebd30d970c3fb9e8849c3cb">getFilter()</a>, and <a class="el" href="class_isis_1_1_abstract_filter_selector.html#adf05ba75eca2bb8efde7fed8f2a7239d">getMainLayout()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_point_filter_selector.html#a208e811370a464b493487dc64831ad32">Isis::ImagePointFilterSelector::changeFilter()</a>, <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#a0acfefd74fd56ceb5972525c291c4b01">Isis::PointMeasureFilterSelector::changeFilter()</a>, <a class="el" href="class_isis_1_1_image_image_filter_selector.html#a7f593ed2583958ac825331ca51fa952c">Isis::ImageImageFilterSelector::ImageImageFilterSelector()</a>, <a class="el" href="class_isis_1_1_image_point_filter_selector.html#ad8926929b192f7aa13463ec3e986b77f">Isis::ImagePointFilterSelector::ImagePointFilterSelector()</a>, <a class="el" href="class_isis_1_1_abstract_filter_selector.html#a3703443426e9faeffebb1c6d3a084edb">operator=()</a>, and <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#a86b27a706d9dfb6f632f7faebd1adb9a">Isis::PointMeasureFilterSelector::PointMeasureFilterSelector()</a>.</p>
+
+</div>
+</div>
+<a id="a92528bf1eed4e2758f160fa4f3e5e9c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92528bf1eed4e2758f160fa4f3e5e9c8">&#9670;&nbsp;</a></span>sizeChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractFilterSelector::sizeChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_point_filter_selector.html#a208e811370a464b493487dc64831ad32">Isis::ImagePointFilterSelector::changeFilter()</a>, and <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#a0acfefd74fd56ceb5972525c291c4b01">Isis::PointMeasureFilterSelector::changeFilter()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_abstract_filter_selector_8h_source.html">AbstractFilterSelector.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_abstract_filter_selector_8cpp.html">AbstractFilterSelector.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_abstract_filter_selector.html">AbstractFilterSelector</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

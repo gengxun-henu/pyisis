@@ -1,0 +1,1273 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::CnetEditorWidget Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_cnet_editor_widget.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_cnet_editor_widget-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::CnetEditorWidget Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This widget provides full editing, filtering and viewing capabilities for the raw data in a control network.  
+ <a href="class_isis_1_1_cnet_editor_widget.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_cnet_editor_widget_8h_source.html">CnetEditorWidget.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::CnetEditorWidget:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_cnet_editor_widget__inherit__graph.png" border="0" usemap="#a_isis_1_1_cnet_editor_widget_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_cnet_editor_widget_inherit__map" id="a_isis_1_1_cnet_editor_widget_inherit__map">
+<area shape="rect" title="This widget provides full editing, filtering and viewing capabilities for the raw data in a control n..." alt="" coords="5,135,200,472"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="66,5,139,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::CnetEditorWidget:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_cnet_editor_widget__coll__graph.png" border="0" usemap="#a_isis_1_1_cnet_editor_widget_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_cnet_editor_widget_coll__map" id="a_isis_1_1_cnet_editor_widget_coll__map">
+<area shape="rect" title="This widget provides full editing, filtering and viewing capabilities for the raw data in a control n..." alt="" coords="5,135,200,472"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="66,5,139,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a03062b3c558d990079feff7722112ece"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ece">View</a> { <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112eceaf3db9aed1421a369ba5112cd987eed55">PointView</a>
+, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ecea179ef42cc2c51a590320c71431feeea4">ImageView</a>
+, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ecea27ea52445ea4b2147f915c2d032b273a">ConnectionView</a>
+ }</td></tr>
+<tr class="separator:a03062b3c558d990079feff7722112ece"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:ae5d4fa0bf2e180d9ec67a510d267b012"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#ae5d4fa0bf2e180d9ec67a510d267b012">configSorting</a> ()</td></tr>
+<tr class="memdesc:ae5d4fa0bf2e180d9ec67a510d267b012"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures the sorting dialog.  <a href="class_isis_1_1_cnet_editor_widget.html#ae5d4fa0bf2e180d9ec67a510d267b012">More...</a><br /></td></tr>
+<tr class="separator:ae5d4fa0bf2e180d9ec67a510d267b012"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4ba05347c74e97a8fe8525290abbbdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#ad4ba05347c74e97a8fe8525290abbbdf">setLatLonRadiusCoordinateDisplay</a> ()</td></tr>
+<tr class="memdesc:ad4ba05347c74e97a8fe8525290abbbdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set control point coordinate display type to latitude, longitude, radius.  <a href="class_isis_1_1_cnet_editor_widget.html#ad4ba05347c74e97a8fe8525290abbbdf">More...</a><br /></td></tr>
+<tr class="separator:ad4ba05347c74e97a8fe8525290abbbdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f4ae29629965da5cabc1048929213cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a9f4ae29629965da5cabc1048929213cb">setXYZCoordinateDisplay</a> ()</td></tr>
+<tr class="memdesc:a9f4ae29629965da5cabc1048929213cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set control point coordinate display type to X,Y,Z.  <a href="class_isis_1_1_cnet_editor_widget.html#a9f4ae29629965da5cabc1048929213cb">More...</a><br /></td></tr>
+<tr class="separator:a9f4ae29629965da5cabc1048929213cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81579be2af40806bd175042360fa1e89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a81579be2af40806bd175042360fa1e89">setTablesFrozen</a> (bool)</td></tr>
+<tr class="memdesc:a81579be2af40806bd175042360fa1e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets if the tables are frozen.  <a href="class_isis_1_1_cnet_editor_widget.html#a81579be2af40806bd175042360fa1e89">More...</a><br /></td></tr>
+<tr class="separator:a81579be2af40806bd175042360fa1e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e5f8f903e6ec3f1426a02a9401c7cc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a5e5f8f903e6ec3f1426a02a9401c7cc8">rebuildModels</a> ()</td></tr>
+<tr class="memdesc:a5e5f8f903e6ec3f1426a02a9401c7cc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rebuilds the models.  <a href="class_isis_1_1_cnet_editor_widget.html#a5e5f8f903e6ec3f1426a02a9401c7cc8">More...</a><br /></td></tr>
+<tr class="separator:a5e5f8f903e6ec3f1426a02a9401c7cc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:acf575477dc7f87070c7f58b75579d4e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#acf575477dc7f87070c7f58b75579d4e7">cnetModified</a> ()</td></tr>
+<tr class="separator:acf575477dc7f87070c7f58b75579d4e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af31fc097cc9022a92ab02ba296360cd0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#af31fc097cc9022a92ab02ba296360cd0">editControlPoint</a> (<a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *controlPoint, QString serialNumber)</td></tr>
+<tr class="separator:af31fc097cc9022a92ab02ba296360cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d52863baca3bf2f58f1e3d5c2a07d3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a9d52863baca3bf2f58f1e3d5c2a07d3e">coordinateDisplayTypeChanged</a> ()</td></tr>
+<tr class="separator:a9d52863baca3bf2f58f1e3d5c2a07d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a644008f82747ede81485fa1b7690e928"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a644008f82747ede81485fa1b7690e928">CnetEditorWidget</a> (<a class="el" href="class_isis_1_1_control.html">Control</a> *<a class="el" href="class_isis_1_1_cnet_editor_widget.html#a61f77d19dfab13905accbb3f63822139">control</a>, QString pathForSettings)</td></tr>
+<tr class="separator:a644008f82747ede81485fa1b7690e928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14724bcd5a188f102c127fc86865dde5"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a14724bcd5a188f102c127fc86865dde5">~CnetEditorWidget</a> ()</td></tr>
+<tr class="memdesc:a14724bcd5a188f102c127fc86865dde5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_cnet_editor_widget.html#a14724bcd5a188f102c127fc86865dde5">More...</a><br /></td></tr>
+<tr class="separator:a14724bcd5a188f102c127fc86865dde5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8575e8af60ed09bb6d2c072a53e5136c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a8575e8af60ed09bb6d2c072a53e5136c">readSettings</a> ()</td></tr>
+<tr class="memdesc:a8575e8af60ed09bb6d2c072a53e5136c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the working version settings stored at the settings path.  <a href="class_isis_1_1_cnet_editor_widget.html#a8575e8af60ed09bb6d2c072a53e5136c">More...</a><br /></td></tr>
+<tr class="separator:a8575e8af60ed09bb6d2c072a53e5136c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a801541199bc0e1a60327fb8cc7f31979"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a801541199bc0e1a60327fb8cc7f31979">writeSettings</a> ()</td></tr>
+<tr class="memdesc:a801541199bc0e1a60327fb8cc7f31979"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the configuration settings used.  <a href="class_isis_1_1_cnet_editor_widget.html#a801541199bc0e1a60327fb8cc7f31979">More...</a><br /></td></tr>
+<tr class="separator:a801541199bc0e1a60327fb8cc7f31979"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad28af2eefd0209bb032df0617b666879"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#ad28af2eefd0209bb032df0617b666879">pointTreeView</a> ()</td></tr>
+<tr class="memdesc:ad28af2eefd0209bb032df0617b666879"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the point tree view.  <a href="class_isis_1_1_cnet_editor_widget.html#ad28af2eefd0209bb032df0617b666879">More...</a><br /></td></tr>
+<tr class="separator:ad28af2eefd0209bb032df0617b666879"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad06c6471f35d30610dec85a71f21b88f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#ad06c6471f35d30610dec85a71f21b88f">serialTreeView</a> ()</td></tr>
+<tr class="memdesc:ad06c6471f35d30610dec85a71f21b88f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the serial tree view.  <a href="class_isis_1_1_cnet_editor_widget.html#ad06c6471f35d30610dec85a71f21b88f">More...</a><br /></td></tr>
+<tr class="separator:ad06c6471f35d30610dec85a71f21b88f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a631c10dc8bc8cfa197abb3b66b0032d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a631c10dc8bc8cfa197abb3b66b0032d0">connectionTreeView</a> ()</td></tr>
+<tr class="memdesc:a631c10dc8bc8cfa197abb3b66b0032d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the connection tree view.  <a href="class_isis_1_1_cnet_editor_widget.html#a631c10dc8bc8cfa197abb3b66b0032d0">More...</a><br /></td></tr>
+<tr class="separator:a631c10dc8bc8cfa197abb3b66b0032d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefd029e5ee5f216932726cedeabb59cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#aefd029e5ee5f216932726cedeabb59cf">pointFilterWidget</a> ()</td></tr>
+<tr class="memdesc:aefd029e5ee5f216932726cedeabb59cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the point filter widget.  <a href="class_isis_1_1_cnet_editor_widget.html#aefd029e5ee5f216932726cedeabb59cf">More...</a><br /></td></tr>
+<tr class="separator:aefd029e5ee5f216932726cedeabb59cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ad3df692be5ec1b3770691dc36c458b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a4ad3df692be5ec1b3770691dc36c458b">serialFilterWidget</a> ()</td></tr>
+<tr class="memdesc:a4ad3df692be5ec1b3770691dc36c458b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the serial filter widget.  <a href="class_isis_1_1_cnet_editor_widget.html#a4ad3df692be5ec1b3770691dc36c458b">More...</a><br /></td></tr>
+<tr class="separator:a4ad3df692be5ec1b3770691dc36c458b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79688ba958a8d90199f4fc2383169e44"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a79688ba958a8d90199f4fc2383169e44">connectionFilterWidget</a> ()</td></tr>
+<tr class="memdesc:a79688ba958a8d90199f4fc2383169e44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the connection filter widget.  <a href="class_isis_1_1_cnet_editor_widget.html#a79688ba958a8d90199f4fc2383169e44">More...</a><br /></td></tr>
+<tr class="separator:a79688ba958a8d90199f4fc2383169e44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba473cc7ce302eecbdfa7fd3bc4a635a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table_view.html">TableView</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#aba473cc7ce302eecbdfa7fd3bc4a635a">pointTableView</a> ()</td></tr>
+<tr class="memdesc:aba473cc7ce302eecbdfa7fd3bc4a635a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the point table view.  <a href="class_isis_1_1_cnet_editor_widget.html#aba473cc7ce302eecbdfa7fd3bc4a635a">More...</a><br /></td></tr>
+<tr class="separator:aba473cc7ce302eecbdfa7fd3bc4a635a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5dfabf71f1fed559b5c0a500a84a9f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table_view.html">TableView</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#ac5dfabf71f1fed559b5c0a500a84a9f7">measureTableView</a> ()</td></tr>
+<tr class="memdesc:ac5dfabf71f1fed559b5c0a500a84a9f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the measure table view.  <a href="class_isis_1_1_cnet_editor_widget.html#ac5dfabf71f1fed559b5c0a500a84a9f7">More...</a><br /></td></tr>
+<tr class="separator:ac5dfabf71f1fed559b5c0a500a84a9f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61f77d19dfab13905accbb3f63822139"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a61f77d19dfab13905accbb3f63822139">control</a> ()</td></tr>
+<tr class="memdesc:a61f77d19dfab13905accbb3f63822139"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the control network.  <a href="class_isis_1_1_cnet_editor_widget.html#a61f77d19dfab13905accbb3f63822139">More...</a><br /></td></tr>
+<tr class="separator:a61f77d19dfab13905accbb3f63822139"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a518ec479b0d68cf000d09bfc58cf615c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_abstract_table_model.html">AbstractTableModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a518ec479b0d68cf000d09bfc58cf615c">measureTableModel</a> ()</td></tr>
+<tr class="memdesc:a518ec479b0d68cf000d09bfc58cf615c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the measure table model.  <a href="class_isis_1_1_cnet_editor_widget.html#a518ec479b0d68cf000d09bfc58cf615c">More...</a><br /></td></tr>
+<tr class="separator:a518ec479b0d68cf000d09bfc58cf615c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a750bb48ddcc33fcda594eeebd86539d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_abstract_table_model.html">AbstractTableModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a750bb48ddcc33fcda594eeebd86539d4">pointTableModel</a> ()</td></tr>
+<tr class="memdesc:a750bb48ddcc33fcda594eeebd86539d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the point table model.  <a href="class_isis_1_1_cnet_editor_widget.html#a750bb48ddcc33fcda594eeebd86539d4">More...</a><br /></td></tr>
+<tr class="separator:a750bb48ddcc33fcda594eeebd86539d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac00d7a61da82a6e20c8495ca03ba2f7a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_map.html">QMap</a>&lt; <a class="el" href="class_q_action.html">QAction</a> *, <a class="el" href="class_q_list.html">QList</a>&lt; QString &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#ac00d7a61da82a6e20c8495ca03ba2f7a">menuActions</a> ()</td></tr>
+<tr class="memdesc:ac00d7a61da82a6e20c8495ca03ba2f7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the menu actions.  <a href="class_isis_1_1_cnet_editor_widget.html#ac00d7a61da82a6e20c8495ca03ba2f7a">More...</a><br /></td></tr>
+<tr class="separator:ac00d7a61da82a6e20c8495ca03ba2f7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fd51656b711d2c02c3b7feb0e75dc79"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_map.html">QMap</a>&lt; QString, <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a5fd51656b711d2c02c3b7feb0e75dc79">toolBarActions</a> ()</td></tr>
+<tr class="memdesc:a5fd51656b711d2c02c3b7feb0e75dc79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tool bar actions.  <a href="class_isis_1_1_cnet_editor_widget.html#a5fd51656b711d2c02c3b7feb0e75dc79">More...</a><br /></td></tr>
+<tr class="separator:a5fd51656b711d2c02c3b7feb0e75dc79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7956b2a5be7856276ef82355bcc3fb45"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a7956b2a5be7856276ef82355bcc3fb45">filteredNetwork</a> () const</td></tr>
+<tr class="memdesc:a7956b2a5be7856276ef82355bcc3fb45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the filtered control net.  <a href="class_isis_1_1_cnet_editor_widget.html#a7956b2a5be7856276ef82355bcc3fb45">More...</a><br /></td></tr>
+<tr class="separator:a7956b2a5be7856276ef82355bcc3fb45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4d9bd1ae6bf09347307738895df7516"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#ae4d9bd1ae6bf09347307738895df7516">measureTableSortingEnabled</a> () const</td></tr>
+<tr class="memdesc:ae4d9bd1ae6bf09347307738895df7516"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the measure table can be sorted.  <a href="class_isis_1_1_cnet_editor_widget.html#ae4d9bd1ae6bf09347307738895df7516">More...</a><br /></td></tr>
+<tr class="separator:ae4d9bd1ae6bf09347307738895df7516"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa666bdd2aaa069f2645690431881870e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#aa666bdd2aaa069f2645690431881870e">measureTableSortLimit</a> () const</td></tr>
+<tr class="memdesc:aa666bdd2aaa069f2645690431881870e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the sorting limit for the measure table.  <a href="class_isis_1_1_cnet_editor_widget.html#aa666bdd2aaa069f2645690431881870e">More...</a><br /></td></tr>
+<tr class="separator:aa666bdd2aaa069f2645690431881870e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae932b14ed1133b32ba985f08643ec54d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#ae932b14ed1133b32ba985f08643ec54d">pointTableSortingEnabled</a> () const</td></tr>
+<tr class="memdesc:ae932b14ed1133b32ba985f08643ec54d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the point table can be sorted.  <a href="class_isis_1_1_cnet_editor_widget.html#ae932b14ed1133b32ba985f08643ec54d">More...</a><br /></td></tr>
+<tr class="separator:ae932b14ed1133b32ba985f08643ec54d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19a6d3d4b90cdd43de98094db998afac"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a19a6d3d4b90cdd43de98094db998afac">pointTableSortLimit</a> () const</td></tr>
+<tr class="memdesc:a19a6d3d4b90cdd43de98094db998afac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the sorting limit for the point table.  <a href="class_isis_1_1_cnet_editor_widget.html#a19a6d3d4b90cdd43de98094db998afac">More...</a><br /></td></tr>
+<tr class="separator:a19a6d3d4b90cdd43de98094db998afac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad068d703fe36d8feab7b1168e464b725"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#ad068d703fe36d8feab7b1168e464b725">setMeasureTableSortingEnabled</a> (bool enabled)</td></tr>
+<tr class="memdesc:ad068d703fe36d8feab7b1168e464b725"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets if the measure table can be sorted.  <a href="class_isis_1_1_cnet_editor_widget.html#ad068d703fe36d8feab7b1168e464b725">More...</a><br /></td></tr>
+<tr class="separator:ad068d703fe36d8feab7b1168e464b725"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a523a33856671a986fd33f3542ea241e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a523a33856671a986fd33f3542ea241e2">setMeasureTableSortLimit</a> (int limit)</td></tr>
+<tr class="memdesc:a523a33856671a986fd33f3542ea241e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the measure table sorting limit.  <a href="class_isis_1_1_cnet_editor_widget.html#a523a33856671a986fd33f3542ea241e2">More...</a><br /></td></tr>
+<tr class="separator:a523a33856671a986fd33f3542ea241e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac3178e926f05abe753c3985a9624e60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#aac3178e926f05abe753c3985a9624e60">setPointTableSortingEnabled</a> (bool enabled)</td></tr>
+<tr class="memdesc:aac3178e926f05abe753c3985a9624e60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets if the point table can be sorted.  <a href="class_isis_1_1_cnet_editor_widget.html#aac3178e926f05abe753c3985a9624e60">More...</a><br /></td></tr>
+<tr class="separator:aac3178e926f05abe753c3985a9624e60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ce46f9d6ca5514f43ddb93feb1da444"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_editor_widget.html#a2ce46f9d6ca5514f43ddb93feb1da444">setPointTableSortLimit</a> (int limit)</td></tr>
+<tr class="memdesc:a2ce46f9d6ca5514f43ddb93feb1da444"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the point table sorting limit.  <a href="class_isis_1_1_cnet_editor_widget.html#a2ce46f9d6ca5514f43ddb93feb1da444">More...</a><br /></td></tr>
+<tr class="separator:a2ce46f9d6ca5514f43ddb93feb1da444"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This widget provides full editing, filtering and viewing capabilities for the raw data in a control network. </p>
+<p>The raw data is, for example, chooser name or cube serial number. The display is all textual. Please use the widget accessors to appropriately place the various ancillary sections of the editor.</p>
+<dl class="section author"><dt>Author</dt><dd>????-??-?? Eric Hyer </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a03062b3c558d990079feff7722112ece"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03062b3c558d990079feff7722112ece">&#9670;&nbsp;</a></span>View</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ece">Isis::CnetEditorWidget::View</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a03062b3c558d990079feff7722112eceaf3db9aed1421a369ba5112cd987eed55"></a>PointView&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a03062b3c558d990079feff7722112ecea179ef42cc2c51a590320c71431feeea4"></a>ImageView&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a03062b3c558d990079feff7722112ecea27ea52445ea4b2147f915c2d032b273a"></a>ConnectionView&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a644008f82747ede81485fa1b7690e928"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a644008f82747ede81485fa1b7690e928">&#9670;&nbsp;</a></span>CnetEditorWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CnetEditorWidget::CnetEditorWidget </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control.html">Control</a> *&#160;</td>
+          <td class="paramname"><em>control</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>pathForSettings</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cnet_editor_widget.html#acf575477dc7f87070c7f58b75579d4e7">cnetModified()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a61f77d19dfab13905accbb3f63822139">control()</a>, <a class="el" href="class_isis_1_1_cnet_display_properties.html#a5379064ad177a4143e1065eb3d5c0dc4">Isis::CnetDisplayProperties::getInstance()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a8575e8af60ed09bb6d2c072a53e5136c">readSettings()</a>, and <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a5e5f8f903e6ec3f1426a02a9401c7cc8">rebuildModels()</a>.</p>
+
+</div>
+</div>
+<a id="a14724bcd5a188f102c127fc86865dde5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14724bcd5a188f102c127fc86865dde5">&#9670;&nbsp;</a></span>~CnetEditorWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CnetEditorWidget::~CnetEditorWidget </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a801541199bc0e1a60327fb8cc7f31979">writeSettings()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="acf575477dc7f87070c7f58b75579d4e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf575477dc7f87070c7f58b75579d4e7">&#9670;&nbsp;</a></span>cnetModified</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::cnetModified </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a644008f82747ede81485fa1b7690e928">CnetEditorWidget()</a>.</p>
+
+</div>
+</div>
+<a id="ae5d4fa0bf2e180d9ec67a510d267b012"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5d4fa0bf2e180d9ec67a510d267b012">&#9670;&nbsp;</a></span>configSorting</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::configSorting </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Configures the sorting dialog. </p>
+<p>If one does not already exist, create it, then show the dialog </p>
+
+</div>
+</div>
+<a id="a79688ba958a8d90199f4fc2383169e44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79688ba958a8d90199f4fc2383169e44">&#9670;&nbsp;</a></span>connectionFilterWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::CnetEditorWidget::connectionFilterWidget </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the connection filter widget. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_widget.html">QWidget</a> The connection filter widget </dd></dl>
+
+</div>
+</div>
+<a id="a631c10dc8bc8cfa197abb3b66b0032d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a631c10dc8bc8cfa197abb3b66b0032d0">&#9670;&nbsp;</a></span>connectionTreeView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::CnetEditorWidget::connectionTreeView </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the connection tree view. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_widget.html">QWidget</a> The connection tree view </dd></dl>
+
+</div>
+</div>
+<a id="a61f77d19dfab13905accbb3f63822139"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61f77d19dfab13905accbb3f63822139">&#9670;&nbsp;</a></span>control()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> * Isis::CnetEditorWidget::control </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the control network. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_control_net.html" title="a control network">ControlNet</a> The control network </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control.html#a0c5cd12b7a2ca24b87aee22560f17bca">Isis::Control::controlNet()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a644008f82747ede81485fa1b7690e928">CnetEditorWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a9d52863baca3bf2f58f1e3d5c2a07d3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d52863baca3bf2f58f1e3d5c2a07d3e">&#9670;&nbsp;</a></span>coordinateDisplayTypeChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::coordinateDisplayTypeChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#ad4ba05347c74e97a8fe8525290abbbdf">setLatLonRadiusCoordinateDisplay()</a>, and <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a9f4ae29629965da5cabc1048929213cb">setXYZCoordinateDisplay()</a>.</p>
+
+</div>
+</div>
+<a id="af31fc097cc9022a92ab02ba296360cd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af31fc097cc9022a92ab02ba296360cd0">&#9670;&nbsp;</a></span>editControlPoint</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::editControlPoint </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *&#160;</td>
+          <td class="paramname"><em>controlPoint</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>serialNumber</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7956b2a5be7856276ef82355bcc3fb45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7956b2a5be7856276ef82355bcc3fb45">&#9670;&nbsp;</a></span>filteredNetwork()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> * Isis::CnetEditorWidget::filteredNetwork </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the filtered control net. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_control_net.html" title="a control network">ControlNet</a> Filtered control network </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control.html#a0c5cd12b7a2ca24b87aee22560f17bca">Isis::Control::controlNet()</a>, <a class="el" href="class_isis_1_1_control_point.html#a6c1091194f9e749e51dabc16ecb4973c">Isis::ControlPoint::Delete()</a>, <a class="el" href="class_isis_1_1_control_net.html#adaa64fa184ce44b370660226f177a56d">Isis::ControlNet::DeletePoint()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a634a1d293b8c149ae0804cb70b98e283">Isis::ControlMeasure::GetCubeSerialNumber()</a>, <a class="el" href="class_isis_1_1_control_point.html#ace3f3b0b01139b97ce3ad8ad681d9f3a">Isis::ControlPoint::GetId()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a1dec7fff19377a2fb54c918313ec511b">Isis::AbstractTreeModel::getItems()</a>, <a class="el" href="class_isis_1_1_control_point.html#a8c33071678ad5770264f91334bd36c25">Isis::ControlPoint::GetMeasure()</a>, <a class="el" href="class_isis_1_1_control_point.html#a67b6b1404e65a70643eccbaa2e26ce8a">Isis::ControlPoint::GetNumMeasures()</a>, <a class="el" href="class_isis_1_1_control_net.html#a41a4e6eb7f0861800c444c6124e79992">Isis::ControlNet::GetNumPoints()</a>, <a class="el" href="class_isis_1_1_control_net.html#a1893c76a19ad64e3e9502b01bbd6bca6">Isis::ControlNet::GetPoint()</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#a9761b08a296cd6d3ecb950e32673bcfcaeb723779243247c2e85062a3d3aa2bd0">Isis::AbstractTreeItem::Measure</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a073c9dd5bea82a7a10533fe0ce70edf7">Isis::AbstractTreeModel::MeasureItems</a>, <a class="el" href="class_isis_1_1_control_measure.html#a2416e7bf24e53855930b57db674c13b8">Isis::ControlMeasure::Parent()</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#a9761b08a296cd6d3ecb950e32673bcfca71db0e65e19ff3758e2fa3b0349944b8">Isis::AbstractTreeItem::Point</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a51d7be5c06894f0ae79e284004fc964a">Isis::AbstractTreeModel::PointItems</a>, <a class="el" href="class_isis_1_1_control_measure.html#afdb2328069eedce9c9beb51e15984d3d">Isis::ControlMeasure::SetEditLock()</a>, and <a class="el" href="class_isis_1_1_control_point.html#a1260d982bdc35f3e2e91c906b81d661c">Isis::ControlPoint::SetEditLock()</a>.</p>
+
+</div>
+</div>
+<a id="a518ec479b0d68cf000d09bfc58cf615c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a518ec479b0d68cf000d09bfc58cf615c">&#9670;&nbsp;</a></span>measureTableModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_abstract_table_model.html">AbstractTableModel</a> * Isis::CnetEditorWidget::measureTableModel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the measure table model. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_abstract_table_model.html" title="Translates the tree model into a table model.">AbstractTableModel</a> The measure table model </dd></dl>
+
+</div>
+</div>
+<a id="ae4d9bd1ae6bf09347307738895df7516"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4d9bd1ae6bf09347307738895df7516">&#9670;&nbsp;</a></span>measureTableSortingEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::CnetEditorWidget::measureTableSortingEnabled </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if the measure table can be sorted. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if sorting is enabled on the measure table </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_table_model.html#ae3e434a98200644cbc861c108925ca24">Isis::AbstractTableModel::sortingIsEnabled()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a801541199bc0e1a60327fb8cc7f31979">writeSettings()</a>.</p>
+
+</div>
+</div>
+<a id="aa666bdd2aaa069f2645690431881870e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa666bdd2aaa069f2645690431881870e">&#9670;&nbsp;</a></span>measureTableSortLimit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::CnetEditorWidget::measureTableSortLimit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the sorting limit for the measure table. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The sorting limit for the measure table </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_table_model.html#ac994d720215b68987977c9f611f240b5">Isis::AbstractTableModel::sortLimit()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a801541199bc0e1a60327fb8cc7f31979">writeSettings()</a>.</p>
+
+</div>
+</div>
+<a id="ac5dfabf71f1fed559b5c0a500a84a9f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5dfabf71f1fed559b5c0a500a84a9f7">&#9670;&nbsp;</a></span>measureTableView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table_view.html">TableView</a> * Isis::CnetEditorWidget::measureTableView </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the measure table view. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_table_view.html">TableView</a> The measure table view </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_directory.html#af434d6bd6bc850f5b83d09ced8bcb474">Isis::Directory::addCnetEditorView()</a>.</p>
+
+</div>
+</div>
+<a id="ac00d7a61da82a6e20c8495ca03ba2f7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac00d7a61da82a6e20c8495ca03ba2f7a">&#9670;&nbsp;</a></span>menuActions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_map.html">QMap</a>&lt; <a class="el" href="class_q_action.html">QAction</a> *, <a class="el" href="class_q_list.html">QList</a>&lt; QString &gt; &gt; Isis::CnetEditorWidget::menuActions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the menu actions. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_map.html" title="This is free and unencumbered software released into the public domain.">QMap</a>&lt; <a class="el" href="class_q_action.html">QAction</a> *, <a class="el" href="class_q_list.html">QList&lt; QString &gt;</a> &gt; <a class="el" href="class_q_map.html" title="This is free and unencumbered software released into the public domain.">QMap</a> of menu actions </dd></dl>
+
+</div>
+</div>
+<a id="aefd029e5ee5f216932726cedeabb59cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefd029e5ee5f216932726cedeabb59cf">&#9670;&nbsp;</a></span>pointFilterWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::CnetEditorWidget::pointFilterWidget </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the point filter widget. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_widget.html">QWidget</a> The point filter widget </dd></dl>
+
+</div>
+</div>
+<a id="a750bb48ddcc33fcda594eeebd86539d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a750bb48ddcc33fcda594eeebd86539d4">&#9670;&nbsp;</a></span>pointTableModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_abstract_table_model.html">AbstractTableModel</a> * Isis::CnetEditorWidget::pointTableModel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the point table model. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_abstract_table_model.html" title="Translates the tree model into a table model.">AbstractTableModel</a> The point table model </dd></dl>
+
+</div>
+</div>
+<a id="ae932b14ed1133b32ba985f08643ec54d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae932b14ed1133b32ba985f08643ec54d">&#9670;&nbsp;</a></span>pointTableSortingEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::CnetEditorWidget::pointTableSortingEnabled </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if the point table can be sorted. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if sorting is enabled on the point table </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_table_model.html#ae3e434a98200644cbc861c108925ca24">Isis::AbstractTableModel::sortingIsEnabled()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a801541199bc0e1a60327fb8cc7f31979">writeSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a19a6d3d4b90cdd43de98094db998afac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19a6d3d4b90cdd43de98094db998afac">&#9670;&nbsp;</a></span>pointTableSortLimit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::CnetEditorWidget::pointTableSortLimit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the sorting limit for the point table. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The sorting limit for the point table </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_table_model.html#ac994d720215b68987977c9f611f240b5">Isis::AbstractTableModel::sortLimit()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a801541199bc0e1a60327fb8cc7f31979">writeSettings()</a>.</p>
+
+</div>
+</div>
+<a id="aba473cc7ce302eecbdfa7fd3bc4a635a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba473cc7ce302eecbdfa7fd3bc4a635a">&#9670;&nbsp;</a></span>pointTableView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table_view.html">TableView</a> * Isis::CnetEditorWidget::pointTableView </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the point table view. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_table_view.html">TableView</a> The point table view </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_directory.html#af434d6bd6bc850f5b83d09ced8bcb474">Isis::Directory::addCnetEditorView()</a>.</p>
+
+</div>
+</div>
+<a id="ad28af2eefd0209bb032df0617b666879"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad28af2eefd0209bb032df0617b666879">&#9670;&nbsp;</a></span>pointTreeView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::CnetEditorWidget::pointTreeView </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the point tree view. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_widget.html">QWidget</a> The point tree view </dd></dl>
+
+</div>
+</div>
+<a id="a8575e8af60ed09bb6d2c072a53e5136c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8575e8af60ed09bb6d2c072a53e5136c">&#9670;&nbsp;</a></span>readSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::readSettings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reads the working version settings stored at the settings path. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_measure_item.html#a3d7f785a5e026f353ce2ea9dd7f43fba">Isis::AbstractMeasureItem::getColumnName()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab02c55a0580f8b3a13f9abd6a6c21842">Isis::AbstractPointItem::getColumnName()</a>, <a class="el" href="class_isis_1_1_table_view.html#a3611f3eb2fd0b7550c54d9fa1cfd4017">Isis::TableView::getHorizontalHeader()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#ad068d703fe36d8feab7b1168e464b725">setMeasureTableSortingEnabled()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a523a33856671a986fd33f3542ea241e2">setMeasureTableSortLimit()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#aac3178e926f05abe753c3985a9624e60">setPointTableSortingEnabled()</a>, and <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a2ce46f9d6ca5514f43ddb93feb1da444">setPointTableSortLimit()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a644008f82747ede81485fa1b7690e928">CnetEditorWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a5e5f8f903e6ec3f1426a02a9401c7cc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e5f8f903e6ec3f1426a02a9401c7cc8">&#9670;&nbsp;</a></span>rebuildModels</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::rebuildModels </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Rebuilds the models. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a644008f82747ede81485fa1b7690e928">CnetEditorWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a4ad3df692be5ec1b3770691dc36c458b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ad3df692be5ec1b3770691dc36c458b">&#9670;&nbsp;</a></span>serialFilterWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::CnetEditorWidget::serialFilterWidget </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the serial filter widget. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_widget.html">QWidget</a> The serial filter widget </dd></dl>
+
+</div>
+</div>
+<a id="ad06c6471f35d30610dec85a71f21b88f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad06c6471f35d30610dec85a71f21b88f">&#9670;&nbsp;</a></span>serialTreeView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::CnetEditorWidget::serialTreeView </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the serial tree view. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_widget.html">QWidget</a> The serial tree view </dd></dl>
+
+</div>
+</div>
+<a id="ad4ba05347c74e97a8fe8525290abbbdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4ba05347c74e97a8fe8525290abbbdf">&#9670;&nbsp;</a></span>setLatLonRadiusCoordinateDisplay</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::setLatLonRadiusCoordinateDisplay </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set control point coordinate display type to latitude, longitude, radius. </p>
+<p>TODO: can we selectively rebuild only the columns that need to be re-displayed? </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a9d52863baca3bf2f58f1e3d5c2a07d3e">coordinateDisplayTypeChanged()</a>, <a class="el" href="class_isis_1_1_cnet_display_properties.html#a5379064ad177a4143e1065eb3d5c0dc4">Isis::CnetDisplayProperties::getInstance()</a>, <a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2a9d998e8ee1e69fa406c1ab1753ba4eb6">Isis::CnetDisplayProperties::LatLonRadius</a>, <a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">Isis::PointMeasureTreeModel::rebuildItems()</a>, and <a class="el" href="class_isis_1_1_cnet_display_properties.html#a635abfc421d4055e87ca5b9d84d94592">Isis::CnetDisplayProperties::setCoordinateDisplayType()</a>.</p>
+
+</div>
+</div>
+<a id="ad068d703fe36d8feab7b1168e464b725"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad068d703fe36d8feab7b1168e464b725">&#9670;&nbsp;</a></span>setMeasureTableSortingEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::setMeasureTableSortingEnabled </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enabled</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets if the measure table can be sorted. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bool</td><td>Bool if the table can be sorted or not </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_table_model.html#a9867c6b288890be54f96009cb40245c8">Isis::AbstractTableModel::setSortingEnabled()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a8575e8af60ed09bb6d2c072a53e5136c">readSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a523a33856671a986fd33f3542ea241e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a523a33856671a986fd33f3542ea241e2">&#9670;&nbsp;</a></span>setMeasureTableSortLimit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::setMeasureTableSortLimit </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>limit</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the measure table sorting limit. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">int</td><td>Sorting limit </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_table_model.html#a63eef1cd2af3597964316dee1b4f410c">Isis::AbstractTableModel::setSortLimit()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a8575e8af60ed09bb6d2c072a53e5136c">readSettings()</a>.</p>
+
+</div>
+</div>
+<a id="aac3178e926f05abe753c3985a9624e60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac3178e926f05abe753c3985a9624e60">&#9670;&nbsp;</a></span>setPointTableSortingEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::setPointTableSortingEnabled </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enabled</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets if the point table can be sorted. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bool</td><td>Bool if the table can be sorted or not </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_table_model.html#a9867c6b288890be54f96009cb40245c8">Isis::AbstractTableModel::setSortingEnabled()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a8575e8af60ed09bb6d2c072a53e5136c">readSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a2ce46f9d6ca5514f43ddb93feb1da444"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ce46f9d6ca5514f43ddb93feb1da444">&#9670;&nbsp;</a></span>setPointTableSortLimit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::setPointTableSortLimit </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>limit</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the point table sorting limit. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">int</td><td>Sorting limit </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_table_model.html#a63eef1cd2af3597964316dee1b4f410c">Isis::AbstractTableModel::setSortLimit()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a8575e8af60ed09bb6d2c072a53e5136c">readSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a81579be2af40806bd175042360fa1e89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81579be2af40806bd175042360fa1e89">&#9670;&nbsp;</a></span>setTablesFrozen</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::setTablesFrozen </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>freezeTables</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets if the tables are frozen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bool</td><td>Bool that freezes the tables or not </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_tree_model.html#a1815aeff4c54ed4c452a8dfbd6a27da8">Isis::AbstractTreeModel::setFrozen()</a>.</p>
+
+</div>
+</div>
+<a id="a9f4ae29629965da5cabc1048929213cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f4ae29629965da5cabc1048929213cb">&#9670;&nbsp;</a></span>setXYZCoordinateDisplay</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::setXYZCoordinateDisplay </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set control point coordinate display type to X,Y,Z. </p>
+<p>TODO: can we selectively rebuild only the columns that need to be re-displayed? </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a9d52863baca3bf2f58f1e3d5c2a07d3e">coordinateDisplayTypeChanged()</a>, <a class="el" href="class_isis_1_1_cnet_display_properties.html#a5379064ad177a4143e1065eb3d5c0dc4">Isis::CnetDisplayProperties::getInstance()</a>, <a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">Isis::PointMeasureTreeModel::rebuildItems()</a>, <a class="el" href="class_isis_1_1_cnet_display_properties.html#a635abfc421d4055e87ca5b9d84d94592">Isis::CnetDisplayProperties::setCoordinateDisplayType()</a>, and <a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2a484fb2db4c15ba200d93c8edfe44133a">Isis::CnetDisplayProperties::XYZ</a>.</p>
+
+</div>
+</div>
+<a id="a5fd51656b711d2c02c3b7feb0e75dc79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fd51656b711d2c02c3b7feb0e75dc79">&#9670;&nbsp;</a></span>toolBarActions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_map.html">QMap</a>&lt; QString, <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt; &gt; Isis::CnetEditorWidget::toolBarActions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the tool bar actions. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_map.html" title="This is free and unencumbered software released into the public domain.">QMap</a>&lt; <a class="el" href="class_q_action.html">QAction</a> *, <a class="el" href="class_q_list.html">QList&lt; QString &gt;</a> &gt; <a class="el" href="class_q_map.html" title="This is free and unencumbered software released into the public domain.">QMap</a> of tool bar actions </dd></dl>
+
+</div>
+</div>
+<a id="a801541199bc0e1a60327fb8cc7f31979"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a801541199bc0e1a60327fb8cc7f31979">&#9670;&nbsp;</a></span>writeSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetEditorWidget::writeSettings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes the configuration settings used. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_measure_item.html#a3d7f785a5e026f353ce2ea9dd7f43fba">Isis::AbstractMeasureItem::getColumnName()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab02c55a0580f8b3a13f9abd6a6c21842">Isis::AbstractPointItem::getColumnName()</a>, <a class="el" href="class_isis_1_1_table_view.html#a3611f3eb2fd0b7550c54d9fa1cfd4017">Isis::TableView::getHorizontalHeader()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#ae4d9bd1ae6bf09347307738895df7516">measureTableSortingEnabled()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#aa666bdd2aaa069f2645690431881870e">measureTableSortLimit()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#ae932b14ed1133b32ba985f08643ec54d">pointTableSortingEnabled()</a>, and <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a19a6d3d4b90cdd43de98094db998afac">pointTableSortLimit()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a14724bcd5a188f102c127fc86865dde5">~CnetEditorWidget()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_cnet_editor_widget_8h_source.html">CnetEditorWidget.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_cnet_editor_widget_8cpp.html">CnetEditorWidget.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_cnet_editor_widget.html">CnetEditorWidget</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

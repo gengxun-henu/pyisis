@@ -1,0 +1,5 @@
+<map id="Isis::Spice" name="Isis::Spice">
+<area shape="rect" id="node1" title="Obtain SPICE information for a spacecraft." alt="" coords="9,5,220,407"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_sensor.html" title="Class for computing sensor ground coordinates." alt="" coords="5,455,224,712"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="5,760,224,1225"/>
+</map>

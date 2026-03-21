@@ -1,0 +1,971 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Basis1VariableFunction Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_basis1_variable_function.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_basis1_variable_function-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Basis1VariableFunction Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group___math.html">Math</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Time based linear equation class.  
+ <a href="class_isis_1_1_basis1_variable_function.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_basis1_variable_function_8h_source.html">Basis1VariableFunction.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::Basis1VariableFunction:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_basis1_variable_function__inherit__graph.png" border="0" usemap="#a_isis_1_1_basis1_variable_function_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_basis1_variable_function_inherit__map" id="a_isis_1_1_basis1_variable_function_inherit__map">
+<area shape="rect" title="Time based linear equation class." alt="" coords="5,359,192,488"/>
+<area shape="rect" href="class_isis_1_1_polynomial_univariate.html" title="Nth degree Polynomial with one variable." alt="" coords="12,536,185,697"/>
+<area shape="rect" href="class_isis_1_1_basis_function.html" title="Generic linear equation class." alt="" coords="32,5,165,311"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::Basis1VariableFunction:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_basis1_variable_function__coll__graph.png" border="0" usemap="#a_isis_1_1_basis1_variable_function_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_basis1_variable_function_coll__map" id="a_isis_1_1_basis1_variable_function_coll__map">
+<area shape="rect" title="Time based linear equation class." alt="" coords="88,457,274,587"/>
+<area shape="rect" href="class_isis_1_1_basis_function.html" title="Generic linear equation class." alt="" coords="114,167,248,408"/>
+<area shape="rect" title=" " alt="" coords="5,5,125,87"/>
+<area shape="rect" title=" " alt="" coords="148,5,214,87"/>
+<area shape="rect" title=" " alt="" coords="250,5,288,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ae3ff1bd37aac7211e835a9df26d3b490"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis1_variable_function.html#ae3ff1bd37aac7211e835a9df26d3b490">Basis1VariableFunction</a> (const QString &amp;name, int numCoefs)</td></tr>
+<tr class="memdesc:ae3ff1bd37aac7211e835a9df26d3b490"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a Basis Function with a single variable.  <a href="class_isis_1_1_basis1_variable_function.html#ae3ff1bd37aac7211e835a9df26d3b490">More...</a><br /></td></tr>
+<tr class="separator:ae3ff1bd37aac7211e835a9df26d3b490"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae07174ebfc1ba079c4f43d42b7ffc9ab"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis1_variable_function.html#ae07174ebfc1ba079c4f43d42b7ffc9ab">~Basis1VariableFunction</a> ()</td></tr>
+<tr class="memdesc:ae07174ebfc1ba079c4f43d42b7ffc9ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_isis_1_1_basis1_variable_function.html" title="Time based linear equation class.">Basis1VariableFunction</a> object.  <a href="class_isis_1_1_basis1_variable_function.html#ae07174ebfc1ba079c4f43d42b7ffc9ab">More...</a><br /></td></tr>
+<tr class="separator:ae07174ebfc1ba079c4f43d42b7ffc9ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb9c9a78b015f06d45e83b7ac7620f0f"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis1_variable_function.html#abb9c9a78b015f06d45e83b7ac7620f0f">DerivativeVar</a> (const double value)=0</td></tr>
+<tr class="memdesc:abb9c9a78b015f06d45e83b7ac7620f0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This will take the Derivative with respect to the variable and evaluate at given value.  <a href="class_isis_1_1_basis1_variable_function.html#abb9c9a78b015f06d45e83b7ac7620f0f">More...</a><br /></td></tr>
+<tr class="separator:abb9c9a78b015f06d45e83b7ac7620f0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15ded3f291f480101edb1105bf31b156"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis1_variable_function.html#a15ded3f291f480101edb1105bf31b156">DerivativeCoef</a> (const double value, const int coefIndex)=0</td></tr>
+<tr class="memdesc:a15ded3f291f480101edb1105bf31b156"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the derivative defined by the given coefficients with respect to the coefficient at the given index, at the current value.  <a href="class_isis_1_1_basis1_variable_function.html#a15ded3f291f480101edb1105bf31b156">More...</a><br /></td></tr>
+<tr class="separator:a15ded3f291f480101edb1105bf31b156"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa963fbe62d5e2020beab8c487a3a1a16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#aa963fbe62d5e2020beab8c487a3a1a16">SetCoefficients</a> (const std::vector&lt; double &gt; &amp;coefs)</td></tr>
+<tr class="memdesc:aa963fbe62d5e2020beab8c487a3a1a16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the coefficients for the equation.  <a href="class_isis_1_1_basis_function.html#aa963fbe62d5e2020beab8c487a3a1a16">More...</a><br /></td></tr>
+<tr class="separator:aa963fbe62d5e2020beab8c487a3a1a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31cbd7d66fa631beed7cae8454b052ec"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#a31cbd7d66fa631beed7cae8454b052ec">Evaluate</a> (const std::vector&lt; double &gt; &amp;vars)</td></tr>
+<tr class="memdesc:a31cbd7d66fa631beed7cae8454b052ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the equation using the input variables.  <a href="class_isis_1_1_basis_function.html#a31cbd7d66fa631beed7cae8454b052ec">More...</a><br /></td></tr>
+<tr class="separator:a31cbd7d66fa631beed7cae8454b052ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50dafd0ce239d502d4f6b0f0195e0a96"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#a50dafd0ce239d502d4f6b0f0195e0a96">Evaluate</a> (const double &amp;var)</td></tr>
+<tr class="memdesc:a50dafd0ce239d502d4f6b0f0195e0a96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the equation using the input variable.  <a href="class_isis_1_1_basis_function.html#a50dafd0ce239d502d4f6b0f0195e0a96">More...</a><br /></td></tr>
+<tr class="separator:a50dafd0ce239d502d4f6b0f0195e0a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27cab829dad14eb18b6e35ed88e7e72f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#a27cab829dad14eb18b6e35ed88e7e72f">Expand</a> (const std::vector&lt; double &gt; &amp;vars)</td></tr>
+<tr class="memdesc:a27cab829dad14eb18b6e35ed88e7e72f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the function you should replace depending on your needs.  <a href="class_isis_1_1_basis_function.html#a27cab829dad14eb18b6e35ed88e7e72f">More...</a><br /></td></tr>
+<tr class="separator:a27cab829dad14eb18b6e35ed88e7e72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a389b6f55687f45342932412eb5f2fbae"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#a389b6f55687f45342932412eb5f2fbae">Coefficients</a> () const</td></tr>
+<tr class="memdesc:a389b6f55687f45342932412eb5f2fbae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of coefficients for the equation.  <a href="class_isis_1_1_basis_function.html#a389b6f55687f45342932412eb5f2fbae">More...</a><br /></td></tr>
+<tr class="separator:a389b6f55687f45342932412eb5f2fbae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba143e78321a45bf5d1155a52871d1da"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#aba143e78321a45bf5d1155a52871d1da">Variables</a> () const</td></tr>
+<tr class="memdesc:aba143e78321a45bf5d1155a52871d1da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of variables in the equation.  <a href="class_isis_1_1_basis_function.html#aba143e78321a45bf5d1155a52871d1da">More...</a><br /></td></tr>
+<tr class="separator:aba143e78321a45bf5d1155a52871d1da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a155e3f0bd664c282a9c129f359806b7d"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#a155e3f0bd664c282a9c129f359806b7d">Name</a> () const</td></tr>
+<tr class="memdesc:a155e3f0bd664c282a9c129f359806b7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the equation.  <a href="class_isis_1_1_basis_function.html#a155e3f0bd664c282a9c129f359806b7d">More...</a><br /></td></tr>
+<tr class="separator:a155e3f0bd664c282a9c129f359806b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad04d292c6af30742e5931f1837fad4c7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#ad04d292c6af30742e5931f1837fad4c7">Term</a> (int c) const</td></tr>
+<tr class="memdesc:ad04d292c6af30742e5931f1837fad4c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cth term.  <a href="class_isis_1_1_basis_function.html#ad04d292c6af30742e5931f1837fad4c7">More...</a><br /></td></tr>
+<tr class="separator:ad04d292c6af30742e5931f1837fad4c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88a87e2fee6295031c9fa5148d40f00d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#a88a87e2fee6295031c9fa5148d40f00d">Coefficient</a> (int i) const</td></tr>
+<tr class="memdesc:a88a87e2fee6295031c9fa5148d40f00d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ith coefficient.  <a href="class_isis_1_1_basis_function.html#a88a87e2fee6295031c9fa5148d40f00d">More...</a><br /></td></tr>
+<tr class="separator:a88a87e2fee6295031c9fa5148d40f00d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a198851931049ecdb7d374fe3a37ee896"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#a198851931049ecdb7d374fe3a37ee896">p_name</a></td></tr>
+<tr class="memdesc:a198851931049ecdb7d374fe3a37ee896"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the equation. Call it by using <a class="el" href="class_isis_1_1_basis_function.html#a155e3f0bd664c282a9c129f359806b7d" title="Returns the name of the equation.">Name()</a>  <a href="class_isis_1_1_basis_function.html#a198851931049ecdb7d374fe3a37ee896">More...</a><br /></td></tr>
+<tr class="separator:a198851931049ecdb7d374fe3a37ee896"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55441f5d2c1096086b91a9fed4680971"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#a55441f5d2c1096086b91a9fed4680971">p_numVars</a></td></tr>
+<tr class="memdesc:a55441f5d2c1096086b91a9fed4680971"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of variables in the equation. Call it by using <a class="el" href="class_isis_1_1_basis_function.html#aba143e78321a45bf5d1155a52871d1da" title="Returns the number of variables in the equation.">Variables()</a>  <a href="class_isis_1_1_basis_function.html#a55441f5d2c1096086b91a9fed4680971">More...</a><br /></td></tr>
+<tr class="separator:a55441f5d2c1096086b91a9fed4680971"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1d25c161bb6f35cd123b9dc35fea1d0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#af1d25c161bb6f35cd123b9dc35fea1d0">p_numCoefs</a></td></tr>
+<tr class="memdesc:af1d25c161bb6f35cd123b9dc35fea1d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of coefficients in the equation.  <a href="class_isis_1_1_basis_function.html#af1d25c161bb6f35cd123b9dc35fea1d0">More...</a><br /></td></tr>
+<tr class="separator:af1d25c161bb6f35cd123b9dc35fea1d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa506ea05e745236e9e4ff06633128ae2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#aa506ea05e745236e9e4ff06633128ae2">p_coefs</a></td></tr>
+<tr class="memdesc:aa506ea05e745236e9e4ff06633128ae2"><td class="mdescLeft">&#160;</td><td class="mdescRight">A vector of the coefficients in the equation.  <a href="class_isis_1_1_basis_function.html#aa506ea05e745236e9e4ff06633128ae2">More...</a><br /></td></tr>
+<tr class="separator:aa506ea05e745236e9e4ff06633128ae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b0650e700121963131bb7d46d967a1f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_basis_function.html#a8b0650e700121963131bb7d46d967a1f">p_terms</a></td></tr>
+<tr class="memdesc:a8b0650e700121963131bb7d46d967a1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">A vector of the terms in the equation.  <a href="class_isis_1_1_basis_function.html#a8b0650e700121963131bb7d46d967a1f">More...</a><br /></td></tr>
+<tr class="separator:a8b0650e700121963131bb7d46d967a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Time based linear equation class. </p>
+<p>This is a class for generating a general one-variable equation for the <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> least squares fitting algorithm (IsisLSQ). It allows the programmer to set up equations in the form of: </p><p class="formulaDsp">
+\[ x = C1*T1 + C2*T2 + ... + CN*TN; \]
+</p>
+<p> where C1-CN are coefficients and T1-TN are terms with a single variable. For example, </p><p class="formulaDsp">
+\[ x = C1 + C2*t + C3*t**2 \]
+</p>
+<dl class="section author"><dt>Author</dt><dd>2004-06-24 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae3ff1bd37aac7211e835a9df26d3b490"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3ff1bd37aac7211e835a9df26d3b490">&#9670;&nbsp;</a></span>Basis1VariableFunction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Basis1VariableFunction::Basis1VariableFunction </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numCoefs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a Basis Function with a single variable. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the <a class="el" href="class_isis_1_1_basis1_variable_function.html" title="Time based linear equation class.">Basis1VariableFunction</a>. For example, "affine". </td></tr>
+    <tr><td class="paramname">numCoefs</td><td>Number of coefficients in the equation. For example: <p class="formulaDsp">
+\[ x = C1 + C2 * x + C3 * x**2 \]
+</p>
+ has three coefficients: C1, C2 &amp; C3. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae07174ebfc1ba079c4f43d42b7ffc9ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae07174ebfc1ba079c4f43d42b7ffc9ab">&#9670;&nbsp;</a></span>~Basis1VariableFunction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::Basis1VariableFunction::~Basis1VariableFunction </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destroys the <a class="el" href="class_isis_1_1_basis1_variable_function.html" title="Time based linear equation class.">Basis1VariableFunction</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a88a87e2fee6295031c9fa5148d40f00d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88a87e2fee6295031c9fa5148d40f00d">&#9670;&nbsp;</a></span>Coefficient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BasisFunction::Coefficient </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the ith coefficient. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>The index for the desired coefficient.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The ith coefficient </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_basis_function.html#aa506ea05e745236e9e4ff06633128ae2">Isis::BasisFunction::p_coefs</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_polynomial_univariate.html#ad3390f0b62d37ee8205de64a3925261a">Isis::PolynomialUnivariate::DerivativeVar()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a5f15191e6968ac24981d7ce38325d446">Isis::SpicePosition::LoadHermiteCache()</a>, <a class="el" href="class_isis_1_1_surface_model.html#a5fc17f2b543556efc6a3bdbc4619b48d">Isis::SurfaceModel::MinMax()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a5e20b92da43bade716cab5af0acbd759">Isis::SpicePosition::SetPolynomial()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a05fb1d7e38880b055e4f039c69b993d7">Isis::SpiceRotation::SetPolynomial()</a>, and <a class="el" href="class_isis_1_1_affine.html#adf7dc36b1593b11c46940ffb7f9db72a">Isis::Affine::Solve()</a>.</p>
+
+</div>
+</div>
+<a id="a389b6f55687f45342932412eb5f2fbae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a389b6f55687f45342932412eb5f2fbae">&#9670;&nbsp;</a></span>Coefficients()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BasisFunction::Coefficients </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of coefficients for the equation. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of coefficients. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_basis_function.html#af1d25c161bb6f35cd123b9dc35fea1d0">Isis::BasisFunction::p_numCoefs</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_polynomial_univariate.html#ac60f1fbfcfa8c248fd88d05fdd9cdb2e">Isis::PolynomialUnivariate::DerivativeCoef()</a>, <a class="el" href="class_isis_1_1_polynomial_univariate.html#ad3390f0b62d37ee8205de64a3925261a">Isis::PolynomialUnivariate::DerivativeVar()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a5e20b92da43bade716cab5af0acbd759">Isis::SpicePosition::SetPolynomial()</a>, and <a class="el" href="class_isis_1_1_spice_rotation.html#a05fb1d7e38880b055e4f039c69b993d7">Isis::SpiceRotation::SetPolynomial()</a>.</p>
+
+</div>
+</div>
+<a id="a15ded3f291f480101edb1105bf31b156"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15ded3f291f480101edb1105bf31b156">&#9670;&nbsp;</a></span>DerivativeCoef()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double Isis::Basis1VariableFunction::DerivativeCoef </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>coefIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Evaluate the derivative defined by the given coefficients with respect to the coefficient at the given index, at the current value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>(const double) value at which to evaluate derivative </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">coefIndex</td><td>(const int) The index of the coefficient to differentiate with respect to</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>(double) The derivative evaluated at given value </dd></dl>
+
+<p>Implemented in <a class="el" href="class_isis_1_1_polynomial_univariate.html#ac60f1fbfcfa8c248fd88d05fdd9cdb2e">Isis::PolynomialUnivariate</a>.</p>
+
+</div>
+</div>
+<a id="abb9c9a78b015f06d45e83b7ac7620f0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb9c9a78b015f06d45e83b7ac7620f0f">&#9670;&nbsp;</a></span>DerivativeVar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double Isis::Basis1VariableFunction::DerivativeVar </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This will take the Derivative with respect to the variable and evaluate at given value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>(const double) value at which to evaluate derivative</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>(double) The derivative evaluated at given value </dd></dl>
+
+<p>Implemented in <a class="el" href="class_isis_1_1_polynomial_univariate.html#ad3390f0b62d37ee8205de64a3925261a">Isis::PolynomialUnivariate</a>.</p>
+
+</div>
+</div>
+<a id="a50dafd0ce239d502d4f6b0f0195e0a96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50dafd0ce239d502d4f6b0f0195e0a96">&#9670;&nbsp;</a></span>Evaluate() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BasisFunction::Evaluate </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>var</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute the equation using the input variable. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">var</td><td>A single double value to use for the equation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The output double value resulting from the equation. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_basis_function.html#a31cbd7d66fa631beed7cae8454b052ec">Isis::BasisFunction::Evaluate()</a>.</p>
+
+</div>
+</div>
+<a id="a31cbd7d66fa631beed7cae8454b052ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31cbd7d66fa631beed7cae8454b052ec">&#9670;&nbsp;</a></span>Evaluate() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BasisFunction::Evaluate </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vars</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute the equation using the input variables. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vars</td><td>A vector of double values to use for the equation. After setting the coefficients, this can be invoked many times to compute output values given input values.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The output value. </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_basis_function.html#a27cab829dad14eb18b6e35ed88e7e72f">Isis::BasisFunction::Expand()</a>, <a class="el" href="class_isis_1_1_basis_function.html#aa506ea05e745236e9e4ff06633128ae2">Isis::BasisFunction::p_coefs</a>, <a class="el" href="class_isis_1_1_basis_function.html#af1d25c161bb6f35cd123b9dc35fea1d0">Isis::BasisFunction::p_numCoefs</a>, <a class="el" href="class_isis_1_1_basis_function.html#a55441f5d2c1096086b91a9fed4680971">Isis::BasisFunction::p_numVars</a>, <a class="el" href="class_isis_1_1_basis_function.html#a8b0650e700121963131bb7d46d967a1f">Isis::BasisFunction::p_terms</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_basis_function.html#a50dafd0ce239d502d4f6b0f0195e0a96">Isis::BasisFunction::Evaluate()</a>, <a class="el" href="class_isis_1_1_least_squares.html#a998dae9754f534d537ddaa3e9e62b08a">Isis::LeastSquares::Evaluate()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a3d6259b2117866115bdae134e9f0d14f">Isis::SpiceRotation::EvaluatePolyFunction()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a5f15191e6968ac24981d7ce38325d446">Isis::SpicePosition::LoadHermiteCache()</a>, <a class="el" href="class_isis_1_1_spice_position.html#aaaa17bb22560a0041b180cdb117147de">Isis::SpicePosition::SetEphemerisTimePolyFunction()</a>, and <a class="el" href="class_isis_1_1_spice_rotation.html#a046ab0a1808f5f7a45f3599ccbcd1bd2">Isis::SpiceRotation::setEphemerisTimePolyFunction()</a>.</p>
+
+</div>
+</div>
+<a id="a27cab829dad14eb18b6e35ed88e7e72f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27cab829dad14eb18b6e35ed88e7e72f">&#9670;&nbsp;</a></span>Expand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BasisFunction::Expand </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vars</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is the function you should replace depending on your needs. </p>
+<p>It will expand the variables into the terms of the equation. For example, </p><p class="formulaDsp">
+\[ x = C1 + C2*y + C3*z + C4*y*z \]
+</p>
+<p> must be expanded into the p_terms vector as (1.0, y, z, y*z). Note that the term expansion is not limited, you can use cos, sin, sqrt, abs, etc. This virtual method is automatically invoked by the Evaluate method. We provide a default expansion of p_terms = vars, just a linear combination of the variables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vars</td><td>A vector of double values to use for the expansion. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_polynomial_univariate.html#a7415c7b2fdf54a28dbf7a344d4080c98">Isis::PolynomialUnivariate</a>, <a class="el" href="class_isis_1_1_polynomial_bivariate.html#a038b769e7d18276f8c46ef02cabca700">Isis::PolynomialBivariate</a>, and <a class="el" href="class_isis_1_1_nth_order_polynomial.html#a2343b6017d51ecc798180033a592299f">Isis::NthOrderPolynomial</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_basis_function.html#a8b0650e700121963131bb7d46d967a1f">Isis::BasisFunction::p_terms</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_basis_function.html#a31cbd7d66fa631beed7cae8454b052ec">Isis::BasisFunction::Evaluate()</a>.</p>
+
+</div>
+</div>
+<a id="a155e3f0bd664c282a9c129f359806b7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a155e3f0bd664c282a9c129f359806b7d">&#9670;&nbsp;</a></span>Name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BasisFunction::Name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the name of the equation. </p>
+<dl class="section return"><dt>Returns</dt><dd>The name of the equation. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_basis_function.html#a198851931049ecdb7d374fe3a37ee896">Isis::BasisFunction::p_name</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_least_squares.html#adebcd2ef3d6a18bcf59224560a796d86">Isis::LeastSquares::AddKnown()</a>.</p>
+
+</div>
+</div>
+<a id="aa963fbe62d5e2020beab8c487a3a1a16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa963fbe62d5e2020beab8c487a3a1a16">&#9670;&nbsp;</a></span>SetCoefficients()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BasisFunction::SetCoefficients </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>coefs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the coefficients for the equation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coefs</td><td>A vector of coefficients for the equation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_basis_function.html#aa506ea05e745236e9e4ff06633128ae2">Isis::BasisFunction::p_coefs</a>, <a class="el" href="class_isis_1_1_basis_function.html#af1d25c161bb6f35cd123b9dc35fea1d0">Isis::BasisFunction::p_numCoefs</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_rotation.html#acfd614c613a72dfbfacaad875bc19b17">Isis::SpiceRotation::DCJdt()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a3d6259b2117866115bdae134e9f0d14f">Isis::SpiceRotation::EvaluatePolyFunction()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a5f15191e6968ac24981d7ce38325d446">Isis::SpicePosition::LoadHermiteCache()</a>, <a class="el" href="class_isis_1_1_polynomial_univariate.html#a48de3950024643cc90ce7d32574ab02d">Isis::PolynomialUnivariate::PolynomialUnivariate()</a>, <a class="el" href="class_isis_1_1_spice_position.html#aaaa17bb22560a0041b180cdb117147de">Isis::SpicePosition::SetEphemerisTimePolyFunction()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a046ab0a1808f5f7a45f3599ccbcd1bd2">Isis::SpiceRotation::setEphemerisTimePolyFunction()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#aa3accb3e802fded2e90b5d17432c4d0c">Isis::SpiceRotation::SetPolynomial()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#aef400d876e8cadf138952c50f1ff6df0">Isis::SpicePosition::SetPolynomial()</a>.</p>
+
+</div>
+</div>
+<a id="ad04d292c6af30742e5931f1837fad4c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad04d292c6af30742e5931f1837fad4c7">&#9670;&nbsp;</a></span>Term()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BasisFunction::Term </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the cth term. </p>
+<p>This is only valid after a Evalute/Expand has been invoked. It represents the expansion of the variables into the ith term. For example, </p><p class="formulaDsp">
+\[ x = C1 + C2*x + C3*y + C4*x*y \]
+</p>
+<p> would return x*y for the 3rd term (zero-based)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>The index for the desired coefficient.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The cth term. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_basis_function.html#a8b0650e700121963131bb7d46d967a1f">Isis::BasisFunction::p_terms</a>.</p>
+
+</div>
+</div>
+<a id="aba143e78321a45bf5d1155a52871d1da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba143e78321a45bf5d1155a52871d1da">&#9670;&nbsp;</a></span>Variables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BasisFunction::Variables </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of variables in the equation. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of variables. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_basis_function.html#a55441f5d2c1096086b91a9fed4680971">Isis::BasisFunction::p_numVars</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_least_squares.html#adebcd2ef3d6a18bcf59224560a796d86">Isis::LeastSquares::AddKnown()</a>, and <a class="el" href="class_isis_1_1_nth_order_polynomial.html#a2343b6017d51ecc798180033a592299f">Isis::NthOrderPolynomial::Expand()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aa506ea05e745236e9e4ff06633128ae2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa506ea05e745236e9e4ff06633128ae2">&#9670;&nbsp;</a></span>p_coefs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Isis::BasisFunction::p_coefs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A vector of the coefficients in the equation. </p>
+<p>Call it by using <a class="el" href="class_isis_1_1_basis_function.html#a88a87e2fee6295031c9fa5148d40f00d" title="Returns the ith coefficient.">Coefficient()</a> </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_basis_function.html#a88a87e2fee6295031c9fa5148d40f00d">Isis::BasisFunction::Coefficient()</a>, <a class="el" href="class_isis_1_1_basis_function.html#a31cbd7d66fa631beed7cae8454b052ec">Isis::BasisFunction::Evaluate()</a>, and <a class="el" href="class_isis_1_1_basis_function.html#aa963fbe62d5e2020beab8c487a3a1a16">Isis::BasisFunction::SetCoefficients()</a>.</p>
+
+</div>
+</div>
+<a id="a198851931049ecdb7d374fe3a37ee896"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a198851931049ecdb7d374fe3a37ee896">&#9670;&nbsp;</a></span>p_name</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BasisFunction::p_name</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The name of the equation. Call it by using <a class="el" href="class_isis_1_1_basis_function.html#a155e3f0bd664c282a9c129f359806b7d" title="Returns the name of the equation.">Name()</a> </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_basis_function.html#a6ac1e351729ccad6852fd60006f865bb">Isis::BasisFunction::BasisFunction()</a>, and <a class="el" href="class_isis_1_1_basis_function.html#a155e3f0bd664c282a9c129f359806b7d">Isis::BasisFunction::Name()</a>.</p>
+
+</div>
+</div>
+<a id="af1d25c161bb6f35cd123b9dc35fea1d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1d25c161bb6f35cd123b9dc35fea1d0">&#9670;&nbsp;</a></span>p_numCoefs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BasisFunction::p_numCoefs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The number of coefficients in the equation. </p>
+<p>Call it by using <a class="el" href="class_isis_1_1_basis_function.html#a389b6f55687f45342932412eb5f2fbae" title="Returns the number of coefficients for the equation.">Coefficients()</a> </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_basis_function.html#a6ac1e351729ccad6852fd60006f865bb">Isis::BasisFunction::BasisFunction()</a>, <a class="el" href="class_isis_1_1_basis_function.html#a389b6f55687f45342932412eb5f2fbae">Isis::BasisFunction::Coefficients()</a>, <a class="el" href="class_isis_1_1_basis_function.html#a31cbd7d66fa631beed7cae8454b052ec">Isis::BasisFunction::Evaluate()</a>, and <a class="el" href="class_isis_1_1_basis_function.html#aa963fbe62d5e2020beab8c487a3a1a16">Isis::BasisFunction::SetCoefficients()</a>.</p>
+
+</div>
+</div>
+<a id="a55441f5d2c1096086b91a9fed4680971"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55441f5d2c1096086b91a9fed4680971">&#9670;&nbsp;</a></span>p_numVars</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BasisFunction::p_numVars</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The number of variables in the equation. Call it by using <a class="el" href="class_isis_1_1_basis_function.html#aba143e78321a45bf5d1155a52871d1da" title="Returns the number of variables in the equation.">Variables()</a> </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_basis_function.html#a6ac1e351729ccad6852fd60006f865bb">Isis::BasisFunction::BasisFunction()</a>, <a class="el" href="class_isis_1_1_basis_function.html#a31cbd7d66fa631beed7cae8454b052ec">Isis::BasisFunction::Evaluate()</a>, and <a class="el" href="class_isis_1_1_basis_function.html#aba143e78321a45bf5d1155a52871d1da">Isis::BasisFunction::Variables()</a>.</p>
+
+</div>
+</div>
+<a id="a8b0650e700121963131bb7d46d967a1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b0650e700121963131bb7d46d967a1f">&#9670;&nbsp;</a></span>p_terms</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Isis::BasisFunction::p_terms</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A vector of the terms in the equation. </p>
+<p>Call it by using <a class="el" href="class_isis_1_1_basis_function.html#ad04d292c6af30742e5931f1837fad4c7" title="Returns the cth term.">Term()</a> </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_basis_function.html#a31cbd7d66fa631beed7cae8454b052ec">Isis::BasisFunction::Evaluate()</a>, <a class="el" href="class_isis_1_1_basis_function.html#a27cab829dad14eb18b6e35ed88e7e72f">Isis::BasisFunction::Expand()</a>, <a class="el" href="class_isis_1_1_nth_order_polynomial.html#a2343b6017d51ecc798180033a592299f">Isis::NthOrderPolynomial::Expand()</a>, <a class="el" href="class_isis_1_1_polynomial_bivariate.html#a038b769e7d18276f8c46ef02cabca700">Isis::PolynomialBivariate::Expand()</a>, <a class="el" href="class_isis_1_1_polynomial_univariate.html#a7415c7b2fdf54a28dbf7a344d4080c98">Isis::PolynomialUnivariate::Expand()</a>, and <a class="el" href="class_isis_1_1_basis_function.html#ad04d292c6af30742e5931f1837fad4c7">Isis::BasisFunction::Term()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Basis1VariableFunction/<a class="el" href="_basis1_variable_function_8h_source.html">Basis1VariableFunction.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Basis1VariableFunction/<a class="el" href="_basis1_variable_function_8cpp.html">Basis1VariableFunction.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_basis1_variable_function.html">Basis1VariableFunction</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,1061 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ControlHealthMonitorWidget Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_control_health_monitor_widget.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_control_health_monitor_widget-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ControlHealthMonitorWidget Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Interface that allows real-time evaluation of the state of a <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Network.  
+ <a href="class_isis_1_1_control_health_monitor_widget.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_control_health_monitor_widget_8h_source.html">ControlHealthMonitorWidget.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ControlHealthMonitorWidget:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_control_health_monitor_widget__inherit__graph.png" border="0" usemap="#a_isis_1_1_control_health_monitor_widget_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_control_health_monitor_widget_inherit__map" id="a_isis_1_1_control_health_monitor_widget_inherit__map">
+<area shape="rect" title="Interface that allows real&#45;time evaluation of the state of a Control Network." alt="" coords="5,135,219,584"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="76,5,148,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ControlHealthMonitorWidget:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_control_health_monitor_widget__coll__graph.png" border="0" usemap="#a_isis_1_1_control_health_monitor_widget_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_control_health_monitor_widget_coll__map" id="a_isis_1_1_control_health_monitor_widget_coll__map">
+<area shape="rect" title="Interface that allows real&#45;time evaluation of the state of a Control Network." alt="" coords="5,135,219,584"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="76,5,148,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a9038b0ec6aabdf4a91c751c8f7d5c207"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a9038b0ec6aabdf4a91c751c8f7d5c207">emitOpenImageEditor</a> ()</td></tr>
+<tr class="memdesc:a9038b0ec6aabdf4a91c751c8f7d5c207"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is designed to be called whenever a user double-clicks on an image in the image table of the images tab.  <a href="class_isis_1_1_control_health_monitor_widget.html#a9038b0ec6aabdf4a91c751c8f7d5c207">More...</a><br /></td></tr>
+<tr class="separator:a9038b0ec6aabdf4a91c751c8f7d5c207"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bef25cf0b3f026b4de6ff418c725aa0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a4bef25cf0b3f026b4de6ff418c725aa0">emitOpenPointEditor</a> ()</td></tr>
+<tr class="memdesc:a4bef25cf0b3f026b4de6ff418c725aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is designed to be called whenever a user double-clicks on a point in the point table of the points tab.  <a href="class_isis_1_1_control_health_monitor_widget.html#a4bef25cf0b3f026b4de6ff418c725aa0">More...</a><br /></td></tr>
+<tr class="separator:a4bef25cf0b3f026b4de6ff418c725aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a645b578f0168ec55523b986fbc7db45d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a645b578f0168ec55523b986fbc7db45d">historyEntry</a> (QString, QString, QVariant, QVariant, QString)</td></tr>
+<tr class="memdesc:a645b578f0168ec55523b986fbc7db45d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This SLOT is designed to intercept the <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a645b578f0168ec55523b986fbc7db45d" title="This SLOT is designed to intercept the historyEntry() signal emitted from the ControlNetVitals class ...">historyEntry()</a> signal emitted from the <a class="el" href="class_isis_1_1_control_net_vitals.html" title="ControlNetVitals.">ControlNetVitals</a> class whenever a modification is made to the network.  <a href="class_isis_1_1_control_health_monitor_widget.html#a645b578f0168ec55523b986fbc7db45d">More...</a><br /></td></tr>
+<tr class="separator:a645b578f0168ec55523b986fbc7db45d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcb40e3a80f226b7301afcbd9e667966"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#abcb40e3a80f226b7301afcbd9e667966">viewPointAll</a> ()</td></tr>
+<tr class="separator:abcb40e3a80f226b7301afcbd9e667966"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a198aee75962cc19f8055eb5d2222d8d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a198aee75962cc19f8055eb5d2222d8d2">viewPointFree</a> ()</td></tr>
+<tr class="separator:a198aee75962cc19f8055eb5d2222d8d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad77cdb79ce315ea6f8299bb0b7dd28f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#ad77cdb79ce315ea6f8299bb0b7dd28f9">viewPointFixed</a> ()</td></tr>
+<tr class="separator:ad77cdb79ce315ea6f8299bb0b7dd28f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ecc069610c85c67c6b1a4bdaacb4975"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a9ecc069610c85c67c6b1a4bdaacb4975">viewPointConstrained</a> ()</td></tr>
+<tr class="separator:a9ecc069610c85c67c6b1a4bdaacb4975"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae60aba3096dfcaeba51cdb2a65fa5768"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#ae60aba3096dfcaeba51cdb2a65fa5768">viewPointIgnored</a> ()</td></tr>
+<tr class="separator:ae60aba3096dfcaeba51cdb2a65fa5768"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15eb76e81354be15d36cf81ed8a508cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a15eb76e81354be15d36cf81ed8a508cf">viewPointEditLocked</a> ()</td></tr>
+<tr class="separator:a15eb76e81354be15d36cf81ed8a508cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e549c9995524a4b3f6644d4158927f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a6e549c9995524a4b3f6644d4158927f2">viewPointFewMeasures</a> ()</td></tr>
+<tr class="separator:a6e549c9995524a4b3f6644d4158927f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea3fa17a4c0998273ca4c955f9b323c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#aea3fa17a4c0998273ca4c955f9b323c4">viewImageAll</a> ()</td></tr>
+<tr class="separator:aea3fa17a4c0998273ca4c955f9b323c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48ef077ccc6e6a8e1bb006c80c6316bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a48ef077ccc6e6a8e1bb006c80c6316bd">viewImageFewMeasures</a> ()</td></tr>
+<tr class="separator:a48ef077ccc6e6a8e1bb006c80c6316bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89d8728354b5b81782540131c053dbc1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a89d8728354b5b81782540131c053dbc1">viewImageHullTolerance</a> ()</td></tr>
+<tr class="separator:a89d8728354b5b81782540131c053dbc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c5e96a62b123661637db6fbf555d9f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8c5e96a62b123661637db6fbf555d9f7">update</a> ()</td></tr>
+<tr class="memdesc:a8c5e96a62b123661637db6fbf555d9f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This SLOT is called whenever the is a change made to the network embedded in the Global m_vitals object.  <a href="class_isis_1_1_control_health_monitor_widget.html#a8c5e96a62b123661637db6fbf555d9f7">More...</a><br /></td></tr>
+<tr class="separator:a8c5e96a62b123661637db6fbf555d9f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a9482b187b8fa66b4736d9c6469e6e526"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a9482b187b8fa66b4736d9c6469e6e526">openPointEditor</a> (<a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *point)</td></tr>
+<tr class="separator:a9482b187b8fa66b4736d9c6469e6e526"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8080c094f8392065ade7cfd17f1a193"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#ae8080c094f8392065ade7cfd17f1a193">openImageEditor</a> (<a class="el" href="class_q_list.html">QList</a>&lt; QString &gt; serials)</td></tr>
+<tr class="separator:ae8080c094f8392065ade7cfd17f1a193"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:abf92bb41d940da30bebb49ffe9b4325d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#abf92bb41d940da30bebb49ffe9b4325d">ControlHealthMonitorWidget</a> (<a class="el" href="class_isis_1_1_control_net_vitals.html">ControlNetVitals</a> *vitals, <a class="el" href="class_q_widget.html">QWidget</a> *parent=0)</td></tr>
+<tr class="memdesc:abf92bb41d940da30bebb49ffe9b4325d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class is the front end representation of a <a class="el" href="class_isis_1_1_control_net_vitals.html" title="ControlNetVitals.">ControlNetVitals</a> object.  <a href="class_isis_1_1_control_health_monitor_widget.html#abf92bb41d940da30bebb49ffe9b4325d">More...</a><br /></td></tr>
+<tr class="separator:abf92bb41d940da30bebb49ffe9b4325d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa29fb0a37bede84a24b70885abc641f0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#aa29fb0a37bede84a24b70885abc641f0">~ControlHealthMonitorWidget</a> ()</td></tr>
+<tr class="memdesc:aa29fb0a37bede84a24b70885abc641f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_control_health_monitor_widget.html#aa29fb0a37bede84a24b70885abc641f0">More...</a><br /></td></tr>
+<tr class="separator:aa29fb0a37bede84a24b70885abc641f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a242b057a7dab1aef8d7fe267689983d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a242b057a7dab1aef8d7fe267689983d3">createGui</a> ()</td></tr>
+<tr class="memdesc:a242b057a7dab1aef8d7fe267689983d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is responsible for creating all of the components that comprise the GUI.  <a href="class_isis_1_1_control_health_monitor_widget.html#a242b057a7dab1aef8d7fe267689983d3">More...</a><br /></td></tr>
+<tr class="separator:a242b057a7dab1aef8d7fe267689983d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04ccb5ddbea261e7cbe4341b74376236"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a04ccb5ddbea261e7cbe4341b74376236">createImagesTab</a> ()</td></tr>
+<tr class="separator:a04ccb5ddbea261e7cbe4341b74376236"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b0f15536e93d4906773387867dd26cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8b0f15536e93d4906773387867dd26cf">createPointsTab</a> ()</td></tr>
+<tr class="separator:a8b0f15536e93d4906773387867dd26cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86a53a95d394d92f314a56b1e3425fdf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a86a53a95d394d92f314a56b1e3425fdf">createOverviewTab</a> ()</td></tr>
+<tr class="separator:a86a53a95d394d92f314a56b1e3425fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b5d4ea3b812033fa255cd0a7cd0f56b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8b5d4ea3b812033fa255cd0a7cd0f56b">createGraphTab</a> ()</td></tr>
+<tr class="separator:a8b5d4ea3b812033fa255cd0a7cd0f56b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a787b45fe881e24c8f611fab3c6601939"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a787b45fe881e24c8f611fab3c6601939">setVitals</a> (<a class="el" href="class_isis_1_1_control_net_vitals.html">ControlNetVitals</a> *vitals)</td></tr>
+<tr class="separator:a787b45fe881e24c8f611fab3c6601939"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa945586a60312ce9d35aabeb5212f37c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html#aa945586a60312ce9d35aabeb5212f37c">initializeEverything</a> ()</td></tr>
+<tr class="memdesc:aa945586a60312ce9d35aabeb5212f37c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes all member variables to NULL.  <a href="class_isis_1_1_control_health_monitor_widget.html#aa945586a60312ce9d35aabeb5212f37c">More...</a><br /></td></tr>
+<tr class="separator:aa945586a60312ce9d35aabeb5212f37c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Interface that allows real-time evaluation of the state of a <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Network. </p>
+<dl class="section author"><dt>Author</dt><dd>2018-05-28 Adam Goins </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="abf92bb41d940da30bebb49ffe9b4325d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf92bb41d940da30bebb49ffe9b4325d">&#9670;&nbsp;</a></span>ControlHealthMonitorWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlHealthMonitorWidget::ControlHealthMonitorWidget </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_net_vitals.html">ControlNetVitals</a> *&#160;</td>
+          <td class="paramname"><em>vitals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This class is the front end representation of a <a class="el" href="class_isis_1_1_control_net_vitals.html" title="ControlNetVitals.">ControlNetVitals</a> object. </p>
+<p>It will accept a <a class="el" href="class_isis_1_1_control_net_vitals.html" title="ControlNetVitals.">ControlNetVitals</a> object upon initialization and reflects the current real-time status of the embedded <a class="el" href="class_isis_1_1_control_net.html" title="a control network">ControlNet</a> in the <a class="el" href="class_isis_1_1_control_net_vitals.html" title="ControlNetVitals.">ControlNetVitals</a> object.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vitals</td><td>(<a class="el" href="class_isis_1_1_control_net_vitals.html" title="ControlNetVitals.">ControlNetVitals</a> *) The <a class="el" href="class_isis_1_1_control_net_vitals.html" title="ControlNetVitals.">ControlNetVitals</a> object that contains the <a class="el" href="class_isis_1_1_control_net.html" title="a control network">ControlNet</a>. </td></tr>
+    <tr><td class="paramname">parent</td><td>(<a class="el" href="class_q_widget.html">QWidget</a> *) Pointer to parent widget </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a242b057a7dab1aef8d7fe267689983d3">createGui()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a645b578f0168ec55523b986fbc7db45d">historyEntry()</a>, and <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8c5e96a62b123661637db6fbf555d9f7">update()</a>.</p>
+
+</div>
+</div>
+<a id="aa29fb0a37bede84a24b70885abc641f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa29fb0a37bede84a24b70885abc641f0">&#9670;&nbsp;</a></span>~ControlHealthMonitorWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlHealthMonitorWidget::~ControlHealthMonitorWidget </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8b5d4ea3b812033fa255cd0a7cd0f56b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b5d4ea3b812033fa255cd0a7cd0f56b">&#9670;&nbsp;</a></span>createGraphTab()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::ControlHealthMonitorWidget::createGraphTab </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a242b057a7dab1aef8d7fe267689983d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a242b057a7dab1aef8d7fe267689983d3">&#9670;&nbsp;</a></span>createGui()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::createGui </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method is responsible for creating all of the components that comprise the GUI. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a04ccb5ddbea261e7cbe4341b74376236">createImagesTab()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a86a53a95d394d92f314a56b1e3425fdf">createOverviewTab()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8b0f15536e93d4906773387867dd26cf">createPointsTab()</a>, and <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#aa945586a60312ce9d35aabeb5212f37c">initializeEverything()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#abf92bb41d940da30bebb49ffe9b4325d">ControlHealthMonitorWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a04ccb5ddbea261e7cbe4341b74376236"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04ccb5ddbea261e7cbe4341b74376236">&#9670;&nbsp;</a></span>createImagesTab()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::ControlHealthMonitorWidget::createImagesTab </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a9038b0ec6aabdf4a91c751c8f7d5c207">emitOpenImageEditor()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#aea3fa17a4c0998273ca4c955f9b323c4">viewImageAll()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a48ef077ccc6e6a8e1bb006c80c6316bd">viewImageFewMeasures()</a>, and <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a89d8728354b5b81782540131c053dbc1">viewImageHullTolerance()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a242b057a7dab1aef8d7fe267689983d3">createGui()</a>.</p>
+
+</div>
+</div>
+<a id="a86a53a95d394d92f314a56b1e3425fdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86a53a95d394d92f314a56b1e3425fdf">&#9670;&nbsp;</a></span>createOverviewTab()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::ControlHealthMonitorWidget::createOverviewTab </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a242b057a7dab1aef8d7fe267689983d3">createGui()</a>.</p>
+
+</div>
+</div>
+<a id="a8b0f15536e93d4906773387867dd26cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b0f15536e93d4906773387867dd26cf">&#9670;&nbsp;</a></span>createPointsTab()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::ControlHealthMonitorWidget::createPointsTab </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a4bef25cf0b3f026b4de6ff418c725aa0">emitOpenPointEditor()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#abcb40e3a80f226b7301afcbd9e667966">viewPointAll()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a9ecc069610c85c67c6b1a4bdaacb4975">viewPointConstrained()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a15eb76e81354be15d36cf81ed8a508cf">viewPointEditLocked()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a6e549c9995524a4b3f6644d4158927f2">viewPointFewMeasures()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#ad77cdb79ce315ea6f8299bb0b7dd28f9">viewPointFixed()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a198aee75962cc19f8055eb5d2222d8d2">viewPointFree()</a>, and <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#ae60aba3096dfcaeba51cdb2a65fa5768">viewPointIgnored()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a242b057a7dab1aef8d7fe267689983d3">createGui()</a>.</p>
+
+</div>
+</div>
+<a id="a9038b0ec6aabdf4a91c751c8f7d5c207"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9038b0ec6aabdf4a91c751c8f7d5c207">&#9670;&nbsp;</a></span>emitOpenImageEditor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::emitOpenImageEditor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method is designed to be called whenever a user double-clicks on an image in the image table of the images tab. </p>
+<p>It will grab the selected images and emit the <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#ae8080c094f8392065ade7cfd17f1a193">openImageEditor()</a> signal, emitting with it the images that were selected.</p>
+<p>The <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#ae8080c094f8392065ade7cfd17f1a193">openImageEditor()</a> signal is intercepted by the <a class="el" href="class_isis_1_1_control_health_monitor_view.html" title="View for the Control Net Health Monitor.">ControlHealthMonitorView</a> and opens the <a class="el" href="class_isis_1_1_cube_dn_view.html" title="View that displays cubes in a QView-like way.">CubeDnView</a> with the images selected. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#ae8080c094f8392065ade7cfd17f1a193">openImageEditor()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a04ccb5ddbea261e7cbe4341b74376236">createImagesTab()</a>.</p>
+
+</div>
+</div>
+<a id="a4bef25cf0b3f026b4de6ff418c725aa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bef25cf0b3f026b4de6ff418c725aa0">&#9670;&nbsp;</a></span>emitOpenPointEditor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::emitOpenPointEditor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method is designed to be called whenever a user double-clicks on a point in the point table of the points tab. </p>
+<p>It will grab the selected point and emit the <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a9482b187b8fa66b4736d9c6469e6e526">openPointEditor()</a> signal, emitting with it the point that was selected.</p>
+<p>The <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a9482b187b8fa66b4736d9c6469e6e526">openPointEditor()</a> signal is intercepted by the <a class="el" href="class_isis_1_1_control_health_monitor_view.html" title="View for the Control Net Health Monitor.">ControlHealthMonitorView</a> and opens the <a class="el" href="class_isis_1_1_control_point_edit_widget.html" title="Gui for editing ControlPoints in ipce application.">ControlPointEditWidget</a> with that point selected. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#a34787568be0c1dac2e7d89af3c6b6021">Isis::ControlNetVitals::getPoint()</a>, and <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a9482b187b8fa66b4736d9c6469e6e526">openPointEditor()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8b0f15536e93d4906773387867dd26cf">createPointsTab()</a>.</p>
+
+</div>
+</div>
+<a id="a645b578f0168ec55523b986fbc7db45d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a645b578f0168ec55523b986fbc7db45d">&#9670;&nbsp;</a></span>historyEntry</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::historyEntry </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>entry</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVariant&#160;</td>
+          <td class="paramname"><em>oldValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVariant&#160;</td>
+          <td class="paramname"><em>newValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>timeStamp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This SLOT is designed to intercept the <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a645b578f0168ec55523b986fbc7db45d" title="This SLOT is designed to intercept the historyEntry() signal emitted from the ControlNetVitals class ...">historyEntry()</a> signal emitted from the <a class="el" href="class_isis_1_1_control_net_vitals.html" title="ControlNetVitals.">ControlNetVitals</a> class whenever a modification is made to the network. </p>
+<p>The signal emits several details pertaining to the history entry.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entry</td><td>The history comment to be displayed. </td></tr>
+    <tr><td class="paramname">id</td><td>The id of the <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Point, Measure, or Network that was modified. </td></tr>
+    <tr><td class="paramname">oldValue</td><td>The old value before the modification was made. </td></tr>
+    <tr><td class="paramname">newValue</td><td>The new value after the modification was made. </td></tr>
+    <tr><td class="paramname">timeStamp</td><td>The timestamp of when the modification was made. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#abf92bb41d940da30bebb49ffe9b4325d">ControlHealthMonitorWidget()</a>.</p>
+
+</div>
+</div>
+<a id="aa945586a60312ce9d35aabeb5212f37c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa945586a60312ce9d35aabeb5212f37c">&#9670;&nbsp;</a></span>initializeEverything()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::initializeEverything </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes all member variables to NULL. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a242b057a7dab1aef8d7fe267689983d3">createGui()</a>.</p>
+
+</div>
+</div>
+<a id="ae8080c094f8392065ade7cfd17f1a193"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8080c094f8392065ade7cfd17f1a193">&#9670;&nbsp;</a></span>openImageEditor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::openImageEditor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_list.html">QList</a>&lt; QString &gt;&#160;</td>
+          <td class="paramname"><em>serials</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a9038b0ec6aabdf4a91c751c8f7d5c207">emitOpenImageEditor()</a>.</p>
+
+</div>
+</div>
+<a id="a9482b187b8fa66b4736d9c6469e6e526"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9482b187b8fa66b4736d9c6469e6e526">&#9670;&nbsp;</a></span>openPointEditor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::openPointEditor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a4bef25cf0b3f026b4de6ff418c725aa0">emitOpenPointEditor()</a>.</p>
+
+</div>
+</div>
+<a id="a787b45fe881e24c8f611fab3c6601939"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a787b45fe881e24c8f611fab3c6601939">&#9670;&nbsp;</a></span>setVitals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::setVitals </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_net_vitals.html">ControlNetVitals</a> *&#160;</td>
+          <td class="paramname"><em>vitals</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8c5e96a62b123661637db6fbf555d9f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c5e96a62b123661637db6fbf555d9f7">&#9670;&nbsp;</a></span>update</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::update </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This SLOT is called whenever the is a change made to the network embedded in the Global m_vitals object. </p>
+<p>Changes are detected via the networkChanged() signal which is emitted from the <a class="el" href="class_isis_1_1_control_net_vitals.html" title="ControlNetVitals.">ControlNetVitals</a> object which is triggered whenever networkStructureModified() is emitted from the embedded <a class="el" href="class_isis_1_1_control_net.html" title="a control network">ControlNet</a>. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#a321d62ed3ed30a1602eb85d94af3515c">Isis::ControlNetVitals::getNetworkId()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a3eee556fb469badb799e60932081e731">Isis::ControlNetVitals::getStatus()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a6b79efc7ebdb2dc470e892f3ac93a86e">Isis::ControlNetVitals::getStatusDetails()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#af3c6581dbceef317fa95f8638e197af7">Isis::ControlNetVitals::numConstrainedPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a3b80684d35122d9625432457d7255d06">Isis::ControlNetVitals::numFixedPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a95eab60603a9768d14826c0bd78b6456">Isis::ControlNetVitals::numFreePoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a503fa7e8710367f268f2bd82ab4d7551">Isis::ControlNetVitals::numIgnoredPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a79b650ccd76da0038cfa7b93f007cd2e">Isis::ControlNetVitals::numImages()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a9dd8ece0a4ae2ac461df13bc0661523c">Isis::ControlNetVitals::numImagesBelowHullTolerance()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a76c324b1c9f67cb98e1143a7ed03b9c1">Isis::ControlNetVitals::numImagesBelowMeasureThreshold()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a58c5d5910c21dc22f37d8b453d1c28fa">Isis::ControlNetVitals::numLockedPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#afd580a6fb8cff164e63c52a829f3069b">Isis::ControlNetVitals::numMeasures()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a5fe59c3a1b558b91c7a4f23b655a7d61">Isis::ControlNetVitals::numPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a99148e772e0f9c71028ddac9909eda71">Isis::ControlNetVitals::numPointsBelowMeasureThreshold()</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#aea3fa17a4c0998273ca4c955f9b323c4">viewImageAll()</a>, and <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#abcb40e3a80f226b7301afcbd9e667966">viewPointAll()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#abf92bb41d940da30bebb49ffe9b4325d">ControlHealthMonitorWidget()</a>.</p>
+
+</div>
+</div>
+<a id="aea3fa17a4c0998273ca4c955f9b323c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea3fa17a4c0998273ca4c955f9b323c4">&#9670;&nbsp;</a></span>viewImageAll</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::viewImageAll </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#a10f3958b19dce4440d1daac4177a8c51">Isis::ControlNetVitals::getCubeSerials()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a79b650ccd76da0038cfa7b93f007cd2e">Isis::ControlNetVitals::numImages()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a04ccb5ddbea261e7cbe4341b74376236">createImagesTab()</a>, and <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8c5e96a62b123661637db6fbf555d9f7">update()</a>.</p>
+
+</div>
+</div>
+<a id="a48ef077ccc6e6a8e1bb006c80c6316bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48ef077ccc6e6a8e1bb006c80c6316bd">&#9670;&nbsp;</a></span>viewImageFewMeasures</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::viewImageFewMeasures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#aa2be3d80f66f2cb96eb6c853d6f6e5b9">Isis::ControlNetVitals::getImagesBelowMeasureThreshold()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a79b650ccd76da0038cfa7b93f007cd2e">Isis::ControlNetVitals::numImages()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a76c324b1c9f67cb98e1143a7ed03b9c1">Isis::ControlNetVitals::numImagesBelowMeasureThreshold()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a04ccb5ddbea261e7cbe4341b74376236">createImagesTab()</a>.</p>
+
+</div>
+</div>
+<a id="a89d8728354b5b81782540131c053dbc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89d8728354b5b81782540131c053dbc1">&#9670;&nbsp;</a></span>viewImageHullTolerance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::viewImageHullTolerance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#a727a1b07fb831bd793a7331947f94784">Isis::ControlNetVitals::getImagesBelowHullTolerance()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a79b650ccd76da0038cfa7b93f007cd2e">Isis::ControlNetVitals::numImages()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a9dd8ece0a4ae2ac461df13bc0661523c">Isis::ControlNetVitals::numImagesBelowHullTolerance()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a04ccb5ddbea261e7cbe4341b74376236">createImagesTab()</a>.</p>
+
+</div>
+</div>
+<a id="abcb40e3a80f226b7301afcbd9e667966"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcb40e3a80f226b7301afcbd9e667966">&#9670;&nbsp;</a></span>viewPointAll</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::viewPointAll </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#a156dddb23effd88c4bed2b875aa57239">Isis::ControlNetVitals::getAllPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a5fe59c3a1b558b91c7a4f23b655a7d61">Isis::ControlNetVitals::numPoints()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8b0f15536e93d4906773387867dd26cf">createPointsTab()</a>, and <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8c5e96a62b123661637db6fbf555d9f7">update()</a>.</p>
+
+</div>
+</div>
+<a id="a9ecc069610c85c67c6b1a4bdaacb4975"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ecc069610c85c67c6b1a4bdaacb4975">&#9670;&nbsp;</a></span>viewPointConstrained</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::viewPointConstrained </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#ac47666e7f414e0b6205df03de19f7a60">Isis::ControlNetVitals::getConstrainedPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#af3c6581dbceef317fa95f8638e197af7">Isis::ControlNetVitals::numConstrainedPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a5fe59c3a1b558b91c7a4f23b655a7d61">Isis::ControlNetVitals::numPoints()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8b0f15536e93d4906773387867dd26cf">createPointsTab()</a>.</p>
+
+</div>
+</div>
+<a id="a15eb76e81354be15d36cf81ed8a508cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15eb76e81354be15d36cf81ed8a508cf">&#9670;&nbsp;</a></span>viewPointEditLocked</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::viewPointEditLocked </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#aad88b1d928e6e1666293a42e8a371cba">Isis::ControlNetVitals::getLockedPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a58c5d5910c21dc22f37d8b453d1c28fa">Isis::ControlNetVitals::numLockedPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a5fe59c3a1b558b91c7a4f23b655a7d61">Isis::ControlNetVitals::numPoints()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8b0f15536e93d4906773387867dd26cf">createPointsTab()</a>.</p>
+
+</div>
+</div>
+<a id="a6e549c9995524a4b3f6644d4158927f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e549c9995524a4b3f6644d4158927f2">&#9670;&nbsp;</a></span>viewPointFewMeasures</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::viewPointFewMeasures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#ac945714d1ea77db47397d6300d51bdab">Isis::ControlNetVitals::getPointsBelowMeasureThreshold()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a5fe59c3a1b558b91c7a4f23b655a7d61">Isis::ControlNetVitals::numPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a99148e772e0f9c71028ddac9909eda71">Isis::ControlNetVitals::numPointsBelowMeasureThreshold()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8b0f15536e93d4906773387867dd26cf">createPointsTab()</a>.</p>
+
+</div>
+</div>
+<a id="ad77cdb79ce315ea6f8299bb0b7dd28f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad77cdb79ce315ea6f8299bb0b7dd28f9">&#9670;&nbsp;</a></span>viewPointFixed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::viewPointFixed </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#a1ef175fb655eb2a5e88e1707e85d97de">Isis::ControlNetVitals::getFixedPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a3b80684d35122d9625432457d7255d06">Isis::ControlNetVitals::numFixedPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a5fe59c3a1b558b91c7a4f23b655a7d61">Isis::ControlNetVitals::numPoints()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8b0f15536e93d4906773387867dd26cf">createPointsTab()</a>.</p>
+
+</div>
+</div>
+<a id="a198aee75962cc19f8055eb5d2222d8d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a198aee75962cc19f8055eb5d2222d8d2">&#9670;&nbsp;</a></span>viewPointFree</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::viewPointFree </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#abc4d41acb1b0eae62cd6e316fcd1472e">Isis::ControlNetVitals::getFreePoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a95eab60603a9768d14826c0bd78b6456">Isis::ControlNetVitals::numFreePoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a5fe59c3a1b558b91c7a4f23b655a7d61">Isis::ControlNetVitals::numPoints()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8b0f15536e93d4906773387867dd26cf">createPointsTab()</a>.</p>
+
+</div>
+</div>
+<a id="ae60aba3096dfcaeba51cdb2a65fa5768"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae60aba3096dfcaeba51cdb2a65fa5768">&#9670;&nbsp;</a></span>viewPointIgnored</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlHealthMonitorWidget::viewPointIgnored </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_net_vitals.html#aac316954b610990f8175f24aa7546de8">Isis::ControlNetVitals::getIgnoredPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a503fa7e8710367f268f2bd82ab4d7551">Isis::ControlNetVitals::numIgnoredPoints()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a5fe59c3a1b558b91c7a4f23b655a7d61">Isis::ControlNetVitals::numPoints()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8b0f15536e93d4906773387867dd26cf">createPointsTab()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ControlHealthMonitorWidget/<a class="el" href="_control_health_monitor_widget_8h_source.html">ControlHealthMonitorWidget.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ControlHealthMonitorWidget/<a class="el" href="_control_health_monitor_widget_8cpp.html">ControlHealthMonitorWidget.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_control_health_monitor_widget.html">ControlHealthMonitorWidget</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

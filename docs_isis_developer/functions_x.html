@@ -1,0 +1,331 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Class Members</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('functions_x.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="contents">
+<div class="textblock">Here is a list of all class members with links to the classes they belong to:</div>
+
+<h3><a id="index_x"></a>- x -</h3><ul>
+<li>x()
+: <a class="el" href="class_isis_1_1_affine.html#af759dbd520cc1e96a92ca192e6ac6099">Isis::Affine</a>
+</li>
+<li>X()
+: <a class="el" href="class_isis_1_1_multivariate_statistics.html#ac5acd6c4c7256b928a0c150367d81d08">Isis::MultivariateStatistics</a>
+</li>
+<li>xAxisBinCount()
+: <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#afdbf123fdeb4712f8ab2240f856adf3f">Isis::ScatterPlotConfigDialog</a>
+</li>
+<li>xAxisCube()
+: <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a71db14010769def3199e86ddfa395f3a">Isis::ScatterPlotConfigDialog</a>
+</li>
+<li>xAxisCubeBand()
+: <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a128604b9344dbd818e6285f3028ec2d4">Isis::ScatterPlotConfigDialog</a>
+</li>
+<li>xAxisCubeViewport()
+: <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#ad4e14168e0dfe8b317d3af20b6dd9c6b">Isis::ScatterPlotConfigDialog</a>
+</li>
+<li>xAxisUnits()
+: <a class="el" href="class_isis_1_1_plot_window.html#a9ee1761f68265dae806679991d95e390">Isis::PlotWindow</a>
+</li>
+<li>XCoord()
+: <a class="el" href="class_isis_1_1_projection.html#a1c8c36a58d5bb65176a9fe5c76a5e86f">Isis::Projection</a>
+</li>
+<li>xCubeMax()
+: <a class="el" href="class_isis_1_1_scatter_plot_data.html#a4127924a085ed6baf957c952a08edfdd">Isis::ScatterPlotData</a>
+</li>
+<li>xCubeMin()
+: <a class="el" href="class_isis_1_1_scatter_plot_data.html#a8cf7a155ab2d7ef0fb3c6ed72725f6b6">Isis::ScatterPlotData</a>
+</li>
+<li>xFocalPlaneResidual()
+: <a class="el" href="class_isis_1_1_bundle_measure.html#a6bd59656c2011aa62b8538a58ef0a2f9">Isis::BundleMeasure</a>
+</li>
+<li>Xform()
+: <a class="el" href="class_isis_1_1_enlarge.html#a5061182b804c862468a010d63ad63430">Isis::Enlarge</a>
+, <a class="el" href="class_isis_1_1_transform.html#ab0e6860b86e681872ebcda6deaff9a9c">Isis::Transform</a>
+</li>
+<li>Xfy
+: <a class="el" href="class_isis_1_1_histogram_item.html#a7f65e5595dd023e97be8ef158b21007ba3d88d37ac2e05f1e0a14ec8ee255f983">Isis::HistogramItem</a>
+</li>
+<li>XMLChTrans()
+: <a class="el" href="class_x_m_l_ch_trans.html#a0e41775a4de92b0fda1fb236c3527d87">XMLChTrans</a>
+</li>
+<li>XmlToPvlTranslationManager()
+: <a class="el" href="class_isis_1_1_xml_to_pvl_translation_manager.html#ad87ecbc04bdf1dce1de9530f1e91ac05">Isis::XmlToPvlTranslationManager</a>
+</li>
+<li>xp()
+: <a class="el" href="class_isis_1_1_affine.html#a1f57d6570d4c5c5c46fb2738d821ddb8">Isis::Affine</a>
+</li>
+<li>xUnits()
+: <a class="el" href="class_isis_1_1_plot_curve.html#a8414c7492e4758c8670aff5cfdc044ed">Isis::PlotCurve</a>
+</li>
+<li>XYRange()
+: <a class="el" href="class_isis_1_1_equirectangular.html#a1d0227c8cabd7eb244eb2127c16dfc9b">Isis::Equirectangular</a>
+, <a class="el" href="class_isis_1_1_lambert_azimuthal_equal_area.html#a67047078e8b409f64a85af658a79116d">Isis::LambertAzimuthalEqualArea</a>
+, <a class="el" href="class_isis_1_1_lambert_conformal.html#a93016340f579f3afa7564ebf36a35370">Isis::LambertConformal</a>
+, <a class="el" href="class_isis_1_1_lunar_azimuthal_equal_area.html#a84833e8d8c29ec100c5e6fed24e4cc16">Isis::LunarAzimuthalEqualArea</a>
+, <a class="el" href="class_isis_1_1_mercator.html#a89c785bc69f786d184de892cfc025e65">Isis::Mercator</a>
+, <a class="el" href="class_isis_1_1_mollweide.html#aa3f66987432dfbd54427c38d725557af">Isis::Mollweide</a>
+, <a class="el" href="class_isis_1_1_oblique_cylindrical.html#ac7dbeff9cfb0e5b9f556d4501674b899">Isis::ObliqueCylindrical</a>
+, <a class="el" href="class_isis_1_1_orthographic.html#abcf5d4529fd69165aa950fda5a27a44c">Isis::Orthographic</a>
+, <a class="el" href="class_isis_1_1_planar.html#a0e0c47d490cc788fa8bfa6998e745b9d">Isis::Planar</a>
+, <a class="el" href="class_isis_1_1_point_perspective.html#aa1ec3f8e0ebc498a9d2bb89ed60a617f">Isis::PointPerspective</a>
+, <a class="el" href="class_isis_1_1_polar_stereographic.html#ab265362cd04f8c7888f8fc0b088b4e27">Isis::PolarStereographic</a>
+, <a class="el" href="class_isis_1_1_projection.html#ab07c788cfb452de0efddb0b811a1f816">Isis::Projection</a>
+, <a class="el" href="class_isis_1_1_ring_cylindrical.html#af0926a90f1f343dcc05790a5b927b1a2">Isis::RingCylindrical</a>
+, <a class="el" href="class_isis_1_1_ring_plane_projection.html#af867869aa1242f8f77ecedd068d53171">Isis::RingPlaneProjection</a>
+, <a class="el" href="class_isis_1_1_robinson.html#aa3f4a1997575dfeae41e5d1b1f96544a">Isis::Robinson</a>
+, <a class="el" href="class_isis_1_1_simple_cylindrical.html#a97487a830dbabd9a6c853f994ae4ca37">Isis::SimpleCylindrical</a>
+, <a class="el" href="class_isis_1_1_sinusoidal.html#a59f242e714b0378a9c91ab44d6b41627">Isis::Sinusoidal</a>
+, <a class="el" href="class_isis_1_1_t_projection.html#a17adaa6f43d920e20bf511a356d7ab60">Isis::TProjection</a>
+, <a class="el" href="class_isis_1_1_transverse_mercator.html#afda9f55d0b2930650c87819b1dd63bec">Isis::TransverseMercator</a>
+, <a class="el" href="class_isis_1_1_upturned_ellipsoid_transverse_azimuthal.html#a0f3333b9b7ed3a8e72e994996e7554be">Isis::UpturnedEllipsoidTransverseAzimuthal</a>
+</li>
+<li>XYRangeCheck()
+: <a class="el" href="class_isis_1_1_projection.html#a2acdbc75cd8d442890612aa7f71ef781">Isis::Projection</a>
+, <a class="el" href="class_isis_1_1_ring_plane_projection.html#a9ddaa27d932d8b46fe909e5b1fa78e9f">Isis::RingPlaneProjection</a>
+, <a class="el" href="class_isis_1_1_t_projection.html#a57a466d39ce6be8ba11b9e16b1c643ad">Isis::TProjection</a>
+</li>
+<li>xyRangeOblique()
+: <a class="el" href="class_isis_1_1_t_projection.html#a0a6da15fd2678a189a0711f8118c4be5">Isis::TProjection</a>
+</li>
+<li>XYToLatLon()
+: <a class="el" href="class_isis_1_1_polygon_tools.html#abfa1339d5c0af35c35191c332815c1fb">Isis::PolygonTools</a>
+</li>
+<li>XYZ
+: <a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2a484fb2db4c15ba200d93c8edfe44133a">Isis::CnetDisplayProperties</a>
+</li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,4 @@
+<map id="Isis::ProcessByQuickFilter" name="Isis::ProcessByQuickFilter">
+<area shape="rect" id="node1" title="Process cubes using a Filter Object." alt="" coords="6,455,183,584"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_process.html" title="Base class for all cube processing derivatives." alt="" coords="5,5,184,407"/>
+</map>

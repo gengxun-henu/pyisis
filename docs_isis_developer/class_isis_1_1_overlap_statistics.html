@@ -1,0 +1,1058 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::OverlapStatistics Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_overlap_statistics.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_overlap_statistics-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::OverlapStatistics Class Reference<div class="ingroups"><a class="el" href="group___statistics.html">Statistics</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Calculates statistics in the area of overlap between two projected cubes.  
+ <a href="class_isis_1_1_overlap_statistics.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_overlap_statistics_8h_source.html">OverlapStatistics.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::OverlapStatistics:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_overlap_statistics__coll__graph.png" border="0" usemap="#a_isis_1_1_overlap_statistics_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_overlap_statistics_coll__map" id="a_isis_1_1_overlap_statistics_coll__map">
+<area shape="rect" title="Calculates statistics in the area of overlap between two projected cubes." alt="" coords="5,5,156,247"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a934767f7973826f8c93bf85d7acea085"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a934767f7973826f8c93bf85d7acea085">OverlapStatistics</a> (<a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a> &amp;x, <a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a> &amp;y, QString progressMsg=&quot;Gathering Overlap <a class="el" href="class_isis_1_1_statistics.html">Statistics</a>&quot;, double sampPercent=100.0)</td></tr>
+<tr class="memdesc:a934767f7973826f8c93bf85d7acea085"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an <a class="el" href="class_isis_1_1_overlap_statistics.html" title="Calculates statistics in the area of overlap between two projected cubes.">OverlapStatistics</a> object.  <a href="class_isis_1_1_overlap_statistics.html#a934767f7973826f8c93bf85d7acea085">More...</a><br /></td></tr>
+<tr class="separator:a934767f7973826f8c93bf85d7acea085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac34e1f55597b3097b8e333a53606568d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#ac34e1f55597b3097b8e333a53606568d">OverlapStatistics</a> (const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;inStats)</td></tr>
+<tr class="memdesc:ac34e1f55597b3097b8e333a53606568d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an <a class="el" href="class_isis_1_1_overlap_statistics.html" title="Calculates statistics in the area of overlap between two projected cubes.">OverlapStatistics</a> from a <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a>.  <a href="class_isis_1_1_overlap_statistics.html#ac34e1f55597b3097b8e333a53606568d">More...</a><br /></td></tr>
+<tr class="separator:ac34e1f55597b3097b8e333a53606568d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d60d6ba164e781f08f873884f2b5a0b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a0d60d6ba164e781f08f873884f2b5a0b">HasOverlap</a> (int band) const</td></tr>
+<tr class="memdesc:a0d60d6ba164e781f08f873884f2b5a0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the specified band for an overlap.  <a href="class_isis_1_1_overlap_statistics.html#a0d60d6ba164e781f08f873884f2b5a0b">More...</a><br /></td></tr>
+<tr class="separator:a0d60d6ba164e781f08f873884f2b5a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f3a2ef439814becca7b36e5ef6ca6df"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a3f3a2ef439814becca7b36e5ef6ca6df">HasOverlap</a> () const</td></tr>
+<tr class="memdesc:a3f3a2ef439814becca7b36e5ef6ca6df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks all bands of the cubes for an overlap, and will only return false if none of the bands overlap.  <a href="class_isis_1_1_overlap_statistics.html#a3f3a2ef439814becca7b36e5ef6ca6df">More...</a><br /></td></tr>
+<tr class="separator:a3f3a2ef439814becca7b36e5ef6ca6df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7218ad0be43069909975455251f1f515"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_file_name.html">Isis::FileName</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a7218ad0be43069909975455251f1f515">FileNameX</a> () const</td></tr>
+<tr class="memdesc:a7218ad0be43069909975455251f1f515"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the filename of the first cube.  <a href="class_isis_1_1_overlap_statistics.html#a7218ad0be43069909975455251f1f515">More...</a><br /></td></tr>
+<tr class="separator:a7218ad0be43069909975455251f1f515"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08b1752c8d13f13ab011f9d368de6835"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_file_name.html">Isis::FileName</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a08b1752c8d13f13ab011f9d368de6835">FileNameY</a> () const</td></tr>
+<tr class="memdesc:a08b1752c8d13f13ab011f9d368de6835"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the filename of the second cube.  <a href="class_isis_1_1_overlap_statistics.html#a08b1752c8d13f13ab011f9d368de6835">More...</a><br /></td></tr>
+<tr class="separator:a08b1752c8d13f13ab011f9d368de6835"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ee3c57151f526dae6620834aa2b60af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_multivariate_statistics.html">Isis::MultivariateStatistics</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a5ee3c57151f526dae6620834aa2b60af">GetMStats</a> (int band) const</td></tr>
+<tr class="memdesc:a5ee3c57151f526dae6620834aa2b60af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="class_isis_1_1_multivariate_statistics.html" title="Container of multivariate statistics.">MultivariateStatistics</a> object containing all the data from both cubes in the overlapping area.  <a href="class_isis_1_1_overlap_statistics.html#a5ee3c57151f526dae6620834aa2b60af">More...</a><br /></td></tr>
+<tr class="separator:a5ee3c57151f526dae6620834aa2b60af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80547be14fe816a3ca4a064119b3fc30"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a80547be14fe816a3ca4a064119b3fc30">Lines</a> () const</td></tr>
+<tr class="memdesc:a80547be14fe816a3ca4a064119b3fc30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of lines in the overlapping area.  <a href="class_isis_1_1_overlap_statistics.html#a80547be14fe816a3ca4a064119b3fc30">More...</a><br /></td></tr>
+<tr class="separator:a80547be14fe816a3ca4a064119b3fc30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfe175e12e89759f23eb343928b4e310"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#acfe175e12e89759f23eb343928b4e310">Samples</a> () const</td></tr>
+<tr class="memdesc:acfe175e12e89759f23eb343928b4e310"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of samples in the overlapping area.  <a href="class_isis_1_1_overlap_statistics.html#acfe175e12e89759f23eb343928b4e310">More...</a><br /></td></tr>
+<tr class="separator:acfe175e12e89759f23eb343928b4e310"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32752881e230b3d0acaa7277b2300326"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a32752881e230b3d0acaa7277b2300326">Bands</a> () const</td></tr>
+<tr class="memdesc:a32752881e230b3d0acaa7277b2300326"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of bands both cubes have.  <a href="class_isis_1_1_overlap_statistics.html#a32752881e230b3d0acaa7277b2300326">More...</a><br /></td></tr>
+<tr class="separator:a32752881e230b3d0acaa7277b2300326"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bca644372d30a7733987747517d3b7c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a1bca644372d30a7733987747517d3b7c">SampPercent</a> () const</td></tr>
+<tr class="memdesc:a1bca644372d30a7733987747517d3b7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the percentage of cube lines sampled.  <a href="class_isis_1_1_overlap_statistics.html#a1bca644372d30a7733987747517d3b7c">More...</a><br /></td></tr>
+<tr class="separator:a1bca644372d30a7733987747517d3b7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af53684f6891d17c857ccac2b96ee3ca3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#af53684f6891d17c857ccac2b96ee3ca3">StartSampleX</a> () const</td></tr>
+<tr class="memdesc:af53684f6891d17c857ccac2b96ee3ca3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the starting sample position of the overlap in the first cube.  <a href="class_isis_1_1_overlap_statistics.html#af53684f6891d17c857ccac2b96ee3ca3">More...</a><br /></td></tr>
+<tr class="separator:af53684f6891d17c857ccac2b96ee3ca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31e4be49498cdcd4dd426efcc95a9f70"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a31e4be49498cdcd4dd426efcc95a9f70">EndSampleX</a> () const</td></tr>
+<tr class="memdesc:a31e4be49498cdcd4dd426efcc95a9f70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ending sample position of the overlap in the first cube.  <a href="class_isis_1_1_overlap_statistics.html#a31e4be49498cdcd4dd426efcc95a9f70">More...</a><br /></td></tr>
+<tr class="separator:a31e4be49498cdcd4dd426efcc95a9f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d923f877fff30446f8c92e9ed916a85"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a4d923f877fff30446f8c92e9ed916a85">StartLineX</a> () const</td></tr>
+<tr class="memdesc:a4d923f877fff30446f8c92e9ed916a85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the starting line position of the overlap in the first cube.  <a href="class_isis_1_1_overlap_statistics.html#a4d923f877fff30446f8c92e9ed916a85">More...</a><br /></td></tr>
+<tr class="separator:a4d923f877fff30446f8c92e9ed916a85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66ee52053147ea96eca3a1fa58e4d70b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a66ee52053147ea96eca3a1fa58e4d70b">EndLineX</a> () const</td></tr>
+<tr class="memdesc:a66ee52053147ea96eca3a1fa58e4d70b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ending line position of the overlap in the first cube.  <a href="class_isis_1_1_overlap_statistics.html#a66ee52053147ea96eca3a1fa58e4d70b">More...</a><br /></td></tr>
+<tr class="separator:a66ee52053147ea96eca3a1fa58e4d70b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b3638cf1afaaa74451d6afad275173f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a3b3638cf1afaaa74451d6afad275173f">StartSampleY</a> () const</td></tr>
+<tr class="memdesc:a3b3638cf1afaaa74451d6afad275173f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the starting sample position of the overlap in the second cube.  <a href="class_isis_1_1_overlap_statistics.html#a3b3638cf1afaaa74451d6afad275173f">More...</a><br /></td></tr>
+<tr class="separator:a3b3638cf1afaaa74451d6afad275173f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb729ac69993814ab691a67d2c8c9d46"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#aeb729ac69993814ab691a67d2c8c9d46">EndSampleY</a> () const</td></tr>
+<tr class="memdesc:aeb729ac69993814ab691a67d2c8c9d46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ending sample position of the overlap in the second cube.  <a href="class_isis_1_1_overlap_statistics.html#aeb729ac69993814ab691a67d2c8c9d46">More...</a><br /></td></tr>
+<tr class="separator:aeb729ac69993814ab691a67d2c8c9d46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87f21878e6ebc93951c6f8dbae2aa27f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#a87f21878e6ebc93951c6f8dbae2aa27f">StartLineY</a> () const</td></tr>
+<tr class="memdesc:a87f21878e6ebc93951c6f8dbae2aa27f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the starting line position of the overlap in the second cube.  <a href="class_isis_1_1_overlap_statistics.html#a87f21878e6ebc93951c6f8dbae2aa27f">More...</a><br /></td></tr>
+<tr class="separator:a87f21878e6ebc93951c6f8dbae2aa27f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1ef9bc8e7f17f4ba74c9712ac68d375"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#ab1ef9bc8e7f17f4ba74c9712ac68d375">EndLineY</a> () const</td></tr>
+<tr class="memdesc:ab1ef9bc8e7f17f4ba74c9712ac68d375"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ending line position of the overlap in the second cube.  <a href="class_isis_1_1_overlap_statistics.html#ab1ef9bc8e7f17f4ba74c9712ac68d375">More...</a><br /></td></tr>
+<tr class="separator:ab1ef9bc8e7f17f4ba74c9712ac68d375"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1557baaaea092a618fca50252412f7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#af1557baaaea092a618fca50252412f7e">SetMincount</a> (unsigned int mincnt)</td></tr>
+<tr class="memdesc:af1557baaaea092a618fca50252412f7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the minimum number of valid pixels for the overlap to be considered valid for PVL output.  <a href="class_isis_1_1_overlap_statistics.html#af1557baaaea092a618fca50252412f7e">More...</a><br /></td></tr>
+<tr class="separator:af1557baaaea092a618fca50252412f7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8622adb109b49888aa899207c090619"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#ac8622adb109b49888aa899207c090619">MinCount</a> () const</td></tr>
+<tr class="separator:ac8622adb109b49888aa899207c090619"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf958be914d8b244da8dc4d8b1134162"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#abf958be914d8b244da8dc4d8b1134162">IsValid</a> (unsigned int band) const</td></tr>
+<tr class="memdesc:abf958be914d8b244da8dc4d8b1134162"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the overlap meets the minimum valid pixel requirement.  <a href="class_isis_1_1_overlap_statistics.html#abf958be914d8b244da8dc4d8b1134162">More...</a><br /></td></tr>
+<tr class="separator:abf958be914d8b244da8dc4d8b1134162"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefbc75a45149d9b641b1c23175da2320"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_statistics.html#aefbc75a45149d9b641b1c23175da2320">toPvl</a> (QString name=&quot;OverlapStatistics&quot;) const</td></tr>
+<tr class="memdesc:aefbc75a45149d9b641b1c23175da2320"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> containing the following Overlap <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> information File1 File2 Width Height Bands SamplingPercent MinCount MutlivariateStatisticsN (N = current band) Covariance Correlation SumXY ValidPixels InvalidPixels TotalPixels LinearRegression ValidOverlap XStatistics #FileX <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> information YStatistics #FileY <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> information File1 StartSample EndSample StartLine EndLine <a class="el" href="class_isis_1_1_average.html" title="Functor for reduce using average functionality.">Average</a> StandardDeviation Variance File2 StartSample EndSample StartLine EndLine <a class="el" href="class_isis_1_1_average.html" title="Functor for reduce using average functionality.">Average</a> StandardDeviation Variance.  <a href="class_isis_1_1_overlap_statistics.html#aefbc75a45149d9b641b1c23175da2320">More...</a><br /></td></tr>
+<tr class="separator:aefbc75a45149d9b641b1c23175da2320"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Calculates statistics in the area of overlap between two projected cubes. </p>
+<p>This class finds the overlap between two cubes. It allows the user to check whether or not two cubes overlap, and also creates a <a class="el" href="class_isis_1_1_multivariate_statistics.html" title="Container of multivariate statistics.">MultivariateStatistics</a> object containing the data from each cube in the overlapping area. The cubes entered into the constructor for this class must both be projections, and must have the same projection parameters.</p>
+<p>If you would like to see <a class="el" href="class_isis_1_1_overlap_statistics.html" title="Calculates statistics in the area of overlap between two projected cubes.">OverlapStatistics</a> being used in implementation, see equalizer.cpp</p>
+<dl class="section author"><dt>Author</dt><dd>2005-07-18 Elizabeth Ribelin </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a934767f7973826f8c93bf85d7acea085"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a934767f7973826f8c93bf85d7acea085">&#9670;&nbsp;</a></span>OverlapStatistics() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::OverlapStatistics::OverlapStatistics </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a> &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a> &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>progressMsg</em> = <code>&quot;Gathering&#160;Overlap&#160;<a class="el" href="class_isis_1_1_statistics.html">Statistics</a>&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sampPercent</em> = <code>100.0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an <a class="el" href="class_isis_1_1_overlap_statistics.html" title="Calculates statistics in the area of overlap between two projected cubes.">OverlapStatistics</a> object. </p>
+<p>Compares the two input cubes and finds where they overlap.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The first input cube </td></tr>
+    <tr><td class="paramname">y</td><td>The second input cube </td></tr>
+    <tr><td class="paramname">progressMsg</td><td>(Default value of "Gathering Overlap Statistics") Text for indicating progress during statistic gathering </td></tr>
+    <tr><td class="paramname">sampPercent</td><td>(Default value of 100.0) Sampling percent, or the percentage of lines to consider during the statistic gathering procedure</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>- All images must have the same number of bands </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_progress.html#a3af617a61efa731205b9adc52d611811">Isis::Progress::AddSteps()</a>, <a class="el" href="class_isis_1_1_cube.html#aecaf95737562904d53d319ba500e3465">Isis::Cube::bandCount()</a>, <a class="el" href="class_isis_1_1_progress.html#aec4f8e7686cc25be05c8fccc78743ce6">Isis::Progress::CheckStatus()</a>, <a class="el" href="class_isis_1_1_buffer.html#a0e0ddc3c6e9d436b92bbe302169d0e6b">Isis::Buffer::DoubleBuffer()</a>, <a class="el" href="class_isis_1_1_cube.html#ac880a03b1f5464fb972f12e33be517a9">Isis::Cube::fileName()</a>, <a class="el" href="class_isis_1_1_cube.html#a35280cce6e0301a9bbde9c2dac9a2dcd">Isis::Cube::lineCount()</a>, <a class="el" href="class_isis_1_1_cube.html#aa0e7a5399fd01fff927849d9f555f1cb">Isis::Cube::pixelType()</a>, <a class="el" href="class_isis_1_1_cube.html#ae3c443e87b7ca5bf4856a693050ed750">Isis::Cube::projection()</a>, <a class="el" href="class_isis_1_1_cube.html#aaca031bf2e6c12109e2b87d72b152661">Isis::Cube::read()</a>, <a class="el" href="class_isis_1_1_cube.html#a6336fc0d356682258017972eeaf49c12">Isis::Cube::sampleCount()</a>, <a class="el" href="class_isis_1_1_brick.html#ae37b86e5b31d648ca565cc431fe28e1a">Isis::Brick::SetBasePosition()</a>, <a class="el" href="class_isis_1_1_progress.html#a92481afe73aa26bbe32967d80426b446">Isis::Progress::SetMaximumSteps()</a>, <a class="el" href="class_isis_1_1_progress.html#a9ad047499caadad1e09cf75dadb2a939">Isis::Progress::SetText()</a>, <a class="el" href="class_isis_1_1_projection.html#ac7dd44810997da99a7b1f92f442c92be">Isis::Projection::ToProjectionX()</a>, <a class="el" href="class_isis_1_1_projection.html#a7d6270f4d9a46e527588fd58d76f637e">Isis::Projection::ToProjectionY()</a>, <a class="el" href="class_isis_1_1_projection.html#a35fd9b10b1b68cfb856b13b39ab1cbb4">Isis::Projection::ToWorldX()</a>, and <a class="el" href="class_isis_1_1_projection.html#a052041bbe43786c41ced8a29db993511">Isis::Projection::ToWorldY()</a>.</p>
+
+</div>
+</div>
+<a id="ac34e1f55597b3097b8e333a53606568d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac34e1f55597b3097b8e333a53606568d">&#9670;&nbsp;</a></span>OverlapStatistics() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::OverlapStatistics::OverlapStatistics </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;&#160;</td>
+          <td class="paramname"><em>inStats</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an <a class="el" href="class_isis_1_1_overlap_statistics.html" title="Calculates statistics in the area of overlap between two projected cubes.">OverlapStatistics</a> from a <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inStats</td><td>The serialized <a class="el" href="class_isis_1_1_overlap_statistics.html" title="Calculates statistics in the area of overlap between two projected cubes.">OverlapStatistics</a> <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a32752881e230b3d0acaa7277b2300326"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32752881e230b3d0acaa7277b2300326">&#9670;&nbsp;</a></span>Bands()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::Bands </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of bands both cubes have. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The number of bands both cubes have </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization.html#a45c5e3ea248782fc04548c7d30d97a14">Isis::Equalization::fromPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a66ee52053147ea96eca3a1fa58e4d70b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66ee52053147ea96eca3a1fa58e4d70b">&#9670;&nbsp;</a></span>EndLineX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::EndLineX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the ending line position of the overlap in the first cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The ending line of the overlap in the first cube </dd></dl>
+
+</div>
+</div>
+<a id="ab1ef9bc8e7f17f4ba74c9712ac68d375"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1ef9bc8e7f17f4ba74c9712ac68d375">&#9670;&nbsp;</a></span>EndLineY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::EndLineY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the ending line position of the overlap in the second cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The ending line of the overlap in the second cube </dd></dl>
+
+</div>
+</div>
+<a id="a31e4be49498cdcd4dd426efcc95a9f70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31e4be49498cdcd4dd426efcc95a9f70">&#9670;&nbsp;</a></span>EndSampleX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::EndSampleX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the ending sample position of the overlap in the first cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The ending sample of the overlap in the first cube </dd></dl>
+
+</div>
+</div>
+<a id="aeb729ac69993814ab691a67d2c8c9d46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb729ac69993814ab691a67d2c8c9d46">&#9670;&nbsp;</a></span>EndSampleY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::EndSampleY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the ending sample position of the overlap in the second cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The ending sample of the overlap in the second cube </dd></dl>
+
+</div>
+</div>
+<a id="a7218ad0be43069909975455251f1f515"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7218ad0be43069909975455251f1f515">&#9670;&nbsp;</a></span>FileNameX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_file_name.html">Isis::FileName</a> Isis::OverlapStatistics::FileNameX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the filename of the first cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString The name of the first cube </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization.html#a45c5e3ea248782fc04548c7d30d97a14">Isis::Equalization::fromPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a08b1752c8d13f13ab011f9d368de6835"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08b1752c8d13f13ab011f9d368de6835">&#9670;&nbsp;</a></span>FileNameY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_file_name.html">Isis::FileName</a> Isis::OverlapStatistics::FileNameY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the filename of the second cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString The name of the second cube </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization.html#a45c5e3ea248782fc04548c7d30d97a14">Isis::Equalization::fromPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a5ee3c57151f526dae6620834aa2b60af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ee3c57151f526dae6620834aa2b60af">&#9670;&nbsp;</a></span>GetMStats()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_multivariate_statistics.html">Isis::MultivariateStatistics</a> Isis::OverlapStatistics::GetMStats </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>band</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the <a class="el" href="class_isis_1_1_multivariate_statistics.html" title="Container of multivariate statistics.">MultivariateStatistics</a> object containing all the data from both cubes in the overlapping area. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">band</td><td>The band number the <a class="el" href="class_isis_1_1_multivariate_statistics.html" title="Container of multivariate statistics.">MultivariateStatistics</a> object needs to contain data from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_multivariate_statistics.html" title="Container of multivariate statistics.">MultivariateStatistics</a> The <a class="el" href="class_isis_1_1_multivariate_statistics.html" title="Container of multivariate statistics.">MultivariateStatistics</a> object containing all data from both cubes in the overlapping area from the specified band </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization.html#ad64afb696ce28a56d1a80d76949407b4">Isis::Equalization::calculateOverlapStatistics()</a>, <a class="el" href="class_isis_1_1_equalization.html#a45c5e3ea248782fc04548c7d30d97a14">Isis::Equalization::fromPvl()</a>, and <a class="el" href="class_isis_1_1_overlap_statistics.html#abf958be914d8b244da8dc4d8b1134162">IsValid()</a>.</p>
+
+</div>
+</div>
+<a id="a3f3a2ef439814becca7b36e5ef6ca6df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f3a2ef439814becca7b36e5ef6ca6df">&#9670;&nbsp;</a></span>HasOverlap() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::OverlapStatistics::HasOverlap </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks all bands of the cubes for an overlap, and will only return false if none of the bands overlap. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool Returns true if any of the bands overlap, and false if none of the bands overlap </dd></dl>
+
+</div>
+</div>
+<a id="a0d60d6ba164e781f08f873884f2b5a0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d60d6ba164e781f08f873884f2b5a0b">&#9670;&nbsp;</a></span>HasOverlap() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::OverlapStatistics::HasOverlap </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>band</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks the specified band for an overlap. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">band</td><td>The band number of the cubes to be checked for an overlap</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Returns true if the cubes overlap in the specified band, and false if they do not overlap </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization.html#ad64afb696ce28a56d1a80d76949407b4">Isis::Equalization::calculateOverlapStatistics()</a>.</p>
+
+</div>
+</div>
+<a id="abf958be914d8b244da8dc4d8b1134162"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf958be914d8b244da8dc4d8b1134162">&#9670;&nbsp;</a></span>IsValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::OverlapStatistics::IsValid </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>band</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns whether the overlap meets the minimum valid pixel requirement. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">band</td><td>The band to check</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Is minimum requirement met </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_overlap_statistics.html#a5ee3c57151f526dae6620834aa2b60af">GetMStats()</a>, and <a class="el" href="class_isis_1_1_multivariate_statistics.html#ac5756934e8d96f0b7e399f902b1d2b68">Isis::MultivariateStatistics::ValidPixels()</a>.</p>
+
+</div>
+</div>
+<a id="a80547be14fe816a3ca4a064119b3fc30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80547be14fe816a3ca4a064119b3fc30">&#9670;&nbsp;</a></span>Lines()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::Lines </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of lines in the overlapping area. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The number of lines in the overlapping area </dd></dl>
+
+</div>
+</div>
+<a id="ac8622adb109b49888aa899207c090619"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8622adb109b49888aa899207c090619">&#9670;&nbsp;</a></span>MinCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::MinCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acfe175e12e89759f23eb343928b4e310"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfe175e12e89759f23eb343928b4e310">&#9670;&nbsp;</a></span>Samples()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::Samples </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of samples in the overlapping area. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The number of samples in the overlapping area </dd></dl>
+
+</div>
+</div>
+<a id="a1bca644372d30a7733987747517d3b7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bca644372d30a7733987747517d3b7c">&#9670;&nbsp;</a></span>SampPercent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::OverlapStatistics::SampPercent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the percentage of cube lines sampled. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The percentage of lines sampled </dd></dl>
+
+</div>
+</div>
+<a id="af1557baaaea092a618fca50252412f7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1557baaaea092a618fca50252412f7e">&#9670;&nbsp;</a></span>SetMincount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::OverlapStatistics::SetMincount </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>mincnt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the minimum number of valid pixels for the overlap to be considered valid for PVL output. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mincnt</td><td>The minimum valid pixel value to set </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization.html#ad64afb696ce28a56d1a80d76949407b4">Isis::Equalization::calculateOverlapStatistics()</a>.</p>
+
+</div>
+</div>
+<a id="a4d923f877fff30446f8c92e9ed916a85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d923f877fff30446f8c92e9ed916a85">&#9670;&nbsp;</a></span>StartLineX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::StartLineX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the starting line position of the overlap in the first cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The starting line of the overlap in the first cube </dd></dl>
+
+</div>
+</div>
+<a id="a87f21878e6ebc93951c6f8dbae2aa27f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87f21878e6ebc93951c6f8dbae2aa27f">&#9670;&nbsp;</a></span>StartLineY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::StartLineY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the starting line position of the overlap in the second cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The starting line of the overlap in the second cube </dd></dl>
+
+</div>
+</div>
+<a id="af53684f6891d17c857ccac2b96ee3ca3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af53684f6891d17c857ccac2b96ee3ca3">&#9670;&nbsp;</a></span>StartSampleX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::StartSampleX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the starting sample position of the overlap in the first cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The starting sample of the overlap in the first cube </dd></dl>
+
+</div>
+</div>
+<a id="a3b3638cf1afaaa74451d6afad275173f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b3638cf1afaaa74451d6afad275173f">&#9670;&nbsp;</a></span>StartSampleY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::OverlapStatistics::StartSampleY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the starting sample position of the overlap in the second cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The starting sample of the overlap in the second cube </dd></dl>
+
+</div>
+</div>
+<a id="aefbc75a45149d9b641b1c23175da2320"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefbc75a45149d9b641b1c23175da2320">&#9670;&nbsp;</a></span>toPvl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> Isis::OverlapStatistics::toPvl </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em> = <code>&quot;OverlapStatistics&quot;</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> containing the following Overlap <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> information File1 File2 Width Height Bands SamplingPercent MinCount MutlivariateStatisticsN (N = current band) Covariance Correlation SumXY ValidPixels InvalidPixels TotalPixels LinearRegression ValidOverlap XStatistics #FileX <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> information YStatistics #FileY <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> information File1 StartSample EndSample StartLine EndLine <a class="el" href="class_isis_1_1_average.html" title="Functor for reduce using average functionality.">Average</a> StandardDeviation Variance File2 StartSample EndSample StartLine EndLine <a class="el" href="class_isis_1_1_average.html" title="Functor for reduce using average functionality.">Average</a> StandardDeviation Variance. </p>
+<p>Serialize overlap statistics as a <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> containing the information for the Overlap <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a>.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">QString</td><td>name (Default value of "OverlapStatistics") Name of the <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> created</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> A pvl object representing the <a class="el" href="class_isis_1_1_overlap_statistics.html" title="Calculates statistics in the area of overlap between two projected cubes.">OverlapStatistics</a> and its data</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>- Trivial overlap between [File1] and [File2] </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_pvl_object.html#ac18c485fdccb8e8bf16866e6c6ad2e3d">Isis::PvlObject::addGroup()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a9fa1d7c4be1eb69b102c86a38dd5eea3">Isis::PvlObject::addObject()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">Isis::PvlContainer::name()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#ac108091092b382c441f4aeff72db0bfa">Isis::PvlKeyword::setValue()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="namespace_isis.html#a74c284b291bc7ab602e341ecc21b91c5">Isis::operator&lt;&lt;()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/OverlapStatistics/<a class="el" href="_overlap_statistics_8h_source.html">OverlapStatistics.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/OverlapStatistics/<a class="el" href="_overlap_statistics_8cpp.html">OverlapStatistics.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_overlap_statistics.html">OverlapStatistics</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

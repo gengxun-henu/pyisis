@@ -1,0 +1,7 @@
+<map id="Isis::BasisFunction" name="Isis::BasisFunction">
+<area shape="rect" id="node1" title="Generic linear equation class." alt="" coords="233,5,367,311"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_basis1_variable_function.html" title="Time based linear equation class." alt="" coords="5,359,192,488"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_nth_order_polynomial.html" title="NthOrderPolynomial basis function." alt="" coords="216,367,384,480"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_polynomial_bivariate.html" title="Nth degree Polynomial with two variables." alt="" coords="408,367,573,480"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_polynomial_univariate.html" title="Nth degree Polynomial with one variable." alt="" coords="12,536,185,697"/>
+</map>

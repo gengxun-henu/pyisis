@@ -1,0 +1,42 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Spice,"Spice, Instruments, and Cameras",isis/src/base/objs/Spice/Spice.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Spice,isis_pybind.Spice,N,Python class symbol not found in current binding files; Qt 类型/信号槽较多
+Construction/Enum,Spice(),isis_pybind.Spice(),N,Qt 类型/信号槽较多
+Mutation/Configuration,virtual void setTime(const iTime &time),isis_pybind.Spice.set_time,N,Qt 类型/信号槽较多
+Public API,void instrumentPosition(double p[3]) const,isis_pybind.Spice.instrument_position,N,Qt 类型/信号槽较多
+Public API,virtual void instrumentBodyFixedPosition(double p[3]) const,isis_pybind.Spice.instrument_body_fixed_position,N,Qt 类型/信号槽较多
+Public API,virtual void sunPosition(double p[3]) const,isis_pybind.Spice.sun_position,N,Qt 类型/信号槽较多
+Public API,virtual double targetCenterDistance() const,isis_pybind.Spice.target_center_distance,N,Qt 类型/信号槽较多
+Public API,virtual double sunToBodyDist() const,isis_pybind.Spice.sun_to_body_dist,N,Qt 类型/信号槽较多
+Public API,virtual Longitude solarLongitude(),isis_pybind.Spice.solar_longitude,N,Qt 类型/信号槽较多
+Public API,virtual void instrumentBodyFixedVelocity(double v[3]) const,isis_pybind.Spice.instrument_body_fixed_velocity,N,Qt 类型/信号槽较多
+Public API,virtual iTime time() const,isis_pybind.Spice.time,N,Qt 类型/信号槽较多
+Public API,void radii(Distance r[3]) const,isis_pybind.Spice.radii,N,Qt 类型/信号槽较多
+Public API,"virtual void createCache(iTime startTime, iTime endTime, const int size, double tol)",isis_pybind.Spice.create_cache,N,Qt 类型/信号槽较多
+Public API,virtual iTime cacheStartTime() const,isis_pybind.Spice.cache_start_time,N,Qt 类型/信号槽较多
+Public API,virtual iTime cacheEndTime() const,isis_pybind.Spice.cache_end_time,N,Qt 类型/信号槽较多
+Public API,"virtual void subSpacecraftPoint(double &lat, double &lon)",isis_pybind.Spice.sub_spacecraft_point,N,Qt 类型/信号槽较多
+Public API,"virtual void subSolarPoint(double &lat, double &lon)",isis_pybind.Spice.sub_solar_point,N,Qt 类型/信号槽较多
+Public API,virtual Target *target() const,isis_pybind.Spice.target,N,Qt 类型/信号槽较多
+Public API,QString targetName() const,isis_pybind.Spice.target_name,N,Qt 类型/信号槽较多
+Public API,"virtual iTime getClockTime(QString clockValue, int sclkCode = -1, bool clockTicks=false)",isis_pybind.Spice.get_clock_time,N,Qt 类型/信号槽较多
+Public API,"SpiceDouble getDouble(const QString &key, int index = 0)",isis_pybind.Spice.get_double,N,Qt 类型/信号槽较多
+Public API,"SpiceInt getInteger(const QString &key, int index = 0)",isis_pybind.Spice.get_integer,N,Qt 类型/信号槽较多
+Public API,"QString getString(const QString &key, int index = 0)",isis_pybind.Spice.get_string,N,Qt 类型/信号槽较多
+Public API,virtual SpicePosition *sunPosition() const,isis_pybind.Spice.sun_position,N,Qt 类型/信号槽较多
+Public API,virtual SpicePosition *instrumentPosition() const,isis_pybind.Spice.instrument_position,N,Qt 类型/信号槽较多
+Public API,virtual SpiceRotation *bodyRotation() const,isis_pybind.Spice.body_rotation,N,Qt 类型/信号槽较多
+Public API,virtual SpiceRotation *instrumentRotation() const,isis_pybind.Spice.instrument_rotation,N,Qt 类型/信号槽较多
+Query,bool isUsingAle(),isis_pybind.Spice.is_using_ale,N,Qt 类型/信号槽较多
+Query,bool hasKernels(Pvl &lab),isis_pybind.Spice.has_kernels,N,Qt 类型/信号槽较多
+Query,bool isTimeSet(),isis_pybind.Spice.is_time_set,N,Qt 类型/信号槽较多
+Public API,SpiceInt naifBodyCode() const,isis_pybind.Spice.naif_body_code,N,Qt 类型/信号槽较多
+Public API,SpiceInt naifSpkCode() const,isis_pybind.Spice.naif_spk_code,N,Qt 类型/信号槽较多
+Public API,SpiceInt naifCkCode() const,isis_pybind.Spice.naif_ck_code,N,Qt 类型/信号槽较多
+Public API,SpiceInt naifIkCode() const,isis_pybind.Spice.naif_ik_code,N,Qt 类型/信号槽较多
+Public API,SpiceInt naifSclkCode() const,isis_pybind.Spice.naif_sclk_code,N,Qt 类型/信号槽较多
+Public API,SpiceInt naifBodyFrameCode() const,isis_pybind.Spice.naif_body_frame_code,N,Qt 类型/信号槽较多
+Public API,PvlObject getStoredNaifKeywords() const,isis_pybind.Spice.get_stored_naif_keywords,N,Qt 类型/信号槽较多
+Public API,virtual double resolution(),isis_pybind.Spice.resolution,N,Qt 类型/信号槽较多

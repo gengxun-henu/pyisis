@@ -1,0 +1,1077 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::PvlTranslationTable Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_pvl_translation_table.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_pvl_translation_table-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::PvlTranslationTable Class Reference<div class="ingroups"><a class="el" href="group___parsing.html">Parsing</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Internalizes a translation table.  
+ <a href="class_isis_1_1_pvl_translation_table.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_pvl_translation_table_8h_source.html">PvlTranslationTable.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::PvlTranslationTable:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_pvl_translation_table__inherit__graph.png" border="0" usemap="#a_isis_1_1_pvl_translation_table_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_pvl_translation_table_inherit__map" id="a_isis_1_1_pvl_translation_table_inherit__map">
+<area shape="rect" title="Internalizes a translation table." alt="" coords="272,5,437,375"/>
+<area shape="rect" href="class_isis_1_1_label_translation_manager.html" title="Allows applications to translate simple text files." alt="" coords="257,423,452,632"/>
+<area shape="rect" href="class_isis_1_1_pvl_to_pvl_translation_manager.html" title="Allows applications to translate simple text files." alt="" coords="5,720,221,1025"/>
+<area shape="rect" href="class_isis_1_1_pvl_to_xml_translation_manager.html" title="Allows applications to translate simple text files." alt="" coords="245,680,464,1065"/>
+<area shape="rect" href="class_isis_1_1_xml_to_pvl_translation_manager.html" title="Allows applications to translate Xml label files." alt="" coords="489,736,708,1009"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::PvlTranslationTable:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_pvl_translation_table__coll__graph.png" border="0" usemap="#a_isis_1_1_pvl_translation_table_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_pvl_translation_table_coll__map" id="a_isis_1_1_pvl_translation_table_coll__map">
+<area shape="rect" title="Internalizes a translation table." alt="" coords="5,5,170,375"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:af0d19005098e15a4e9a9d9187eb694c4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#af0d19005098e15a4e9a9d9187eb694c4">PvlTranslationTable</a> (<a class="el" href="class_isis_1_1_file_name.html">FileName</a> transFile)</td></tr>
+<tr class="memdesc:af0d19005098e15a4e9a9d9187eb694c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs and initializes a <a class="el" href="class_isis_1_1_pvl_translation_table.html" title="Internalizes a translation table.">PvlTranslationTable</a> object.  <a href="class_isis_1_1_pvl_translation_table.html#af0d19005098e15a4e9a9d9187eb694c4">More...</a><br /></td></tr>
+<tr class="separator:af0d19005098e15a4e9a9d9187eb694c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e8b9a31650eaa1e4b07038679084d66"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#a0e8b9a31650eaa1e4b07038679084d66">PvlTranslationTable</a> (std::istream &amp;istr)</td></tr>
+<tr class="memdesc:a0e8b9a31650eaa1e4b07038679084d66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs and initializes a <a class="el" href="class_isis_1_1_pvl_translation_table.html" title="Internalizes a translation table.">PvlTranslationTable</a> object.  <a href="class_isis_1_1_pvl_translation_table.html#a0e8b9a31650eaa1e4b07038679084d66">More...</a><br /></td></tr>
+<tr class="separator:a0e8b9a31650eaa1e4b07038679084d66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00865ae35f0561b2356c8184d9b15aa1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#a00865ae35f0561b2356c8184d9b15aa1">PvlTranslationTable</a> ()</td></tr>
+<tr class="memdesc:a00865ae35f0561b2356c8184d9b15aa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct an empty <a class="el" href="class_isis_1_1_pvl_translation_table.html" title="Internalizes a translation table.">PvlTranslationTable</a>.  <a href="class_isis_1_1_pvl_translation_table.html#a00865ae35f0561b2356c8184d9b15aa1">More...</a><br /></td></tr>
+<tr class="separator:a00865ae35f0561b2356c8184d9b15aa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d9692a801ccf33421ad0c77bcbdd2b7"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#a8d9692a801ccf33421ad0c77bcbdd2b7">~PvlTranslationTable</a> ()</td></tr>
+<tr class="memdesc:a8d9692a801ccf33421ad0c77bcbdd2b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_isis_1_1_pvl_translation_table.html" title="Internalizes a translation table.">PvlTranslationTable</a> object.  <a href="class_isis_1_1_pvl_translation_table.html#a8d9692a801ccf33421ad0c77bcbdd2b7">More...</a><br /></td></tr>
+<tr class="separator:a8d9692a801ccf33421ad0c77bcbdd2b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaf6af737dfce72c852fadf2577c1012"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#acaf6af737dfce72c852fadf2577c1012">InputGroup</a> (const QString translationGroupName, const int inst=0) const</td></tr>
+<tr class="memdesc:acaf6af737dfce72c852fadf2577c1012"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the input group name from the translation table corresponding to the output name argument.  <a href="class_isis_1_1_pvl_translation_table.html#acaf6af737dfce72c852fadf2577c1012">More...</a><br /></td></tr>
+<tr class="separator:acaf6af737dfce72c852fadf2577c1012"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca8186ec886d95d765ae0f5a7a808e7d"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#aca8186ec886d95d765ae0f5a7a808e7d">InputKeywordName</a> (const QString translationGroupName) const</td></tr>
+<tr class="memdesc:aca8186ec886d95d765ae0f5a7a808e7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the input keyword name from the translation table corresponding to the output name argument.  <a href="class_isis_1_1_pvl_translation_table.html#aca8186ec886d95d765ae0f5a7a808e7d">More...</a><br /></td></tr>
+<tr class="separator:aca8186ec886d95d765ae0f5a7a808e7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf9fa42539fbcb1375084754abb71fd7"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#adf9fa42539fbcb1375084754abb71fd7">InputDefault</a> (const QString translationGroupName) const</td></tr>
+<tr class="memdesc:adf9fa42539fbcb1375084754abb71fd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the input default value from the translation table corresponding to the output name argument.  <a href="class_isis_1_1_pvl_translation_table.html#adf9fa42539fbcb1375084754abb71fd7">More...</a><br /></td></tr>
+<tr class="separator:adf9fa42539fbcb1375084754abb71fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f11ac9c4a80e266eb0b0de19f9fd132"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#a6f11ac9c4a80e266eb0b0de19f9fd132">Translate</a> (const QString translationGroupName, const QString inputKeyValue=&quot;&quot;) const</td></tr>
+<tr class="memdesc:a6f11ac9c4a80e266eb0b0de19f9fd132"><td class="mdescLeft">&#160;</td><td class="mdescRight">Translates a single output value from the given translation group name and input value.  <a href="class_isis_1_1_pvl_translation_table.html#a6f11ac9c4a80e266eb0b0de19f9fd132">More...</a><br /></td></tr>
+<tr class="separator:a6f11ac9c4a80e266eb0b0de19f9fd132"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab16e4a325ce34c7103b5a30bc4b7a719"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#ab16e4a325ce34c7103b5a30bc4b7a719">AddTable</a> (std::istream &amp;transStm)</td></tr>
+<tr class="memdesc:ab16e4a325ce34c7103b5a30bc4b7a719"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the contents of a translation table to the searchable groups/keys Also performs a verification, to ensure that the translation table is valid.  <a href="class_isis_1_1_pvl_translation_table.html#ab16e4a325ce34c7103b5a30bc4b7a719">More...</a><br /></td></tr>
+<tr class="separator:ab16e4a325ce34c7103b5a30bc4b7a719"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00fd572958a19aa633a3aaad94114ef9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#a00fd572958a19aa633a3aaad94114ef9">AddTable</a> (const QString &amp;transFile)</td></tr>
+<tr class="memdesc:a00fd572958a19aa633a3aaad94114ef9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the contents of a translation table to the searchable groups/keys.  <a href="class_isis_1_1_pvl_translation_table.html#a00fd572958a19aa633a3aaad94114ef9">More...</a><br /></td></tr>
+<tr class="separator:a00fd572958a19aa633a3aaad94114ef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:adf56d2df25fde2c4978562f68c4e1666"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#adf56d2df25fde2c4978562f68c4e1666">TranslationTable</a> ()</td></tr>
+<tr class="memdesc:adf56d2df25fde2c4978562f68c4e1666"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protected accessor for pvl translation table passed into class.  <a href="class_isis_1_1_pvl_translation_table.html#adf56d2df25fde2c4978562f68c4e1666">More...</a><br /></td></tr>
+<tr class="separator:adf56d2df25fde2c4978562f68c4e1666"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cec305825cdae89ca1e354ad73d8a9e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#a9cec305825cdae89ca1e354ad73d8a9e">TranslationTable</a> () const</td></tr>
+<tr class="memdesc:a9cec305825cdae89ca1e354ad73d8a9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protected accessor for const pvl translation table passed into class.  <a href="class_isis_1_1_pvl_translation_table.html#a9cec305825cdae89ca1e354ad73d8a9e">More...</a><br /></td></tr>
+<tr class="separator:a9cec305825cdae89ca1e354ad73d8a9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d419dd776e2816ef78c8cfa2aff5c3a"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; std::pair&lt; QString, int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#a4d419dd776e2816ef78c8cfa2aff5c3a">validKeywords</a> () const</td></tr>
+<tr class="memdesc:a4d419dd776e2816ef78c8cfa2aff5c3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of valid keyword names and their sizes.  <a href="class_isis_1_1_pvl_translation_table.html#a4d419dd776e2816ef78c8cfa2aff5c3a">More...</a><br /></td></tr>
+<tr class="separator:a4d419dd776e2816ef78c8cfa2aff5c3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76bc543f87ceec2e0c052e82149ac88d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#a76bc543f87ceec2e0c052e82149ac88d">hasInputDefault</a> (const QString translationGroupName)</td></tr>
+<tr class="memdesc:a76bc543f87ceec2e0c052e82149ac88d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the given group has a default input value.  <a href="class_isis_1_1_pvl_translation_table.html#a76bc543f87ceec2e0c052e82149ac88d">More...</a><br /></td></tr>
+<tr class="separator:a76bc543f87ceec2e0c052e82149ac88d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad728b522a1e3d007efa5b26e15de5557"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#ad728b522a1e3d007efa5b26e15de5557">IsAuto</a> (const QString translationGroupName)</td></tr>
+<tr class="memdesc:ad728b522a1e3d007efa5b26e15de5557"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the given group should be automatically translated.  <a href="class_isis_1_1_pvl_translation_table.html#ad728b522a1e3d007efa5b26e15de5557">More...</a><br /></td></tr>
+<tr class="separator:ad728b522a1e3d007efa5b26e15de5557"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a207c9d70080b3b86e0eb96281542ce54"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#a207c9d70080b3b86e0eb96281542ce54">IsOptional</a> (const QString translationGroupName)</td></tr>
+<tr class="memdesc:a207c9d70080b3b86e0eb96281542ce54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the translation group is optional.  <a href="class_isis_1_1_pvl_translation_table.html#a207c9d70080b3b86e0eb96281542ce54">More...</a><br /></td></tr>
+<tr class="separator:a207c9d70080b3b86e0eb96281542ce54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25518761d31c32f53b537a0d628c18a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#a25518761d31c32f53b537a0d628c18a3">OutputPosition</a> (const QString translationGroupName)</td></tr>
+<tr class="memdesc:a25518761d31c32f53b537a0d628c18a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the OutputPosition <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> for the translation group with the given name.  <a href="class_isis_1_1_pvl_translation_table.html#a25518761d31c32f53b537a0d628c18a3">More...</a><br /></td></tr>
+<tr class="separator:a25518761d31c32f53b537a0d628c18a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0d7f3b3cb5d967ffb7a5db209df96e2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#aa0d7f3b3cb5d967ffb7a5db209df96e2">OutputName</a> (const QString translationGroupName)</td></tr>
+<tr class="memdesc:aa0d7f3b3cb5d967ffb7a5db209df96e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a string containing the value of the OutputName keyword for the translation group with the given name.  <a href="class_isis_1_1_pvl_translation_table.html#aa0d7f3b3cb5d967ffb7a5db209df96e2">More...</a><br /></td></tr>
+<tr class="separator:aa0d7f3b3cb5d967ffb7a5db209df96e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56fabd0d2c6b342175ab0478134c51a7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_translation_table.html#a56fabd0d2c6b342175ab0478134c51a7">findTranslationGroup</a> (const QString translationGroupName) const</td></tr>
+<tr class="memdesc:a56fabd0d2c6b342175ab0478134c51a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches for translation group with the given name.  <a href="class_isis_1_1_pvl_translation_table.html#a56fabd0d2c6b342175ab0478134c51a7">More...</a><br /></td></tr>
+<tr class="separator:a56fabd0d2c6b342175ab0478134c51a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Internalizes a translation table. </p>
+<p>This class internalizes an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> translation table and provides group/key searches and value translations. The group names listed are the output names used by applications to get the input names and values. There is only one level of groups and groups are not allowed to be nested. The Group names can NOT be repeated. OutputGroup is a comma delimited list of objects and/or groups in the input label. Traversing this list within the input label will lead to the correct level to find the input keyword. OutputKey is the keyword within the group which holds the information. OutputDefault is the value used if there is no value for the keyword. Translation is the output and corresponding input values. Translation may be repeated as needed. An example piece of a tranlation file: </p><div class="fragment"><div class="line"> Group = DataStart</div>
+<div class="line">   OutputKey = ^IMAGE</div>
+<div class="line">   OutputDefault = 1</div>
+<div class="line">   Translation = (*,*)</div>
+<div class="line"> EndGroup</div>
+<div class="line"> Group = DataFileRecordBytes</div>
+<div class="line">   OutputKey = RECORD_BYTES</div>
+<div class="line">   Translation = (*,*)</div>
+<div class="line"> EndGroup</div>
+<div class="line"> Group = CoreSamples</div>
+<div class="line">   OutputGroup = IMAGE</div>
+<div class="line">   OutputKey = LINE_SAMPLES</div>
+<div class="line">   Translation = (*,*)</div>
+<div class="line"> EndGroup</div>
+<div class="line"> Group = CorePixelType</div>
+<div class="line">   OutputGroup = IMAGE</div>
+<div class="line">   OutputKey = SAMPLE_TYPE</div>
+<div class="line">   OutputDefault = LSB_INTEGER</div>
+<div class="line">   Translation = (Integer,LSB_INTEGER)</div>
+<div class="line">   Translation = (Integer,MSB_INTEGER)</div>
+<div class="line">   Translation = (Integer,PC_INTEGER)</div>
+<div class="line">   Translation = (Integer,MAC_INTEGER)</div>
+<div class="line">   Translation = (Integer,SUN_INTEGER)</div>
+<div class="line">   Translation = (Integer,VAX_INTEGER)</div>
+<div class="line">   Translation = (Natural,UNSIGNED_INTEGER)</div>
+<div class="line">   Translation = (Natural,LSB_UNSIGNED_INTEGER)</div>
+<div class="line">   Translation = (Natural,MSB_UNSIGNED_INTEGER)</div>
+<div class="line"> EndGroup</div>
+<div class="line"> Group = CoreOrganization</div>
+<div class="line">   OutputGroup = IMAGE</div>
+<div class="line">   OutputKey = BAND_STORAGE_TYPE</div>
+<div class="line">   OutputDefault = BAND_SEQUENTIAL</div>
+<div class="line">   Translation = (BSQ,BAND_SEQUENTIAL)</div>
+<div class="line">   Translation = (BIL,LINE_INTERLEAVED)</div>
+<div class="line">   Translation = (BIP,SAMPLE_INTERLEAVED)</div>
+<div class="line"> EndGroup</div>
+<div class="line">End</div>
+</div><!-- fragment --><dl class="section author"><dt>Author</dt><dd>2003-05-01 Stuart Sides </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af0d19005098e15a4e9a9d9187eb694c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0d19005098e15a4e9a9d9187eb694c4">&#9670;&nbsp;</a></span>PvlTranslationTable() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlTranslationTable::PvlTranslationTable </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td>
+          <td class="paramname"><em>transFile</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs and initializes a <a class="el" href="class_isis_1_1_pvl_translation_table.html" title="Internalizes a translation table.">PvlTranslationTable</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transFile</td><td>The translation file to be used. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>.</p>
+
+</div>
+</div>
+<a id="a0e8b9a31650eaa1e4b07038679084d66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e8b9a31650eaa1e4b07038679084d66">&#9670;&nbsp;</a></span>PvlTranslationTable() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlTranslationTable::PvlTranslationTable </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>istr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs and initializes a <a class="el" href="class_isis_1_1_pvl_translation_table.html" title="Internalizes a translation table.">PvlTranslationTable</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">istr</td><td>The translation stream to be used to translate values </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a00865ae35f0561b2356c8184d9b15aa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00865ae35f0561b2356c8184d9b15aa1">&#9670;&nbsp;</a></span>PvlTranslationTable() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlTranslationTable::PvlTranslationTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct an empty <a class="el" href="class_isis_1_1_pvl_translation_table.html" title="Internalizes a translation table.">PvlTranslationTable</a>. </p>
+
+</div>
+</div>
+<a id="a8d9692a801ccf33421ad0c77bcbdd2b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d9692a801ccf33421ad0c77bcbdd2b7">&#9670;&nbsp;</a></span>~PvlTranslationTable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlTranslationTable::~PvlTranslationTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destroys the <a class="el" href="class_isis_1_1_pvl_translation_table.html" title="Internalizes a translation table.">PvlTranslationTable</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a00fd572958a19aa633a3aaad94114ef9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00fd572958a19aa633a3aaad94114ef9">&#9670;&nbsp;</a></span>AddTable() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PvlTranslationTable::AddTable </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>transFile</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds the contents of a translation table to the searchable groups/keys. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transFile</td><td>The name of the translation file to be added. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl.html#a869e6c9dccd4603617236927d09f96ab">Isis::Pvl::read()</a>.</p>
+
+</div>
+</div>
+<a id="ab16e4a325ce34c7103b5a30bc4b7a719"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab16e4a325ce34c7103b5a30bc4b7a719">&#9670;&nbsp;</a></span>AddTable() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PvlTranslationTable::AddTable </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>transStm</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds the contents of a translation table to the searchable groups/keys Also performs a verification, to ensure that the translation table is valid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transStm</td><td>The stream to be added.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>- "Unable to find InputKey for group 
+                          in translation file." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>- "Keyword is not valid. Error in file." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>- "Keyword does not have correct number of elements.
+                            Error in file." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a911cac3dac4b78c792488400c6d16775">Isis::PvlContainer::keywords()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">Isis::PvlContainer::name()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#a297f07b8935a1f8752a45a5c77ee7ffa">Isis::PvlKeyword::name()</a>, and <a class="el" href="class_isis_1_1_pvl_keyword.html#a2c88473ba977e24be39e95a3ac4f29c8">Isis::PvlKeyword::size()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_label_translation_manager.html#aaebbc15449d8f038d9315798e9429110">Isis::LabelTranslationManager::LabelTranslationManager()</a>, and <a class="el" href="class_isis_1_1_xml_to_pvl_translation_manager.html#ad87ecbc04bdf1dce1de9530f1e91ac05">Isis::XmlToPvlTranslationManager::XmlToPvlTranslationManager()</a>.</p>
+
+</div>
+</div>
+<a id="a56fabd0d2c6b342175ab0478134c51a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56fabd0d2c6b342175ab0478134c51a7">&#9670;&nbsp;</a></span>findTranslationGroup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp; Isis::PvlTranslationTable::findTranslationGroup </td>
+          <td>(</td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>translationGroupName</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Searches for translation group with the given name. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38" title="Find a group with the specified name, within these indexes.">PvlObject::findGroup()</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">translationGroupName</td><td>The name of the PVL translation group used to identify the input/output keywords to be translated. Often, this is the same as the output keyword name.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a>&amp; The first PVL group with the given name.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- "Unable to find translation 
+                  group in file." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_pvl_container.html#a6cdb4c84baf37ecc870517b6c23ebe6d">Isis::PvlContainer::fileName()</a>.</p>
+
+</div>
+</div>
+<a id="a76bc543f87ceec2e0c052e82149ac88d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76bc543f87ceec2e0c052e82149ac88d">&#9670;&nbsp;</a></span>hasInputDefault()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::PvlTranslationTable::hasInputDefault </td>
+          <td>(</td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>translationGroupName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determines whether the given group has a default input value. </p>
+<p>This method returns true if the translation group contains a <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> with the name "InputDefault". Note: no value needs to be assigned to this keyword.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">translationGroupName</td><td>The name of the PVL translation group used to identify the input/output keywords to be translated. Often, this is the same as the output keyword name.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Indicates whether the given group has an InputDefault keyword. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_xml_to_pvl_translation_manager.html#a58b1304e7887a7b52b81baff309b4bd9">Isis::XmlToPvlTranslationManager::Translate()</a>.</p>
+
+</div>
+</div>
+<a id="adf9fa42539fbcb1375084754abb71fd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf9fa42539fbcb1375084754abb71fd7">&#9670;&nbsp;</a></span>InputDefault()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlTranslationTable::InputDefault </td>
+          <td>(</td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>translationGroupName</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the input default value from the translation table corresponding to the output name argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">translationGroupName</td><td>The name of the PVL translation group used to identify the input/output keywords to be translated. Often, this is the same as the output keyword name.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString The input default value. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_xml_to_pvl_translation_manager.html#a58b1304e7887a7b52b81baff309b4bd9">Isis::XmlToPvlTranslationManager::Translate()</a>.</p>
+
+</div>
+</div>
+<a id="acaf6af737dfce72c852fadf2577c1012"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acaf6af737dfce72c852fadf2577c1012">&#9670;&nbsp;</a></span>InputGroup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> Isis::PvlTranslationTable::InputGroup </td>
+          <td>(</td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>translationGroupName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>inst</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the input group name from the translation table corresponding to the output name argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">translationGroupName</td><td>The name of the PVL translation group used to identify the input/output keywords to be translated. Often, this is the same as the output keyword name. </td></tr>
+    <tr><td class="paramname">inst</td><td>The occurence number of the "InputGroup" keyword (first one is zero)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString The input group name</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- "Keyword [InputPosition] cannot have a comma [,] 
+                                  in the value." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a676040b7d08e97e2806b432db00588f8">Isis::PvlContainer::begin()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">Isis::PvlContainer::end()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#aec162efdd61490e50dc5211e7f97469b">Isis::PvlContainer::findKeyword()</a>, and <a class="el" href="class_isis_1_1_pvl_keyword.html#a2c88473ba977e24be39e95a3ac4f29c8">Isis::PvlKeyword::size()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#a5bbfdcc7ddbe916d64edff0db2d7e294">Isis::PvlToPvlTranslationManager::DoTranslation()</a>, <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a2dc0524f154363c1f4802906125b5cd4">Isis::PvlToXmlTranslationManager::doTranslation()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#adb6cbbd2becd56da14daa00e558602f1">Isis::PvlToPvlTranslationManager::InputHasKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a622d00573867bb7738f0b86ac2900f22">Isis::PvlToXmlTranslationManager::InputHasKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#a5bd6b8819290a5b2f4793918b169b5df">Isis::PvlToPvlTranslationManager::InputKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#ab007e584bdbe996c298d3e8f8094dfc6">Isis::PvlToXmlTranslationManager::InputKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#aa2082a22d74679abd39a88b663e26e32">Isis::PvlToPvlTranslationManager::Translate()</a>, and <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a6ac8b0611372319ad36e5fbdf68a91e8">Isis::PvlToXmlTranslationManager::Translate()</a>.</p>
+
+</div>
+</div>
+<a id="aca8186ec886d95d765ae0f5a7a808e7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca8186ec886d95d765ae0f5a7a808e7d">&#9670;&nbsp;</a></span>InputKeywordName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlTranslationTable::InputKeywordName </td>
+          <td>(</td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>translationGroupName</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the input keyword name from the translation table corresponding to the output name argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">translationGroupName</td><td>The name of the PVL translation group used to identify the input/output keywords to be translated. Often, this is the same as the output keyword name.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString The input keyword name</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a2dc0524f154363c1f4802906125b5cd4">Isis::PvlToXmlTranslationManager::doTranslation()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#adb6cbbd2becd56da14daa00e558602f1">Isis::PvlToPvlTranslationManager::InputHasKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a622d00573867bb7738f0b86ac2900f22">Isis::PvlToXmlTranslationManager::InputHasKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#a5bd6b8819290a5b2f4793918b169b5df">Isis::PvlToPvlTranslationManager::InputKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#ab007e584bdbe996c298d3e8f8094dfc6">Isis::PvlToXmlTranslationManager::InputKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#aa2082a22d74679abd39a88b663e26e32">Isis::PvlToPvlTranslationManager::Translate()</a>, and <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a6ac8b0611372319ad36e5fbdf68a91e8">Isis::PvlToXmlTranslationManager::Translate()</a>.</p>
+
+</div>
+</div>
+<a id="ad728b522a1e3d007efa5b26e15de5557"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad728b522a1e3d007efa5b26e15de5557">&#9670;&nbsp;</a></span>IsAuto()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::PvlTranslationTable::IsAuto </td>
+          <td>(</td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>translationGroupName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determines whether the given group should be automatically translated. </p>
+<p>This method returns true if the translation group contains a <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> with the name "Auto". Note: no value is assigned to this keyword.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">translationGroupName</td><td>The name of the PVL translation group used to identify the input/output keywords to be translated. Often, this is the same as the output keyword name.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Indicates whether the given group has an Auto keyword. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_label_translation_manager.html#a92c40f9c662d0cadc095f54a711cfec5">Isis::LabelTranslationManager::Auto()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#af8d0f25edf1cbcc35071b1365a6ecc73">Isis::PvlToPvlTranslationManager::Auto()</a>, and <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#abffc7fe125e2c9961230793d533e784d">Isis::PvlToXmlTranslationManager::Auto()</a>.</p>
+
+</div>
+</div>
+<a id="a207c9d70080b3b86e0eb96281542ce54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a207c9d70080b3b86e0eb96281542ce54">&#9670;&nbsp;</a></span>IsOptional()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::PvlTranslationTable::IsOptional </td>
+          <td>(</td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>translationGroupName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determines whether the translation group is optional. </p>
+<p>This method returns true if the translation group contains a <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> with the name "Optional". Note: no value is assigned to this keyword.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">translationGroupName</td><td>The name of the PVL translation group used to identify the input/output keywords to be translated. Often, this is the same as the output keyword name.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Indicates whether the given group has an Optional keyword. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_label_translation_manager.html#a92c40f9c662d0cadc095f54a711cfec5">Isis::LabelTranslationManager::Auto()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#af8d0f25edf1cbcc35071b1365a6ecc73">Isis::PvlToPvlTranslationManager::Auto()</a>, and <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#abffc7fe125e2c9961230793d533e784d">Isis::PvlToXmlTranslationManager::Auto()</a>.</p>
+
+</div>
+</div>
+<a id="aa0d7f3b3cb5d967ffb7a5db209df96e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0d7f3b3cb5d967ffb7a5db209df96e2">&#9670;&nbsp;</a></span>OutputName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlTranslationTable::OutputName </td>
+          <td>(</td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>translationGroupName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves a string containing the value of the OutputName keyword for the translation group with the given name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">translationGroupName</td><td>The name of the PVL translation group used to identify the input/output keywords to be translated. Often, this is the same as the output keyword name.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The value of the OutputName keyword from the given translation group. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#a5bbfdcc7ddbe916d64edff0db2d7e294">Isis::PvlToPvlTranslationManager::DoTranslation()</a>, and <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a2dc0524f154363c1f4802906125b5cd4">Isis::PvlToXmlTranslationManager::doTranslation()</a>.</p>
+
+</div>
+</div>
+<a id="a25518761d31c32f53b537a0d628c18a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25518761d31c32f53b537a0d628c18a3">&#9670;&nbsp;</a></span>OutputPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> Isis::PvlTranslationTable::OutputPosition </td>
+          <td>(</td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>translationGroupName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the OutputPosition <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> for the translation group with the given name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">translationGroupName</td><td>The name of the PVL translation group used to identify the input/output keywords to be translated. Often, this is the same as the output keyword name.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> The OutputPosition keyword from the given translation group.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- "Unable to find translation keyword [OutputPostion]
+                                  in translation group in file." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_label_translation_manager.html#ae9cffec039e471205e2414963e5ff563">Isis::LabelTranslationManager::CreateContainer()</a>, and <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a4639dd504dcc5c54754b4d4ce0ed1e45">Isis::PvlToXmlTranslationManager::createParentElements()</a>.</p>
+
+</div>
+</div>
+<a id="a6f11ac9c4a80e266eb0b0de19f9fd132"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f11ac9c4a80e266eb0b0de19f9fd132">&#9670;&nbsp;</a></span>Translate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlTranslationTable::Translate </td>
+          <td>(</td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>translationGroupName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>inputKeyValue</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Translates a single output value from the given translation group name and input value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">translationGroupName</td><td>The name of the PVL translation group used to identify the input/output keywords to be translated. Often, this is the same as the output keyword name. </td></tr>
+    <tr><td class="paramname">inputKeyValue</td><td>The value to be translated, from the input keyword.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString The translated value, for the output keyword.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- "No value or default value to translate 
+                                 for translation group." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- "Unable to find translation value in file." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a676040b7d08e97e2806b432db00588f8">Isis::PvlContainer::begin()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">Isis::PvlContainer::end()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a6cdb4c84baf37ecc870517b6c23ebe6d">Isis::PvlContainer::fileName()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#aec162efdd61490e50dc5211e7f97469b">Isis::PvlContainer::findKeyword()</a>, and <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#a5bbfdcc7ddbe916d64edff0db2d7e294">Isis::PvlToPvlTranslationManager::DoTranslation()</a>, <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a2dc0524f154363c1f4802906125b5cd4">Isis::PvlToXmlTranslationManager::doTranslation()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#aa2082a22d74679abd39a88b663e26e32">Isis::PvlToPvlTranslationManager::Translate()</a>, <a class="el" href="class_isis_1_1_xml_to_pvl_translation_manager.html#a58b1304e7887a7b52b81baff309b4bd9">Isis::XmlToPvlTranslationManager::Translate()</a>, and <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a6ac8b0611372319ad36e5fbdf68a91e8">Isis::PvlToXmlTranslationManager::Translate()</a>.</p>
+
+</div>
+</div>
+<a id="adf56d2df25fde2c4978562f68c4e1666"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf56d2df25fde2c4978562f68c4e1666">&#9670;&nbsp;</a></span>TranslationTable() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp; Isis::PvlTranslationTable::TranslationTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Protected accessor for pvl translation table passed into class. </p>
+<p>This method returns a reference to the translation table member.</p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a></b> The translation table as a PVL object. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_label_translation_manager.html#a92c40f9c662d0cadc095f54a711cfec5">Isis::LabelTranslationManager::Auto()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#af8d0f25edf1cbcc35071b1365a6ecc73">Isis::PvlToPvlTranslationManager::Auto()</a>, <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#abffc7fe125e2c9961230793d533e784d">Isis::PvlToXmlTranslationManager::Auto()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#a5bbfdcc7ddbe916d64edff0db2d7e294">Isis::PvlToPvlTranslationManager::DoTranslation()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#a5bd6b8819290a5b2f4793918b169b5df">Isis::PvlToPvlTranslationManager::InputKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#ab007e584bdbe996c298d3e8f8094dfc6">Isis::PvlToXmlTranslationManager::InputKeyword()</a>, and <a class="el" href="class_isis_1_1_xml_to_pvl_translation_manager.html#a58b1304e7887a7b52b81baff309b4bd9">Isis::XmlToPvlTranslationManager::Translate()</a>.</p>
+
+</div>
+</div>
+<a id="a9cec305825cdae89ca1e354ad73d8a9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cec305825cdae89ca1e354ad73d8a9e">&#9670;&nbsp;</a></span>TranslationTable() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp; Isis::PvlTranslationTable::TranslationTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Protected accessor for const pvl translation table passed into class. </p>
+<p>This method returns a <b>const</b> reference to the translation table member.</p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a></b> The translation table as a PVL object. </dd></dl>
+
+</div>
+</div>
+<a id="a4d419dd776e2816ef78c8cfa2aff5c3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d419dd776e2816ef78c8cfa2aff5c3a">&#9670;&nbsp;</a></span>validKeywords()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; pair&lt; QString, int &gt; &gt; Isis::PvlTranslationTable::validKeywords </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a vector of valid keyword names and their sizes. </p>
+<p>A size of -1 indicates that the keyword can be any size.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>vector&lt;pair&lt;QString,int&gt;&gt;</b> A vector of valid keyword names and their sizes. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_xml_to_pvl_translation_manager.html#a131eeb79a2e66499fd69c29c27cf82ac">Isis::XmlToPvlTranslationManager</a>, and <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a830905e88a78bd7fbaccb04c09cda613">Isis::PvlToXmlTranslationManager</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_to_xml_translation_manager.html#a830905e88a78bd7fbaccb04c09cda613">Isis::PvlToXmlTranslationManager::validKeywords()</a>, and <a class="el" href="class_isis_1_1_xml_to_pvl_translation_manager.html#a131eeb79a2e66499fd69c29c27cf82ac">Isis::XmlToPvlTranslationManager::validKeywords()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/PvlTranslationTable/<a class="el" href="_pvl_translation_table_8h_source.html">PvlTranslationTable.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/PvlTranslationTable/<a class="el" href="_pvl_translation_table_8cpp.html">PvlTranslationTable.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_pvl_translation_table.html">PvlTranslationTable</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

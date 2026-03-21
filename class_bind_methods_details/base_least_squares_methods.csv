@@ -1,0 +1,24 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+LeastSquares,Math,isis/src/base/objs/LeastSquares/LeastSquares.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,LeastSquares,isis_pybind.LeastSquares,N,Python class symbol not found in current binding files
+Construction/Enum,"SolveMethod enum (SVD, QRD, SPARSE)",isis_pybind.LeastSquares.SolveMethod,N,Enum exposure not detected in current binding files
+Construction/Enum,LeastSquares(),isis_pybind.LeastSquares(),N,Constructor binding not detected in current binding files
+Mutation/Configuration,"void AddKnown(const std::vector<double> &input, double expected, double weight = 1.0)",isis_pybind.LeastSquares.add_known,N,Method not found in current binding files
+Public API,std::vector<double> GetInput(int row) const,isis_pybind.LeastSquares.get_input,N,Method not found in current binding files
+Public API,double GetExpected(int row) const,isis_pybind.LeastSquares.get_expected,N,Method not found in current binding files
+Public API,int Rows() const,isis_pybind.LeastSquares.rows,N,Method not found in current binding files
+Public API,int Solve(Isis::LeastSquares::SolveMethod method = SVD),isis_pybind.LeastSquares.solve,N,Method not found in current binding files
+Public API,double Evaluate(const std::vector<double> &input),isis_pybind.LeastSquares.evaluate,N,Method not found in current binding files
+Public API,std::vector<double> Residuals() const,isis_pybind.LeastSquares.residuals,N,Method not found in current binding files
+Public API,double Residual(int i) const,isis_pybind.LeastSquares.residual,N,Method not found in current binding files
+Public API,"void Weight(int index, double weight)",isis_pybind.LeastSquares.weight,N,Method not found in current binding files
+Public API,int Knowns() const { return p_expected.size(),isis_pybind.LeastSquares.knowns,N,Method not found in current binding files
+Public API,double GetSigma0() { return p_sigma0; },isis_pybind.LeastSquares.get_sigma0,N,Method not found in current binding files
+Public API,int GetDegreesOfFreedom() { return p_degreesOfFreedom; },isis_pybind.LeastSquares.get_degrees_of_freedom,N,Method not found in current binding files
+Public API,void Reset (),isis_pybind.LeastSquares.reset,N,Method not found in current binding files
+Public API,void ResetSparse() { Reset(); },isis_pybind.LeastSquares.reset_sparse,N,Method not found in current binding files
+Public API,std::vector<double> GetEpsilons () const { return p_epsilonsSparse; },isis_pybind.LeastSquares.get_epsilons,N,Method not found in current binding files
+Mutation/Configuration,void SetParameterWeights(const std::vector<double> weights) { p_parameterWeights = weights; },isis_pybind.LeastSquares.set_parameter_weights,N,Method not found in current binding files
+Mutation/Configuration,void SetNumberOfConstrainedParameters(int n) { p_constrainedParameters = n; },isis_pybind.LeastSquares.set_number_of_constrained_parameters,N,Method not found in current binding files

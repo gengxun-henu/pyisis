@@ -1,0 +1,79 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Cube,Low Level Cube I/O,isis/src/base/objs/Cube/Cube.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp; isis_pybind_standalone/src/bind_cube.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Cube,isis_pybind.Cube,Y,Python class symbol is exported; Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Construction/Enum,"Format enum (Bsq, Tile)",isis_pybind.Cube.Format,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Construction/Enum,Cube(),isis_pybind.Cube(),Y,Constructor is explicitly bound
+Public API,"void fromIsd(const FileName &fileName, Pvl &label, nlohmann::json &isd, QString access)",isis_pybind.Cube.from_isd,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,"void fromIsd(const FileName &fileName, FileName &labelFile, FileName &isdFile, QString access)",isis_pybind.Cube.from_isd,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,"void fromLabel(const FileName &fileName, Pvl &label, QString access)",isis_pybind.Cube.from_label,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Query,bool isOpen() const,isis_pybind.Cube.is_open,Y,Current Python name
+Query,bool isProjected() const,isis_pybind.Cube.is_projected,Y,Current Python name
+Query,bool isReadOnly() const,isis_pybind.Cube.is_read_only,Y,Current Python name
+Query,bool isReadWrite() const,isis_pybind.Cube.is_read_write,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,bool labelsAttached() const,isis_pybind.Cube.labels_attached,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void attachSpiceFromIsd(nlohmann::json Isd),isis_pybind.Cube.attach_spice_from_isd,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void attachLineScanTableFromIsd(nlohmann::json isd),isis_pybind.Cube.attach_line_scan_table_from_isd,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,void close(bool remove = false),isis_pybind.Cube.close,Y,Current Python name
+Public API,"Cube *copy(FileName newFile, const CubeAttributeOutput &newFileAttributes)",isis_pybind.Cube.copy,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Static/Factory,void create(const QString &cfile),isis_pybind.Cube.create,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Static/Factory,"void create(const QString &cfile, const CubeAttributeOutput &att)",isis_pybind.Cube.create,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,"void open(const QString &cfile, QString access = ""r"")",isis_pybind.Cube.open,Y,Current Python name
+Public API,"void reopen(QString access = ""r"")",isis_pybind.Cube.reopen,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,void read(Buffer &rbuf) const,isis_pybind.Cube.read,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,"OriginalLabel readOriginalLabel(const QString &name=""IsisCube"") const",isis_pybind.Cube.read_original_label,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,OriginalXmlLabel readOriginalXmlLabel() const,isis_pybind.Cube.read_original_xml_label,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,"History readHistory(const QString &name = ""IsisCube"") const",isis_pybind.Cube.read_history,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,ImagePolygon readFootprint() const,isis_pybind.Cube.read_footprint,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,Table readTable(const QString &name),isis_pybind.Cube.read_table,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,"void write(Blob &blob, bool overwrite=true)",isis_pybind.Cube.write,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,void write(const Table &table),isis_pybind.Cube.write,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,void write(const CubeStretch &cubeStretch),isis_pybind.Cube.write,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,void write(OriginalLabel &lab),isis_pybind.Cube.write,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,void write(const OriginalXmlLabel &lab),isis_pybind.Cube.write,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,"void write(History &history, const QString &name = ""IsisCube"")",isis_pybind.Cube.write,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,void write(const ImagePolygon &polygon),isis_pybind.Cube.write,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Read/Write IO,void write(Buffer &wbuf),isis_pybind.Cube.write,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,"void setBaseMultiplier(double base, double mult)",isis_pybind.Cube.set_base_multiplier,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,"void setMinMax(double min, double max)",isis_pybind.Cube.set_min_max,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void setByteOrder(ByteOrder byteOrder),isis_pybind.Cube.set_byte_order,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,"void setDimensions(int ns, int nl, int nb)",isis_pybind.Cube.set_dimensions,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void setExternalDnData(FileName cubeFileWithDnData),isis_pybind.Cube.set_external_dn_data,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void setFormat(Format format),isis_pybind.Cube.set_format,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void setLabelsAttached(bool attached),isis_pybind.Cube.set_labels_attached,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void setLabelSize(int labelBytes),isis_pybind.Cube.set_label_size,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void setPixelType(PixelType pixelType),isis_pybind.Cube.set_pixel_type,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void setVirtualBands(const QList<QString> &vbands),isis_pybind.Cube.set_virtual_bands,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void setVirtualBands(const std::vector<QString> &vbands),isis_pybind.Cube.set_virtual_bands,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,void relocateDnData(FileName dnDataFile),isis_pybind.Cube.relocate_dn_data,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,virtual int bandCount() const,isis_pybind.Cube.band_count,Y,Current Python name
+Public API,double base() const,isis_pybind.Cube.base,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,ByteOrder byteOrder() const,isis_pybind.Cube.byte_order,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,Camera *camera(),isis_pybind.Cube.camera,Y,Current Python name
+Public API,FileName externalCubeFileName() const,isis_pybind.Cube.external_cube_file_name,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,virtual QString fileName() const,isis_pybind.Cube.file_name,Y,Current Python name
+Public API,Format format() const,isis_pybind.Cube.format,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,"virtual Histogram *histogram(const int &band = 1, QString msg = ""Gathering histogram"")",isis_pybind.Cube.histogram,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,"virtual Histogram *histogram(const int &band, const double &validMin, const double &validMax, QString msg = ""Gathering histogram"")",isis_pybind.Cube.histogram,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,Pvl *label() const,isis_pybind.Cube.label,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,int labelSize(bool actual = false) const,isis_pybind.Cube.label_size,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,int lineCount() const,isis_pybind.Cube.line_count,Y,Current Python name
+Public API,double multiplier() const,isis_pybind.Cube.multiplier,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,PixelType pixelType() const,isis_pybind.Cube.pixel_type,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,virtual int physicalBand(const int &virtualBand) const,isis_pybind.Cube.physical_band,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,Projection *projection(),isis_pybind.Cube.projection,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,int sampleCount() const,isis_pybind.Cube.sample_count,Y,Current Python name
+Public API,"Statistics *statistics(const int &band = 1, QString msg = ""Gathering statistics"")",isis_pybind.Cube.statistics,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,"Statistics *statistics(const int &band, const double &validMin, const double &validMax, QString msg = ""Gathering statistics"")",isis_pybind.Cube.statistics,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,bool storesDnData() const,isis_pybind.Cube.stores_dn_data,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void addCachingAlgorithm(CubeCachingAlgorithm *),isis_pybind.Cube.add_caching_algorithm,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void clearIoCache(),isis_pybind.Cube.clear_io_cache,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,"bool deleteBlob(QString BlobName, QString BlobType)",isis_pybind.Cube.delete_blob,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void deleteGroup(const QString &group),isis_pybind.Cube.delete_group,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,PvlGroup &group(const QString &group) const,isis_pybind.Cube.group,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Query,bool hasGroup(const QString &group) const,isis_pybind.Cube.has_group,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Query,bool hasTable(const QString &name),isis_pybind.Cube.has_table,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Query,"bool hasBlob(const QString &name, const QString &type)",isis_pybind.Cube.has_blob,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Mutation/Configuration,void putGroup(const PvlGroup &group),isis_pybind.Cube.put_group,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Public API,"void latLonRange(double &minLatitude, double &maxLatitude, double &minLongitude, double &maxLongitude)",isis_pybind.Cube.lat_lon_range,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射

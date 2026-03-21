@@ -1,0 +1,17 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ObliqueCylindrical,Map Projection,isis/src/base/objs/ObliqueCylindrical/ObliqueCylindrical.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ObliqueCylindrical,isis_pybind.ObliqueCylindrical,N,Python class symbol not found in current binding files
+Construction/Enum,ObliqueCylindrical(),isis_pybind.ObliqueCylindrical(),N,Constructor binding not detected in current binding files
+Public API,QString Name() const,isis_pybind.ObliqueCylindrical.name,N,Method not found in current binding files
+Public API,QString Version() const,isis_pybind.ObliqueCylindrical.version,N,Method not found in current binding files
+Mutation/Configuration,"bool SetGround(const double lat, const double lon)",isis_pybind.ObliqueCylindrical.set_ground,N,Method not found in current binding files
+Mutation/Configuration,"bool SetCoordinate(const double x, const double y)",isis_pybind.ObliqueCylindrical.set_coordinate,N,Method not found in current binding files
+Public API,"bool XYRange(double &minX, double &maxX, double &minY, double &maxY)",isis_pybind.ObliqueCylindrical.xy_range,N,Method not found in current binding files
+Public API,PvlGroup Mapping(),isis_pybind.ObliqueCylindrical.mapping,N,Method not found in current binding files
+Public API,PvlGroup MappingLatitudes(),isis_pybind.ObliqueCylindrical.mapping_latitudes,N,Method not found in current binding files
+Public API,PvlGroup MappingLongitudes(),isis_pybind.ObliqueCylindrical.mapping_longitudes,N,Method not found in current binding files
+Public API,double poleLatitude() const,isis_pybind.ObliqueCylindrical.pole_latitude,N,Method not found in current binding files
+Public API,double poleLongitude() const,isis_pybind.ObliqueCylindrical.pole_longitude,N,Method not found in current binding files
+Public API,double poleRotation() const,isis_pybind.ObliqueCylindrical.pole_rotation,N,Method not found in current binding files

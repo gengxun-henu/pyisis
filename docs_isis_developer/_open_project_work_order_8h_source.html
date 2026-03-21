@@ -1,0 +1,294 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/Directory/OpenProjectWorkOrder.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_open_project_work_order_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">OpenProjectWorkOrder.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_open_project_work_order_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef OpenProjectWorkOrder_H</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define OpenProjectWorkOrder_H</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_work_order_8h.html">WorkOrder.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">class </span>QString;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="class_isis_1_1_open_project_work_order.html">   56</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_open_project_work_order.html">OpenProjectWorkOrder</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_work_order.html">WorkOrder</a> {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;      <a class="code" href="class_isis_1_1_open_project_work_order.html#acef74dfc2af9440d8d28d50b16678af0">OpenProjectWorkOrder</a>(<a class="code" href="class_isis_1_1_project.html">Project</a> *<a class="code" href="class_isis_1_1_work_order.html#aba48b35a2329e2bc3dd3f7cc98e36ccc">project</a>);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      <a class="code" href="class_isis_1_1_open_project_work_order.html#acef74dfc2af9440d8d28d50b16678af0">OpenProjectWorkOrder</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_open_project_work_order.html">OpenProjectWorkOrder</a> &amp;other);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      <a class="code" href="class_isis_1_1_open_project_work_order.html#abc86a0ad5d7e6666e329d9f0ea749d77">~OpenProjectWorkOrder</a>();</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_open_project_work_order.html">OpenProjectWorkOrder</a> *<a class="code" href="class_isis_1_1_open_project_work_order.html#aa2240a5cebbffac0a4c65b8ae8c977b9">clone</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_open_project_work_order.html#a4e4922c5ead5d48350335038b1e32981">isExecutable</a>(QString projectFileName, <span class="keywordtype">bool</span> recentProject=<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_open_project_work_order.html#a71d10358e371a68c7d61f60d1f537047">setupExecution</a>();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_open_project_work_order.html#a8617d7ad8a543dad7fd7dff57f24b3cf">execute</a>();</div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="class_isis_1_1_open_project_work_order.html#ac72cbc7647ab64a336f84d9bf4874bc2">   69</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_open_project_work_order.html#ac72cbc7647ab64a336f84d9bf4874bc2">setRecent</a>(<span class="keywordtype">bool</span> isRecent);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    signals:</div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="class_isis_1_1_open_project_work_order.html#a42e0a3e1a80c021e0b1e68c7c4dec77d">   72</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_open_project_work_order.html#a42e0a3e1a80c021e0b1e68c7c4dec77d">openProjectFromCommandLine</a>(QString);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      <a class="code" href="class_isis_1_1_open_project_work_order.html">OpenProjectWorkOrder</a> &amp;operator=(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_open_project_work_order.html">OpenProjectWorkOrder</a> &amp;rhs);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <span class="keywordtype">bool</span> m_recentProject;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      <span class="keywordtype">bool</span> m_startingState;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      QString m_projectPath;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  };</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;}</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// OpenProjectWorkOrder_H</span></div>
+<div class="ttc" id="a_work_order_8h_html"><div class="ttname"><a href="_work_order_8h.html">WorkOrder.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_open_project_work_order_html"><div class="ttname"><a href="class_isis_1_1_open_project_work_order.html">Isis::OpenProjectWorkOrder</a></div><div class="ttdoc">This opens a project that's saved on disk.</div><div class="ttdef"><b>Definition:</b> OpenProjectWorkOrder.h:56</div></div>
+<div class="ttc" id="aclass_isis_1_1_open_project_work_order_html_a42e0a3e1a80c021e0b1e68c7c4dec77d"><div class="ttname"><a href="class_isis_1_1_open_project_work_order.html#a42e0a3e1a80c021e0b1e68c7c4dec77d">Isis::OpenProjectWorkOrder::openProjectFromCommandLine</a></div><div class="ttdeci">void openProjectFromCommandLine(QString)</div></div>
+<div class="ttc" id="aclass_isis_1_1_open_project_work_order_html_a4e4922c5ead5d48350335038b1e32981"><div class="ttname"><a href="class_isis_1_1_open_project_work_order.html#a4e4922c5ead5d48350335038b1e32981">Isis::OpenProjectWorkOrder::isExecutable</a></div><div class="ttdeci">bool isExecutable(QString projectFileName, bool recentProject=false)</div><div class="ttdoc">This function determines if the given project file name can be opened.</div><div class="ttdef"><b>Definition:</b> OpenProjectWorkOrder.cpp:103</div></div>
+<div class="ttc" id="aclass_isis_1_1_open_project_work_order_html_a71d10358e371a68c7d61f60d1f537047"><div class="ttname"><a href="class_isis_1_1_open_project_work_order.html#a71d10358e371a68c7d61f60d1f537047">Isis::OpenProjectWorkOrder::setupExecution</a></div><div class="ttdeci">bool setupExecution()</div><div class="ttdoc">Setup this WorkOrder for execution, deleting the progress bar, determine if there is a current projec...</div><div class="ttdef"><b>Definition:</b> OpenProjectWorkOrder.cpp:120</div></div>
+<div class="ttc" id="aclass_isis_1_1_open_project_work_order_html_a8617d7ad8a543dad7fd7dff57f24b3cf"><div class="ttname"><a href="class_isis_1_1_open_project_work_order.html#a8617d7ad8a543dad7fd7dff57f24b3cf">Isis::OpenProjectWorkOrder::execute</a></div><div class="ttdeci">void execute()</div><div class="ttdoc">Open the chosen project folder.</div><div class="ttdef"><b>Definition:</b> OpenProjectWorkOrder.cpp:175</div></div>
+<div class="ttc" id="aclass_isis_1_1_open_project_work_order_html_aa2240a5cebbffac0a4c65b8ae8c977b9"><div class="ttname"><a href="class_isis_1_1_open_project_work_order.html#aa2240a5cebbffac0a4c65b8ae8c977b9">Isis::OpenProjectWorkOrder::clone</a></div><div class="ttdeci">virtual OpenProjectWorkOrder * clone() const</div><div class="ttdoc">Clones the current OpenProjectWorkOrder.</div><div class="ttdef"><b>Definition:</b> OpenProjectWorkOrder.cpp:92</div></div>
+<div class="ttc" id="aclass_isis_1_1_open_project_work_order_html_abc86a0ad5d7e6666e329d9f0ea749d77"><div class="ttname"><a href="class_isis_1_1_open_project_work_order.html#abc86a0ad5d7e6666e329d9f0ea749d77">Isis::OpenProjectWorkOrder::~OpenProjectWorkOrder</a></div><div class="ttdeci">~OpenProjectWorkOrder()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> OpenProjectWorkOrder.cpp:82</div></div>
+<div class="ttc" id="aclass_isis_1_1_open_project_work_order_html_ac72cbc7647ab64a336f84d9bf4874bc2"><div class="ttname"><a href="class_isis_1_1_open_project_work_order.html#ac72cbc7647ab64a336f84d9bf4874bc2">Isis::OpenProjectWorkOrder::setRecent</a></div><div class="ttdeci">void setRecent(bool isRecent)</div></div>
+<div class="ttc" id="aclass_isis_1_1_open_project_work_order_html_acef74dfc2af9440d8d28d50b16678af0"><div class="ttname"><a href="class_isis_1_1_open_project_work_order.html#acef74dfc2af9440d8d28d50b16678af0">Isis::OpenProjectWorkOrder::OpenProjectWorkOrder</a></div><div class="ttdeci">OpenProjectWorkOrder(Project *project)</div><div class="ttdoc">Constructs an OpenProjectWorkOrder.</div><div class="ttdef"><b>Definition:</b> OpenProjectWorkOrder.cpp:47</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_html"><div class="ttname"><a href="class_isis_1_1_project.html">Isis::Project</a></div><div class="ttdoc">The main project for ipce.</div><div class="ttdef"><b>Definition:</b> Project.h:287</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html"><div class="ttname"><a href="class_isis_1_1_work_order.html">Isis::WorkOrder</a></div><div class="ttdoc">Provide Undo/redo abilities, serialization, and history for an operation.</div><div class="ttdef"><b>Definition:</b> WorkOrder.h:311</div></div>
+<div class="ttc" id="aclass_isis_1_1_work_order_html_aba48b35a2329e2bc3dd3f7cc98e36ccc"><div class="ttname"><a href="class_isis_1_1_work_order.html#aba48b35a2329e2bc3dd3f7cc98e36ccc">Isis::WorkOrder::project</a></div><div class="ttdeci">Project * project() const</div><div class="ttdoc">Returns the Project this WorkOrder is attached to.</div><div class="ttdef"><b>Definition:</b> WorkOrder.cpp:1288</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_eded47d0571299bd0e2869690f3b3455.html">Directory</a></li><li class="navelem"><a class="el" href="_open_project_work_order_8h.html">OpenProjectWorkOrder.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

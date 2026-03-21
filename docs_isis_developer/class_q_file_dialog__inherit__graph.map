@@ -1,0 +1,7 @@
+<map id="QFileDialog" name="QFileDialog">
+<area shape="rect" id="node1" title=" " alt="" coords="206,5,296,87"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_file_dialog.html" title="Class for browsing cubes." alt="" coords="92,135,210,360"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_new_ground_source_location_dialog.html" title="Dialog used by ControlPointEditWidget to select a new location for ground source files." alt="" coords="234,183,471,312"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_browse_dialog.html" title="Class for browsing cubes." alt="" coords="5,424,137,537"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_save_as_dialog.html" title="Widget to save(Save As) Isis cubes(used in qview) to display the FileDialog to select the output cube..." alt="" coords="161,408,304,553"/>
+</map>

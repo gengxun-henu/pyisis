@@ -1,0 +1,1049 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::MeasureIgnoredFilter Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_measure_ignored_filter.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_measure_ignored_filter-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::MeasureIgnoredFilter Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Allows filtering by a control measure's ignored status.  
+ <a href="class_isis_1_1_measure_ignored_filter.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_measure_ignored_filter_8h_source.html">MeasureIgnoredFilter.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::MeasureIgnoredFilter:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_measure_ignored_filter__inherit__graph.png" border="0" usemap="#a_isis_1_1_measure_ignored_filter_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_measure_ignored_filter_inherit__map" id="a_isis_1_1_measure_ignored_filter_inherit__map">
+<area shape="rect" title="Allows filtering by a control measure&#39;s ignored status." alt="" coords="25,648,200,857"/>
+<area shape="rect" href="class_isis_1_1_abstract_filter.html" title="Base class for control net filters." alt="" coords="5,135,220,600"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="76,5,149,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::MeasureIgnoredFilter:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_measure_ignored_filter__coll__graph.png" border="0" usemap="#a_isis_1_1_measure_ignored_filter_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_measure_ignored_filter_coll__map" id="a_isis_1_1_measure_ignored_filter_coll__map">
+<area shape="rect" title="Allows filtering by a control measure&#39;s ignored status." alt="" coords="25,648,200,857"/>
+<area shape="rect" href="class_isis_1_1_abstract_filter.html" title="Base class for control net filters." alt="" coords="5,135,220,600"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="76,5,149,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a439a71579f058a4335ba063e4ce8d787"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#a439a71579f058a4335ba063e4ce8d787">FilterEffectiveness</a> { <a class="el" href="class_isis_1_1_abstract_filter.html#a439a71579f058a4335ba063e4ce8d787a1aaaaca55c4d0df1cdb04119f6cc9fa4">Images</a> = 1
+, <a class="el" href="class_isis_1_1_abstract_filter.html#a439a71579f058a4335ba063e4ce8d787a7ce6c9a168640681026149ff681bdc40">Points</a> = 2
+, <a class="el" href="class_isis_1_1_abstract_filter.html#a439a71579f058a4335ba063e4ce8d787afc7df08efb09627e74881f55870ba0b8">Measures</a> = 4
+ }</td></tr>
+<tr class="separator:a439a71579f058a4335ba063e4ce8d787"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a0072213ca44eb059219ae9ccac7b20da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#a0072213ca44eb059219ae9ccac7b20da">filterChanged</a> ()</td></tr>
+<tr class="separator:a0072213ca44eb059219ae9ccac7b20da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ac4c77a5dca558bb37c84a1a5a7c6cb7c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_measure_ignored_filter.html#ac4c77a5dca558bb37c84a1a5a7c6cb7c">MeasureIgnoredFilter</a> (AbstractFilter::FilterEffectivenessFlag flag, int minimumForSuccess=-1)</td></tr>
+<tr class="separator:ac4c77a5dca558bb37c84a1a5a7c6cb7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a189d6feb058b254215ca87a622f48724"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_measure_ignored_filter.html#a189d6feb058b254215ca87a622f48724">~MeasureIgnoredFilter</a> ()</td></tr>
+<tr class="separator:a189d6feb058b254215ca87a622f48724"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a229204a446ef969c9f770f0070be68ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_measure_ignored_filter.html#a229204a446ef969c9f770f0070be68ba">evaluate</a> (const <a class="el" href="struct_q_pair.html">QPair</a>&lt; QString, <a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> * &gt; *) const</td></tr>
+<tr class="separator:a229204a446ef969c9f770f0070be68ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3e6575769f75cc4af47997620d600b4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_measure_ignored_filter.html#af3e6575769f75cc4af47997620d600b4">evaluate</a> (const <a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *) const</td></tr>
+<tr class="separator:af3e6575769f75cc4af47997620d600b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6deabf61f5c2f64ae97d113ade678cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_measure_ignored_filter.html#ad6deabf61f5c2f64ae97d113ade678cb">evaluate</a> (const <a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *) const</td></tr>
+<tr class="separator:ad6deabf61f5c2f64ae97d113ade678cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0e1149a3e191a806f83cb27fe7ca379"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_abstract_filter.html">AbstractFilter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_measure_ignored_filter.html#ad0e1149a3e191a806f83cb27fe7ca379">clone</a> () const</td></tr>
+<tr class="separator:ad0e1149a3e191a806f83cb27fe7ca379"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21a35c609793432cb734699d9f9b3899"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_measure_ignored_filter.html#a21a35c609793432cb734699d9f9b3899">getImageDescription</a> () const</td></tr>
+<tr class="separator:a21a35c609793432cb734699d9f9b3899"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac41f535da92b36ee193c9dc5f4ca504c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_measure_ignored_filter.html#ac41f535da92b36ee193c9dc5f4ca504c">getPointDescription</a> () const</td></tr>
+<tr class="separator:ac41f535da92b36ee193c9dc5f4ca504c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a347f4e07aabf7f0375ac3b99299e13e2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_measure_ignored_filter.html#a347f4e07aabf7f0375ac3b99299e13e2">getMeasureDescription</a> () const</td></tr>
+<tr class="separator:a347f4e07aabf7f0375ac3b99299e13e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb1e86c1ffba9ba5acaf5266b4f8ffd4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#abb1e86c1ffba9ba5acaf5266b4f8ffd4">canFilterImages</a> () const</td></tr>
+<tr class="separator:abb1e86c1ffba9ba5acaf5266b4f8ffd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7c14914795f8532f889424d6610d5ba"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#ac7c14914795f8532f889424d6610d5ba">canFilterPoints</a> () const</td></tr>
+<tr class="separator:ac7c14914795f8532f889424d6610d5ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95bc95ece0fc22f2ce7baf6a4593367e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#a95bc95ece0fc22f2ce7baf6a4593367e">canFilterMeasures</a> () const</td></tr>
+<tr class="separator:a95bc95ece0fc22f2ce7baf6a4593367e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a7266c3cba4f8aa76d3ee78f820fe0bd9"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#a7266c3cba4f8aa76d3ee78f820fe0bd9">evaluate</a> (const <a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *, bool(ControlPoint::*)() const) const</td></tr>
+<tr class="separator:a7266c3cba4f8aa76d3ee78f820fe0bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5548d0c13a4d229f5c3af007a0267270"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#a5548d0c13a4d229f5c3af007a0267270">evaluate</a> (const <a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *, bool(ControlMeasure::*)() const) const</td></tr>
+<tr class="separator:a5548d0c13a4d229f5c3af007a0267270"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae01cce38c2863c431cc16bab048a45b7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#ae01cce38c2863c431cc16bab048a45b7">inclusive</a> () const</td></tr>
+<tr class="separator:ae01cce38c2863c431cc16bab048a45b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad81fbebe93831d15e422b8d755d7d04f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#ad81fbebe93831d15e422b8d755d7d04f">getMinForSuccess</a> () const</td></tr>
+<tr class="separator:ad81fbebe93831d15e422b8d755d7d04f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc9f15806399652d3cbd7e93c125535d"><td class="memItemLeft" align="right" valign="top">AbstractFilter::FilterEffectivenessFlag *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#acc9f15806399652d3cbd7e93c125535d">getEffectivenessFlags</a> () const</td></tr>
+<tr class="separator:acc9f15806399652d3cbd7e93c125535d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a630823b51c6c65b65940bef1ae384263"><td class="memItemLeft" align="right" valign="top">QBoxLayout *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#a630823b51c6c65b65940bef1ae384263">getMainLayout</a> () const</td></tr>
+<tr class="separator:a630823b51c6c65b65940bef1ae384263"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a114e7b54b1b634f85a5ffa55f98cbc6d"><td class="memItemLeft" align="right" valign="top">QBoxLayout *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#a114e7b54b1b634f85a5ffa55f98cbc6d">getInclusiveExclusiveLayout</a> () const</td></tr>
+<tr class="separator:a114e7b54b1b634f85a5ffa55f98cbc6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbb9043a2002a760b3fa1aca47715c18"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#abbb9043a2002a760b3fa1aca47715c18">evaluateImageFromPointFilter</a> (const <a class="el" href="struct_q_pair.html">QPair</a>&lt; QString, <a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> * &gt; *) const</td></tr>
+<tr class="separator:abbb9043a2002a760b3fa1aca47715c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca070a5626b84a8e073a15b4228c8b85"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#aca070a5626b84a8e073a15b4228c8b85">evaluateImageFromMeasureFilter</a> (const <a class="el" href="struct_q_pair.html">QPair</a>&lt; QString, <a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> * &gt; *) const</td></tr>
+<tr class="separator:aca070a5626b84a8e073a15b4228c8b85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6214777b93a83a700c062e52b08266b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_filter.html#a6214777b93a83a700c062e52b08266b6">evaluatePointFromMeasureFilter</a> (const <a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *) const</td></tr>
+<tr class="separator:a6214777b93a83a700c062e52b08266b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Allows filtering by a control measure's ignored status. </p>
+<p>This class allows the user to filter control measures based on whether or not they are ignored. This allows the user to make a list of ignored or not-ignored control measures.</p>
+<dl class="section author"><dt>Author</dt><dd>????-??-?? Eric Hyer </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a439a71579f058a4335ba063e4ce8d787"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a439a71579f058a4335ba063e4ce8d787">&#9670;&nbsp;</a></span>FilterEffectiveness</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_abstract_filter.html#a439a71579f058a4335ba063e4ce8d787">Isis::AbstractFilter::FilterEffectiveness</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a439a71579f058a4335ba063e4ce8d787a1aaaaca55c4d0df1cdb04119f6cc9fa4"></a>Images&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a439a71579f058a4335ba063e4ce8d787a7ce6c9a168640681026149ff681bdc40"></a>Points&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a439a71579f058a4335ba063e4ce8d787afc7df08efb09627e74881f55870ba0b8"></a>Measures&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ac4c77a5dca558bb37c84a1a5a7c6cb7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4c77a5dca558bb37c84a1a5a7c6cb7c">&#9670;&nbsp;</a></span>MeasureIgnoredFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::MeasureIgnoredFilter::MeasureIgnoredFilter </td>
+          <td>(</td>
+          <td class="paramtype">AbstractFilter::FilterEffectivenessFlag&#160;</td>
+          <td class="paramname"><em>flag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>minimumForSuccess</em> = <code>-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_measure_ignored_filter.html#ad0e1149a3e191a806f83cb27fe7ca379">clone()</a>.</p>
+
+</div>
+</div>
+<a id="a189d6feb058b254215ca87a622f48724"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a189d6feb058b254215ca87a622f48724">&#9670;&nbsp;</a></span>~MeasureIgnoredFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::MeasureIgnoredFilter::~MeasureIgnoredFilter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="abb1e86c1ffba9ba5acaf5266b4f8ffd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb1e86c1ffba9ba5acaf5266b4f8ffd4">&#9670;&nbsp;</a></span>canFilterImages()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilter::canFilterImages </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#a439a71579f058a4335ba063e4ce8d787a1aaaaca55c4d0df1cdb04119f6cc9fa4">Isis::AbstractFilter::Images</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_filter_widget.html#ad63f9528451c5e5ac6d166abc9289cc5">Isis::FilterWidget::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_filter.html#aca070a5626b84a8e073a15b4228c8b85">Isis::AbstractFilter::evaluateImageFromMeasureFilter()</a>, and <a class="el" href="class_isis_1_1_abstract_filter.html#abbb9043a2002a760b3fa1aca47715c18">Isis::AbstractFilter::evaluateImageFromPointFilter()</a>.</p>
+
+</div>
+</div>
+<a id="a95bc95ece0fc22f2ce7baf6a4593367e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95bc95ece0fc22f2ce7baf6a4593367e">&#9670;&nbsp;</a></span>canFilterMeasures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilter::canFilterMeasures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#a439a71579f058a4335ba063e4ce8d787afc7df08efb09627e74881f55870ba0b8">Isis::AbstractFilter::Measures</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_filter_widget.html#a0ba298ec86e195604862b14f4767e71b">Isis::FilterWidget::evaluate()</a>.</p>
+
+</div>
+</div>
+<a id="ac7c14914795f8532f889424d6610d5ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7c14914795f8532f889424d6610d5ba">&#9670;&nbsp;</a></span>canFilterPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilter::canFilterPoints </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#a439a71579f058a4335ba063e4ce8d787a7ce6c9a168640681026149ff681bdc40">Isis::AbstractFilter::Points</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_filter_widget.html#a7f60459935c04bd3048c0b21b277e871">Isis::FilterWidget::evaluate()</a>, and <a class="el" href="class_isis_1_1_abstract_filter.html#a6214777b93a83a700c062e52b08266b6">Isis::AbstractFilter::evaluatePointFromMeasureFilter()</a>.</p>
+
+</div>
+</div>
+<a id="ad0e1149a3e191a806f83cb27fe7ca379"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0e1149a3e191a806f83cb27fe7ca379">&#9670;&nbsp;</a></span>clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_abstract_filter.html">AbstractFilter</a> * Isis::MeasureIgnoredFilter::clone </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_isis_1_1_abstract_filter.html#a776a971a0a552050b3d8d68f7c9939f9">Isis::AbstractFilter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_measure_ignored_filter.html#ac4c77a5dca558bb37c84a1a5a7c6cb7c">MeasureIgnoredFilter()</a>.</p>
+
+</div>
+</div>
+<a id="ad6deabf61f5c2f64ae97d113ade678cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6deabf61f5c2f64ae97d113ade678cb">&#9670;&nbsp;</a></span>evaluate() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::MeasureIgnoredFilter::evaluate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *&#160;</td>
+          <td class="paramname"><em>measure</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_isis_1_1_abstract_filter.html#a0209d5a0e05b0bb0e0da6841ed186511">Isis::AbstractFilter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#a4c5373e6fbef644e6bd0b7dafe2b4d8e">Isis::AbstractFilter::evaluate()</a>, and <a class="el" href="class_isis_1_1_control_measure.html#a6b58506887286ca0211bd459481b393c">Isis::ControlMeasure::IsIgnored()</a>.</p>
+
+</div>
+</div>
+<a id="a5548d0c13a4d229f5c3af007a0267270"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5548d0c13a4d229f5c3af007a0267270">&#9670;&nbsp;</a></span>evaluate() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilter::evaluate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *&#160;</td>
+          <td class="paramname"><em>measure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool(ControlMeasure::*)() const&#160;</td>
+          <td class="paramname"><em>meth</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#ae01cce38c2863c431cc16bab048a45b7">Isis::AbstractFilter::inclusive()</a>.</p>
+
+</div>
+</div>
+<a id="af3e6575769f75cc4af47997620d600b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3e6575769f75cc4af47997620d600b4">&#9670;&nbsp;</a></span>evaluate() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::MeasureIgnoredFilter::evaluate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_isis_1_1_abstract_filter.html#af4c24742731db0927f5c9866ea3a24c4">Isis::AbstractFilter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#a6214777b93a83a700c062e52b08266b6">Isis::AbstractFilter::evaluatePointFromMeasureFilter()</a>.</p>
+
+</div>
+</div>
+<a id="a7266c3cba4f8aa76d3ee78f820fe0bd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7266c3cba4f8aa76d3ee78f820fe0bd9">&#9670;&nbsp;</a></span>evaluate() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilter::evaluate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *&#160;</td>
+          <td class="paramname"><em>point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool(ControlPoint::*)() const&#160;</td>
+          <td class="paramname"><em>meth</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#ae01cce38c2863c431cc16bab048a45b7">Isis::AbstractFilter::inclusive()</a>.</p>
+
+</div>
+</div>
+<a id="a229204a446ef969c9f770f0070be68ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a229204a446ef969c9f770f0070be68ba">&#9670;&nbsp;</a></span>evaluate() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::MeasureIgnoredFilter::evaluate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_q_pair.html">QPair</a>&lt; QString, <a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> * &gt; *&#160;</td>
+          <td class="paramname"><em>imageAndNet</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_isis_1_1_abstract_filter.html#a4c5373e6fbef644e6bd0b7dafe2b4d8e">Isis::AbstractFilter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#aca070a5626b84a8e073a15b4228c8b85">Isis::AbstractFilter::evaluateImageFromMeasureFilter()</a>.</p>
+
+</div>
+</div>
+<a id="aca070a5626b84a8e073a15b4228c8b85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca070a5626b84a8e073a15b4228c8b85">&#9670;&nbsp;</a></span>evaluateImageFromMeasureFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilter::evaluateImageFromMeasureFilter </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_q_pair.html">QPair</a>&lt; QString, <a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> * &gt; *&#160;</td>
+          <td class="paramname"><em>imageAndNet</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#abb1e86c1ffba9ba5acaf5266b4f8ffd4">Isis::AbstractFilter::canFilterImages()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_goodness_of_fit_filter.html#a76d728f925326f82e30671539c241d34">Isis::GoodnessOfFitFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_line_filter.html#a8eb3ca69b7f5d2709b023f5dd0153ad9">Isis::LineFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_line_residual_filter.html#a6903e12d979c1de2af2a16242100f7f0">Isis::LineResidualFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_line_shift_filter.html#a9595e006a2e3013ad1663fb53c5c30eb">Isis::LineShiftFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_measure_ignored_filter.html#a229204a446ef969c9f770f0070be68ba">evaluate()</a>, <a class="el" href="class_isis_1_1_measure_jigsaw_rejected_filter.html#a262fe811915e3cdff42eb2f2d9af882e">Isis::MeasureJigsawRejectedFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_measure_type_filter.html#a20312a12f8ea19152e19004be6f2948a">Isis::MeasureTypeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_residual_magnitude_filter.html#aeeecf185f09d6aba8e5f461912435d6c">Isis::ResidualMagnitudeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_sample_filter.html#ae1d72f34e45ee8557b19ce518784b478">Isis::SampleFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_sample_residual_filter.html#a77d2d1876b49a9093666839e51c78772">Isis::SampleResidualFilter::evaluate()</a>, and <a class="el" href="class_isis_1_1_sample_shift_filter.html#a792908913966c9545066ba75697bfc74">Isis::SampleShiftFilter::evaluate()</a>.</p>
+
+</div>
+</div>
+<a id="abbb9043a2002a760b3fa1aca47715c18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbb9043a2002a760b3fa1aca47715c18">&#9670;&nbsp;</a></span>evaluateImageFromPointFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilter::evaluateImageFromPointFilter </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_q_pair.html">QPair</a>&lt; QString, <a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> * &gt; *&#160;</td>
+          <td class="paramname"><em>imageAndNet</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#abb1e86c1ffba9ba5acaf5266b4f8ffd4">Isis::AbstractFilter::canFilterImages()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_adjusted_latitude_filter.html#a4e14811ff2b678af5a0c7ca4b9fb65a0">Isis::AdjustedLatitudeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_latitude_sigma_filter.html#aecacd956068a323a4bc5dbeed92feb30">Isis::AdjustedLatitudeSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_longitude_filter.html#a88ab29f520084403de2ddc6ea662dc43">Isis::AdjustedLongitudeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_longitude_sigma_filter.html#a2ec0a7597e38fbf8691757e584ba45ba">Isis::AdjustedLongitudeSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_radius_filter.html#a87df63f530b973ddfd4e0e8a00b46bb3">Isis::AdjustedRadiusFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_radius_sigma_filter.html#ac7f306961bd6cf26f0684f74b79ed55b">Isis::AdjustedRadiusSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_x_filter.html#a6685e00dd4b8d8542b6e54917cb9c2ae">Isis::AdjustedXFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_x_sigma_filter.html#a5f242e668cca14fef0fa20f3763f43bb">Isis::AdjustedXSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_y_filter.html#ae183685aea7ef27c67d0236e2bffa8d9">Isis::AdjustedYFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_y_sigma_filter.html#a57bc40dc1bf91d91ef4b751c5e274713">Isis::AdjustedYSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_z_filter.html#abda3f520aede6b6f09c709adc67c9801">Isis::AdjustedZFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_z_sigma_filter.html#a1bafc54beb5d5befd5533a50e6c77b24">Isis::AdjustedZSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_latitude_filter.html#abb9b6e91d5a93bb4e56dbc6242219cda">Isis::APrioriLatitudeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_latitude_sigma_filter.html#ad6965d28e6feeb5dc7ae79c1747f1d91">Isis::APrioriLatitudeSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_longitude_filter.html#a9dd5e39b839a8f1700218409fa6a4594">Isis::APrioriLongitudeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_longitude_sigma_filter.html#a616b24b8e61eedc993d9beda2fe9e397">Isis::APrioriLongitudeSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_radius_filter.html#a4c60e128953951f5d167cbe9e731ef61">Isis::APrioriRadiusFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_radius_sigma_filter.html#aec327a0933e06408a84f76384f9f8802">Isis::APrioriRadiusSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_x_filter.html#adf2645647a4979963d5eaa35cd4065dc">Isis::APrioriXFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_x_sigma_filter.html#a07c1989574c939b691edf1ae6c382c03">Isis::APrioriXSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_y_filter.html#a8dae1c9217f649efe6b48c5460ada628">Isis::APrioriYFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_y_sigma_filter.html#a2224e0fb4a36e0c403f34e5663bcc16d">Isis::APrioriYSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_z_filter.html#affdd9485148b72af5575a265c76fd859">Isis::APrioriZFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_z_sigma_filter.html#a7dd61cb57763a61dec0e8097688e257d">Isis::APrioriZSigmaFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_chooser_name_filter.html#a4060cad431cfe040740e133eb06cd30e">Isis::ChooserNameFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_measure_count_filter.html#a46aae18d9d9be95c04b3c417996361a9">Isis::MeasureCountFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_point_edit_locked_filter.html#ab93e6c7cf86b20de98cc2ef1d442f7da">Isis::PointEditLockedFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_point_id_filter.html#a9b3a309b9fbc17a383a75d2acbf4ed19">Isis::PointIdFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_point_ignored_filter.html#a04611d58215149dc51e068a91f82d34b">Isis::PointIgnoredFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_point_jigsaw_rejected_filter.html#aba796cec974d233d2d2b0e22153d7ac7">Isis::PointJigsawRejectedFilter::evaluate()</a>, and <a class="el" href="class_isis_1_1_point_type_filter.html#aa93d1a5f506db89f88d8e3cf30e7d05c">Isis::PointTypeFilter::evaluate()</a>.</p>
+
+</div>
+</div>
+<a id="a6214777b93a83a700c062e52b08266b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6214777b93a83a700c062e52b08266b6">&#9670;&nbsp;</a></span>evaluatePointFromMeasureFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilter::evaluatePointFromMeasureFilter </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#ac7c14914795f8532f889424d6610d5ba">Isis::AbstractFilter::canFilterPoints()</a>, and <a class="el" href="class_isis_1_1_control_point.html#ad6be4979cfc59837b7f1f086da27bb92">Isis::ControlPoint::getMeasures()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_goodness_of_fit_filter.html#a953a299c82a2aadb39f74851f65c541b">Isis::GoodnessOfFitFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_image_id_filter.html#a9e7942344fda36bfa56b39bca5324df5">Isis::ImageIdFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_line_filter.html#a00b53242de80691d244399a7b3b98372">Isis::LineFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_line_residual_filter.html#adc052c4e9398cf05a3bce243f5618f98">Isis::LineResidualFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_line_shift_filter.html#a43df2b809d8d803f2a0f086c0a66d49d">Isis::LineShiftFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_measure_ignored_filter.html#af3e6575769f75cc4af47997620d600b4">evaluate()</a>, <a class="el" href="class_isis_1_1_measure_jigsaw_rejected_filter.html#a264cb01248d8e6fc1e4039be3e25d575">Isis::MeasureJigsawRejectedFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_measure_type_filter.html#ae467b58608467abb3618c48de2f42c48">Isis::MeasureTypeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_residual_magnitude_filter.html#a86116c1d6809142f149087a8e930c46d">Isis::ResidualMagnitudeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_sample_filter.html#a0894483be48c4e09b38467490a0cad3a">Isis::SampleFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_sample_residual_filter.html#a548bcaff9da1a0db3a4ab9edc93ae245">Isis::SampleResidualFilter::evaluate()</a>, and <a class="el" href="class_isis_1_1_sample_shift_filter.html#a9e8fc6239f58ba7242f9d1767550262e">Isis::SampleShiftFilter::evaluate()</a>.</p>
+
+</div>
+</div>
+<a id="a0072213ca44eb059219ae9ccac7b20da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0072213ca44eb059219ae9ccac7b20da">&#9670;&nbsp;</a></span>filterChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractFilter::filterChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc9f15806399652d3cbd7e93c125535d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc9f15806399652d3cbd7e93c125535d">&#9670;&nbsp;</a></span>getEffectivenessFlags()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">AbstractFilter::FilterEffectivenessFlag * Isis::AbstractFilter::getEffectivenessFlags </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a21a35c609793432cb734699d9f9b3899"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21a35c609793432cb734699d9f9b3899">&#9670;&nbsp;</a></span>getImageDescription()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::MeasureIgnoredFilter::getImageDescription </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_abstract_filter.html#a00110b21c40a7b952020b36999418f1d">Isis::AbstractFilter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#a00110b21c40a7b952020b36999418f1d">Isis::AbstractFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_abstract_filter.html#ad81fbebe93831d15e422b8d755d7d04f">Isis::AbstractFilter::getMinForSuccess()</a>, and <a class="el" href="class_isis_1_1_abstract_filter.html#ae01cce38c2863c431cc16bab048a45b7">Isis::AbstractFilter::inclusive()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_measure_ignored_filter.html#ac41f535da92b36ee193c9dc5f4ca504c">getPointDescription()</a>.</p>
+
+</div>
+</div>
+<a id="a114e7b54b1b634f85a5ffa55f98cbc6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a114e7b54b1b634f85a5ffa55f98cbc6d">&#9670;&nbsp;</a></span>getInclusiveExclusiveLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QBoxLayout * Isis::AbstractFilter::getInclusiveExclusiveLayout </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a630823b51c6c65b65940bef1ae384263"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a630823b51c6c65b65940bef1ae384263">&#9670;&nbsp;</a></span>getMainLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QBoxLayout * Isis::AbstractFilter::getMainLayout </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_multiple_choice_filter.html#a944e9818625a178fd3d8a406f5325d16">Isis::AbstractMultipleChoiceFilter::createWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a347f4e07aabf7f0375ac3b99299e13e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a347f4e07aabf7f0375ac3b99299e13e2">&#9670;&nbsp;</a></span>getMeasureDescription()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::MeasureIgnoredFilter::getMeasureDescription </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_abstract_filter.html#aa077ecbd44734581e245992a2440da2a">Isis::AbstractFilter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_filter.html#ae01cce38c2863c431cc16bab048a45b7">Isis::AbstractFilter::inclusive()</a>.</p>
+
+</div>
+</div>
+<a id="ad81fbebe93831d15e422b8d755d7d04f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad81fbebe93831d15e422b8d755d7d04f">&#9670;&nbsp;</a></span>getMinForSuccess()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::AbstractFilter::getMinForSuccess </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_filter.html#a00110b21c40a7b952020b36999418f1d">Isis::AbstractFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_latitude_filter.html#aba4479c524f2a82f9b87f5b13a40aba0">Isis::AdjustedLatitudeFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_latitude_sigma_filter.html#a98fd8c95a572e0f82a51d88eab5f45f9">Isis::AdjustedLatitudeSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_longitude_filter.html#afd78828421b2ce89ecb9495e512e3fa6">Isis::AdjustedLongitudeFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_longitude_sigma_filter.html#aae90922d41a6ad134f28180b8ebc33f1">Isis::AdjustedLongitudeSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_radius_filter.html#a6f6a95e67dd942c68214826756b2306a">Isis::AdjustedRadiusFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_radius_sigma_filter.html#a330daab466a3adab03d54b758911a11f">Isis::AdjustedRadiusSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_x_filter.html#a55c52935e808728262835d3b29c7ae1f">Isis::AdjustedXFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_x_sigma_filter.html#a3ddcd73846961dcc24c4b3b4e25ad93a">Isis::AdjustedXSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_y_filter.html#a1f490ed134568987338e37eb6edae089">Isis::AdjustedYFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_y_sigma_filter.html#a626a8516877e632b6ffd62030de890c9">Isis::AdjustedYSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_z_filter.html#a6e8a51b0e326cdb409393db58fd4ba0e">Isis::AdjustedZFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_adjusted_z_sigma_filter.html#afe791e542e682707f91ebd04d90e7d01">Isis::AdjustedZSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_latitude_filter.html#a3ca561edddb79c2e19cc5936a99a0307">Isis::APrioriLatitudeFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_latitude_sigma_filter.html#a34eb8580d0169b46104f1af5824a33d7">Isis::APrioriLatitudeSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_longitude_filter.html#a9efe19caf6a844dde8103f409a0d4a1b">Isis::APrioriLongitudeFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_longitude_sigma_filter.html#a0fefdf365facf409d351462d4d309bfb">Isis::APrioriLongitudeSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_radius_filter.html#a7161b875c2b248c299b65eb157671fb4">Isis::APrioriRadiusFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_radius_sigma_filter.html#a2e5c57d4c9cd0f567030917413c809a5">Isis::APrioriRadiusSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_x_filter.html#a939f87eaae4e80068b28498ef5847100">Isis::APrioriXFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_x_sigma_filter.html#a5b65873bf8e223de6c26e00465df22f5">Isis::APrioriXSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_y_filter.html#a18570f40b6a627b64394990ed0b5da33">Isis::APrioriYFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_y_sigma_filter.html#ad371c19e9f188555dc20fe83976a4e4a">Isis::APrioriYSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_z_filter.html#acba7a28b73b47750fc23152288c0c7cb">Isis::APrioriZFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_a_priori_z_sigma_filter.html#a56edab0f8e079d267cc586af58d933e0">Isis::APrioriZSigmaFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_chooser_name_filter.html#a8626f2a3ff3a6ec072669fe17c0d81a7">Isis::ChooserNameFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_goodness_of_fit_filter.html#aff2be7638d029c4c3fb08778132964ef">Isis::GoodnessOfFitFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_line_filter.html#abf2172039a20e722f1557ef7bdb93287">Isis::LineFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_line_residual_filter.html#a46ee165c4026edbf57612b1519addef0">Isis::LineResidualFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_line_shift_filter.html#aef2205afad96dfc45f46053a2bf364a2">Isis::LineShiftFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_measure_count_filter.html#a026c452ff54416ab4c3dafaa2c82d571">Isis::MeasureCountFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_measure_ignored_filter.html#a21a35c609793432cb734699d9f9b3899">getImageDescription()</a>, <a class="el" href="class_isis_1_1_measure_jigsaw_rejected_filter.html#a4dbc4b200c70c8868c44079faf297105">Isis::MeasureJigsawRejectedFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_measure_type_filter.html#a36900ea5dc66f69aa28224c693d757ac">Isis::MeasureTypeFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_point_edit_locked_filter.html#ad2f6884b3670e325aec5ae9efdc51852">Isis::PointEditLockedFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_point_id_filter.html#a488f958db9133e9b30729f176d98062e">Isis::PointIdFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_point_ignored_filter.html#a037b4fa592a2b45c84580ef527381570">Isis::PointIgnoredFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_point_jigsaw_rejected_filter.html#abd0444f9d60b8cab8cd146fc70431ecb">Isis::PointJigsawRejectedFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_point_type_filter.html#a8135fe6810e83d6a21c7e1edab4458c8">Isis::PointTypeFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_residual_magnitude_filter.html#adac17c8aaafd4342147ac2229d400659">Isis::ResidualMagnitudeFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_sample_filter.html#a06f364955c546b9d95ef0edf8740a5fa">Isis::SampleFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_sample_residual_filter.html#ad53881c0c806868b93f863d76aaf78fe">Isis::SampleResidualFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_sample_shift_filter.html#ac9ac907e99377cce9748ddcd6fa5c331">Isis::SampleShiftFilter::getImageDescription()</a>, and <a class="el" href="class_isis_1_1_image_id_filter.html#a09174bbb9000ff93818810728aadaa61">Isis::ImageIdFilter::getPointDescription()</a>.</p>
+
+</div>
+</div>
+<a id="ac41f535da92b36ee193c9dc5f4ca504c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac41f535da92b36ee193c9dc5f4ca504c">&#9670;&nbsp;</a></span>getPointDescription()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::MeasureIgnoredFilter::getPointDescription </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_abstract_filter.html#af2aa3cabe950609e0c67fea76f19235f">Isis::AbstractFilter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_measure_ignored_filter.html#a21a35c609793432cb734699d9f9b3899">getImageDescription()</a>.</p>
+
+</div>
+</div>
+<a id="ae01cce38c2863c431cc16bab048a45b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae01cce38c2863c431cc16bab048a45b7">&#9670;&nbsp;</a></span>inclusive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractFilter::inclusive </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_number_filter.html#a2407b7b6a6df366e4c675dbedf6aa64a">Isis::AbstractNumberFilter::descriptionSuffix()</a>, <a class="el" href="class_isis_1_1_abstract_string_filter.html#aef9b0c91aee49a8db5ccc8b5dc942198">Isis::AbstractStringFilter::descriptionSuffix()</a>, <a class="el" href="class_isis_1_1_measure_type_filter.html#ac32e51a0a64f9ae39f6a7256828f5938">Isis::MeasureTypeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_point_type_filter.html#acbcd4fde4c1dac455ed585c17954ed20">Isis::PointTypeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_filter.html#a7266c3cba4f8aa76d3ee78f820fe0bd9">Isis::AbstractFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_number_filter.html#afb0276bb40d705a25c29ca74b4daed0d">Isis::AbstractNumberFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_string_filter.html#a7c641b806c1e01bb36155ea698465f62">Isis::AbstractStringFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_measure_count_filter.html#a026c452ff54416ab4c3dafaa2c82d571">Isis::MeasureCountFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_measure_ignored_filter.html#a21a35c609793432cb734699d9f9b3899">getImageDescription()</a>, <a class="el" href="class_isis_1_1_measure_jigsaw_rejected_filter.html#a4dbc4b200c70c8868c44079faf297105">Isis::MeasureJigsawRejectedFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_measure_type_filter.html#a36900ea5dc66f69aa28224c693d757ac">Isis::MeasureTypeFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_point_edit_locked_filter.html#ad2f6884b3670e325aec5ae9efdc51852">Isis::PointEditLockedFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_point_ignored_filter.html#a037b4fa592a2b45c84580ef527381570">Isis::PointIgnoredFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_point_jigsaw_rejected_filter.html#abd0444f9d60b8cab8cd146fc70431ecb">Isis::PointJigsawRejectedFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_point_type_filter.html#a8135fe6810e83d6a21c7e1edab4458c8">Isis::PointTypeFilter::getImageDescription()</a>, <a class="el" href="class_isis_1_1_measure_ignored_filter.html#a347f4e07aabf7f0375ac3b99299e13e2">getMeasureDescription()</a>, <a class="el" href="class_isis_1_1_measure_jigsaw_rejected_filter.html#a0c6268141317effe215fb4360236b253">Isis::MeasureJigsawRejectedFilter::getMeasureDescription()</a>, <a class="el" href="class_isis_1_1_measure_type_filter.html#abe19eab328a948dd320673d7695c1ea9">Isis::MeasureTypeFilter::getMeasureDescription()</a>, <a class="el" href="class_isis_1_1_measure_count_filter.html#aff174e18670e0fe987d5330cef50153c">Isis::MeasureCountFilter::getPointDescription()</a>, <a class="el" href="class_isis_1_1_point_edit_locked_filter.html#a2944085cad02e9d410189615d0ec5de2">Isis::PointEditLockedFilter::getPointDescription()</a>, <a class="el" href="class_isis_1_1_point_ignored_filter.html#a0fd7aa62878a007fbad08343a7a9195a">Isis::PointIgnoredFilter::getPointDescription()</a>, <a class="el" href="class_isis_1_1_point_jigsaw_rejected_filter.html#af025d73b3ec051e52b54c4de0849b037">Isis::PointJigsawRejectedFilter::getPointDescription()</a>, and <a class="el" href="class_isis_1_1_point_type_filter.html#afb584aeec65bc91620717c19c0648fea">Isis::PointTypeFilter::getPointDescription()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_measure_ignored_filter_8h_source.html">MeasureIgnoredFilter.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_measure_ignored_filter_8cpp.html">MeasureIgnoredFilter.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_measure_ignored_filter.html">MeasureIgnoredFilter</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+<map id="Isis::AffineRadio" name="Isis::AffineRadio">
+<area shape="rect" id="node1" title="Container for affine and radiometric parameters." alt="" coords="26,376,144,585"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,199,72,280"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_radiometric.html" title="Store for radiometric gain and shift parameters." alt="" coords="96,167,216,312"/>
+<area shape="rect" id="node4" title=" " alt="" coords="126,5,186,87"/>
+</map>

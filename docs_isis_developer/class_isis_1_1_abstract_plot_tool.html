@@ -1,0 +1,2216 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::AbstractPlotTool Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_abstract_plot_tool.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
+<a href="#pro-slots">Protected Slots</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_abstract_plot_tool-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::AbstractPlotTool Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Parent class for plotting tools which provides common functionality.  
+ <a href="class_isis_1_1_abstract_plot_tool.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_abstract_plot_tool_8h_source.html">AbstractPlotTool.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::AbstractPlotTool:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_abstract_plot_tool__inherit__graph.png" border="0" usemap="#a_isis_1_1_abstract_plot_tool_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_abstract_plot_tool_inherit__map" id="a_isis_1_1_abstract_plot_tool_inherit__map">
+<area shape="rect" title="Parent class for plotting tools which provides common functionality." alt="" coords="309,824,471,1145"/>
+<area shape="rect" href="class_isis_1_1_histogram_tool.html" title="Tool for histograms." alt="" coords="5,1217,180,1427"/>
+<area shape="rect" href="class_isis_1_1_spatial_plot_tool.html" title="Spatial Plots." alt="" coords="204,1209,378,1435"/>
+<area shape="rect" href="class_isis_1_1_spectral_plot_tool.html" title="Plot cube DN statistics against the cube band numbers." alt="" coords="403,1193,577,1451"/>
+<area shape="rect" href="class_isis_1_1_stereo_tool.html" title="Tool for computing parallax." alt="" coords="601,1193,776,1451"/>
+<area shape="rect" href="class_isis_1_1_tool.html" title="Base class for the Qisis tools." alt="" coords="303,135,477,776"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="355,5,425,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::AbstractPlotTool:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_abstract_plot_tool__coll__graph.png" border="0" usemap="#a_isis_1_1_abstract_plot_tool_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_abstract_plot_tool_coll__map" id="a_isis_1_1_abstract_plot_tool_coll__map">
+<area shape="rect" title="Parent class for plotting tools which provides common functionality." alt="" coords="12,824,173,1145"/>
+<area shape="rect" href="class_isis_1_1_tool.html" title="Base class for the Qisis tools." alt="" coords="5,135,180,776"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="58,5,127,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a144aba5053d91a56f030de16c2fb62e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#a144aba5053d91a56f030de16c2fb62e6">removeWindow</a> (<a class="el" href="class_q_object.html">QObject</a> *)</td></tr>
+<tr class="memdesc:a144aba5053d91a56f030de16c2fb62e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">When a user closes a window, we want to remove that window from our combo box for selecting the active window.  <a href="class_isis_1_1_abstract_plot_tool.html#a144aba5053d91a56f030de16c2fb62e6">More...</a><br /></td></tr>
+<tr class="separator:a144aba5053d91a56f030de16c2fb62e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96b8a131b61f9a28fb02e9e854d99490"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#a96b8a131b61f9a28fb02e9e854d99490">repaintViewports</a> (<a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> *)</td></tr>
+<tr class="memdesc:a96b8a131b61f9a28fb02e9e854d99490"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method causes the viewports corresponding with the given <a class="el" href="class_isis_1_1_cube_plot_curve.html" title="This is a plot curve with information relating it to a particular cube or region of a cube.">CubePlotCurve</a> to be repainted with all of the area's of interest associated with the <a class="el" href="class_isis_1_1_cube_plot_curve.html" title="This is a plot curve with information relating it to a particular cube or region of a cube.">CubePlotCurve</a>'s <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a>.  <a href="class_isis_1_1_abstract_plot_tool.html#a96b8a131b61f9a28fb02e9e854d99490">More...</a><br /></td></tr>
+<tr class="separator:a96b8a131b61f9a28fb02e9e854d99490"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a22ce58ca14cb72ea374bb81e7162c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#a9a22ce58ca14cb72ea374bb81e7162c2">showPlotWindow</a> ()</td></tr>
+<tr class="memdesc:a9a22ce58ca14cb72ea374bb81e7162c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">displays the plot window  <a href="class_isis_1_1_abstract_plot_tool.html#a9a22ce58ca14cb72ea374bb81e7162c2">More...</a><br /></td></tr>
+<tr class="separator:a9a22ce58ca14cb72ea374bb81e7162c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ae575a1659b99222874cfbbab6d5b38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a9ae575a1659b99222874cfbbab6d5b38">activate</a> (bool)</td></tr>
+<tr class="memdesc:a9ae575a1659b99222874cfbbab6d5b38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activates the tool.  <a href="class_isis_1_1_tool.html#a9ae575a1659b99222874cfbbab6d5b38">More...</a><br /></td></tr>
+<tr class="separator:a9ae575a1659b99222874cfbbab6d5b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabf2c6787be800be5821b69cda6a3566"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#aabf2c6787be800be5821b69cda6a3566">setCubeViewport</a> (<a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *cvp)</td></tr>
+<tr class="memdesc:aabf2c6787be800be5821b69cda6a3566"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the current viewport to the given cvp.  <a href="class_isis_1_1_tool.html#aabf2c6787be800be5821b69cda6a3566">More...</a><br /></td></tr>
+<tr class="separator:aabf2c6787be800be5821b69cda6a3566"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:acae10b547a99c67c965b2fca8049fdae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#acae10b547a99c67c965b2fca8049fdae">clearWarningSignal</a> ()</td></tr>
+<tr class="separator:acae10b547a99c67c965b2fca8049fdae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e95d5a9dbf696a3b42425c0c80636b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a4e95d5a9dbf696a3b42425c0c80636b5">toolActivated</a> ()</td></tr>
+<tr class="separator:a4e95d5a9dbf696a3b42425c0c80636b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe0e0dcacf1cb644004a0a8e7d469243"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#afe0e0dcacf1cb644004a0a8e7d469243">viewportChanged</a> ()</td></tr>
+<tr class="separator:afe0e0dcacf1cb644004a0a8e7d469243"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:af2da792abd733600dfb81947d38c2530"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#af2da792abd733600dfb81947d38c2530">AbstractPlotTool</a> (<a class="el" href="class_q_widget.html">QWidget</a> *parent)</td></tr>
+<tr class="memdesc:af2da792abd733600dfb81947d38c2530"><td class="mdescLeft">&#160;</td><td class="mdescRight">When you construct a plot tool, this initializes the common functionality between plot tools.  <a href="class_isis_1_1_abstract_plot_tool.html#af2da792abd733600dfb81947d38c2530">More...</a><br /></td></tr>
+<tr class="separator:af2da792abd733600dfb81947d38c2530"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8aa56768923aac5cb50673fe4dc1efa7"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#a8aa56768923aac5cb50673fe4dc1efa7">~AbstractPlotTool</a> ()</td></tr>
+<tr class="memdesc:a8aa56768923aac5cb50673fe4dc1efa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clean up the abstract plot tool.  <a href="class_isis_1_1_abstract_plot_tool.html#a8aa56768923aac5cb50673fe4dc1efa7">More...</a><br /></td></tr>
+<tr class="separator:a8aa56768923aac5cb50673fe4dc1efa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4da829c85b00c9fa3f8fa49faee5249d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#a4da829c85b00c9fa3f8fa49faee5249d">paintViewport</a> (<a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *vp, QPainter *painter)</td></tr>
+<tr class="memdesc:a4da829c85b00c9fa3f8fa49faee5249d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method allows each plot window to paint any information it wants onto the cube viewports.  <a href="class_isis_1_1_abstract_plot_tool.html#a4da829c85b00c9fa3f8fa49faee5249d">More...</a><br /></td></tr>
+<tr class="separator:a4da829c85b00c9fa3f8fa49faee5249d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a456ff8f54037585cae90e226dc88f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a1a456ff8f54037585cae90e226dc88f8">addTo</a> (<a class="el" href="class_isis_1_1_viewport_main_window.html">ViewportMainWindow</a> *mw)</td></tr>
+<tr class="memdesc:a1a456ff8f54037585cae90e226dc88f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the tool to the application.  <a href="class_isis_1_1_tool.html#a1a456ff8f54037585cae90e226dc88f8">More...</a><br /></td></tr>
+<tr class="separator:a1a456ff8f54037585cae90e226dc88f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70d63d11a19169740d80b7d6df5bf42e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a70d63d11a19169740d80b7d6df5bf42e">addTo</a> (<a class="el" href="class_isis_1_1_tool_pad.html">ToolPad</a> *toolpad)</td></tr>
+<tr class="memdesc:a70d63d11a19169740d80b7d6df5bf42e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the tool to the toolpad.  <a href="class_isis_1_1_tool.html#a70d63d11a19169740d80b7d6df5bf42e">More...</a><br /></td></tr>
+<tr class="separator:a70d63d11a19169740d80b7d6df5bf42e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43bd5f3e9d645203331d7e4003e753ee"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a43bd5f3e9d645203331d7e4003e753ee">addTo</a> (<a class="el" href="class_q_menu.html">QMenu</a> *menu)</td></tr>
+<tr class="separator:a43bd5f3e9d645203331d7e4003e753ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af61d34345c662de31a98d7031739a6c3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#af61d34345c662de31a98d7031739a6c3">addTo</a> (<a class="el" href="class_isis_1_1_workspace.html">Workspace</a> *ws)</td></tr>
+<tr class="memdesc:af61d34345c662de31a98d7031739a6c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the given workspace to the cubeviewport list.  <a href="class_isis_1_1_tool.html#af61d34345c662de31a98d7031739a6c3">More...</a><br /></td></tr>
+<tr class="separator:af61d34345c662de31a98d7031739a6c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50a7c37ae8e722a168b4bf84ad6b432f"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a50a7c37ae8e722a168b4bf84ad6b432f">menuName</a> () const</td></tr>
+<tr class="memdesc:a50a7c37ae8e722a168b4bf84ad6b432f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Anytime a tool is created, you must give it a name for the menu.  <a href="class_isis_1_1_tool.html#a50a7c37ae8e722a168b4bf84ad6b432f">More...</a><br /></td></tr>
+<tr class="separator:a50a7c37ae8e722a168b4bf84ad6b432f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac94ccefc589b1dc1f5832bbb45ec71e3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#ac94ccefc589b1dc1f5832bbb45ec71e3">addToPermanent</a> (<a class="el" href="class_q_tool_bar.html">QToolBar</a> *toolbar)</td></tr>
+<tr class="separator:ac94ccefc589b1dc1f5832bbb45ec71e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad20fc5a47916262650832855cd8facae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#ad20fc5a47916262650832855cd8facae">addToActive</a> (<a class="el" href="class_q_tool_bar.html">QToolBar</a> *toolbar)</td></tr>
+<tr class="separator:ad20fc5a47916262650832855cd8facae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff46b0071ca1b18d750fcf1945761a05"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#aff46b0071ca1b18d750fcf1945761a05">toolIconDir</a> () const</td></tr>
+<tr class="memdesc:aff46b0071ca1b18d750fcf1945761a05"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the path to the icon directory.  <a href="class_isis_1_1_tool.html#aff46b0071ca1b18d750fcf1945761a05">More...</a><br /></td></tr>
+<tr class="separator:aff46b0071ca1b18d750fcf1945761a05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78f92349be2a54b41ed332886582797b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_rubber_band_tool.html">RubberBandTool</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a78f92349be2a54b41ed332886582797b">rubberBandTool</a> ()</td></tr>
+<tr class="separator:a78f92349be2a54b41ed332886582797b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a504430f496834fe5699d764d1a322f4a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a504430f496834fe5699d764d1a322f4a">setList</a> (<a class="el" href="class_isis_1_1_tool_list.html">ToolList</a> *currentList)</td></tr>
+<tr class="separator:a504430f496834fe5699d764d1a322f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:a57dcacf06868324e92ca71b87c8087d5"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_q_vector.html">QVector</a>&lt; <a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a57dcacf06868324e92ca71b87c8087d5">CubeViewportList</a></td></tr>
+<tr class="memdesc:a57dcacf06868324e92ca71b87c8087d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of cubeviewports.  <a href="class_isis_1_1_tool.html#a57dcacf06868324e92ca71b87c8087d5">More...</a><br /></td></tr>
+<tr class="separator:a57dcacf06868324e92ca71b87c8087d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-slots"></a>
+Protected Slots</h2></td></tr>
+<tr class="memitem:a05063a88bc34af9aa3ea875e6fdf681f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#a05063a88bc34af9aa3ea875e6fdf681f">repaintViewports</a> ()</td></tr>
+<tr class="memdesc:a05063a88bc34af9aa3ea875e6fdf681f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method causes all of the viewports to be repainted.  <a href="class_isis_1_1_abstract_plot_tool.html#a05063a88bc34af9aa3ea875e6fdf681f">More...</a><br /></td></tr>
+<tr class="separator:a05063a88bc34af9aa3ea875e6fdf681f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13ac9897c422414c2f6354f7bea4e3ee"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a13ac9897c422414c2f6354f7bea4e3ee">rubberBandComplete</a> ()</td></tr>
+<tr class="separator:a13ac9897c422414c2f6354f7bea4e3ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b95f6c2e7290d2fb2feae9c13972d7f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a4b95f6c2e7290d2fb2feae9c13972d7f">screenPixelsChanged</a> ()</td></tr>
+<tr class="memdesc:a4b95f6c2e7290d2fb2feae9c13972d7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is called when actions change which pixels from the cube are displayed.  <a href="class_isis_1_1_tool.html#a4b95f6c2e7290d2fb2feae9c13972d7f">More...</a><br /></td></tr>
+<tr class="separator:a4b95f6c2e7290d2fb2feae9c13972d7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2369cef1aea34a1703b909a8bd6077b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#ae2369cef1aea34a1703b909a8bd6077b">mouseEnter</a> ()</td></tr>
+<tr class="separator:ae2369cef1aea34a1703b909a8bd6077b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa100cfa2985d68183c28f26e91e18823"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#aa100cfa2985d68183c28f26e91e18823">mouseMove</a> (QPoint p)</td></tr>
+<tr class="separator:aa100cfa2985d68183c28f26e91e18823"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ee51213e6eb6124edb201608cf8d377"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a3ee51213e6eb6124edb201608cf8d377">mouseMove</a> (QPoint p, Qt::MouseButton)</td></tr>
+<tr class="separator:a3ee51213e6eb6124edb201608cf8d377"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8aae7284aabcfd4a5216027aaae99c0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#af8aae7284aabcfd4a5216027aaae99c0">mouseLeave</a> ()</td></tr>
+<tr class="separator:af8aae7284aabcfd4a5216027aaae99c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:aca46e2e3d39c548983916d8499804bac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#aca46e2e3d39c548983916d8499804bac">addWindow</a> ()</td></tr>
+<tr class="memdesc:aca46e2e3d39c548983916d8499804bac"><td class="mdescLeft">&#160;</td><td class="mdescRight">This creates and initializes everything about a plot window.  <a href="class_isis_1_1_abstract_plot_tool.html#aca46e2e3d39c548983916d8499804bac">More...</a><br /></td></tr>
+<tr class="separator:aca46e2e3d39c548983916d8499804bac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a612834190c97dbfbbed3a121d51ca12f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#a612834190c97dbfbbed3a121d51ca12f">createToolBarWidget</a> (QStackedWidget *parent)</td></tr>
+<tr class="memdesc:a612834190c97dbfbbed3a121d51ca12f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This provides the standard plot tool options, such as selecting an active plot window.  <a href="class_isis_1_1_abstract_plot_tool.html#a612834190c97dbfbbed3a121d51ca12f">More...</a><br /></td></tr>
+<tr class="separator:a612834190c97dbfbbed3a121d51ca12f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affae2595bfa0b46638c634da1b0ed3dd"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#affae2595bfa0b46638c634da1b0ed3dd">createWindow</a> ()=0</td></tr>
+<tr class="memdesc:affae2595bfa0b46638c634da1b0ed3dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">This needs to be implemented by children to instantiate a plot window of the appropriate child class of <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a>.  <a href="class_isis_1_1_abstract_plot_tool.html#affae2595bfa0b46638c634da1b0ed3dd">More...</a><br /></td></tr>
+<tr class="separator:affae2595bfa0b46638c634da1b0ed3dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc485e45e96f564af7bbb50c3d86c076"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#abc485e45e96f564af7bbb50c3d86c076">updateTool</a> ()</td></tr>
+<tr class="memdesc:abc485e45e96f564af7bbb50c3d86c076"><td class="mdescLeft">&#160;</td><td class="mdescRight">This forwards all update calls to the plot windows.  <a href="class_isis_1_1_abstract_plot_tool.html#abc485e45e96f564af7bbb50c3d86c076">More...</a><br /></td></tr>
+<tr class="separator:abc485e45e96f564af7bbb50c3d86c076"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a736b0b96b5b1c961f0723dc62b5f3e74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#a736b0b96b5b1c961f0723dc62b5f3e74">viewportsToPlot</a> ()</td></tr>
+<tr class="memdesc:a736b0b96b5b1c961f0723dc62b5f3e74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of linked viewports that should be plotting when a new plot is requested.  <a href="class_isis_1_1_abstract_plot_tool.html#a736b0b96b5b1c961f0723dc62b5f3e74">More...</a><br /></td></tr>
+<tr class="separator:a736b0b96b5b1c961f0723dc62b5f3e74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89e98d4c041dc5a5e4ea3ef6dc5453e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#a89e98d4c041dc5a5e4ea3ef6dc5453e2">plotWindows</a> ()</td></tr>
+<tr class="memdesc:a89e98d4c041dc5a5e4ea3ef6dc5453e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of all of the instantiated plot windows.  <a href="class_isis_1_1_abstract_plot_tool.html#a89e98d4c041dc5a5e4ea3ef6dc5453e2">More...</a><br /></td></tr>
+<tr class="separator:a89e98d4c041dc5a5e4ea3ef6dc5453e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0ef2e97f90e0d7ef666db0c00cd64c1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#aa0ef2e97f90e0d7ef666db0c00cd64c1">detachCurves</a> ()=0</td></tr>
+<tr class="memdesc:aa0ef2e97f90e0d7ef666db0c00cd64c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This will be called when the selected plot window changes.  <a href="class_isis_1_1_abstract_plot_tool.html#aa0ef2e97f90e0d7ef666db0c00cd64c1">More...</a><br /></td></tr>
+<tr class="separator:aa0ef2e97f90e0d7ef666db0c00cd64c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3120332c73692f4ef79ae5e7562918d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#a3120332c73692f4ef79ae5e7562918d0">selectedWindow</a> (bool createIfNeeded=true)</td></tr>
+<tr class="memdesc:a3120332c73692f4ef79ae5e7562918d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the 'active' plot window (the window selected by the user to contain new curves).  <a href="class_isis_1_1_abstract_plot_tool.html#a3120332c73692f4ef79ae5e7562918d0">More...</a><br /></td></tr>
+<tr class="separator:a3120332c73692f4ef79ae5e7562918d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71b2766d4140d9d9338de709373a0d5c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a71b2766d4140d9d9338de709373a0d5c">mouseDoubleClick</a> (QPoint p)</td></tr>
+<tr class="separator:a71b2766d4140d9d9338de709373a0d5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae989e22867e7b1c47944a37df2126254"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#ae989e22867e7b1c47944a37df2126254">mouseButtonPress</a> (QPoint p, Qt::MouseButton s)</td></tr>
+<tr class="separator:ae989e22867e7b1c47944a37df2126254"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94fb9efbd81d3aad3c6e22be52c8dec3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a94fb9efbd81d3aad3c6e22be52c8dec3">mouseButtonRelease</a> (QPoint p, Qt::MouseButton s)</td></tr>
+<tr class="memdesc:a94fb9efbd81d3aad3c6e22be52c8dec3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the Warning to Nowarning when a different activity occurs on the application.  <a href="class_isis_1_1_tool.html#a94fb9efbd81d3aad3c6e22be52c8dec3">More...</a><br /></td></tr>
+<tr class="separator:a94fb9efbd81d3aad3c6e22be52c8dec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd9885048ea427d9271c183721f8040b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#abd9885048ea427d9271c183721f8040b">updateMeasure</a> ()</td></tr>
+<tr class="separator:abd9885048ea427d9271c183721f8040b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade0359edf6cb38d70377cab59bed035d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#ade0359edf6cb38d70377cab59bed035d">scaleChanged</a> ()</td></tr>
+<tr class="separator:ade0359edf6cb38d70377cab59bed035d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95f1da1201e2e8a795abed7576b34914"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a95f1da1201e2e8a795abed7576b34914">stretchRequested</a> (<a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *, int)</td></tr>
+<tr class="separator:a95f1da1201e2e8a795abed7576b34914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb69697f4a8a672caf9c60825fa98103"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#adb69697f4a8a672caf9c60825fa98103">registerTool</a> (<a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *viewport)</td></tr>
+<tr class="memdesc:adb69697f4a8a672caf9c60825fa98103"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the tool to the viewport.  <a href="class_isis_1_1_tool.html#adb69697f4a8a672caf9c60825fa98103">More...</a><br /></td></tr>
+<tr class="separator:adb69697f4a8a672caf9c60825fa98103"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab39b77000fd5aa8cbc7b063fb208a0b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#ab39b77000fd5aa8cbc7b063fb208a0b5">cubeViewport</a> () const</td></tr>
+<tr class="memdesc:ab39b77000fd5aa8cbc7b063fb208a0b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current cubeviewport.  <a href="class_isis_1_1_tool.html#ab39b77000fd5aa8cbc7b063fb208a0b5">More...</a><br /></td></tr>
+<tr class="separator:ab39b77000fd5aa8cbc7b063fb208a0b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d6b6336bb81d71ff4d908e82f3b14d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_tool.html#a57dcacf06868324e92ca71b87c8087d5">CubeViewportList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a9d6b6336bb81d71ff4d908e82f3b14d7">cubeViewportList</a> () const</td></tr>
+<tr class="memdesc:a9d6b6336bb81d71ff4d908e82f3b14d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the list of cubeviewports.  <a href="class_isis_1_1_tool.html#a9d6b6336bb81d71ff4d908e82f3b14d7">More...</a><br /></td></tr>
+<tr class="separator:a9d6b6336bb81d71ff4d908e82f3b14d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52362dc376ad895c8bd5c2b981a94e32"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_q_action.html">QAction</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a52362dc376ad895c8bd5c2b981a94e32">toolPadAction</a> (<a class="el" href="class_isis_1_1_tool_pad.html">ToolPad</a> *toolpad)</td></tr>
+<tr class="memdesc:a52362dc376ad895c8bd5c2b981a94e32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Anytime a tool is created, you must setup a tool pad action with it.  <a href="class_isis_1_1_tool.html#a52362dc376ad895c8bd5c2b981a94e32">More...</a><br /></td></tr>
+<tr class="separator:a52362dc376ad895c8bd5c2b981a94e32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4b31244f5c39171dc2582956f84aaae"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#ab4b31244f5c39171dc2582956f84aaae">addConnections</a> (<a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *cvp)</td></tr>
+<tr class="memdesc:ab4b31244f5c39171dc2582956f84aaae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Anytime a tool is created, you must add the connections for it.  <a href="class_isis_1_1_tool.html#ab4b31244f5c39171dc2582956f84aaae">More...</a><br /></td></tr>
+<tr class="separator:ab4b31244f5c39171dc2582956f84aaae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01b45151e17396216543229ce5761c15"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a01b45151e17396216543229ce5761c15">removeConnections</a> (<a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *cvp)</td></tr>
+<tr class="memdesc:a01b45151e17396216543229ce5761c15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Anytime a tool is created, you must be able to remove it's connections.  <a href="class_isis_1_1_tool.html#a01b45151e17396216543229ce5761c15">More...</a><br /></td></tr>
+<tr class="separator:a01b45151e17396216543229ce5761c15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a410b18e75616718d6b9c0ac9d57d076a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#a410b18e75616718d6b9c0ac9d57d076a">enableRubberBandTool</a> ()</td></tr>
+<tr class="memdesc:a410b18e75616718d6b9c0ac9d57d076a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Anytime a tool is created, you may use the rubber band tool.  <a href="class_isis_1_1_tool.html#a410b18e75616718d6b9c0ac9d57d076a">More...</a><br /></td></tr>
+<tr class="separator:a410b18e75616718d6b9c0ac9d57d076a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f52d78b28912e21394de4524540e3e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_workspace.html">Workspace</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tool.html#ae4f52d78b28912e21394de4524540e3e">workspace</a> ()</td></tr>
+<tr class="separator:ae4f52d78b28912e21394de4524540e3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr class="memitem:acb21bd9d5f251d2c3fb294776c9f5d33"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_plot_tool.html#acb21bd9d5f251d2c3fb294776c9f5d33">createCurve</a> (QString name, QPen pen, <a class="el" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a> xUnits, <a class="el" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a> yUnits)</td></tr>
+<tr class="memdesc:acb21bd9d5f251d2c3fb294776c9f5d33"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a helper method for children.  <a href="class_isis_1_1_abstract_plot_tool.html#acb21bd9d5f251d2c3fb294776c9f5d33">More...</a><br /></td></tr>
+<tr class="separator:acb21bd9d5f251d2c3fb294776c9f5d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Parent class for plotting tools which provides common functionality. </p>
+<p>This qview tool is designed to be inherited from by tools which create plots. This class provides common functionality such as opening new plot windows.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-01-18 Steven Lambright and Tracie Sucharski </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a57dcacf06868324e92ca71b87c8087d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57dcacf06868324e92ca71b87c8087d5">&#9670;&nbsp;</a></span>CubeViewportList</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="class_q_vector.html">QVector</a>&lt; <a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> * &gt; <a class="el" href="class_isis_1_1_tool.html#a57dcacf06868324e92ca71b87c8087d5">Isis::Tool::CubeViewportList</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A list of cubeviewports. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af2da792abd733600dfb81947d38c2530"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2da792abd733600dfb81947d38c2530">&#9670;&nbsp;</a></span>AbstractPlotTool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::AbstractPlotTool::AbstractPlotTool </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>When you construct a plot tool, this initializes the common functionality between plot tools. </p>
+<p>For example, the select window combo box that appears when you call <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a612834190c97dbfbbed3a121d51ca12f" title="This provides the standard plot tool options, such as selecting an active plot window.">createToolBarWidget()</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8aa56768923aac5cb50673fe4dc1efa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8aa56768923aac5cb50673fe4dc1efa7">&#9670;&nbsp;</a></span>~AbstractPlotTool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::AbstractPlotTool::~AbstractPlotTool </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clean up the abstract plot tool. </p>
+<p>This will destroy all of the plot windows. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9ae575a1659b99222874cfbbab6d5b38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ae575a1659b99222874cfbbab6d5b38">&#9670;&nbsp;</a></span>activate</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::activate </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>on</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Activates the tool. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">on</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#acae10b547a99c67c965b2fca8049fdae">Isis::Tool::clearWarningSignal()</a>, and <a class="el" href="class_isis_1_1_tool.html#a4e95d5a9dbf696a3b42425c0c80636b5">Isis::Tool::toolActivated()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool.html#a70d63d11a19169740d80b7d6df5bf42e">Isis::Tool::addTo()</a>, <a class="el" href="class_isis_1_1_advanced_track_tool.html#afa68d5b84add340008eaf59ced217451">Isis::AdvancedTrackTool::AdvancedTrackTool()</a>, <a class="el" href="class_isis_1_1_rubber_band_tool.html#a01f3ab44824b6b0b8a0b4b6f90b13830">Isis::RubberBandTool::disable()</a>, <a class="el" href="class_isis_1_1_rubber_band_tool.html#acf4a2c98c23558204222edb844ab1d95">Isis::RubberBandTool::enable()</a>, <a class="el" href="class_isis_1_1_advanced_track_tool.html#a12283ab83a6400e5c8187a1355588d93">Isis::AdvancedTrackTool::eventFilter()</a>, <a class="el" href="class_isis_1_1_file_tool.html#a18aaf0a06f81d6afd3b73b89d656f6cb">Isis::FileTool::FileTool()</a>, <a class="el" href="class_isis_1_1_rubber_band_tool.html#afecba08b5ce1ef9d61bc912d90faf466">Isis::RubberBandTool::RubberBandTool()</a>, <a class="el" href="class_isis_1_1_track_tool.html#a83a2b0a53169c3c94cb41febcadf294c">Isis::TrackTool::TrackTool()</a>, <a class="el" href="class_isis_1_1_window_tool.html#ac46b0fc38abdb6afe195534e0756173b">Isis::WindowTool::WindowTool()</a>, and <a class="el" href="class_isis_1_1_workspace.html#ad267ab4211a7676eae11a34d3c92ac92">Isis::Workspace::Workspace()</a>.</p>
+
+</div>
+</div>
+<a id="ab4b31244f5c39171dc2582956f84aaae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4b31244f5c39171dc2582956f84aaae">&#9670;&nbsp;</a></span>addConnections()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::addConnections </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td>
+          <td class="paramname"><em>cvp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Anytime a tool is created, you must add the connections for it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cvp</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_window_tool.html#ae60b0a31a0baf560973b426998ac93fc">Isis::WindowTool</a>, and <a class="el" href="class_isis_1_1_track_tool.html#a48c33123de8e23acf9201a2dc2892c13">Isis::TrackTool</a>.</p>
+
+</div>
+</div>
+<a id="a43bd5f3e9d645203331d7e4003e753ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43bd5f3e9d645203331d7e4003e753ee">&#9670;&nbsp;</a></span>addTo() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::addTo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_menu.html">QMenu</a> *&#160;</td>
+          <td class="paramname"><em>menu</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">menu</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_zoom_tool.html#a66853a81ff9c4709d3e1bbc367afb6b3">Isis::ZoomTool</a>, <a class="el" href="class_isis_1_1_window_tool.html#aeb371b00b9b738028c72cf0fd1c75df6">Isis::WindowTool</a>, <a class="el" href="class_isis_1_1_sun_shadow_tool.html#ae4f41d00b45c92b1ab1b2557b87f0001">Isis::SunShadowTool</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a88d7a62fac71d9505bf46f1cbfb775dd">Isis::StretchTool</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a3898176f4890196d7cc03c9885da8390">Isis::SpectralPlotTool</a>, <a class="el" href="class_isis_1_1_special_pixel_tool.html#a60fd40002baac0bf6be19dc946b1c8ef">Isis::SpecialPixelTool</a>, <a class="el" href="class_isis_1_1_qnet_file_tool.html#ad06af69c9881920eb91fb1a5c152a17a">Isis::QnetFileTool</a>, <a class="el" href="class_isis_1_1_measure_tool.html#af28d2313357514f1d5bd7230e747b6e6">Isis::MeasureTool</a>, <a class="el" href="class_isis_1_1_help_tool.html#ac829ee300b5fcd747c04a712bc814352">Isis::HelpTool</a>, <a class="el" href="class_isis_1_1_find_tool.html#a3805f771f0d90502d483f44f3c21167e">Isis::FindTool</a>, <a class="el" href="class_isis_1_1_file_tool.html#aa48dfc5c88de8914f03eb08b2fcc7c46">Isis::FileTool</a>, <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#a07f6886bcf23193e1769d7d70ffac112">Isis::FeatureNomenclatureTool</a>, <a class="el" href="class_isis_1_1_blink_tool.html#a0ea1e2b1c9284cf9204b8a1fc3a8f831">Isis::BlinkTool</a>, <a class="el" href="class_isis_1_1_advanced_track_tool.html#a6d856392ba36692681838652a711da2a">Isis::AdvancedTrackTool</a>, and <a class="el" href="class_isis_1_1_pan_tool.html#aca79644ec2c6be3822eeb2e91061fd47">Isis::PanTool</a>.</p>
+
+</div>
+</div>
+<a id="a70d63d11a19169740d80b7d6df5bf42e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70d63d11a19169740d80b7d6df5bf42e">&#9670;&nbsp;</a></span>addTo() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::addTo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_tool_pad.html">ToolPad</a> *&#160;</td>
+          <td class="paramname"><em>toolpad</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds the tool to the toolpad. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">toolpad</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#a9ae575a1659b99222874cfbbab6d5b38">Isis::Tool::activate()</a>, <a class="el" href="class_isis_1_1_tool_pad.html#a1049935b5fdcbd05c9223f82bab5c73b">Isis::ToolPad::addAction()</a>, and <a class="el" href="class_isis_1_1_tool.html#a52362dc376ad895c8bd5c2b981a94e32">Isis::Tool::toolPadAction()</a>.</p>
+
+</div>
+</div>
+<a id="a1a456ff8f54037585cae90e226dc88f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a456ff8f54037585cae90e226dc88f8">&#9670;&nbsp;</a></span>addTo() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::addTo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_viewport_main_window.html">ViewportMainWindow</a> *&#160;</td>
+          <td class="paramname"><em>pViewPortMnWin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds the tool to the application. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pViewPortMnWin</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_viewport_main_window.html#a30c5ce2617feebfe7751d31f9a479084">Isis::ViewportMainWindow::activeToolBar()</a>, <a class="el" href="class_isis_1_1_tool.html#ad20fc5a47916262650832855cd8facae">Isis::Tool::addToActive()</a>, <a class="el" href="class_isis_1_1_tool.html#ac94ccefc589b1dc1f5832bbb45ec71e3">Isis::Tool::addToPermanent()</a>, <a class="el" href="class_isis_1_1_viewport_main_window.html#ad0f574c6dc7a183c882a531c2bad02e2">Isis::ViewportMainWindow::getMenu()</a>, <a class="el" href="class_isis_1_1_tool.html#a50a7c37ae8e722a168b4bf84ad6b432f">Isis::Tool::menuName()</a>, <a class="el" href="class_isis_1_1_viewport_main_window.html#aade14869ae8a9f7eb86383c135256c2b">Isis::ViewportMainWindow::permanentToolBar()</a>, <a class="el" href="class_isis_1_1_viewport_main_window.html#aa7b26ef8b2351e20093a6f7552d6c92d">Isis::ViewportMainWindow::toolPad()</a>, and <a class="el" href="class_isis_1_1_viewport_main_window.html#a92be4681bb68400d1c4cff6b7cbd823e">Isis::ViewportMainWindow::workspace()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_edit_tool.html#ac6c71cbb48df4f1000e96f1e9c268c77">Isis::EditTool::addTo()</a>, <a class="el" href="class_isis_1_1_file_tool.html#a6473b035a811048c08686cbc381d1ad3">Isis::FileTool::addTo()</a>, <a class="el" href="class_isis_1_1_special_pixel_tool.html#ac9023de960be39b9a849bb0dba21879d">Isis::SpecialPixelTool::addTo()</a>, <a class="el" href="class_isis_1_1_window_tool.html#ab21d0b4289d0d3292db01bae6881f5ee">Isis::WindowTool::addTo()</a>, <a class="el" href="class_isis_1_1_viewport_main_window.html#a9d0d80bea57b87adb0c6d645200a0414">Isis::ViewportMainWindow::ViewportMainWindow()</a>, and <a class="el" href="class_isis_1_1_workspace.html#ad267ab4211a7676eae11a34d3c92ac92">Isis::Workspace::Workspace()</a>.</p>
+
+</div>
+</div>
+<a id="af61d34345c662de31a98d7031739a6c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af61d34345c662de31a98d7031739a6c3">&#9670;&nbsp;</a></span>addTo() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::addTo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_workspace.html">Workspace</a> *&#160;</td>
+          <td class="paramname"><em>ws</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds the given workspace to the cubeviewport list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ws</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_window_tool.html#ab21d0b4289d0d3292db01bae6881f5ee">Isis::WindowTool</a>, <a class="el" href="class_isis_1_1_special_pixel_tool.html#ac9023de960be39b9a849bb0dba21879d">Isis::SpecialPixelTool</a>, <a class="el" href="class_isis_1_1_file_tool.html#a6473b035a811048c08686cbc381d1ad3">Isis::FileTool</a>, and <a class="el" href="class_isis_1_1_edit_tool.html#ac6c71cbb48df4f1000e96f1e9c268c77">Isis::EditTool</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#adb69697f4a8a672caf9c60825fa98103">Isis::Tool::registerTool()</a>, and <a class="el" href="class_isis_1_1_tool.html#aabf2c6787be800be5821b69cda6a3566">Isis::Tool::setCubeViewport()</a>.</p>
+
+</div>
+</div>
+<a id="ad20fc5a47916262650832855cd8facae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad20fc5a47916262650832855cd8facae">&#9670;&nbsp;</a></span>addToActive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::addToActive </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_tool_bar.html">QToolBar</a> *&#160;</td>
+          <td class="paramname"><em>toolbar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">toolbar</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#a41b9b964a1848a0ff44270d64350fbd5">Isis::Tool::createToolBarWidget()</a>, and <a class="el" href="class_isis_1_1_tool_list.html#a6142b0a7ec40c497ed7b2746f5f2ad2c">Isis::ToolList::toolBarStack()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool.html#a1a456ff8f54037585cae90e226dc88f8">Isis::Tool::addTo()</a>, and <a class="el" href="class_isis_1_1_workspace.html#ad267ab4211a7676eae11a34d3c92ac92">Isis::Workspace::Workspace()</a>.</p>
+
+</div>
+</div>
+<a id="ac94ccefc589b1dc1f5832bbb45ec71e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac94ccefc589b1dc1f5832bbb45ec71e3">&#9670;&nbsp;</a></span>addToPermanent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::addToPermanent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_tool_bar.html">QToolBar</a> *&#160;</td>
+          <td class="paramname"><em>toolbar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">toolbar</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_window_tool.html#af97bc9019e7df8d0c89fc0ec7cc7bea7">Isis::WindowTool</a>, <a class="el" href="class_isis_1_1_special_pixel_tool.html#a2a3e72ff28ba4570f194661ad17d8b83">Isis::SpecialPixelTool</a>, <a class="el" href="class_isis_1_1_help_tool.html#a548d64b743ad6199314935577c568be2">Isis::HelpTool</a>, <a class="el" href="class_isis_1_1_file_tool.html#a61606711e4a3278e9e1d61951f61fb62">Isis::FileTool</a>, <a class="el" href="class_isis_1_1_blink_tool.html#a9526c88b530d36d1925a3e3d2e4c64a9">Isis::BlinkTool</a>, and <a class="el" href="class_isis_1_1_advanced_track_tool.html#a324b783440c0705f2abbc177a678ae9f">Isis::AdvancedTrackTool</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool.html#a1a456ff8f54037585cae90e226dc88f8">Isis::Tool::addTo()</a>, and <a class="el" href="class_isis_1_1_workspace.html#ad267ab4211a7676eae11a34d3c92ac92">Isis::Workspace::Workspace()</a>.</p>
+
+</div>
+</div>
+<a id="aca46e2e3d39c548983916d8499804bac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca46e2e3d39c548983916d8499804bac">&#9670;&nbsp;</a></span>addWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a> * Isis::AbstractPlotTool::addWindow </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This creates and initializes everything about a plot window. </p>
+<p>This updates the window's title to be unique, adds it to the active plot window combo box, listens for the window to be removed and selects it in the active plot window combo box. Call this if you need a new plot window.</p>
+<dl class="section return"><dt>Returns</dt><dd>The newly initialized plot window </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_plot_tool.html#affae2595bfa0b46638c634da1b0ed3dd">createWindow()</a>, <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a144aba5053d91a56f030de16c2fb62e6">removeWindow()</a>, and <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a05063a88bc34af9aa3ea875e6fdf681f">repaintViewports()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aef3783202967d8913df6d5a9f1921637">Isis::SpatialPlotTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a61ba135b941bbebd623fdd1f0dec3012">Isis::SpectralPlotTool::refreshPlot()</a>, and <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a3120332c73692f4ef79ae5e7562918d0">selectedWindow()</a>.</p>
+
+</div>
+</div>
+<a id="acae10b547a99c67c965b2fca8049fdae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acae10b547a99c67c965b2fca8049fdae">&#9670;&nbsp;</a></span>clearWarningSignal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::clearWarningSignal </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool.html#a9ae575a1659b99222874cfbbab6d5b38">Isis::Tool::activate()</a>, <a class="el" href="class_isis_1_1_tool.html#ae989e22867e7b1c47944a37df2126254">Isis::Tool::mouseButtonPress()</a>, <a class="el" href="class_isis_1_1_tool.html#a94fb9efbd81d3aad3c6e22be52c8dec3">Isis::Tool::mouseButtonRelease()</a>, and <a class="el" href="class_isis_1_1_tool.html#a71b2766d4140d9d9338de709373a0d5c">Isis::Tool::mouseDoubleClick()</a>.</p>
+
+</div>
+</div>
+<a id="acb21bd9d5f251d2c3fb294776c9f5d33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb21bd9d5f251d2c3fb294776c9f5d33">&#9670;&nbsp;</a></span>createCurve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> * Isis::AbstractPlotTool::createCurve </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QPen&#160;</td>
+          <td class="paramname"><em>pen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a>&#160;</td>
+          <td class="paramname"><em>xUnits</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a>&#160;</td>
+          <td class="paramname"><em>yUnits</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is a helper method for children. </p>
+<p>Given a title, a color, and units a new <a class="el" href="class_isis_1_1_cube_plot_curve.html" title="This is a plot curve with information relating it to a particular cube or region of a cube.">CubePlotCurve</a> is created.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The title of the curve to be created </td></tr>
+    <tr><td class="paramname">pen</td><td>The color &amp; thickness of the curve </td></tr>
+    <tr><td class="paramname">xUnits</td><td>The units of the x-axis associated with this curve. This must match the plot window's x axis. </td></tr>
+    <tr><td class="paramname">yUnits</td><td>The units of the y-axis associated with this curve. This must match the plot window's y axis. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>createCurve The requested plot curve </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_curve.html#a04f65826799fbefc1121ace46fd1ddf4">Isis::PlotCurve::setColor()</a>, and <a class="el" href="class_isis_1_1_plot_curve.html#ac235438ff612a058a1e7d92ffa706ee9">Isis::PlotCurve::setPen()</a>.</p>
+
+</div>
+</div>
+<a id="a612834190c97dbfbbed3a121d51ca12f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a612834190c97dbfbbed3a121d51ca12f">&#9670;&nbsp;</a></span>createToolBarWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::AbstractPlotTool::createToolBarWidget </td>
+          <td>(</td>
+          <td class="paramtype">QStackedWidget *&#160;</td>
+          <td class="paramname"><em>parent</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This provides the standard plot tool options, such as selecting an active plot window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>The stacked widget which will contain ours as one of the widgets it can show.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QWidget* The widget we want the stacked widget to show when this is the active tool. </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_tool.html#a41b9b964a1848a0ff44270d64350fbd5">Isis::Tool</a>.</p>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_stereo_tool.html#a739b02534772009215e84f73b042052d">Isis::StereoTool</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a4a04013479b5611fb9d5057ce7fcc8dc">Isis::SpectralPlotTool</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#af2d26d79524deec1c188380037ee7d3b">Isis::SpatialPlotTool</a>, and <a class="el" href="class_isis_1_1_histogram_tool.html#a7429e71dfc58df22195605b3099002e9">Isis::HistogramTool</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_histogram_tool.html#a7429e71dfc58df22195605b3099002e9">Isis::HistogramTool::createToolBarWidget()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#af2d26d79524deec1c188380037ee7d3b">Isis::SpatialPlotTool::createToolBarWidget()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a4a04013479b5611fb9d5057ce7fcc8dc">Isis::SpectralPlotTool::createToolBarWidget()</a>, and <a class="el" href="class_isis_1_1_stereo_tool.html#a739b02534772009215e84f73b042052d">Isis::StereoTool::createToolBarWidget()</a>.</p>
+
+</div>
+</div>
+<a id="affae2595bfa0b46638c634da1b0ed3dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affae2595bfa0b46638c634da1b0ed3dd">&#9670;&nbsp;</a></span>createWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a>* Isis::AbstractPlotTool::createWindow </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This needs to be implemented by children to instantiate a plot window of the appropriate child class of <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a>. </p>
+<p>You should set the window title, but the rest of the initialization will be handled by <a class="el" href="class_isis_1_1_abstract_plot_tool.html#aca46e2e3d39c548983916d8499804bac" title="This creates and initializes everything about a plot window.">addWindow()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>A newly instantiated, but not fully initialized, plot window. </dd></dl>
+
+<p>Implemented in <a class="el" href="class_isis_1_1_stereo_tool.html#a8b25c8d286010a21027a17089dafd08e">Isis::StereoTool</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a963e6a9e6085503a3742af20358d3cc8">Isis::SpectralPlotTool</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#a89d7a397f1bfa229c059a313166b1c5f">Isis::SpatialPlotTool</a>, and <a class="el" href="class_isis_1_1_histogram_tool.html#afe917955f1ecf808f6bfdcdfa94e3c9a">Isis::HistogramTool</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_plot_tool.html#aca46e2e3d39c548983916d8499804bac">addWindow()</a>.</p>
+
+</div>
+</div>
+<a id="ab39b77000fd5aa8cbc7b063fb208a0b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab39b77000fd5aa8cbc7b063fb208a0b5">&#9670;&nbsp;</a></span>cubeViewport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a>* Isis::Tool::cubeViewport </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the current cubeviewport. </p>
+<dl class="section return"><dt>Returns</dt><dd>CubeViewport* </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_track_tool.html#a48c33123de8e23acf9201a2dc2892c13">Isis::TrackTool::addConnections()</a>, <a class="el" href="class_isis_1_1_window_tool.html#ae60b0a31a0baf560973b426998ac93fc">Isis::WindowTool::addConnections()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a7da8b15dc0c279c33505004575f2d307">Isis::StretchTool::deleteFromCube()</a>, <a class="el" href="class_isis_1_1_file_tool.html#aa23d2f9817c0d946c29f9c2b8ce12400">Isis::FileTool::discard()</a>, <a class="el" href="class_isis_1_1_file_tool.html#a15f059cd413d0320ec767f25480a7be3">Isis::FileTool::exportToList()</a>, <a class="el" href="class_isis_1_1_file_tool.html#a194a407ff1a0da116cd5a624a0d3a2ec">Isis::FileTool::exportView()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#aeb851202f534ee2b646fe7315240106a">Isis::StretchTool::loadStretchFromCube()</a>, <a class="el" href="class_isis_1_1_sun_shadow_tool.html#a442cb82e08c9ec008f23d5518d3ebfa5">Isis::SunShadowTool::mouseButtonPress()</a>, <a class="el" href="class_isis_1_1_edit_tool.html#a0160dfa800571172ea9e09888374fd99">Isis::EditTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_control_net_tool.html#a62158163a9a07e21cfcc11be8d7e0536">Isis::ControlNetTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#aa48cb4076fecc7c6f58bd8860b79c4fb">Isis::FeatureNomenclatureTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_find_tool.html#ac9c6ea45b071e5c2c02a945025d595bc">Isis::FindTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_match_tool.html#a293f8409f38aa5024be833df6c121c12">Isis::MatchTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_pan_tool.html#a9ae9207c2aa70a545a9a9097c892b3b2">Isis::PanTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#aacbc8697bf53a669a2c9f43491b4c6be">Isis::QnetTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_rubber_band_tool.html#a3cb0fcf780c1ad244d4b401ecd749f6f">Isis::RubberBandTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#ab394963dddd774b6588bac99cc0eefe3">Isis::StretchTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_advanced_track_tool.html#af99718f26f41ef80b2f1a8cead95e624">Isis::AdvancedTrackTool::mouseLeave()</a>, <a class="el" href="class_isis_1_1_sun_shadow_tool.html#aa1f3834e97610e08e061c16083223e5c">Isis::SunShadowTool::mouseMove()</a>, <a class="el" href="class_isis_1_1_track_tool.html#a5dbca327d4682196c9573b8447b5d5f9">Isis::TrackTool::mouseMove()</a>, <a class="el" href="class_isis_1_1_rubber_band_tool.html#a255c6a33102083e08c5e4eb509816387">Isis::RubberBandTool::mouseMove()</a>, <a class="el" href="class_isis_1_1_scatter_plot_tool.html#ada7f708cb864af85b5463bf15a5710d1">Isis::ScatterPlotTool::mouseMove()</a>, <a class="el" href="class_isis_1_1_lat_lon_grid_tool.html#a97aa1556b3d3c114a646e2543d18cd4a">Isis::LatLonGridTool::paintViewport()</a>, <a class="el" href="class_isis_1_1_find_tool.html#a0a20b464b36191d164957176414bc2c5">Isis::FindTool::paintViewport()</a>, <a class="el" href="class_isis_1_1_rubber_band_tool.html#a523a277e26d052cd6652b2975d412b7b">Isis::RubberBandTool::paintViewport()</a>, <a class="el" href="class_isis_1_1_sun_shadow_tool.html#a7691b5f4dfa715a308cf6c28c55cc2fe">Isis::SunShadowTool::paintViewport()</a>, <a class="el" href="class_isis_1_1_file_tool.html#a27d9c03a09ebed14b8a1fbe045473e86">Isis::FileTool::print()</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#ad7354352a9a02070d3ed8031f8eb505f">Isis::HistogramTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aef3783202967d8913df6d5a9f1921637">Isis::SpatialPlotTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a61ba135b941bbebd623fdd1f0dec3012">Isis::SpectralPlotTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_track_tool.html#a566bf98d7277a7b23fbe061b17b58595">Isis::TrackTool::removeConnections()</a>, <a class="el" href="class_isis_1_1_window_tool.html#a36b6c205fc022668bc16bd1d3e97ce75">Isis::WindowTool::removeConnections()</a>, <a class="el" href="class_isis_1_1_edit_tool.html#a55e30e7df5eda8ab703d6227aeac84ce">Isis::EditTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#a2e82e94497c2381d8815584f6e8958ab">Isis::HistogramTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_measure_tool.html#a7e4f5d56849f4d16272581cf88dfcd4f">Isis::MeasureTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#a60c189d19da637fa550c44ab1bfee16b">Isis::StereoTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a4308dbfa60e50eca867891f45805cc77">Isis::StretchTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_zoom_tool.html#a104615f38df9f56b2bb441af46295b94">Isis::ZoomTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_file_tool.html#a0455a56ddca25368f9f940d2de9cec36">Isis::FileTool::save()</a>, <a class="el" href="class_isis_1_1_file_tool.html#a0c5e0236033cd49a854aa6df953a504e">Isis::FileTool::saveAs()</a>, <a class="el" href="class_isis_1_1_file_tool.html#aafed746b020aab28378f7c25482f9c8f">Isis::FileTool::saveAsCubeByOption()</a>, <a class="el" href="class_isis_1_1_file_tool.html#ab107694c86f37e6a7364e80679a539de">Isis::FileTool::saveInfo()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#ac702b6c9956e102076055618e7c85e1f">Isis::StretchTool::saveStretchToCube()</a>, <a class="el" href="class_isis_1_1_scatter_plot_tool.html#a584661bf841471cb0ed265e9aa90172d">Isis::ScatterPlotTool::showNewScatterPlotConfig()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a14e5e342fa115a728c40d6a1f2ce0b51">Isis::StretchTool::stretchGlobal()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#acb3bdc7ef191e272c11e76cce075947d">Isis::StretchTool::stretchGlobalAllBands()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a1946c473efbb1ae0469013d1601ffe2b">Isis::StretchTool::stretchRegional()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a10a5eb4013cd5230b286d9c458476daa">Isis::StretchTool::updateAdvStretchDialogforAll()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a7798715c3c3fe0ec01a0698c096d4d20">Isis::StretchTool::updateHistograms()</a>, <a class="el" href="class_isis_1_1_measure_tool.html#aec753c2520a471aec9b62b0a4ce2cc15">Isis::MeasureTool::updateMeasure()</a>, <a class="el" href="class_isis_1_1_abstract_plot_tool.html#abc485e45e96f564af7bbb50c3d86c076">updateTool()</a>, <a class="el" href="class_isis_1_1_band_tool.html#ab24908df4b1c9c8ce21e37aaf79a231e">Isis::BandTool::updateTool()</a>, <a class="el" href="class_isis_1_1_blink_tool.html#ab1c1e9c279cf64c560793737f7ff706b">Isis::BlinkTool::updateTool()</a>, <a class="el" href="class_isis_1_1_edit_tool.html#ad6e0583d4193bbac862f0ebbe0f65461">Isis::EditTool::updateTool()</a>, <a class="el" href="class_isis_1_1_file_tool.html#a265343f54c47f8d2fd83c6466eac42df">Isis::FileTool::updateTool()</a>, <a class="el" href="class_isis_1_1_find_tool.html#a5939eb9233cbb807c8c49d840be59386">Isis::FindTool::updateTool()</a>, <a class="el" href="class_isis_1_1_lat_lon_grid_tool.html#ab51650a788c9f3f75cedc55f32fd1932">Isis::LatLonGridTool::updateTool()</a>, <a class="el" href="class_isis_1_1_special_pixel_tool.html#a1cc7ea1083ecc6cfa161a6809e64b26b">Isis::SpecialPixelTool::updateTool()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#adf83a407b6cee610b951590db26c5d02">Isis::StretchTool::updateTool()</a>, <a class="el" href="class_isis_1_1_sun_shadow_tool.html#a3eaf150868caa6c6e7ddbb03a0dbd174">Isis::SunShadowTool::updateTool()</a>, <a class="el" href="class_isis_1_1_window_tool.html#aacecae35a91fea49bf91a3000beb6311">Isis::WindowTool::updateTool()</a>, <a class="el" href="class_isis_1_1_zoom_tool.html#a0c8a9c1380abbf5548d141588d54abe8">Isis::ZoomTool::updateTool()</a>, and <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a736b0b96b5b1c961f0723dc62b5f3e74">viewportsToPlot()</a>.</p>
+
+</div>
+</div>
+<a id="a9d6b6336bb81d71ff4d908e82f3b14d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d6b6336bb81d71ff4d908e82f3b14d7">&#9670;&nbsp;</a></span>cubeViewportList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_tool.html#a57dcacf06868324e92ca71b87c8087d5">Tool::CubeViewportList</a> * Isis::Tool::cubeViewportList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the list of cubeviewports. </p>
+<dl class="section return"><dt>Returns</dt><dd>CubeViewportList* </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_workspace.html#af3b152677561be2478777752b04dbbd5">Isis::Workspace::cubeViewportList()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_file_tool.html#a1728439edfaf3f8ac45cda402667b956">Isis::FileTool::closeAll()</a>, <a class="el" href="class_isis_1_1_match_tool.html#ac196689084b840946a1a511ea712417e">Isis::MatchTool::createPoint()</a>, <a class="el" href="class_isis_1_1_blink_tool.html#af91506b7750648a3e49dfeb693393e77">Isis::BlinkTool::eventFilter()</a>, <a class="el" href="class_isis_1_1_pan_tool.html#a9ae9207c2aa70a545a9a9097c892b3b2">Isis::PanTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_rubber_band_tool.html#a3cb0fcf780c1ad244d4b401ecd749f6f">Isis::RubberBandTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_rubber_band_tool.html#a255c6a33102083e08c5e4eb509816387">Isis::RubberBandTool::mouseMove()</a>, <a class="el" href="class_isis_1_1_scatter_plot_tool.html#aac3ada59fa7629787d06651c99ac7d78">Isis::ScatterPlotTool::repaintViewports()</a>, <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a96b8a131b61f9a28fb02e9e854d99490">repaintViewports()</a>, <a class="el" href="class_isis_1_1_zoom_tool.html#a104615f38df9f56b2bb441af46295b94">Isis::ZoomTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_control_net_tool.html#a3c02b2c0e324a8ea650be3714afc3094">Isis::ControlNetTool::setControlNet()</a>, <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#aca5bee62b6fb759f6bbe6f78d183a480">Isis::FeatureNomenclatureTool::setFontColor()</a>, <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#a3574c651ce2bd951fe06dc66f049636b">Isis::FeatureNomenclatureTool::setFontSize()</a>, <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#a15d7abd04df0cbf8105f7285eb210d2d">Isis::FeatureNomenclatureTool::setShowApprovedOnly()</a>, <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#a021f0760bf5900aed38a0051b85ccc70">Isis::FeatureNomenclatureTool::setVectorType()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#aa5cefa8174373fbc5768dd20180fc6b8">Isis::StretchTool::stretchGlobalAllViewports()</a>, <a class="el" href="class_isis_1_1_measure_tool.html#aec753c2520a471aec9b62b0a4ce2cc15">Isis::MeasureTool::updateMeasure()</a>, <a class="el" href="class_isis_1_1_blink_tool.html#ab1c1e9c279cf64c560793737f7ff706b">Isis::BlinkTool::updateTool()</a>, <a class="el" href="class_isis_1_1_find_tool.html#a5939eb9233cbb807c8c49d840be59386">Isis::FindTool::updateTool()</a>, <a class="el" href="class_isis_1_1_window_tool.html#aacecae35a91fea49bf91a3000beb6311">Isis::WindowTool::updateTool()</a>, and <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a736b0b96b5b1c961f0723dc62b5f3e74">viewportsToPlot()</a>.</p>
+
+</div>
+</div>
+<a id="aa0ef2e97f90e0d7ef666db0c00cd64c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0ef2e97f90e0d7ef666db0c00cd64c1">&#9670;&nbsp;</a></span>detachCurves()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::AbstractPlotTool::detachCurves </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This will be called when the selected plot window changes. </p>
+<p>The existing curves need to be detached (forgotten, but not deleted). The curves are being detached between the previously selected window and the tool. </p>
+
+<p>Implemented in <a class="el" href="class_isis_1_1_stereo_tool.html#a2b09c44fc9685814b845d8c0527664bd">Isis::StereoTool</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a8e36e4c8b9774af56cf3418023a00fd4">Isis::SpectralPlotTool</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#af0b54246a50926b94a95ea6a5cca7fa0">Isis::SpatialPlotTool</a>, and <a class="el" href="class_isis_1_1_histogram_tool.html#ab27467cd7282fdbcee6b7dd113250a02">Isis::HistogramTool</a>.</p>
+
+</div>
+</div>
+<a id="a410b18e75616718d6b9c0ac9d57d076a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a410b18e75616718d6b9c0ac9d57d076a">&#9670;&nbsp;</a></span>enableRubberBandTool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::enableRubberBandTool </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Anytime a tool is created, you may use the rubber band tool. </p>
+<p>Enable the use of the rubberband tool. </p>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_zoom_tool.html#acf8c7f36a0924542a86e3b416793de17">Isis::ZoomTool</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#a67adfc0654d0c025bebc33ea9ba0eb1e">Isis::StereoTool</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a24ba76750855ce971d4963052b0cb891">Isis::SpectralPlotTool</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aa0ae3b28708b4c58b95e09e1794549b9">Isis::SpatialPlotTool</a>, <a class="el" href="class_isis_1_1_rubber_band_tool.html#a9f429839f3725fe48997e8b1e0db621d">Isis::RubberBandTool</a>, <a class="el" href="class_isis_1_1_measure_tool.html#aa924a2245ce7871c2752e4d27b542ec9">Isis::MeasureTool</a>, and <a class="el" href="class_isis_1_1_histogram_tool.html#a545c6c006a2f5b2391a20b6e3281592e">Isis::HistogramTool</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_rubber_band_tool.html#a01f3ab44824b6b0b8a0b4b6f90b13830">Isis::RubberBandTool::disable()</a>, and <a class="el" href="class_isis_1_1_tool.html#a78f92349be2a54b41ed332886582797b">Isis::Tool::rubberBandTool()</a>.</p>
+
+</div>
+</div>
+<a id="a50a7c37ae8e722a168b4bf84ad6b432f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50a7c37ae8e722a168b4bf84ad6b432f">&#9670;&nbsp;</a></span>menuName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QString Isis::Tool::menuName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Anytime a tool is created, you must give it a name for the menu. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_zoom_tool.html#afd5f880713c4002f2eb89d2444288928">Isis::ZoomTool</a>, <a class="el" href="class_isis_1_1_window_tool.html#a238661fe00a905bda824f5db2ded4448">Isis::WindowTool</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#ab2748cda409667a6685a84bee6de7fee">Isis::StretchTool</a>, <a class="el" href="class_isis_1_1_special_pixel_tool.html#aac557e2d7b02380a8d8f913156244d99">Isis::SpecialPixelTool</a>, <a class="el" href="class_isis_1_1_pan_tool.html#adb10094a9753068b5613fde1f2a7ac53">Isis::PanTool</a>, <a class="el" href="class_isis_1_1_measure_tool.html#ae5a111861e88c694d9802804b5f7f69a">Isis::MeasureTool</a>, <a class="el" href="class_isis_1_1_help_tool.html#a6b3c39448b82130b99baf360fea5048d">Isis::HelpTool</a>, <a class="el" href="class_isis_1_1_find_tool.html#abee92930a2ded2d95b6ade62194cee85">Isis::FindTool</a>, <a class="el" href="class_isis_1_1_file_tool.html#adc03317a134ba3db812e270ab9a91d06">Isis::FileTool</a>, <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#ae1c02f8b220a63931d747a62b5fc0ade">Isis::FeatureNomenclatureTool</a>, <a class="el" href="class_isis_1_1_blink_tool.html#a6eb7dfe9b64e4ea22d178342d2ace931">Isis::BlinkTool</a>, <a class="el" href="class_isis_1_1_band_tool.html#ac1f3658fa7305be11a139121303688d8">Isis::BandTool</a>, and <a class="el" href="class_isis_1_1_advanced_track_tool.html#ad1c9318b48327b949e19ba68a718c92f">Isis::AdvancedTrackTool</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool.html#a1a456ff8f54037585cae90e226dc88f8">Isis::Tool::addTo()</a>, and <a class="el" href="class_isis_1_1_workspace.html#ad267ab4211a7676eae11a34d3c92ac92">Isis::Workspace::Workspace()</a>.</p>
+
+</div>
+</div>
+<a id="ae989e22867e7b1c47944a37df2126254"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae989e22867e7b1c47944a37df2126254">&#9670;&nbsp;</a></span>mouseButtonPress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::mouseButtonPress </td>
+          <td>(</td>
+          <td class="paramtype">QPoint&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::MouseButton&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td></td></tr>
+    <tr><td class="paramname">s</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#acae10b547a99c67c965b2fca8049fdae">Isis::Tool::clearWarningSignal()</a>.</p>
+
+</div>
+</div>
+<a id="a94fb9efbd81d3aad3c6e22be52c8dec3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94fb9efbd81d3aad3c6e22be52c8dec3">&#9670;&nbsp;</a></span>mouseButtonRelease()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::mouseButtonRelease </td>
+          <td>(</td>
+          <td class="paramtype">QPoint&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::MouseButton&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Resets the Warning to Nowarning when a different activity occurs on the application. </p>
+<p>This is called by all the mouseButtonRelease events in all the tools.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td></td></tr>
+    <tr><td class="paramname">s</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#aa48cb4076fecc7c6f58bd8860b79c4fb">Isis::FeatureNomenclatureTool</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#acae10b547a99c67c965b2fca8049fdae">Isis::Tool::clearWarningSignal()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_stretch_tool.html#ab394963dddd774b6588bac99cc0eefe3">Isis::StretchTool::mouseButtonRelease()</a>.</p>
+
+</div>
+</div>
+<a id="a71b2766d4140d9d9338de709373a0d5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71b2766d4140d9d9338de709373a0d5c">&#9670;&nbsp;</a></span>mouseDoubleClick()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::mouseDoubleClick </td>
+          <td>(</td>
+          <td class="paramtype">QPoint&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#acae10b547a99c67c965b2fca8049fdae">Isis::Tool::clearWarningSignal()</a>.</p>
+
+</div>
+</div>
+<a id="ae2369cef1aea34a1703b909a8bd6077b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2369cef1aea34a1703b909a8bd6077b">&#9670;&nbsp;</a></span>mouseEnter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::mouseEnter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af8aae7284aabcfd4a5216027aaae99c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8aae7284aabcfd4a5216027aaae99c0">&#9670;&nbsp;</a></span>mouseLeave</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::mouseLeave </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa100cfa2985d68183c28f26e91e18823"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa100cfa2985d68183c28f26e91e18823">&#9670;&nbsp;</a></span>mouseMove <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::mouseMove </td>
+          <td>(</td>
+          <td class="paramtype">QPoint&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3ee51213e6eb6124edb201608cf8d377"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ee51213e6eb6124edb201608cf8d377">&#9670;&nbsp;</a></span>mouseMove <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::mouseMove </td>
+          <td>(</td>
+          <td class="paramtype">QPoint&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::MouseButton&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4da829c85b00c9fa3f8fa49faee5249d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4da829c85b00c9fa3f8fa49faee5249d">&#9670;&nbsp;</a></span>paintViewport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractPlotTool::paintViewport </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td>
+          <td class="paramname"><em>vp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QPainter *&#160;</td>
+          <td class="paramname"><em>painter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method allows each plot window to paint any information it wants onto the cube viewports. </p>
+<p>For example, spatial plots can paint the originating selection in the color of the curve.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vp</td><td>The viewport to paint onto </td></tr>
+    <tr><td class="paramname">painter</td><td>The painter to use for painting </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_tool.html#ab6833cdeb09c0e272619383d1c467800">Isis::Tool</a>.</p>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_stereo_tool.html#acdd7e8f131058463a04030eb70dce41b">Isis::StereoTool</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_plot_window.html#ad2193b2ae278b909ec62e665eff1e784">Isis::PlotWindow::paint()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_stereo_tool.html#acdd7e8f131058463a04030eb70dce41b">Isis::StereoTool::paintViewport()</a>.</p>
+
+</div>
+</div>
+<a id="a89e98d4c041dc5a5e4ea3ef6dc5453e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89e98d4c041dc5a5e4ea3ef6dc5453e2">&#9670;&nbsp;</a></span>plotWindows()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a> * &gt; Isis::AbstractPlotTool::plotWindows </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a list of all of the instantiated plot windows. </p>
+<dl class="section return"><dt>Returns</dt><dd>All of the plot windows associated with this tool </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_plot_tool.html#abc485e45e96f564af7bbb50c3d86c076">updateTool()</a>.</p>
+
+</div>
+</div>
+<a id="adb69697f4a8a672caf9c60825fa98103"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb69697f4a8a672caf9c60825fa98103">&#9670;&nbsp;</a></span>registerTool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::registerTool </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td>
+          <td class="paramname"><em>viewport</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Registers the tool to the viewport. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">viewport</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mdi_cube_viewport.html#ab2e919ddcc3ed97c32a7ecb4e490d346">Isis::MdiCubeViewport::registerTool()</a>, and <a class="el" href="class_isis_1_1_tool.html#a95f1da1201e2e8a795abed7576b34914">Isis::Tool::stretchRequested()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool.html#af61d34345c662de31a98d7031739a6c3">Isis::Tool::addTo()</a>.</p>
+
+</div>
+</div>
+<a id="a01b45151e17396216543229ce5761c15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01b45151e17396216543229ce5761c15">&#9670;&nbsp;</a></span>removeConnections()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::removeConnections </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td>
+          <td class="paramname"><em>cvp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Anytime a tool is created, you must be able to remove it's connections. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cvp</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_window_tool.html#a36b6c205fc022668bc16bd1d3e97ce75">Isis::WindowTool</a>, <a class="el" href="class_isis_1_1_track_tool.html#a566bf98d7277a7b23fbe061b17b58595">Isis::TrackTool</a>, and <a class="el" href="class_isis_1_1_measure_tool.html#ad00072a19916d8152ab82a6bac1f86ea">Isis::MeasureTool</a>.</p>
+
+</div>
+</div>
+<a id="a144aba5053d91a56f030de16c2fb62e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a144aba5053d91a56f030de16c2fb62e6">&#9670;&nbsp;</a></span>removeWindow</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractPlotTool::removeWindow </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>When a user closes a window, we want to remove that window from our combo box for selecting the active window. </p>
+<p>We also repaint all of the cube viewports so that the destroyed window leaves no visible artifacts.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">window</td><td>The plot window that is to be removed </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a05063a88bc34af9aa3ea875e6fdf681f">repaintViewports()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_plot_tool.html#aca46e2e3d39c548983916d8499804bac">addWindow()</a>.</p>
+
+</div>
+</div>
+<a id="a05063a88bc34af9aa3ea875e6fdf681f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05063a88bc34af9aa3ea875e6fdf681f">&#9670;&nbsp;</a></span>repaintViewports <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractPlotTool::repaintViewports </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method causes all of the viewports to be repainted. </p>
+<p>This is useful because it removes visible artifacts from deleted plot windows/curves. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#a9d6b6336bb81d71ff4d908e82f3b14d7">Isis::Tool::cubeViewportList()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_plot_tool.html#aca46e2e3d39c548983916d8499804bac">addWindow()</a>, and <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a144aba5053d91a56f030de16c2fb62e6">removeWindow()</a>.</p>
+
+</div>
+</div>
+<a id="a96b8a131b61f9a28fb02e9e854d99490"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96b8a131b61f9a28fb02e9e854d99490">&#9670;&nbsp;</a></span>repaintViewports <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractPlotTool::repaintViewports </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> *&#160;</td>
+          <td class="paramname"><em>pc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method causes the viewports corresponding with the given <a class="el" href="class_isis_1_1_cube_plot_curve.html" title="This is a plot curve with information relating it to a particular cube or region of a cube.">CubePlotCurve</a> to be repainted with all of the area's of interest associated with the <a class="el" href="class_isis_1_1_cube_plot_curve.html" title="This is a plot curve with information relating it to a particular cube or region of a cube.">CubePlotCurve</a>'s <a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pc</td><td>The plot curve which needs to repaint </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_viewport.html#a0cd043ff7aa84543b08a56cf95490dea">Isis::CubeViewport::cube()</a>, <a class="el" href="class_isis_1_1_tool.html#a9d6b6336bb81d71ff4d908e82f3b14d7">Isis::Tool::cubeViewportList()</a>, <a class="el" href="class_isis_1_1_cube.html#ac880a03b1f5464fb972f12e33be517a9">Isis::Cube::fileName()</a>, and <a class="el" href="class_isis_1_1_cube_plot_curve.html#a4730832c24f9533e185306b84c13581c">Isis::CubePlotCurve::sourceCube()</a>.</p>
+
+</div>
+</div>
+<a id="a13ac9897c422414c2f6354f7bea4e3ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13ac9897c422414c2f6354f7bea4e3ee">&#9670;&nbsp;</a></span>rubberBandComplete</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::rubberBandComplete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a78f92349be2a54b41ed332886582797b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78f92349be2a54b41ed332886582797b">&#9670;&nbsp;</a></span>rubberBandTool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_rubber_band_tool.html">RubberBandTool</a> * Isis::Tool::rubberBandTool </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool_list.html#af855cf4fda3742389df55b8bbebf2ef6">Isis::ToolList::rubberBandTool()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_measure_tool.html#aa99f0558649747380491f2b38e6b86be">Isis::MeasureTool::createToolBarWidget()</a>, <a class="el" href="class_isis_1_1_edit_tool.html#abd7b2d296f953fbd547dc1d988c7e69c">Isis::EditTool::enableRubberBandTool()</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#a545c6c006a2f5b2391a20b6e3281592e">Isis::HistogramTool::enableRubberBandTool()</a>, <a class="el" href="class_isis_1_1_measure_tool.html#aa924a2245ce7871c2752e4d27b542ec9">Isis::MeasureTool::enableRubberBandTool()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aa0ae3b28708b4c58b95e09e1794549b9">Isis::SpatialPlotTool::enableRubberBandTool()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a24ba76750855ce971d4963052b0cb891">Isis::SpectralPlotTool::enableRubberBandTool()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#a67adfc0654d0c025bebc33ea9ba0eb1e">Isis::StereoTool::enableRubberBandTool()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a8f641641016cd55b7dc920f5978a6f94">Isis::StretchTool::enableRubberBandTool()</a>, <a class="el" href="class_isis_1_1_tool.html#a410b18e75616718d6b9c0ac9d57d076a">Isis::Tool::enableRubberBandTool()</a>, <a class="el" href="class_isis_1_1_zoom_tool.html#acf8c7f36a0924542a86e3b416793de17">Isis::ZoomTool::enableRubberBandTool()</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#ad7354352a9a02070d3ed8031f8eb505f">Isis::HistogramTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aef3783202967d8913df6d5a9f1921637">Isis::SpatialPlotTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a61ba135b941bbebd623fdd1f0dec3012">Isis::SpectralPlotTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_rubber_band_combo_box.html#a24ebec38d6be97f36187785d5948a0a6">Isis::RubberBandComboBox::RubberBandComboBox()</a>, <a class="el" href="class_isis_1_1_edit_tool.html#a55e30e7df5eda8ab703d6227aeac84ce">Isis::EditTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#a2e82e94497c2381d8815584f6e8958ab">Isis::HistogramTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_measure_tool.html#a7e4f5d56849f4d16272581cf88dfcd4f">Isis::MeasureTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#ae877b69da5348913315f19603f9eab08">Isis::SpatialPlotTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a8da817c5310f9e3a5fb24590afb5dbf2">Isis::SpectralPlotTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#a60c189d19da637fa550c44ab1bfee16b">Isis::StereoTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a4308dbfa60e50eca867891f45805cc77">Isis::StretchTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_zoom_tool.html#a104615f38df9f56b2bb441af46295b94">Isis::ZoomTool::rubberBandComplete()</a>, and <a class="el" href="class_isis_1_1_rubber_band_combo_box.html#a16fec932c7653a61a838283247caec01">Isis::RubberBandComboBox::selectionChanged()</a>.</p>
+
+</div>
+</div>
+<a id="ade0359edf6cb38d70377cab59bed035d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade0359edf6cb38d70377cab59bed035d">&#9670;&nbsp;</a></span>scaleChanged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::scaleChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_rubber_band_tool.html#a51623172fd8970451a4be4e97ae90127">Isis::RubberBandTool</a>.</p>
+
+</div>
+</div>
+<a id="a4b95f6c2e7290d2fb2feae9c13972d7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b95f6c2e7290d2fb2feae9c13972d7f">&#9670;&nbsp;</a></span>screenPixelsChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::screenPixelsChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is called when actions change which pixels from the cube are displayed. </p>
+
+</div>
+</div>
+<a id="a3120332c73692f4ef79ae5e7562918d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3120332c73692f4ef79ae5e7562918d0">&#9670;&nbsp;</a></span>selectedWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_plot_window.html">PlotWindow</a> * Isis::AbstractPlotTool::selectedWindow </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>createIfNeeded</em> = <code>true</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the 'active' plot window (the window selected by the user to contain new curves). </p>
+<p>This may return NULL if and only if createIfNeeded is false. Windows are created by child classes.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">createIfNeeded</td><td>If this is true, and no window is selected in the active window combo box, then a window will be created and selected before this method returns.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The user-selected active plot window </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_plot_tool.html#aca46e2e3d39c548983916d8499804bac">addWindow()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_histogram_tool.html#ad7354352a9a02070d3ed8031f8eb505f">Isis::HistogramTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aef3783202967d8913df6d5a9f1921637">Isis::SpatialPlotTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a61ba135b941bbebd623fdd1f0dec3012">Isis::SpectralPlotTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#a2e82e94497c2381d8815584f6e8958ab">Isis::HistogramTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#ae877b69da5348913315f19603f9eab08">Isis::SpatialPlotTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a8da817c5310f9e3a5fb24590afb5dbf2">Isis::SpectralPlotTool::rubberBandComplete()</a>, and <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a9a22ce58ca14cb72ea374bb81e7162c2">showPlotWindow()</a>.</p>
+
+</div>
+</div>
+<a id="aabf2c6787be800be5821b69cda6a3566"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabf2c6787be800be5821b69cda6a3566">&#9670;&nbsp;</a></span>setCubeViewport</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::setCubeViewport </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td>
+          <td class="paramname"><em>cvp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the current viewport to the given cvp. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cvp</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#a5f5c4854f322d923e612b0184b39b394">Isis::Tool::updateTool()</a>, and <a class="el" href="class_isis_1_1_tool.html#afe0e0dcacf1cb644004a0a8e7d469243">Isis::Tool::viewportChanged()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool.html#af61d34345c662de31a98d7031739a6c3">Isis::Tool::addTo()</a>, and <a class="el" href="class_isis_1_1_file_tool.html#a1728439edfaf3f8ac45cda402667b956">Isis::FileTool::closeAll()</a>.</p>
+
+</div>
+</div>
+<a id="a504430f496834fe5699d764d1a322f4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a504430f496834fe5699d764d1a322f4a">&#9670;&nbsp;</a></span>setList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::setList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_tool_list.html">ToolList</a> *&#160;</td>
+          <td class="paramname"><em>currentList</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool_list.html#a2f3715be11329e74693132b1dbd4837a">Isis::ToolList::append()</a>.</p>
+
+</div>
+</div>
+<a id="a9a22ce58ca14cb72ea374bb81e7162c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a22ce58ca14cb72ea374bb81e7162c2">&#9670;&nbsp;</a></span>showPlotWindow</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractPlotTool::showPlotWindow </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>displays the plot window </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a3120332c73692f4ef79ae5e7562918d0">selectedWindow()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#a6bfd46278c4429a99ead4593bef62ca1">Isis::PlotWindow::showWindow()</a>.</p>
+
+</div>
+</div>
+<a id="a95f1da1201e2e8a795abed7576b34914"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95f1da1201e2e8a795abed7576b34914">&#9670;&nbsp;</a></span>stretchRequested()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::stretchRequested </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_stretch_tool.html#a58c2f832b939b9cee4c57a42ecfd99d9">Isis::StretchTool</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool.html#adb69697f4a8a672caf9c60825fa98103">Isis::Tool::registerTool()</a>.</p>
+
+</div>
+</div>
+<a id="a4e95d5a9dbf696a3b42425c0c80636b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e95d5a9dbf696a3b42425c0c80636b5">&#9670;&nbsp;</a></span>toolActivated</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::toolActivated </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool.html#a9ae575a1659b99222874cfbbab6d5b38">Isis::Tool::activate()</a>, <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#a6f5628698f1935d62a11fba7df388497">Isis::FeatureNomenclatureTool::FeatureNomenclatureTool()</a>, <a class="el" href="class_isis_1_1_match_tool.html#ae464fb50dfae3072c6a83704ba9be69c">Isis::MatchTool::MatchTool()</a>, and <a class="el" href="class_isis_1_1_stereo_tool.html#a2fd838f5ec6c3814edfed1f0864f29fe">Isis::StereoTool::StereoTool()</a>.</p>
+
+</div>
+</div>
+<a id="aff46b0071ca1b18d750fcf1945761a05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff46b0071ca1b18d750fcf1945761a05">&#9670;&nbsp;</a></span>toolIconDir()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Tool::toolIconDir </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>returns the path to the icon directory. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_advanced_track_tool.html#afa68d5b84add340008eaf59ced217451">Isis::AdvancedTrackTool::AdvancedTrackTool()</a>, <a class="el" href="class_isis_1_1_blink_tool.html#ace48842cbb401b7b309ed353a47efd83">Isis::BlinkTool::BlinkTool()</a>, <a class="el" href="class_isis_1_1_band_tool.html#a62d1baedeb9362d2a90e8d71ff6679cc">Isis::BandTool::createToolBarWidget()</a>, <a class="el" href="class_isis_1_1_edit_tool.html#a80ece33b31aa794e4540de040e5ddcd0">Isis::EditTool::createToolBarWidget()</a>, <a class="el" href="class_isis_1_1_find_tool.html#ad42597836157cc07528ef79b9f00be3e">Isis::FindTool::createToolBarWidget()</a>, <a class="el" href="class_isis_1_1_match_tool.html#a10d192c91495420ac4915663be5e9eb6">Isis::MatchTool::createToolBarWidget()</a>, <a class="el" href="class_isis_1_1_pan_tool.html#af97b1321fbfcecf58e0329341eb9b50b">Isis::PanTool::createToolBarWidget()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#a739b02534772009215e84f73b042052d">Isis::StereoTool::createToolBarWidget()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#ac827729935d760c43a67af6c6f86f180">Isis::StretchTool::createToolBarWidget()</a>, <a class="el" href="class_isis_1_1_zoom_tool.html#adda1e87fd1961145a089a6766bcd0367">Isis::ZoomTool::createToolBarWidget()</a>, <a class="el" href="class_isis_1_1_file_tool.html#a18aaf0a06f81d6afd3b73b89d656f6cb">Isis::FileTool::FileTool()</a>, <a class="el" href="class_isis_1_1_find_tool.html#ad8cd56f595793bb26e15f4fcf6102df4">Isis::FindTool::FindTool()</a>, <a class="el" href="class_isis_1_1_help_tool.html#a97c15f73a96b833770f765960666e8aa">Isis::HelpTool::HelpTool()</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#a34a0086f5b385f254bde209367ff9d77">Isis::HistogramTool::HistogramTool()</a>, <a class="el" href="class_isis_1_1_pan_tool.html#ac79ff3a6a1fbb3a71c30b4333395bb24">Isis::PanTool::PanTool()</a>, <a class="el" href="class_isis_1_1_special_pixel_tool.html#a68ffe5aa699f922290857ff91940be03">Isis::SpecialPixelTool::SpecialPixelTool()</a>, <a class="el" href="class_isis_1_1_rubber_band_combo_box.html#a81b9e3799c2a8a668404f4aae1ec9ec5">Isis::RubberBandComboBox::toolIconDir()</a>, <a class="el" href="class_isis_1_1_band_tool.html#a6bc0609b7a952e0888bdab654a89cb2a">Isis::BandTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_control_net_tool.html#a472adae4f65b0ab0e208ae778aa296be">Isis::ControlNetTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_edit_tool.html#acddcb0965cc2a968b75a0ea5abf37e72">Isis::EditTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#afe140a0ec3bdffc64f600220205275e5">Isis::FeatureNomenclatureTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#a0452f5f52ac8df5535fff9bf4e5c31ac">Isis::HistogramTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_lat_lon_grid_tool.html#a282d5f049cf53f9e578131f35e391c38">Isis::LatLonGridTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_match_tool.html#afb586f52af251924319f6cb14f15ef89">Isis::MatchTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_measure_tool.html#ae600b899bfbec9750c93b7940a84e9d8">Isis::MeasureTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_pan_tool.html#a918d69c136e0b9ed24b17de51fee6b19">Isis::PanTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#ae7933a2dd6770bea9a61aa6e4b364ea9">Isis::QnetTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_scatter_plot_tool.html#afb0fa9b6b750551bbf9289afa40b1300">Isis::ScatterPlotTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#a23df17140fe66ded042551fb5a2ee177">Isis::SpatialPlotTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a9fb28d972f5a5993911bfdce2512c204">Isis::SpectralPlotTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#a0238b2618030cd4b4cf059b3a353bd6c">Isis::StereoTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a6b184c41f8a918b1bd671ab324146e24">Isis::StretchTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_sun_shadow_tool.html#a2a00660a9ee6823bfd5e19a478741ad6">Isis::SunShadowTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_find_tool.html#adb549cc0fea55ee15264bd6d1fd7ca8d">Isis::FindTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_statistics_tool.html#a843f47047753f130404bf57c219fcf2f">Isis::StatisticsTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_zoom_tool.html#ac9824382c62775eceb3675012b6b6f4d">Isis::ZoomTool::toolPadAction()</a>, <a class="el" href="class_isis_1_1_window_tool.html#ac46b0fc38abdb6afe195534e0756173b">Isis::WindowTool::WindowTool()</a>, and <a class="el" href="class_isis_1_1_zoom_tool.html#a1f7bcc73e06fc576fa9e69cdfc2d95b2">Isis::ZoomTool::ZoomTool()</a>.</p>
+
+</div>
+</div>
+<a id="a52362dc376ad895c8bd5c2b981a94e32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52362dc376ad895c8bd5c2b981a94e32">&#9670;&nbsp;</a></span>toolPadAction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="class_q_action.html">QAction</a>* Isis::Tool::toolPadAction </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_tool_pad.html">ToolPad</a> *&#160;</td>
+          <td class="paramname"><em>toolpad</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Anytime a tool is created, you must setup a tool pad action with it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">toolpad</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QAction* </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_zoom_tool.html#ac9824382c62775eceb3675012b6b6f4d">Isis::ZoomTool</a>, <a class="el" href="class_isis_1_1_statistics_tool.html#a843f47047753f130404bf57c219fcf2f">Isis::StatisticsTool</a>, <a class="el" href="class_isis_1_1_find_tool.html#adb549cc0fea55ee15264bd6d1fd7ca8d">Isis::FindTool</a>, <a class="el" href="class_isis_1_1_sun_shadow_tool.html#a2a00660a9ee6823bfd5e19a478741ad6">Isis::SunShadowTool</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a6b184c41f8a918b1bd671ab324146e24">Isis::StretchTool</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#a0238b2618030cd4b4cf059b3a353bd6c">Isis::StereoTool</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a9fb28d972f5a5993911bfdce2512c204">Isis::SpectralPlotTool</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#a23df17140fe66ded042551fb5a2ee177">Isis::SpatialPlotTool</a>, <a class="el" href="class_isis_1_1_scatter_plot_tool.html#afb0fa9b6b750551bbf9289afa40b1300">Isis::ScatterPlotTool</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#ae7933a2dd6770bea9a61aa6e4b364ea9">Isis::QnetTool</a>, <a class="el" href="class_isis_1_1_pan_tool.html#a918d69c136e0b9ed24b17de51fee6b19">Isis::PanTool</a>, <a class="el" href="class_isis_1_1_measure_tool.html#ae600b899bfbec9750c93b7940a84e9d8">Isis::MeasureTool</a>, <a class="el" href="class_isis_1_1_match_tool.html#afb586f52af251924319f6cb14f15ef89">Isis::MatchTool</a>, <a class="el" href="class_isis_1_1_lat_lon_grid_tool.html#a282d5f049cf53f9e578131f35e391c38">Isis::LatLonGridTool</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#a0452f5f52ac8df5535fff9bf4e5c31ac">Isis::HistogramTool</a>, <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#afe140a0ec3bdffc64f600220205275e5">Isis::FeatureNomenclatureTool</a>, <a class="el" href="class_isis_1_1_edit_tool.html#acddcb0965cc2a968b75a0ea5abf37e72">Isis::EditTool</a>, <a class="el" href="class_isis_1_1_control_net_tool.html#a472adae4f65b0ab0e208ae778aa296be">Isis::ControlNetTool</a>, and <a class="el" href="class_isis_1_1_band_tool.html#a6bc0609b7a952e0888bdab654a89cb2a">Isis::BandTool</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool.html#a70d63d11a19169740d80b7d6df5bf42e">Isis::Tool::addTo()</a>.</p>
+
+</div>
+</div>
+<a id="abd9885048ea427d9271c183721f8040b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd9885048ea427d9271c183721f8040b">&#9670;&nbsp;</a></span>updateMeasure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Tool::updateMeasure </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abc485e45e96f564af7bbb50c3d86c076"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc485e45e96f564af7bbb50c3d86c076">&#9670;&nbsp;</a></span>updateTool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractPlotTool::updateTool </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This forwards all update calls to the plot windows. </p>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_tool.html#a5f5c4854f322d923e612b0184b39b394">Isis::Tool</a>.</p>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_spectral_plot_tool.html#ae20c2b617c7f9df6d64d687b92c76e37">Isis::SpectralPlotTool</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aa54f175a40ca25fc1b213ef839c6b0dc">Isis::SpatialPlotTool</a>, and <a class="el" href="class_isis_1_1_histogram_tool.html#a1d19763278a7702056cc9b6cc3a8edf3">Isis::HistogramTool</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#ab39b77000fd5aa8cbc7b063fb208a0b5">Isis::Tool::cubeViewport()</a>, <a class="el" href="class_isis_1_1_abstract_plot_tool.html#a89e98d4c041dc5a5e4ea3ef6dc5453e2">plotWindows()</a>, and <a class="el" href="class_isis_1_1_plot_window.html#ab4e77a26ff2038943618d9d76c303ca4">Isis::PlotWindow::update()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_histogram_tool.html#a1d19763278a7702056cc9b6cc3a8edf3">Isis::HistogramTool::updateTool()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aa54f175a40ca25fc1b213ef839c6b0dc">Isis::SpatialPlotTool::updateTool()</a>, and <a class="el" href="class_isis_1_1_spectral_plot_tool.html#ae20c2b617c7f9df6d64d687b92c76e37">Isis::SpectralPlotTool::updateTool()</a>.</p>
+
+</div>
+</div>
+<a id="afe0e0dcacf1cb644004a0a8e7d469243"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe0e0dcacf1cb644004a0a8e7d469243">&#9670;&nbsp;</a></span>viewportChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Tool::viewportChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tool.html#aabf2c6787be800be5821b69cda6a3566">Isis::Tool::setCubeViewport()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#a26c1b7125b87ce99019db185fc09f2f7">Isis::SpatialPlotTool::SpatialPlotTool()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a32fc6d8e3bd62929a97d1e310fe0c6ea">Isis::SpectralPlotTool::SpectralPlotTool()</a>, and <a class="el" href="class_isis_1_1_sun_shadow_tool.html#a84237f8419e0a6f34744bb106d200bb1">Isis::SunShadowTool::SunShadowTool()</a>.</p>
+
+</div>
+</div>
+<a id="a736b0b96b5b1c961f0723dc62b5f3e74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a736b0b96b5b1c961f0723dc62b5f3e74">&#9670;&nbsp;</a></span>viewportsToPlot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> * &gt; Isis::AbstractPlotTool::viewportsToPlot </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a list of linked viewports that should be plotting when a new plot is requested. </p>
+<p>This is a utility for child classes. For example, a spatial plot will make a curve for each viewport.</p>
+<dl class="section return"><dt>Returns</dt><dd>A list of viewports containing the active one and any that are linked to the active viewport. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#ab39b77000fd5aa8cbc7b063fb208a0b5">Isis::Tool::cubeViewport()</a>, <a class="el" href="class_isis_1_1_tool.html#a9d6b6336bb81d71ff4d908e82f3b14d7">Isis::Tool::cubeViewportList()</a>, and <a class="el" href="class_isis_1_1_mdi_cube_viewport.html#ae07e346c7129d1df90f9d4f00dceab1b">Isis::MdiCubeViewport::isLinked()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aef3783202967d8913df6d5a9f1921637">Isis::SpatialPlotTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#a61ba135b941bbebd623fdd1f0dec3012">Isis::SpectralPlotTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aa54f175a40ca25fc1b213ef839c6b0dc">Isis::SpatialPlotTool::updateTool()</a>, and <a class="el" href="class_isis_1_1_spectral_plot_tool.html#ae20c2b617c7f9df6d64d687b92c76e37">Isis::SpectralPlotTool::updateTool()</a>.</p>
+
+</div>
+</div>
+<a id="ae4f52d78b28912e21394de4524540e3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4f52d78b28912e21394de4524540e3e">&#9670;&nbsp;</a></span>workspace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_workspace.html">Workspace</a> * Isis::Tool::workspace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_edit_tool.html#ac6c71cbb48df4f1000e96f1e9c268c77">Isis::EditTool::addTo()</a>, <a class="el" href="class_isis_1_1_control_net_tool.html#a3c02b2c0e324a8ea650be3714afc3094">Isis::ControlNetTool::setControlNet()</a>, and <a class="el" href="class_isis_1_1_scatter_plot_tool.html#a584661bf841471cb0ed265e9aa90172d">Isis::ScatterPlotTool::showNewScatterPlotConfig()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/AbstractPlotTool/<a class="el" href="_abstract_plot_tool_8h_source.html">AbstractPlotTool.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/AbstractPlotTool/<a class="el" href="_abstract_plot_tool_8cpp.html">AbstractPlotTool.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_abstract_plot_tool.html">AbstractPlotTool</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

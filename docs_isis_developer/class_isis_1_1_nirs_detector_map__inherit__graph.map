@@ -1,0 +1,4 @@
+<map id="Isis::NirsDetectorMap" name="Isis::NirsDetectorMap">
+<area shape="rect" id="node1" title="The detector map class for the Hayabusa NIRS camera." alt="" coords="20,455,183,584"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="5,5,198,407"/>
+</map>

@@ -1,0 +1,698 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::CameraPointInfo Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_camera_point_info.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_camera_point_info-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::CameraPointInfo Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="class_isis_1_1_camera_point_info.html" title="CameraPointInfo provides quick access to the majority of information avaliable from a camera on a poi...">CameraPointInfo</a> provides quick access to the majority of information avaliable from a camera on a point.  
+ <a href="class_isis_1_1_camera_point_info.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_camera_point_info_8h_source.html">CameraPointInfo.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::CameraPointInfo:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_camera_point_info__coll__graph.png" border="0" usemap="#a_isis_1_1_camera_point_info_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_camera_point_info_coll__map" id="a_isis_1_1_camera_point_info_coll__map">
+<area shape="rect" title="CameraPointInfo provides quick access to the majority of information avaliable from a camera on a poi..." alt="" coords="5,5,154,247"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a68f91f92a5bf5b8eea40320986488b2d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_point_info.html#a68f91f92a5bf5b8eea40320986488b2d">CameraPointInfo</a> ()</td></tr>
+<tr class="memdesc:a68f91f92a5bf5b8eea40320986488b2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, initializes <a class="el" href="class_isis_1_1_cube_manager.html" title="Class for quick re-accessing of cubes based on file name.">CubeManager</a> and other variables for use.  <a href="class_isis_1_1_camera_point_info.html#a68f91f92a5bf5b8eea40320986488b2d">More...</a><br /></td></tr>
+<tr class="separator:a68f91f92a5bf5b8eea40320986488b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa10dc93fb1cfeb7a8ed90ee3c56bffd5"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_point_info.html#aa10dc93fb1cfeb7a8ed90ee3c56bffd5">~CameraPointInfo</a> ()</td></tr>
+<tr class="memdesc:aa10dc93fb1cfeb7a8ed90ee3c56bffd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor, deletes <a class="el" href="class_isis_1_1_cube_manager.html" title="Class for quick re-accessing of cubes based on file name.">CubeManager</a> object used.  <a href="class_isis_1_1_camera_point_info.html#aa10dc93fb1cfeb7a8ed90ee3c56bffd5">More...</a><br /></td></tr>
+<tr class="separator:aa10dc93fb1cfeb7a8ed90ee3c56bffd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad62557dc45fd7628be1edd6777bc91c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_point_info.html#ad62557dc45fd7628be1edd6777bc91c6">SetCube</a> (const QString &amp;cubeFileName)</td></tr>
+<tr class="memdesc:ad62557dc45fd7628be1edd6777bc91c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">SetCube opens the given cube in a <a class="el" href="class_isis_1_1_cube_manager.html" title="Class for quick re-accessing of cubes based on file name.">CubeManager</a>.  <a href="class_isis_1_1_camera_point_info.html#ad62557dc45fd7628be1edd6777bc91c6">More...</a><br /></td></tr>
+<tr class="separator:ad62557dc45fd7628be1edd6777bc91c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1111f8a3402c8dbe51af7c3db7d6ad74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_point_info.html#a1111f8a3402c8dbe51af7c3db7d6ad74">SetCSVOutput</a> (bool csvOutput)</td></tr>
+<tr class="memdesc:a1111f8a3402c8dbe51af7c3db7d6ad74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the output format (true is CSV, false is PVL)  <a href="class_isis_1_1_camera_point_info.html#a1111f8a3402c8dbe51af7c3db7d6ad74">More...</a><br /></td></tr>
+<tr class="separator:a1111f8a3402c8dbe51af7c3db7d6ad74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab59c4076d198662d307c8555762a4649"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_point_info.html#ab59c4076d198662d307c8555762a4649">SetImage</a> (const double sample, const double line, const bool outside=false, const bool error=false)</td></tr>
+<tr class="memdesc:ab59c4076d198662d307c8555762a4649"><td class="mdescLeft">&#160;</td><td class="mdescRight">SetImage sets a sample, line image coordinate in the camera so data can be accessed.  <a href="class_isis_1_1_camera_point_info.html#ab59c4076d198662d307c8555762a4649">More...</a><br /></td></tr>
+<tr class="separator:ab59c4076d198662d307c8555762a4649"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d1323a091b5b0fd6e02f0a35753bfa5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_point_info.html#a5d1323a091b5b0fd6e02f0a35753bfa5">SetCenter</a> (const bool outside=false, const bool error=false)</td></tr>
+<tr class="memdesc:a5d1323a091b5b0fd6e02f0a35753bfa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">SetCenter sets the image coordinates to the center of the image.  <a href="class_isis_1_1_camera_point_info.html#a5d1323a091b5b0fd6e02f0a35753bfa5">More...</a><br /></td></tr>
+<tr class="separator:a5d1323a091b5b0fd6e02f0a35753bfa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b4238c89fa9ed0fc42485cbf36c19b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_point_info.html#a8b4238c89fa9ed0fc42485cbf36c19b4">SetSample</a> (const double sample, const bool outside=false, const bool error=false)</td></tr>
+<tr class="memdesc:a8b4238c89fa9ed0fc42485cbf36c19b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">SetSample sets the image coordinates to the center line and the given sample.  <a href="class_isis_1_1_camera_point_info.html#a8b4238c89fa9ed0fc42485cbf36c19b4">More...</a><br /></td></tr>
+<tr class="separator:a8b4238c89fa9ed0fc42485cbf36c19b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd1c86d4af64d9e6e0260a573f73567c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_point_info.html#acd1c86d4af64d9e6e0260a573f73567c">SetLine</a> (const double line, const bool outside=false, const bool error=false)</td></tr>
+<tr class="memdesc:acd1c86d4af64d9e6e0260a573f73567c"><td class="mdescLeft">&#160;</td><td class="mdescRight">SetLine sets the image coordinates to the center sample and the given line.  <a href="class_isis_1_1_camera_point_info.html#acd1c86d4af64d9e6e0260a573f73567c">More...</a><br /></td></tr>
+<tr class="separator:acd1c86d4af64d9e6e0260a573f73567c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a945b92212c60407e0597300a8fd7cacc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_point_info.html#a945b92212c60407e0597300a8fd7cacc">SetGround</a> (const double latitude, const double longitude, const bool outside=false, const bool error=false)</td></tr>
+<tr class="memdesc:a945b92212c60407e0597300a8fd7cacc"><td class="mdescLeft">&#160;</td><td class="mdescRight">SetGround sets a latitude, longitude grrund coordinate in the camera so data can be accessed.  <a href="class_isis_1_1_camera_point_info.html#a945b92212c60407e0597300a8fd7cacc">More...</a><br /></td></tr>
+<tr class="separator:a945b92212c60407e0597300a8fd7cacc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a5388f150b253098e9af6f61ece702fb7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_camera.html">Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_point_info.html#a5388f150b253098e9af6f61ece702fb7">camera</a> ()</td></tr>
+<tr class="memdesc:a5388f150b253098e9af6f61ece702fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a pointer to the camera.  <a href="class_isis_1_1_camera_point_info.html#a5388f150b253098e9af6f61ece702fb7">More...</a><br /></td></tr>
+<tr class="separator:a5388f150b253098e9af6f61ece702fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5da791d0bc335632d4194aa2243c496f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_point_info.html#a5da791d0bc335632d4194aa2243c496f">cube</a> ()</td></tr>
+<tr class="memdesc:a5da791d0bc335632d4194aa2243c496f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a pointer to the current cube.  <a href="class_isis_1_1_camera_point_info.html#a5da791d0bc335632d4194aa2243c496f">More...</a><br /></td></tr>
+<tr class="separator:a5da791d0bc335632d4194aa2243c496f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="class_isis_1_1_camera_point_info.html" title="CameraPointInfo provides quick access to the majority of information avaliable from a camera on a poi...">CameraPointInfo</a> provides quick access to the majority of information avaliable from a camera on a point. </p>
+<p><a class="el" href="class_isis_1_1_camera_point_info.html" title="CameraPointInfo provides quick access to the majority of information avaliable from a camera on a poi...">CameraPointInfo</a> provides the functionality which was a part of campt in class form. This functionality is access to the majoirty of information avaliable on any given point on an image. The main difference is the use of a <a class="el" href="class_isis_1_1_cube_manager.html" title="Class for quick re-accessing of cubes based on file name.">CubeManager</a> within <a class="el" href="class_isis_1_1_camera_point_info.html" title="CameraPointInfo provides quick access to the majority of information avaliable from a camera on a poi...">CameraPointInfo</a> for effeciency when working with control nets and the opening of cubes several times.</p>
+<dl class="section author"><dt>Author</dt><dd>2009-08-25 Mackenzie Boyd </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a68f91f92a5bf5b8eea40320986488b2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68f91f92a5bf5b8eea40320986488b2d">&#9670;&nbsp;</a></span>CameraPointInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CameraPointInfo::CameraPointInfo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor, initializes <a class="el" href="class_isis_1_1_cube_manager.html" title="Class for quick re-accessing of cubes based on file name.">CubeManager</a> and other variables for use. </p>
+
+</div>
+</div>
+<a id="aa10dc93fb1cfeb7a8ed90ee3c56bffd5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa10dc93fb1cfeb7a8ed90ee3c56bffd5">&#9670;&nbsp;</a></span>~CameraPointInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CameraPointInfo::~CameraPointInfo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor, deletes <a class="el" href="class_isis_1_1_cube_manager.html" title="Class for quick re-accessing of cubes based on file name.">CubeManager</a> object used. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5388f150b253098e9af6f61ece702fb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5388f150b253098e9af6f61ece702fb7">&#9670;&nbsp;</a></span>camera()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_camera.html">Camera</a> * Isis::CameraPointInfo::camera </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves a pointer to the camera. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>Camera*</b> A pointer to the <a class="el" href="class_isis_1_1_camera.html">Camera</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a5da791d0bc335632d4194aa2243c496f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5da791d0bc335632d4194aa2243c496f">&#9670;&nbsp;</a></span>cube()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cube.html">Cube</a> * Isis::CameraPointInfo::cube </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves a pointer to the current cube. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>Cube*</b> A pointer to the current cube. </dd></dl>
+
+</div>
+</div>
+<a id="a5d1323a091b5b0fd6e02f0a35753bfa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d1323a091b5b0fd6e02f0a35753bfa5">&#9670;&nbsp;</a></span>SetCenter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> * Isis::CameraPointInfo::SetCenter </td>
+          <td>(</td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>allowOutside</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>allowErrors</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>SetCenter sets the image coordinates to the center of the image. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">allowOutside</td><td>Indicates whether to allow extrapolation. </td></tr>
+    <tr><td class="paramname">allowErrors</td><td>Indicates whether to allow the program to throw an error if a problem occurs.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>PvlGroup*</b> The pertinent data from the <a class="el" href="class_isis_1_1_camera.html">Camera</a> class on the point. Ownership is passed to caller. </dd></dl>
+
+</div>
+</div>
+<a id="a1111f8a3402c8dbe51af7c3db7d6ad74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1111f8a3402c8dbe51af7c3db7d6ad74">&#9670;&nbsp;</a></span>SetCSVOutput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraPointInfo::SetCSVOutput </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>csvOutput</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the output format (true is CSV, false is PVL) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">csvOutput</td><td>The new value to set csvOutput </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad62557dc45fd7628be1edd6777bc91c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad62557dc45fd7628be1edd6777bc91c6">&#9670;&nbsp;</a></span>SetCube()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraPointInfo::SetCube </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>cubeFileName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>SetCube opens the given cube in a <a class="el" href="class_isis_1_1_cube_manager.html" title="Class for quick re-accessing of cubes based on file name.">CubeManager</a>. </p>
+<p>The <a class="el" href="class_isis_1_1_cube_manager.html" title="Class for quick re-accessing of cubes based on file name.">CubeManager</a> is for effeciency when working with control nets where cubes are accesed multiple times.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cubeFileName</td><td>A cube file name. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a945b92212c60407e0597300a8fd7cacc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a945b92212c60407e0597300a8fd7cacc">&#9670;&nbsp;</a></span>SetGround()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> * Isis::CameraPointInfo::SetGround </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>latitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>longitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>allowOutside</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>allowErrors</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>SetGround sets a latitude, longitude grrund coordinate in the camera so data can be accessed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">latitude</td><td>A latitude coordinate in or almost in the cube </td></tr>
+    <tr><td class="paramname">longitude</td><td>A longitude coordinate in or almost in the cube </td></tr>
+    <tr><td class="paramname">allowOutside</td><td>Indicates whether to allow extrapolation. </td></tr>
+    <tr><td class="paramname">allowErrors</td><td>Indicates whether to allow the program to throw an error if a problem occurs.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>PvlGroup*</b> The pertinent data from the <a class="el" href="class_isis_1_1_camera.html">Camera</a> class on the point. Ownership is passed to caller. </dd></dl>
+
+</div>
+</div>
+<a id="ab59c4076d198662d307c8555762a4649"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab59c4076d198662d307c8555762a4649">&#9670;&nbsp;</a></span>SetImage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> * Isis::CameraPointInfo::SetImage </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>sample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>allowOutside</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>allowErrors</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>SetImage sets a sample, line image coordinate in the camera so data can be accessed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sample</td><td>A sample coordinate in or almost in the cube. </td></tr>
+    <tr><td class="paramname">line</td><td>A line coordinate in or almost in the cube. </td></tr>
+    <tr><td class="paramname">allowOutside</td><td>Indicates whether to allow extrapolation. </td></tr>
+    <tr><td class="paramname">allowErrors</td><td>Indicates whether to allow the program to throw an error if a problem occurs.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>PvlGroup*</b> The pertinent data from the <a class="el" href="class_isis_1_1_camera.html">Camera</a> class on the point. Ownership is passed to caller. </dd></dl>
+
+</div>
+</div>
+<a id="acd1c86d4af64d9e6e0260a573f73567c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd1c86d4af64d9e6e0260a573f73567c">&#9670;&nbsp;</a></span>SetLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> * Isis::CameraPointInfo::SetLine </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>allowOutside</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>allowErrors</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>SetLine sets the image coordinates to the center sample and the given line. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td>A line coordinate in or almost in the cube. </td></tr>
+    <tr><td class="paramname">allowOutside</td><td>Indicates whether to allow extrapolation. </td></tr>
+    <tr><td class="paramname">allowErrors</td><td>Indicates whether to allow the program to throw an error if a problem occurs.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>PvlGroup*</b> The pertinent data from the <a class="el" href="class_isis_1_1_camera.html">Camera</a> class on the point. Ownership is passed to caller. </dd></dl>
+
+</div>
+</div>
+<a id="a8b4238c89fa9ed0fc42485cbf36c19b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b4238c89fa9ed0fc42485cbf36c19b4">&#9670;&nbsp;</a></span>SetSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> * Isis::CameraPointInfo::SetSample </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>sample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>allowOutside</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>allowErrors</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>SetSample sets the image coordinates to the center line and the given sample. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sample</td><td>A sample coordinate in or almost in the cube. </td></tr>
+    <tr><td class="paramname">allowOutside</td><td>Indicates whether to allow extrapolation. </td></tr>
+    <tr><td class="paramname">allowErrors</td><td>Indicates whether to allow the program to throw an error if a problem occurs.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>PvlGroup*</b> The pertinent data from the <a class="el" href="class_isis_1_1_camera.html">Camera</a> class on the point. Ownership is passed to caller. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CameraPointInfo/<a class="el" href="_camera_point_info_8h_source.html">CameraPointInfo.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CameraPointInfo/<a class="el" href="_camera_point_info_8cpp.html">CameraPointInfo.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_camera_point_info.html">CameraPointInfo</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

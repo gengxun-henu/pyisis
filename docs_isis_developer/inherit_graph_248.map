@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_q_file_dialog.html" title=" " alt="" coords="5,61,95,89"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_file_dialog.html" title="Class for browsing cubes." alt="" coords="193,31,302,59"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_new_ground_source_location_dialog.html" title="Dialog used by ControlPointEditWidget to select a new location for ground source files." alt="" coords="143,83,352,127"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_browse_dialog.html" title="Class for browsing cubes." alt="" coords="401,5,532,33"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_save_as_dialog.html" title="Widget to save(Save As) Isis cubes(used in qview) to display the FileDialog to select the output cube..." alt="" coords="400,57,533,85"/>
+</map>

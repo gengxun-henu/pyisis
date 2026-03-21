@@ -1,0 +1,37 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+RingPlaneProjection,Map Projection,isis/src/base/objs/RingPlaneProjection/RingPlaneProjection.h,isis_pybind_standalone/src/base/bind_base_projection.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,RingPlaneProjection,isis_pybind.RingPlaneProjection,Y,Python class symbol is exported; constructor exposure may be limited; 抽象基类/纯虚接口
+Construction/Enum,"RingLongitudeDirection enum (Clockwise, CounterClockwise)",isis_pybind.RingPlaneProjection.RingLongitudeDirection,N,抽象基类/纯虚接口
+Construction/Enum,RingPlaneProjection(),isis_pybind.RingPlaneProjection(),N,抽象基类/纯虚接口
+Public API,double LocalRadius() const,isis_pybind.RingPlaneProjection.local_radius,N,抽象基类/纯虚接口
+Public API,virtual QString Name() const = 0,isis_pybind.RingPlaneProjection.name,N,抽象基类/纯虚接口
+Public API,virtual QString Version() const = 0,isis_pybind.RingPlaneProjection.version,N,抽象基类/纯虚接口
+Public API,virtual double TrueScaleRingRadius() const,isis_pybind.RingPlaneProjection.true_scale_ring_radius,Y,Current Python name
+Query,bool IsClockwise() const,isis_pybind.RingPlaneProjection.is_clockwise,N,抽象基类/纯虚接口
+Query,bool IsCounterClockwise() const,isis_pybind.RingPlaneProjection.is_counter_clockwise,N,抽象基类/纯虚接口
+Public API,std::string RingLongitudeDirectionString() const,isis_pybind.RingPlaneProjection.ring_longitude_direction_string,N,抽象基类/纯虚接口
+Query,bool Has180Domain() const,isis_pybind.RingPlaneProjection.has180_domain,N,抽象基类/纯虚接口
+Query,bool Has360Domain() const,isis_pybind.RingPlaneProjection.has360_domain,N,抽象基类/纯虚接口
+Public API,std::string RingLongitudeDomainString() const,isis_pybind.RingPlaneProjection.ring_longitude_domain_string,N,抽象基类/纯虚接口
+Public API,double MinimumRingRadius() const,isis_pybind.RingPlaneProjection.minimum_ring_radius,N,抽象基类/纯虚接口
+Public API,double MaximumRingRadius() const,isis_pybind.RingPlaneProjection.maximum_ring_radius,N,抽象基类/纯虚接口
+Public API,double MinimumRingLongitude() const,isis_pybind.RingPlaneProjection.minimum_ring_longitude,N,抽象基类/纯虚接口
+Public API,double MaximumRingLongitude() const,isis_pybind.RingPlaneProjection.maximum_ring_longitude,N,抽象基类/纯虚接口
+Mutation/Configuration,"virtual bool SetGround(const double ringRadius, const double ringLongitude)",isis_pybind.RingPlaneProjection.set_ground,N,抽象基类/纯虚接口
+Mutation/Configuration,"virtual bool SetCoordinate(const double x, const double y)",isis_pybind.RingPlaneProjection.set_coordinate,N,抽象基类/纯虚接口
+Public API,double RingRadius() const,isis_pybind.RingPlaneProjection.ring_radius,N,抽象基类/纯虚接口
+Public API,double RingLongitude() const,isis_pybind.RingPlaneProjection.ring_longitude,N,抽象基类/纯虚接口
+Mutation/Configuration,"bool SetUniversalGround(const double ringRadius, const double ringLongitude)",isis_pybind.RingPlaneProjection.set_universal_ground,N,抽象基类/纯虚接口
+Public API,double UniversalRingRadius(),isis_pybind.RingPlaneProjection.universal_ring_radius,N,抽象基类/纯虚接口
+Public API,double UniversalRingLongitude(),isis_pybind.RingPlaneProjection.universal_ring_longitude,N,抽象基类/纯虚接口
+Public API,double Scale() const,isis_pybind.RingPlaneProjection.scale,N,抽象基类/纯虚接口
+Public API,"virtual bool XYRange(double &minX, double &maxX, double &minY, double &maxY)",isis_pybind.RingPlaneProjection.xy_range,N,抽象基类/纯虚接口
+Public API,virtual PvlGroup Mapping(),isis_pybind.RingPlaneProjection.mapping,N,抽象基类/纯虚接口
+Public API,virtual PvlGroup MappingRingRadii(),isis_pybind.RingPlaneProjection.mapping_ring_radii,N,抽象基类/纯虚接口
+Public API,virtual PvlGroup MappingRingLongitudes(),isis_pybind.RingPlaneProjection.mapping_ring_longitudes,N,抽象基类/纯虚接口
+Static/Factory,"static double ToClockwise(const double ringLongitude, const int domain)",isis_pybind.RingPlaneProjection.to_clockwise,N,抽象基类/纯虚接口
+Static/Factory,"static double ToCounterClockwise(const double ringLongitude, const int domain)",isis_pybind.RingPlaneProjection.to_counter_clockwise,N,抽象基类/纯虚接口
+Static/Factory,static double To180Domain(const double lon),isis_pybind.RingPlaneProjection.to180_domain,N,抽象基类/纯虚接口
+Static/Factory,static double To360Domain(const double lon),isis_pybind.RingPlaneProjection.to360_domain,N,抽象基类/纯虚接口

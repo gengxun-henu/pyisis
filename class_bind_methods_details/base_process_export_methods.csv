@@ -1,0 +1,48 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ProcessExport,High Level Cube I/O,isis/src/base/objs/ProcessExport/ProcessExport.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口；流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ProcessExport,isis_pybind.ProcessExport,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口；流程/回调接口较多
+Construction/Enum,"ExportFormat enum (BSQ, BIL, BIP, JP2)",isis_pybind.ProcessExport.ExportFormat,N,抽象基类/纯虚接口；流程/回调接口较多
+Construction/Enum,ProcessExport(),isis_pybind.ProcessExport(),N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,virtual void StartProcess(std::ofstream &fout),isis_pybind.ProcessExport.start_process,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"void SetOutputRange(const double minimum, const double maximum)",isis_pybind.ProcessExport.set_output_range,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetOutputNull(const double value),isis_pybind.ProcessExport.set_output_null,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetOutputLis(const double value),isis_pybind.ProcessExport.set_output_lis,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetOutputLrs(const double value),isis_pybind.ProcessExport.set_output_lrs,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetOutputHis(const double value),isis_pybind.ProcessExport.set_output_his,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetOutputHrs(const double value),isis_pybind.ProcessExport.set_output_hrs,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,double OutputNull(),isis_pybind.ProcessExport.output_null,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,double OutputLis(),isis_pybind.ProcessExport.output_lis,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,double OutputLrs(),isis_pybind.ProcessExport.output_lrs,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,double OutputHis(),isis_pybind.ProcessExport.output_his,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,double OutputHrs(),isis_pybind.ProcessExport.output_hrs,N,抽象基类/纯虚接口；流程/回调接口较多
+Query,bool HasInputRange() const,isis_pybind.ProcessExport.has_input_range,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetInputRange(),isis_pybind.ProcessExport.set_input_range,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetInputRange(UserInterface &ui),isis_pybind.ProcessExport.set_input_range,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"void SetInputRange(const double minimum, const double maximum)",isis_pybind.ProcessExport.set_input_range,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"void SetInputRange(const double minimum, const double maximum, const int index)",isis_pybind.ProcessExport.set_input_range,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"void SetInputRange(const double minimum, const double middle, const double maximum)",isis_pybind.ProcessExport.set_input_range,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"void SetInputRange(const double minimum, const double middle, const double maximum, const int index)",isis_pybind.ProcessExport.set_input_range,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,void CreateWorldFile(const QString &worldFile),isis_pybind.ProcessExport.create_world_file,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetOutputEndian(enum ByteOrder endianness),isis_pybind.ProcessExport.set_output_endian,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetOutputType(Isis::PixelType pixelIn),isis_pybind.ProcessExport.set_output_type,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void setCanGenerateChecksum(bool flag),isis_pybind.ProcessExport.set_can_generate_checksum,N,抽象基类/纯虚接口；流程/回调接口较多
+Query,bool canGenerateChecksum(),isis_pybind.ProcessExport.can_generate_checksum,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,QString checksum(),isis_pybind.ProcessExport.checksum,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,double GetInputMinimum(unsigned int n=0) const,isis_pybind.ProcessExport.get_input_minimum,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,double GetInputMaximum(unsigned int n=0) const,isis_pybind.ProcessExport.get_input_maximum,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,double GetOutputMinimum() { return (p_outputMinimum),isis_pybind.ProcessExport.get_output_minimum,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,double GetOutputMaximum() { return (p_outputMaximum),isis_pybind.ProcessExport.get_output_maximum,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void setFormat(ExportFormat format) { p_format = format,isis_pybind.ProcessExport.set_format,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,template <typename Functor> void ProcessCubes(const Functor & functor) { int samples = InputCubes[0]->sampleCount(),isis_pybind.ProcessExport.process_cubes,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,if (p_format == BIP) { length = InputCubes[0]->bandCount(),isis_pybind.ProcessExport.if,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,else { length = InputCubes[0]->lineCount(),isis_pybind.ProcessExport.line_count,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,std::vector<BufferManager *> imgrs = GetBuffers(),isis_pybind.ProcessExport.get_buffers,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,for (int k = 1; k <= length; k++) { std::vector<Buffer *> ibufs,isis_pybind.ProcessExport.for,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,for (unsigned int cubeIndex = 0; cubeIndex < InputCubes.size(); cubeIndex++) { InputCubes[cubeIndex]->read(*imgrs[cubeIndex]),isis_pybind.ProcessExport.for,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,for (int sampleIndex = 0; sampleIndex < samples; sampleIndex++) { (*imgrs[cubeIndex])[sampleIndex] = p_str[cubeIndex]->Map((*imgrs[cubeIndex])[sampleIndex]),isis_pybind.ProcessExport.for,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,ibufs.push_back(imgrs[cubeIndex]),isis_pybind.ProcessExport.push_back,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,functor(ibufs),isis_pybind.ProcessExport.functor,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,for (unsigned int i = 0; i < imgrs.size(); i++) imgrs[i]->next(),isis_pybind.ProcessExport.for,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,p_progress->CheckStatus(),isis_pybind.ProcessExport.check_status,N,抽象基类/纯虚接口；流程/回调接口较多

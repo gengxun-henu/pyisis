@@ -1,0 +1,1074 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::BulletClosestRayCallback Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_bullet_closest_ray_callback.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_bullet_closest_ray_callback-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::BulletClosestRayCallback Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Bullet ray tracing callback for closest hit on target surface.  
+ <a href="class_isis_1_1_bullet_closest_ray_callback.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_bullet_closest_ray_callback_8h_source.html">BulletClosestRayCallback.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::BulletClosestRayCallback:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bullet_closest_ray_callback__inherit__graph.png" border="0" usemap="#a_isis_1_1_bullet_closest_ray_callback_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_bullet_closest_ray_callback_inherit__map" id="a_isis_1_1_bullet_closest_ray_callback_inherit__map">
+<area shape="rect" title="Bullet ray tracing callback for closest hit on target surface." alt="" coords="5,151,209,456"/>
+<area shape="rect" title=" " alt="" coords="23,5,191,103"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::BulletClosestRayCallback:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bullet_closest_ray_callback__coll__graph.png" border="0" usemap="#a_isis_1_1_bullet_closest_ray_callback_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_bullet_closest_ray_callback_coll__map" id="a_isis_1_1_bullet_closest_ray_callback_coll__map">
+<area shape="rect" title="Bullet ray tracing callback for closest hit on target surface." alt="" coords="135,183,338,440"/>
+<area shape="rect" title=" " alt="" coords="5,5,174,103"/>
+<area shape="rect" title=" " alt="" coords="198,13,275,95"/>
+<area shape="rect" title=" " alt="" coords="316,13,354,95"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:accb2a934f26e8f5d8487fcf634144be1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#accb2a934f26e8f5d8487fcf634144be1">BulletClosestRayCallback</a> ()</td></tr>
+<tr class="memdesc:accb2a934f26e8f5d8487fcf634144be1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#accb2a934f26e8f5d8487fcf634144be1">More...</a><br /></td></tr>
+<tr class="separator:accb2a934f26e8f5d8487fcf634144be1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad15158423ab1d7192d524b9e91c3f2a4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad15158423ab1d7192d524b9e91c3f2a4">BulletClosestRayCallback</a> (const <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a> &amp;result, const btVector3 &amp;<a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8d47293b4053f087760cd53039a2d349">point</a>, const btVector3 &amp;<a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ac5c58e0a9ee8cc6af672a44304c50fbc">normal</a>)</td></tr>
+<tr class="memdesc:ad15158423ab1d7192d524b9e91c3f2a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a callback from another callback, an intersection point, and a surface normal.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#ad15158423ab1d7192d524b9e91c3f2a4">More...</a><br /></td></tr>
+<tr class="separator:ad15158423ab1d7192d524b9e91c3f2a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6965708c6bb155e4bb24c54d0bad499a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a6965708c6bb155e4bb24c54d0bad499a">BulletClosestRayCallback</a> (const btVector3 &amp;<a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#adfd4741ca8457019707442f8e097cb8a">observer</a>, const btVector3 &amp;<a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a6b142e69e0a7dc2bc35e55b6123f9eb6">lookdir</a>)</td></tr>
+<tr class="memdesc:a6965708c6bb155e4bb24c54d0bad499a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a callback from a ray start and end.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a6965708c6bb155e4bb24c54d0bad499a">More...</a><br /></td></tr>
+<tr class="separator:a6965708c6bb155e4bb24c54d0bad499a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c9e82c4f763f64ac1f07961baec7f69"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8c9e82c4f763f64ac1f07961baec7f69">BulletClosestRayCallback</a> (const btVector3 &amp;<a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#adfd4741ca8457019707442f8e097cb8a">observer</a>, const btVector3 &amp;<a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a6b142e69e0a7dc2bc35e55b6123f9eb6">lookdir</a>, const btCollisionWorld::RayResultCallback &amp;source, btCollisionWorld::LocalRayResult &amp;rayResult, bool nornmalInWorldSpace)</td></tr>
+<tr class="memdesc:a8c9e82c4f763f64ac1f07961baec7f69"><td class="mdescLeft">&#160;</td><td class="mdescRight">This constructor is used to create a single ray hit.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a8c9e82c4f763f64ac1f07961baec7f69">More...</a><br /></td></tr>
+<tr class="separator:a8c9e82c4f763f64ac1f07961baec7f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c833befdc98b6f47c0c7dcf1b9ae23e"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8c833befdc98b6f47c0c7dcf1b9ae23e">~BulletClosestRayCallback</a> ()</td></tr>
+<tr class="memdesc:a8c833befdc98b6f47c0c7dcf1b9ae23e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destory a callback.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a8c833befdc98b6f47c0c7dcf1b9ae23e">More...</a><br /></td></tr>
+<tr class="separator:a8c833befdc98b6f47c0c7dcf1b9ae23e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a4afd3ead1f686f78e4c984b9a9398a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8a4afd3ead1f686f78e4c984b9a9398a">isValid</a> () const</td></tr>
+<tr class="memdesc:a8a4afd3ead1f686f78e4c984b9a9398a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the callback is valid/has a valid intersection.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a8a4afd3ead1f686f78e4c984b9a9398a">More...</a><br /></td></tr>
+<tr class="separator:a8a4afd3ead1f686f78e4c984b9a9398a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfd4741ca8457019707442f8e097cb8a"><td class="memItemLeft" align="right" valign="top">btVector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#adfd4741ca8457019707442f8e097cb8a">observer</a> () const</td></tr>
+<tr class="memdesc:adfd4741ca8457019707442f8e097cb8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the beginning of the ray.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#adfd4741ca8457019707442f8e097cb8a">More...</a><br /></td></tr>
+<tr class="separator:adfd4741ca8457019707442f8e097cb8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b142e69e0a7dc2bc35e55b6123f9eb6"><td class="memItemLeft" align="right" valign="top">btVector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a6b142e69e0a7dc2bc35e55b6123f9eb6">lookdir</a> () const</td></tr>
+<tr class="memdesc:a6b142e69e0a7dc2bc35e55b6123f9eb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the end of the ray.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a6b142e69e0a7dc2bc35e55b6123f9eb6">More...</a><br /></td></tr>
+<tr class="separator:a6b142e69e0a7dc2bc35e55b6123f9eb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1389c21dd11bc896ea2998c947ec9838"><td class="memItemLeft" align="right" valign="top">btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a1389c21dd11bc896ea2998c947ec9838">fraction</a> () const</td></tr>
+<tr class="memdesc:a1389c21dd11bc896ea2998c947ec9838"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the intersection hit fraction or fractional distance along the ray of the intersection.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a1389c21dd11bc896ea2998c947ec9838">More...</a><br /></td></tr>
+<tr class="separator:a1389c21dd11bc896ea2998c947ec9838"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d47293b4053f087760cd53039a2d349"><td class="memItemLeft" align="right" valign="top">btVector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8d47293b4053f087760cd53039a2d349">point</a> () const</td></tr>
+<tr class="memdesc:a8d47293b4053f087760cd53039a2d349"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the intersection point, if one exists.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a8d47293b4053f087760cd53039a2d349">More...</a><br /></td></tr>
+<tr class="separator:a8d47293b4053f087760cd53039a2d349"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5c58e0a9ee8cc6af672a44304c50fbc"><td class="memItemLeft" align="right" valign="top">btVector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ac5c58e0a9ee8cc6af672a44304c50fbc">normal</a> () const</td></tr>
+<tr class="memdesc:ac5c58e0a9ee8cc6af672a44304c50fbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the local surface normal at the intersection, if an intersection exists.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#ac5c58e0a9ee8cc6af672a44304c50fbc">More...</a><br /></td></tr>
+<tr class="separator:ac5c58e0a9ee8cc6af672a44304c50fbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d05076d2b12478b7768253944ce78a5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8d05076d2b12478b7768253944ce78a5">triangleIndex</a> () const</td></tr>
+<tr class="memdesc:a8d05076d2b12478b7768253944ce78a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the 0-based index of the intersected triangle.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a8d05076d2b12478b7768253944ce78a5">More...</a><br /></td></tr>
+<tr class="separator:a8d05076d2b12478b7768253944ce78a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac87bb5e76957e6bc3496e49a062cc509"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ac87bb5e76957e6bc3496e49a062cc509">partId</a> () const</td></tr>
+<tr class="memdesc:ac87bb5e76957e6bc3496e49a062cc509"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the Bullet <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> of the intersected collision object.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#ac87bb5e76957e6bc3496e49a062cc509">More...</a><br /></td></tr>
+<tr class="separator:ac87bb5e76957e6bc3496e49a062cc509"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44f873db2b16472de483da6fdace0e82"><td class="memItemLeft" align="right" valign="top">btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a44f873db2b16472de483da6fdace0e82">distance</a> () const</td></tr>
+<tr class="memdesc:a44f873db2b16472de483da6fdace0e82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the distance from the intersection point to the beginning of the ray.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a44f873db2b16472de483da6fdace0e82">More...</a><br /></td></tr>
+<tr class="separator:a44f873db2b16472de483da6fdace0e82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad653d24b2bcc0478cd8d592cd90a0966"><td class="memItemLeft" align="right" valign="top">btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad653d24b2bcc0478cd8d592cd90a0966">distance</a> (const <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a> &amp;other) const</td></tr>
+<tr class="memdesc:ad653d24b2bcc0478cd8d592cd90a0966"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the distance from the intersection point of this callback to the intersection point of another callback.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#ad653d24b2bcc0478cd8d592cd90a0966">More...</a><br /></td></tr>
+<tr class="separator:ad653d24b2bcc0478cd8d592cd90a0966"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af970c405d6def46260f993e022fcd6fa"><td class="memItemLeft" align="right" valign="top">btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#af970c405d6def46260f993e022fcd6fa">distance</a> (const btVector3 &amp;other) const</td></tr>
+<tr class="memdesc:af970c405d6def46260f993e022fcd6fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the distance from the intersection point to another point.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#af970c405d6def46260f993e022fcd6fa">More...</a><br /></td></tr>
+<tr class="separator:af970c405d6def46260f993e022fcd6fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b67092505a02df5aaef29cc7ac89af3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a9b67092505a02df5aaef29cc7ac89af3">operator==</a> (const <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a> &amp;other) const</td></tr>
+<tr class="memdesc:a9b67092505a02df5aaef29cc7ac89af3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equality operator to check if this callback is equivalent to another callback.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a9b67092505a02df5aaef29cc7ac89af3">More...</a><br /></td></tr>
+<tr class="separator:a9b67092505a02df5aaef29cc7ac89af3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2f8d996ceec53a1cc6d5e46af1d7b49"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ab2f8d996ceec53a1cc6d5e46af1d7b49">isVisible</a> (const <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a> &amp;other, const btScalar tolerance=DBL_MAX) const</td></tr>
+<tr class="memdesc:ab2f8d996ceec53a1cc6d5e46af1d7b49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the intersection in this is visible based on another callback.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#ab2f8d996ceec53a1cc6d5e46af1d7b49">More...</a><br /></td></tr>
+<tr class="separator:ab2f8d996ceec53a1cc6d5e46af1d7b49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1c87d5d4f5d59395e9633b4cf63f574"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad1c87d5d4f5d59395e9633b4cf63f574">body</a> () const</td></tr>
+<tr class="memdesc:ad1c87d5d4f5d59395e9633b4cf63f574"><td class="mdescLeft">&#160;</td><td class="mdescRight">@breif Return pointer to target shape  <a href="class_isis_1_1_bullet_closest_ray_callback.html#ad1c87d5d4f5d59395e9633b4cf63f574">More...</a><br /></td></tr>
+<tr class="separator:ad1c87d5d4f5d59395e9633b4cf63f574"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:acd4a91d6addedc7b589893a718fd2064"><td class="memItemLeft" align="right" valign="top">virtual btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#acd4a91d6addedc7b589893a718fd2064">addSingleResult</a> (btCollisionWorld::LocalRayResult &amp;rayResult, bool normalInWorldSpace)</td></tr>
+<tr class="memdesc:acd4a91d6addedc7b589893a718fd2064"><td class="mdescLeft">&#160;</td><td class="mdescRight">! The Bullet <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> of the intersected collision object.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#acd4a91d6addedc7b589893a718fd2064">More...</a><br /></td></tr>
+<tr class="separator:acd4a91d6addedc7b589893a718fd2064"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:ad9e8d0da9e431a81aad76955df4634dd"><td class="memItemLeft" align="right" valign="top">btVector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad9e8d0da9e431a81aad76955df4634dd">m_point</a></td></tr>
+<tr class="separator:ad9e8d0da9e431a81aad76955df4634dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a611e52da8a3d6515dd3b5fb6def34ec7"><td class="memItemLeft" align="right" valign="top">btVector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a611e52da8a3d6515dd3b5fb6def34ec7">m_normal</a></td></tr>
+<tr class="memdesc:a611e52da8a3d6515dd3b5fb6def34ec7"><td class="mdescLeft">&#160;</td><td class="mdescRight">! The intersection point in body fixed (x, y, z) kilometers.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a611e52da8a3d6515dd3b5fb6def34ec7">More...</a><br /></td></tr>
+<tr class="separator:a611e52da8a3d6515dd3b5fb6def34ec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc657279292b2c6e3edf5868c26f6f0c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#adc657279292b2c6e3edf5868c26f6f0c">m_triangleIndex</a></td></tr>
+<tr class="memdesc:adc657279292b2c6e3edf5868c26f6f0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">! The local surface normal at the intersection point in body fixed (x, y, z).  <a href="class_isis_1_1_bullet_closest_ray_callback.html#adc657279292b2c6e3edf5868c26f6f0c">More...</a><br /></td></tr>
+<tr class="separator:adc657279292b2c6e3edf5868c26f6f0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d76e3b7d2debf3ec40166cdd0deb357"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a7d76e3b7d2debf3ec40166cdd0deb357">m_partId</a></td></tr>
+<tr class="memdesc:a7d76e3b7d2debf3ec40166cdd0deb357"><td class="mdescLeft">&#160;</td><td class="mdescRight">! The 0-based index of the intersected triangle.  <a href="class_isis_1_1_bullet_closest_ray_callback.html#a7d76e3b7d2debf3ec40166cdd0deb357">More...</a><br /></td></tr>
+<tr class="separator:a7d76e3b7d2debf3ec40166cdd0deb357"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Bullet ray tracing callback for closest hit on target surface. </p>
+<p>Stores the results of a raycast to find the closest intersection to the start of a ray. If no raycast has been preformed, or a raycast was unsuccessful, then the callback will be flagged as invalid.</p>
+<dl class="section author"><dt>Author</dt><dd>2017-03-17 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="accb2a934f26e8f5d8487fcf634144be1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accb2a934f26e8f5d8487fcf634144be1">&#9670;&nbsp;</a></span>BulletClosestRayCallback() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BulletClosestRayCallback::BulletClosestRayCallback </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default constructor. </p>
+<p>The ray beginning and end, intersection point, and normal default to the origin. The triangle index and part <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> default to -1. </p>
+
+</div>
+</div>
+<a id="ad15158423ab1d7192d524b9e91c3f2a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad15158423ab1d7192d524b9e91c3f2a4">&#9670;&nbsp;</a></span>BulletClosestRayCallback() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BulletClosestRayCallback::BulletClosestRayCallback </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const btVector3 &amp;&#160;</td>
+          <td class="paramname"><em>point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const btVector3 &amp;&#160;</td>
+          <td class="paramname"><em>normal</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a callback from another callback, an intersection point, and a surface normal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">result</td><td>The callback to to construct a copy of. The intersection point and normal will not be copied. </td></tr>
+    <tr><td class="paramname">point</td><td>The intersection point to store. </td></tr>
+    <tr><td class="paramname">normal</td><td>The surface normal to store. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a611e52da8a3d6515dd3b5fb6def34ec7">m_normal</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad9e8d0da9e431a81aad76955df4634dd">m_point</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ac5c58e0a9ee8cc6af672a44304c50fbc">normal()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8d47293b4053f087760cd53039a2d349">point()</a>.</p>
+
+</div>
+</div>
+<a id="a6965708c6bb155e4bb24c54d0bad499a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6965708c6bb155e4bb24c54d0bad499a">&#9670;&nbsp;</a></span>BulletClosestRayCallback() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BulletClosestRayCallback::BulletClosestRayCallback </td>
+          <td>(</td>
+          <td class="paramtype">const btVector3 &amp;&#160;</td>
+          <td class="paramname"><em>observer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const btVector3 &amp;&#160;</td>
+          <td class="paramname"><em>lookdir</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a callback from a ray start and end. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">observer</td><td>The beginning of the ray. </td></tr>
+    <tr><td class="paramname">lookdir</td><td>The end of the ray. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8c9e82c4f763f64ac1f07961baec7f69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c9e82c4f763f64ac1f07961baec7f69">&#9670;&nbsp;</a></span>BulletClosestRayCallback() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BulletClosestRayCallback::BulletClosestRayCallback </td>
+          <td>(</td>
+          <td class="paramtype">const btVector3 &amp;&#160;</td>
+          <td class="paramname"><em>observer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const btVector3 &amp;&#160;</td>
+          <td class="paramname"><em>lookdir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const btCollisionWorld::RayResultCallback &amp;&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">btCollisionWorld::LocalRayResult &amp;&#160;</td>
+          <td class="paramname"><em>rayResult</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>normalInWorldSpace</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This constructor is used to create a single ray hit. </p>
+<p>This constructor is intended to be used in a multi-ray hit environment such as the BulletAllRayHitsRayCallback object to provide the same features provided in this single hit object.</p>
+<dl class="section author"><dt>Author</dt><dd>2017-03-17 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">observer</td><td>The beginning of the ray. </td></tr>
+    <tr><td class="paramname">lookdir</td><td>The end of the ray. </td></tr>
+    <tr><td class="paramname">source</td><td>The original callback this is being created from. </td></tr>
+    <tr><td class="paramname">rayResult</td><td>The local intersection result. </td></tr>
+    <tr><td class="paramname">normalInWorldSpace</td><td>Is the normal in the local result in the local coordinate system or the world coordinate system? </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#acd4a91d6addedc7b589893a718fd2064">addSingleResult()</a>.</p>
+
+</div>
+</div>
+<a id="a8c833befdc98b6f47c0c7dcf1b9ae23e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c833befdc98b6f47c0c7dcf1b9ae23e">&#9670;&nbsp;</a></span>~BulletClosestRayCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BulletClosestRayCallback::~BulletClosestRayCallback </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destory a callback. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="acd4a91d6addedc7b589893a718fd2064"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd4a91d6addedc7b589893a718fd2064">&#9670;&nbsp;</a></span>addSingleResult()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">btScalar Isis::BulletClosestRayCallback::addSingleResult </td>
+          <td>(</td>
+          <td class="paramtype">btCollisionWorld::LocalRayResult &amp;&#160;</td>
+          <td class="paramname"><em>rayResult</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>normalInWorldSpace</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>! The Bullet <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> of the intersected collision object. </p>
+<p>Add a local intersection result to this callback during ray casting.</p>
+<p>Because this callback only stores the single closest result, this overwrites any currently stored result.</p>
+<dl class="section note"><dt>Note</dt><dd>This method is called automatically by btCollisionWorld::rayTest.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rayResult</td><td>The local intersection result for the ray cast. </td></tr>
+    <tr><td class="paramname">normalInWorldSpace</td><td>If the normal stored in the local result is in local coordinates or world coordinates.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>btScalar</b> The hit fraction, fractional distance along the ray, of the intersections </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a611e52da8a3d6515dd3b5fb6def34ec7">m_normal</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a7d76e3b7d2debf3ec40166cdd0deb357">m_partId</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad9e8d0da9e431a81aad76955df4634dd">m_point</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#adc657279292b2c6e3edf5868c26f6f0c">m_triangleIndex</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8c9e82c4f763f64ac1f07961baec7f69">BulletClosestRayCallback()</a>.</p>
+
+</div>
+</div>
+<a id="ad1c87d5d4f5d59395e9633b4cf63f574"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1c87d5d4f5d59395e9633b4cf63f574">&#9670;&nbsp;</a></span>body()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> * Isis::BulletClosestRayCallback::body </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>@breif Return pointer to target shape </p>
+<p>This method assumes the creators have properly set the user pointer in (at least) the btCollisionObject.</p>
+<dl class="section author"><dt>Author</dt><dd>2017-03-17 Kris Becker</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>const BulletClosestRayCallback::BulletTargetShape* </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8a4afd3ead1f686f78e4c984b9a9398a">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a44f873db2b16472de483da6fdace0e82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44f873db2b16472de483da6fdace0e82">&#9670;&nbsp;</a></span>distance() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btScalar Isis::BulletClosestRayCallback::distance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the distance from the intersection point to the beginning of the ray. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>btScalar</b> <a class="el" href="class_isis_1_1_distance.html" title="Distance measurement, usually in meters.">Distance</a> between observer and point in kilometers. If no intersection exists, then DBL_MAX is returned. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8a4afd3ead1f686f78e4c984b9a9398a">isValid()</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#adfd4741ca8457019707442f8e097cb8a">observer()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8d47293b4053f087760cd53039a2d349">point()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad653d24b2bcc0478cd8d592cd90a0966">distance()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ab2f8d996ceec53a1cc6d5e46af1d7b49">isVisible()</a>.</p>
+
+</div>
+</div>
+<a id="af970c405d6def46260f993e022fcd6fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af970c405d6def46260f993e022fcd6fa">&#9670;&nbsp;</a></span>distance() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btScalar Isis::BulletClosestRayCallback::distance </td>
+          <td>(</td>
+          <td class="paramtype">const btVector3 &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the distance from the intersection point to another point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The point to calculate the distance to.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>btScalar</b> <a class="el" href="class_isis_1_1_distance.html" title="Distance measurement, usually in meters.">Distance</a> between intersection and point in kilometers. If no intersection exists, then DBL_MAX is returned. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a44f873db2b16472de483da6fdace0e82">distance()</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8a4afd3ead1f686f78e4c984b9a9398a">isValid()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8d47293b4053f087760cd53039a2d349">point()</a>.</p>
+
+</div>
+</div>
+<a id="ad653d24b2bcc0478cd8d592cd90a0966"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad653d24b2bcc0478cd8d592cd90a0966">&#9670;&nbsp;</a></span>distance() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btScalar Isis::BulletClosestRayCallback::distance </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the distance from the intersection point of this callback to the intersection point of another callback. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The other callback to find the distance to.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>btScalar</b> <a class="el" href="class_isis_1_1_distance.html" title="Distance measurement, usually in meters.">Distance</a> between the intersection point and the other callback's intersection point in kilometers. If this callback or the other callback does not have an intersection, then DBL_MAX is returned. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a44f873db2b16472de483da6fdace0e82">distance()</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8a4afd3ead1f686f78e4c984b9a9398a">isValid()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8d47293b4053f087760cd53039a2d349">point()</a>.</p>
+
+</div>
+</div>
+<a id="a1389c21dd11bc896ea2998c947ec9838"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1389c21dd11bc896ea2998c947ec9838">&#9670;&nbsp;</a></span>fraction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btScalar Isis::BulletClosestRayCallback::fraction </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the intersection hit fraction or fractional distance along the ray of the intersection. </p>
+<p>This is where along the ray the intersection was found. If the hit fraction is 0, then the intersection was found at the very beginning of the ray. If the hit fraction is 1, then the intersection was found at the very end of the ray. The intersection point can be calculates as:</p>
+<p>(1 - hitFraction) * rayStart + hitFraction * rayEnd</p>
+<dl class="section return"><dt>Returns</dt><dd>@btScalar The closest intersection hit fraction. </dd></dl>
+
+</div>
+</div>
+<a id="a8a4afd3ead1f686f78e4c984b9a9398a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a4afd3ead1f686f78e4c984b9a9398a">&#9670;&nbsp;</a></span>isValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BulletClosestRayCallback::isValid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if the callback is valid/has a valid intersection. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If there is a valid intersection.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>ClosestRayResultCallback::hasHit() </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad1c87d5d4f5d59395e9633b4cf63f574">body()</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a44f873db2b16472de483da6fdace0e82">distance()</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ab2f8d996ceec53a1cc6d5e46af1d7b49">isVisible()</a>, <a class="el" href="class_isis_1_1_bullet_shape_model.html#a4f56cc2b7e150bde73dc9f752b246751">Isis::BulletShapeModel::isVisibleFrom()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a9b67092505a02df5aaef29cc7ac89af3">operator==()</a>.</p>
+
+</div>
+</div>
+<a id="ab2f8d996ceec53a1cc6d5e46af1d7b49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2f8d996ceec53a1cc6d5e46af1d7b49">&#9670;&nbsp;</a></span>isVisible()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BulletClosestRayCallback::isVisible </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const btScalar&#160;</td>
+          <td class="paramname"><em>tolerance</em> = <code>DBL_MAX</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if the intersection in this is visible based on another callback. </p>
+<p>Three things are checked to confirm visibility. First, both callbacks must intersect the same triangle on the same collision object. Second, the angle between this callback's local normal and the vector from the other callback's beginning to this callback's intersection must be less than or equal to 90 degrees. Finally, the distance between the intersections of the two callbacks must be less than the tolerance.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The callback for checking visibility. This should represent the observer's look ray. </td></tr>
+    <tr><td class="paramname">tolerance</td><td>The tolerance for the final check of the distance between intersection points.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If the intersection in this callback is visible. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a44f873db2b16472de483da6fdace0e82">distance()</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8a4afd3ead1f686f78e4c984b9a9398a">isValid()</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ac87bb5e76957e6bc3496e49a062cc509">partId()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8d05076d2b12478b7768253944ce78a5">triangleIndex()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_shape_model.html#a4f56cc2b7e150bde73dc9f752b246751">Isis::BulletShapeModel::isVisibleFrom()</a>.</p>
+
+</div>
+</div>
+<a id="a6b142e69e0a7dc2bc35e55b6123f9eb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b142e69e0a7dc2bc35e55b6123f9eb6">&#9670;&nbsp;</a></span>lookdir()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btVector3 Isis::BulletClosestRayCallback::lookdir </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the end of the ray. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>btVector3</b> The end of the ray. </dd></dl>
+
+</div>
+</div>
+<a id="ac5c58e0a9ee8cc6af672a44304c50fbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5c58e0a9ee8cc6af672a44304c50fbc">&#9670;&nbsp;</a></span>normal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btVector3 Isis::BulletClosestRayCallback::normal </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the local surface normal at the intersection, if an intersection exists. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>btVector3</b> The local surface normal in body fixed (x, y, z). </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a611e52da8a3d6515dd3b5fb6def34ec7">m_normal</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad15158423ab1d7192d524b9e91c3f2a4">BulletClosestRayCallback()</a>, <a class="el" href="class_isis_1_1_bullet_shape_model.html#a4f56cc2b7e150bde73dc9f752b246751">Isis::BulletShapeModel::isVisibleFrom()</a>, and <a class="el" href="class_isis_1_1_bullet_shape_model.html#ac3a65944aeb676f63ae1dac30e69da6f">Isis::BulletShapeModel::setLocalNormalFromIntercept()</a>.</p>
+
+</div>
+</div>
+<a id="adfd4741ca8457019707442f8e097cb8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfd4741ca8457019707442f8e097cb8a">&#9670;&nbsp;</a></span>observer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btVector3 Isis::BulletClosestRayCallback::observer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the beginning of the ray. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>btVector3</b> The beginning of the ray. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a44f873db2b16472de483da6fdace0e82">distance()</a>.</p>
+
+</div>
+</div>
+<a id="a9b67092505a02df5aaef29cc7ac89af3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b67092505a02df5aaef29cc7ac89af3">&#9670;&nbsp;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BulletClosestRayCallback::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Equality operator to check if this callback is equivalent to another callback. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The callback to compare with.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If both callbacks are valid and intersected the same triangle on the same collision body. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8a4afd3ead1f686f78e4c984b9a9398a">isValid()</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ac87bb5e76957e6bc3496e49a062cc509">partId()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8d05076d2b12478b7768253944ce78a5">triangleIndex()</a>.</p>
+
+</div>
+</div>
+<a id="ac87bb5e76957e6bc3496e49a062cc509"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac87bb5e76957e6bc3496e49a062cc509">&#9670;&nbsp;</a></span>partId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BulletClosestRayCallback::partId </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the Bullet <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> of the intersected collision object. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The Bullet <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> of the intersected collision object. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a7d76e3b7d2debf3ec40166cdd0deb357">m_partId</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ab2f8d996ceec53a1cc6d5e46af1d7b49">isVisible()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a9b67092505a02df5aaef29cc7ac89af3">operator==()</a>.</p>
+
+</div>
+</div>
+<a id="a8d47293b4053f087760cd53039a2d349"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d47293b4053f087760cd53039a2d349">&#9670;&nbsp;</a></span>point()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btVector3 Isis::BulletClosestRayCallback::point </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the intersection point, if one exists. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>btVector3</b> The intersection point in body fixed (x, y, z) kilometers. </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad9e8d0da9e431a81aad76955df4634dd">m_point</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad15158423ab1d7192d524b9e91c3f2a4">BulletClosestRayCallback()</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a44f873db2b16472de483da6fdace0e82">distance()</a>, <a class="el" href="class_isis_1_1_bullet_shape_model.html#a4f56cc2b7e150bde73dc9f752b246751">Isis::BulletShapeModel::isVisibleFrom()</a>, and <a class="el" href="class_isis_1_1_bullet_shape_model.html#a296727972842ab32c8bce5d8664dc153">Isis::BulletShapeModel::localRadius()</a>.</p>
+
+</div>
+</div>
+<a id="a8d05076d2b12478b7768253944ce78a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d05076d2b12478b7768253944ce78a5">&#9670;&nbsp;</a></span>triangleIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BulletClosestRayCallback::triangleIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the 0-based index of the intersected triangle. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The 0-based index of the intersected triangle. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#adc657279292b2c6e3edf5868c26f6f0c">m_triangleIndex</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ab2f8d996ceec53a1cc6d5e46af1d7b49">isVisible()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a9b67092505a02df5aaef29cc7ac89af3">operator==()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a611e52da8a3d6515dd3b5fb6def34ec7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a611e52da8a3d6515dd3b5fb6def34ec7">&#9670;&nbsp;</a></span>m_normal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">btVector3 Isis::BulletClosestRayCallback::m_normal</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>! The intersection point in body fixed (x, y, z) kilometers. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#acd4a91d6addedc7b589893a718fd2064">addSingleResult()</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad15158423ab1d7192d524b9e91c3f2a4">BulletClosestRayCallback()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ac5c58e0a9ee8cc6af672a44304c50fbc">normal()</a>.</p>
+
+</div>
+</div>
+<a id="a7d76e3b7d2debf3ec40166cdd0deb357"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d76e3b7d2debf3ec40166cdd0deb357">&#9670;&nbsp;</a></span>m_partId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BulletClosestRayCallback::m_partId</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>! The 0-based index of the intersected triangle. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#acd4a91d6addedc7b589893a718fd2064">addSingleResult()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ac87bb5e76957e6bc3496e49a062cc509">partId()</a>.</p>
+
+</div>
+</div>
+<a id="ad9e8d0da9e431a81aad76955df4634dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9e8d0da9e431a81aad76955df4634dd">&#9670;&nbsp;</a></span>m_point</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">btVector3 Isis::BulletClosestRayCallback::m_point</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#acd4a91d6addedc7b589893a718fd2064">addSingleResult()</a>, <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad15158423ab1d7192d524b9e91c3f2a4">BulletClosestRayCallback()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8d47293b4053f087760cd53039a2d349">point()</a>.</p>
+
+</div>
+</div>
+<a id="adc657279292b2c6e3edf5868c26f6f0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc657279292b2c6e3edf5868c26f6f0c">&#9670;&nbsp;</a></span>m_triangleIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BulletClosestRayCallback::m_triangleIndex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>! The local surface normal at the intersection point in body fixed (x, y, z). </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#acd4a91d6addedc7b589893a718fd2064">addSingleResult()</a>, and <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#a8d05076d2b12478b7768253944ce78a5">triangleIndex()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/BulletShapeModel/<a class="el" href="_bullet_closest_ray_callback_8h_source.html">BulletClosestRayCallback.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/BulletShapeModel/<a class="el" href="_bullet_closest_ray_callback_8cpp.html">BulletClosestRayCallback.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

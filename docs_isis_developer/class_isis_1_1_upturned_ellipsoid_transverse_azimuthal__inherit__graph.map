@@ -1,0 +1,5 @@
+<map id="Isis::UpturnedEllipsoidTransverseAzimuthal" name="Isis::UpturnedEllipsoidTransverseAzimuthal">
+<area shape="rect" id="node1" title="Upturned Ellipsoid Transverse Azimuthal Map Projection." alt="" coords="5,1288,223,1577"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_t_projection.html" title="Base class for Map TProjections." alt="" coords="32,567,196,1240"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_projection.html" title="Base class for Map Projections." alt="" coords="35,5,193,519"/>
+</map>

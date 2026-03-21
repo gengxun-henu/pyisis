@@ -1,0 +1,392 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Deprecated List</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('deprecated.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">Deprecated List </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><dl class="reflist">
+<dt>Member <a class="el" href="namespace_isis.html#a4c6d646be46ce6ee7decf6a75e19d3b2">Isis::IsBigEndian</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000002"></a> </dd>
+<dt>Member <a class="el" href="namespace_isis.html#a3a55584e6099f4aca4973f18424ed859">Isis::IsLittleEndian</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000001"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a34b49a636a1030576689d2dcc5cb18f8">Isis::IString::Compress</a>  (bool force=false)</dt>
+<dd><a class="anchor" id="_deprecated000036"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#aaad03c0ef2e592f5431a35ce987a8a96">Isis::IString::Compress</a>  (const std::string &amp;str, bool force=false)</dt>
+<dd><a class="anchor" id="_deprecated000037"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a493ac3c8510e8974061a2564710b4067">Isis::IString::Convert</a>  (const std::string &amp;listofchars, const char &amp;to)</dt>
+<dd><a class="anchor" id="_deprecated000042"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a28de8a4f133f02b5ac1ed79770b72217">Isis::IString::Convert</a>  (const std::string &amp;str, const std::string &amp;listofchars, const char &amp;to)</dt>
+<dd><a class="anchor" id="_deprecated000043"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#abea51d980d41857b34abb146e9608f4b">Isis::IString::ConvertWhiteSpace</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000044"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a95ae512fd13fb96864f9a69ae796cd5e">Isis::IString::ConvertWhiteSpace</a>  (const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000045"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a20bc9b0ef6b8739543d28ddb25a99824">Isis::IString::DownCase</a>  (const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000022"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a6bc0f2894a15418c9057ed501c6bf63a">Isis::IString::DownCase</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000021"></a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a7c146f6298f6ab5812e791a2c3be9924">Isis::IString::Equal</a>  (const std::string &amp;str1, const std::string &amp;str2)</dt>
+<dd><a class="anchor" id="_deprecated000025"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a08663c4c18d8630917f7bfd47fd79cab">Isis::IString::Equal</a>  (const std::string &amp;str) const</dt>
+<dd><a class="anchor" id="_deprecated000024"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a78c18d24e88eefba3f7cd3044a92b24d">Isis::IString::IString</a>  (const int &amp;num)</dt>
+<dd><a class="anchor" id="_deprecated000007"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a67fee616115b6610e3ebeb970017a13a">Isis::IString::IString</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000003"></a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a3c74162cb44ea4a6186f34e771d5f623">Isis::IString::IString</a>  (const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000004"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#ae98f9ac5ba527403df561001cf47a79a">Isis::IString::IString</a>  (const QString &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000011"></a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#aaf51cc69f82615af9ef1f9222e3e6a27">Isis::IString::IString</a>  (const <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000005"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a0754552f72f2f1453af6adfe62f97f14">Isis::IString::IString</a>  (const double &amp;num, const int piPrecision=14)</dt>
+<dd><a class="anchor" id="_deprecated000009"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a9f63275f62dad1658adf4c9a0f8804b4">Isis::IString::IString</a>  (const BigInt &amp;num)</dt>
+<dd><a class="anchor" id="_deprecated000008"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a11fc5309e05d34ec6e53a236e43c3fdf">Isis::IString::IString</a>  (const char *str)</dt>
+<dd><a class="anchor" id="_deprecated000006"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a0b11bc78926b531ffde346c8b6c9850a">Isis::IString::operator=</a>  (const int &amp;value)</dt>
+<dd><a class="anchor" id="_deprecated000048"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a7321ec855927cc61b118d44db0edc795">Isis::IString::operator=</a>  (const BigInt &amp;value)</dt>
+<dd><a class="anchor" id="_deprecated000049"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a312a46e9feefd6cf043e4eb8004a9cd1">Isis::IString::Remove</a>  (const std::string &amp;del)</dt>
+<dd><a class="anchor" id="_deprecated000046"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a4d3556a96c801acd984ea13b3f80b462">Isis::IString::Remove</a>  (const std::string &amp;del, const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000047"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#aa5971b1fcbbc6f9850fc1ec2b5037791">Isis::IString::Replace</a>  (const std::string &amp;str, const std::string &amp;from, const std::string &amp;to, bool honorquotes)</dt>
+<dd><a class="anchor" id="_deprecated000041"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a32a9154c79f8dbde1a65ea4578c432bc">Isis::IString::Replace</a>  (const std::string &amp;from, const std::string &amp;to, bool honorquotes)</dt>
+<dd><a class="anchor" id="_deprecated000040"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#ad9c2bd94e12b24ba3af474808651cf33">Isis::IString::Replace</a>  (const std::string &amp;str, const std::string &amp;from, const std::string &amp;to, int maxReplacementCount=20)</dt>
+<dd><a class="anchor" id="_deprecated000039"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a94382f1fb513bebfae23aaccd783287a">Isis::IString::Replace</a>  (const std::string &amp;from, const std::string &amp;to, int maxReplaceCount=20)</dt>
+<dd><a class="anchor" id="_deprecated000038"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#ac86fd7d6b985b09cd733ff17b4771324">Isis::IString::Split</a>  (const char separator, const std::string &amp;instr, std::vector&lt; std::string &gt; &amp;tokens, bool allowEmptyEntries=true)</dt>
+<dd><a class="anchor" id="_deprecated000035"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a6912112f4c5a65026b51f39fe11c42d4">Isis::IString::ToBigInteger</a>  (const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000029"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#aba0ff422cce649c125f26e5e3e1a7421">Isis::IString::ToBigInteger</a>  () const</dt>
+<dd><a class="anchor" id="_deprecated000028"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a30a4b72b2bc55fa7af33deebe6fa9167">Isis::IString::ToDouble</a>  (const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000031"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#ae56ed251df5ac88b2a1bf48bb7bc1cf7">Isis::IString::ToDouble</a>  () const</dt>
+<dd><a class="anchor" id="_deprecated000030"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a243346734ca51bdedb9e5c65ff986e7e">Isis::IString::ToInteger</a>  (const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000027"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">Isis::IString::ToInteger</a>  () const</dt>
+<dd><a class="anchor" id="_deprecated000026"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a748288dc2f51058c6d2f9e1d5e4259fd">Isis::IString::Token</a>  (const <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> &amp;separator)</dt>
+<dd><a class="anchor" id="_deprecated000034"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a771e32c8a3cbe76ba8ff9916da73effb">Isis::IString::ToQt</a>  () const</dt>
+<dd><a class="anchor" id="_deprecated000032"></a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a04315cb37e43c54780190297ff826aac">Isis::IString::ToQt</a>  (const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000033"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#af0fcd64355d3f366a9e54a3dfcce4ef7">Isis::IString::ToQt</a>  (const std::vector&lt; std::string &gt; &amp;sl)</dt>
+<dd><a class="anchor" id="_deprecated000051"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#ad29bb11a361c30021ae23f7d95fce0dd">Isis::IString::ToStd</a>  (const QStringList &amp;sl)</dt>
+<dd><a class="anchor" id="_deprecated000052"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a45f0615a503707d29517e2ca7e7dbb60">Isis::IString::ToStd</a>  (const QString &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000050"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a9c8e646620975f736af0d5cb752d7390">Isis::IString::Trim</a>  (const std::string &amp;chars, const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000014"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a5e2177424ba4fe476e605f56d3edba01">Isis::IString::Trim</a>  (const std::string &amp;chars)</dt>
+<dd><a class="anchor" id="_deprecated000013"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#aa35fb779d8a7931f7762cf4abed1b36b">Isis::IString::TrimHead</a>  (const std::string &amp;chars, const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000016"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#aa2c773451719a9b93a74c67ecb0b89cc">Isis::IString::TrimHead</a>  (const std::string &amp;chars)</dt>
+<dd><a class="anchor" id="_deprecated000015"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a0fcef6024854a36b2cdb70db1d2f1380">Isis::IString::TrimTail</a>  (const std::string &amp;chars)</dt>
+<dd><a class="anchor" id="_deprecated000017"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a2c522b191a20c1f0fb1bcbb471bf0bca">Isis::IString::TrimTail</a>  (const std::string &amp;chars, const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000018"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a69f44966f3c629e79aec55ba5b921d75">Isis::IString::UpCase</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000019"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#ae08ec86f22eb18d3c1c59682f2ae940c">Isis::IString::UpCase</a>  (const std::string &amp;str)</dt>
+<dd><a class="anchor" id="_deprecated000020"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_i_string.html#a6f10a5ba3562661eccba1d50f23f71e6">Isis::IString::~IString</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000012"></a>  </dd>
+<dt>Member <a class="el" href="namespace_isis.html#aa6cf8d3c286373925e67a6464de85cf5">Isis::nocase_compare</a>  (const char c1, const char c2)</dt>
+<dd><a class="anchor" id="_deprecated000023"></a> </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process.html#a248a4f86edfc17d0a629dc9c58b76121">Isis::Process::EndProcess</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000053"></a>Please use <a class="el" href="class_isis_1_1_process.html#afa074f4de51484f575ddc0ba0baeeb25" title="Cleans up by closing cubes and freeing memory for owned cubes.">Finalize()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_boxcar.html#a0ab78527ef38ce247c26c45996e78ef2">Isis::ProcessByBoxcar::EndProcess</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000054"></a>Please use <a class="el" href="class_isis_1_1_process_by_boxcar.html#ab6654ac444ab0b22e7e0cd2e5c720b6a" title="End the boxcar processing sequence and cleans up by closing cubes, freeing memory,...">Finalize()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_brick.html#ad44d37928a36fcf7d9f6025c531a65d2">Isis::ProcessByBrick::EndProcess</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000055"></a>Please use <a class="el" href="class_isis_1_1_process_by_brick.html#a3646ac80183de809c271ada36f7c871c" title="Cleans up by closing cubes and freeing memory.">Finalize()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_line.html#aa34de89c8d88e89c8a31d6032c0e2d75">Isis::ProcessByLine::StartProcess</a>  (void funct(std::vector&lt; Isis::Buffer * &gt; &amp;in, std::vector&lt; Isis::Buffer * &gt; &amp;out))</dt>
+<dd><a class="anchor" id="_deprecated000059"></a>Please use <a class="el" href="class_isis_1_1_process_by_line.html#a0837be962d40f37307ed98048ebbfab0" title="Same functionality as StartProcess(std::vector&lt;Isis::Buffer *&gt; &amp;in, std::vector&lt;Isis::Buffer *&gt; &amp;out)...">ProcessCubes()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_line.html#a5530109d6e0a694d949a7839829bc103">Isis::ProcessByLine::StartProcess</a>  (void funct(Isis::Buffer &amp;in, Isis::Buffer &amp;out))</dt>
+<dd><a class="anchor" id="_deprecated000058"></a>Please use <a class="el" href="class_isis_1_1_process_by_line.html#aac778948ae5a7bdb98cfecc9fa517d95" title="Same functionality as StartProcess(void funct(Isis::Buffer &amp;in, Isis::Buffer &amp;out)) using Functors.">ProcessCube()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_line.html#a7534057df339eb463274baf279c7b49f">Isis::ProcessByLine::StartProcess</a>  (void funct(Isis::Buffer &amp;inout))</dt>
+<dd><a class="anchor" id="_deprecated000056"></a>Please use <a class="el" href="class_isis_1_1_process_by_line.html#af5a9064877f9d48631175a55d478a664" title="Same functionality as StartProcess(void funct(Isis::Buffer &amp;inout)) using Functors.">ProcessCubeInPlace()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_line.html#abc722256b49e7dc2999d33377a96aff4">Isis::ProcessByLine::StartProcess</a>  (std::function&lt; void(Isis::Buffer &amp;in)&gt; funct)</dt>
+<dd><a class="anchor" id="_deprecated000057"></a>Please use <a class="el" href="class_isis_1_1_process_by_line.html#af5a9064877f9d48631175a55d478a664" title="Same functionality as StartProcess(void funct(Isis::Buffer &amp;inout)) using Functors.">ProcessCubeInPlace()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_sample.html#a39dc1b8c2fcef8f74b9979a62f72fc93">Isis::ProcessBySample::StartProcess</a>  (void funct(Isis::Buffer &amp;inout))</dt>
+<dd><a class="anchor" id="_deprecated000060"></a>Please use <a class="el" href="class_isis_1_1_process_by_sample.html#abccdb966835917df0fbecefb752e5465">ProcessCubeInPlace()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_sample.html#affa1661d82ff8f513e82a99e34fd8dbf">Isis::ProcessBySample::StartProcess</a>  (void funct(Isis::Buffer &amp;in, Isis::Buffer &amp;out))</dt>
+<dd><a class="anchor" id="_deprecated000061"></a>Please use <a class="el" href="class_isis_1_1_process_by_sample.html#aa73a342643aea741f51b464c21dc2590">ProcessCube()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_sample.html#afa3b89d512b05528f5cc4c96fbf68555">Isis::ProcessBySample::StartProcess</a>  (void funct(std::vector&lt; Isis::Buffer * &gt; &amp;in, std::vector&lt; Isis::Buffer * &gt; &amp;out))</dt>
+<dd><a class="anchor" id="_deprecated000062"></a>Please use <a class="el" href="class_isis_1_1_process_by_sample.html#a8527129935bcea4d63ff0af6df88b332">ProcessCubes()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_spectra.html#a5c69e307f609d39cb0b1a6d647fda8d7">Isis::ProcessBySpectra::StartProcess</a>  (void funct(Isis::Buffer &amp;in))</dt>
+<dd><a class="anchor" id="_deprecated000063"></a>Please use <a class="el" href="class_isis_1_1_process_by_spectra.html#a80a88498d9d040ec60966506c49c8906">ProcessCubeInPlace()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_spectra.html#a3007a33c26ac2ab49c456c4a2231e700">Isis::ProcessBySpectra::StartProcess</a>  (void funct(Isis::Buffer &amp;in, Isis::Buffer &amp;out))</dt>
+<dd><a class="anchor" id="_deprecated000064"></a>Please use <a class="el" href="class_isis_1_1_process_by_spectra.html#aef6bda0dbf2e31c3fca38a8fb662a861">ProcessCube()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_spectra.html#a045093abe82761dc661c5f756cc04ca7">Isis::ProcessBySpectra::StartProcess</a>  (void funct(std::vector&lt; Isis::Buffer * &gt; &amp;in, std::vector&lt; Isis::Buffer * &gt; &amp;out))</dt>
+<dd><a class="anchor" id="_deprecated000065"></a>Please use <a class="el" href="class_isis_1_1_process_by_spectra.html#aceac4fea2f47d373d1bab1b40e63f9f2">ProcessCubes()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_tile.html#ad861c23694a798bf705a4d0f32f2cb2c">Isis::ProcessByTile::EndProcess</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000069"></a>Please use <a class="el" href="class_isis_1_1_process_by_tile.html#a29e0a725f5073830cccfa054d0dbba38" title="Cleans up by closing cubes and freeing memory.">Finalize()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_tile.html#a6e73ea7dec411b4b9aff49d75b85d121">Isis::ProcessByTile::StartProcess</a>  (void funct(Buffer &amp;in, Buffer &amp;out))</dt>
+<dd><a class="anchor" id="_deprecated000066"></a>Please use <a class="el" href="class_isis_1_1_process_by_tile.html#a9831a6ac560b589dc6fea6159bb666c8">ProcessCube()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_tile.html#aad4946c1749b53f34fe4f6dfe252b0c5">Isis::ProcessByTile::StartProcess</a>  (void funct(std::vector&lt; Buffer * &gt; &amp;in, std::vector&lt; Buffer * &gt; &amp;out))</dt>
+<dd><a class="anchor" id="_deprecated000068"></a>Please use <a class="el" href="class_isis_1_1_process_by_tile.html#a53fb2329104c5c61bbed99c0b0022cf2">ProcessCubes()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_by_tile.html#a0895dac76b7ee9f2b3babe51e343e43d">Isis::ProcessByTile::StartProcess</a>  (void funct(Buffer &amp;in))</dt>
+<dd><a class="anchor" id="_deprecated000067"></a>Please use <a class="el" href="class_isis_1_1_process_by_tile.html#a20b4dc918b4ceb054f1e4b3cf7e95208">ProcessCubeInPlace()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_ground_polygons.html#a8fb76f3e9d3d25899687bb9d7ee6f0a4">Isis::ProcessGroundPolygons::EndProcess</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000070"></a>Please use <a class="el" href="class_isis_1_1_process_ground_polygons.html#a47126164393f0b5f069ea348784be316" title="This method cleans up any open outputcube files and deletes the pointer to the universal ground map i...">Finalize()</a>  </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_import_pds.html#a24329dbe356f8ccfb91fa147ed972426">Isis::ProcessImportPds::EndProcess</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000071"></a>. </dd>
+<dt>Member <a class="el" href="class_isis_1_1_process_polygons.html#a64323d7b0a156b00b30396b0ca38b121">Isis::ProcessPolygons::EndProcess</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000072"></a>Please use <a class="el" href="class_isis_1_1_process_polygons.html#ab52f456c121c1d0012c91e60d20555a7" title="Cleans up by closing cubes and freeing memory for owned cubes.">Finalize()</a>  </dd>
+<dt><a class="el" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources.">Module</a> <a class="el" href="group___user_interface.html">UserInterface</a>  </dt>
+<dd><p class="startdd"><a class="anchor" id="_deprecated000073"></a>Objects in this category should be moved to the ApplicationInteface group</p>
+<p class="enddd"><a class="anchor" id="_deprecated000074"></a>Objects in this category should be moved to the ApplicationInteface group</p>
+</dd>
+</dl>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

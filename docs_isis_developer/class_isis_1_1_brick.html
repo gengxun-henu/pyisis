@@ -1,0 +1,2412 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Brick Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_brick.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_brick-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Brick Class Reference<div class="ingroups"><a class="el" href="group___low_level_cube_i_o.html">Low Level Cube I/O</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data.">Buffer</a> for containing a three dimensional section of an image.  
+ <a href="class_isis_1_1_brick.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_brick_8h_source.html">Brick.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::Brick:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_brick__inherit__graph.png" border="0" usemap="#a_isis_1_1_brick_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_brick_inherit__map" id="a_isis_1_1_brick_inherit__map">
+<area shape="rect" title="Buffer for containing a three dimensional section of an image." alt="" coords="10,936,148,1161"/>
+<area shape="rect" href="class_isis_1_1_buffer_manager.html" title="Manages a Buffer over a cube." alt="" coords="11,535,147,888"/>
+<area shape="rect" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data." alt="" coords="5,5,153,487"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::Brick:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_brick__coll__graph.png" border="0" usemap="#a_isis_1_1_brick_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_brick_coll__map" id="a_isis_1_1_brick_coll__map">
+<area shape="rect" title="Buffer for containing a three dimensional section of an image." alt="" coords="10,792,148,1017"/>
+<area shape="rect" href="class_isis_1_1_buffer_manager.html" title="Manages a Buffer over a cube." alt="" coords="11,391,147,744"/>
+<area shape="rect" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data." alt="" coords="5,5,153,343"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ad2e4aeb71918cad24c6e25e6c0ed3df5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_brick.html#ad2e4aeb71918cad24c6e25e6c0ed3df5">Brick</a> (const int nsamps, const int nlines, const int nbands, const <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">Isis::PixelType</a> type, bool reverse=false)</td></tr>
+<tr class="memdesc:ad2e4aeb71918cad24c6e25e6c0ed3df5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_brick.html" title="Buffer for containing a three dimensional section of an image.">Brick</a> object.  <a href="class_isis_1_1_brick.html#ad2e4aeb71918cad24c6e25e6c0ed3df5">More...</a><br /></td></tr>
+<tr class="separator:ad2e4aeb71918cad24c6e25e6c0ed3df5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a678fb03eda0dfa06cba8895fb4fdd1a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_brick.html#a678fb03eda0dfa06cba8895fb4fdd1a2">Brick</a> (const <a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a> &amp;cube, const int &amp;bufNumSamples, const int &amp;bufNumLines, const int &amp;bufNumBands, bool reverse=false)</td></tr>
+<tr class="memdesc:a678fb03eda0dfa06cba8895fb4fdd1a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_brick.html" title="Buffer for containing a three dimensional section of an image.">Brick</a> object.  <a href="class_isis_1_1_brick.html#a678fb03eda0dfa06cba8895fb4fdd1a2">More...</a><br /></td></tr>
+<tr class="separator:a678fb03eda0dfa06cba8895fb4fdd1a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef6d97df45ddfc51f98d81e2b1cd12d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_brick.html#aef6d97df45ddfc51f98d81e2b1cd12d9">Brick</a> (int maxSamples, int maxLines, int maxBands, int bufNumSamples, int bufNumLines, int bufNumBands, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">Isis::PixelType</a> type, bool reverse=false)</td></tr>
+<tr class="memdesc:aef6d97df45ddfc51f98d81e2b1cd12d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_brick.html" title="Buffer for containing a three dimensional section of an image.">Brick</a> object of the specified buffer size and area size to map.  <a href="class_isis_1_1_brick.html#aef6d97df45ddfc51f98d81e2b1cd12d9">More...</a><br /></td></tr>
+<tr class="separator:aef6d97df45ddfc51f98d81e2b1cd12d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae37b86e5b31d648ca565cc431fe28e1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_brick.html#ae37b86e5b31d648ca565cc431fe28e1a">SetBasePosition</a> (const int start_sample, const int start_line, const int start_band)</td></tr>
+<tr class="memdesc:ae37b86e5b31d648ca565cc431fe28e1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is used to set the base position of the shape buffer.  <a href="class_isis_1_1_brick.html#ae37b86e5b31d648ca565cc431fe28e1a">More...</a><br /></td></tr>
+<tr class="separator:ae37b86e5b31d648ca565cc431fe28e1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abff197a2b8b3e64c5275cccece4896f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_brick.html#abff197a2b8b3e64c5275cccece4896f2">SetBaseSample</a> (const int start_samp)</td></tr>
+<tr class="memdesc:abff197a2b8b3e64c5275cccece4896f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is used to set the base sample position of the shape buffer.  <a href="class_isis_1_1_brick.html#abff197a2b8b3e64c5275cccece4896f2">More...</a><br /></td></tr>
+<tr class="separator:abff197a2b8b3e64c5275cccece4896f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a347ab909c21d1f5ae032b812f5750d26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_brick.html#a347ab909c21d1f5ae032b812f5750d26">SetBaseLine</a> (const int start_line)</td></tr>
+<tr class="memdesc:a347ab909c21d1f5ae032b812f5750d26"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is used to set the base line position of the shape buffer.  <a href="class_isis_1_1_brick.html#a347ab909c21d1f5ae032b812f5750d26">More...</a><br /></td></tr>
+<tr class="separator:a347ab909c21d1f5ae032b812f5750d26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39aee168145be43ea13674f5243f8246"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_brick.html#a39aee168145be43ea13674f5243f8246">SetBaseBand</a> (const int start_band)</td></tr>
+<tr class="memdesc:a39aee168145be43ea13674f5243f8246"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is used to set the base band position of the shape buffer.  <a href="class_isis_1_1_brick.html#a39aee168145be43ea13674f5243f8246">More...</a><br /></td></tr>
+<tr class="separator:a39aee168145be43ea13674f5243f8246"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e789a4630b020ce5dce2a69c70703c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_brick.html#a0e789a4630b020ce5dce2a69c70703c3">Resize</a> (const int nsamps, const int nlines, const int nbands)</td></tr>
+<tr class="memdesc:a0e789a4630b020ce5dce2a69c70703c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resizes the memory buffer to the specified number of samples, lines, and bands.  <a href="class_isis_1_1_brick.html#a0e789a4630b020ce5dce2a69c70703c3">More...</a><br /></td></tr>
+<tr class="separator:a0e789a4630b020ce5dce2a69c70703c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace41ab4cb1f4ecc76367257dcf73abc1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_brick.html#ace41ab4cb1f4ecc76367257dcf73abc1">SetBrick</a> (const int brick)</td></tr>
+<tr class="memdesc:ace41ab4cb1f4ecc76367257dcf73abc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is used to set the position of the brick.  <a href="class_isis_1_1_brick.html#ace41ab4cb1f4ecc76367257dcf73abc1">More...</a><br /></td></tr>
+<tr class="separator:ace41ab4cb1f4ecc76367257dcf73abc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accee4c70e1b1bf27713c8b673f3e895c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_brick.html#accee4c70e1b1bf27713c8b673f3e895c">Bricks</a> ()</td></tr>
+<tr class="memdesc:accee4c70e1b1bf27713c8b673f3e895c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of Bricks in the cube.  <a href="class_isis_1_1_brick.html#accee4c70e1b1bf27713c8b673f3e895c">More...</a><br /></td></tr>
+<tr class="separator:accee4c70e1b1bf27713c8b673f3e895c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed620227b79d1c467084eaad7a48a6da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#aed620227b79d1c467084eaad7a48a6da">operator++</a> (int)</td></tr>
+<tr class="memdesc:aed620227b79d1c467084eaad7a48a6da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the shape buffer to the next position.  <a href="class_isis_1_1_buffer_manager.html#aed620227b79d1c467084eaad7a48a6da">More...</a><br /></td></tr>
+<tr class="separator:aed620227b79d1c467084eaad7a48a6da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f91bba9a4dec6cd99a015921b02d039"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_buffer_manager.html">BufferManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#a9f91bba9a4dec6cd99a015921b02d039">operator+=</a> (int i)</td></tr>
+<tr class="memdesc:a9f91bba9a4dec6cd99a015921b02d039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the shape buffer by a certain amount.  <a href="class_isis_1_1_buffer_manager.html#a9f91bba9a4dec6cd99a015921b02d039">More...</a><br /></td></tr>
+<tr class="separator:a9f91bba9a4dec6cd99a015921b02d039"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c3e68ed0e090ac9b64ee15197e5b1b3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#a2c3e68ed0e090ac9b64ee15197e5b1b3">begin</a> ()</td></tr>
+<tr class="memdesc:a2c3e68ed0e090ac9b64ee15197e5b1b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the shape buffer to the first position.  <a href="class_isis_1_1_buffer_manager.html#a2c3e68ed0e090ac9b64ee15197e5b1b3">More...</a><br /></td></tr>
+<tr class="separator:a2c3e68ed0e090ac9b64ee15197e5b1b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad78bcce288421976d93a55224569025f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#ad78bcce288421976d93a55224569025f">next</a> ()</td></tr>
+<tr class="memdesc:ad78bcce288421976d93a55224569025f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the shape buffer to the next position.  <a href="class_isis_1_1_buffer_manager.html#ad78bcce288421976d93a55224569025f">More...</a><br /></td></tr>
+<tr class="separator:ad78bcce288421976d93a55224569025f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbdd8ea3e8ae11dab3e7ae2bb3ded7ae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#acbdd8ea3e8ae11dab3e7ae2bb3ded7ae">end</a> () const</td></tr>
+<tr class="memdesc:acbdd8ea3e8ae11dab3e7ae2bb3ded7ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the shape buffer has accessed the end of the cube.  <a href="class_isis_1_1_buffer_manager.html#acbdd8ea3e8ae11dab3e7ae2bb3ded7ae">More...</a><br /></td></tr>
+<tr class="separator:acbdd8ea3e8ae11dab3e7ae2bb3ded7ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3f7b2ca0d7c7ece36ef52e98d98ae87"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#ab3f7b2ca0d7c7ece36ef52e98d98ae87">setpos</a> (<a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> map)</td></tr>
+<tr class="memdesc:ab3f7b2ca0d7c7ece36ef52e98d98ae87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the position of the shape in the cube.  <a href="class_isis_1_1_buffer_manager.html#ab3f7b2ca0d7c7ece36ef52e98d98ae87">More...</a><br /></td></tr>
+<tr class="separator:ab3f7b2ca0d7c7ece36ef52e98d98ae87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a237f3b41edcedbb2e1b2dfed8fb78e90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#a237f3b41edcedbb2e1b2dfed8fb78e90">swap</a> (<a class="el" href="class_isis_1_1_buffer_manager.html">BufferManager</a> &amp;other)</td></tr>
+<tr class="memdesc:a237f3b41edcedbb2e1b2dfed8fb78e90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swaps the values of this <a class="el" href="class_isis_1_1_buffer_manager.html" title="Manages a Buffer over a cube.">BufferManager</a> with that of another.  <a href="class_isis_1_1_buffer_manager.html#a237f3b41edcedbb2e1b2dfed8fb78e90">More...</a><br /></td></tr>
+<tr class="separator:a237f3b41edcedbb2e1b2dfed8fb78e90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe9df445edbcdfd33514f7c620c54674"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#abe9df445edbcdfd33514f7c620c54674">SampleDimension</a> () const</td></tr>
+<tr class="memdesc:abe9df445edbcdfd33514f7c620c54674"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of samples in the shape buffer.  <a href="class_isis_1_1_buffer.html#abe9df445edbcdfd33514f7c620c54674">More...</a><br /></td></tr>
+<tr class="separator:abe9df445edbcdfd33514f7c620c54674"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a697aae263a56aa8dffa9107de29d287f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a697aae263a56aa8dffa9107de29d287f">LineDimension</a> () const</td></tr>
+<tr class="memdesc:a697aae263a56aa8dffa9107de29d287f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of lines in the shape buffer.  <a href="class_isis_1_1_buffer.html#a697aae263a56aa8dffa9107de29d287f">More...</a><br /></td></tr>
+<tr class="separator:a697aae263a56aa8dffa9107de29d287f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1ac3dce55dc5e6a7408b5166886bb74"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#ab1ac3dce55dc5e6a7408b5166886bb74">BandDimension</a> () const</td></tr>
+<tr class="memdesc:ab1ac3dce55dc5e6a7408b5166886bb74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of bands in the shape buffer.  <a href="class_isis_1_1_buffer.html#ab1ac3dce55dc5e6a7408b5166886bb74">More...</a><br /></td></tr>
+<tr class="separator:ab1ac3dce55dc5e6a7408b5166886bb74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06491867698d94aa8f9e166ea87132e8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a06491867698d94aa8f9e166ea87132e8">size</a> () const</td></tr>
+<tr class="memdesc:a06491867698d94aa8f9e166ea87132e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total number of pixels in the shape buffer.  <a href="class_isis_1_1_buffer.html#a06491867698d94aa8f9e166ea87132e8">More...</a><br /></td></tr>
+<tr class="separator:a06491867698d94aa8f9e166ea87132e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae298ec455635f8059ef217007f17e7db"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#ae298ec455635f8059ef217007f17e7db">Sample</a> (const int index=0) const</td></tr>
+<tr class="memdesc:ae298ec455635f8059ef217007f17e7db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the sample position associated with a shape buffer index.  <a href="class_isis_1_1_buffer.html#ae298ec455635f8059ef217007f17e7db">More...</a><br /></td></tr>
+<tr class="separator:ae298ec455635f8059ef217007f17e7db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a153bf0870143ceaaf72c2d801981a5fc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a153bf0870143ceaaf72c2d801981a5fc">Line</a> (const int index=0) const</td></tr>
+<tr class="memdesc:a153bf0870143ceaaf72c2d801981a5fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the line position associated with a shape buffer index.  <a href="class_isis_1_1_buffer.html#a153bf0870143ceaaf72c2d801981a5fc">More...</a><br /></td></tr>
+<tr class="separator:a153bf0870143ceaaf72c2d801981a5fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad9cf749cd23a69c8ca13d60265735d1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#aad9cf749cd23a69c8ca13d60265735d1">Band</a> (const int index=0) const</td></tr>
+<tr class="memdesc:aad9cf749cd23a69c8ca13d60265735d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the band position associated with a shape buffer index.  <a href="class_isis_1_1_buffer.html#aad9cf749cd23a69c8ca13d60265735d1">More...</a><br /></td></tr>
+<tr class="separator:aad9cf749cd23a69c8ca13d60265735d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a785f6e9ecb646377057df620482e6f34"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a785f6e9ecb646377057df620482e6f34">Position</a> (const int index, int &amp;i_samp, int &amp;i_line, int &amp;i_band) const</td></tr>
+<tr class="memdesc:a785f6e9ecb646377057df620482e6f34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the sample, line, and band position associated with a shape buffer index.  <a href="class_isis_1_1_buffer.html#a785f6e9ecb646377057df620482e6f34">More...</a><br /></td></tr>
+<tr class="separator:a785f6e9ecb646377057df620482e6f34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade618f5f53149a99db4ae72d16635a4f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#ade618f5f53149a99db4ae72d16635a4f">Index</a> (const int i_samp, const int i_line, const int i_band) const</td></tr>
+<tr class="memdesc:ade618f5f53149a99db4ae72d16635a4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a sample, line, and band position, this returns the appropriate index in the shape buffer.  <a href="class_isis_1_1_buffer.html#ade618f5f53149a99db4ae72d16635a4f">More...</a><br /></td></tr>
+<tr class="separator:ade618f5f53149a99db4ae72d16635a4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace8c542223e3469c2d26ac64eee3a1aa"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#ace8c542223e3469c2d26ac64eee3a1aa">at</a> (const int index) const</td></tr>
+<tr class="memdesc:ace8c542223e3469c2d26ac64eee3a1aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value in the shape buffer at the given index.  <a href="class_isis_1_1_buffer.html#ace8c542223e3469c2d26ac64eee3a1aa">More...</a><br /></td></tr>
+<tr class="separator:ace8c542223e3469c2d26ac64eee3a1aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab09a0a3f371876ce9d5e5586397b88b5"><td class="memItemLeft" align="right" valign="top">double &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#ab09a0a3f371876ce9d5e5586397b88b5">operator[]</a> (const int index)</td></tr>
+<tr class="memdesc:ab09a0a3f371876ce9d5e5586397b88b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value in the shape buffer at given index.  <a href="class_isis_1_1_buffer.html#ab09a0a3f371876ce9d5e5586397b88b5">More...</a><br /></td></tr>
+<tr class="separator:ab09a0a3f371876ce9d5e5586397b88b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a74c675f792a06362f534db620b6c90"><td class="memItemLeft" align="right" valign="top">const double &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a4a74c675f792a06362f534db620b6c90">operator[]</a> (const int index) const</td></tr>
+<tr class="memdesc:a4a74c675f792a06362f534db620b6c90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value in the shape buffer at given index.  <a href="class_isis_1_1_buffer.html#a4a74c675f792a06362f534db620b6c90">More...</a><br /></td></tr>
+<tr class="separator:a4a74c675f792a06362f534db620b6c90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e0ddc3c6e9d436b92bbe302169d0e6b"><td class="memItemLeft" align="right" valign="top">double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a0e0ddc3c6e9d436b92bbe302169d0e6b">DoubleBuffer</a> () const</td></tr>
+<tr class="memdesc:a0e0ddc3c6e9d436b92bbe302169d0e6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the shape buffer.  <a href="class_isis_1_1_buffer.html#a0e0ddc3c6e9d436b92bbe302169d0e6b">More...</a><br /></td></tr>
+<tr class="separator:a0e0ddc3c6e9d436b92bbe302169d0e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac869a285dc4ef0cb5fce8a10142f19d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#ac869a285dc4ef0cb5fce8a10142f19d6">Copy</a> (const <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> &amp;in, bool includeRawBuf=true)</td></tr>
+<tr class="memdesc:ac869a285dc4ef0cb5fce8a10142f19d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows copying of the buffer contents to another <a class="el" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data.">Buffer</a>.  <a href="class_isis_1_1_buffer.html#ac869a285dc4ef0cb5fce8a10142f19d6">More...</a><br /></td></tr>
+<tr class="separator:ac869a285dc4ef0cb5fce8a10142f19d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77197572092aac27e1ab9df7f9fce57c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">CopyOverlapFrom</a> (const <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> &amp;in)</td></tr>
+<tr class="memdesc:a77197572092aac27e1ab9df7f9fce57c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows copying of the buffer contents of a larger buffer to another same size or smaller <a class="el" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data.">Buffer</a>, using their base positions to relate data.  <a href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">More...</a><br /></td></tr>
+<tr class="separator:a77197572092aac27e1ab9df7f9fce57c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bb92e3ab60efd10a6182b9e35d267c1"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a2bb92e3ab60efd10a6182b9e35d267c1">RawBuffer</a> () const</td></tr>
+<tr class="memdesc:a2bb92e3ab60efd10a6182b9e35d267c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a void pointer to the raw buffer.  <a href="class_isis_1_1_buffer.html#a2bb92e3ab60efd10a6182b9e35d267c1">More...</a><br /></td></tr>
+<tr class="separator:a2bb92e3ab60efd10a6182b9e35d267c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e270c9f886dca8b115d59b072da02e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">Isis::PixelType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a8e270c9f886dca8b115d59b072da02e4">PixelType</a> () const</td></tr>
+<tr class="memdesc:a8e270c9f886dca8b115d59b072da02e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the raw buffer pixel type.  <a href="class_isis_1_1_buffer.html#a8e270c9f886dca8b115d59b072da02e4">More...</a><br /></td></tr>
+<tr class="separator:a8e270c9f886dca8b115d59b072da02e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a52a7ed777e334459ec470fc8928e3522"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#a52a7ed777e334459ec470fc8928e3522">MaxSamples</a> () const</td></tr>
+<tr class="memdesc:a52a7ed777e334459ec470fc8928e3522"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of samples in the cube.  <a href="class_isis_1_1_buffer_manager.html#a52a7ed777e334459ec470fc8928e3522">More...</a><br /></td></tr>
+<tr class="separator:a52a7ed777e334459ec470fc8928e3522"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaedd28e8ddaedd4dc7dacf40bf55c0c6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#aaedd28e8ddaedd4dc7dacf40bf55c0c6">MaxLines</a> () const</td></tr>
+<tr class="memdesc:aaedd28e8ddaedd4dc7dacf40bf55c0c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of lines in the cube.  <a href="class_isis_1_1_buffer_manager.html#aaedd28e8ddaedd4dc7dacf40bf55c0c6">More...</a><br /></td></tr>
+<tr class="separator:aaedd28e8ddaedd4dc7dacf40bf55c0c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc21e07d8ac60ecfcc976f1170f26abd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#abc21e07d8ac60ecfcc976f1170f26abd">MaxBands</a> () const</td></tr>
+<tr class="memdesc:abc21e07d8ac60ecfcc976f1170f26abd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of bands in the cube.  <a href="class_isis_1_1_buffer_manager.html#abc21e07d8ac60ecfcc976f1170f26abd">More...</a><br /></td></tr>
+<tr class="separator:abc21e07d8ac60ecfcc976f1170f26abd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0e071405acfad3eb52ef75634ca8533"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#ae0e071405acfad3eb52ef75634ca8533">MaxMaps</a> () const</td></tr>
+<tr class="memdesc:ae0e071405acfad3eb52ef75634ca8533"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum number of positions the shape buffer needs to cover the entire image (see setpos method for more info).  <a href="class_isis_1_1_buffer_manager.html#ae0e071405acfad3eb52ef75634ca8533">More...</a><br /></td></tr>
+<tr class="separator:ae0e071405acfad3eb52ef75634ca8533"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6172708b5aa65d61e3f15c6ae6d7169"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#ae6172708b5aa65d61e3f15c6ae6d7169">SetIncrements</a> (const int sinc, const int linc, const int binc)</td></tr>
+<tr class="memdesc:ae6172708b5aa65d61e3f15c6ae6d7169"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets how the shape is incremented through the cube.  <a href="class_isis_1_1_buffer_manager.html#ae6172708b5aa65d61e3f15c6ae6d7169">More...</a><br /></td></tr>
+<tr class="separator:ae6172708b5aa65d61e3f15c6ae6d7169"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50053d46f213b8d7c520e4033128ce4b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer_manager.html#a50053d46f213b8d7c520e4033128ce4b">SetOffsets</a> (const int soff, const int loff, const int boff)</td></tr>
+<tr class="memdesc:a50053d46f213b8d7c520e4033128ce4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the offset of the buffer.  <a href="class_isis_1_1_buffer_manager.html#a50053d46f213b8d7c520e4033128ce4b">More...</a><br /></td></tr>
+<tr class="separator:a50053d46f213b8d7c520e4033128ce4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f5de5f82cc920ea1d587eb02c07f576"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a5f5de5f82cc920ea1d587eb02c07f576">Allocate</a> ()</td></tr>
+<tr class="memdesc:a5f5de5f82cc920ea1d587eb02c07f576"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size or resize the memory buffer.  <a href="class_isis_1_1_buffer.html#a5f5de5f82cc920ea1d587eb02c07f576">More...</a><br /></td></tr>
+<tr class="separator:a5f5de5f82cc920ea1d587eb02c07f576"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:ab72f3ecc7945130d5c65e80d3fa441cc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#ab72f3ecc7945130d5c65e80d3fa441cc">p_sample</a></td></tr>
+<tr class="memdesc:ab72f3ecc7945130d5c65e80d3fa441cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starting sample to read/write.  <a href="class_isis_1_1_buffer.html#ab72f3ecc7945130d5c65e80d3fa441cc">More...</a><br /></td></tr>
+<tr class="separator:ab72f3ecc7945130d5c65e80d3fa441cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad38e115ac920e74e4f28ce3298412a57"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#ad38e115ac920e74e4f28ce3298412a57">p_nsamps</a></td></tr>
+<tr class="memdesc:ad38e115ac920e74e4f28ce3298412a57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of samples to read/write.  <a href="class_isis_1_1_buffer.html#ad38e115ac920e74e4f28ce3298412a57">More...</a><br /></td></tr>
+<tr class="separator:ad38e115ac920e74e4f28ce3298412a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1b1fb31f18ff76cb52bb5e49f54e8fc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#ae1b1fb31f18ff76cb52bb5e49f54e8fc">p_line</a></td></tr>
+<tr class="memdesc:ae1b1fb31f18ff76cb52bb5e49f54e8fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starting line to read/write.  <a href="class_isis_1_1_buffer.html#ae1b1fb31f18ff76cb52bb5e49f54e8fc">More...</a><br /></td></tr>
+<tr class="separator:ae1b1fb31f18ff76cb52bb5e49f54e8fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b8070762d901e8e541640b78fa70ada"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a6b8070762d901e8e541640b78fa70ada">p_nlines</a></td></tr>
+<tr class="memdesc:a6b8070762d901e8e541640b78fa70ada"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of lines to read/write.  <a href="class_isis_1_1_buffer.html#a6b8070762d901e8e541640b78fa70ada">More...</a><br /></td></tr>
+<tr class="separator:a6b8070762d901e8e541640b78fa70ada"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1ddeeaf5f998d59c0df0bd9fcc1f411"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#ac1ddeeaf5f998d59c0df0bd9fcc1f411">p_band</a></td></tr>
+<tr class="memdesc:ac1ddeeaf5f998d59c0df0bd9fcc1f411"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starting band to read/write.  <a href="class_isis_1_1_buffer.html#ac1ddeeaf5f998d59c0df0bd9fcc1f411">More...</a><br /></td></tr>
+<tr class="separator:ac1ddeeaf5f998d59c0df0bd9fcc1f411"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bd371742df3e7f752a6247ef2e08e94"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a6bd371742df3e7f752a6247ef2e08e94">p_nbands</a></td></tr>
+<tr class="memdesc:a6bd371742df3e7f752a6247ef2e08e94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of bands to read/write.  <a href="class_isis_1_1_buffer.html#a6bd371742df3e7f752a6247ef2e08e94">More...</a><br /></td></tr>
+<tr class="separator:a6bd371742df3e7f752a6247ef2e08e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39ead81259125de61bd739380bd36651"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a39ead81259125de61bd739380bd36651">p_npixels</a></td></tr>
+<tr class="memdesc:a39ead81259125de61bd739380bd36651"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of pixels (nsamps * nlines * nbands)  <a href="class_isis_1_1_buffer.html#a39ead81259125de61bd739380bd36651">More...</a><br /></td></tr>
+<tr class="separator:a39ead81259125de61bd739380bd36651"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8595d0f7b68fbeb7cae0e89fe4af8cc7"><td class="memItemLeft" align="right" valign="top">double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a8595d0f7b68fbeb7cae0e89fe4af8cc7">p_buf</a></td></tr>
+<tr class="memdesc:a8595d0f7b68fbeb7cae0e89fe4af8cc7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> buffer allocated to the size of npixels for handling reads/writes.  <a href="class_isis_1_1_buffer.html#a8595d0f7b68fbeb7cae0e89fe4af8cc7">More...</a><br /></td></tr>
+<tr class="separator:a8595d0f7b68fbeb7cae0e89fe4af8cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abde4024d5d68ca34b300b28f34d55f4d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">Isis::PixelType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#abde4024d5d68ca34b300b28f34d55f4d">p_pixelType</a></td></tr>
+<tr class="memdesc:abde4024d5d68ca34b300b28f34d55f4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pixel type of the raw buffer.  <a href="class_isis_1_1_buffer.html#abde4024d5d68ca34b300b28f34d55f4d">More...</a><br /></td></tr>
+<tr class="separator:abde4024d5d68ca34b300b28f34d55f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ab46e91481b51d8a15117aea7b2e541"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_buffer.html#a0ab46e91481b51d8a15117aea7b2e541">p_rawbuf</a></td></tr>
+<tr class="memdesc:a0ab46e91481b51d8a15117aea7b2e541"><td class="mdescLeft">&#160;</td><td class="mdescRight">The raw dm read from the disk.  <a href="class_isis_1_1_buffer.html#a0ab46e91481b51d8a15117aea7b2e541">More...</a><br /></td></tr>
+<tr class="separator:a0ab46e91481b51d8a15117aea7b2e541"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data.">Buffer</a> for containing a three dimensional section of an image. </p>
+<p>This class is a <a class="el" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data.">Buffer</a>. The shape of the buffer is three dimensional in the line, sample, and band directions. This class provides a random access window into a cube. The position can be set to any line, sample and band, including outside the image.</p>
+<dl class="section author"><dt>Author</dt><dd>2005-01-18 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad2e4aeb71918cad24c6e25e6c0ed3df5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2e4aeb71918cad24c6e25e6c0ed3df5">&#9670;&nbsp;</a></span>Brick() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Brick::Brick </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nsamps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nlines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nbands</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">Isis::PixelType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>reverse</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_brick.html" title="Buffer for containing a three dimensional section of an image.">Brick</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nsamps</td><td>Number of samples in shape buffer </td></tr>
+    <tr><td class="paramname">nlines</td><td>Number of lines in shape buffer </td></tr>
+    <tr><td class="paramname">nbands</td><td>Number of bands in shape buffer </td></tr>
+    <tr><td class="paramname">type</td><td>Type of pixel in raw buffer </td></tr>
+    <tr><td class="paramname">reverse</td><td>Modifies the order of progression this buffer takes through the cube. By default, progresses samples first, then lines, then bands. If reverse = true, then the buffer progresses bands first, then lines, then samples. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a678fb03eda0dfa06cba8895fb4fdd1a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a678fb03eda0dfa06cba8895fb4fdd1a2">&#9670;&nbsp;</a></span>Brick() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Brick::Brick </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_cube.html">Isis::Cube</a> &amp;&#160;</td>
+          <td class="paramname"><em>cube</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>bufNumSamples</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>bufNumLines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>bufNumBands</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>reverse</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_brick.html" title="Buffer for containing a three dimensional section of an image.">Brick</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">&amp;cube</td><td>Reference to the cube to calculate a <a class="el" href="class_isis_1_1_brick.html" title="Buffer for containing a three dimensional section of an image.">Brick</a> from </td></tr>
+    <tr><td class="paramname">&amp;bufNumSamples</td><td>Reference to the number of samples in shape buffer </td></tr>
+    <tr><td class="paramname">&amp;bufNumLines</td><td>Reference to the number of lines in shape buffer </td></tr>
+    <tr><td class="paramname">&amp;bufNumBands</td><td>Reference to the number of bands in shape buffer </td></tr>
+    <tr><td class="paramname">reverse</td><td>Modifies the order of progression this buffer takes through the cube. By default, progresses samples first, then lines, then bands. If reverse = true, then the buffer progresses bands first, then lines, then samples. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aef6d97df45ddfc51f98d81e2b1cd12d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef6d97df45ddfc51f98d81e2b1cd12d9">&#9670;&nbsp;</a></span>Brick() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Brick::Brick </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxSamples</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxLines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxBands</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bufNumSamples</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bufNumLines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bufNumBands</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">Isis::PixelType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>reverse</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_brick.html" title="Buffer for containing a three dimensional section of an image.">Brick</a> object of the specified buffer size and area size to map. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">maxSamples</td><td>Maximum number of samples to map </td></tr>
+    <tr><td class="paramname">maxLines</td><td>Maximum number of lines to map </td></tr>
+    <tr><td class="paramname">maxBands</td><td>Maximum number of bands to map </td></tr>
+    <tr><td class="paramname">bufNumSamples</td><td>Number of samples in shape buffer </td></tr>
+    <tr><td class="paramname">bufNumLines</td><td>Number of lines in shape buffer </td></tr>
+    <tr><td class="paramname">bufNumBands</td><td>Number of bands in shape buffer </td></tr>
+    <tr><td class="paramname">type</td><td>Type of pixel in raw buffer </td></tr>
+    <tr><td class="paramname">reverse</td><td>Modifies the order of progression this buffer takes through the cube. By default, progresses samples first, then lines, then bands. If reverse = true, then the buffer progresses bands first, then lines, then samples. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5f5de5f82cc920ea1d587eb02c07f576"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f5de5f82cc920ea1d587eb02c07f576">&#9670;&nbsp;</a></span>Allocate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Buffer::Allocate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Size or resize the memory buffer. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::System</td><td>- Memory allocation failed </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="namespace_isis_1_1_message.html#ae0f312e6dae4d74c883394a27051d65a">Isis::Message::MemoryAllocationFailed()</a>, <a class="el" href="class_isis_1_1_buffer.html#a8595d0f7b68fbeb7cae0e89fe4af8cc7">Isis::Buffer::p_buf</a>, <a class="el" href="class_isis_1_1_buffer.html#a39ead81259125de61bd739380bd36651">Isis::Buffer::p_npixels</a>, <a class="el" href="class_isis_1_1_buffer.html#abde4024d5d68ca34b300b28f34d55f4d">Isis::Buffer::p_pixelType</a>, <a class="el" href="class_isis_1_1_buffer.html#a0ab46e91481b51d8a15117aea7b2e541">Isis::Buffer::p_rawbuf</a>, <a class="el" href="namespace_isis.html#a0988a6783ba76c6d8cf7c4febb95fdb5">Isis::SizeOf()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78">Isis::IException::Unknown</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#ae461c0c56c37b45d203c5bf451cf4d2a">Isis::Buffer::Buffer()</a>, and <a class="el" href="class_isis_1_1_brick.html#a0e789a4630b020ce5dce2a69c70703c3">Resize()</a>.</p>
+
+</div>
+</div>
+<a id="ace8c542223e3469c2d26ac64eee3a1aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace8c542223e3469c2d26ac64eee3a1aa">&#9670;&nbsp;</a></span>at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Buffer::at </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the value in the shape buffer at the given index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Index position in buffer. Out of bounds index is trapped.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double <a class="el" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data.">Buffer</a> value at index</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Array Subscript not in range </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="namespace_isis_1_1_message.html#a3e3db179a224517c3d1db5281d67c23e">Isis::Message::ArraySubscriptNotInRange()</a>, <a class="el" href="class_isis_1_1_buffer.html#a8595d0f7b68fbeb7cae0e89fe4af8cc7">Isis::Buffer::p_buf</a>, <a class="el" href="class_isis_1_1_buffer.html#a39ead81259125de61bd739380bd36651">Isis::Buffer::p_npixels</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_data_thread_tester.html#ad79eb252d22af6626a04412741bdda4f">Isis::CubeDataThreadTester::BrickChanged()</a>, <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>, <a class="el" href="class_isis_1_1_cube_data_thread_tester.html#a40d2812b853297ee405c35063faccc46">Isis::CubeDataThreadTester::ReadBrick()</a>, and <a class="el" href="class_isis_1_1_cube_data_thread_tester.html#ac3e7ffa1bfac90395b3a006299803374">Isis::CubeDataThreadTester::ReadWriteBrick()</a>.</p>
+
+</div>
+</div>
+<a id="aad9cf749cd23a69c8ca13d60265735d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad9cf749cd23a69c8ca13d60265735d1">&#9670;&nbsp;</a></span>Band()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::Band </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the band position associated with a shape buffer index. </p>
+<p>The shape buffer is one dimensional. Let us assume a nsamps=2, nlines=3, and nbands=2. Therefore the total size of the shape buffer is 12 and valid index values are 0-11. Indexes 0-5 will return band 1 and 6-11 will return band 2.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td><a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> buffer index to map to a band position. Defaults to 0.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The absolute band number based on the buffer index. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#ac1ddeeaf5f998d59c0df0bd9fcc1f411">Isis::Buffer::p_band</a>, <a class="el" href="class_isis_1_1_buffer.html#a6b8070762d901e8e541640b78fa70ada">Isis::Buffer::p_nlines</a>, and <a class="el" href="class_isis_1_1_buffer.html#ad38e115ac920e74e4f28ce3298412a57">Isis::Buffer::p_nsamps</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, <a class="el" href="class_isis_1_1_independent_cube_viewport.html#ac7aa997f70c68786764473c79a6b6734">Isis::IndependentCubeViewport::cubeDataChanged()</a>, <a class="el" href="unit_test__disabled_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main()</a>, <a class="el" href="class_isis_1_1_spectral_definition2_d.html#a573c9474ae8292efc806fea2c2e142b6">Isis::SpectralDefinition2D::operator()()</a>, <a class="el" href="class_isis_1_1_equalization_1_1_apply_functor.html#ae4cb92e0ca9de89c33038c5c240346a3">Isis::Equalization::ApplyFunctor::operator()()</a>, <a class="el" href="class_isis_1_1_image_importer.html#aa1843dc687f6e0ae0338da0b8abbbcf6">Isis::ImageImporter::operator()()</a>, <a class="el" href="class_isis_1_1_average.html#a00739a6b82c4465a8a290daccfeb2a5b">Isis::Average::operator()()</a>, <a class="el" href="class_isis_1_1_buffer.html#a785f6e9ecb646377057df620482e6f34">Isis::Buffer::Position()</a>, <a class="el" href="class_isis_1_1_cube_io_handler.html#acc92e282ce068dae2057456191aa7b64">Isis::CubeIoHandler::read()</a>, and <a class="el" href="class_isis_1_1_process_rubber_sheet.html#a1664625f6df331595a65d2615fcfbb2f">Isis::ProcessRubberSheet::StartProcess()</a>.</p>
+
+</div>
+</div>
+<a id="ab1ac3dce55dc5e6a7408b5166886bb74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1ac3dce55dc5e6a7408b5166886bb74">&#9670;&nbsp;</a></span>BandDimension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::BandDimension </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of bands in the shape buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a6bd371742df3e7f752a6247ef2e08e94">Isis::Buffer::p_nbands</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_independent_cube_viewport.html#ac7aa997f70c68786764473c79a6b6734">Isis::IndependentCubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_cube_io_handler.html#acc92e282ce068dae2057456191aa7b64">Isis::CubeIoHandler::read()</a>, <a class="el" href="class_isis_1_1_regional_caching_algorithm.html#ad35ada29690bb142ba202ca2ca3e7d42">Isis::RegionalCachingAlgorithm::recommendChunksToFree()</a>, and <a class="el" href="class_isis_1_1_hillshade.html#aefe842b24eba9f436962bc4f7a51677b">Isis::Hillshade::shadedValue()</a>.</p>
+
+</div>
+</div>
+<a id="a2c3e68ed0e090ac9b64ee15197e5b1b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c3e68ed0e090ac9b64ee15197e5b1b3">&#9670;&nbsp;</a></span>begin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BufferManager::begin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Moves the shape buffer to the first position. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer_manager.html#ab3f7b2ca0d7c7ece36ef52e98d98ae87">Isis::BufferManager::setpos()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="class_isis_1_1_process_export.html#a7c7877da13c23190b752ad19fc51adcf">Isis::ProcessExport::GetBuffersBIL()</a>, <a class="el" href="class_isis_1_1_process_export.html#a5ba51c7a391315e983cb4821a86e9168">Isis::ProcessExport::GetBuffersBIP()</a>, <a class="el" href="class_isis_1_1_process_export.html#a24c14b85a79850eb3b1e10270afbe456">Isis::ProcessExport::GetBuffersBSQ()</a>, <a class="el" href="unit_test__disabled_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main()</a>, <a class="el" href="class_isis_1_1_process_rubber_sheet.html#a1664625f6df331595a65d2615fcfbb2f">Isis::ProcessRubberSheet::StartProcess()</a>, <a class="el" href="class_isis_1_1_process_by_brick.html#a88551a6b202796a80bdfd4450710b2e8">Isis::ProcessByBrick::StartProcess()</a>, <a class="el" href="class_isis_1_1_process_export.html#aa86c084ff4f8ae00c3684fbdc4131096">Isis::ProcessExport::StartProcess()</a>, and <a class="el" href="class_isis_1_1_process_by_boxcar.html#a59466f429b3ee43e8ade127c462b6f41">Isis::ProcessByBoxcar::StartProcess()</a>.</p>
+
+</div>
+</div>
+<a id="accee4c70e1b1bf27713c8b673f3e895c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accee4c70e1b1bf27713c8b673f3e895c">&#9670;&nbsp;</a></span>Bricks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Brick::Bricks </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of Bricks in the cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer_manager.html#ae0e071405acfad3eb52ef75634ca8533">Isis::BufferManager::MaxMaps()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_process_by_brick.html#a6106e67123fb400e36594cfc6c6fddbe">Isis::ProcessByBrick::ProcessCubeInPlace()</a>, and <a class="el" href="class_isis_1_1_process_by_brick.html#a88551a6b202796a80bdfd4450710b2e8">Isis::ProcessByBrick::StartProcess()</a>.</p>
+
+</div>
+</div>
+<a id="ac869a285dc4ef0cb5fce8a10142f19d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac869a285dc4ef0cb5fce8a10142f19d6">&#9670;&nbsp;</a></span>Copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Buffer::Copy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> &amp;&#160;</td>
+          <td class="paramname"><em>in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>includeRawBuf</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Allows copying of the buffer contents to another <a class="el" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data.">Buffer</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td>The <a class="el" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data.">Buffer</a> to be copied. </td></tr>
+    <tr><td class="paramname">includeRawBuf</td><td>Whether to include raw dm read from disk</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Input and Output buffers are not the same size </td></tr>
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Input and Output buffers do not use the same pixel type </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_buffer.html#a8595d0f7b68fbeb7cae0e89fe4af8cc7">Isis::Buffer::p_buf</a>, <a class="el" href="class_isis_1_1_buffer.html#a39ead81259125de61bd739380bd36651">Isis::Buffer::p_npixels</a>, <a class="el" href="class_isis_1_1_buffer.html#abde4024d5d68ca34b300b28f34d55f4d">Isis::Buffer::p_pixelType</a>, <a class="el" href="class_isis_1_1_buffer.html#a0ab46e91481b51d8a15117aea7b2e541">Isis::Buffer::p_rawbuf</a>, <a class="el" href="class_isis_1_1_buffer.html#a8e270c9f886dca8b115d59b072da02e4">Isis::Buffer::PixelType()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_buffer.html#a06491867698d94aa8f9e166ea87132e8">Isis::Buffer::size()</a>, and <a class="el" href="namespace_isis.html#a0988a6783ba76c6d8cf7c4febb95fdb5">Isis::SizeOf()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#a5ffc069aec5aeae5475e5e44711ea326">Isis::Buffer::Buffer()</a>, and <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>.</p>
+
+</div>
+</div>
+<a id="a77197572092aac27e1ab9df7f9fce57c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77197572092aac27e1ab9df7f9fce57c">&#9670;&nbsp;</a></span>CopyOverlapFrom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Buffer::CopyOverlapFrom </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> &amp;&#160;</td>
+          <td class="paramname"><em>in</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Allows copying of the buffer contents of a larger buffer to another same size or smaller <a class="el" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data.">Buffer</a>, using their base positions to relate data. </p>
+<p>This does not copy the raw buffer.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td>The <a class="el" href="class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data.">Buffer</a> to be copied. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The operation was successful (the buffers overlapped) </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#aad9cf749cd23a69c8ca13d60265735d1">Isis::Buffer::Band()</a>, <a class="el" href="class_isis_1_1_buffer.html#ade618f5f53149a99db4ae72d16635a4f">Isis::Buffer::Index()</a>, <a class="el" href="class_isis_1_1_buffer.html#a153bf0870143ceaaf72c2d801981a5fc">Isis::Buffer::Line()</a>, <a class="el" href="class_isis_1_1_buffer.html#ac1ddeeaf5f998d59c0df0bd9fcc1f411">Isis::Buffer::p_band</a>, <a class="el" href="class_isis_1_1_buffer.html#ae1b1fb31f18ff76cb52bb5e49f54e8fc">Isis::Buffer::p_line</a>, <a class="el" href="class_isis_1_1_buffer.html#a6bd371742df3e7f752a6247ef2e08e94">Isis::Buffer::p_nbands</a>, <a class="el" href="class_isis_1_1_buffer.html#a6b8070762d901e8e541640b78fa70ada">Isis::Buffer::p_nlines</a>, <a class="el" href="class_isis_1_1_buffer.html#a39ead81259125de61bd739380bd36651">Isis::Buffer::p_npixels</a>, <a class="el" href="class_isis_1_1_buffer.html#ad38e115ac920e74e4f28ce3298412a57">Isis::Buffer::p_nsamps</a>, <a class="el" href="class_isis_1_1_buffer.html#ab72f3ecc7945130d5c65e80d3fa441cc">Isis::Buffer::p_sample</a>, <a class="el" href="class_isis_1_1_buffer.html#ae298ec455635f8059ef217007f17e7db">Isis::Buffer::Sample()</a>, and <a class="el" href="class_isis_1_1_buffer.html#a06491867698d94aa8f9e166ea87132e8">Isis::Buffer::size()</a>.</p>
+
+</div>
+</div>
+<a id="a0e0ddc3c6e9d436b92bbe302169d0e6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e0ddc3c6e9d436b92bbe302169d0e6b">&#9670;&nbsp;</a></span>DoubleBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double* Isis::Buffer::DoubleBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the value of the shape buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>double* The shape buffer </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a8595d0f7b68fbeb7cae0e89fe4af8cc7">Isis::Buffer::p_buf</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_process.html#ab88ff5f5f018293e5cbda0b63e164fd9">Isis::Process::CalculateStatistics()</a>, <a class="el" href="class_isis_1_1_independent_cube_viewport.html#ac7aa997f70c68786764473c79a6b6734">Isis::IndependentCubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_chip.html#a493ecbe9f2ec00477b9ff930236ad9b4">Isis::Chip::Extract()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a22f8ffbe2ec7440e5a9a8a050d768ece">Isis::StretchTool::histFromCube()</a>, <a class="el" href="class_isis_1_1_cube.html#a0e3d72d18bf88bd339fcda48bbbf9dfb">Isis::Cube::histogram()</a>, <a class="el" href="class_isis_1_1_image_histogram.html#ab30707570c740ce27e383caeae6ff26d">Isis::ImageHistogram::ImageHistogram()</a>, <a class="el" href="class_isis_1_1_dem_shape.html#a8cfc22369b4ddd6304355e5b51182773">Isis::DemShape::localRadius()</a>, <a class="el" href="class_isis_1_1_overlap_statistics.html#a934767f7973826f8c93bf85d7acea085">Isis::OverlapStatistics::OverlapStatistics()</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#ad7354352a9a02070d3ed8031f8eb505f">Isis::HistogramTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_process_by_quick_filter.html#a0bf1c0a36089cd733325efbfdb129ca1">Isis::ProcessByQuickFilter::StartProcess()</a>, <a class="el" href="class_isis_1_1_cube.html#a5f9009bc9b325c019adac91edf2c4424">Isis::Cube::statistics()</a>, and <a class="el" href="class_isis_1_1_stretch_tool.html#a49f1699aa9d638c05ec15906484fa1ae">Isis::StretchTool::statsFromCube()</a>.</p>
+
+</div>
+</div>
+<a id="acbdd8ea3e8ae11dab3e7ae2bb3ded7ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbdd8ea3e8ae11dab3e7ae2bb3ded7ae">&#9670;&nbsp;</a></span>end()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BufferManager::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the shape buffer has accessed the end of the cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="unit_test__disabled_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main()</a>, <a class="el" href="class_isis_1_1_buffer_manager.html#ab3f7b2ca0d7c7ece36ef52e98d98ae87">Isis::BufferManager::setpos()</a>, <a class="el" href="class_isis_1_1_process_rubber_sheet.html#a1664625f6df331595a65d2615fcfbb2f">Isis::ProcessRubberSheet::StartProcess()</a>, <a class="el" href="class_isis_1_1_process_by_brick.html#a88551a6b202796a80bdfd4450710b2e8">Isis::ProcessByBrick::StartProcess()</a>, <a class="el" href="class_isis_1_1_process_export.html#aa86c084ff4f8ae00c3684fbdc4131096">Isis::ProcessExport::StartProcess()</a>, and <a class="el" href="class_isis_1_1_process_by_boxcar.html#a59466f429b3ee43e8ade127c462b6f41">Isis::ProcessByBoxcar::StartProcess()</a>.</p>
+
+</div>
+</div>
+<a id="ade618f5f53149a99db4ae72d16635a4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade618f5f53149a99db4ae72d16635a4f">&#9670;&nbsp;</a></span>Index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::Index </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>i_samp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>i_line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>i_band</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Given a sample, line, and band position, this returns the appropriate index in the shape buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i_samp</td><td>Sample position. </td></tr>
+    <tr><td class="paramname">i_line</td><td>Line position. </td></tr>
+    <tr><td class="paramname">i_band</td><td>Band position.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int Index at the specified sample, line and band.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Array Subscript not in range </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="namespace_isis_1_1_message.html#a3e3db179a224517c3d1db5281d67c23e">Isis::Message::ArraySubscriptNotInRange()</a>, <a class="el" href="class_isis_1_1_buffer.html#ac1ddeeaf5f998d59c0df0bd9fcc1f411">Isis::Buffer::p_band</a>, <a class="el" href="class_isis_1_1_buffer.html#ae1b1fb31f18ff76cb52bb5e49f54e8fc">Isis::Buffer::p_line</a>, <a class="el" href="class_isis_1_1_buffer.html#a6bd371742df3e7f752a6247ef2e08e94">Isis::Buffer::p_nbands</a>, <a class="el" href="class_isis_1_1_buffer.html#a6b8070762d901e8e541640b78fa70ada">Isis::Buffer::p_nlines</a>, <a class="el" href="class_isis_1_1_buffer.html#ad38e115ac920e74e4f28ce3298412a57">Isis::Buffer::p_nsamps</a>, <a class="el" href="class_isis_1_1_buffer.html#ab72f3ecc7945130d5c65e80d3fa441cc">Isis::Buffer::p_sample</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, and <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>.</p>
+
+</div>
+</div>
+<a id="a153bf0870143ceaaf72c2d801981a5fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a153bf0870143ceaaf72c2d801981a5fc">&#9670;&nbsp;</a></span>Line()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::Line </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the line position associated with a shape buffer index. </p>
+<p>The shape buffer is one dimensional. Let us assume a nsamps=2, nlines=3, and nbands=2. Therefore the total size of the shape buffer is 12 and valid index values are 0-11. Line(0), Line(1), Line(6) and Line(7), will return a 1, Line(2), Line(3), Line(8) and Line(9) will return a 2, and Line(4), Line(5), Line(10), and Line(11) will return a 3.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td><a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> buffer index to map to a line position. Defaults to 0</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The absolute line number based on the buffer index </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#ae1b1fb31f18ff76cb52bb5e49f54e8fc">Isis::Buffer::p_line</a>, <a class="el" href="class_isis_1_1_buffer.html#a6b8070762d901e8e541640b78fa70ada">Isis::Buffer::p_nlines</a>, and <a class="el" href="class_isis_1_1_buffer.html#ad38e115ac920e74e4f28ce3298412a57">Isis::Buffer::p_nsamps</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, <a class="el" href="class_isis_1_1_independent_cube_viewport.html#ac7aa997f70c68786764473c79a6b6734">Isis::IndependentCubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#ae73031c8a858ec512b7339436062cb98">Isis::CubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, <a class="el" href="class_isis_1_1_chip.html#a493ecbe9f2ec00477b9ff930236ad9b4">Isis::Chip::Extract()</a>, <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>, <a class="el" href="unit_test__disabled_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main()</a>, <a class="el" href="class_isis_1_1_equalization_1_1_calculate_functor.html#a3308e429d7bcd530a74a6c61d26bf08c">Isis::Equalization::CalculateFunctor::operator()()</a>, <a class="el" href="class_isis_1_1_image_importer.html#aa1843dc687f6e0ae0338da0b8abbbcf6">Isis::ImageImporter::operator()()</a>, <a class="el" href="class_isis_1_1_nearest.html#a0d14589b8410d59d217c928e7fdec2da">Isis::Nearest::operator()()</a>, <a class="el" href="class_isis_1_1_average.html#a00739a6b82c4465a8a290daccfeb2a5b">Isis::Average::operator()()</a>, <a class="el" href="class_isis_1_1_buffer.html#a785f6e9ecb646377057df620482e6f34">Isis::Buffer::Position()</a>, <a class="el" href="class_isis_1_1_cube_io_handler.html#acc92e282ce068dae2057456191aa7b64">Isis::CubeIoHandler::read()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a75f4257465c087d3a601c4738a51ecd4">Isis::QtExporter::writeGrayscale()</a>, <a class="el" href="class_isis_1_1_stream_exporter.html#ac4dc2fcb0622d278c99399675b75d922">Isis::StreamExporter::writeGrayscale()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#ad82740ffa60bc9f90b175e964f3f2533">Isis::QtExporter::writeRgb()</a>, <a class="el" href="class_isis_1_1_stream_exporter.html#a936c43499aef26f7f3ab3e7709068766">Isis::StreamExporter::writeRgb()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a4f954a450783f0c7b010fc70e4f7c51f">Isis::QtExporter::writeRgba()</a>, and <a class="el" href="class_isis_1_1_stream_exporter.html#a0be48478bf56393417e63c7d03db625f">Isis::StreamExporter::writeRgba()</a>.</p>
+
+</div>
+</div>
+<a id="a697aae263a56aa8dffa9107de29d287f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a697aae263a56aa8dffa9107de29d287f">&#9670;&nbsp;</a></span>LineDimension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::LineDimension </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of lines in the shape buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a6b8070762d901e8e541640b78fa70ada">Isis::Buffer::p_nlines</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_independent_cube_viewport.html#ac7aa997f70c68786764473c79a6b6734">Isis::IndependentCubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#ae73031c8a858ec512b7339436062cb98">Isis::CubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>, <a class="el" href="class_isis_1_1_equalization_1_1_calculate_functor.html#a3308e429d7bcd530a74a6c61d26bf08c">Isis::Equalization::CalculateFunctor::operator()()</a>, <a class="el" href="class_isis_1_1_cube_io_handler.html#acc92e282ce068dae2057456191aa7b64">Isis::CubeIoHandler::read()</a>, <a class="el" href="class_isis_1_1_regional_caching_algorithm.html#ad35ada29690bb142ba202ca2ca3e7d42">Isis::RegionalCachingAlgorithm::recommendChunksToFree()</a>, and <a class="el" href="class_isis_1_1_hillshade.html#aefe842b24eba9f436962bc4f7a51677b">Isis::Hillshade::shadedValue()</a>.</p>
+
+</div>
+</div>
+<a id="abc21e07d8ac60ecfcc976f1170f26abd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc21e07d8ac60ecfcc976f1170f26abd">&#9670;&nbsp;</a></span>MaxBands()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BufferManager::MaxBands </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of bands in the cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_band_manager.html#ac72bc243aea60033fca0072117d4c6d3">Isis::BandManager::SetBand()</a>.</p>
+
+</div>
+</div>
+<a id="aaedd28e8ddaedd4dc7dacf40bf55c0c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaedd28e8ddaedd4dc7dacf40bf55c0c6">&#9670;&nbsp;</a></span>MaxLines()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BufferManager::MaxLines </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of lines in the cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_line_manager.html#a4dd043c8aae3bb2ff353a5e32a02a80e">Isis::LineManager::SetLine()</a>.</p>
+
+</div>
+</div>
+<a id="ae0e071405acfad3eb52ef75634ca8533"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0e071405acfad3eb52ef75634ca8533">&#9670;&nbsp;</a></span>MaxMaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> Isis::BufferManager::MaxMaps </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the maximum number of positions the shape buffer needs to cover the entire image (see setpos method for more info). </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_brick.html#accee4c70e1b1bf27713c8b673f3e895c">Bricks()</a>, and <a class="el" href="class_isis_1_1_tile_manager.html#adcdcb0800fa1219980f2e5b6954e90af">Isis::TileManager::Tiles()</a>.</p>
+
+</div>
+</div>
+<a id="a52a7ed777e334459ec470fc8928e3522"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52a7ed777e334459ec470fc8928e3522">&#9670;&nbsp;</a></span>MaxSamples()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BufferManager::MaxSamples </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of samples in the cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sample_manager.html#a559c6922f7dd90158355148ff56afacb">Isis::SampleManager::SetSample()</a>.</p>
+
+</div>
+</div>
+<a id="ad78bcce288421976d93a55224569025f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad78bcce288421976d93a55224569025f">&#9670;&nbsp;</a></span>next()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BufferManager::next </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Moves the shape buffer to the next position. </p>
+<p>Returns true if the next position is valid.</p>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer_manager.html#ab3f7b2ca0d7c7ece36ef52e98d98ae87">Isis::BufferManager::setpos()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="class_isis_1_1_buffer_manager.html#aed620227b79d1c467084eaad7a48a6da">Isis::BufferManager::operator++()</a>, <a class="el" href="class_isis_1_1_process_export.html#aa86c084ff4f8ae00c3684fbdc4131096">Isis::ProcessExport::StartProcess()</a>, and <a class="el" href="class_isis_1_1_process_by_boxcar.html#a59466f429b3ee43e8ade127c462b6f41">Isis::ProcessByBoxcar::StartProcess()</a>.</p>
+
+</div>
+</div>
+<a id="aed620227b79d1c467084eaad7a48a6da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed620227b79d1c467084eaad7a48a6da">&#9670;&nbsp;</a></span>operator++()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BufferManager::operator++ </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Moves the shape buffer to the next position. </p>
+<p>Returns true if the next position is valid.</p>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer_manager.html#ad78bcce288421976d93a55224569025f">Isis::BufferManager::next()</a>.</p>
+
+</div>
+</div>
+<a id="a9f91bba9a4dec6cd99a015921b02d039"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f91bba9a4dec6cd99a015921b02d039">&#9670;&nbsp;</a></span>operator+=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_buffer_manager.html">BufferManager</a>&amp; Isis::BufferManager::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Moves the shape buffer by a certain amount. </p>
+<p>Returns a pointer to the <a class="el" href="class_isis_1_1_buffer_manager.html" title="Manages a Buffer over a cube.">BufferManager</a> it was called on.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>How far to shift the shape buffer</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_buffer_manager.html" title="Manages a Buffer over a cube.">BufferManager</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer_manager.html#ab3f7b2ca0d7c7ece36ef52e98d98ae87">Isis::BufferManager::setpos()</a>.</p>
+
+</div>
+</div>
+<a id="ab09a0a3f371876ce9d5e5586397b88b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab09a0a3f371876ce9d5e5586397b88b5">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double&amp; Isis::Buffer::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the value in the shape buffer at given index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Index position in buffer. No out of bounds index is checked</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double&amp; </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a8595d0f7b68fbeb7cae0e89fe4af8cc7">Isis::Buffer::p_buf</a>.</p>
+
+</div>
+</div>
+<a id="a4a74c675f792a06362f534db620b6c90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a74c675f792a06362f534db620b6c90">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const double&amp; Isis::Buffer::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the value in the shape buffer at given index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Index position in buffer. No out of bounds index is checked</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a8595d0f7b68fbeb7cae0e89fe4af8cc7">Isis::Buffer::p_buf</a>.</p>
+
+</div>
+</div>
+<a id="a8e270c9f886dca8b115d59b072da02e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e270c9f886dca8b115d59b072da02e4">&#9670;&nbsp;</a></span>PixelType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">Isis::PixelType</a> Isis::Buffer::PixelType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the raw buffer pixel type. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f" title="Enumerations for Isis Pixel Types.">Isis::PixelType</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#abde4024d5d68ca34b300b28f34d55f4d">Isis::Buffer::p_pixelType</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#ac869a285dc4ef0cb5fce8a10142f19d6">Isis::Buffer::Copy()</a>.</p>
+
+</div>
+</div>
+<a id="a785f6e9ecb646377057df620482e6f34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a785f6e9ecb646377057df620482e6f34">&#9670;&nbsp;</a></span>Position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Buffer::Position </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>i_samp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>i_line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>i_band</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the sample, line, and band position associated with a shape buffer index. </p>
+<p>Performs the same function as the Sample, Line, and Band methods.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td><a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> buffer index to map to a band position. </td></tr>
+    <tr><td class="paramname">i_samp</td><td>Sample position in shape buffer at index. </td></tr>
+    <tr><td class="paramname">i_line</td><td>Line position in shape buffer at index </td></tr>
+    <tr><td class="paramname">i_band</td><td>Band position in shape buffer at index. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#aad9cf749cd23a69c8ca13d60265735d1">Isis::Buffer::Band()</a>, <a class="el" href="class_isis_1_1_buffer.html#a153bf0870143ceaaf72c2d801981a5fc">Isis::Buffer::Line()</a>, and <a class="el" href="class_isis_1_1_buffer.html#ae298ec455635f8059ef217007f17e7db">Isis::Buffer::Sample()</a>.</p>
+
+</div>
+</div>
+<a id="a2bb92e3ab60efd10a6182b9e35d267c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bb92e3ab60efd10a6182b9e35d267c1">&#9670;&nbsp;</a></span>RawBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* Isis::Buffer::RawBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a void pointer to the raw buffer. </p>
+<p>Cast this void pointer using information from the <a class="el" href="class_isis_1_1_buffer.html#a8e270c9f886dca8b115d59b072da02e4" title="Returns the raw buffer pixel type.">PixelType()</a> method</p>
+<dl class="section return"><dt>Returns</dt><dd>void* Pointer to the raw buffer </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a0ab46e91481b51d8a15117aea7b2e541">Isis::Buffer::p_rawbuf</a>.</p>
+
+</div>
+</div>
+<a id="a0e789a4630b020ce5dce2a69c70703c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e789a4630b020ce5dce2a69c70703c3">&#9670;&nbsp;</a></span>Resize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Brick::Resize </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nsamps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nlines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nbands</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resizes the memory buffer to the specified number of samples, lines, and bands. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nsamps</td><td>Number of samples </td></tr>
+    <tr><td class="paramname">nlines</td><td>Number of lines </td></tr>
+    <tr><td class="paramname">nbands</td><td>Number of bands </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a5f5de5f82cc920ea1d587eb02c07f576">Isis::Buffer::Allocate()</a>, <a class="el" href="class_isis_1_1_buffer.html#a8595d0f7b68fbeb7cae0e89fe4af8cc7">Isis::Buffer::p_buf</a>, <a class="el" href="class_isis_1_1_buffer.html#a6bd371742df3e7f752a6247ef2e08e94">Isis::Buffer::p_nbands</a>, <a class="el" href="class_isis_1_1_buffer.html#a6b8070762d901e8e541640b78fa70ada">Isis::Buffer::p_nlines</a>, <a class="el" href="class_isis_1_1_buffer.html#a39ead81259125de61bd739380bd36651">Isis::Buffer::p_npixels</a>, <a class="el" href="class_isis_1_1_buffer.html#ad38e115ac920e74e4f28ce3298412a57">Isis::Buffer::p_nsamps</a>, and <a class="el" href="class_isis_1_1_buffer.html#a0ab46e91481b51d8a15117aea7b2e541">Isis::Buffer::p_rawbuf</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="unit_test__disabled_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main()</a>.</p>
+
+</div>
+</div>
+<a id="ae298ec455635f8059ef217007f17e7db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae298ec455635f8059ef217007f17e7db">&#9670;&nbsp;</a></span>Sample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::Sample </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the sample position associated with a shape buffer index. </p>
+<p>The shape buffer is one dimensional. Let us assume a nsamps=2, nlines=3, and nbands=2. Therefore the total size of the shape buffer is 12 and valid index values are 0-11. Sample(0), Sample(2), Sample(4), etc will return a 1 while Sample(1), Sample(3), Sample(5), etc will return a 2.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td><a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> buffer index to map to a sample position. Defaults to 0.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The absolute sample number based on the buffer index. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#ad38e115ac920e74e4f28ce3298412a57">Isis::Buffer::p_nsamps</a>, and <a class="el" href="class_isis_1_1_buffer.html#ab72f3ecc7945130d5c65e80d3fa441cc">Isis::Buffer::p_sample</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, <a class="el" href="class_isis_1_1_independent_cube_viewport.html#ac7aa997f70c68786764473c79a6b6734">Isis::IndependentCubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#ae73031c8a858ec512b7339436062cb98">Isis::CubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, <a class="el" href="class_isis_1_1_chip.html#a493ecbe9f2ec00477b9ff930236ad9b4">Isis::Chip::Extract()</a>, <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>, <a class="el" href="class_isis_1_1_spectral_definition2_d.html#a573c9474ae8292efc806fea2c2e142b6">Isis::SpectralDefinition2D::operator()()</a>, <a class="el" href="class_isis_1_1_buffer.html#a785f6e9ecb646377057df620482e6f34">Isis::Buffer::Position()</a>, and <a class="el" href="class_isis_1_1_cube_io_handler.html#acc92e282ce068dae2057456191aa7b64">Isis::CubeIoHandler::read()</a>.</p>
+
+</div>
+</div>
+<a id="abe9df445edbcdfd33514f7c620c54674"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe9df445edbcdfd33514f7c620c54674">&#9670;&nbsp;</a></span>SampleDimension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::SampleDimension </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of samples in the shape buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#ad38e115ac920e74e4f28ce3298412a57">Isis::Buffer::p_nsamps</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_independent_cube_viewport.html#ac7aa997f70c68786764473c79a6b6734">Isis::IndependentCubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#ae73031c8a858ec512b7339436062cb98">Isis::CubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>, <a class="el" href="class_isis_1_1_image_importer.html#aa1843dc687f6e0ae0338da0b8abbbcf6">Isis::ImageImporter::operator()()</a>, <a class="el" href="class_isis_1_1_cube_io_handler.html#acc92e282ce068dae2057456191aa7b64">Isis::CubeIoHandler::read()</a>, <a class="el" href="class_isis_1_1_regional_caching_algorithm.html#ad35ada29690bb142ba202ca2ca3e7d42">Isis::RegionalCachingAlgorithm::recommendChunksToFree()</a>, <a class="el" href="class_isis_1_1_hillshade.html#aefe842b24eba9f436962bc4f7a51677b">Isis::Hillshade::shadedValue()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a75f4257465c087d3a601c4738a51ecd4">Isis::QtExporter::writeGrayscale()</a>, <a class="el" href="class_isis_1_1_stream_exporter.html#ac4dc2fcb0622d278c99399675b75d922">Isis::StreamExporter::writeGrayscale()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#ad82740ffa60bc9f90b175e964f3f2533">Isis::QtExporter::writeRgb()</a>, <a class="el" href="class_isis_1_1_stream_exporter.html#a936c43499aef26f7f3ab3e7709068766">Isis::StreamExporter::writeRgb()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a4f954a450783f0c7b010fc70e4f7c51f">Isis::QtExporter::writeRgba()</a>, and <a class="el" href="class_isis_1_1_stream_exporter.html#a0be48478bf56393417e63c7d03db625f">Isis::StreamExporter::writeRgba()</a>.</p>
+
+</div>
+</div>
+<a id="a39aee168145be43ea13674f5243f8246"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39aee168145be43ea13674f5243f8246">&#9670;&nbsp;</a></span>SetBaseBand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Brick::SetBaseBand </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>start_band</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method is used to set the base band position of the shape buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start_band</td><td>Starting band to set </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#ae4aef209e521f8cefd1e58953b13e887">Isis::Buffer::SetBaseBand()</a>.</p>
+
+</div>
+</div>
+<a id="a347ab909c21d1f5ae032b812f5750d26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a347ab909c21d1f5ae032b812f5750d26">&#9670;&nbsp;</a></span>SetBaseLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Brick::SetBaseLine </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>start_line</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method is used to set the base line position of the shape buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start_line</td><td>Starting line to set </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a80e3f2d46309f88688947d820739a32f">Isis::Buffer::SetBaseLine()</a>.</p>
+
+</div>
+</div>
+<a id="ae37b86e5b31d648ca565cc431fe28e1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae37b86e5b31d648ca565cc431fe28e1a">&#9670;&nbsp;</a></span>SetBasePosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Brick::SetBasePosition </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>start_sample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>start_line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>start_band</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method is used to set the base position of the shape buffer. </p>
+<p>It is used to progress sequentially through a cube by brick.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start_sample</td><td>Starting sample to set. </td></tr>
+    <tr><td class="paramname">start_line</td><td>Starting line to set. </td></tr>
+    <tr><td class="paramname">start_band</td><td>Starting band to set. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a0adad992f2c105292c17ae75a726b10c">Isis::Buffer::SetBasePosition()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_viewport.html#a063b27905ef178c35488538bb2b19248">Isis::CubeViewport::bluePixel()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#a7674a309d1248d51d6e69c5fd4ae5dc3">Isis::CubeViewport::grayPixel()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#a1f206d4c9590aa3070396831b19f6f57">Isis::CubeViewport::greenPixel()</a>, <a class="el" href="class_isis_1_1_stretch_tool.html#a22f8ffbe2ec7440e5a9a8a050d768ece">Isis::StretchTool::histFromCube()</a>, <a class="el" href="class_isis_1_1_image_histogram.html#ab30707570c740ce27e383caeae6ff26d">Isis::ImageHistogram::ImageHistogram()</a>, <a class="el" href="unit_test__disabled_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main()</a>, <a class="el" href="class_isis_1_1_edit_tool.html#a0160dfa800571172ea9e09888374fd99">Isis::EditTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_overlap_statistics.html#a934767f7973826f8c93bf85d7acea085">Isis::OverlapStatistics::OverlapStatistics()</a>, <a class="el" href="class_isis_1_1_cube_viewport.html#ab677e8615a64a14edaa0e134f27ff057">Isis::CubeViewport::redPixel()</a>, <a class="el" href="class_isis_1_1_histogram_tool.html#ad7354352a9a02070d3ed8031f8eb505f">Isis::HistogramTool::refreshPlot()</a>, <a class="el" href="class_isis_1_1_scatter_plot_data.html#a81866166a98c5280e99258618fb8797d">Isis::ScatterPlotData::ScatterPlotData()</a>, and <a class="el" href="class_isis_1_1_stretch_tool.html#a49f1699aa9d638c05ec15906484fa1ae">Isis::StretchTool::statsFromCube()</a>.</p>
+
+</div>
+</div>
+<a id="abff197a2b8b3e64c5275cccece4896f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abff197a2b8b3e64c5275cccece4896f2">&#9670;&nbsp;</a></span>SetBaseSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Brick::SetBaseSample </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>start_samp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method is used to set the base sample position of the shape buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start_samp</td><td>Starting sample to set </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#aef42dc7710e68968d6a7ba1d1da7f293">Isis::Buffer::SetBaseSample()</a>.</p>
+
+</div>
+</div>
+<a id="ace41ab4cb1f4ecc76367257dcf73abc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace41ab4cb1f4ecc76367257dcf73abc1">&#9670;&nbsp;</a></span>SetBrick()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Brick::SetBrick </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>brick</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method is used to set the position of the brick. </p>
+<p>Sets the current brick as requested.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">brick</td><td><a class="el" href="class_isis_1_1_brick.html" title="Buffer for containing a three dimensional section of an image.">Brick</a> number to move to.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Is the brick at the end of the cube?</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">brick</td><td>The brick number within a cube. This number starts with the upper left corner of the cube and proceedes across the samples then down the lines and lastly through the bands. The first brick starts at (1,1,1). The last brick contains the point (cubeSamples,cubeLines,cubeBands).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- invalid argument value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_buffer_manager.html#ab3f7b2ca0d7c7ece36ef52e98d98ae87">Isis::BufferManager::setpos()</a>.</p>
+
+</div>
+</div>
+<a id="ae6172708b5aa65d61e3f15c6ae6d7169"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6172708b5aa65d61e3f15c6ae6d7169">&#9670;&nbsp;</a></span>SetIncrements()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BufferManager::SetIncrements </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>sinc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>linc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>binc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets how the shape is incremented through the cube. </p>
+<p>By default (if this method is not invoked) shapes are moved sequentially through the cube with no overlap. For example, assume a 3 sample by 3 line tile buffer. It would first move across the image from left-to-right starting at sample 1, line 1, and band 1. Upon an increment it would be positioned at sample 4, line 1, and band 1. Each successive increment would cause the sample position to increase by 3 until it exceeds the number of samples in the cube. At that point the shape buffer would be positioned at sample 1, line 4, and band 1 (effectively moving to the next row of tiles). The shape would then continue moving across the cube until it reaches the edge again. Then the next row of tiles would be accessed until the shape reached the bottom of the cube. This default management can be overridden using this method. For example, by setting the increments to (6,3,1) we effectively skip every other tile. By setting them to (6,6,1) we skip every other tile and every other row of tiles. By setting them to (1,1,1) we essentially have NSxNLxNB positions in the cube and the 3x3 tile is managed such that the top left corner of the tile is moved over by 1 sample until it reaches the end of the line then down 1 line and so on until the end of the cube is reached.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sinc</td><td>Sample increment</td></tr>
+    <tr><td class="paramname">linc</td><td>Line increment</td></tr>
+    <tr><td class="paramname">binc</td><td>Band increment </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_boxcar_manager.html#a2f30ba5b318276e3533abe337d320d80">Isis::BoxcarManager::BoxcarManager()</a>, and <a class="el" href="class_isis_1_1_buffer_manager.html#a1f122c52de93d9eeb583755c1e1c3507">Isis::BufferManager::BufferManager()</a>.</p>
+
+</div>
+</div>
+<a id="a50053d46f213b8d7c520e4033128ce4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50053d46f213b8d7c520e4033128ce4b">&#9670;&nbsp;</a></span>SetOffsets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BufferManager::SetOffsets </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>soff</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>loff</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>boff</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the offset of the buffer. </p>
+<p>By default (if this method is not invoked) the offsets are (0,0,0). Offsets are applied when computing the top-left corner of the shape buffer. When used in conjunction with the SetIncrements method, this allows for centering shape buffers around a pixel when passing in negative offsets. For example,with a 3x3x1 shape and offsets of (-1,-1,0) and increments of (1,1,1) would cause the manager to walk a 3x3 buffer through the entire image. Setting the manager position the beginning causes the 3x3 window to be positioned such that sample 1, line 1 of the cube would be at the center of the window and increment would cause sample 2, line 1 to be at the center of the window. Successive increments will move the window in the sample direction until the end of line is reached at which time the buffer would be centered on sample 1, line 2.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">soff</td><td>Sample offset</td></tr>
+    <tr><td class="paramname">loff</td><td>Line offset</td></tr>
+    <tr><td class="paramname">boff</td><td>Band offset </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_boxcar_manager.html#a2f30ba5b318276e3533abe337d320d80">Isis::BoxcarManager::BoxcarManager()</a>.</p>
+
+</div>
+</div>
+<a id="ab3f7b2ca0d7c7ece36ef52e98d98ae87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3f7b2ca0d7c7ece36ef52e98d98ae87">&#9670;&nbsp;</a></span>setpos()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BufferManager::setpos </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>&#160;</td>
+          <td class="paramname"><em>map</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the position of the shape in the cube. </p>
+<p>This shape fits into the cube a specific number of times.</p>
+<p>When p_reverse is left false: (default) For example, a line shape on a 100 sample, 200 line, and 2 band cube would have 200*2 or 400 different positions as there are 400 total lines in the cube. Performing setpos(0) would position the shape at sample 1, line 1, and band 1. While setpos(200) would position the shape at sample 1, line 1, and band 2. Finally, setpos(399) would position the shape at sample 1, line 400, and band 2. Setpos returns true if it was sucessfully in setting the position, and false if the shape is at the end of the cube (beyond index 399 in the case of our example).</p>
+<p>When p_reverse is set to true: Following the above cube with 100 samples, 200 lines, and 2 bands, performing the setpos(0) would still position the shape at sample 1, line 1, and band 1. However, setpos(1) would position the shape at sample 1, line 1, band 2, while setpos(200) would position the spame at sample 1, line 100, band 1. Setpos returns true of it was sucessfully in setting the position, and false if the shape is at the end of the cube(beyond final index).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map</td><td><a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> buffer position value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True or False depending on whether the shape is at the end of the cube or not.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Invalid value for map argument </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_buffer_manager.html#acbdd8ea3e8ae11dab3e7ae2bb3ded7ae">Isis::BufferManager::end()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_buffer.html#a0adad992f2c105292c17ae75a726b10c">Isis::Buffer::SetBasePosition()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer_manager.html#a2c3e68ed0e090ac9b64ee15197e5b1b3">Isis::BufferManager::begin()</a>, <a class="el" href="class_isis_1_1_buffer_manager.html#ad78bcce288421976d93a55224569025f">Isis::BufferManager::next()</a>, <a class="el" href="class_isis_1_1_buffer_manager.html#a9f91bba9a4dec6cd99a015921b02d039">Isis::BufferManager::operator+=()</a>, <a class="el" href="class_isis_1_1_band_manager.html#ac72bc243aea60033fca0072117d4c6d3">Isis::BandManager::SetBand()</a>, <a class="el" href="class_isis_1_1_brick.html#ace41ab4cb1f4ecc76367257dcf73abc1">SetBrick()</a>, <a class="el" href="class_isis_1_1_line_manager.html#a4dd043c8aae3bb2ff353a5e32a02a80e">Isis::LineManager::SetLine()</a>, <a class="el" href="class_isis_1_1_sample_manager.html#a559c6922f7dd90158355148ff56afacb">Isis::SampleManager::SetSample()</a>, and <a class="el" href="class_isis_1_1_tile_manager.html#af02214e054046a49e498e9f52475e002">Isis::TileManager::SetTile()</a>.</p>
+
+</div>
+</div>
+<a id="a06491867698d94aa8f9e166ea87132e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06491867698d94aa8f9e166ea87132e8">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the total number of pixels in the shape buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a39ead81259125de61bd739380bd36651">Isis::Buffer::p_npixels</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization_1_1_calculate_functor.html#aa8fffab20640bc84038ff5eb11d81128">Isis::Equalization::CalculateFunctor::addStats()</a>, <a class="el" href="class_isis_1_1_hi_equalization_1_1_hi_calculate_functor.html#a0689b8b6999bfaa117b6b8a3655d7089">Isis::HiEqualization::HiCalculateFunctor::addStats()</a>, <a class="el" href="class_isis_1_1_cube_data_thread_tester.html#ad79eb252d22af6626a04412741bdda4f">Isis::CubeDataThreadTester::BrickChanged()</a>, <a class="el" href="class_isis_1_1_process.html#ab88ff5f5f018293e5cbda0b63e164fd9">Isis::Process::CalculateStatistics()</a>, <a class="el" href="class_isis_1_1_buffer.html#ac869a285dc4ef0cb5fce8a10142f19d6">Isis::Buffer::Copy()</a>, <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, <a class="el" href="class_isis_1_1_independent_cube_viewport.html#ac7aa997f70c68786764473c79a6b6734">Isis::IndependentCubeViewport::cubeDataChanged()</a>, <a class="el" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady()</a>, <a class="el" href="class_isis_1_1_chip.html#a493ecbe9f2ec00477b9ff930236ad9b4">Isis::Chip::Extract()</a>, <a class="el" href="class_isis_1_1_viewport_buffer.html#a54dd4574306ea8a7417e179e5340584e">Isis::ViewportBuffer::fillBuffer()</a>, <a class="el" href="class_isis_1_1_cube.html#a0e3d72d18bf88bd339fcda48bbbf9dfb">Isis::Cube::histogram()</a>, <a class="el" href="class_isis_1_1_image_histogram.html#ab30707570c740ce27e383caeae6ff26d">Isis::ImageHistogram::ImageHistogram()</a>, <a class="el" href="unit_test__disabled_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main()</a>, <a class="el" href="class_isis_1_1_equalization_1_1_apply_functor.html#ae4cb92e0ca9de89c33038c5c240346a3">Isis::Equalization::ApplyFunctor::operator()()</a>, <a class="el" href="class_isis_1_1_average.html#a00739a6b82c4465a8a290daccfeb2a5b">Isis::Average::operator()()</a>, <a class="el" href="class_isis_1_1_calculator.html#aa76993bd42f59477c86b3540ba8d66c4">Isis::Calculator::Push()</a>, <a class="el" href="class_isis_1_1_cube_io_handler.html#acc92e282ce068dae2057456191aa7b64">Isis::CubeIoHandler::read()</a>, <a class="el" href="class_isis_1_1_cube_data_thread_tester.html#a40d2812b853297ee405c35063faccc46">Isis::CubeDataThreadTester::ReadBrick()</a>, <a class="el" href="class_isis_1_1_cube_data_thread_tester.html#ac3e7ffa1bfac90395b3a006299803374">Isis::CubeDataThreadTester::ReadWriteBrick()</a>, <a class="el" href="class_isis_1_1_scatter_plot_data.html#a81866166a98c5280e99258618fb8797d">Isis::ScatterPlotData::ScatterPlotData()</a>, <a class="el" href="class_isis_1_1_hillshade.html#aefe842b24eba9f436962bc4f7a51677b">Isis::Hillshade::shadedValue()</a>, <a class="el" href="class_isis_1_1_process_mosaic.html#a120773bc59ecdf91cc10b8c1fdaa349b">Isis::ProcessMosaic::StartProcess()</a>, <a class="el" href="class_isis_1_1_process_export.html#aa86c084ff4f8ae00c3684fbdc4131096">Isis::ProcessExport::StartProcess()</a>, <a class="el" href="class_isis_1_1_process_by_boxcar.html#a59466f429b3ee43e8ade127c462b6f41">Isis::ProcessByBoxcar::StartProcess()</a>, and <a class="el" href="class_isis_1_1_cube.html#a5f9009bc9b325c019adac91edf2c4424">Isis::Cube::statistics()</a>.</p>
+
+</div>
+</div>
+<a id="a237f3b41edcedbb2e1b2dfed8fb78e90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a237f3b41edcedbb2e1b2dfed8fb78e90">&#9670;&nbsp;</a></span>swap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BufferManager::swap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_buffer_manager.html">BufferManager</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Swaps the values of this <a class="el" href="class_isis_1_1_buffer_manager.html" title="Manages a Buffer over a cube.">BufferManager</a> with that of another. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">&amp;other</td><td>Reference to a <a class="el" href="class_isis_1_1_buffer_manager.html" title="Manages a Buffer over a cube.">BufferManager</a> to swap with </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer_manager.html#a0dc025bbb1a343a2f039e316e8307aa6">Isis::BufferManager::operator=()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ac1ddeeaf5f998d59c0df0bd9fcc1f411"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1ddeeaf5f998d59c0df0bd9fcc1f411">&#9670;&nbsp;</a></span>p_band</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::p_band</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Starting band to read/write. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#aad9cf749cd23a69c8ca13d60265735d1">Isis::Buffer::Band()</a>, <a class="el" href="class_isis_1_1_buffer.html#ae461c0c56c37b45d203c5bf451cf4d2a">Isis::Buffer::Buffer()</a>, <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, <a class="el" href="class_isis_1_1_buffer.html#ade618f5f53149a99db4ae72d16635a4f">Isis::Buffer::Index()</a>, and <a class="el" href="class_isis_1_1_buffer.html#ae4aef209e521f8cefd1e58953b13e887">Isis::Buffer::SetBaseBand()</a>.</p>
+
+</div>
+</div>
+<a id="a8595d0f7b68fbeb7cae0e89fe4af8cc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8595d0f7b68fbeb7cae0e89fe4af8cc7">&#9670;&nbsp;</a></span>p_buf</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double* Isis::Buffer::p_buf</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> buffer allocated to the size of npixels for handling reads/writes. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#a5f5de5f82cc920ea1d587eb02c07f576">Isis::Buffer::Allocate()</a>, <a class="el" href="class_isis_1_1_buffer.html#ace8c542223e3469c2d26ac64eee3a1aa">Isis::Buffer::at()</a>, <a class="el" href="class_isis_1_1_buffer.html#ac869a285dc4ef0cb5fce8a10142f19d6">Isis::Buffer::Copy()</a>, <a class="el" href="class_isis_1_1_buffer.html#a0e0ddc3c6e9d436b92bbe302169d0e6b">Isis::Buffer::DoubleBuffer()</a>, <a class="el" href="class_isis_1_1_buffer.html#a768fa330d437c8726e3365a8dd594a5e">Isis::Buffer::operator=()</a>, <a class="el" href="class_isis_1_1_buffer.html#ab09a0a3f371876ce9d5e5586397b88b5">Isis::Buffer::operator[]()</a>, <a class="el" href="class_isis_1_1_brick.html#a0e789a4630b020ce5dce2a69c70703c3">Resize()</a>, and <a class="el" href="class_isis_1_1_buffer.html#af4b9e1241c5f948fe5eec32975c4ad8f">Isis::Buffer::~Buffer()</a>.</p>
+
+</div>
+</div>
+<a id="ae1b1fb31f18ff76cb52bb5e49f54e8fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1b1fb31f18ff76cb52bb5e49f54e8fc">&#9670;&nbsp;</a></span>p_line</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::p_line</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Starting line to read/write. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#ae461c0c56c37b45d203c5bf451cf4d2a">Isis::Buffer::Buffer()</a>, <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, <a class="el" href="class_isis_1_1_buffer.html#ade618f5f53149a99db4ae72d16635a4f">Isis::Buffer::Index()</a>, <a class="el" href="class_isis_1_1_buffer.html#a153bf0870143ceaaf72c2d801981a5fc">Isis::Buffer::Line()</a>, and <a class="el" href="class_isis_1_1_buffer.html#a80e3f2d46309f88688947d820739a32f">Isis::Buffer::SetBaseLine()</a>.</p>
+
+</div>
+</div>
+<a id="a6bd371742df3e7f752a6247ef2e08e94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bd371742df3e7f752a6247ef2e08e94">&#9670;&nbsp;</a></span>p_nbands</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::p_nbands</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of bands to read/write. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#ab1ac3dce55dc5e6a7408b5166886bb74">Isis::Buffer::BandDimension()</a>, <a class="el" href="class_isis_1_1_buffer.html#ae461c0c56c37b45d203c5bf451cf4d2a">Isis::Buffer::Buffer()</a>, <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, <a class="el" href="class_isis_1_1_buffer.html#ade618f5f53149a99db4ae72d16635a4f">Isis::Buffer::Index()</a>, and <a class="el" href="class_isis_1_1_brick.html#a0e789a4630b020ce5dce2a69c70703c3">Resize()</a>.</p>
+
+</div>
+</div>
+<a id="a6b8070762d901e8e541640b78fa70ada"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b8070762d901e8e541640b78fa70ada">&#9670;&nbsp;</a></span>p_nlines</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::p_nlines</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of lines to read/write. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#aad9cf749cd23a69c8ca13d60265735d1">Isis::Buffer::Band()</a>, <a class="el" href="class_isis_1_1_buffer.html#ae461c0c56c37b45d203c5bf451cf4d2a">Isis::Buffer::Buffer()</a>, <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, <a class="el" href="class_isis_1_1_buffer.html#ade618f5f53149a99db4ae72d16635a4f">Isis::Buffer::Index()</a>, <a class="el" href="class_isis_1_1_buffer.html#a153bf0870143ceaaf72c2d801981a5fc">Isis::Buffer::Line()</a>, <a class="el" href="class_isis_1_1_buffer.html#a697aae263a56aa8dffa9107de29d287f">Isis::Buffer::LineDimension()</a>, and <a class="el" href="class_isis_1_1_brick.html#a0e789a4630b020ce5dce2a69c70703c3">Resize()</a>.</p>
+
+</div>
+</div>
+<a id="a39ead81259125de61bd739380bd36651"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39ead81259125de61bd739380bd36651">&#9670;&nbsp;</a></span>p_npixels</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::p_npixels</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of pixels (nsamps * nlines * nbands) </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#a5f5de5f82cc920ea1d587eb02c07f576">Isis::Buffer::Allocate()</a>, <a class="el" href="class_isis_1_1_buffer.html#ace8c542223e3469c2d26ac64eee3a1aa">Isis::Buffer::at()</a>, <a class="el" href="class_isis_1_1_buffer.html#ae461c0c56c37b45d203c5bf451cf4d2a">Isis::Buffer::Buffer()</a>, <a class="el" href="class_isis_1_1_buffer.html#ac869a285dc4ef0cb5fce8a10142f19d6">Isis::Buffer::Copy()</a>, <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, <a class="el" href="class_isis_1_1_buffer.html#a768fa330d437c8726e3365a8dd594a5e">Isis::Buffer::operator=()</a>, <a class="el" href="class_isis_1_1_brick.html#a0e789a4630b020ce5dce2a69c70703c3">Resize()</a>, and <a class="el" href="class_isis_1_1_buffer.html#a06491867698d94aa8f9e166ea87132e8">Isis::Buffer::size()</a>.</p>
+
+</div>
+</div>
+<a id="ad38e115ac920e74e4f28ce3298412a57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad38e115ac920e74e4f28ce3298412a57">&#9670;&nbsp;</a></span>p_nsamps</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::p_nsamps</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of samples to read/write. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#aad9cf749cd23a69c8ca13d60265735d1">Isis::Buffer::Band()</a>, <a class="el" href="class_isis_1_1_buffer.html#ae461c0c56c37b45d203c5bf451cf4d2a">Isis::Buffer::Buffer()</a>, <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, <a class="el" href="class_isis_1_1_buffer.html#ade618f5f53149a99db4ae72d16635a4f">Isis::Buffer::Index()</a>, <a class="el" href="class_isis_1_1_buffer.html#a153bf0870143ceaaf72c2d801981a5fc">Isis::Buffer::Line()</a>, <a class="el" href="class_isis_1_1_brick.html#a0e789a4630b020ce5dce2a69c70703c3">Resize()</a>, <a class="el" href="class_isis_1_1_buffer.html#ae298ec455635f8059ef217007f17e7db">Isis::Buffer::Sample()</a>, and <a class="el" href="class_isis_1_1_buffer.html#abe9df445edbcdfd33514f7c620c54674">Isis::Buffer::SampleDimension()</a>.</p>
+
+</div>
+</div>
+<a id="abde4024d5d68ca34b300b28f34d55f4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abde4024d5d68ca34b300b28f34d55f4d">&#9670;&nbsp;</a></span>p_pixelType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">Isis::PixelType</a> Isis::Buffer::p_pixelType</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The pixel type of the raw buffer. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#a5f5de5f82cc920ea1d587eb02c07f576">Isis::Buffer::Allocate()</a>, <a class="el" href="class_isis_1_1_buffer.html#ac869a285dc4ef0cb5fce8a10142f19d6">Isis::Buffer::Copy()</a>, and <a class="el" href="class_isis_1_1_buffer.html#a8e270c9f886dca8b115d59b072da02e4">Isis::Buffer::PixelType()</a>.</p>
+
+</div>
+</div>
+<a id="a0ab46e91481b51d8a15117aea7b2e541"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ab46e91481b51d8a15117aea7b2e541">&#9670;&nbsp;</a></span>p_rawbuf</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* Isis::Buffer::p_rawbuf</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The raw dm read from the disk. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#a5f5de5f82cc920ea1d587eb02c07f576">Isis::Buffer::Allocate()</a>, <a class="el" href="class_isis_1_1_buffer.html#ac869a285dc4ef0cb5fce8a10142f19d6">Isis::Buffer::Copy()</a>, <a class="el" href="class_isis_1_1_buffer.html#a2bb92e3ab60efd10a6182b9e35d267c1">Isis::Buffer::RawBuffer()</a>, <a class="el" href="class_isis_1_1_brick.html#a0e789a4630b020ce5dce2a69c70703c3">Resize()</a>, and <a class="el" href="class_isis_1_1_buffer.html#af4b9e1241c5f948fe5eec32975c4ad8f">Isis::Buffer::~Buffer()</a>.</p>
+
+</div>
+</div>
+<a id="ab72f3ecc7945130d5c65e80d3fa441cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab72f3ecc7945130d5c65e80d3fa441cc">&#9670;&nbsp;</a></span>p_sample</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Buffer::p_sample</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Starting sample to read/write. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_buffer.html#ae461c0c56c37b45d203c5bf451cf4d2a">Isis::Buffer::Buffer()</a>, <a class="el" href="class_isis_1_1_buffer.html#a77197572092aac27e1ab9df7f9fce57c">Isis::Buffer::CopyOverlapFrom()</a>, <a class="el" href="class_isis_1_1_buffer.html#ade618f5f53149a99db4ae72d16635a4f">Isis::Buffer::Index()</a>, <a class="el" href="class_isis_1_1_buffer.html#ae298ec455635f8059ef217007f17e7db">Isis::Buffer::Sample()</a>, and <a class="el" href="class_isis_1_1_buffer.html#aef42dc7710e68968d6a7ba1d1da7f293">Isis::Buffer::SetBaseSample()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Brick/<a class="el" href="_brick_8h_source.html">Brick.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Brick/<a class="el" href="_brick_8cpp.html">Brick.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_brick.html">Brick</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

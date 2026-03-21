@@ -1,0 +1,414 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Process/Process.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_process_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">Process.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_process_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef Process_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define Process_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_preference_8h.html">Preference.h</a>&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_cube_8h.html">Cube.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_progress_8h.html">Progress.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_cube_attribute_8h.html">CubeAttribute.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_statistics_8h.html">Statistics.h</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="class_q_set.html">   16</a></span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">class </span><a class="code" href="class_q_set.html">QSet</a>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">class </span><a class="code" href="class_q_list.html">QList</a>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="namespace_isis.html#a3dcdcd6ab96890f12eb7b3ca24ce9d93">   20</a></span>&#160;  <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="namespace_isis.html#a3dcdcd6ab96890f12eb7b3ca24ce9d93">SizeMatch</a> = 1;</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="namespace_isis.html#a573cc715e1c7124393ffa649e44ee36b">   21</a></span>&#160;  <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="namespace_isis.html#a573cc715e1c7124393ffa649e44ee36b">SpatialMatch</a> = 2;</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="namespace_isis.html#ad73d9631a23ab56238d5beb6dd11ab61">   22</a></span>&#160;  <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="namespace_isis.html#ad73d9631a23ab56238d5beb6dd11ab61">OneBand</a> = 16;</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="namespace_isis.html#aa2aa62b0eb99071b7f35f05810d5495b">   23</a></span>&#160;  <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="namespace_isis.html#aa2aa62b0eb99071b7f35f05810d5495b">BandMatchOrOne</a> = 32;</div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">   24</a></span>&#160;  <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">ReadWrite</a> = 64;</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="namespace_isis.html#a97f4e0e9d6b2f5222c8d166c7e6db6a3">   25</a></span>&#160;  <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="namespace_isis.html#a97f4e0e9d6b2f5222c8d166c7e6db6a3">AllMatchOrOne</a> = 128;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;};</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">class </span>UserInterface;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html">  143</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_process.html">Process</a> {</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#aa9a541ebb7c539f78b7ce8f6b830ba37">  145</a></span>&#160;      <a class="code" href="class_isis_1_1_progress.html">Isis::Progress</a> *<a class="code" href="class_isis_1_1_process.html#aa9a541ebb7c539f78b7ce8f6b830ba37">p_progress</a>;  </div>
+<div class="line"><a name="l00149"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#a330a59a6630355e6c190a28d485fba2e">  149</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_process.html#a330a59a6630355e6c190a28d485fba2e">p_propagateLabels</a>;</div>
+<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#ad5f7ba9442cba4eb809e2162aacfa80c">  153</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_process.html#ad5f7ba9442cba4eb809e2162aacfa80c">p_propagateTables</a>;</div>
+<div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#a217dccc152571dd838340ca572907b2b">  157</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_process.html#a217dccc152571dd838340ca572907b2b">p_propagatePolygons</a>;</div>
+<div class="line"><a name="l00161"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#aa7cbee387afb878ad57fb87354922123">  161</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_process.html#aa7cbee387afb878ad57fb87354922123">p_propagateHistory</a>;</div>
+<div class="line"><a name="l00165"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#a285d90900c45d65bd55cdf785d9a082d">  165</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_process.html#a285d90900c45d65bd55cdf785d9a082d">p_propagateOriginalLabel</a>;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00172"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#a44b17bd59172f9d18e311091bd6d38b3">  172</a></span>&#160;      std::vector&lt; std::vector&lt; Isis::Statistics * &gt; &gt; <a class="code" href="class_isis_1_1_process.html#a44b17bd59172f9d18e311091bd6d38b3">p_bandStats</a>;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00179"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#a52e18d7925af358112d6cff6989f5f41">  179</a></span>&#160;      std::vector&lt; Isis::Statistics * &gt; <a class="code" href="class_isis_1_1_process.html#a52e18d7925af358112d6cff6989f5f41">p_cubeStats</a>;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
+<div class="line"><a name="l00185"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#a76ceda97501e9bbfa63d62731e5e388d">  185</a></span>&#160;      std::vector&lt;Isis::Cube *&gt; <a class="code" href="class_isis_1_1_process.html#a76ceda97501e9bbfa63d62731e5e388d">InputCubes</a>;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#ab4dd229c5627a21992b5b38bb0617efd">  191</a></span>&#160;      std::vector&lt;Isis::Cube *&gt; <a class="code" href="class_isis_1_1_process.html#ab4dd229c5627a21992b5b38bb0617efd">OutputCubes</a>;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#aa20424a7015bcece03dd20cdf6139906">  199</a></span>&#160;      <a class="code" href="class_q_set.html">QSet&lt;Isis::Cube *&gt;</a> *<a class="code" href="class_isis_1_1_process.html#aa20424a7015bcece03dd20cdf6139906">m_ownedCubes</a>;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;      <a class="code" href="class_isis_1_1_process.html#a5da24fbf389a8ab94d5be47a41b24b3e">Process</a>();</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_process.html#a4a09b054748b5b8939d2f7d8b8932200">~Process</a>();</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
+<div class="line"><a name="l00213"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#a08b7e0a02140d69b2580db3f176ce9f7">  213</a></span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#a08b7e0a02140d69b2580db3f176ce9f7">StartProcess</a>(<span class="keywordtype">void</span> funct()) {</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        funct();</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;      };</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#a248a4f86edfc17d0a629dc9c58b76121">EndProcess</a>();</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#afa074f4de51484f575ddc0ba0baeeb25">Finalize</a>();</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process.html#ad208f1c88c7d72af1babe59efcbf47a4">SetInputCube</a>(<span class="keyword">const</span> QString &amp;parameter,</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                               <span class="keyword">const</span> <span class="keywordtype">int</span> requirements = 0);</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process.html#ad208f1c88c7d72af1babe59efcbf47a4">SetInputCube</a>(<span class="keyword">const</span> QString &amp;fname,</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;                               <span class="keyword">const</span> <a class="code" href="class_isis_1_1_cube_attribute_input.html">Isis::CubeAttributeInput</a> &amp;att,</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                               <span class="keywordtype">int</span> requirements = 0);</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#ad208f1c88c7d72af1babe59efcbf47a4">SetInputCube</a>(<a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *inCube, <span class="keywordtype">int</span> requirements = 0);</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process.html#aaf14fdbab292dbfe809bf11d650587bf">SetOutputCube</a>(<span class="keyword">const</span> QString &amp;parameter);</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process.html#a8d08e87ba5d16b92e3fe458594584ae6">SetOutputCubeStretch</a>(<span class="keyword">const</span> QString &amp;parameter, <a class="code" href="class_isis_1_1_user_interface.html">UserInterface</a> *ui=<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process.html#aaf14fdbab292dbfe809bf11d650587bf">SetOutputCube</a>(<span class="keyword">const</span> QString &amp;parameter, <span class="keyword">const</span> <span class="keywordtype">int</span> nsamps,</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                                <span class="keyword">const</span> <span class="keywordtype">int</span> nlines, <span class="keyword">const</span> <span class="keywordtype">int</span> nbands = 1);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process.html#a8d08e87ba5d16b92e3fe458594584ae6">SetOutputCubeStretch</a>(<span class="keyword">const</span> QString &amp;parameter, <span class="keyword">const</span> <span class="keywordtype">int</span> nsamps,</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                                <span class="keyword">const</span> <span class="keywordtype">int</span> nlines, <span class="keyword">const</span> <span class="keywordtype">int</span> nbands = 1, <a class="code" href="class_isis_1_1_user_interface.html">UserInterface</a> *ui=<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process.html#aaf14fdbab292dbfe809bf11d650587bf">SetOutputCube</a>(<span class="keyword">const</span> QString &amp;fname,</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                                <span class="keyword">const</span> <a class="code" href="class_isis_1_1_cube_attribute_output.html">Isis::CubeAttributeOutput</a> &amp;att,</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                                <span class="keyword">const</span> <span class="keywordtype">int</span> nsamps, <span class="keyword">const</span> <span class="keywordtype">int</span> nlines,</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                                <span class="keyword">const</span> <span class="keywordtype">int</span> nbands = 1);</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#a8ce9a9f8f8bf27a04b974b4813bdc995">AddInputCube</a>(<a class="code" href="class_isis_1_1_cube.html">Cube</a> *cube, <span class="keywordtype">bool</span> owned = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#a65a21c7bd650b0852e92a3fed7f6bd8f">AddOutputCube</a>(<a class="code" href="class_isis_1_1_cube.html">Cube</a> *cube, <span class="keywordtype">bool</span> owned = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#ac9d6eb916c832692dfc9654bb50a9fc1">CheckRequirements</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_cube.html">Cube</a> *cube, <span class="keyword">const</span> <span class="keywordtype">int</span> requirements);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#af93531040bb0af1d1c13230bb36ffeb9">ClearCubes</a>();</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#ad457dd2c52a5f440c092359bf765dda2">ClearInputCubes</a>();</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#ae77e7df124746d67e90668782c34ea2e">ClearOutputCubes</a>();</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#a1db17b92bbaf31bacee4256acac33931">PropagateLabels</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> prop);</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#a1db17b92bbaf31bacee4256acac33931">PropagateLabels</a>(<span class="keyword">const</span> QString &amp;cube);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#a81b08f44e5ba9aa44f2590683d71e84b">PropagateTables</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> prop);</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#a81b08f44e5ba9aa44f2590683d71e84b">PropagateTables</a>(<span class="keyword">const</span> QString &amp;fromName, <span class="keyword">const</span> <a class="code" href="class_q_list.html">QList&lt;QString&gt;</a>&amp; tableNames = <a class="code" href="class_q_list.html">QList&lt;QString&gt;</a>());</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#ad2e82594e9b26cc012e68b0146fb8df2">PropagatePolygons</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> prop);</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#a2632ab0debc291c6c302f9042ea65a61">PropagateHistory</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> prop);</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#a5c66ae3ca18abe6702d18bbb2ca4e4e6">PropagateOriginalLabel</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> prop);</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
+<div class="line"><a name="l00259"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#a828cde8d016f2edb7757bf07ecc21962">  259</a></span>&#160;      <a class="code" href="class_isis_1_1_progress.html">Isis::Progress</a> *<a class="code" href="class_isis_1_1_process.html#a828cde8d016f2edb7757bf07ecc21962">Progress</a>() {</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="class_isis_1_1_process.html#aa9a541ebb7c539f78b7ce8f6b830ba37">p_progress</a>;</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;      };</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;      QString <a class="code" href="class_isis_1_1_process.html#a7c4255378c3124edbe0d734bc348974b">MissionData</a>(<span class="keyword">const</span> QString &amp;mission, <span class="keyword">const</span> QString &amp;file,</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                              <span class="keywordtype">bool</span> highestVersion = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#a83c52f704bb10c19add9b460e983787c">WriteHistory</a>(<a class="code" href="class_isis_1_1_cube.html">Cube</a> &amp;cube);</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160; </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process.html#ab88ff5f5f018293e5cbda0b63e164fd9">CalculateStatistics</a>();</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#a99030aa7075af26a93c7aaca593ff481">  279</a></span>&#160;      <span class="keyword">inline</span> std::vector&lt;Isis::Statistics *&gt; <a class="code" href="class_isis_1_1_process.html#a99030aa7075af26a93c7aaca593ff481">BandStatistics</a>(</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">unsigned</span> index) {</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="class_isis_1_1_process.html#a44b17bd59172f9d18e311091bd6d38b3">p_bandStats</a>[index];</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;      }</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160; </div>
+<div class="line"><a name="l00293"></a><span class="lineno"><a class="line" href="class_isis_1_1_process.html#ab4881062784a166cb60974fcc8c1a966">  293</a></span>&#160;      <span class="keyword">inline</span> <a class="code" href="class_isis_1_1_statistics.html">Isis::Statistics</a> *<a class="code" href="class_isis_1_1_process.html#ab4881062784a166cb60974fcc8c1a966">CubeStatistics</a>(</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">unsigned</span> index) {</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="class_isis_1_1_process.html#a52e18d7925af358112d6cff6989f5f41">p_cubeStats</a>[index];</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;      }</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;  };</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;}</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160; </div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_cube_8h_html"><div class="ttname"><a href="_cube_8h.html">Cube.h</a></div></div>
+<div class="ttc" id="a_cube_attribute_8h_html"><div class="ttname"><a href="_cube_attribute_8h.html">CubeAttribute.h</a></div></div>
+<div class="ttc" id="a_preference_8h_html"><div class="ttname"><a href="_preference_8h.html">Preference.h</a></div></div>
+<div class="ttc" id="a_progress_8h_html"><div class="ttname"><a href="_progress_8h.html">Progress.h</a></div></div>
+<div class="ttc" id="a_statistics_8h_html"><div class="ttname"><a href="_statistics_8h.html">Statistics.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_attribute_input_html"><div class="ttname"><a href="class_isis_1_1_cube_attribute_input.html">Isis::CubeAttributeInput</a></div><div class="ttdoc">Manipulate and parse attributes of input cube filenames.</div><div class="ttdef"><b>Definition:</b> CubeAttribute.h:381</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_attribute_output_html"><div class="ttname"><a href="class_isis_1_1_cube_attribute_output.html">Isis::CubeAttributeOutput</a></div><div class="ttdoc">Manipulate and parse attributes of output cube filenames.</div><div class="ttdef"><b>Definition:</b> CubeAttribute.h:473</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_html"><div class="ttname"><a href="class_isis_1_1_cube.html">Isis::Cube</a></div><div class="ttdoc">IO Handler for Isis Cubes.</div><div class="ttdef"><b>Definition:</b> Cube.h:168</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html"><div class="ttname"><a href="class_isis_1_1_process.html">Isis::Process</a></div><div class="ttdoc">Base class for all cube processing derivatives.</div><div class="ttdef"><b>Definition:</b> Process.h:143</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a08b7e0a02140d69b2580db3f176ce9f7"><div class="ttname"><a href="class_isis_1_1_process.html#a08b7e0a02140d69b2580db3f176ce9f7">Isis::Process::StartProcess</a></div><div class="ttdeci">virtual void StartProcess(void funct())</div><div class="ttdoc">In the base class, this method will invoked a user-specified function exactly one time.</div><div class="ttdef"><b>Definition:</b> Process.h:213</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a1db17b92bbaf31bacee4256acac33931"><div class="ttname"><a href="class_isis_1_1_process.html#a1db17b92bbaf31bacee4256acac33931">Isis::Process::PropagateLabels</a></div><div class="ttdeci">void PropagateLabels(const bool prop)</div><div class="ttdoc">This method allows the programmer to turn on/off the propagation of labels from the 1st input cube to...</div><div class="ttdef"><b>Definition:</b> Process.cpp:652</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a217dccc152571dd838340ca572907b2b"><div class="ttname"><a href="class_isis_1_1_process.html#a217dccc152571dd838340ca572907b2b">Isis::Process::p_propagatePolygons</a></div><div class="ttdeci">bool p_propagatePolygons</div><div class="ttdoc">Flag indicating if blobs are be propagated to output cubes.</div><div class="ttdef"><b>Definition:</b> Process.h:157</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a248a4f86edfc17d0a629dc9c58b76121"><div class="ttname"><a href="class_isis_1_1_process.html#a248a4f86edfc17d0a629dc9c58b76121">Isis::Process::EndProcess</a></div><div class="ttdeci">virtual void EndProcess()</div><div class="ttdoc">End the processing sequence and cleans up by closing cubes, freeing memory, etc.</div><div class="ttdef"><b>Definition:</b> Process.cpp:462</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a2632ab0debc291c6c302f9042ea65a61"><div class="ttname"><a href="class_isis_1_1_process.html#a2632ab0debc291c6c302f9042ea65a61">Isis::Process::PropagateHistory</a></div><div class="ttdeci">void PropagateHistory(const bool prop)</div><div class="ttdoc">This method allows the programmer to propagate history to the output cube (default is true)</div><div class="ttdef"><b>Definition:</b> Process.cpp:755</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a285d90900c45d65bd55cdf785d9a082d"><div class="ttname"><a href="class_isis_1_1_process.html#a285d90900c45d65bd55cdf785d9a082d">Isis::Process::p_propagateOriginalLabel</a></div><div class="ttdeci">bool p_propagateOriginalLabel</div><div class="ttdoc">Flag indicating if original lable is to be propagated to output cubes.</div><div class="ttdef"><b>Definition:</b> Process.h:165</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a330a59a6630355e6c190a28d485fba2e"><div class="ttname"><a href="class_isis_1_1_process.html#a330a59a6630355e6c190a28d485fba2e">Isis::Process::p_propagateLabels</a></div><div class="ttdeci">bool p_propagateLabels</div><div class="ttdoc">Flag indicating if labels are be propagated to output cubes.</div><div class="ttdef"><b>Definition:</b> Process.h:149</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a44b17bd59172f9d18e311091bd6d38b3"><div class="ttname"><a href="class_isis_1_1_process.html#a44b17bd59172f9d18e311091bd6d38b3">Isis::Process::p_bandStats</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; Isis::Statistics * &gt; &gt; p_bandStats</div><div class="ttdoc">Holds the calculated statistics for each band separately of every input cubei after the CalculateStat...</div><div class="ttdef"><b>Definition:</b> Process.h:172</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a4a09b054748b5b8939d2f7d8b8932200"><div class="ttname"><a href="class_isis_1_1_process.html#a4a09b054748b5b8939d2f7d8b8932200">Isis::Process::~Process</a></div><div class="ttdeci">virtual ~Process()</div><div class="ttdoc">Destroys the Process Object. It will close all opened cubes.</div><div class="ttdef"><b>Definition:</b> Process.cpp:44</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a52e18d7925af358112d6cff6989f5f41"><div class="ttname"><a href="class_isis_1_1_process.html#a52e18d7925af358112d6cff6989f5f41">Isis::Process::p_cubeStats</a></div><div class="ttdeci">std::vector&lt; Isis::Statistics * &gt; p_cubeStats</div><div class="ttdoc">Holds the calculated statistics for every band together of every input cubei after the CalculateStati...</div><div class="ttdef"><b>Definition:</b> Process.h:179</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a5c66ae3ca18abe6702d18bbb2ca4e4e6"><div class="ttname"><a href="class_isis_1_1_process.html#a5c66ae3ca18abe6702d18bbb2ca4e4e6">Isis::Process::PropagateOriginalLabel</a></div><div class="ttdeci">void PropagateOriginalLabel(const bool prop)</div><div class="ttdoc">This method allows the programmer to propagate original labels to the output cube (default is true)</div><div class="ttdef"><b>Definition:</b> Process.cpp:767</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a5da24fbf389a8ab94d5be47a41b24b3e"><div class="ttname"><a href="class_isis_1_1_process.html#a5da24fbf389a8ab94d5be47a41b24b3e">Isis::Process::Process</a></div><div class="ttdeci">Process()</div><div class="ttdoc">Constructs a Process Object.</div><div class="ttdef"><b>Definition:</b> Process.cpp:29</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a65a21c7bd650b0852e92a3fed7f6bd8f"><div class="ttname"><a href="class_isis_1_1_process.html#a65a21c7bd650b0852e92a3fed7f6bd8f">Isis::Process::AddOutputCube</a></div><div class="ttdeci">void AddOutputCube(Cube *cube, bool owned=true)</div><div class="ttdef"><b>Definition:</b> Process.cpp:482</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a76ceda97501e9bbfa63d62731e5e388d"><div class="ttname"><a href="class_isis_1_1_process.html#a76ceda97501e9bbfa63d62731e5e388d">Isis::Process::InputCubes</a></div><div class="ttdeci">std::vector&lt; Isis::Cube * &gt; InputCubes</div><div class="ttdoc">A vector of pointers to opened Cube objects.</div><div class="ttdef"><b>Definition:</b> Process.h:185</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a7c4255378c3124edbe0d734bc348974b"><div class="ttname"><a href="class_isis_1_1_process.html#a7c4255378c3124edbe0d734bc348974b">Isis::Process::MissionData</a></div><div class="ttdeci">QString MissionData(const QString &amp;mission, const QString &amp;file, bool highestVersion=false)</div><div class="ttdoc">This method reads the mission specific data directory from the user preference file,...</div><div class="ttdef"><b>Definition:</b> Process.cpp:788</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a81b08f44e5ba9aa44f2590683d71e84b"><div class="ttname"><a href="class_isis_1_1_process.html#a81b08f44e5ba9aa44f2590683d71e84b">Isis::Process::PropagateTables</a></div><div class="ttdeci">void PropagateTables(const bool prop)</div><div class="ttdoc">This method allows the programmer to propagate input tables to the output cube (default is true)</div><div class="ttdef"><b>Definition:</b> Process.cpp:693</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a828cde8d016f2edb7757bf07ecc21962"><div class="ttname"><a href="class_isis_1_1_process.html#a828cde8d016f2edb7757bf07ecc21962">Isis::Process::Progress</a></div><div class="ttdeci">Isis::Progress * Progress()</div><div class="ttdoc">This method returns a pointer to a Progress object.</div><div class="ttdef"><b>Definition:</b> Process.h:259</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a83c52f704bb10c19add9b460e983787c"><div class="ttname"><a href="class_isis_1_1_process.html#a83c52f704bb10c19add9b460e983787c">Isis::Process::WriteHistory</a></div><div class="ttdeci">void WriteHistory(Cube &amp;cube)</div><div class="ttdoc">Writes out the History blob to the cube.</div><div class="ttdef"><b>Definition:</b> Process.cpp:822</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a8ce9a9f8f8bf27a04b974b4813bdc995"><div class="ttname"><a href="class_isis_1_1_process.html#a8ce9a9f8f8bf27a04b974b4813bdc995">Isis::Process::AddInputCube</a></div><div class="ttdeci">void AddInputCube(Cube *cube, bool owned=true)</div><div class="ttdef"><b>Definition:</b> Process.cpp:476</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a8d08e87ba5d16b92e3fe458594584ae6"><div class="ttname"><a href="class_isis_1_1_process.html#a8d08e87ba5d16b92e3fe458594584ae6">Isis::Process::SetOutputCubeStretch</a></div><div class="ttdeci">virtual Isis::Cube * SetOutputCubeStretch(const QString &amp;parameter, UserInterface *ui=nullptr)</div><div class="ttdoc">Allocates a user-specified output cube whose size matches the first input cube.</div><div class="ttdef"><b>Definition:</b> Process.cpp:196</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_a99030aa7075af26a93c7aaca593ff481"><div class="ttname"><a href="class_isis_1_1_process.html#a99030aa7075af26a93c7aaca593ff481">Isis::Process::BandStatistics</a></div><div class="ttdeci">std::vector&lt; Isis::Statistics * &gt; BandStatistics(const unsigned index)</div><div class="ttdoc">Get the vector of Statistics objects for each band separately of a specified input cube.</div><div class="ttdef"><b>Definition:</b> Process.h:279</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_aa20424a7015bcece03dd20cdf6139906"><div class="ttname"><a href="class_isis_1_1_process.html#aa20424a7015bcece03dd20cdf6139906">Isis::Process::m_ownedCubes</a></div><div class="ttdeci">QSet&lt; Isis::Cube * &gt; * m_ownedCubes</div><div class="ttdoc">A list of cubes owned by this instant.</div><div class="ttdef"><b>Definition:</b> Process.h:199</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_aa7cbee387afb878ad57fb87354922123"><div class="ttname"><a href="class_isis_1_1_process.html#aa7cbee387afb878ad57fb87354922123">Isis::Process::p_propagateHistory</a></div><div class="ttdeci">bool p_propagateHistory</div><div class="ttdoc">Flag indicating if history is to be propagated to output cubes.</div><div class="ttdef"><b>Definition:</b> Process.h:161</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_aa9a541ebb7c539f78b7ce8f6b830ba37"><div class="ttname"><a href="class_isis_1_1_process.html#aa9a541ebb7c539f78b7ce8f6b830ba37">Isis::Process::p_progress</a></div><div class="ttdeci">Isis::Progress * p_progress</div><div class="ttdoc">Pointer to a Progress object.</div><div class="ttdef"><b>Definition:</b> Process.h:145</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_aaf14fdbab292dbfe809bf11d650587bf"><div class="ttname"><a href="class_isis_1_1_process.html#aaf14fdbab292dbfe809bf11d650587bf">Isis::Process::SetOutputCube</a></div><div class="ttdeci">virtual Isis::Cube * SetOutputCube(const QString &amp;parameter)</div><div class="ttdoc">Allocates a user-specified output cube whose size matches the first input cube.</div><div class="ttdef"><b>Definition:</b> Process.cpp:163</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_ab4881062784a166cb60974fcc8c1a966"><div class="ttname"><a href="class_isis_1_1_process.html#ab4881062784a166cb60974fcc8c1a966">Isis::Process::CubeStatistics</a></div><div class="ttdeci">Isis::Statistics * CubeStatistics(const unsigned index)</div><div class="ttdoc">Get the Statistics object for all bands of a specified input cube.</div><div class="ttdef"><b>Definition:</b> Process.h:293</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_ab4dd229c5627a21992b5b38bb0617efd"><div class="ttname"><a href="class_isis_1_1_process.html#ab4dd229c5627a21992b5b38bb0617efd">Isis::Process::OutputCubes</a></div><div class="ttdeci">std::vector&lt; Isis::Cube * &gt; OutputCubes</div><div class="ttdoc">A vector of pointers to allocated Cube objects.</div><div class="ttdef"><b>Definition:</b> Process.h:191</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_ab88ff5f5f018293e5cbda0b63e164fd9"><div class="ttname"><a href="class_isis_1_1_process.html#ab88ff5f5f018293e5cbda0b63e164fd9">Isis::Process::CalculateStatistics</a></div><div class="ttdeci">void CalculateStatistics()</div><div class="ttdoc">Calculates and stores off statistics on every band of every cube added to this process via the SetInp...</div><div class="ttdef"><b>Definition:</b> Process.cpp:858</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_ac9d6eb916c832692dfc9654bb50a9fc1"><div class="ttname"><a href="class_isis_1_1_process.html#ac9d6eb916c832692dfc9654bb50a9fc1">Isis::Process::CheckRequirements</a></div><div class="ttdeci">void CheckRequirements(const Cube *cube, const int requirements)</div><div class="ttdoc">Checks to make sure the input cube meets the inputted requirements.</div><div class="ttdef"><b>Definition:</b> Process.cpp:513</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_ad208f1c88c7d72af1babe59efcbf47a4"><div class="ttname"><a href="class_isis_1_1_process.html#ad208f1c88c7d72af1babe59efcbf47a4">Isis::Process::SetInputCube</a></div><div class="ttdeci">virtual Isis::Cube * SetInputCube(const QString &amp;parameter, const int requirements=0)</div><div class="ttdoc">Opens an input cube specified by the user and verifies requirements are met.</div><div class="ttdef"><b>Definition:</b> Process.cpp:139</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_ad2e82594e9b26cc012e68b0146fb8df2"><div class="ttname"><a href="class_isis_1_1_process.html#ad2e82594e9b26cc012e68b0146fb8df2">Isis::Process::PropagatePolygons</a></div><div class="ttdeci">void PropagatePolygons(const bool prop)</div><div class="ttdoc">This method allows the programmer to propagate input blobs to the output cube (default is true)</div><div class="ttdef"><b>Definition:</b> Process.cpp:744</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_ad457dd2c52a5f440c092359bf765dda2"><div class="ttname"><a href="class_isis_1_1_process.html#ad457dd2c52a5f440c092359bf765dda2">Isis::Process::ClearInputCubes</a></div><div class="ttdeci">void ClearInputCubes()</div><div class="ttdoc">Close owned input cubes from the list and clear the list.</div><div class="ttdef"><b>Definition:</b> Process.cpp:614</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_ad5f7ba9442cba4eb809e2162aacfa80c"><div class="ttname"><a href="class_isis_1_1_process.html#ad5f7ba9442cba4eb809e2162aacfa80c">Isis::Process::p_propagateTables</a></div><div class="ttdeci">bool p_propagateTables</div><div class="ttdoc">Flag indicating if tables are be propagated to output cubes.</div><div class="ttdef"><b>Definition:</b> Process.h:153</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_ae77e7df124746d67e90668782c34ea2e"><div class="ttname"><a href="class_isis_1_1_process.html#ae77e7df124746d67e90668782c34ea2e">Isis::Process::ClearOutputCubes</a></div><div class="ttdeci">void ClearOutputCubes()</div><div class="ttdoc">Close owned output cubes from the list and clear the list.</div><div class="ttdef"><b>Definition:</b> Process.cpp:629</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_af93531040bb0af1d1c13230bb36ffeb9"><div class="ttname"><a href="class_isis_1_1_process.html#af93531040bb0af1d1c13230bb36ffeb9">Isis::Process::ClearCubes</a></div><div class="ttdeci">void ClearCubes()</div><div class="ttdoc">Close owned cubes from the list and clear the list.</div><div class="ttdef"><b>Definition:</b> Process.cpp:603</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_html_afa074f4de51484f575ddc0ba0baeeb25"><div class="ttname"><a href="class_isis_1_1_process.html#afa074f4de51484f575ddc0ba0baeeb25">Isis::Process::Finalize</a></div><div class="ttdeci">virtual void Finalize()</div><div class="ttdoc">Cleans up by closing cubes and freeing memory for owned cubes.</div><div class="ttdef"><b>Definition:</b> Process.cpp:471</div></div>
+<div class="ttc" id="aclass_isis_1_1_progress_html"><div class="ttname"><a href="class_isis_1_1_progress.html">Isis::Progress</a></div><div class="ttdoc">Program progress reporter.</div><div class="ttdef"><b>Definition:</b> Progress.h:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html"><div class="ttname"><a href="class_isis_1_1_statistics.html">Isis::Statistics</a></div><div class="ttdoc">This class is used to accumulate statistics on double arrays.</div><div class="ttdef"><b>Definition:</b> Statistics.h:93</div></div>
+<div class="ttc" id="aclass_isis_1_1_user_interface_html"><div class="ttname"><a href="class_isis_1_1_user_interface.html">Isis::UserInterface</a></div><div class="ttdoc">Command Line and Xml loader, validation, and access.</div><div class="ttdef"><b>Definition:</b> UserInterface.h:139</div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="aclass_q_set_html"><div class="ttname"><a href="class_q_set.html">QSet</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Process.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a3dcdcd6ab96890f12eb7b3ca24ce9d93"><div class="ttname"><a href="namespace_isis.html#a3dcdcd6ab96890f12eb7b3ca24ce9d93">Isis::SizeMatch</a></div><div class="ttdeci">const int SizeMatch</div><div class="ttdef"><b>Definition:</b> Process.h:20</div></div>
+<div class="ttc" id="anamespace_isis_html_a573cc715e1c7124393ffa649e44ee36b"><div class="ttname"><a href="namespace_isis.html#a573cc715e1c7124393ffa649e44ee36b">Isis::SpatialMatch</a></div><div class="ttdeci">const int SpatialMatch</div><div class="ttdef"><b>Definition:</b> Process.h:21</div></div>
+<div class="ttc" id="anamespace_isis_html_a599ab93f2f4db6855baf4ce67fbb6831"><div class="ttname"><a href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">Isis::ReadWrite</a></div><div class="ttdeci">const int ReadWrite</div><div class="ttdef"><b>Definition:</b> Process.h:24</div></div>
+<div class="ttc" id="anamespace_isis_html_a97f4e0e9d6b2f5222c8d166c7e6db6a3"><div class="ttname"><a href="namespace_isis.html#a97f4e0e9d6b2f5222c8d166c7e6db6a3">Isis::AllMatchOrOne</a></div><div class="ttdeci">const int AllMatchOrOne</div><div class="ttdef"><b>Definition:</b> Process.h:25</div></div>
+<div class="ttc" id="anamespace_isis_html_aa2aa62b0eb99071b7f35f05810d5495b"><div class="ttname"><a href="namespace_isis.html#aa2aa62b0eb99071b7f35f05810d5495b">Isis::BandMatchOrOne</a></div><div class="ttdeci">const int BandMatchOrOne</div><div class="ttdef"><b>Definition:</b> Process.h:23</div></div>
+<div class="ttc" id="anamespace_isis_html_ad73d9631a23ab56238d5beb6dd11ab61"><div class="ttname"><a href="namespace_isis.html#ad73d9631a23ab56238d5beb6dd11ab61">Isis::OneBand</a></div><div class="ttdeci">const int OneBand</div><div class="ttdef"><b>Definition:</b> Process.h:22</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_2babaf165a41c09d8845631e079d6ed5.html">Process</a></li><li class="navelem"><a class="el" href="_process_8h.html">Process.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,770 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::PvlTokenizer Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_pvl_tokenizer.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_pvl_tokenizer-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::PvlTokenizer Class Reference<div class="ingroups"><a class="el" href="group___parsing.html">Parsing</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Construct Token list from a stream.  
+ <a href="class_isis_1_1_pvl_tokenizer.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_pvl_tokenizer_8h_source.html">PvlTokenizer.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::PvlTokenizer:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_pvl_tokenizer__coll__graph.png" border="0" usemap="#a_isis_1_1_pvl_tokenizer_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_pvl_tokenizer_coll__map" id="a_isis_1_1_pvl_tokenizer_coll__map">
+<area shape="rect" title="Construct Token list from a stream." alt="" coords="7,151,168,440"/>
+<area shape="rect" title=" " alt="" coords="5,5,170,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aedf7e336d04f8ae7a8c565e36bba4462"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#aedf7e336d04f8ae7a8c565e36bba4462">PvlTokenizer</a> ()</td></tr>
+<tr class="memdesc:aedf7e336d04f8ae7a8c565e36bba4462"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a Tokenizer with an empty token list.  <a href="class_isis_1_1_pvl_tokenizer.html#aedf7e336d04f8ae7a8c565e36bba4462">More...</a><br /></td></tr>
+<tr class="separator:aedf7e336d04f8ae7a8c565e36bba4462"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e8be03c119ca6d7b8a5513faef96a57"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#a3e8be03c119ca6d7b8a5513faef96a57">~PvlTokenizer</a> ()</td></tr>
+<tr class="memdesc:a3e8be03c119ca6d7b8a5513faef96a57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the Tokenizer object and token list.  <a href="class_isis_1_1_pvl_tokenizer.html#a3e8be03c119ca6d7b8a5513faef96a57">More...</a><br /></td></tr>
+<tr class="separator:a3e8be03c119ca6d7b8a5513faef96a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefb9b63b685d8de4f2120dff39bb76ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#aefb9b63b685d8de4f2120dff39bb76ff">Load</a> (std::istream &amp;stream, const QString &amp;terminator=&quot;END&quot;)</td></tr>
+<tr class="memdesc:aefb9b63b685d8de4f2120dff39bb76ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the Token list from a stream.  <a href="class_isis_1_1_pvl_tokenizer.html#aefb9b63b685d8de4f2120dff39bb76ff">More...</a><br /></td></tr>
+<tr class="separator:aefb9b63b685d8de4f2120dff39bb76ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a351691b23d60f200ef02a5cad1dbcc6a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#a351691b23d60f200ef02a5cad1dbcc6a">Clear</a> ()</td></tr>
+<tr class="memdesc:a351691b23d60f200ef02a5cad1dbcc6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empties the token list.  <a href="class_isis_1_1_pvl_tokenizer.html#a351691b23d60f200ef02a5cad1dbcc6a">More...</a><br /></td></tr>
+<tr class="separator:a351691b23d60f200ef02a5cad1dbcc6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7028adbf49c0ea7266d4daf2db2f5eb9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_isis_1_1_pvl_token.html">Isis::PvlToken</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#a7028adbf49c0ea7266d4daf2db2f5eb9">GetTokenList</a> ()</td></tr>
+<tr class="separator:a7028adbf49c0ea7266d4daf2db2f5eb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:aa012d10ecb4c4af3d2f32c289ae3d84e"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#aa012d10ecb4c4af3d2f32c289ae3d84e">ReadComment</a> (std::istream &amp;stream)</td></tr>
+<tr class="memdesc:aa012d10ecb4c4af3d2f32c289ae3d84e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads and returns a comment from the stream.  <a href="class_isis_1_1_pvl_tokenizer.html#aa012d10ecb4c4af3d2f32c289ae3d84e">More...</a><br /></td></tr>
+<tr class="separator:aa012d10ecb4c4af3d2f32c289ae3d84e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8192706edd65d7d95ff8d1877d20ccf9"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#a8192706edd65d7d95ff8d1877d20ccf9">ReadToken</a> (std::istream &amp;stream)</td></tr>
+<tr class="memdesc:a8192706edd65d7d95ff8d1877d20ccf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads and returns a token from the stream.  <a href="class_isis_1_1_pvl_tokenizer.html#a8192706edd65d7d95ff8d1877d20ccf9">More...</a><br /></td></tr>
+<tr class="separator:a8192706edd65d7d95ff8d1877d20ccf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19ab0c2a6dcb619e73224269a9564083"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#a19ab0c2a6dcb619e73224269a9564083">SkipWhiteSpace</a> (std::istream &amp;stream)</td></tr>
+<tr class="memdesc:a19ab0c2a6dcb619e73224269a9564083"><td class="mdescLeft">&#160;</td><td class="mdescRight">Skips over whitespace so long as it is not inside quotes.  <a href="class_isis_1_1_pvl_tokenizer.html#a19ab0c2a6dcb619e73224269a9564083">More...</a><br /></td></tr>
+<tr class="separator:a19ab0c2a6dcb619e73224269a9564083"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3da6a7ca14b0f186397b01a583722bdc"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#a3da6a7ca14b0f186397b01a583722bdc">ReadToSingleQuote</a> (std::istream &amp;stream)</td></tr>
+<tr class="separator:a3da6a7ca14b0f186397b01a583722bdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a663dad65267d4d04ef59679d1fd04002"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#a663dad65267d4d04ef59679d1fd04002">ReadToDoubleQuote</a> (std::istream &amp;stream)</td></tr>
+<tr class="separator:a663dad65267d4d04ef59679d1fd04002"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a631f86a256fed11dacdd820453b81def"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#a631f86a256fed11dacdd820453b81def">ReadToParen</a> (std::istream &amp;stream)</td></tr>
+<tr class="separator:a631f86a256fed11dacdd820453b81def"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45e5c73bbfafd47152c332dd795a775b"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#a45e5c73bbfafd47152c332dd795a775b">ReadToBrace</a> (std::istream &amp;stream)</td></tr>
+<tr class="separator:a45e5c73bbfafd47152c332dd795a775b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad56858d9d0f402e14f9154141292b12f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#ad56858d9d0f402e14f9154141292b12f">ParseCommaList</a> (<a class="el" href="class_isis_1_1_pvl_token.html">Isis::PvlToken</a> &amp;t, const QString &amp;cl)</td></tr>
+<tr class="memdesc:ad56858d9d0f402e14f9154141292b12f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This routine parses a QString containing a comma separated list.  <a href="class_isis_1_1_pvl_tokenizer.html#ad56858d9d0f402e14f9154141292b12f">More...</a><br /></td></tr>
+<tr class="separator:ad56858d9d0f402e14f9154141292b12f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab87eb79ee677624bf2770d9758ec1abc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#ab87eb79ee677624bf2770d9758ec1abc">ValidateCharacter</a> (int c)</td></tr>
+<tr class="memdesc:ab87eb79ee677624bf2770d9758ec1abc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make sure a character is valid printable (non-control) character.  <a href="class_isis_1_1_pvl_tokenizer.html#ab87eb79ee677624bf2770d9758ec1abc">More...</a><br /></td></tr>
+<tr class="separator:ab87eb79ee677624bf2770d9758ec1abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:aad5d6bc2106ddc8f219e28bae70eeedb"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_isis_1_1_pvl_token.html">Isis::PvlToken</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_tokenizer.html#aad5d6bc2106ddc8f219e28bae70eeedb">tokens</a></td></tr>
+<tr class="memdesc:aad5d6bc2106ddc8f219e28bae70eeedb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The array of Tokens parse out of the stream.  <a href="class_isis_1_1_pvl_tokenizer.html#aad5d6bc2106ddc8f219e28bae70eeedb">More...</a><br /></td></tr>
+<tr class="separator:aad5d6bc2106ddc8f219e28bae70eeedb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Construct Token list from a stream. </p>
+<p>This class tokenizes a stream. That is, it will take a stream, from a file or a string, and break the contents of the stream into keyword-value pairs. Examples of such are PDS labels, the standard <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> command line, and VICAR labels. Note that this does not validate the stream to ensure it is of PDS- or VICAR-type. It simply creates a list of keyword-value pairs which can be parsed by another object. The ruleset for tokenizing is straightforward. Consider SPACECRAFT=MARS_GLOBAL_SURVEYOR. The keyword would be SPACECRAFT and the value would be MARS_GLOBAL_SURVEYOR. Other valid examples include: LINES=5, FOCAL_LENGTH=12.4, INSTRUMENT="CAMERA_A", LIST=(0,1,5), and DOGS=("LAB","PUG","BULL"). The later examples, are considered arrays and therefore, will have multiple values associated with the keyword. Comments are allowed in the stream and are indicated by either "#" or "/ *" as the first character on the line.</p>
+<dl class="section author"><dt>Author</dt><dd>2002-02-15 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aedf7e336d04f8ae7a8c565e36bba4462"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedf7e336d04f8ae7a8c565e36bba4462">&#9670;&nbsp;</a></span>PvlTokenizer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlTokenizer::PvlTokenizer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a Tokenizer with an empty token list. </p>
+
+</div>
+</div>
+<a id="a3e8be03c119ca6d7b8a5513faef96a57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e8be03c119ca6d7b8a5513faef96a57">&#9670;&nbsp;</a></span>~PvlTokenizer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlTokenizer::~PvlTokenizer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys the Tokenizer object and token list. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a351691b23d60f200ef02a5cad1dbcc6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a351691b23d60f200ef02a5cad1dbcc6a">&#9670;&nbsp;</a></span>Clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PvlTokenizer::Clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Empties the token list. </p>
+
+</div>
+</div>
+<a id="a7028adbf49c0ea7266d4daf2db2f5eb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7028adbf49c0ea7266d4daf2db2f5eb9">&#9670;&nbsp;</a></span>GetTokenList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; <a class="el" href="class_isis_1_1_pvl_token.html">Isis::PvlToken</a> &gt; &amp; Isis::PvlTokenizer::GetTokenList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aefb9b63b685d8de4f2120dff39bb76ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefb9b63b685d8de4f2120dff39bb76ff">&#9670;&nbsp;</a></span>Load()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PvlTokenizer::Load </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>stream</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>terminator</em> = <code>&quot;END&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Loads the Token list from a stream. </p>
+<p>The loading will be terminated upon reaching either 1) end-of-stream, or 2) a programmer specified terminator QString</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>The input stream to tokenize</td></tr>
+    <tr><td class="paramname">terminator</td><td>If the tokenizer see's this QString as a token in the input stream it will cease tokenizing. Defaults to "END"</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Parse</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_pvl_token.html#ac4c23920dcbbdfd911a94c9e123fcd24">Isis::PvlToken::addValue()</a>, <a class="el" href="class_isis_1_1_pvl_token.html#a8fe7a5dafa267880ac712c3300300ae4">Isis::PvlToken::key()</a>, <a class="el" href="class_isis_1_1_pvl_token.html#a0b07296a3e188fa0511a2e10a7a361e6">Isis::PvlToken::keyUpper()</a>, and <a class="el" href="namespace_isis_1_1_message.html#a7a69de37cc02ac13dbf0f78432ca1433">Isis::Message::KeywordValueBad()</a>.</p>
+
+</div>
+</div>
+<a id="ad56858d9d0f402e14f9154141292b12f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad56858d9d0f402e14f9154141292b12f">&#9670;&nbsp;</a></span>ParseCommaList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PvlTokenizer::ParseCommaList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl_token.html">Isis::PvlToken</a> &amp;&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>cl</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This routine parses a QString containing a comma separated list. </p>
+<p>Each of the items in the list is stored as a value in the Token.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>Token to load the comma separated list</td></tr>
+    <tr><td class="paramname">cl</td><td>QString containing comma separated list </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_token.html#ac4c23920dcbbdfd911a94c9e123fcd24">Isis::PvlToken::addValue()</a>.</p>
+
+</div>
+</div>
+<a id="aa012d10ecb4c4af3d2f32c289ae3d84e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa012d10ecb4c4af3d2f32c289ae3d84e">&#9670;&nbsp;</a></span>ReadComment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlTokenizer::ReadComment </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads and returns a comment from the stream. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>Input stream to read from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString </dd></dl>
+
+</div>
+</div>
+<a id="a45e5c73bbfafd47152c332dd795a775b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45e5c73bbfafd47152c332dd795a775b">&#9670;&nbsp;</a></span>ReadToBrace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlTokenizer::ReadToBrace </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis_1_1_message.html#a74180ce7352f1e2143f2e29d4e9adf7a">Isis::Message::MissingDelimiter()</a>.</p>
+
+</div>
+</div>
+<a id="a663dad65267d4d04ef59679d1fd04002"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a663dad65267d4d04ef59679d1fd04002">&#9670;&nbsp;</a></span>ReadToDoubleQuote()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlTokenizer::ReadToDoubleQuote </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis_1_1_message.html#a74180ce7352f1e2143f2e29d4e9adf7a">Isis::Message::MissingDelimiter()</a>.</p>
+
+</div>
+</div>
+<a id="a8192706edd65d7d95ff8d1877d20ccf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8192706edd65d7d95ff8d1877d20ccf9">&#9670;&nbsp;</a></span>ReadToken()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlTokenizer::ReadToken </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads and returns a token from the stream. </p>
+<p>A token is delimited by either whitespace or an equal sign. In the case of whitespace the token will be considered valueless. That is, there will be no value in the value side of the token (e.g., KEYWORD=).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>Input stream to read from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString </dd></dl>
+
+</div>
+</div>
+<a id="a631f86a256fed11dacdd820453b81def"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a631f86a256fed11dacdd820453b81def">&#9670;&nbsp;</a></span>ReadToParen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlTokenizer::ReadToParen </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis_1_1_message.html#a74180ce7352f1e2143f2e29d4e9adf7a">Isis::Message::MissingDelimiter()</a>.</p>
+
+</div>
+</div>
+<a id="a3da6a7ca14b0f186397b01a583722bdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3da6a7ca14b0f186397b01a583722bdc">&#9670;&nbsp;</a></span>ReadToSingleQuote()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlTokenizer::ReadToSingleQuote </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis_1_1_message.html#a74180ce7352f1e2143f2e29d4e9adf7a">Isis::Message::MissingDelimiter()</a>.</p>
+
+</div>
+</div>
+<a id="a19ab0c2a6dcb619e73224269a9564083"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19ab0c2a6dcb619e73224269a9564083">&#9670;&nbsp;</a></span>SkipWhiteSpace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::PvlTokenizer::SkipWhiteSpace </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Skips over whitespace so long as it is not inside quotes. </p>
+<p>Whitespace is tabs, blanks, line feeds, carriage returns, and NULLs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>Input stream to read from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab87eb79ee677624bf2770d9758ec1abc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab87eb79ee677624bf2770d9758ec1abc">&#9670;&nbsp;</a></span>ValidateCharacter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PvlTokenizer::ValidateCharacter </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Make sure a character is valid printable (non-control) character. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>Character to be validated </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aad5d6bc2106ddc8f219e28bae70eeedb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad5d6bc2106ddc8f219e28bae70eeedb">&#9670;&nbsp;</a></span>tokens</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="class_isis_1_1_pvl_token.html">Isis::PvlToken</a>&gt; Isis::PvlTokenizer::tokens</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The array of Tokens parse out of the stream. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/PvlTokenizer/<a class="el" href="_pvl_tokenizer_8h_source.html">PvlTokenizer.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/PvlTokenizer/<a class="el" href="_pvl_tokenizer_8cpp.html">PvlTokenizer.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_pvl_tokenizer.html">PvlTokenizer</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

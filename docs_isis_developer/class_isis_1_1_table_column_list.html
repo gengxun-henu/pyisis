@@ -1,0 +1,798 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::TableColumnList Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_table_column_list.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_table_column_list-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::TableColumnList Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_table_column_list_8h_source.html">TableColumnList.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::TableColumnList:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_table_column_list__inherit__graph.png" border="0" usemap="#a_isis_1_1_table_column_list_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_table_column_list_inherit__map" id="a_isis_1_1_table_column_list_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,135,153,376"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="44,5,114,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::TableColumnList:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_table_column_list__coll__graph.png" border="0" usemap="#a_isis_1_1_table_column_list_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_table_column_list_coll__map" id="a_isis_1_1_table_column_list_coll__map">
+<area shape="rect" title=" " alt="" coords="5,135,153,376"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="44,5,114,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a28092561cd6513fd3bea0ea4a1a57bb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a28092561cd6513fd3bea0ea4a1a57bb8">sortOutDated</a> ()</td></tr>
+<tr class="separator:a28092561cd6513fd3bea0ea4a1a57bb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ad10a1080a05a13515a17589e6c7f2d14"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#ad10a1080a05a13515a17589e6c7f2d14">TableColumnList</a> ()</td></tr>
+<tr class="separator:ad10a1080a05a13515a17589e6c7f2d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab83d34fec340bde391850b8ad3c60a73"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#ab83d34fec340bde391850b8ad3c60a73">TableColumnList</a> (<a class="el" href="class_isis_1_1_table_column_list.html">TableColumnList</a> const &amp;)</td></tr>
+<tr class="separator:ab83d34fec340bde391850b8ad3c60a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a924926df53513e254b18a5a9693af275"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a924926df53513e254b18a5a9693af275">~TableColumnList</a> ()</td></tr>
+<tr class="separator:a924926df53513e254b18a5a9693af275"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c5b6087afab647bb95940ae404c2871"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *&amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a2c5b6087afab647bb95940ae404c2871">operator[]</a> (int index)</td></tr>
+<tr class="separator:a2c5b6087afab647bb95940ae404c2871"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf086de6206aeec1714a962f66e95cf6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *&amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#aaf086de6206aeec1714a962f66e95cf6">operator[]</a> (QString title)</td></tr>
+<tr class="separator:aaf086de6206aeec1714a962f66e95cf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2217b42c799b9b6632c3d5ef7a0e41c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a2217b42c799b9b6632c3d5ef7a0e41c2">append</a> (<a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *newCol)</td></tr>
+<tr class="separator:a2217b42c799b9b6632c3d5ef7a0e41c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29b58f0be5c1b69bafe3fe6a0161d36e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a29b58f0be5c1b69bafe3fe6a0161d36e">prepend</a> (<a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *newCol)</td></tr>
+<tr class="separator:a29b58f0be5c1b69bafe3fe6a0161d36e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32c745900b9af9a8733bc14ef7b213d5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a32c745900b9af9a8733bc14ef7b213d5">indexOf</a> (<a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *someCol) const</td></tr>
+<tr class="separator:a32c745900b9af9a8733bc14ef7b213d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0db68ed817716b4127b0876deded147"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#ad0db68ed817716b4127b0876deded147">contains</a> (<a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *someCol) const</td></tr>
+<tr class="separator:ad0db68ed817716b4127b0876deded147"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4657632706b6c810ffc9e8593e63529c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a4657632706b6c810ffc9e8593e63529c">contains</a> (QString columnTitle) const</td></tr>
+<tr class="separator:a4657632706b6c810ffc9e8593e63529c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2df44957a3e359880b6de5d3d19b3514"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_q_pair.html">QPair</a>&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a2df44957a3e359880b6de5d3d19b3514">getVisibleXRange</a> (int visibleColumn)</td></tr>
+<tr class="separator:a2df44957a3e359880b6de5d3d19b3514"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab45a572b495870d9bf642baf82e89ab0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table_column_list.html">TableColumnList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#ab45a572b495870d9bf642baf82e89ab0">getVisibleColumns</a> ()</td></tr>
+<tr class="separator:ab45a572b495870d9bf642baf82e89ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6198b3a1774f509dba09c1b18f8031c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#ac6198b3a1774f509dba09c1b18f8031c">getVisibleWidth</a> () const</td></tr>
+<tr class="separator:ac6198b3a1774f509dba09c1b18f8031c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3179ce0166c8e3f458f40ba0d332abe4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a3179ce0166c8e3f458f40ba0d332abe4">getSortingOrder</a> ()</td></tr>
+<tr class="separator:a3179ce0166c8e3f458f40ba0d332abe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af73492770602757beaa29f61d98f5b56"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#af73492770602757beaa29f61d98f5b56">getSortingOrderAsStrings</a> () const</td></tr>
+<tr class="separator:af73492770602757beaa29f61d98f5b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada589c41698643060cf98c451e18b447"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#ada589c41698643060cf98c451e18b447">setSortingOrder</a> (QStringList newOrder)</td></tr>
+<tr class="separator:ada589c41698643060cf98c451e18b447"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6711c21f69daa407c4ff2433e5bc0b6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a6711c21f69daa407c4ff2433e5bc0b6d">lower</a> (<a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *col, bool emitSortOutDated=true)</td></tr>
+<tr class="separator:a6711c21f69daa407c4ff2433e5bc0b6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a891d1d06653891da44f27f40a07233d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a891d1d06653891da44f27f40a07233d1">raise</a> (<a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *col, bool emitSortOutDated=true)</td></tr>
+<tr class="separator:a891d1d06653891da44f27f40a07233d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72a31ef25dd841861a7e50752ab07661"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a72a31ef25dd841861a7e50752ab07661">raiseToTop</a> (<a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *col)</td></tr>
+<tr class="separator:a72a31ef25dd841861a7e50752ab07661"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fd06d2ee268e42ce2d59f5b74a1c6a9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#a5fd06d2ee268e42ce2d59f5b74a1c6a9">size</a> () const</td></tr>
+<tr class="separator:a5fd06d2ee268e42ce2d59f5b74a1c6a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac39c2d3481cef8e17773841a51b6a385"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table_column_list.html">TableColumnList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_column_list.html#ac39c2d3481cef8e17773841a51b6a385">operator=</a> (<a class="el" href="class_isis_1_1_table_column_list.html">TableColumnList</a> other)</td></tr>
+<tr class="separator:ac39c2d3481cef8e17773841a51b6a385"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="section author"><dt>Author</dt><dd>????-??-?? Unknown </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad10a1080a05a13515a17589e6c7f2d14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad10a1080a05a13515a17589e6c7f2d14">&#9670;&nbsp;</a></span>TableColumnList() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableColumnList::TableColumnList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab83d34fec340bde391850b8ad3c60a73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab83d34fec340bde391850b8ad3c60a73">&#9670;&nbsp;</a></span>TableColumnList() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableColumnList::TableColumnList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column_list.html">TableColumnList</a> const &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a924926df53513e254b18a5a9693af275"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a924926df53513e254b18a5a9693af275">&#9670;&nbsp;</a></span>~TableColumnList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableColumnList::~TableColumnList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2217b42c799b9b6632c3d5ef7a0e41c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2217b42c799b9b6632c3d5ef7a0e41c2">&#9670;&nbsp;</a></span>append()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableColumnList::append </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *&#160;</td>
+          <td class="paramname"><em>newCol</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_table_column_list.html#a28092561cd6513fd3bea0ea4a1a57bb8">sortOutDated()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#affd28ed0f94dc2389a85f8b8b4665414">Isis::AbstractMeasureItem::createColumns()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#a6367abd739d87910ac826eac8994ced6">Isis::AbstractPointItem::createColumns()</a>, and <a class="el" href="class_isis_1_1_table_column_list.html#ab45a572b495870d9bf642baf82e89ab0">getVisibleColumns()</a>.</p>
+
+</div>
+</div>
+<a id="a4657632706b6c810ffc9e8593e63529c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4657632706b6c810ffc9e8593e63529c">&#9670;&nbsp;</a></span>contains() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TableColumnList::contains </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>columnTitle</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad0db68ed817716b4127b0876deded147"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0db68ed817716b4127b0876deded147">&#9670;&nbsp;</a></span>contains() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TableColumnList::contains </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *&#160;</td>
+          <td class="paramname"><em>someCol</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_table_column_list.html#a32c745900b9af9a8733bc14ef7b213d5">indexOf()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_column_list.html#ab45a572b495870d9bf642baf82e89ab0">getVisibleColumns()</a>, and <a class="el" href="class_isis_1_1_table_column_list.html#ada589c41698643060cf98c451e18b447">setSortingOrder()</a>.</p>
+
+</div>
+</div>
+<a id="a3179ce0166c8e3f458f40ba0d332abe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3179ce0166c8e3f458f40ba0d332abe4">&#9670;&nbsp;</a></span>getSortingOrder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> * &gt; Isis::TableColumnList::getSortingOrder </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_view_header.html#a199a6902e1c866b1ecc12cbdc7fa5f50">Isis::TableViewHeader::mouseMoveEvent()</a>, <a class="el" href="class_isis_1_1_table_view_header.html#a22d6b4f713142b0202b5d3ba7b5eb286">Isis::TableViewHeader::mouseReleaseEvent()</a>, and <a class="el" href="class_isis_1_1_abstract_table_model.html#a7b3f20c2517f3f108419d3fbc9f3ae21">Isis::AbstractTableModel::sort()</a>.</p>
+
+</div>
+</div>
+<a id="af73492770602757beaa29f61d98f5b56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af73492770602757beaa29f61d98f5b56">&#9670;&nbsp;</a></span>getSortingOrderAsStrings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::TableColumnList::getSortingOrderAsStrings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_view.html#a559e2a540c38e2ab75799d45d6868cde">Isis::TableView::~TableView()</a>.</p>
+
+</div>
+</div>
+<a id="ab45a572b495870d9bf642baf82e89ab0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab45a572b495870d9bf642baf82e89ab0">&#9670;&nbsp;</a></span>getVisibleColumns()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table_column_list.html">TableColumnList</a> Isis::TableColumnList::getVisibleColumns </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_table_column_list.html#a2217b42c799b9b6632c3d5ef7a0e41c2">append()</a>, <a class="el" href="class_isis_1_1_table_column_list.html#ad0db68ed817716b4127b0876deded147">contains()</a>, and <a class="el" href="class_isis_1_1_table_column_list.html#a5fd06d2ee268e42ce2d59f5b74a1c6a9">size()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_column_list.html#a2df44957a3e359880b6de5d3d19b3514">getVisibleXRange()</a>, <a class="el" href="class_isis_1_1_table_view_header.html#ae2c7b4ecc732c0e15cc4ba31ae81e792">Isis::TableViewHeader::handleFilterCountsChanged()</a>, <a class="el" href="class_isis_1_1_table_view_content.html#aad6162a4260edcf221c8b628022d5abc">Isis::TableViewContent::keyPressEvent()</a>, <a class="el" href="class_isis_1_1_table_view_content.html#a0ae678b0d504aca266d8da304bab14f1">Isis::TableViewContent::mouseDoubleClickEvent()</a>, <a class="el" href="class_isis_1_1_table_view_header.html#a199a6902e1c866b1ecc12cbdc7fa5f50">Isis::TableViewHeader::mouseMoveEvent()</a>, <a class="el" href="class_isis_1_1_table_view_content.html#a3c7fd4e97c41a70baa0bceda3182faf0">Isis::TableViewContent::mousePressEvent()</a>, <a class="el" href="class_isis_1_1_table_view_header.html#aa75655a798a1c0e8b4b3a479b16dafc2">Isis::TableViewHeader::mousePressEvent()</a>, <a class="el" href="class_isis_1_1_table_view_header.html#a22d6b4f713142b0202b5d3ba7b5eb286">Isis::TableViewHeader::mouseReleaseEvent()</a>, and <a class="el" href="class_isis_1_1_table_view_content.html#a84d50b94201f1b03dbcadb24cb559874">Isis::TableViewContent::updateHorizontalScrollBar()</a>.</p>
+
+</div>
+</div>
+<a id="ac6198b3a1774f509dba09c1b18f8031c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6198b3a1774f509dba09c1b18f8031c">&#9670;&nbsp;</a></span>getVisibleWidth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::TableColumnList::getVisibleWidth </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_table_column_list.html#a5fd06d2ee268e42ce2d59f5b74a1c6a9">size()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_view_content.html#a2b8dc6978e3cb379bbb28f18ca81d98d">Isis::TableViewContent::paintEvent()</a>.</p>
+
+</div>
+</div>
+<a id="a2df44957a3e359880b6de5d3d19b3514"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2df44957a3e359880b6de5d3d19b3514">&#9670;&nbsp;</a></span>getVisibleXRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_q_pair.html">QPair</a>&lt; int, int &gt; Isis::TableColumnList::getVisibleXRange </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>visibleColumn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>minX, maxX in a pair </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_table_column_list.html#ab45a572b495870d9bf642baf82e89ab0">getVisibleColumns()</a>, and <a class="el" href="class_isis_1_1_table_column_list.html#a5fd06d2ee268e42ce2d59f5b74a1c6a9">size()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_view_content.html#a2b8dc6978e3cb379bbb28f18ca81d98d">Isis::TableViewContent::paintEvent()</a>.</p>
+
+</div>
+</div>
+<a id="a32c745900b9af9a8733bc14ef7b213d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32c745900b9af9a8733bc14ef7b213d5">&#9670;&nbsp;</a></span>indexOf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::TableColumnList::indexOf </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *&#160;</td>
+          <td class="paramname"><em>someCol</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_column_list.html#ad0db68ed817716b4127b0876deded147">contains()</a>.</p>
+
+</div>
+</div>
+<a id="a6711c21f69daa407c4ff2433e5bc0b6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6711c21f69daa407c4ff2433e5bc0b6d">&#9670;&nbsp;</a></span>lower()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableColumnList::lower </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *&#160;</td>
+          <td class="paramname"><em>col</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>emitSortOutDated</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_table_column_list.html#a5fd06d2ee268e42ce2d59f5b74a1c6a9">size()</a>, and <a class="el" href="class_isis_1_1_table_column_list.html#a28092561cd6513fd3bea0ea4a1a57bb8">sortOutDated()</a>.</p>
+
+</div>
+</div>
+<a id="ac39c2d3481cef8e17773841a51b6a385"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac39c2d3481cef8e17773841a51b6a385">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table_column_list.html">TableColumnList</a> &amp; Isis::TableColumnList::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column_list.html">TableColumnList</a>&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2c5b6087afab647bb95940ae404c2871"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c5b6087afab647bb95940ae404c2871">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *&amp; Isis::TableColumnList::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaf086de6206aeec1714a962f66e95cf6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf086de6206aeec1714a962f66e95cf6">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *&amp; Isis::TableColumnList::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>title</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+</div>
+</div>
+<a id="a29b58f0be5c1b69bafe3fe6a0161d36e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29b58f0be5c1b69bafe3fe6a0161d36e">&#9670;&nbsp;</a></span>prepend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableColumnList::prepend </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *&#160;</td>
+          <td class="paramname"><em>newCol</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_view.html#afadfb5879737adbdfe8b9c87ce8d0352">Isis::TableView::TableView()</a>.</p>
+
+</div>
+</div>
+<a id="a891d1d06653891da44f27f40a07233d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a891d1d06653891da44f27f40a07233d1">&#9670;&nbsp;</a></span>raise()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableColumnList::raise </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *&#160;</td>
+          <td class="paramname"><em>col</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>emitSortOutDated</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_table_column_list.html#a28092561cd6513fd3bea0ea4a1a57bb8">sortOutDated()</a>.</p>
+
+</div>
+</div>
+<a id="a72a31ef25dd841861a7e50752ab07661"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72a31ef25dd841861a7e50752ab07661">&#9670;&nbsp;</a></span>raiseToTop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableColumnList::raiseToTop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> *&#160;</td>
+          <td class="paramname"><em>col</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_table_column_list.html#a28092561cd6513fd3bea0ea4a1a57bb8">sortOutDated()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_view_header.html#a22d6b4f713142b0202b5d3ba7b5eb286">Isis::TableViewHeader::mouseReleaseEvent()</a>, and <a class="el" href="class_isis_1_1_table_column_list.html#ada589c41698643060cf98c451e18b447">setSortingOrder()</a>.</p>
+
+</div>
+</div>
+<a id="ada589c41698643060cf98c451e18b447"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada589c41698643060cf98c451e18b447">&#9670;&nbsp;</a></span>setSortingOrder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableColumnList::setSortingOrder </td>
+          <td>(</td>
+          <td class="paramtype">QStringList&#160;</td>
+          <td class="paramname"><em>newOrder</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_table_column_list.html#ad0db68ed817716b4127b0876deded147">contains()</a>, and <a class="el" href="class_isis_1_1_table_column_list.html#a72a31ef25dd841861a7e50752ab07661">raiseToTop()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_view.html#afadfb5879737adbdfe8b9c87ce8d0352">Isis::TableView::TableView()</a>.</p>
+
+</div>
+</div>
+<a id="a5fd06d2ee268e42ce2d59f5b74a1c6a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fd06d2ee268e42ce2d59f5b74a1c6a9">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::TableColumnList::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_column_list.html#ab45a572b495870d9bf642baf82e89ab0">getVisibleColumns()</a>, <a class="el" href="class_isis_1_1_table_column_list.html#ac6198b3a1774f509dba09c1b18f8031c">getVisibleWidth()</a>, <a class="el" href="class_isis_1_1_table_column_list.html#a2df44957a3e359880b6de5d3d19b3514">getVisibleXRange()</a>, <a class="el" href="class_isis_1_1_table_view_header.html#ae2c7b4ecc732c0e15cc4ba31ae81e792">Isis::TableViewHeader::handleFilterCountsChanged()</a>, <a class="el" href="class_isis_1_1_table_column_list.html#a6711c21f69daa407c4ff2433e5bc0b6d">lower()</a>, <a class="el" href="class_isis_1_1_table_view_header.html#a22d6b4f713142b0202b5d3ba7b5eb286">Isis::TableViewHeader::mouseReleaseEvent()</a>, <a class="el" href="class_isis_1_1_table_view.html#ad66eac89931730688a34f6826893f66c">Isis::TableView::setColumnVisible()</a>, <a class="el" href="class_isis_1_1_table_view_header.html#a44a6a11860d9fcf2595d9c41187c0614">Isis::TableViewHeader::setModel()</a>, <a class="el" href="class_isis_1_1_table_view.html#afadfb5879737adbdfe8b9c87ce8d0352">Isis::TableView::TableView()</a>, <a class="el" href="class_isis_1_1_table_view_content.html#a9fde17a610870830485253ffcf51449c">Isis::TableViewContent::TableViewContent()</a>, <a class="el" href="class_isis_1_1_table_view_content.html#a84d50b94201f1b03dbcadb24cb559874">Isis::TableViewContent::updateHorizontalScrollBar()</a>, <a class="el" href="class_isis_1_1_abstract_table_model.html#a7b2da16fb32f63a8a9b581103c636207">Isis::AbstractTableModel::~AbstractTableModel()</a>, and <a class="el" href="class_isis_1_1_table_view.html#a559e2a540c38e2ab75799d45d6868cde">Isis::TableView::~TableView()</a>.</p>
+
+</div>
+</div>
+<a id="a28092561cd6513fd3bea0ea4a1a57bb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28092561cd6513fd3bea0ea4a1a57bb8">&#9670;&nbsp;</a></span>sortOutDated</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableColumnList::sortOutDated </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_column_list.html#a2217b42c799b9b6632c3d5ef7a0e41c2">append()</a>, <a class="el" href="class_isis_1_1_table_column_list.html#a6711c21f69daa407c4ff2433e5bc0b6d">lower()</a>, <a class="el" href="class_isis_1_1_table_column_list.html#a891d1d06653891da44f27f40a07233d1">raise()</a>, and <a class="el" href="class_isis_1_1_table_column_list.html#a72a31ef25dd841861a7e50752ab07661">raiseToTop()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_table_column_list_8h_source.html">TableColumnList.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_table_column_list_8cpp.html">TableColumnList.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_table_column_list.html">TableColumnList</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,1086 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::CubeAttributeOutput Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_cube_attribute_output.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_cube_attribute_output-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::CubeAttributeOutput Class Reference<div class="ingroups"><a class="el" href="group___parsing.html">Parsing</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Manipulate and parse attributes of output cube filenames.  
+ <a href="class_isis_1_1_cube_attribute_output.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_cube_attribute_8h_source.html">CubeAttribute.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::CubeAttributeOutput:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_cube_attribute_output__inherit__graph.png" border="0" usemap="#a_isis_1_1_cube_attribute_output_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_cube_attribute_output_inherit__map" id="a_isis_1_1_cube_attribute_output_inherit__map">
+<area shape="rect" title="Manipulate and parse attributes of output cube filenames." alt="" coords="5,311,214,552"/>
+<area shape="rect" href="class_isis_1_1_cube_attribute.html" title=" " alt="" coords="27,5,192,263"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::CubeAttributeOutput:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_cube_attribute_output__coll__graph.png" border="0" usemap="#a_isis_1_1_cube_attribute_output_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_cube_attribute_output_coll__map" id="a_isis_1_1_cube_attribute_output_coll__map">
+<area shape="rect" title="Manipulate and parse attributes of output cube filenames." alt="" coords="5,311,214,552"/>
+<area shape="rect" href="class_isis_1_1_cube_attribute.html" title=" " alt="" coords="27,5,192,263"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a9a42b3fadafdd3971866f24a1c073c00"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a9a42b3fadafdd3971866f24a1c073c00">CubeAttributeOutput</a> ()</td></tr>
+<tr class="memdesc:a9a42b3fadafdd3971866f24a1c073c00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an empty <a class="el" href="class_isis_1_1_cube_attribute_output.html" title="Manipulate and parse attributes of output cube filenames.">CubeAttributeOutput</a>.  <a href="class_isis_1_1_cube_attribute_output.html#a9a42b3fadafdd3971866f24a1c073c00">More...</a><br /></td></tr>
+<tr class="separator:a9a42b3fadafdd3971866f24a1c073c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9445c768a89d92be2e5f37da9a3b158d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a9445c768a89d92be2e5f37da9a3b158d">CubeAttributeOutput</a> (const <a class="el" href="class_isis_1_1_file_name.html">FileName</a> &amp;fileName)</td></tr>
+<tr class="memdesc:a9445c768a89d92be2e5f37da9a3b158d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_cube_attribute_output.html" title="Manipulate and parse attributes of output cube filenames.">CubeAttributeOutput</a> and initialized it with the contents of the string parameter.  <a href="class_isis_1_1_cube_attribute_output.html#a9445c768a89d92be2e5f37da9a3b158d">More...</a><br /></td></tr>
+<tr class="separator:a9445c768a89d92be2e5f37da9a3b158d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab50e1e4a57512b3dde7b62dc384cb32d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#ab50e1e4a57512b3dde7b62dc384cb32d">~CubeAttributeOutput</a> ()</td></tr>
+<tr class="memdesc:ab50e1e4a57512b3dde7b62dc384cb32d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object.  <a href="class_isis_1_1_cube_attribute_output.html#ab50e1e4a57512b3dde7b62dc384cb32d">More...</a><br /></td></tr>
+<tr class="separator:ab50e1e4a57512b3dde7b62dc384cb32d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3da47788e4ba529ac5a0cf1e40bc9ff1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a3da47788e4ba529ac5a0cf1e40bc9ff1">propagatePixelType</a> () const</td></tr>
+<tr class="memdesc:a3da47788e4ba529ac5a0cf1e40bc9ff1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if the pixel type is to be propagated from an input cube.  <a href="class_isis_1_1_cube_attribute_output.html#a3da47788e4ba529ac5a0cf1e40bc9ff1">More...</a><br /></td></tr>
+<tr class="separator:a3da47788e4ba529ac5a0cf1e40bc9ff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cf00e4da05bab1fd03370ef3b11690f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a3cf00e4da05bab1fd03370ef3b11690f">propagateMinimumMaximum</a> () const</td></tr>
+<tr class="memdesc:a3cf00e4da05bab1fd03370ef3b11690f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if the min/max are to be propagated from an input cube.  <a href="class_isis_1_1_cube_attribute_output.html#a3cf00e4da05bab1fd03370ef3b11690f">More...</a><br /></td></tr>
+<tr class="separator:a3cf00e4da05bab1fd03370ef3b11690f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a582ce8e7863d0d63693e9fedf7dbb3a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_cube.html#ab700c3f820b5af8a399fca3168cfd17e">Cube::Format</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a582ce8e7863d0d63693e9fedf7dbb3a0">fileFormat</a> () const</td></tr>
+<tr class="memdesc:a582ce8e7863d0d63693e9fedf7dbb3a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the file format an <a class="el" href="class_isis_1_1_cube.html#ab700c3f820b5af8a399fca3168cfd17e" title="These are the possible storage formats of ISIS cubes.">Cube::Format</a>.  <a href="class_isis_1_1_cube_attribute_output.html#a582ce8e7863d0d63693e9fedf7dbb3a0">More...</a><br /></td></tr>
+<tr class="separator:a582ce8e7863d0d63693e9fedf7dbb3a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66c81f666941ce8cd5f9ff7b095b7e76"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a66c81f666941ce8cd5f9ff7b095b7e76">fileFormatString</a> () const</td></tr>
+<tr class="memdesc:a66c81f666941ce8cd5f9ff7b095b7e76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the file format as a string.  <a href="class_isis_1_1_cube_attribute_output.html#a66c81f666941ce8cd5f9ff7b095b7e76">More...</a><br /></td></tr>
+<tr class="separator:a66c81f666941ce8cd5f9ff7b095b7e76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acafa9a0b38075507237861f6dd41dc96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#acafa9a0b38075507237861f6dd41dc96">setFileFormat</a> (<a class="el" href="class_isis_1_1_cube.html#ab700c3f820b5af8a399fca3168cfd17e">Cube::Format</a> fmt)</td></tr>
+<tr class="memdesc:acafa9a0b38075507237861f6dd41dc96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the format to the fmt parameter.  <a href="class_isis_1_1_cube_attribute_output.html#acafa9a0b38075507237861f6dd41dc96">More...</a><br /></td></tr>
+<tr class="separator:acafa9a0b38075507237861f6dd41dc96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bb9458fb5a0b1120aad8822f56259a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___utility.html#ga7e1eea4515d0ddbe7f32cb0305a51fcb">ByteOrder</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a0bb9458fb5a0b1120aad8822f56259a5">byteOrder</a> () const</td></tr>
+<tr class="memdesc:a0bb9458fb5a0b1120aad8822f56259a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the byte order as an <a class="el" href="group___utility.html#ga7e1eea4515d0ddbe7f32cb0305a51fcb" title="Tests the current architecture for byte order.">Isis::ByteOrder</a>.  <a href="class_isis_1_1_cube_attribute_output.html#a0bb9458fb5a0b1120aad8822f56259a5">More...</a><br /></td></tr>
+<tr class="separator:a0bb9458fb5a0b1120aad8822f56259a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ff5d0fd847e541c164f2cd4b21863f4"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a8ff5d0fd847e541c164f2cd4b21863f4">byteOrderString</a> () const</td></tr>
+<tr class="memdesc:a8ff5d0fd847e541c164f2cd4b21863f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the byte order as a string.  <a href="class_isis_1_1_cube_attribute_output.html#a8ff5d0fd847e541c164f2cd4b21863f4">More...</a><br /></td></tr>
+<tr class="separator:a8ff5d0fd847e541c164f2cd4b21863f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33d10b034136cad7bace130b30497a27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a33d10b034136cad7bace130b30497a27">setByteOrder</a> (<a class="el" href="group___utility.html#ga7e1eea4515d0ddbe7f32cb0305a51fcb">ByteOrder</a> order)</td></tr>
+<tr class="memdesc:a33d10b034136cad7bace130b30497a27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the order according to the parameter order.  <a href="class_isis_1_1_cube_attribute_output.html#a33d10b034136cad7bace130b30497a27">More...</a><br /></td></tr>
+<tr class="separator:a33d10b034136cad7bace130b30497a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05aa5c96a6281f6aa8d9f7287aed78a7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a05aa5c96a6281f6aa8d9f7287aed78a7">minimum</a> () const</td></tr>
+<tr class="memdesc:a05aa5c96a6281f6aa8d9f7287aed78a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the output cube attribute minimum.  <a href="class_isis_1_1_cube_attribute_output.html#a05aa5c96a6281f6aa8d9f7287aed78a7">More...</a><br /></td></tr>
+<tr class="separator:a05aa5c96a6281f6aa8d9f7287aed78a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12d4add4a6f2c81e8aae72d3b018a4da"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a12d4add4a6f2c81e8aae72d3b018a4da">maximum</a> () const</td></tr>
+<tr class="memdesc:a12d4add4a6f2c81e8aae72d3b018a4da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the output cube attribute maximum.  <a href="class_isis_1_1_cube_attribute_output.html#a12d4add4a6f2c81e8aae72d3b018a4da">More...</a><br /></td></tr>
+<tr class="separator:a12d4add4a6f2c81e8aae72d3b018a4da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafd3624e5122bbd0723a60edba711ac0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#aafd3624e5122bbd0723a60edba711ac0">setMinimum</a> (double min)</td></tr>
+<tr class="memdesc:aafd3624e5122bbd0723a60edba711ac0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the output cube attribute minimum.  <a href="class_isis_1_1_cube_attribute_output.html#aafd3624e5122bbd0723a60edba711ac0">More...</a><br /></td></tr>
+<tr class="separator:aafd3624e5122bbd0723a60edba711ac0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab074f2fd6a1eb5ea6b7600e2bd4fca87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#ab074f2fd6a1eb5ea6b7600e2bd4fca87">setMaximum</a> (double max)</td></tr>
+<tr class="memdesc:ab074f2fd6a1eb5ea6b7600e2bd4fca87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the output cube attribute maximum.  <a href="class_isis_1_1_cube_attribute_output.html#ab074f2fd6a1eb5ea6b7600e2bd4fca87">More...</a><br /></td></tr>
+<tr class="separator:ab074f2fd6a1eb5ea6b7600e2bd4fca87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6b87435542582382085bf5cd85bdd99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">PixelType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#aa6b87435542582382085bf5cd85bdd99">pixelType</a> () const</td></tr>
+<tr class="memdesc:aa6b87435542582382085bf5cd85bdd99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the pixel type as an <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f" title="Enumerations for Isis Pixel Types.">Isis::PixelType</a>.  <a href="class_isis_1_1_cube_attribute_output.html#aa6b87435542582382085bf5cd85bdd99">More...</a><br /></td></tr>
+<tr class="separator:aa6b87435542582382085bf5cd85bdd99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac900e6ac88c8d7baf8323c0e38c57dca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#ac900e6ac88c8d7baf8323c0e38c57dca">setPixelType</a> (<a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">PixelType</a> type)</td></tr>
+<tr class="memdesc:ac900e6ac88c8d7baf8323c0e38c57dca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the pixel type to that given by the parameter.  <a href="class_isis_1_1_cube_attribute_output.html#ac900e6ac88c8d7baf8323c0e38c57dca">More...</a><br /></td></tr>
+<tr class="separator:ac900e6ac88c8d7baf8323c0e38c57dca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a47e9955e979c2dca4e7b7b718e0228"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a0a47e9955e979c2dca4e7b7b718e0228">setLabelAttachment</a> (<a class="el" href="namespace_isis.html#a7ab17d7eac74ed25b3531aa34f8ad474">LabelAttachment</a> attachment)</td></tr>
+<tr class="memdesc:a0a47e9955e979c2dca4e7b7b718e0228"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the label attachment type to the parameter value.  <a href="class_isis_1_1_cube_attribute_output.html#a0a47e9955e979c2dca4e7b7b718e0228">More...</a><br /></td></tr>
+<tr class="separator:a0a47e9955e979c2dca4e7b7b718e0228"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03d290f0c30545b955ddbccf86a48e1a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#a7ab17d7eac74ed25b3531aa34f8ad474">LabelAttachment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute_output.html#a03d290f0c30545b955ddbccf86a48e1a">labelAttachment</a> () const</td></tr>
+<tr class="separator:a03d290f0c30545b955ddbccf86a48e1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dfa36ee9466e7d62e568d9a6e3ea0b4"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute.html#a6dfa36ee9466e7d62e568d9a6e3ea0b4">toString</a> () const</td></tr>
+<tr class="memdesc:a6dfa36ee9466e7d62e568d9a6e3ea0b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a string-representation of this cube attributes.  <a href="class_isis_1_1_cube_attribute.html#a6dfa36ee9466e7d62e568d9a6e3ea0b4">More...</a><br /></td></tr>
+<tr class="separator:a6dfa36ee9466e7d62e568d9a6e3ea0b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dac6d1321246321cad35ff8677f101b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute.html#a6dac6d1321246321cad35ff8677f101b">addAttribute</a> (QString attribute)</td></tr>
+<tr class="memdesc:a6dac6d1321246321cad35ff8677f101b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a single attribute to these attributes.  <a href="class_isis_1_1_cube_attribute.html#a6dac6d1321246321cad35ff8677f101b">More...</a><br /></td></tr>
+<tr class="separator:a6dac6d1321246321cad35ff8677f101b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32ee59db814b17a1a0ff35916d7712c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute.html#a32ee59db814b17a1a0ff35916d7712c2">addAttributes</a> (const <a class="el" href="class_isis_1_1_file_name.html">FileName</a> &amp;fileNameWithAtts)</td></tr>
+<tr class="memdesc:a32ee59db814b17a1a0ff35916d7712c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append the attributes found in the filename to these cube attributes.  <a href="class_isis_1_1_cube_attribute.html#a32ee59db814b17a1a0ff35916d7712c2">More...</a><br /></td></tr>
+<tr class="separator:a32ee59db814b17a1a0ff35916d7712c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2f4526db429063186e38ec19a94086b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute.html#ae2f4526db429063186e38ec19a94086b">addAttributes</a> (const char *attributesString)</td></tr>
+<tr class="memdesc:ae2f4526db429063186e38ec19a94086b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append the attributes in the string to these cube attributes.  <a href="class_isis_1_1_cube_attribute.html#ae2f4526db429063186e38ec19a94086b">More...</a><br /></td></tr>
+<tr class="separator:ae2f4526db429063186e38ec19a94086b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f6cb8d2b736543cb60f4d7902910cce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute.html#a9f6cb8d2b736543cb60f4d7902910cce">addAttributes</a> (const QString &amp;attributesString)</td></tr>
+<tr class="memdesc:a9f6cb8d2b736543cb60f4d7902910cce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append the attributes in the string to these cube attributes.  <a href="class_isis_1_1_cube_attribute.html#a9f6cb8d2b736543cb60f4d7902910cce">More...</a><br /></td></tr>
+<tr class="separator:a9f6cb8d2b736543cb60f4d7902910cce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abed79fd1cf4bff98ddd04219ebe953be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute.html#abed79fd1cf4bff98ddd04219ebe953be">setAttributes</a> (const <a class="el" href="class_isis_1_1_file_name.html">FileName</a> &amp;fileName)</td></tr>
+<tr class="memdesc:abed79fd1cf4bff98ddd04219ebe953be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces the current attributes with the attributes in the given file name.  <a href="class_isis_1_1_cube_attribute.html#abed79fd1cf4bff98ddd04219ebe953be">More...</a><br /></td></tr>
+<tr class="separator:abed79fd1cf4bff98ddd04219ebe953be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:aa33834ba68ddfc08f69be64d4f4e58f0"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute.html#aa33834ba68ddfc08f69be64d4f4e58f0">attributeList</a> (bool(ChildClass::*tester)(QString) const) const</td></tr>
+<tr class="memdesc:aa33834ba68ddfc08f69be64d4f4e58f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of attributes that the tester returns true on.  <a href="class_isis_1_1_cube_attribute.html#aa33834ba68ddfc08f69be64d4f4e58f0">More...</a><br /></td></tr>
+<tr class="separator:aa33834ba68ddfc08f69be64d4f4e58f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acae032944428f40a18ac7be7fa7aa02c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_attribute.html#acae032944428f40a18ac7be7fa7aa02c">setAttribute</a> (QString newValue, bool(ChildClass::*tester)(QString) const)</td></tr>
+<tr class="memdesc:acae032944428f40a18ac7be7fa7aa02c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the attribute(s) for which tester returns true to newValue.  <a href="class_isis_1_1_cube_attribute.html#acae032944428f40a18ac7be7fa7aa02c">More...</a><br /></td></tr>
+<tr class="separator:acae032944428f40a18ac7be7fa7aa02c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Manipulate and parse attributes of output cube filenames. </p>
+<p>This class provides parsing and manipulation of attributes associated with output cube filenames. Output cube filenames can have an attributes of "minimum:maximum", "pixel type", "file format", "byte order", and "label placement"</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_aml.html" title="Application program XML file parameter manager.">IsisAml</a> IsisGui</dd></dl>
+<dl class="section author"><dt>Author</dt><dd>2003-07-29 Stuart Sides </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a9a42b3fadafdd3971866f24a1c073c00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a42b3fadafdd3971866f24a1c073c00">&#9670;&nbsp;</a></span>CubeAttributeOutput() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CubeAttributeOutput::CubeAttributeOutput </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an empty <a class="el" href="class_isis_1_1_cube_attribute_output.html" title="Manipulate and parse attributes of output cube filenames.">CubeAttributeOutput</a>. </p>
+
+</div>
+</div>
+<a id="a9445c768a89d92be2e5f37da9a3b158d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9445c768a89d92be2e5f37da9a3b158d">&#9670;&nbsp;</a></span>CubeAttributeOutput() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CubeAttributeOutput::CubeAttributeOutput </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_file_name.html">FileName</a> &amp;&#160;</td>
+          <td class="paramname"><em>fileName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_cube_attribute_output.html" title="Manipulate and parse attributes of output cube filenames.">CubeAttributeOutput</a> and initialized it with the contents of the string parameter. </p>
+<p>The string is parased to obtain any min/max, pixel type, byte order, file format or label placement. Any attribute information that is not valie for an output cube will throw an error.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">att</td><td>A string containing the file attributes. All characters before the first "+" are assumed to be the filename and are ignored. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab50e1e4a57512b3dde7b62dc384cb32d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab50e1e4a57512b3dde7b62dc384cb32d">&#9670;&nbsp;</a></span>~CubeAttributeOutput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CubeAttributeOutput::~CubeAttributeOutput </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys the object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6dac6d1321246321cad35ff8677f101b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dac6d1321246321cad35ff8677f101b">&#9670;&nbsp;</a></span>addAttribute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_isis_1_1_cube_attribute.html">Isis::CubeAttribute</a>&lt; <a class="el" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a>  &gt;::addAttribute </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>attribute</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add a single attribute to these attributes. </p>
+<p>This attribute should NOT have a '+' in it. For example, if you wanted to add BandSequential to the <a class="el" href="class_isis_1_1_cube_attribute_output.html" title="Manipulate and parse attributes of output cube filenames.">CubeAttributeOutput</a> class, you could call addAttribute("BSQ") or addAttribute("BandSequential") or any valid deviation of that string. This will preserve existing attributes unless it's of the same type (if Tile was already set, then this will overwrite Tile). If the attribute is unrecognized or ambiguous, then an exception will be thrown.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">attribute</td><td>The attribute we're adding to the current cube attributes </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae2f4526db429063186e38ec19a94086b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2f4526db429063186e38ec19a94086b">&#9670;&nbsp;</a></span>addAttributes() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_isis_1_1_cube_attribute.html">Isis::CubeAttribute</a>&lt; <a class="el" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a>  &gt;::addAttributes </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>attributesString</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Append the attributes in the string to these cube attributes. </p>
+<p>This will call <a class="el" href="class_isis_1_1_cube_attribute.html#a6dac6d1321246321cad35ff8677f101b" title="Add a single attribute to these attributes.">addAttribute()</a> for every attribute in the string. The initial "+" is not expected but allowed. This should NOT be called with a file name.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">attributesString</td><td>A string of recognizable attributes, for example "+Bsq+Real" or "Bsq+Real" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a32ee59db814b17a1a0ff35916d7712c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32ee59db814b17a1a0ff35916d7712c2">&#9670;&nbsp;</a></span>addAttributes() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_isis_1_1_cube_attribute.html">Isis::CubeAttribute</a>&lt; <a class="el" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a>  &gt;::addAttributes </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_file_name.html">FileName</a> &amp;&#160;</td>
+          <td class="paramname"><em>fileNameWithAtts</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Append the attributes found in the filename to these cube attributes. </p>
+<p>This will call <a class="el" href="class_isis_1_1_cube_attribute.html#a6dac6d1321246321cad35ff8677f101b" title="Add a single attribute to these attributes.">addAttribute()</a> for every attribute found in the file name.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_file_name.html#ad63a0af5a1ba15b2e11b1c37ecaa0300" title="Returns a QString of the attributes in a filename, attributes are expected to be of type CubeAttribut...">FileName::attributes()</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileNameWithAtts</td><td>A filename with attributes appended, for example <a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a>("out.cub+Bsq") </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9f6cb8d2b736543cb60f4d7902910cce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f6cb8d2b736543cb60f4d7902910cce">&#9670;&nbsp;</a></span>addAttributes() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_isis_1_1_cube_attribute.html">Isis::CubeAttribute</a>&lt; <a class="el" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a>  &gt;::addAttributes </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>attributesString</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Append the attributes in the string to these cube attributes. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_cube_attribute.html#ae2f4526db429063186e38ec19a94086b" title="Append the attributes in the string to these cube attributes.">addAttributes(const char *)</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">attributesString</td><td>A string of recognizable attributes, for example "+Bsq+Real" or "Bsq+Real" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa33834ba68ddfc08f69be64d4f4e58f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa33834ba68ddfc08f69be64d4f4e58f0">&#9670;&nbsp;</a></span>attributeList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList <a class="el" href="class_isis_1_1_cube_attribute.html">Isis::CubeAttribute</a>&lt; <a class="el" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a>  &gt;::attributeList </td>
+          <td>(</td>
+          <td class="paramtype">bool(ChildClass::*)(QString) const&#160;</td>
+          <td class="paramname"><em>tester</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a list of attributes that the tester returns true on. </p>
+<p>This is helpful for accessing the values of existing attributes. The strings will always be the UPPER CASE version of the attribute, i.e. not Bsq but BSQ. The returned attributes do not contain delimiters.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tester</td><td>A method that determines whether the attribute should be returned/is relevant </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A list of attributes for which the tester returns true on. </dd></dl>
+
+</div>
+</div>
+<a id="a0bb9458fb5a0b1120aad8822f56259a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bb9458fb5a0b1120aad8822f56259a5">&#9670;&nbsp;</a></span>byteOrder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group___utility.html#ga7e1eea4515d0ddbe7f32cb0305a51fcb">ByteOrder</a> Isis::CubeAttributeOutput::byteOrder </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the byte order as an <a class="el" href="group___utility.html#ga7e1eea4515d0ddbe7f32cb0305a51fcb" title="Tests the current architecture for byte order.">Isis::ByteOrder</a>. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_attribute.html#aa33834ba68ddfc08f69be64d4f4e58f0">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::attributeList()</a>, <a class="el" href="namespace_isis.html#a02a26b367dac34ab63d57182352e7f91">Isis::IsLsb()</a>, <a class="el" href="group___utility.html#gga7e1eea4515d0ddbe7f32cb0305a51fcbae56c06f7bd9ac0b0c7c805b5d1dff5d9">Isis::Lsb</a>, and <a class="el" href="group___utility.html#gga7e1eea4515d0ddbe7f32cb0305a51fcbad8f628bddc4c964a0b27cab2f7dce617">Isis::Msb</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_attribute_output.html#a8ff5d0fd847e541c164f2cd4b21863f4">byteOrderString()</a>, <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="class_isis_1_1_cube.html#a946dbcaeaa51ad192c4ed2a613c600a2">Isis::Cube::create()</a>, <a class="el" href="class_isis_1_1_gui_output_attribute.html#ae35bae09876d21751dc77e120542e7d8">Isis::GuiOutputAttribute::SetAttributes()</a>, and <a class="el" href="class_isis_1_1_process.html#a34b4c9666bd3535fe9c27535fa0e44dd">Isis::Process::SetOutputCube()</a>.</p>
+
+</div>
+</div>
+<a id="a8ff5d0fd847e541c164f2cd4b21863f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ff5d0fd847e541c164f2cd4b21863f4">&#9670;&nbsp;</a></span>byteOrderString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::CubeAttributeOutput::byteOrderString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the byte order as a string. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_attribute_output.html#a0bb9458fb5a0b1120aad8822f56259a5">byteOrder()</a>, and <a class="el" href="namespace_isis.html#a4a3d356261343da0c622a52befad29e6">Isis::ByteOrderName()</a>.</p>
+
+</div>
+</div>
+<a id="a582ce8e7863d0d63693e9fedf7dbb3a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a582ce8e7863d0d63693e9fedf7dbb3a0">&#9670;&nbsp;</a></span>fileFormat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cube.html#ab700c3f820b5af8a399fca3168cfd17e">Cube::Format</a> Isis::CubeAttributeOutput::fileFormat </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the file format an <a class="el" href="class_isis_1_1_cube.html#ab700c3f820b5af8a399fca3168cfd17e" title="These are the possible storage formats of ISIS cubes.">Cube::Format</a>. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_attribute.html#aa33834ba68ddfc08f69be64d4f4e58f0">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::attributeList()</a>, <a class="el" href="class_isis_1_1_cube.html#ab700c3f820b5af8a399fca3168cfd17ead8d755535125c06f41f4e65f4a7ddd18">Isis::Cube::Bsq</a>, and <a class="el" href="class_isis_1_1_cube.html#ab700c3f820b5af8a399fca3168cfd17ea8920b4a5ac8a67d6d52600c0c72726aa">Isis::Cube::Tile</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="class_isis_1_1_cube.html#a946dbcaeaa51ad192c4ed2a613c600a2">Isis::Cube::create()</a>, <a class="el" href="class_isis_1_1_cube_attribute_output.html#a66c81f666941ce8cd5f9ff7b095b7e76">fileFormatString()</a>, <a class="el" href="class_isis_1_1_gui_output_attribute.html#ae35bae09876d21751dc77e120542e7d8">Isis::GuiOutputAttribute::SetAttributes()</a>, and <a class="el" href="class_isis_1_1_process.html#a34b4c9666bd3535fe9c27535fa0e44dd">Isis::Process::SetOutputCube()</a>.</p>
+
+</div>
+</div>
+<a id="a66c81f666941ce8cd5f9ff7b095b7e76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66c81f666941ce8cd5f9ff7b095b7e76">&#9670;&nbsp;</a></span>fileFormatString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::CubeAttributeOutput::fileFormatString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the file format as a string. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_attribute_output.html#a582ce8e7863d0d63693e9fedf7dbb3a0">fileFormat()</a>, and <a class="el" href="class_isis_1_1_cube_attribute.html#a6dfa36ee9466e7d62e568d9a6e3ea0b4">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a03d290f0c30545b955ddbccf86a48e1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03d290f0c30545b955ddbccf86a48e1a">&#9670;&nbsp;</a></span>labelAttachment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#a7ab17d7eac74ed25b3531aa34f8ad474">LabelAttachment</a> Isis::CubeAttributeOutput::labelAttachment </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a7ab17d7eac74ed25b3531aa34f8ad474a9869bf0767a6e25b63bf3094fffe117c">Isis::AttachedLabel</a>, <a class="el" href="class_isis_1_1_cube_attribute.html#aa33834ba68ddfc08f69be64d4f4e58f0">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::attributeList()</a>, <a class="el" href="namespace_isis.html#a7ab17d7eac74ed25b3531aa34f8ad474ae236373a9aeb597beceb7393561ade43">Isis::DetachedLabel</a>, and <a class="el" href="namespace_isis.html#a7ab17d7eac74ed25b3531aa34f8ad474a1f18e98b57b014c49ee7c807eaba9752">Isis::ExternalLabel</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="class_isis_1_1_cube.html#a946dbcaeaa51ad192c4ed2a613c600a2">Isis::Cube::create()</a>, <a class="el" href="class_isis_1_1_gui_output_attribute.html#ae35bae09876d21751dc77e120542e7d8">Isis::GuiOutputAttribute::SetAttributes()</a>, and <a class="el" href="class_isis_1_1_process.html#a34b4c9666bd3535fe9c27535fa0e44dd">Isis::Process::SetOutputCube()</a>.</p>
+
+</div>
+</div>
+<a id="a12d4add4a6f2c81e8aae72d3b018a4da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12d4add4a6f2c81e8aae72d3b018a4da">&#9670;&nbsp;</a></span>maximum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CubeAttributeOutput::maximum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the output cube attribute maximum. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_attribute.html#aa33834ba68ddfc08f69be64d4f4e58f0">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::attributeList()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_cube_attribute_output.html#a3cf00e4da05bab1fd03370ef3b11690f">propagateMinimumMaximum()</a>, and <a class="el" href="namespace_isis.html#ad7233a0dfd589ede203db382294b286c">Isis::toDouble()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="class_isis_1_1_cube.html#a946dbcaeaa51ad192c4ed2a613c600a2">Isis::Cube::create()</a>, <a class="el" href="class_isis_1_1_gui_output_attribute.html#ae35bae09876d21751dc77e120542e7d8">Isis::GuiOutputAttribute::SetAttributes()</a>, <a class="el" href="class_isis_1_1_cube_attribute_output.html#aafd3624e5122bbd0723a60edba711ac0">setMinimum()</a>, and <a class="el" href="class_isis_1_1_process.html#a34b4c9666bd3535fe9c27535fa0e44dd">Isis::Process::SetOutputCube()</a>.</p>
+
+</div>
+</div>
+<a id="a05aa5c96a6281f6aa8d9f7287aed78a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05aa5c96a6281f6aa8d9f7287aed78a7">&#9670;&nbsp;</a></span>minimum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::CubeAttributeOutput::minimum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the output cube attribute minimum. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_attribute.html#aa33834ba68ddfc08f69be64d4f4e58f0">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::attributeList()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_cube_attribute_output.html#a3cf00e4da05bab1fd03370ef3b11690f">propagateMinimumMaximum()</a>, and <a class="el" href="namespace_isis.html#ad7233a0dfd589ede203db382294b286c">Isis::toDouble()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="class_isis_1_1_cube.html#a946dbcaeaa51ad192c4ed2a613c600a2">Isis::Cube::create()</a>, <a class="el" href="class_isis_1_1_gui_output_attribute.html#ae35bae09876d21751dc77e120542e7d8">Isis::GuiOutputAttribute::SetAttributes()</a>, <a class="el" href="class_isis_1_1_cube_attribute_output.html#ab074f2fd6a1eb5ea6b7600e2bd4fca87">setMaximum()</a>, and <a class="el" href="class_isis_1_1_process.html#a34b4c9666bd3535fe9c27535fa0e44dd">Isis::Process::SetOutputCube()</a>.</p>
+
+</div>
+</div>
+<a id="aa6b87435542582382085bf5cd85bdd99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6b87435542582382085bf5cd85bdd99">&#9670;&nbsp;</a></span>pixelType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">PixelType</a> Isis::CubeAttributeOutput::pixelType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the pixel type as an <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f" title="Enumerations for Isis Pixel Types.">Isis::PixelType</a>. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_attribute.html#aa33834ba68ddfc08f69be64d4f4e58f0">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::attributeList()</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa765485b7074fbfe10aeff5fea59128d7">Isis::None</a>, <a class="el" href="class_isis_1_1_cube_attribute_output.html#a3da47788e4ba529ac5a0cf1e40bc9ff1">propagatePixelType()</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530faa557465bb7a2ccac7e045deea97f906e">Isis::Real</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa25264f8db7cd95cbbbfc0269424690de">Isis::SignedInteger</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa20c5985c19cf057341fea1d4bc2c62a6">Isis::SignedWord</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa93be2b341f0d7ce702e5617ee508cb69">Isis::UnsignedByte</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa3a8c7ce9e4cf1c372a0047e2ffac57bf">Isis::UnsignedInteger</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa9a1991e15705d6438e893b672ef470c3">Isis::UnsignedWord</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="class_isis_1_1_cube.html#a946dbcaeaa51ad192c4ed2a613c600a2">Isis::Cube::create()</a>, <a class="el" href="class_isis_1_1_gui_output_attribute.html#ae35bae09876d21751dc77e120542e7d8">Isis::GuiOutputAttribute::SetAttributes()</a>, and <a class="el" href="class_isis_1_1_process.html#a34b4c9666bd3535fe9c27535fa0e44dd">Isis::Process::SetOutputCube()</a>.</p>
+
+</div>
+</div>
+<a id="a3cf00e4da05bab1fd03370ef3b11690f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cf00e4da05bab1fd03370ef3b11690f">&#9670;&nbsp;</a></span>propagateMinimumMaximum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::CubeAttributeOutput::propagateMinimumMaximum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return true if the min/max are to be propagated from an input cube. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_attribute.html#aa33834ba68ddfc08f69be64d4f4e58f0">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::attributeList()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="class_isis_1_1_cube_attribute_output.html#a12d4add4a6f2c81e8aae72d3b018a4da">maximum()</a>, <a class="el" href="class_isis_1_1_cube_attribute_output.html#a05aa5c96a6281f6aa8d9f7287aed78a7">minimum()</a>, <a class="el" href="class_isis_1_1_gui_output_attribute.html#ae35bae09876d21751dc77e120542e7d8">Isis::GuiOutputAttribute::SetAttributes()</a>, <a class="el" href="class_isis_1_1_process_import.html#adf55d4e334d53277b46bd76754b26b07">Isis::ProcessImport::SetAttributes()</a>, and <a class="el" href="class_isis_1_1_process.html#a34b4c9666bd3535fe9c27535fa0e44dd">Isis::Process::SetOutputCube()</a>.</p>
+
+</div>
+</div>
+<a id="a3da47788e4ba529ac5a0cf1e40bc9ff1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3da47788e4ba529ac5a0cf1e40bc9ff1">&#9670;&nbsp;</a></span>propagatePixelType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::CubeAttributeOutput::propagatePixelType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return true if the pixel type is to be propagated from an input cube. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_attribute.html#aa33834ba68ddfc08f69be64d4f4e58f0">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::attributeList()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="class_isis_1_1_cube.html#a946dbcaeaa51ad192c4ed2a613c600a2">Isis::Cube::create()</a>, <a class="el" href="class_isis_1_1_cube_attribute_output.html#aa6b87435542582382085bf5cd85bdd99">pixelType()</a>, <a class="el" href="class_isis_1_1_gui_output_attribute.html#ae35bae09876d21751dc77e120542e7d8">Isis::GuiOutputAttribute::SetAttributes()</a>, <a class="el" href="class_isis_1_1_process_import.html#adf55d4e334d53277b46bd76754b26b07">Isis::ProcessImport::SetAttributes()</a>, and <a class="el" href="class_isis_1_1_process.html#a34b4c9666bd3535fe9c27535fa0e44dd">Isis::Process::SetOutputCube()</a>.</p>
+
+</div>
+</div>
+<a id="acae032944428f40a18ac7be7fa7aa02c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acae032944428f40a18ac7be7fa7aa02c">&#9670;&nbsp;</a></span>setAttribute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_isis_1_1_cube_attribute.html">Isis::CubeAttribute</a>&lt; <a class="el" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a>  &gt;::setAttribute </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>newValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool(ChildClass::*)(QString) const&#160;</td>
+          <td class="paramname"><em>tester</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the attribute(s) for which tester returns true to newValue. </p>
+<p>If multiple attributes match (tester returns true on them), only the first one is preserved and it's value becomes newValue. Subsequent matching attributes are removed/deleted. This is done to simplify the resulting attribute string to be minimal with this particular attribute.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newValue</td><td>The string to set the attribute to... tester(newValue) really ought to return true. </td></tr>
+    <tr><td class="paramname">tester</td><td>A method that determines if an attribute is of the same type of newValue, so that existing attributes can be overwritten. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abed79fd1cf4bff98ddd04219ebe953be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abed79fd1cf4bff98ddd04219ebe953be">&#9670;&nbsp;</a></span>setAttributes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_isis_1_1_cube_attribute.html">Isis::CubeAttribute</a>&lt; <a class="el" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a>  &gt;::setAttributes </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_file_name.html">FileName</a> &amp;&#160;</td>
+          <td class="paramname"><em>fileName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Replaces the current attributes with the attributes in the given file name. </p>
+<p>This will call <a class="el" href="class_isis_1_1_cube_attribute.html#a6dac6d1321246321cad35ff8677f101b" title="Add a single attribute to these attributes.">addAttribute()</a> for every attribute in the file name.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_file_name.html#ad63a0af5a1ba15b2e11b1c37ecaa0300" title="Returns a QString of the attributes in a filename, attributes are expected to be of type CubeAttribut...">FileName::attributes()</a> </dd>
+<dd>
+<a class="el" href="class_isis_1_1_cube_attribute.html#ae2f4526db429063186e38ec19a94086b" title="Append the attributes in the string to these cube attributes.">addAttributes(const char *)</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileName</td><td>A file name with (or without) attributes on the end, for example <a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a>("out.cub+Bsq") </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a33d10b034136cad7bace130b30497a27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33d10b034136cad7bace130b30497a27">&#9670;&nbsp;</a></span>setByteOrder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CubeAttributeOutput::setByteOrder </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group___utility.html#ga7e1eea4515d0ddbe7f32cb0305a51fcb">ByteOrder</a>&#160;</td>
+          <td class="paramname"><em>order</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the order according to the parameter order. </p>
+
+<p class="reference">References <a class="el" href="group___utility.html#gga7e1eea4515d0ddbe7f32cb0305a51fcbad8f628bddc4c964a0b27cab2f7dce617">Isis::Msb</a>, and <a class="el" href="class_isis_1_1_cube_attribute.html#acae032944428f40a18ac7be7fa7aa02c">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::setAttribute()</a>.</p>
+
+</div>
+</div>
+<a id="acafa9a0b38075507237861f6dd41dc96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acafa9a0b38075507237861f6dd41dc96">&#9670;&nbsp;</a></span>setFileFormat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CubeAttributeOutput::setFileFormat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html#ab700c3f820b5af8a399fca3168cfd17e">Cube::Format</a>&#160;</td>
+          <td class="paramname"><em>fmt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the format to the fmt parameter. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_attribute.html#acae032944428f40a18ac7be7fa7aa02c">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::setAttribute()</a>, and <a class="el" href="class_isis_1_1_cube.html#ab700c3f820b5af8a399fca3168cfd17ea8920b4a5ac8a67d6d52600c0c72726aa">Isis::Cube::Tile</a>.</p>
+
+</div>
+</div>
+<a id="a0a47e9955e979c2dca4e7b7b718e0228"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a47e9955e979c2dca4e7b7b718e0228">&#9670;&nbsp;</a></span>setLabelAttachment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CubeAttributeOutput::setLabelAttachment </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#a7ab17d7eac74ed25b3531aa34f8ad474">LabelAttachment</a>&#160;</td>
+          <td class="paramname"><em>attachment</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the label attachment type to the parameter value. </p>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#ae08be85ecf1f85efbfdf4259d2bddf60">Isis::LabelAttachmentName()</a>, and <a class="el" href="class_isis_1_1_cube_attribute.html#acae032944428f40a18ac7be7fa7aa02c">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::setAttribute()</a>.</p>
+
+</div>
+</div>
+<a id="ab074f2fd6a1eb5ea6b7600e2bd4fca87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab074f2fd6a1eb5ea6b7600e2bd4fca87">&#9670;&nbsp;</a></span>setMaximum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CubeAttributeOutput::setMaximum </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>max</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the output cube attribute maximum. </p>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_cube_attribute_output.html#a05aa5c96a6281f6aa8d9f7287aed78a7">minimum()</a>, <a class="el" href="class_isis_1_1_cube_attribute.html#acae032944428f40a18ac7be7fa7aa02c">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::setAttribute()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_process_import.html#adf55d4e334d53277b46bd76754b26b07">Isis::ProcessImport::SetAttributes()</a>.</p>
+
+</div>
+</div>
+<a id="aafd3624e5122bbd0723a60edba711ac0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafd3624e5122bbd0723a60edba711ac0">&#9670;&nbsp;</a></span>setMinimum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CubeAttributeOutput::setMinimum </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>min</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the output cube attribute minimum. </p>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_cube_attribute_output.html#a12d4add4a6f2c81e8aae72d3b018a4da">maximum()</a>, <a class="el" href="class_isis_1_1_cube_attribute.html#acae032944428f40a18ac7be7fa7aa02c">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::setAttribute()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_process_import.html#adf55d4e334d53277b46bd76754b26b07">Isis::ProcessImport::SetAttributes()</a>.</p>
+
+</div>
+</div>
+<a id="ac900e6ac88c8d7baf8323c0e38c57dca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac900e6ac88c8d7baf8323c0e38c57dca">&#9670;&nbsp;</a></span>setPixelType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CubeAttributeOutput::setPixelType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">PixelType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the pixel type to that given by the parameter. </p>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#acc4e8b91ef1f28c7b76dbe1f7bf21618">Isis::PixelTypeName()</a>, and <a class="el" href="class_isis_1_1_cube_attribute.html#acae032944428f40a18ac7be7fa7aa02c">Isis::CubeAttribute&lt; CubeAttributeOutput &gt;::setAttribute()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_process_import.html#adf55d4e334d53277b46bd76754b26b07">Isis::ProcessImport::SetAttributes()</a>.</p>
+
+</div>
+</div>
+<a id="a6dfa36ee9466e7d62e568d9a6e3ea0b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dfa36ee9466e7d62e568d9a6e3ea0b4">&#9670;&nbsp;</a></span>toString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString <a class="el" href="class_isis_1_1_cube_attribute.html">Isis::CubeAttribute</a>&lt; <a class="el" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a>  &gt;::toString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return a string-representation of this cube attributes. </p>
+<p>This will typically be exactl the string passed in if you used setAttributes(...). This can be an empty string ("") or if there are attributes then it will be +att1+att2+... The result of this method could be used to re-create this instance.</p>
+<dl class="section return"><dt>Returns</dt><dd>The cube attributes in string form </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CubeAttribute/<a class="el" href="_cube_attribute_8h_source.html">CubeAttribute.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CubeAttribute/<a class="el" href="_cube_attribute_8cpp.html">CubeAttribute.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

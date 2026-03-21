@@ -1,0 +1,18 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Hapke,Radiometric And Photometric Correction,isis/src/base/objs/Hapke/Hapke.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Hapke,isis_pybind.Hapke,N,Python class symbol not found in current binding files
+Construction/Enum,Hapke(),isis_pybind.Hapke(),N,Constructor binding not detected in current binding files
+Mutation/Configuration,void SetPhotoHg1(const double hg1),isis_pybind.Hapke.set_photo_hg1,N,Method not found in current binding files
+Mutation/Configuration,void SetPhotoHg2(const double hg2),isis_pybind.Hapke.set_photo_hg2,N,Method not found in current binding files
+Mutation/Configuration,void SetPhotoBh(const double bh),isis_pybind.Hapke.set_photo_bh,N,Method not found in current binding files
+Mutation/Configuration,void SetPhotoCh(const double ch),isis_pybind.Hapke.set_photo_ch,N,Method not found in current binding files
+Mutation/Configuration,void SetPhotoWh(const double wh),isis_pybind.Hapke.set_photo_wh,N,Method not found in current binding files
+Mutation/Configuration,void SetPhotoHh(const double hh),isis_pybind.Hapke.set_photo_hh,N,Method not found in current binding files
+Mutation/Configuration,void SetPhotoB0(const double b0),isis_pybind.Hapke.set_photo_b0,N,Method not found in current binding files
+Mutation/Configuration,void SetPhotoTheta(const double theta),isis_pybind.Hapke.set_photo_theta,N,Method not found in current binding files
+Mutation/Configuration,void SetOldTheta(double theta) { p_photoThetaold = theta,isis_pybind.Hapke.set_old_theta,N,Method not found in current binding files
+Mutation/Configuration,void SetPhoto0B0Standard(const QString &b0standard),isis_pybind.Hapke.set_photo0_b0_standard,N,Method not found in current binding files
+Mutation/Configuration,void SetStandardConditions(bool standard),isis_pybind.Hapke.set_standard_conditions,N,Method not found in current binding files
+Public API,"virtual double PhotoModelAlgorithm(double phase, double incidence, double emission)",isis_pybind.Hapke.photo_model_algorithm,N,Method not found in current binding files

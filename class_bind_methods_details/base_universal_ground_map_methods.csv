@@ -1,0 +1,23 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+UniversalGroundMap,Geometry,isis/src/base/objs/UniversalGroundMap/UniversalGroundMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,UniversalGroundMap,isis_pybind.UniversalGroundMap,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,"CameraPriority enum (CameraFirst, ProjectionFirst)",isis_pybind.UniversalGroundMap.CameraPriority,N,抽象基类/纯虚接口
+Construction/Enum,UniversalGroundMap(),isis_pybind.UniversalGroundMap(),N,抽象基类/纯虚接口
+Mutation/Configuration,void SetBand(const int band),isis_pybind.UniversalGroundMap.set_band,N,抽象基类/纯虚接口
+Mutation/Configuration,"bool SetUniversalGround(double lat, double lon)",isis_pybind.UniversalGroundMap.set_universal_ground,N,抽象基类/纯虚接口
+Mutation/Configuration,"bool SetUnboundGround(Latitude lat, Longitude lon)",isis_pybind.UniversalGroundMap.set_unbound_ground,N,抽象基类/纯虚接口
+Mutation/Configuration,"bool SetGround(Latitude lat, Longitude lon)",isis_pybind.UniversalGroundMap.set_ground,N,抽象基类/纯虚接口
+Mutation/Configuration,bool SetGround(const SurfacePoint &),isis_pybind.UniversalGroundMap.set_ground,N,抽象基类/纯虚接口
+Public API,double Sample() const,isis_pybind.UniversalGroundMap.sample,N,抽象基类/纯虚接口
+Public API,double Line() const,isis_pybind.UniversalGroundMap.line,N,抽象基类/纯虚接口
+Mutation/Configuration,"bool SetImage(double sample, double line)",isis_pybind.UniversalGroundMap.set_image,N,抽象基类/纯虚接口
+Public API,double UniversalLatitude() const,isis_pybind.UniversalGroundMap.universal_latitude,N,抽象基类/纯虚接口
+Public API,double UniversalLongitude() const,isis_pybind.UniversalGroundMap.universal_longitude,N,抽象基类/纯虚接口
+Public API,double Resolution() const,isis_pybind.UniversalGroundMap.resolution,N,抽象基类/纯虚接口
+Public API,"bool GroundRange(Cube *cube, Latitude &minLat, Latitude &maxLat, Longitude &minLon, Longitude &maxLon, bool allowEstimation = true)",isis_pybind.UniversalGroundMap.ground_range,N,抽象基类/纯虚接口
+Query,bool HasProjection() { return p_projection != 0,isis_pybind.UniversalGroundMap.has_projection,N,抽象基类/纯虚接口
+Query,bool HasCamera() { return p_camera != 0,isis_pybind.UniversalGroundMap.has_camera,N,抽象基类/纯虚接口
+Public API,Isis::Projection *Projection() const { return p_projection,isis_pybind.UniversalGroundMap.projection,N,抽象基类/纯虚接口
+Public API,Isis::Camera *Camera() const { return p_camera,isis_pybind.UniversalGroundMap.camera,N,抽象基类/纯虚接口

@@ -1,0 +1,14 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Brick,Low Level Cube I/O,isis/src/base/objs/Brick/Brick.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,需注意内存生命周期与数据视图映射
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Brick,isis_pybind.Brick,Y,Python class symbol is exported; 需注意内存生命周期与数据视图映射
+Construction/Enum,"Brick(const int nsamps, const int nlines, const int nbands, const Isis::PixelType type, bool reverse=false) : Isis::BufferManager(nsamps, nlines, nbands, nsamps, nlines, nbands, type, reverse) { }",isis_pybind.Brick(),Y,Constructor is explicitly bound
+Construction/Enum,"Brick(int maxSamples, int maxLines, int maxBands, int bufNumSamples, int bufNumLines, int bufNumBands, Isis::PixelType type, bool reverse=false) : Isis::BufferManager(maxSamples, maxLines, maxBands, bufNumSamples, bufNumLines, bufNumBands, type, reverse) { }",isis_pybind.Brick(),Y,Constructor is explicitly bound
+Mutation/Configuration,"void SetBasePosition(const int start_sample, const int start_line, const int start_band) { this->Isis::Buffer::SetBasePosition(start_sample, start_line, start_band)",isis_pybind.Brick.set_base_position,Y,Current Python name
+Mutation/Configuration,inline void SetBaseSample(const int start_samp) { this->Isis::Buffer::SetBaseSample(start_samp),isis_pybind.Brick.set_base_sample,Y,Current Python name
+Mutation/Configuration,inline void SetBaseLine(const int start_line) { this->Isis::Buffer::SetBaseLine(start_line),isis_pybind.Brick.set_base_line,Y,Current Python name
+Mutation/Configuration,inline void SetBaseBand(const int start_band) { this->Isis::Buffer::SetBaseBand(start_band),isis_pybind.Brick.set_base_band,Y,Current Python name
+Public API,"void Resize(const int nsamps, const int nlines, const int nbands)",isis_pybind.Brick.resize,Y,Current Python name
+Mutation/Configuration,bool SetBrick(const int brick),isis_pybind.Brick.set_brick,Y,Current Python name
+Public API,inline int Bricks() { return MaxMaps(),isis_pybind.Brick.bricks,Y,Current Python name

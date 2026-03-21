@@ -1,0 +1,11 @@
+<map id="Isis::CameraDetectorMap" name="Isis::CameraDetectorMap">
+<area shape="rect" id="node1" title="Convert between parent image coordinates and detector coordinates." alt="" coords="600,5,792,407"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_apollo_panoramic_detector_map.html" title="Convert between parent image (aka encoder aka machine) coordinates and detector coordinates." alt="" coords="5,471,229,696"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_line_scan_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="252,471,478,696"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_nirs_detector_map.html" title="The detector map class for the Hayabusa NIRS camera." alt="" coords="502,519,665,648"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_push_frame_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="690,455,928,712"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_radar_pulse_map.html" title="Convert between alpha image coordinates and radar sample, time coordinates." alt="" coords="952,487,1141,680"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_rolling_shutter_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="1165,471,1384,696"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_moc_wide_angle_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="133,808,346,937"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_variable_line_scan_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="370,760,608,985"/>
+</map>

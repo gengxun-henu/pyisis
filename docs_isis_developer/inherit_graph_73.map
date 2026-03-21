@@ -1,0 +1,4 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database." alt="" coords="5,5,110,33"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_db_access.html" title="DbAccess manages programatic access to a database through profiles." alt="" coords="158,5,269,33"/>
+</map>

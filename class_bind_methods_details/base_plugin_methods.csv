@@ -1,0 +1,7 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Plugin,System,isis/src/base/objs/Plugin/Plugin.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Plugin,isis_pybind.Plugin,N,Python class symbol not found in current binding files
+Construction/Enum,Plugin(),isis_pybind.Plugin(),N,Constructor binding not detected in current binding files
+Public API,QFunctionPointer GetPlugin(const QString &group),isis_pybind.Plugin.get_plugin,N,Method not found in current binding files

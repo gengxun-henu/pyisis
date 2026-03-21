@@ -1,0 +1,5 @@
+<map id="Isis::ProcessBySpectra" name="Isis::ProcessBySpectra">
+<area shape="rect" id="node1" title="Process cubes by spectra." alt="" coords="12,744,177,1017"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_process_by_brick.html" title="Process cubes by brick." alt="" coords="16,455,173,696"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_process.html" title="Base class for all cube processing derivatives." alt="" coords="5,5,184,407"/>
+</map>

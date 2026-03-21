@@ -1,0 +1,5 @@
+<map id="Isis::SpectralDefinition" name="Isis::SpectralDefinition">
+<area shape="rect" id="node1" title="contains calibration info for spectral smile correction (center wavelengths and widths for the whole ..." alt="" coords="112,5,302,279"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_spectral_definition1_d.html" title="A Spectral definition that includes wavelength and center values for each (line, sample) coordinate." alt="" coords="5,327,196,536"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_spectral_definition2_d.html" title="A Spectral definition that includes wavelength and center values for each (line, sample) coordinate." alt="" coords="220,327,410,536"/>
+</map>

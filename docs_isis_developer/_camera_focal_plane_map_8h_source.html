@@ -1,0 +1,379 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CameraFocalPlaneMap/CameraFocalPlaneMap.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_camera_focal_plane_map_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">CameraFocalPlaneMap.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_camera_focal_plane_map_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef CameraFocalPlaneMap_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define CameraFocalPlaneMap_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt; <span class="keyword">class </span><a class="code" href="class_q_vector.html">QVector</a>;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  <span class="keyword">class </span>Affine;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <span class="keyword">class </span>Camera;</div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html">   85</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_camera_focal_plane_map.html">CameraFocalPlaneMap</a> {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#aecb97fecfa5fe621f5afe7f1b0bfce5b">CameraFocalPlaneMap</a>(<a class="code" href="class_isis_1_1_camera.html">Camera</a> *parent, <span class="keyword">const</span> <span class="keywordtype">int</span> naifIkCode);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#aecb97fecfa5fe621f5afe7f1b0bfce5b">CameraFocalPlaneMap</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> naifIkCode);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#aecb97fecfa5fe621f5afe7f1b0bfce5b">CameraFocalPlaneMap</a>(<a class="code" href="class_isis_1_1_camera.html">Camera</a> *parent, <a class="code" href="class_isis_1_1_affine.html">Affine</a> &amp;affine);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#ac48c2a927c2b75013e2dfd97a51c3b13">~CameraFocalPlaneMap</a>();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">SetDetector</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> sample, <span class="keyword">const</span> <span class="keywordtype">double</span> line);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#ac6c8215c92ee4585403839fd114e7d53">SetFocalPlane</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> dx, <span class="keyword">const</span> <span class="keywordtype">double</span> dy);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#aea7639f61c49fdfd81e3e7e1061bcb34">FocalPlaneX</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a05ad59a4c3d491052fcdc55e0826d8c0">FocalPlaneY</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a03aea9d8598133eb80e88fdbb58082bf">DetectorSample</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#aa1d7ac60e59eee33a17c878d6ae11478">DetectorLine</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a170d1535a0171d6338a778bc7e84ebb8">CenteredDetectorSample</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a7a942a438fa43c1b280758b7df951e57">CenteredDetectorLine</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a8eb60b5f3c9d471052b75e53c27dfc8c">SetDetectorOrigin</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> sample, <span class="keyword">const</span> <span class="keywordtype">double</span> line);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#af35e3acd816adf081c6021363b928366">DetectorLineOrigin</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#af189e8038de5bcbeb366e93a4f52db7c">DetectorSampleOrigin</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a1be10c7510d14950c9390570ddae8242">SetDetectorOffset</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> sampleOffset,</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                                    <span class="keyword">const</span> <span class="keywordtype">double</span> lineOffset);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#afd45fc29861198441fb343f122ef0560">DetectorLineOffset</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a9a5d2aec161ffb85228ef6e998dc83cb">DetectorSampleOffset</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a70e2d0250b7f0d4a2606333facb4a748">SetTransL</a>(<span class="keyword">const</span> <a class="code" href="class_q_vector.html">QVector&lt;double&gt;</a> transL);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a6b0236f1d263f379bdeca060628a0417">SetTransS</a>(<span class="keyword">const</span> <a class="code" href="class_q_vector.html">QVector&lt;double&gt;</a> transS);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a90567ee839d43055c2497927e8eaa731">SetTransX</a>(<span class="keyword">const</span> <a class="code" href="class_q_vector.html">QVector&lt;double&gt;</a> transX);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a9a3079b6ca28db7475fa91bfb03e508d">SetTransY</a>(<span class="keyword">const</span> <a class="code" href="class_q_vector.html">QVector&lt;double&gt;</a> transY);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">double</span> *<a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a34ddcda50620c0c8195eb4c346157929">TransL</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">double</span> *<a class="code" href="class_isis_1_1_camera_focal_plane_map.html#ad65a1c0cd5c8af839371b6c314048f92">TransS</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">double</span> *<a class="code" href="class_isis_1_1_camera_focal_plane_map.html#acadeb721f9a368d017248835bab17278">TransX</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">double</span> *<a class="code" href="class_isis_1_1_camera_focal_plane_map.html#ac620d64b9297912d2b4d1670912c8046">TransY</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fd">  123</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fd">FocalPlaneXDependencyType</a> {</div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fdacdc7441cfddbc819180f1a935a61dc44">  124</a></span>&#160;        <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fdacdc7441cfddbc819180f1a935a61dc44">Sample</a> = 1, </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fda10c241138cbd3f241769f88026fd9e03">Line</a> = 2    </div>
+<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fda10c241138cbd3f241769f88026fd9e03">  126</a></span>&#160;      };</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="comment">//      FocalPlaneXDependencyType FocalPlaneXDependency();</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a0504cee7c8b1d860978dca17c21f9292">FocalPlaneXDependency</a>();</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#ae6731df3b35e663f6f25ba9ab060c14e">SignMostSigX</a>();</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a3585d8fea9e1d8b5dbcb9ffc9fc39804">SignMostSigY</a>();</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#ae9ca189f994c7ef06cbd779621c3dcbd">ComputeCentered</a>();</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a09c2c3943a097b3d6f28989a6aa37b0a">ComputeUncentered</a>();</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#a17e39bc8a2a0476ae194458f31b6f3fc">  137</a></span>&#160;      <a class="code" href="class_isis_1_1_camera.html">Camera</a> *<a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a17e39bc8a2a0476ae194458f31b6f3fc">p_camera</a>;                 </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#a4f361612d8bcf9e3dd6a4610feab7600">  139</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a4f361612d8bcf9e3dd6a4610feab7600">p_detectorLineOrigin</a>;      </div>
+<div class="line"><a name="l00140"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#aa18a13ea76fb7e743c14983aecb58126">  140</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#aa18a13ea76fb7e743c14983aecb58126">p_detectorSampleOrigin</a>;    </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#adc2c7b010a0d6a03e987071fdf2bd1f3">  142</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#adc2c7b010a0d6a03e987071fdf2bd1f3">p_focalPlaneX</a>;             </div>
+<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#aab586ae896d5113b21083020147fde54">  143</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#aab586ae896d5113b21083020147fde54">p_focalPlaneY</a>;             </div>
+<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#afdc93edb030e5d12cd3b563a194c6300">  144</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#afdc93edb030e5d12cd3b563a194c6300">p_detectorLine</a>;            </div>
+<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#a6e062107f2a884378457f86813486061">  145</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a6e062107f2a884378457f86813486061">p_detectorSample</a>;          </div>
+<div class="line"><a name="l00146"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#afb3b411422f8d737d233d5537b8c22bd">  146</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#afb3b411422f8d737d233d5537b8c22bd">p_centeredDetectorSample</a>;  </div>
+<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#a8195ca59fa852eaafbe4e8300f82ac07">  147</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a8195ca59fa852eaafbe4e8300f82ac07">p_centeredDetectorLine</a>;    </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
+<div class="line"><a name="l00149"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#ac4c83c1bfa976e960a7bb9900cd277a5">  149</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#ac4c83c1bfa976e960a7bb9900cd277a5">p_detectorLineOffset</a>;      </div>
+<div class="line"><a name="l00150"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#aad0a6986718cc9e2fb65080f0acf419c">  150</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#aad0a6986718cc9e2fb65080f0acf419c">p_detectorSampleOffset</a>;    </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#a45b78587a50a4298c58240dbb62dee84">  152</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a45b78587a50a4298c58240dbb62dee84">p_transx</a>[3];               </div>
+<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#a9ad5c95efc393c924f9fb4b524c64309">  153</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a9ad5c95efc393c924f9fb4b524c64309">p_transy</a>[3];               </div>
+<div class="line"><a name="l00154"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#a19c854aaf2dd9377dc87dea1e4e5b5d3">  154</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a19c854aaf2dd9377dc87dea1e4e5b5d3">p_itranss</a>[3];              </div>
+<div class="line"><a name="l00155"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_focal_plane_map.html#a9584f565d92261fb551a32dd5d006bda">  155</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_focal_plane_map.html#a9584f565d92261fb551a32dd5d006bda">p_itransl</a>[3];              </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;      <span class="keywordtype">void</span> Init(<a class="code" href="class_isis_1_1_camera.html">Camera</a> *parent, <span class="keyword">const</span> <span class="keywordtype">int</span> naifIkCode);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  };</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;};</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclass_isis_1_1_affine_html"><div class="ttname"><a href="class_isis_1_1_affine.html">Isis::Affine</a></div><div class="ttdoc">Affine basis function.</div><div class="ttdef"><b>Definition:</b> Affine.h:65</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html">Isis::CameraFocalPlaneMap</a></div><div class="ttdoc">Convert between distorted focal plane and detector coordinates.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:85</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a03aea9d8598133eb80e88fdbb58082bf"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a03aea9d8598133eb80e88fdbb58082bf">Isis::CameraFocalPlaneMap::DetectorSample</a></div><div class="ttdeci">double DetectorSample() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:255</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a0504cee7c8b1d860978dca17c21f9292"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a0504cee7c8b1d860978dca17c21f9292">Isis::CameraFocalPlaneMap::FocalPlaneXDependency</a></div><div class="ttdeci">int FocalPlaneXDependency()</div><div class="ttdoc">Return the focal plane x dependency variable.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:182</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a05ad59a4c3d491052fcdc55e0826d8c0"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a05ad59a4c3d491052fcdc55e0826d8c0">Isis::CameraFocalPlaneMap::FocalPlaneY</a></div><div class="ttdeci">double FocalPlaneY() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:247</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a09c2c3943a097b3d6f28989a6aa37b0a"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a09c2c3943a097b3d6f28989a6aa37b0a">Isis::CameraFocalPlaneMap::ComputeUncentered</a></div><div class="ttdeci">void ComputeUncentered()</div><div class="ttdoc">Convenience method to center detector origin (use when inheriting)</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:435</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a170d1535a0171d6338a778bc7e84ebb8"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a170d1535a0171d6338a778bc7e84ebb8">Isis::CameraFocalPlaneMap::CenteredDetectorSample</a></div><div class="ttdeci">double CenteredDetectorSample() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:271</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a17e39bc8a2a0476ae194458f31b6f3fc"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a17e39bc8a2a0476ae194458f31b6f3fc">Isis::CameraFocalPlaneMap::p_camera</a></div><div class="ttdeci">Camera * p_camera</div><div class="ttdoc">Camera of the image.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:137</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a19c854aaf2dd9377dc87dea1e4e5b5d3"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a19c854aaf2dd9377dc87dea1e4e5b5d3">Isis::CameraFocalPlaneMap::p_itranss</a></div><div class="ttdeci">double p_itranss[3]</div><div class="ttdoc">The x transition from distorted to detector.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:154</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a1be10c7510d14950c9390570ddae8242"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a1be10c7510d14950c9390570ddae8242">Isis::CameraFocalPlaneMap::SetDetectorOffset</a></div><div class="ttdeci">void SetDetectorOffset(const double sampleOffset, const double lineOffset)</div><div class="ttdoc">Set the detector offset.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:324</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a34ddcda50620c0c8195eb4c346157929"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a34ddcda50620c0c8195eb4c346157929">Isis::CameraFocalPlaneMap::TransL</a></div><div class="ttdeci">const double * TransL() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:422</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a3585d8fea9e1d8b5dbcb9ffc9fc39804"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a3585d8fea9e1d8b5dbcb9ffc9fc39804">Isis::CameraFocalPlaneMap::SignMostSigY</a></div><div class="ttdeci">double SignMostSigY()</div><div class="ttdoc">Return the sign of the p_transy coefficient with the greatest magnitude.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:223</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a45b78587a50a4298c58240dbb62dee84"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a45b78587a50a4298c58240dbb62dee84">Isis::CameraFocalPlaneMap::p_transx</a></div><div class="ttdeci">double p_transx[3]</div><div class="ttdoc">The x transition from detector to distorted.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:152</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a4f361612d8bcf9e3dd6a4610feab7600"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a4f361612d8bcf9e3dd6a4610feab7600">Isis::CameraFocalPlaneMap::p_detectorLineOrigin</a></div><div class="ttdeci">double p_detectorLineOrigin</div><div class="ttdoc">The origin line of the detector.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:139</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a6b0236f1d263f379bdeca060628a0417"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a6b0236f1d263f379bdeca060628a0417">Isis::CameraFocalPlaneMap::SetTransS</a></div><div class="ttdeci">void SetTransS(const QVector&lt; double &gt; transS)</div><div class="ttdoc">Set the affine coefficients for converting destorted (x,y) to a detector Sample.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:364</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a6e062107f2a884378457f86813486061"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a6e062107f2a884378457f86813486061">Isis::CameraFocalPlaneMap::p_detectorSample</a></div><div class="ttdeci">double p_detectorSample</div><div class="ttdoc">sample value of the detector</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:145</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a70e2d0250b7f0d4a2606333facb4a748"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a70e2d0250b7f0d4a2606333facb4a748">Isis::CameraFocalPlaneMap::SetTransL</a></div><div class="ttdeci">void SetTransL(const QVector&lt; double &gt; transL)</div><div class="ttdoc">Set the affine coefficients for converting destorted (x,y) to a detector Line.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:352</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a7a942a438fa43c1b280758b7df951e57"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a7a942a438fa43c1b280758b7df951e57">Isis::CameraFocalPlaneMap::CenteredDetectorLine</a></div><div class="ttdeci">double CenteredDetectorLine() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:279</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a7aac4edc4145e7b2c44784ef9cb0f2f4"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a7aac4edc4145e7b2c44784ef9cb0f2f4">Isis::CameraFocalPlaneMap::SetDetector</a></div><div class="ttdeci">virtual bool SetDetector(const double sample, const double line)</div><div class="ttdoc">Compute distorted focal plane coordinate from detector position (sampel,line)</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:164</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a8195ca59fa852eaafbe4e8300f82ac07"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a8195ca59fa852eaafbe4e8300f82ac07">Isis::CameraFocalPlaneMap::p_centeredDetectorLine</a></div><div class="ttdeci">double p_centeredDetectorLine</div><div class="ttdoc">Detector line position.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:147</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a8eb60b5f3c9d471052b75e53c27dfc8c"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a8eb60b5f3c9d471052b75e53c27dfc8c">Isis::CameraFocalPlaneMap::SetDetectorOrigin</a></div><div class="ttdeci">void SetDetectorOrigin(const double sample, const double line)</div><div class="ttdoc">Set the detector origin.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:293</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a90567ee839d43055c2497927e8eaa731"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a90567ee839d43055c2497927e8eaa731">Isis::CameraFocalPlaneMap::SetTransX</a></div><div class="ttdeci">void SetTransX(const QVector&lt; double &gt; transX)</div><div class="ttdoc">Set the affine coefficients for converting detector (sample,line) to a distorted X.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:376</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a9584f565d92261fb551a32dd5d006bda"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a9584f565d92261fb551a32dd5d006bda">Isis::CameraFocalPlaneMap::p_itransl</a></div><div class="ttdeci">double p_itransl[3]</div><div class="ttdoc">The y transition from distorted to detector.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:155</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a9a3079b6ca28db7475fa91bfb03e508d"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a9a3079b6ca28db7475fa91bfb03e508d">Isis::CameraFocalPlaneMap::SetTransY</a></div><div class="ttdeci">void SetTransY(const QVector&lt; double &gt; transY)</div><div class="ttdoc">Set the affine coefficients for converting detector (sample,line) to a distorted Y.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:388</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a9a5d2aec161ffb85228ef6e998dc83cb"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a9a5d2aec161ffb85228ef6e998dc83cb">Isis::CameraFocalPlaneMap::DetectorSampleOffset</a></div><div class="ttdeci">double DetectorSampleOffset() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:342</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_a9ad5c95efc393c924f9fb4b524c64309"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#a9ad5c95efc393c924f9fb4b524c64309">Isis::CameraFocalPlaneMap::p_transy</a></div><div class="ttdeci">double p_transy[3]</div><div class="ttdoc">The y transition from detector to distorted.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:153</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_aa18a13ea76fb7e743c14983aecb58126"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#aa18a13ea76fb7e743c14983aecb58126">Isis::CameraFocalPlaneMap::p_detectorSampleOrigin</a></div><div class="ttdeci">double p_detectorSampleOrigin</div><div class="ttdoc">The origin sample of the detector.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:140</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_aa1d7ac60e59eee33a17c878d6ae11478"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#aa1d7ac60e59eee33a17c878d6ae11478">Isis::CameraFocalPlaneMap::DetectorLine</a></div><div class="ttdeci">double DetectorLine() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:263</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_aab586ae896d5113b21083020147fde54"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#aab586ae896d5113b21083020147fde54">Isis::CameraFocalPlaneMap::p_focalPlaneY</a></div><div class="ttdeci">double p_focalPlaneY</div><div class="ttdoc">y value of focal plane coordinate</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:143</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_aad0a6986718cc9e2fb65080f0acf419c"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#aad0a6986718cc9e2fb65080f0acf419c">Isis::CameraFocalPlaneMap::p_detectorSampleOffset</a></div><div class="ttdeci">double p_detectorSampleOffset</div><div class="ttdoc">offset of the detector origin sample from the average</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:150</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_ab2b4e67b672af76748563f3472d071fd"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fd">Isis::CameraFocalPlaneMap::FocalPlaneXDependencyType</a></div><div class="ttdeci">FocalPlaneXDependencyType</div><div class="ttdoc">Focal plane x dependency indicates whether the x value of the focal plane coordinate maps to a sample...</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:123</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_ab2b4e67b672af76748563f3472d071fda10c241138cbd3f241769f88026fd9e03"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fda10c241138cbd3f241769f88026fd9e03">Isis::CameraFocalPlaneMap::Line</a></div><div class="ttdeci">@ Line</div><div class="ttdoc">The x value of the focal plane maps to a line.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:125</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_ab2b4e67b672af76748563f3472d071fdacdc7441cfddbc819180f1a935a61dc44"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#ab2b4e67b672af76748563f3472d071fdacdc7441cfddbc819180f1a935a61dc44">Isis::CameraFocalPlaneMap::Sample</a></div><div class="ttdeci">@ Sample</div><div class="ttdoc">The x value of the focal plane maps to a sample.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:124</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_ac48c2a927c2b75013e2dfd97a51c3b13"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#ac48c2a927c2b75013e2dfd97a51c3b13">Isis::CameraFocalPlaneMap::~CameraFocalPlaneMap</a></div><div class="ttdeci">virtual ~CameraFocalPlaneMap()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:82</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_ac4c83c1bfa976e960a7bb9900cd277a5"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#ac4c83c1bfa976e960a7bb9900cd277a5">Isis::CameraFocalPlaneMap::p_detectorLineOffset</a></div><div class="ttdeci">double p_detectorLineOffset</div><div class="ttdoc">Offset of the detector origin line from the average.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:149</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_ac620d64b9297912d2b4d1670912c8046"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#ac620d64b9297912d2b4d1670912c8046">Isis::CameraFocalPlaneMap::TransY</a></div><div class="ttdeci">const double * TransY() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:406</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_ac6c8215c92ee4585403839fd114e7d53"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#ac6c8215c92ee4585403839fd114e7d53">Isis::CameraFocalPlaneMap::SetFocalPlane</a></div><div class="ttdeci">virtual bool SetFocalPlane(const double dx, const double dy)</div><div class="ttdoc">Compute detector position (sample,line) from focal plane coordinates.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:143</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_acadeb721f9a368d017248835bab17278"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#acadeb721f9a368d017248835bab17278">Isis::CameraFocalPlaneMap::TransX</a></div><div class="ttdeci">const double * TransX() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:398</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_ad65a1c0cd5c8af839371b6c314048f92"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#ad65a1c0cd5c8af839371b6c314048f92">Isis::CameraFocalPlaneMap::TransS</a></div><div class="ttdeci">const double * TransS() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:414</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_adc2c7b010a0d6a03e987071fdf2bd1f3"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#adc2c7b010a0d6a03e987071fdf2bd1f3">Isis::CameraFocalPlaneMap::p_focalPlaneX</a></div><div class="ttdeci">double p_focalPlaneX</div><div class="ttdoc">x value of focal plane coordinate</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:142</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_ae6731df3b35e663f6f25ba9ab060c14e"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#ae6731df3b35e663f6f25ba9ab060c14e">Isis::CameraFocalPlaneMap::SignMostSigX</a></div><div class="ttdeci">double SignMostSigX()</div><div class="ttdoc">Return the sign of the p_transx coefficient with the greatest magnitude.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:201</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_ae9ca189f994c7ef06cbd779621c3dcbd"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#ae9ca189f994c7ef06cbd779621c3dcbd">Isis::CameraFocalPlaneMap::ComputeCentered</a></div><div class="ttdeci">void ComputeCentered()</div><div class="ttdoc">Convenience method to center detector origin (use when inheriting)</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:428</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_aea7639f61c49fdfd81e3e7e1061bcb34"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#aea7639f61c49fdfd81e3e7e1061bcb34">Isis::CameraFocalPlaneMap::FocalPlaneX</a></div><div class="ttdeci">double FocalPlaneX() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:239</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_aecb97fecfa5fe621f5afe7f1b0bfce5b"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#aecb97fecfa5fe621f5afe7f1b0bfce5b">Isis::CameraFocalPlaneMap::CameraFocalPlaneMap</a></div><div class="ttdeci">CameraFocalPlaneMap(Camera *parent, const int naifIkCode)</div><div class="ttdoc">Construct mapping between detectors and focal plane x/y.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:25</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_af189e8038de5bcbeb366e93a4f52db7c"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#af189e8038de5bcbeb366e93a4f52db7c">Isis::CameraFocalPlaneMap::DetectorSampleOrigin</a></div><div class="ttdeci">double DetectorSampleOrigin() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:310</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_af35e3acd816adf081c6021363b928366"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#af35e3acd816adf081c6021363b928366">Isis::CameraFocalPlaneMap::DetectorLineOrigin</a></div><div class="ttdeci">double DetectorLineOrigin() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:302</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_afb3b411422f8d737d233d5537b8c22bd"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#afb3b411422f8d737d233d5537b8c22bd">Isis::CameraFocalPlaneMap::p_centeredDetectorSample</a></div><div class="ttdeci">double p_centeredDetectorSample</div><div class="ttdoc">Detector sample position.</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:146</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_afd45fc29861198441fb343f122ef0560"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#afd45fc29861198441fb343f122ef0560">Isis::CameraFocalPlaneMap::DetectorLineOffset</a></div><div class="ttdeci">double DetectorLineOffset() const</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.cpp:334</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_focal_plane_map_html_afdc93edb030e5d12cd3b563a194c6300"><div class="ttname"><a href="class_isis_1_1_camera_focal_plane_map.html#afdc93edb030e5d12cd3b563a194c6300">Isis::CameraFocalPlaneMap::p_detectorLine</a></div><div class="ttdeci">double p_detectorLine</div><div class="ttdoc">line value of the detector</div><div class="ttdef"><b>Definition:</b> CameraFocalPlaneMap.h:144</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_html"><div class="ttname"><a href="class_isis_1_1_camera.html">Isis::Camera</a></div><div class="ttdef"><b>Definition:</b> Camera.h:236</div></div>
+<div class="ttc" id="aclass_q_vector_html"><div class="ttname"><a href="class_q_vector.html">QVector</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Calculator.h:18</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_7259cf1f3b2eab6f3e8f181dbcf4b687.html">CameraFocalPlaneMap</a></li><li class="navelem"><a class="el" href="_camera_focal_plane_map_8h.html">CameraFocalPlaneMap.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

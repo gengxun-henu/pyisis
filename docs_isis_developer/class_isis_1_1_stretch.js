@@ -1,0 +1,26 @@
+var class_isis_1_1_stretch =
+[
+    [ "Stretch", "class_isis_1_1_stretch.html#a493918ad6145976e5f2fa9c4caf3f69b", null ],
+    [ "~Stretch", "class_isis_1_1_stretch.html#abcf699d4ca763513a9e18ed2a0d0d019", null ],
+    [ "AddPair", "class_isis_1_1_stretch.html#a0874817fdd51d7fefb3e92ee876fad0a", null ],
+    [ "ClearPairs", "class_isis_1_1_stretch.html#ae72330147243d385b88076f048df88f9", null ],
+    [ "CopyPairs", "class_isis_1_1_stretch.html#a031365f2d8269a360a8463e58d94e160", null ],
+    [ "Input", "class_isis_1_1_stretch.html#a98ac83787150c6f134940db9fa0e40b7", null ],
+    [ "Load", "class_isis_1_1_stretch.html#afc5bfc5b2deec0ed4e8c5a07083d3564", null ],
+    [ "Load", "class_isis_1_1_stretch.html#a6beaae51c4709cca3e8a83b8f72a9f49", null ],
+    [ "Map", "class_isis_1_1_stretch.html#af34aba8d4791daab481d2315ec98f33f", null ],
+    [ "Output", "class_isis_1_1_stretch.html#a63acef90a108bcf91c5aae8b64165960", null ],
+    [ "Pairs", "class_isis_1_1_stretch.html#af56580ead933ed3aa6ff5a4843c36d2e", null ],
+    [ "Parse", "class_isis_1_1_stretch.html#a064a71cc80742476ad31a55d46ce4ae1", null ],
+    [ "Parse", "class_isis_1_1_stretch.html#a9f4550722fa077493737ccddde193dc5", null ],
+    [ "Save", "class_isis_1_1_stretch.html#a37e330414e39f2fa5d3c43dcef1dc90e", null ],
+    [ "Save", "class_isis_1_1_stretch.html#a60613867b9bef340d860bf62461817c6", null ],
+    [ "SetHis", "class_isis_1_1_stretch.html#ab0c37f3e38a767b3e675d182b87e334e", null ],
+    [ "SetHrs", "class_isis_1_1_stretch.html#a52d51416b75f5c759d448ce61665e497", null ],
+    [ "SetLis", "class_isis_1_1_stretch.html#ab80f5bf9e2970ef26112687345400ae8", null ],
+    [ "SetLrs", "class_isis_1_1_stretch.html#afd00522d8efec39dca5546396babe839", null ],
+    [ "SetMaximum", "class_isis_1_1_stretch.html#a234078b4634be9bb2a17ad554663cb5d", null ],
+    [ "SetMinimum", "class_isis_1_1_stretch.html#a6827bd46e83311b91d1b14042cb9fe88", null ],
+    [ "SetNull", "class_isis_1_1_stretch.html#a23217c73947267e9daf07b71a9dfb7e2", null ],
+    [ "Text", "class_isis_1_1_stretch.html#affeda5003a4c9ace863525cd5d428f43", null ]
+];

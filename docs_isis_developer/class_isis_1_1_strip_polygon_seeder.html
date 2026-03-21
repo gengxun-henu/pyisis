@@ -1,0 +1,700 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::StripPolygonSeeder Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_strip_polygon_seeder.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_strip_polygon_seeder-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::StripPolygonSeeder Class Reference<div class="ingroups"><a class="el" href="group___pattern_matching.html">Pattern Matching</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Seed points using a grid with a staggered pattern.  
+ <a href="class_isis_1_1_strip_polygon_seeder.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_strip_polygon_seeder_8h_source.html">StripPolygonSeeder.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::StripPolygonSeeder:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_strip_polygon_seeder__inherit__graph.png" border="0" usemap="#a_isis_1_1_strip_polygon_seeder_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_strip_polygon_seeder_inherit__map" id="a_isis_1_1_strip_polygon_seeder_inherit__map">
+<area shape="rect" title="Seed points using a grid with a staggered pattern." alt="" coords="5,311,171,456"/>
+<area shape="rect" href="class_isis_1_1_polygon_seeder.html" title="This class is used as the base class for all PolygonSeeder objects." alt="" coords="11,5,165,263"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::StripPolygonSeeder:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_strip_polygon_seeder__coll__graph.png" border="0" usemap="#a_isis_1_1_strip_polygon_seeder_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_strip_polygon_seeder_coll__map" id="a_isis_1_1_strip_polygon_seeder_coll__map">
+<area shape="rect" title="Seed points using a grid with a staggered pattern." alt="" coords="5,665,171,811"/>
+<area shape="rect" href="class_isis_1_1_polygon_seeder.html" title="This class is used as the base class for all PolygonSeeder objects." alt="" coords="11,359,165,616"/>
+<area shape="rect" href="class_isis_1_1_pvl.html" title="Container for cube&#45;like labels." alt="" coords="11,5,165,295"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aa77f91544d07a41f526f8735e7353b43"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_strip_polygon_seeder.html#aa77f91544d07a41f526f8735e7353b43">StripPolygonSeeder</a> (<a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl)</td></tr>
+<tr class="memdesc:aa77f91544d07a41f526f8735e7353b43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <a class="el" href="class_isis_1_1_strip_polygon_seeder.html" title="Seed points using a grid with a staggered pattern.">StripPolygonSeeder</a> algorithm.  <a href="class_isis_1_1_strip_polygon_seeder.html#aa77f91544d07a41f526f8735e7353b43">More...</a><br /></td></tr>
+<tr class="separator:aa77f91544d07a41f526f8735e7353b43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46bfc755c5786a522131b7cd40af9603"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_strip_polygon_seeder.html#a46bfc755c5786a522131b7cd40af9603">~StripPolygonSeeder</a> ()</td></tr>
+<tr class="memdesc:a46bfc755c5786a522131b7cd40af9603"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_strip_polygon_seeder.html#a46bfc755c5786a522131b7cd40af9603">More...</a><br /></td></tr>
+<tr class="separator:a46bfc755c5786a522131b7cd40af9603"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a68619dd389df920dd231f052adcc0a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; geos::geom::Point * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_strip_polygon_seeder.html#a8a68619dd389df920dd231f052adcc0a">Seed</a> (const geos::geom::MultiPolygon *mp)</td></tr>
+<tr class="memdesc:a8a68619dd389df920dd231f052adcc0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seed a polygon with points.  <a href="class_isis_1_1_strip_polygon_seeder.html#a8a68619dd389df920dd231f052adcc0a">More...</a><br /></td></tr>
+<tr class="separator:a8a68619dd389df920dd231f052adcc0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe2ba49914c9b8330a8e362427751ffe"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_strip_polygon_seeder.html#afe2ba49914c9b8330a8e362427751ffe">PluginParameters</a> (QString grpName)</td></tr>
+<tr class="memdesc:afe2ba49914c9b8330a8e362427751ffe"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_plugin.html" title="Loads plugins from a shared library.">Plugin</a> parameters.  <a href="class_isis_1_1_strip_polygon_seeder.html#afe2ba49914c9b8330a8e362427751ffe">More...</a><br /></td></tr>
+<tr class="separator:afe2ba49914c9b8330a8e362427751ffe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2660a8e7811c72d18e0cd5a50796791"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_polygon_seeder.html#af2660a8e7811c72d18e0cd5a50796791">MinimumThickness</a> ()</td></tr>
+<tr class="memdesc:af2660a8e7811c72d18e0cd5a50796791"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the minimum allowed thickness of the polygon.  <a href="class_isis_1_1_polygon_seeder.html#af2660a8e7811c72d18e0cd5a50796791">More...</a><br /></td></tr>
+<tr class="separator:af2660a8e7811c72d18e0cd5a50796791"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af10cbd514385c71c3d37657f282a6dc2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_polygon_seeder.html#af10cbd514385c71c3d37657f282a6dc2">MinimumArea</a> ()</td></tr>
+<tr class="memdesc:af10cbd514385c71c3d37657f282a6dc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the minimum allowed area of the polygon.  <a href="class_isis_1_1_polygon_seeder.html#af10cbd514385c71c3d37657f282a6dc2">More...</a><br /></td></tr>
+<tr class="separator:af10cbd514385c71c3d37657f282a6dc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af51468b678c5531bda8569f0ad68329e"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_polygon_seeder.html#af51468b678c5531bda8569f0ad68329e">Algorithm</a> () const</td></tr>
+<tr class="memdesc:af51468b678c5531bda8569f0ad68329e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the algorithm, read from the Name Keyword in the <a class="el" href="class_isis_1_1_polygon_seeder.html" title="This class is used as the base class for all PolygonSeeder objects.">PolygonSeeder</a> <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> passed into the constructor.  <a href="class_isis_1_1_polygon_seeder.html#af51468b678c5531bda8569f0ad68329e">More...</a><br /></td></tr>
+<tr class="separator:af51468b678c5531bda8569f0ad68329e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f4b02100ae17682b9245f10e5400486"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_polygon_seeder.html#a2f4b02100ae17682b9245f10e5400486">InvalidInput</a> ()</td></tr>
+<tr class="memdesc:a2f4b02100ae17682b9245f10e5400486"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method returns a copy of the <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> passed in by the constructor (from a def file probably) minus what was used.  <a href="class_isis_1_1_polygon_seeder.html#a2f4b02100ae17682b9245f10e5400486">More...</a><br /></td></tr>
+<tr class="separator:a2f4b02100ae17682b9245f10e5400486"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:aef7c48a16e3d689c07d299bfec022554"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_strip_polygon_seeder.html#aef7c48a16e3d689c07d299bfec022554">Parse</a> (<a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl)</td></tr>
+<tr class="memdesc:aef7c48a16e3d689c07d299bfec022554"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the StripSeeder spicific parameters from the PVL.  <a href="class_isis_1_1_strip_polygon_seeder.html#aef7c48a16e3d689c07d299bfec022554">More...</a><br /></td></tr>
+<tr class="separator:aef7c48a16e3d689c07d299bfec022554"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a720d0911b0369feb5ccdb1e2a71d3dbc"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_polygon_seeder.html#a720d0911b0369feb5ccdb1e2a71d3dbc">StandardTests</a> (const geos::geom::MultiPolygon *multiPoly, const geos::geom::Envelope *polyBoundBox)</td></tr>
+<tr class="memdesc:a720d0911b0369feb5ccdb1e2a71d3dbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check the polygon to see if it meets standard criteria.  <a href="class_isis_1_1_polygon_seeder.html#a720d0911b0369feb5ccdb1e2a71d3dbc">More...</a><br /></td></tr>
+<tr class="separator:a720d0911b0369feb5ccdb1e2a71d3dbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a486c5567ad5480edcebbf173f7af62da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_polygon_seeder.html#a486c5567ad5480edcebbf173f7af62da">invalidInput</a></td></tr>
+<tr class="memdesc:a486c5567ad5480edcebbf173f7af62da"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> passed in by the constructor minus what was used.  <a href="class_isis_1_1_polygon_seeder.html#a486c5567ad5480edcebbf173f7af62da">More...</a><br /></td></tr>
+<tr class="separator:a486c5567ad5480edcebbf173f7af62da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Seed points using a grid with a staggered pattern. </p>
+<p>This class seeds the polygon with <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Points by creating a grid, centered on the overlap polygon. In each grid square two points are checked to see if they are inside the overlap polygon. One of these points lies 1/6 of a grid square up and left from the grid's center point, while the other point lies 1/6 down and right. Each point found that is within the overlap polygon is returned as a point.</p>
+<dl class="section author"><dt>Author</dt><dd>2006-01-20 Stuart Sides </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa77f91544d07a41f526f8735e7353b43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa77f91544d07a41f526f8735e7353b43">&#9670;&nbsp;</a></span>StripPolygonSeeder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::StripPolygonSeeder::StripPolygonSeeder </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a <a class="el" href="class_isis_1_1_strip_polygon_seeder.html" title="Seed points using a grid with a staggered pattern.">StripPolygonSeeder</a> algorithm. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td>A <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> object that contains a valid polygon point seeding definition </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_strip_polygon_seeder.html#aef7c48a16e3d689c07d299bfec022554">Parse()</a>.</p>
+
+</div>
+</div>
+<a id="a46bfc755c5786a522131b7cd40af9603"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46bfc755c5786a522131b7cd40af9603">&#9670;&nbsp;</a></span>~StripPolygonSeeder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::StripPolygonSeeder::~StripPolygonSeeder </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af51468b678c5531bda8569f0ad68329e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af51468b678c5531bda8569f0ad68329e">&#9670;&nbsp;</a></span>Algorithm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PolygonSeeder::Algorithm </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The name of the algorithm, read from the Name Keyword in the <a class="el" href="class_isis_1_1_polygon_seeder.html" title="This class is used as the base class for all PolygonSeeder objects.">PolygonSeeder</a> <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> passed into the constructor. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The value of the Name Keyword in the <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a>. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_grid_polygon_seeder.html#a5119861f10bdc94862a1f7d461c3e3d6">Isis::GridPolygonSeeder::PluginParameters()</a>, <a class="el" href="class_isis_1_1_limit_polygon_seeder.html#a89fa7c20551ebc3f3e35890e848e87f3">Isis::LimitPolygonSeeder::PluginParameters()</a>, and <a class="el" href="class_isis_1_1_strip_polygon_seeder.html#afe2ba49914c9b8330a8e362427751ffe">PluginParameters()</a>.</p>
+
+</div>
+</div>
+<a id="a2f4b02100ae17682b9245f10e5400486"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f4b02100ae17682b9245f10e5400486">&#9670;&nbsp;</a></span>InvalidInput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> Isis::PolygonSeeder::InvalidInput </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method returns a copy of the <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> passed in by the constructor (from a def file probably) minus what was used. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a></b> A copy of this pvl minus what was used. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_polygon_seeder.html#a486c5567ad5480edcebbf173f7af62da">Isis::PolygonSeeder::invalidInput</a>.</p>
+
+</div>
+</div>
+<a id="af10cbd514385c71c3d37657f282a6dc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af10cbd514385c71c3d37657f282a6dc2">&#9670;&nbsp;</a></span>MinimumArea()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PolygonSeeder::MinimumArea </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the minimum allowed area of the polygon. </p>
+<p>This value is set from the "MinimumArea" keyword in the PVL. The seeding algorithm will not seed polygons that have an area less than this.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> The value for the minimum area allowed. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_grid_polygon_seeder.html#a5119861f10bdc94862a1f7d461c3e3d6">Isis::GridPolygonSeeder::PluginParameters()</a>, <a class="el" href="class_isis_1_1_limit_polygon_seeder.html#a89fa7c20551ebc3f3e35890e848e87f3">Isis::LimitPolygonSeeder::PluginParameters()</a>, <a class="el" href="class_isis_1_1_strip_polygon_seeder.html#afe2ba49914c9b8330a8e362427751ffe">PluginParameters()</a>, and <a class="el" href="class_isis_1_1_polygon_seeder.html#a720d0911b0369feb5ccdb1e2a71d3dbc">Isis::PolygonSeeder::StandardTests()</a>.</p>
+
+</div>
+</div>
+<a id="af2660a8e7811c72d18e0cd5a50796791"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2660a8e7811c72d18e0cd5a50796791">&#9670;&nbsp;</a></span>MinimumThickness()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PolygonSeeder::MinimumThickness </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the minimum allowed thickness of the polygon. </p>
+<p>This value is set from the "MinimumThickness" keyword in the PVL. The seeding algorithm will not seed polygons that have a thickness ratio less than this</p>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> The value for the minimum thickness allowed. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_grid_polygon_seeder.html#a5119861f10bdc94862a1f7d461c3e3d6">Isis::GridPolygonSeeder::PluginParameters()</a>, <a class="el" href="class_isis_1_1_limit_polygon_seeder.html#a89fa7c20551ebc3f3e35890e848e87f3">Isis::LimitPolygonSeeder::PluginParameters()</a>, <a class="el" href="class_isis_1_1_strip_polygon_seeder.html#afe2ba49914c9b8330a8e362427751ffe">PluginParameters()</a>, and <a class="el" href="class_isis_1_1_polygon_seeder.html#a720d0911b0369feb5ccdb1e2a71d3dbc">Isis::PolygonSeeder::StandardTests()</a>.</p>
+
+</div>
+</div>
+<a id="aef7c48a16e3d689c07d299bfec022554"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef7c48a16e3d689c07d299bfec022554">&#9670;&nbsp;</a></span>Parse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::StripPolygonSeeder::Parse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Parse the StripSeeder spicific parameters from the PVL. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td>The PVL object containing the control parameters for this polygon seeder. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_polygon_seeder.html#a44cfa675bbd987700603636da02cdf0f">Isis::PolygonSeeder</a>.</p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_pvl_container.html#addebfb8ede51d12d0cb694ee15ae2e28">Isis::PvlContainer::deleteKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a6cdb4c84baf37ecc870517b6c23ebe6d">Isis::PvlContainer::fileName()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">Isis::PvlObject::findGroup()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>, <a class="el" href="class_isis_1_1_polygon_seeder.html#a486c5567ad5480edcebbf173f7af62da">Isis::PolygonSeeder::invalidInput</a>, <a class="el" href="class_isis_1_1_polygon_seeder.html#a44cfa675bbd987700603636da02cdf0f">Isis::PolygonSeeder::Parse()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261aa29caa5de1aa5d875ec6127aa5b5e490">Isis::PvlObject::Traverse</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_strip_polygon_seeder.html#aa77f91544d07a41f526f8735e7353b43">StripPolygonSeeder()</a>.</p>
+
+</div>
+</div>
+<a id="afe2ba49914c9b8330a8e362427751ffe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe2ba49914c9b8330a8e362427751ffe">&#9670;&nbsp;</a></span>PluginParameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> Isis::StripPolygonSeeder::PluginParameters </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>grpName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_plugin.html" title="Loads plugins from a shared library.">Plugin</a> parameters. </p>
+<p>This method will add the <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> values for algorithm name, minimum thickness, and minimum area of this object to a <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a> with the name that is passed in.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">grpName</td><td>A string containing the <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a> name.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a></b> The <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a> with the appropriate parameters added. </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_polygon_seeder.html#a7ba9ca0c5bafc0c1766eb3f6db016791">Isis::PolygonSeeder</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_container.html#ad23c104f285206b85e42d1faf50eb171">Isis::PvlContainer::addKeyword()</a>, <a class="el" href="class_isis_1_1_polygon_seeder.html#af51468b678c5531bda8569f0ad68329e">Isis::PolygonSeeder::Algorithm()</a>, <a class="el" href="class_isis_1_1_polygon_seeder.html#af10cbd514385c71c3d37657f282a6dc2">Isis::PolygonSeeder::MinimumArea()</a>, <a class="el" href="class_isis_1_1_polygon_seeder.html#af2660a8e7811c72d18e0cd5a50796791">Isis::PolygonSeeder::MinimumThickness()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a8a68619dd389df920dd231f052adcc0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a68619dd389df920dd231f052adcc0a">&#9670;&nbsp;</a></span>Seed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; geos::geom::Point * &gt; Isis::StripPolygonSeeder::Seed </td>
+          <td>(</td>
+          <td class="paramtype">const geos::geom::MultiPolygon *&#160;</td>
+          <td class="paramname"><em>multiPoly</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seed a polygon with points. </p>
+<p>Seed the supplied polygon with points in a staggered pattern. The spacing is determined by the PVL group "PolygonSeederAlgorithm"</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lonLatPoly</td><td>The polygon to be seeded with points.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector of points which have been seeded into the polygon. The caller assumes responsibility for deleteing these. </dd></dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_polygon_seeder.html#a183e5efc0e1a932a0b40cfc6a9e67bf5">Isis::PolygonSeeder</a>.</p>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aef83e85d1e0a3305840ff186215957a7">Isis::globalFactory</a>, and <a class="el" href="class_isis_1_1_polygon_seeder.html#a720d0911b0369feb5ccdb1e2a71d3dbc">Isis::PolygonSeeder::StandardTests()</a>.</p>
+
+</div>
+</div>
+<a id="a720d0911b0369feb5ccdb1e2a71d3dbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a720d0911b0369feb5ccdb1e2a71d3dbc">&#9670;&nbsp;</a></span>StandardTests()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PolygonSeeder::StandardTests </td>
+          <td>(</td>
+          <td class="paramtype">const geos::geom::MultiPolygon *&#160;</td>
+          <td class="paramname"><em>xymp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const geos::geom::Envelope *&#160;</td>
+          <td class="paramname"><em>xyBoundBox</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check the polygon to see if it meets standard criteria. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">xymp</td><td>The multipoly containing the coordinates in x/y units instead of lon/lat </td></tr>
+    <tr><td class="paramname">xyBoundBox</td><td>The bounding box of the multipoly</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString A string with an appropriate message to throw if a test was unsuccessful or an empty string if all tests passed. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_polygon_seeder.html#af10cbd514385c71c3d37657f282a6dc2">Isis::PolygonSeeder::MinimumArea()</a>, <a class="el" href="class_isis_1_1_polygon_seeder.html#af2660a8e7811c72d18e0cd5a50796791">Isis::PolygonSeeder::MinimumThickness()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_limit_polygon_seeder.html#aebcc4e4b903546be4db781405a44caec">Isis::LimitPolygonSeeder::Seed()</a>, and <a class="el" href="class_isis_1_1_strip_polygon_seeder.html#a8a68619dd389df920dd231f052adcc0a">Seed()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a486c5567ad5480edcebbf173f7af62da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a486c5567ad5480edcebbf173f7af62da">&#9670;&nbsp;</a></span>invalidInput</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a>* Isis::PolygonSeeder::invalidInput</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> passed in by the constructor minus what was used. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_polygon_seeder.html#a2f4b02100ae17682b9245f10e5400486">Isis::PolygonSeeder::InvalidInput()</a>, <a class="el" href="class_isis_1_1_grid_polygon_seeder.html#a2c67918a16e4e5ff3654a0d1499cb0a5">Isis::GridPolygonSeeder::Parse()</a>, <a class="el" href="class_isis_1_1_limit_polygon_seeder.html#ac673212d788a74ea40df1fcae55c1b85">Isis::LimitPolygonSeeder::Parse()</a>, <a class="el" href="class_isis_1_1_polygon_seeder.html#a44cfa675bbd987700603636da02cdf0f">Isis::PolygonSeeder::Parse()</a>, <a class="el" href="class_isis_1_1_strip_polygon_seeder.html#aef7c48a16e3d689c07d299bfec022554">Parse()</a>, <a class="el" href="class_isis_1_1_polygon_seeder.html#ad798c4737f6e922c0fe4a35c53938f8f">Isis::PolygonSeeder::PolygonSeeder()</a>, and <a class="el" href="class_isis_1_1_polygon_seeder.html#a980b4108ba7304fe6e12f157be93095a">Isis::PolygonSeeder::~PolygonSeeder()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/StripPolygonSeeder/<a class="el" href="_strip_polygon_seeder_8h_source.html">StripPolygonSeeder.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/StripPolygonSeeder/<a class="el" href="_strip_polygon_seeder_8cpp.html">StripPolygonSeeder.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_strip_polygon_seeder.html">StripPolygonSeeder</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

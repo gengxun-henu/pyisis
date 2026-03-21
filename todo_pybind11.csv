@@ -1,0 +1,314 @@
+模块类别,类名,当前状态,备注
+Control Networks,BundleAdjust,未转换,Qt 类型/信号槽较多
+Control Networks,BundleControlPoint,未转换,
+Control Networks,BundleImage,已转换,2026-03-21 已在 bind_control_core.cpp 暴露相机/序列号/文件名基础接口
+Control Networks,BundleLidarControlPoint,未转换,
+Control Networks,BundleLidarPointVector,未转换,
+Control Networks,BundleLidarRangeConstraint,未转换,
+Control Networks,BundleMeasure,未转换,Qt 类型/信号槽较多
+Control Networks,BundleObservation,未转换,抽象基类/纯虚接口
+Control Networks,BundleObservationSolveSettings,已转换,2026-03-21 已在 bind_control_core.cpp 暴露枚举/求解配置/观测号接口
+Control Networks,BundleObservationVector,未转换,
+Control Networks,BundleResults,未转换,Qt 类型/信号槽较多
+Control Networks,BundleSettings,已转换,2026-03-21 已在 bind_control_core.cpp 暴露核心 bundle 配置/观测求解设置/目标体链接
+Control Networks,BundleSolutionInfo,未转换,Qt 类型/信号槽较多
+Control Networks,BundleTargetBody,已转换,2026-03-21 已在 bind_control_core.cpp 暴露目标体求解配置/格式化/局部半径接口
+Control Networks,ControlMeasure,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Control Networks,ControlMeasureLogData,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Control Networks,ControlNet,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Control Networks,ControlNetDiff,已转换,2026-03-21 已在 bind_control_core.cpp 暴露 compare(...) 与 tolerances 接口
+Control Networks,ControlNetFilter,未转换,
+Control Networks,ControlNetStatistics,未转换,
+Control Networks,ControlNetValidMeasure,未转换,
+Control Networks,ControlNetVersioner,未转换,
+Control Networks,ControlNetVitals,未转换,Qt 类型/信号槽较多
+Control Networks,ControlPoint,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Control Networks,ControlPointList,已转换,2026-03-21 已在 bind_control_core.cpp 暴露文件读取/索引/统计注册接口
+Control Networks,ControlPointV0001,未转换,
+Control Networks,ControlPointV0002,未转换,
+Control Networks,ControlPointV0003,未转换,
+Control Networks,CsmBundleObservation,未转换,
+Control Networks,ImageOverlap,未转换,
+Control Networks,InterestOperator,未转换,抽象基类/纯虚接口
+Control Networks,InterestOperatorFactory,未转换,工厂类，静态创建接口较多
+Control Networks,IsisBundleObservation,未转换,
+Control Networks,LidarControlPoint,未转换,
+Control Networks,MeasureValidationResults,已转换,2026-03-21 已在 bind_control_core.cpp 暴露验证状态/失败消息/字符串格式化接口
+Control Networks,ObservationNumber,已转换,2026-03-21 已在 bind_base_support.cpp 暴露 compose(...) 与 possible_serial(...)
+Control Networks,SerialNumber,已转换,2026-03-21 已在 bind_base_support.cpp 暴露 compose(...) 与 compose_observation(...)
+Control Networks,SerialNumberList,已转换,2026-03-21 已在 bind_base_support.cpp 暴露构造/增删/查询/索引/观测号辅助接口
+Geometry,Enlarge,已转换,已在 bind_base_geometry.cpp 暴露
+Geometry,Interpolator,已转换,已在 bind_base_geometry.cpp 暴露
+Geometry,Reduce,已转换,已在 bind_base_geometry.cpp 暴露
+Geometry,SurfacePoint,已转换,
+Geometry,Transform,已转换,已在 bind_base_geometry.cpp 暴露
+Geometry,UniversalGroundMap,已转换,抽象基类/纯虚接口；已导出基础符号
+High Level Cube I/O,ExportDescription,已转换,已在高层 cube io 绑定中导出
+High Level Cube I/O,ImageExporter,未转换,抽象基类/纯虚接口
+High Level Cube I/O,ImageImporter,未转换,抽象基类/纯虚接口
+High Level Cube I/O,JP2Decoder,已转换,已在高层 cube io 绑定中导出
+High Level Cube I/O,JP2Encoder,已转换,已在高层 cube io 绑定中导出
+High Level Cube I/O,JP2Error,已转换,已在高层 cube io 绑定中导出
+High Level Cube I/O,JP2Exporter,未转换,
+High Level Cube I/O,JP2Importer,未转换,
+High Level Cube I/O,Process,已转换,流程/回调接口较多
+High Level Cube I/O,ProcessByBoxcar,已转换,流程/回调接口较多
+High Level Cube I/O,ProcessByBrick,已转换,抽象基类/纯虚接口；流程/回调接口较多
+High Level Cube I/O,ProcessByLine,已转换,抽象基类/纯虚接口；流程/回调接口较多
+High Level Cube I/O,ProcessByQuickFilter,已转换,流程/回调接口较多
+High Level Cube I/O,ProcessBySample,已转换,流程/回调接口较多
+High Level Cube I/O,ProcessBySpectra,已转换,抽象基类/纯虚接口；流程/回调接口较多
+High Level Cube I/O,ProcessByTile,已转换,流程/回调接口较多
+High Level Cube I/O,ProcessExport,未转换,抽象基类/纯虚接口；流程/回调接口较多
+High Level Cube I/O,ProcessExportPds,未转换,流程/回调接口较多
+High Level Cube I/O,ProcessGroundPolygons,未转换,流程/回调接口较多
+High Level Cube I/O,ProcessImport,已转换,流程/回调接口较多
+High Level Cube I/O,ProcessImportFits,已转换,流程/回调接口较多
+High Level Cube I/O,ProcessImportPds,已转换,流程/回调接口较多
+High Level Cube I/O,ProcessImportVicar,已转换,流程/回调接口较多
+High Level Cube I/O,ProcessMapMosaic,未转换,流程/回调接口较多
+High Level Cube I/O,ProcessMosaic,未转换,流程/回调接口较多
+High Level Cube I/O,ProcessPolygons,未转换,流程/回调接口较多
+High Level Cube I/O,ProcessRubberSheet,未转换,流程/回调接口较多
+High Level Cube I/O,QtExporter,未转换,
+High Level Cube I/O,QtImporter,未转换,
+High Level Cube I/O,StreamExporter,未转换,抽象基类/纯虚接口
+High Level Cube I/O,SubArea,未转换,
+High Level Cube I/O,TiffExporter,未转换,
+High Level Cube I/O,TiffImporter,未转换,
+Low Level Cube I/O,AlphaCube,已转换,
+Low Level Cube I/O,BandManager,已转换,2026-03-21 已在 bind_low_level_cube_io.cpp 暴露构造与 set_band(...)
+Low Level Cube I/O,Blobber,未转换,抽象基类/纯虚接口
+Low Level Cube I/O,BoxcarManager,未转换,
+Low Level Cube I/O,Brick,已转换,需注意内存生命周期与数据视图映射
+Low Level Cube I/O,Buffer,已转换,需注意内存生命周期与数据视图映射
+Low Level Cube I/O,BufferManager,已转换,需注意内存生命周期与数据视图映射
+Low Level Cube I/O,Cube,已转换,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Low Level Cube I/O,CubeBsqHandler,未转换,
+Low Level Cube I/O,CubeCachingAlgorithm,未转换,抽象基类/纯虚接口
+Low Level Cube I/O,CubeIoHandler,未转换,抽象基类/纯虚接口
+Low Level Cube I/O,CubeTileHandler,未转换,
+Low Level Cube I/O,LineManager,已转换,
+Low Level Cube I/O,OriginalLabel,未转换,
+Low Level Cube I/O,OriginalXmlLabel,未转换,
+Low Level Cube I/O,Portal,已转换,需注意内存生命周期与数据视图映射
+Low Level Cube I/O,RawCubeChunk,未转换,
+Low Level Cube I/O,RegionalCachingAlgorithm,未转换,
+Low Level Cube I/O,SampleManager,已转换,
+Low Level Cube I/O,Table,已转换,需注意内存生命周期与数据视图映射
+Low Level Cube I/O,TableField,已转换,需注意内存生命周期与数据视图映射
+Low Level Cube I/O,TableRecord,已转换,需注意内存生命周期与数据视图映射
+Low Level Cube I/O,TileManager,已转换,
+Map Projection,Equirectangular,已转换,已导出基础投影类型
+Map Projection,LambertAzimuthalEqualArea,已转换,已导出基础投影类型
+Map Projection,LambertConformal,已转换,已导出基础投影类型
+Map Projection,LunarAzimuthalEqualArea,已转换,
+Map Projection,Mercator,已转换,已导出基础投影类型
+Map Projection,Mollweide,已转换,已导出基础投影类型
+Map Projection,ObliqueCylindrical,已转换,已导出基础投影类型
+Map Projection,Orthographic,已转换,已导出基础投影类型
+Map Projection,Planar,已转换,已导出基础投影类型
+Map Projection,PointPerspective,已转换,已导出基础投影类型
+Map Projection,PolarStereographic,已转换,已导出基础投影类型
+Map Projection,Projection,已转换,抽象基类/纯虚接口；基础单测已补
+Map Projection,ProjectionFactory,已转换,工厂类，静态创建接口较多；基础单测已补
+Map Projection,RingCylindrical,已转换,第四批已补单测（构造/坐标互转/范围导出）
+Map Projection,RingPlaneProjection,已转换,抽象基类/纯虚接口
+Map Projection,Robinson,已转换,已导出基础投影类型
+Map Projection,SimpleCylindrical,已转换,第四批已补单测（构造/坐标互转/mapping 导出）
+Map Projection,Sinusoidal,已转换,已导出基础投影类型
+Map Projection,TProjection,已转换,抽象基类/纯虚接口
+Map Projection,TransverseMercator,已转换,已导出基础投影类型
+Map Projection,UpturnedEllipsoidTransverseAzimuthal,已转换,已导出基础投影类型
+Map Projection,WorldMapper,已转换,抽象基类/纯虚接口
+Mars Express,HrscCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Express,MexHrscSrcCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Global Surveyor,MocLabels,未转换,"亦属 Spice, Instruments, and Cameras 相关类"
+Mars Global Surveyor,MocNarrowAngleCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Global Surveyor,MocNarrowAngleSumming,未转换,"亦属 Spice, Instruments, and Cameras 相关类"
+Mars Global Surveyor,MocWideAngleCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Global Surveyor,MocWideAngleDetectorMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类"
+Mars Global Surveyor,MocWideAngleDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Reconnaissance Orbiter,CrismCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Reconnaissance Orbiter,CTXCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Reconnaissance Orbiter,GainChannelNormalize,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,GainFlatField,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,GainLineDrift,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,GainNonLinearity,未转换,
+Mars Reconnaissance Orbiter,GainTemperature,未转换,
+Mars Reconnaissance Orbiter,GainUnitConversion,未转换,
+Mars Reconnaissance Orbiter,HiBlob,未转换,
+Mars Reconnaissance Orbiter,HiCalConf,未转换,
+Mars Reconnaissance Orbiter,HiCalData,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,HiEqualization,未转换,
+Mars Reconnaissance Orbiter,HiHistory,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,HiLab,未转换,
+Mars Reconnaissance Orbiter,HiLineTimeEqn,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,HiriseCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Reconnaissance Orbiter,LoadCSV,未转换,
+Mars Reconnaissance Orbiter,LowPassFilter,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,MarciCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Reconnaissance Orbiter,MarciDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Reconnaissance Orbiter,Module,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,NonLinearLSQ,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,SplineFill,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,ZeroBufferFit,未转换,
+Mars Reconnaissance Orbiter,ZeroBufferSmooth,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,ZeroDark,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,ZeroDarkRate,未转换,抽象基类/纯虚接口
+Mars Reconnaissance Orbiter,ZeroReverse,未转换,抽象基类/纯虚接口
+Math,Affine,未转换,
+Math,Basis1VariableFunction,未转换,抽象基类/纯虚接口
+Math,BasisFunction,未转换,
+Math,Calculator,未转换,
+Math,CubeCalculator,未转换,
+Math,CubeInfixToPostfix,未转换,
+Math,FunctionTools,未转换,抽象基类/纯虚接口
+Math,InfixToPostfix,未转换,
+Math,InlineInfixToPostfix,未转换,
+Math,LeastSquares,未转换,
+Math,Matrix,未转换,
+Math,MaximumLikelihoodWFunctions,未转换,
+Math,NthOrderPolynomial,未转换,
+Math,NumericalApproximation,未转换,抽象基类/纯虚接口
+Math,NumericalAtmosApprox,未转换,
+Math,PolynomialBivariate,未转换,
+Math,PolynomialUnivariate,未转换,
+Math,SurfaceModel,未转换,
+Near Earth Asteroid Rendezvous - Shoemaker,MsiCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Messenger,MdisCamera,已转换,"第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖"
+Parsing,CSVReader,未转换,抽象基类/纯虚接口
+Parsing,FileList,未转换,
+Parsing,FileName,已转换,
+Parsing,IString,未转换,
+Parsing,iTime,已转换,
+Parsing,LabelTranslationManager,未转换,抽象基类/纯虚接口
+Parsing,Pvl,已转换,
+Parsing,PvlContainer,已转换,
+Parsing,PvlFormat,未转换,
+Parsing,PvlFormatPds,未转换,
+Parsing,PvlGroup,已转换,
+Parsing,PvlKeyword,已转换,Qt 类型/信号槽较多
+Parsing,PvlObject,已转换,
+Parsing,PvlSequence,未转换,
+Parsing,PvlToken,未转换,
+Parsing,PvlTokenizer,未转换,
+Parsing,PvlToPvlTranslationManager,未转换,
+Parsing,PvlToXmlTranslationManager,未转换,
+Parsing,PvlTranslationTable,未转换,
+Parsing,XmlToPvlTranslationManager,未转换,
+Pattern Matching,AdaptiveGruen,未转换,
+Pattern Matching,AtmosModelFactory,未转换,工厂类，静态创建接口较多
+Pattern Matching,AutoReg,未转换,抽象基类/纯虚接口
+Pattern Matching,AutoRegFactory,未转换,工厂类，静态创建接口较多
+Pattern Matching,Chip,未转换,抽象基类/纯虚接口
+Pattern Matching,GridPolygonSeeder,未转换,
+Pattern Matching,Gruen,未转换,
+Pattern Matching,ImageOverlapSet,未转换,
+Pattern Matching,ImagePolygon,未转换,
+Pattern Matching,LimitPolygonSeeder,未转换,
+Pattern Matching,MaximumCorrelation,未转换,
+Pattern Matching,MinimumDifference,未转换,
+Pattern Matching,NormModelFactory,未转换,工厂类，静态创建接口较多
+Pattern Matching,PhotoModelFactory,未转换,工厂类，静态创建接口较多
+Pattern Matching,PolygonSeeder,未转换,抽象基类/纯虚接口
+Pattern Matching,PolygonSeederFactory,未转换,工厂类，静态创建接口较多
+Pattern Matching,StripPolygonSeeder,未转换,
+Radiometric And Photometric Correction,AlbedoAtm,未转换,
+Radiometric And Photometric Correction,Anisotropic1,未转换,
+Radiometric And Photometric Correction,Anisotropic2,未转换,
+Radiometric And Photometric Correction,AtmosModel,未转换,抽象基类/纯虚接口
+Radiometric And Photometric Correction,Hapke,未转换,
+Radiometric And Photometric Correction,HapkeAtm1,未转换,
+Radiometric And Photometric Correction,HapkeAtm2,未转换,
+Radiometric And Photometric Correction,Isotropic1,未转换,
+Radiometric And Photometric Correction,Isotropic2,未转换,
+Radiometric And Photometric Correction,PhotoModel,未转换,抽象基类/纯虚接口
+Radiometric And Photometric Correction,ShadeAtm,未转换,
+Radiometric And Photometric Correction,TopoAtm,未转换,
+SensorUtilities,Body,未转换,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+SensorUtilities,GroundPt2D,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+SensorUtilities,GroundPt3D,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+SensorUtilities,Illuminator,未转换,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+SensorUtilities,ImagePt,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+SensorUtilities,Intersection,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+SensorUtilities,Matrix,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+SensorUtilities,ObserverState,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+SensorUtilities,RaDec,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+SensorUtilities,Sensor,未转换,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+SensorUtilities,Shape,未转换,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
+SensorUtilities,Vec,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+"Spice, Instruments, and Cameras",Camera,已转换,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测；已通过 Sensor 继承暴露 get_surface_point() 以支撑 measure-level 几何链路
+"Spice, Instruments, and Cameras",CameraDetectorMap,已转换,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+"Spice, Instruments, and Cameras",CameraDistortionMap,已转换,第七批已补基础单测（局部畸变正反变换）
+"Spice, Instruments, and Cameras",CameraFactory,已转换,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
+"Spice, Instruments, and Cameras",CameraFocalPlaneMap,已转换,第六批已补基础单测（局部几何 round-trip / 系数访问）
+"Spice, Instruments, and Cameras",CameraGroundMap,已转换,第六批已补基础单测（相机派生地面几何）
+"Spice, Instruments, and Cameras",CameraSkyMap,已转换,第六批已补基础单测（相机派生天球几何）
+"Spice, Instruments, and Cameras",CameraStatistics,未转换,
+"Spice, Instruments, and Cameras",CSMSkyMap,未转换,
+"Spice, Instruments, and Cameras",FramingCamera,已转换,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已验证层级关系
+"Spice, Instruments, and Cameras",IdealCamera,已转换,相机模型/Spice 依赖
+"Spice, Instruments, and Cameras",IrregularBodyCameraGroundMap,未转换,
+"Spice, Instruments, and Cameras",LightTimeCorrectionState,未转换,
+"Spice, Instruments, and Cameras",LineScanCamera,已转换,相机模型/Spice 依赖；后续建议补真实数据单测
+"Spice, Instruments, and Cameras",LineScanCameraDetectorMap,已转换,第七批已补基础单测（独立构造/时间参数）
+"Spice, Instruments, and Cameras",LineScanCameraGroundMap,已转换,第七批已补符号导出；缺少稳定本地 line-scan cube，后续补行为单测
+"Spice, Instruments, and Cameras",LineScanCameraSkyMap,已转换,第七批已补符号导出；缺少稳定本地 line-scan cube，后续补行为单测
+"Spice, Instruments, and Cameras",PixelFOV,未转换,
+"Spice, Instruments, and Cameras",PushFrameCamera,已转换,相机模型/Spice 依赖；后续建议补真实数据单测
+"Spice, Instruments, and Cameras",PushFrameCameraCcdLayout,未转换,
+"Spice, Instruments, and Cameras",PushFrameCameraDetectorMap,未转换,
+"Spice, Instruments, and Cameras",PushFrameCameraGroundMap,未转换,
+"Spice, Instruments, and Cameras",Quaternion,未转换,
+"Spice, Instruments, and Cameras",RadarCamera,已转换,相机模型/Spice 依赖；后续建议补真实数据单测
+"Spice, Instruments, and Cameras",RadarGroundMap,未转换,
+"Spice, Instruments, and Cameras",RadarGroundRangeMap,未转换,
+"Spice, Instruments, and Cameras",RadarPulseMap,未转换,
+"Spice, Instruments, and Cameras",RadarSkyMap,未转换,
+"Spice, Instruments, and Cameras",RadarSlantRangeMap,未转换,
+"Spice, Instruments, and Cameras",ReseauDistortionMap,未转换,相机模型/Spice 依赖
+"Spice, Instruments, and Cameras",RollingShutterCamera,已转换,相机模型/Spice 依赖
+"Spice, Instruments, and Cameras",RollingShutterCameraDetectorMap,未转换,
+"Spice, Instruments, and Cameras",Sensor,已转换,抽象基类/纯虚接口；已补 get_surface_point() 以支撑 measure-level 地面点/半径提取
+"Spice, Instruments, and Cameras",SpacecraftPosition,未转换,
+"Spice, Instruments, and Cameras",Spice,未转换,Qt 类型/信号槽较多
+"Spice, Instruments, and Cameras",SpicePosition,未转换,
+"Spice, Instruments, and Cameras",SpiceRotation,未转换,
+"Spice, Instruments, and Cameras",VariableLineScanCameraDetectorMap,未转换,
+Statistics,FourierTransform,未转换,
+Statistics,GaussianDistribution,已转换,
+Statistics,GroupedStatistics,已转换,
+Statistics,Histogram,已转换,
+Statistics,ImageHistogram,已转换,
+Statistics,MultivariateStatistics,已转换,
+Statistics,OverlapStatistics,未转换,
+Statistics,PrincipalComponentAnalysis,未转换,
+Statistics,QuickFilter,未转换,
+Statistics,StatCumProbDistDynCalc,未转换,Qt 类型/信号槽较多
+Statistics,Statistics,已转换,Qt 类型/信号槽较多
+Statistics,VecFilter,已转换,
+System,Plugin,未转换,
+Trace Gas Orbiter,TgoCassisCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Trace Gas Orbiter,TgoCassisDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Utility,Area3D,未转换,
+Utility,Column,未转换,
+Utility,CubeStretch,未转换,
+Utility,Displacement,已转换,
+Utility,Distance,已转换,
+Utility,EndianSwapper,未转换,
+Utility,ExportPdsTable,未转换,
+Utility,GaussianStretch,未转换,
+Utility,GSLUtility,未转换,
+Utility,ID,未转换,
+Utility,ImportPdsTable,未转换,
+Utility,Kernels,未转换,
+Utility,Latitude,已转换,
+Utility,LineEquation,未转换,
+Utility,Longitude,已转换,
+Utility,Pixel,未转换,
+Utility,PolygonTools,未转换,
+Utility,Selection,未转换,抽象基类/纯虚接口
+Utility,SparseBlockMatrix,未转换,
+Utility,Stretch,未转换,抽象基类/纯虚接口
+Utility,TextFile,未转换,

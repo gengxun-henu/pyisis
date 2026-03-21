@@ -1,0 +1,4 @@
+<map id="Isis::IsisSensor" name="Isis::IsisSensor">
+<area shape="rect" id="node1" title="Implementation of SensorUtilities::Sensor backed by an ISIS camera model." alt="" coords="27,135,139,248"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,161,87"/>
+</map>

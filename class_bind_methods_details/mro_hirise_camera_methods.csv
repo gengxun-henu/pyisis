@@ -1,0 +1,9 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+HiriseCamera,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiriseCamera/HiriseCamera.h,isis_pybind_standalone/src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,HiriseCamera,isis_pybind.HiriseCamera,Y,"Python class symbol is exported; constructor exposure may be limited; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Construction/Enum,HiriseCamera(),isis_pybind.HiriseCamera(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int CkFrameId() const { return (-74000); },isis_pybind.HiriseCamera.ck_frame_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int CkReferenceId() const { return (-74900); },isis_pybind.HiriseCamera.ck_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int SpkReferenceId() const { return (1); },isis_pybind.HiriseCamera.spk_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"

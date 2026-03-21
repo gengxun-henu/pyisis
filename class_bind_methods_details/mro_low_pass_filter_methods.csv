@@ -1,0 +1,12 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+LowPassFilter,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/LowPassFilter.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,LowPassFilter,isis_pybind.LowPassFilter,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,"LowPassFilter() : Module(""LowPassFilter""), _width(3), _iterations(1) { }",isis_pybind.LowPassFilter(),N,抽象基类/纯虚接口
+Construction/Enum,"LowPassFilter(int width, int iterations = 1) : Module(""LowPassFilter""), _width(width), _iterations(iterations) { }",isis_pybind.LowPassFilter(),N,抽象基类/纯虚接口
+Construction/Enum,"LowPassFilter(const Module &c, int width = 3, int iterations = 1) : Module(""LowPassFilter"", c), _width(width), _iterations(iterations) { _data = filterIterator(c.ref(), _width, _iterations)",isis_pybind.LowPassFilter(),N,抽象基类/纯虚接口
+Construction/Enum,"LowPassFilter(const HiVector &v, const HiHistory &h, int width = 3, int iterations = 1) : Module(""LowPassFilter"", h), _width(width), _iterations(iterations) { _data = filterIterator(v, _width, _iterations)",isis_pybind.LowPassFilter(),N,抽象基类/纯虚接口
+Public API,"void Process(const HiVector &v) { _data = filterIterator(v, _width, _iterations)",isis_pybind.LowPassFilter.process,N,抽象基类/纯虚接口
+Mutation/Configuration,_history.clear(),isis_pybind.LowPassFilter.clear,N,抽象基类/纯虚接口
+Public API,inline int Width() const { return (_width); },isis_pybind.LowPassFilter.width,N,抽象基类/纯虚接口

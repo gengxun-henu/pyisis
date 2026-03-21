@@ -1,0 +1,345 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/RubberBandComboBox/RubberBandComboBox.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_rubber_band_combo_box_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">RubberBandComboBox.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_rubber_band_combo_box_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef RubberBandComboBox_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define RubberBandComboBox_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;QComboBox&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_file_name_8h.html">FileName.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_rubber_band_tool_8h.html">RubberBandTool.h</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="class_isis_1_1_rubber_band_combo_box.html">   26</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_rubber_band_combo_box.html">RubberBandComboBox</a> : <span class="keyword">public</span> <a class="code" href="class_q_combo_box.html">QComboBox</a> {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;      <a class="code" href="class_isis_1_1_rubber_band_combo_box.html#a24ebec38d6be97f36187785d5948a0a6">RubberBandComboBox</a>(<a class="code" href="class_isis_1_1_tool.html">Tool</a> *tool, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> bandingOptions, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> defaultOption,</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;          <span class="keywordtype">bool</span> showIndicatorColors = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064f">   36</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064f">RubberBandOptions</a> {</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fad716b1519076ea31197fd2ece4af3e5b">   37</a></span>&#160;        <a class="code" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fad716b1519076ea31197fd2ece4af3e5b">Circle</a>           = 1,   </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa81ffd95fe0ffc27de50d30493d60abd7">   38</a></span>&#160;        <a class="code" href="struct_ellipse.html">Ellipse</a>          = 2,   </div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fafcd1e08bdf6c7a27e211dc9b57bb3d0a">   39</a></span>&#160;        <a class="code" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fafcd1e08bdf6c7a27e211dc9b57bb3d0a">Rectangle</a>        = 4,   </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa656c7ddfb66ceaff19eaf523522e3910">   40</a></span>&#160;        <a class="code" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa656c7ddfb66ceaff19eaf523522e3910">RotatedRectangle</a> = 8,   </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa57a13178e6016e20c8dd2a7a5d073498">   41</a></span>&#160;        <a class="code" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa57a13178e6016e20c8dd2a7a5d073498">Polygon</a>          = 16,  </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa470390437841209f3d74a9f6e2924056">   42</a></span>&#160;        <a class="code" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa470390437841209f3d74a9f6e2924056">Line</a>             = 32,  </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa4ee944073224c40b22870a612262edd0">   43</a></span>&#160;        <a class="code" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa4ee944073224c40b22870a612262edd0">SegmentedLine</a>    = 64,  </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="class_isis_1_1_angle.html">Angle</a>            = 128  </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064face942c409dff4ed6f5697e465366ff02">   45</a></span>&#160;      };</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="class_isis_1_1_rubber_band_combo_box.html#a81b9e3799c2a8a668404f4aae1ec9ec5">   48</a></span>&#160;      QString <a class="code" href="class_isis_1_1_rubber_band_combo_box.html#a81b9e3799c2a8a668404f4aae1ec9ec5">toolIconDir</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">return</span> m_tool-&gt;<a class="code" href="class_isis_1_1_tool.html#aff46b0071ca1b18d750fcf1945761a05">toolIconDir</a>();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;      }</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_rubber_band_combo_box.html#ac18f3f11f3ad507d2c55d1c953d7210d">reset</a>();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">protected</span> slots:</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_rubber_band_combo_box.html#a16fec932c7653a61a838283247caec01">selectionChanged</a>(<span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getDefault(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> defaultOption, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> bandingOptions);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      <span class="keywordtype">void</span> showAngle() {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        m_tool-&gt;<a class="code" href="class_isis_1_1_tool.html#a78f92349be2a54b41ed332886582797b">rubberBandTool</a>()-&gt;<a class="code" href="class_isis_1_1_rubber_band_tool.html#acf4a2c98c23558204222edb844ab1d95">enable</a>(<a class="code" href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bcafec30d905355e6499a994e0a326635a3">RubberBandTool::AngleMode</a>, m_showIndicatorColors);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      <span class="keywordtype">void</span> showCircle()            {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        m_tool-&gt;<a class="code" href="class_isis_1_1_tool.html#a78f92349be2a54b41ed332886582797b">rubberBandTool</a>()-&gt;<a class="code" href="class_isis_1_1_rubber_band_tool.html#acf4a2c98c23558204222edb844ab1d95">enable</a>(<a class="code" href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bcab2fef4b328a3a6582b4597efa212ff97">RubberBandTool::CircleMode</a>, m_showIndicatorColors);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <span class="keywordtype">void</span> showEllipse()           {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        m_tool-&gt;<a class="code" href="class_isis_1_1_tool.html#a78f92349be2a54b41ed332886582797b">rubberBandTool</a>()-&gt;<a class="code" href="class_isis_1_1_rubber_band_tool.html#acf4a2c98c23558204222edb844ab1d95">enable</a>(<a class="code" href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bca43ff0374054a70fb30f4c6328fb7fab9">RubberBandTool::EllipseMode</a>, m_showIndicatorColors);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      }</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      <span class="keywordtype">void</span> showLine()              {</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        m_tool-&gt;<a class="code" href="class_isis_1_1_tool.html#a78f92349be2a54b41ed332886582797b">rubberBandTool</a>()-&gt;<a class="code" href="class_isis_1_1_rubber_band_tool.html#acf4a2c98c23558204222edb844ab1d95">enable</a>(<a class="code" href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bcabd1876e30c28fd42d761c0cf7ba4335a">RubberBandTool::LineMode</a>, m_showIndicatorColors);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <span class="keywordtype">void</span> showRectangle()         {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        m_tool-&gt;<a class="code" href="class_isis_1_1_tool.html#a78f92349be2a54b41ed332886582797b">rubberBandTool</a>()-&gt;<a class="code" href="class_isis_1_1_rubber_band_tool.html#acf4a2c98c23558204222edb844ab1d95">enable</a>(<a class="code" href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bca8c6adf03a5a2abca589754225731735e">RubberBandTool::RectangleMode</a>, m_showIndicatorColors);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      }</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      <span class="keywordtype">void</span> showRotatedRectangle()  {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        m_tool-&gt;<a class="code" href="class_isis_1_1_tool.html#a78f92349be2a54b41ed332886582797b">rubberBandTool</a>()-&gt;<a class="code" href="class_isis_1_1_rubber_band_tool.html#acf4a2c98c23558204222edb844ab1d95">enable</a>(<a class="code" href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bcad146f009644fc3ba837ed4e8b54f3c6d">RubberBandTool::RotatedRectangleMode</a>,</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                                         m_showIndicatorColors);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      }</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      <span class="keywordtype">void</span> showPolygon()           {</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        m_tool-&gt;<a class="code" href="class_isis_1_1_tool.html#a78f92349be2a54b41ed332886582797b">rubberBandTool</a>()-&gt;<a class="code" href="class_isis_1_1_rubber_band_tool.html#acf4a2c98c23558204222edb844ab1d95">enable</a>(<a class="code" href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bcaa9f4a1d60826c10349eba6176beb0012">RubberBandTool::PolygonMode</a>, m_showIndicatorColors);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      }</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      <span class="keywordtype">void</span> showSegmentedLine()     {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        m_tool-&gt;<a class="code" href="class_isis_1_1_tool.html#a78f92349be2a54b41ed332886582797b">rubberBandTool</a>()-&gt;<a class="code" href="class_isis_1_1_rubber_band_tool.html#acf4a2c98c23558204222edb844ab1d95">enable</a>(<a class="code" href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bca2b79934e8d776bba2652219d81043204">RubberBandTool::SegmentedLineMode</a>, m_showIndicatorColors);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      }</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      QStringList m_bandingOptionStrings; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;      <span class="keywordtype">bool</span> m_showIndicatorColors; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      Tool *m_tool;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  };</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;};</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_file_name_8h_html"><div class="ttname"><a href="_file_name_8h.html">FileName.h</a></div></div>
+<div class="ttc" id="a_rubber_band_tool_8h_html"><div class="ttname"><a href="_rubber_band_tool_8h.html">RubberBandTool.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_angle_html"><div class="ttname"><a href="class_isis_1_1_angle.html">Isis::Angle</a></div><div class="ttdoc">Defines an angle and provides unit conversions.</div><div class="ttdef"><b>Definition:</b> Angle.h:45</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html">Isis::RubberBandComboBox</a></div><div class="ttdoc">Combo box for choosing a rubber band type.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.h:26</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html_a16fec932c7653a61a838283247caec01"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html#a16fec932c7653a61a838283247caec01">Isis::RubberBandComboBox::selectionChanged</a></div><div class="ttdeci">void selectionChanged(int index)</div><div class="ttdoc">This slot is called whenever the rubberband shape selection has changed.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.cpp:189</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html_a24ebec38d6be97f36187785d5948a0a6"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html#a24ebec38d6be97f36187785d5948a0a6">Isis::RubberBandComboBox::RubberBandComboBox</a></div><div class="ttdeci">RubberBandComboBox(Tool *tool, unsigned int bandingOptions, unsigned int defaultOption, bool showIndicatorColors=false)</div><div class="ttdoc">RubberBandComboBox constructor.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.cpp:16</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html_a81b9e3799c2a8a668404f4aae1ec9ec5"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html#a81b9e3799c2a8a668404f4aae1ec9ec5">Isis::RubberBandComboBox::toolIconDir</a></div><div class="ttdeci">QString toolIconDir() const</div><div class="ttdoc">Returns the icon directory.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.h:48</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html_ac18f3f11f3ad507d2c55d1c953d7210d"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html#ac18f3f11f3ad507d2c55d1c953d7210d">Isis::RubberBandComboBox::reset</a></div><div class="ttdeci">void reset()</div><div class="ttdoc">Resets the selection.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.cpp:226</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html_aeb65a8b9c9d2a6cfc25bfc96c6f6064f"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064f">Isis::RubberBandComboBox::RubberBandOptions</a></div><div class="ttdeci">RubberBandOptions</div><div class="ttdoc">Enum to store rubber band shapes.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.h:36</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html_aeb65a8b9c9d2a6cfc25bfc96c6f6064fa470390437841209f3d74a9f6e2924056"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa470390437841209f3d74a9f6e2924056">Isis::RubberBandComboBox::Line</a></div><div class="ttdeci">@ Line</div><div class="ttdoc">Line.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.h:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html_aeb65a8b9c9d2a6cfc25bfc96c6f6064fa4ee944073224c40b22870a612262edd0"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa4ee944073224c40b22870a612262edd0">Isis::RubberBandComboBox::SegmentedLine</a></div><div class="ttdeci">@ SegmentedLine</div><div class="ttdoc">Segmented Line.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.h:43</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html_aeb65a8b9c9d2a6cfc25bfc96c6f6064fa57a13178e6016e20c8dd2a7a5d073498"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa57a13178e6016e20c8dd2a7a5d073498">Isis::RubberBandComboBox::Polygon</a></div><div class="ttdeci">@ Polygon</div><div class="ttdoc">Polygon.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.h:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html_aeb65a8b9c9d2a6cfc25bfc96c6f6064fa656c7ddfb66ceaff19eaf523522e3910"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fa656c7ddfb66ceaff19eaf523522e3910">Isis::RubberBandComboBox::RotatedRectangle</a></div><div class="ttdeci">@ RotatedRectangle</div><div class="ttdoc">RotatedRectangle.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.h:40</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html_aeb65a8b9c9d2a6cfc25bfc96c6f6064fad716b1519076ea31197fd2ece4af3e5b"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fad716b1519076ea31197fd2ece4af3e5b">Isis::RubberBandComboBox::Circle</a></div><div class="ttdeci">@ Circle</div><div class="ttdoc">Circle.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.h:37</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_combo_box_html_aeb65a8b9c9d2a6cfc25bfc96c6f6064fafcd1e08bdf6c7a27e211dc9b57bb3d0a"><div class="ttname"><a href="class_isis_1_1_rubber_band_combo_box.html#aeb65a8b9c9d2a6cfc25bfc96c6f6064fafcd1e08bdf6c7a27e211dc9b57bb3d0a">Isis::RubberBandComboBox::Rectangle</a></div><div class="ttdeci">@ Rectangle</div><div class="ttdoc">Rectangle.</div><div class="ttdef"><b>Definition:</b> RubberBandComboBox.h:39</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_tool_html_a577bcd212572829272c9227e813392bca2b79934e8d776bba2652219d81043204"><div class="ttname"><a href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bca2b79934e8d776bba2652219d81043204">Isis::RubberBandTool::SegmentedLineMode</a></div><div class="ttdeci">@ SegmentedLineMode</div><div class="ttdef"><b>Definition:</b> RubberBandTool.h:65</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_tool_html_a577bcd212572829272c9227e813392bca43ff0374054a70fb30f4c6328fb7fab9"><div class="ttname"><a href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bca43ff0374054a70fb30f4c6328fb7fab9">Isis::RubberBandTool::EllipseMode</a></div><div class="ttdeci">@ EllipseMode</div><div class="ttdef"><b>Definition:</b> RubberBandTool.h:60</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_tool_html_a577bcd212572829272c9227e813392bca8c6adf03a5a2abca589754225731735e"><div class="ttname"><a href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bca8c6adf03a5a2abca589754225731735e">Isis::RubberBandTool::RectangleMode</a></div><div class="ttdeci">@ RectangleMode</div><div class="ttdef"><b>Definition:</b> RubberBandTool.h:62</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_tool_html_a577bcd212572829272c9227e813392bcaa9f4a1d60826c10349eba6176beb0012"><div class="ttname"><a href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bcaa9f4a1d60826c10349eba6176beb0012">Isis::RubberBandTool::PolygonMode</a></div><div class="ttdeci">@ PolygonMode</div><div class="ttdef"><b>Definition:</b> RubberBandTool.h:64</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_tool_html_a577bcd212572829272c9227e813392bcab2fef4b328a3a6582b4597efa212ff97"><div class="ttname"><a href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bcab2fef4b328a3a6582b4597efa212ff97">Isis::RubberBandTool::CircleMode</a></div><div class="ttdeci">@ CircleMode</div><div class="ttdef"><b>Definition:</b> RubberBandTool.h:59</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_tool_html_a577bcd212572829272c9227e813392bcabd1876e30c28fd42d761c0cf7ba4335a"><div class="ttname"><a href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bcabd1876e30c28fd42d761c0cf7ba4335a">Isis::RubberBandTool::LineMode</a></div><div class="ttdeci">@ LineMode</div><div class="ttdef"><b>Definition:</b> RubberBandTool.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_tool_html_a577bcd212572829272c9227e813392bcad146f009644fc3ba837ed4e8b54f3c6d"><div class="ttname"><a href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bcad146f009644fc3ba837ed4e8b54f3c6d">Isis::RubberBandTool::RotatedRectangleMode</a></div><div class="ttdeci">@ RotatedRectangleMode</div><div class="ttdef"><b>Definition:</b> RubberBandTool.h:63</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_tool_html_a577bcd212572829272c9227e813392bcafec30d905355e6499a994e0a326635a3"><div class="ttname"><a href="class_isis_1_1_rubber_band_tool.html#a577bcd212572829272c9227e813392bcafec30d905355e6499a994e0a326635a3">Isis::RubberBandTool::AngleMode</a></div><div class="ttdeci">@ AngleMode</div><div class="ttdef"><b>Definition:</b> RubberBandTool.h:58</div></div>
+<div class="ttc" id="aclass_isis_1_1_rubber_band_tool_html_acf4a2c98c23558204222edb844ab1d95"><div class="ttname"><a href="class_isis_1_1_rubber_band_tool.html#acf4a2c98c23558204222edb844ab1d95">Isis::RubberBandTool::enable</a></div><div class="ttdeci">void enable(RubberBandMode mode, bool showIndicatorColors=false)</div><div class="ttdoc">This is called when changing modes or turning on.</div><div class="ttdef"><b>Definition:</b> RubberBandTool.cpp:301</div></div>
+<div class="ttc" id="aclass_isis_1_1_tool_html"><div class="ttname"><a href="class_isis_1_1_tool.html">Isis::Tool</a></div><div class="ttdoc">Base class for the Qisis tools.</div><div class="ttdef"><b>Definition:</b> Tool.h:67</div></div>
+<div class="ttc" id="aclass_isis_1_1_tool_html_a78f92349be2a54b41ed332886582797b"><div class="ttname"><a href="class_isis_1_1_tool.html#a78f92349be2a54b41ed332886582797b">Isis::Tool::rubberBandTool</a></div><div class="ttdeci">RubberBandTool * rubberBandTool()</div><div class="ttdef"><b>Definition:</b> Tool.cpp:57</div></div>
+<div class="ttc" id="aclass_isis_1_1_tool_html_aff46b0071ca1b18d750fcf1945761a05"><div class="ttname"><a href="class_isis_1_1_tool.html#aff46b0071ca1b18d750fcf1945761a05">Isis::Tool::toolIconDir</a></div><div class="ttdeci">QString toolIconDir() const</div><div class="ttdoc">returns the path to the icon directory.</div><div class="ttdef"><b>Definition:</b> Tool.h:113</div></div>
+<div class="ttc" id="aclass_q_combo_box_html"><div class="ttname"><a href="class_q_combo_box.html">QComboBox</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="astruct_ellipse_html"><div class="ttname"><a href="struct_ellipse.html">Ellipse</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Selection.h:14</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_562895d85013cc97cffc5e47eee8d480.html">RubberBandComboBox</a></li><li class="navelem"><a class="el" href="_rubber_band_combo_box_8h.html">RubberBandComboBox.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

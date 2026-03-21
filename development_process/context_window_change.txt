@@ -1,0 +1,216 @@
+## 当前窗口上下文总结
+
+### 目标与方向
+
+- 当前工作重点是 **ISIS `control` 相关非 GUI 类的 pybind11 绑定**
+- 用户偏好已明确：
+  - **按高优先级推进**
+  - **优先 Control Networks**
+  - **尽量由代理自己直接执行，不需要反复确认**
+  - 可以直接写文件、编译、跑测试
+- Python 对外暴露策略已定：
+  - **源码目录新增 `control/`**
+  - **Python 侧继续保持顶层扁平导出**
+  - **不做 `ip.control.*` 子模块**
+
+### 已完成的实现
+
+当前已经落地并验证通过的 Control Networks 绑定：
+
+- `ControlMeasureLogData`
+- `ControlMeasure`
+- `ControlPoint`
+- `ControlNet`
+- `ControlNetDiff`
+- `ControlPointList`
+
+这些实现主要集中在：
+
+- bind_control_core.cpp
+
+### 已修改/同步过的关键文件
+
+#### 绑定实现
+- bind_control_core.cpp
+
+#### 模块注册 / 构建接线
+- module.cpp
+- CMakeLists.txt
+
+#### Python 顶层导出
+- __init__.py
+
+#### 测试
+- control_core_unit_test.py
+- smoke_import.py
+
+#### 进度与覆盖率同步
+- todo_pybind11.lis
+- control_control_net_diff_methods.csv
+- control_control_point_list_methods.csv
+
+### 当前验证状态
+
+以下验证已经成功通过：
+
+#### 编译
+- `cmake --build build -j2`
+
+#### control 单测
+- `PYTHONPATH=tests/unitTest /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v control_core_unit_test`
+
+结果：
+- 5 个测试全部通过
+
+#### smoke
+- `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+
+结果：
+- `smoke import ok`
+
+### 已确认/已踩过的坑
+
+#### 1. `ControlNetDiff::compare` 需要手动消歧
+- 因为 `compare` 有重载
+- pybind 里要用明确的 `static_cast<...>(&Isis::ControlNetDiff::compare)`
+
+#### 2. `ControlPointList.register_statistics()` 的输出不是我最初假设的 group
+- 实际输出更像顶层 PVL keyword，例如：
+  - `TotalPoints`
+  - `ValidPoints`
+  - `InvalidPoints`
+  - `InvalidPointIds`
+- 因此测试要验证**稳定字段**，不要假设固定 group 名
+
+#### 3. 之前 bind_control_core.cpp 已被用户或其他工具改过
+- 后续继续修改前，**一定要先重新读取当前文件内容**
+- 这个是系统提醒过的
+
+#### 4. `class_bind_methods_details/*.csv` 和真实代码状态可能不完全同步
+- 至少 `ControlNetDiff`、`ControlPointList` 已手动同步
+- 但整体 summary CSV 可能仍有滞后
+- 后续如继续推进，最好做一次统一再生成/同步
+
+### 当前未完成但下一步最合理的方向
+
+优先建议继续沿 **Control Networks** 主线推进，但分层做：
+
+#### 推荐下一步
+1. **继续补 control 轻量/quick win 类**
+2. **开始清 Bundle 主线依赖**
+   - 优先考虑：
+     - `BundleSettings`
+     - 其依赖的 bundle utility types
+   - 再进入：
+     - `BundleAdjust`
+
+#### 暂不建议直接硬上
+- `BundleAdjust`
+  - 虽然高优先级
+  - 但真实依赖比较重，直接上容易拖出很多未绑定类
+- `InterestOperatorFactory`
+  - 单独绑定价值有限
+  - 更适合和 `InterestOperator` / 工厂返回对象一起设计
+
+### 当前 todo 状态
+
+- [x] 审查现有绑定范式
+- [x] 设计control模块骨架
+- [-] 实现核心control绑定
+- [x] 接入构建与导出
+- [x] 添加最小control测试
+- [x] 编译并运行验证
+- [ ] 扩展Bundle相关绑定
+
+这里的关键含义是：
+
+- **核心 control 绑定已经不是空白**
+- 但还没到“全部完成”，所以 `实现核心control绑定` 还是进行中
+- 下一阶段主任务应转向 **Bundle 相关绑定扩展**
+
+### 当前环境与约束
+
+#### 测试/验证 Python
+必须优先用这个解释器：
+- python
+
+#### 仓库规则
+- 做 pybind 工作后，应同步更新：
+  - todo_pybind11.lis
+  - 必要时更新对应 `*_methods.csv`
+- 优先用最小相关测试验证
+- smoke_import.py 保持 broad smoke，不要塞太多细节行为断言
+
+### 额外注意事项
+
+#### 当前终端历史里有两个旧失败，不是这轮 control 失败
+旧终端状态里有：
+- `high_level_cube_io_unit_test` 退出码 `139`
+- low_level_cube_io_unit_test.py 退出码 `1`
+
+但本轮 control 相关验证是：
+- `control_core_unit_test && smoke_import.py`
+- **退出码 0**
+
+所以新窗口里不要把那两个旧失败误判成当前 control 绑定回归。
+
+## 建议你在新 chat 里直接贴的接续提示
+
+你可以直接贴这段：
+
+> 继续当前 isis_pybind_standalone 的 pybind11 工作。  
+> 已完成并验证通过的 Control Networks 绑定包括：`ControlMeasureLogData`、`ControlMeasure`、`ControlPoint`、`ControlNet`、`ControlNetDiff`、`ControlPointList`。  
+> 关键实现文件是 bind_control_core.cpp，并已同步更新 __init__.py、control_core_unit_test.py、smoke_import.py、todo_pybind11.lis。  
+> 当前应继续按高优先级、优先 Control Networks 推进，推荐从 `BundleSettings` / Bundle 相关依赖清理开始，再考虑 `BundleAdjust`。  
+> 注意：修改前先重新读取当前 bind_control_core.cpp，因为它可能被外部改动过；验证继续使用 python。
+
+## 收尾
+
+一句话版总结：
+
+- **control 主线已经真正起步并跑通测试**
+- **当前最稳的下一步是转向 Bundle 依赖清理与绑定**
+- **不要忘记先重新读取 bind_control_core.cpp 再继续改**
+
+如果你愿意，我还可以下一条直接给你一份**“适合粘贴到新 chat 的超短版上下文”**，控制在 10 行以内。
+
+
+
+
+当前窗口上下文总结，控制在10行以内，便于我直接拷贝到下一个CHAT窗口
+##
+２０２６０３２１-１４:３５
+继续 isis_pybind_standalone 的 pybind11 工作，当前主线是 control 非 GUI 类，优先 Control Networks / Bundle 相关。
+已完成并验证通过的绑定：ControlMeasureLogData、ControlMeasure、ControlPoint、ControlNet、ControlNetDiff、ControlPointList。
+核心实现文件：isis_pybind_standalone/src/bind_control_core.cpp。
+已同步文件：module.cpp、CMakeLists.txt、python/pyisis/__init__.py、tests/unitTest/control_core_unit_test.py、tests/smoke_import.py、todo_pybind11.lis。
+已验证通过：cmake --build build -j2；control_core_unit_test 全通过；smoke_import.py 通过。
+关键坑1：ControlNetDiff::compare 有重载，pybind 里需要 static_cast 明确消歧。
+关键坑2：ControlPointList.register_statistics() 测试应验证稳定 keyword，不要假设固定 group 名。
+注意：bind_control_core.cpp 之前被外部改过，继续修改前必须先重新读取当前文件。
+下一步建议：先做 BundleSettings 及其轻量依赖清理，再考虑 BundleAdjust。
+不要把旧终端中的 high_level_cube_io / low_level_cube_io 失败误判成当前 control 绑定回归。
+
+【当前目标】
+【已完成】
+【关键文件】
+【验证结果】
+【已知坑】
+【下一步】
+【必须先重读的文件】
+【环境/解释器】
+【可忽略的旧错误】
+
+
+
+下一步最合理
+现在最顺的下一步有两个方向，你可以任选其一，我都能直接继续：
+
+继续补 Camera.set_ground(...) 两个重载
+这样你能做前后向几何闭环验证
+
+直接开始写可执行的 measure-level DOM 粗差分析脚本
+
+输入 ControlNet + image list + DOM cube
+输出每个点内部的 measure DOM 偏移异常
+如果你要我继续，我建议直接走第 2 个——现在桥已经搭好了，该让车过一遍了。

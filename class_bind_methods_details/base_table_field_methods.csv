@@ -1,0 +1,17 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+TableField,Low Level Cube I/O,isis/src/base/objs/TableField/TableField.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,需注意内存生命周期与数据视图映射
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,TableField,isis_pybind.TableField,Y,Python class symbol is exported; 需注意内存生命周期与数据视图映射
+Construction/Enum,"Type enum (Integer, Double, Text, Real)",isis_pybind.TableField.Type,N,需注意内存生命周期与数据视图映射
+Construction/Enum,TableField(),isis_pybind.TableField(),Y,Constructor is explicitly bound
+Public API,QString name() const,isis_pybind.TableField.name,N,需注意内存生命周期与数据视图映射
+Public API,Type type() const,isis_pybind.TableField.type,N,需注意内存生命周期与数据视图映射
+Query,bool isInteger() const,isis_pybind.TableField.is_integer,N,需注意内存生命周期与数据视图映射
+Query,bool isDouble() const,isis_pybind.TableField.is_double,N,需注意内存生命周期与数据视图映射
+Query,bool isText() const,isis_pybind.TableField.is_text,N,需注意内存生命周期与数据视图映射
+Query,bool isReal() const,isis_pybind.TableField.is_real,N,需注意内存生命周期与数据视图映射
+Public API,int bytes() const,isis_pybind.TableField.bytes,N,需注意内存生命周期与数据视图映射
+Query,int size() const,isis_pybind.TableField.size,N,需注意内存生命周期与数据视图映射
+Public API,PvlGroup pvlGroup(),isis_pybind.TableField.pvl_group,N,需注意内存生命周期与数据视图映射
+Static/Factory,"static QString toString(const TableField &field, QString delimiter = "","")",isis_pybind.TableField.to_string,N,需注意内存生命周期与数据视图映射

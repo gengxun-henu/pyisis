@@ -1,0 +1,6 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+PhotoModelFactory,Pattern Matching,isis/src/base/objs/PhotoModelFactory/PhotoModelFactory.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,工厂类，静态创建接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,PhotoModelFactory,isis_pybind.PhotoModelFactory,N,Python class symbol not found in current binding files; 工厂类，静态创建接口较多
+Static/Factory,static PhotoModel *Create(Pvl &pvl),isis_pybind.PhotoModelFactory.create,N,工厂类，静态创建接口较多

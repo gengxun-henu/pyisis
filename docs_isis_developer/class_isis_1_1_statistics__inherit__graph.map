@@ -1,0 +1,8 @@
+<map id="Isis::Statistics" name="Isis::Statistics">
+<area shape="rect" id="node1" title="This class is used to accumulate statistics on double arrays." alt="" coords="258,135,380,376"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_gaussian_distribution.html" title="gaussian distribution class" alt="" coords="5,456,222,633"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_gaussian_stretch.html" title="Gaussian stretch class." alt="" coords="245,488,393,601"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_histogram.html" title="Container of a cube histogram." alt="" coords="417,424,527,665"/>
+<area shape="rect" id="node2" href="$class_q_object.html" title=" " alt="" coords="284,5,354,87"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_image_histogram.html" title="Container of a cube histogram." alt="" coords="399,713,545,891"/>
+</map>

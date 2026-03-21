@@ -1,0 +1,363 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Member List</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_robinson.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">Isis::Robinson Member List</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This is the complete list of members for <a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a>, including all inherited members.</p>
+<table class="directory">
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a8c5eaab1e12bd887997d0281a11ca725">e4Compute</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a57c8e0b5fa499a8713cbf69299f89065">Eccentricity</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ae44dcbe29f7648d4c37695feeb96ca6c">EquatorialRadius</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a827b8048e6249c9fc4efc7cce2401fa7">GetX</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#ac996a26e2ff2e39fed7cd460b6063030">GetY</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a3e7808d8ad0a018e34c0386c6eaac28e">Has180Domain</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ac34a297a023be0bfb62222debb632758">Has360Domain</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a32b3a00df3928a97d857bf96baf43011">HasGroundRange</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a6767a1cb2d397a0a098a8c20ae770124">inLatitudeRange</a>(double latitude)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a4fa119868d8dd72896871f11f410465b">inLongitudeRange</a>(double longitude)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#aa3ff6b8ec238fb015ec3979ec40e0583">inLongitudeRange</a>(double minLon, double maxLon, double longitude)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ac0b70f4257d2ca9eaf2a05a79fdad5d7">IsEquatorialCylindrical</a>()</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#ad3951fb6f7b680483f71d620512db7b9">IsGood</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a13840f14f4f7ad30c1f558b6dde70bb6">IsPlanetocentric</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ab257cb493253d841beef7a01349d5917">IsPlanetographic</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ae6595a81c2ee8e0d651e12bb83942b75">IsPositiveEast</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a63350df227c0ee54deae911f702627b7">IsPositiveWest</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a3230fa4e7e1f69f8c3dee89ad6f8a0db">IsSky</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#aa6092212cc95a193ac807074078182c5">Latitude</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ac715b1938d9942855373dd4cca155e55">LatitudeType</a> enum name</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ac22d7c59351ea319bf630636773ec918">LatitudeTypeString</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a26442318c4cc13e46e03fd2188f95467">LocalRadius</a>(double lat) const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a2b854a2b910b2d9dda15bfdfe8f218db">LocalRadius</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#af5a2c37ea973c7295cc4bdbd1984161a">Longitude</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#aa4239ec333ace11878fe4c5e1969a51d">LongitudeDirection</a> enum name</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a668ea575d5e8719541ebf72e22b2e37b">LongitudeDirectionString</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#aad59692e2d95c7017250b7b9cb11b775">LongitudeDomainString</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a6e71889151fdaa1ec15212fe6c471545">m_eccentricity</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a24e8ee27fecf38dc658497a528ef5127">m_equatorialRadius</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a8c2876bedc04136e0e8f8a0556e47a5e">m_good</a></td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a57cd8c827736d3b6aafda3d8ff7c17c3">m_groundRangeGood</a></td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#afda3acd993d0bb54afd51d2654290771">m_latitude</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#acfc6b05de72e35cef13f2fc704c92591">m_latitudeType</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a05614f9ffaacc6e82c84e587a2410bb3">m_longitude</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a2662478f9dd14d63212b6c47a8450679">m_longitudeDirection</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a30776ad9fa0240975ba3363794702343">m_longitudeDomain</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a0f6047ad884956bfcf948b7b23e6b250">m_mapper</a></td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#aa46b774c6b19c9df78e5b7e2477e0fd3">m_mappingGrp</a></td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#aa467ae2a647a14465f91b90d626e240a">m_maximumLatitude</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a1d1382305435cacf0da51f1deef12da5">m_maximumLongitude</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a1db027ad82d97161b15618e6e7f257d1">m_maximumX</a></td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#aea23fa6d014dbee1b2af4793984a7c81">m_maximumY</a></td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a1723834603315bf844d0851f216652bf">m_minimumLatitude</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a819c55012203236cbf6d6246009c36d0">m_minimumLongitude</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a8f0ddc2a23bc78faa773777e7f63e42c">m_minimumX</a></td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#ab09cd1e95944e33beace8b8f1da38e29">m_minimumY</a></td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a1832d31d0daf8db77a461ace86069c86">m_polarRadius</a></td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#ab654b677b60debd6576c55b6a9dfbe73">m_sky</a></td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_robinson.html#a97ff66f1ec41e978ff11c91ae27800f0">Mapping</a>()</td><td class="entry"><a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_robinson.html#a937e37f943fb5aa9c0ed7fd86191c232">MappingLatitudes</a>()</td><td class="entry"><a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_robinson.html#ae61e9fcd9e3c19f57ec196f5c1afa820">MappingLongitudes</a>()</td><td class="entry"><a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a298edf06e2ab37373ac156cf68d9e6bf">MaximumLatitude</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ad5fa500f139b03886340d3151242fbc6">MaximumLongitude</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a31948f077a85992df7cf730858ddaab2">mCompute</a>(const double sinphi, const double cosphi) const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#acecd14cc9b340c50d5dd44214c401b19">MinimumLatitude</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a44c9cee55924a3312cb79b6bc0219aac">MinimumLongitude</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_robinson.html#ad83bd169bb4142f6cff6474d4e94658f">Name</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a88a2c63ce33138eb852cf7ab3c818c54">operator!=</a>(const Projection &amp;proj)</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_robinson.html#ab5cf86c34f04ec2da87691b44d3fb96b">operator==</a>(const Projection &amp;proj)</td><td class="entry"><a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a7fd38d66848c971b75f6978c1977bdee">phi2Compute</a>(const double t) const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a58dce597b64b059752866325a85c6b6d">PixelResolution</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ac715b1938d9942855373dd4cca155e55a8548689245bc09329bae1f5985ec720a">Planetocentric</a> enum value</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ac715b1938d9942855373dd4cca155e55a99f3c8edacf7c3fad54e50dda76d8c0f">Planetographic</a> enum value</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a4e0641443e750394b6accee99fc79442">PolarRadius</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#aa4239ec333ace11878fe4c5e1969a51da0abcab78e34866518c8a36f9727bef3c">PositiveEast</a> enum value</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#aa4239ec333ace11878fe4c5e1969a51da04aab5d2103bf9aa292c10639c883e0d">PositiveWest</a> enum value</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a9b8f5f165c1d2becd133476707065603">Projection</a>(Pvl &amp;label)</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#add764dd0d63f3c458f2e33dda00cdc81">projectionType</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a0f3e0cf869cb148d6cd65abe09f8737e">ProjectionType</a> enum name</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a7718e148cfab1cc5a4b8e0d1929a98fa">qCompute</a>(const double sinPhi) const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a1090b35e16633f7c4dbd0323b9d3da9f">Resolution</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a0f3e0cf869cb148d6cd65abe09f8737eafbf0cd2fbd3706ec85f97813ed6245ff">RingPlane</a> enum value</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_robinson.html#ab407bf135ad7dbd6d2983d95a66e9fa7">Robinson</a>(Pvl &amp;label, bool allowDefaults=false)</td><td class="entry"><a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#abd340f701a0ea2ab8aa9fefada720fbe">Rotation</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#af015a223a5e0e94719442c1eb5319ff5">Scale</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#afc011a9c9598920bca4ae045863d656b">SetComputedXY</a>(double x, double y)</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_robinson.html#abc824cf2ce05a0a32c642206d310a7bd">SetCoordinate</a>(const double x, const double y)</td><td class="entry"><a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_robinson.html#a57c38938957fe600ee1da6ba3df60365">SetGround</a>(const double lat, const double lon)</td><td class="entry"><a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#ae727649b57331960bbe90e2504e54940">setProjectionType</a>(const ProjectionType ptype)</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a0eb306c2f2c879886c1885c625c54dac">SetUnboundUniversalGround</a>(const double coord1, const double coord2)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a40744149f250a6adde4eb1c0c872a80e">SetUniversalGround</a>(const double lat, const double lon)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a46481e0356e349075f373ff5947cc819">SetUpperLeftCorner</a>(const Displacement &amp;x, const Displacement &amp;y)</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a293a2c433ebb72c53725631d5e27b879">SetWorld</a>(const double x, const double y)</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a0df129c4d6aed16db100b2669efd30e1">SetWorldMapper</a>(WorldMapper *mapper)</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#ad14ee4e466ece5bbb1070c0c4d749b22">SetXY</a>(double x, double y)</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a95de3b51baa66caedc126e293dbb63b4">tCompute</a>(const double phi, const double sinphi) const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a1f1564033fe545f03d0b9f9cbef3b67b">To180Domain</a>(const double lon)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#aac2d505e571c2bb3ae6e20278121c06c">To360Domain</a>(const double lon)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#afc8748bbfef17be67a7d240916b47efd">ToDMS</a>(double angle)</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#aaebd733cf5b13dbf03980f12fead0dd5">ToHMS</a>(double angle)</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a038dfa01e68a679b5f0ce17a265a7235">ToHours</a>(double angle)</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a3de3ec89ad72c6ca1cbb2bb347b74391">ToPlanetocentric</a>(const double lat) const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a61a4f6d2da282d0f924e3e61d0643bed">ToPlanetocentric</a>(double lat, double eRadius, double pRadius)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#af99ee3a2b5a98e899761506a171e66e2">ToPlanetographic</a>(const double lat) const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#add5ece0b800e1c63b95319a59be1d48d">ToPlanetographic</a>(double lat, double eRadius, double pRadius)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ada1eafe37560dd6e2241cc8011cb9d2f">ToPositiveEast</a>(const double lon, const int domain)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#aa99ba64bfc1d21c1685dd3333c4383de">ToPositiveWest</a>(const double lon, const int domain)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#ac7dd44810997da99a7b1f92f442c92be">ToProjectionX</a>(const double worldX) const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a7d6270f4d9a46e527588fd58d76f637e">ToProjectionY</a>(const double worldY) const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a35fd9b10b1b68cfb856b13b39ab1cbb4">ToWorldX</a>(const double projectionX) const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a052041bbe43786c41ced8a29db993511">ToWorldY</a>(const double projectionY) const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#aacb51072ca34c87855d5b27737dbfe2a">TProjection</a>(Pvl &amp;label)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a0f3e0cf869cb148d6cd65abe09f8737ea2907904e8c59d8fa09b96f35a9272225">Triaxial</a> enum value</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#aff967dfa9851a3b78c66f7ef9a104062">TrueScaleLatitude</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#ada27261a5b3a46d568dcffcc9a6f341f">UniversalLatitude</a>()</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a4cc777bcc817995dd343dafcf82eb69f">UniversalLongitude</a>()</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_robinson.html#a9118125c8e3880f7beec9ec44fc8c0ac">Version</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a732f0ad6f3866524bba029c49297a2d9">WorldX</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a63e1bd32824e8d8d478b70deb717b4e7">WorldY</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a1c8c36a58d5bb65176a9fe5c76a5e86f">XCoord</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_robinson.html#aa3f4a1997575dfeae41e5d1b1f96544a">XYRange</a>(double &amp;minX, double &amp;maxX, double &amp;minY, double &amp;maxY)</td><td class="entry"><a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a57a466d39ce6be8ba11b9e16b1c643ad">XYRangeCheck</a>(const double latitude, const double longitude)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a0a6da15fd2678a189a0711f8118c4be5">xyRangeOblique</a>(double &amp;minX, double &amp;maxX, double &amp;minY, double &amp;maxY)</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a676904683c2294f79181e0d359636b35">YCoord</a>() const</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_projection.html#a2acc046ac1925be5ff437ff5f001bbad">~Projection</a>()</td><td class="entry"><a class="el" href="class_isis_1_1_projection.html">Isis::Projection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_isis_1_1_robinson.html#a368e1e1d2b3d778bc2159419bd593f36">~Robinson</a>()</td><td class="entry"><a class="el" href="class_isis_1_1_robinson.html">Isis::Robinson</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html#a2abec8f1142d9bb8dabc658c39bb50eb">~TProjection</a>()</td><td class="entry"><a class="el" href="class_isis_1_1_t_projection.html">Isis::TProjection</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+</table></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

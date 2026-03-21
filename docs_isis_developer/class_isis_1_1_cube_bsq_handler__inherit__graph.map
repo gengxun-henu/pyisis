@@ -1,0 +1,4 @@
+<map id="Isis::CubeBsqHandler" name="Isis::CubeBsqHandler">
+<area shape="rect" id="node1" title="IO Handler for Isis Cubes using the BSQ format." alt="" coords="55,455,204,600"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_cube_io_handler.html" title="Handles converting buffers to and from disk." alt="" coords="5,5,254,407"/>
+</map>

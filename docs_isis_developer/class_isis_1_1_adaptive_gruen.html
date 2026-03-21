@@ -1,0 +1,3089 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::AdaptiveGruen Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_adaptive_gruen.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_adaptive_gruen-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::AdaptiveGruen Class Reference<div class="ingroups"><a class="el" href="group___pattern_matching.html">Pattern Matching</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> (adaptive) pattern matching.  
+ <a href="class_isis_1_1_adaptive_gruen.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_adaptive_gruen_8h_source.html">AdaptiveGruen.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::AdaptiveGruen:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_adaptive_gruen__inherit__graph.png" border="0" usemap="#a_isis_1_1_adaptive_gruen_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_adaptive_gruen_inherit__map" id="a_isis_1_1_adaptive_gruen_inherit__map">
+<area shape="rect" title="Gruen (adaptive) pattern matching." alt="" coords="27,920,164,1049"/>
+<area shape="rect" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm." alt="" coords="11,471,180,872"/>
+<area shape="rect" href="class_isis_1_1_auto_reg.html" title="Auto Registration class." alt="" coords="5,5,186,423"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::AdaptiveGruen:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_adaptive_gruen__coll__graph.png" border="0" usemap="#a_isis_1_1_adaptive_gruen_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_adaptive_gruen_coll__map" id="a_isis_1_1_adaptive_gruen_coll__map">
+<area shape="rect" title="Gruen (adaptive) pattern matching." alt="" coords="27,920,164,1049"/>
+<area shape="rect" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm." alt="" coords="11,471,180,872"/>
+<area shape="rect" href="class_isis_1_1_auto_reg.html" title="Auto Registration class." alt="" coords="5,5,186,423"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a0be98f36bab6a5870fb7b5588b3e108b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b">RegisterStatus</a> { <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108ba1bb6487d023f9e0195becb7eb226cfe6">SuccessPixel</a>
+, <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108ba75c5ec430080e0f2a120a0aeee2fd9a4">SuccessSubPixel</a>
+, <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108ba14c852b0ffa592f01c20744e44ad4d8f">PatternChipNotEnoughValidData</a>
+, <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108baba8c5f749da9e5a3763f7dadb2162ad8">FitChipNoData</a>
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108bab7f201feac81ba27e28ed2148856f737">FitChipToleranceNotMet</a>
+, <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108baf9437fdd822a74bb7bdfbbccd8edcc57">SurfaceModelNotEnoughValidData</a>
+, <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108ba6d275185cfa4fc776f7c2ee22b93b8da">SurfaceModelSolutionInvalid</a>
+, <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108bad3d46f79ca9d626293b6c792a7eaa7d5">SurfaceModelDistanceInvalid</a>
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108ba31aed2fff9571d4f5e5fa855ecc16739">PatternZScoreNotMet</a>
+, <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108ba7e58352167573e52230edf26371fa746">AdaptiveAlgorithmFailed</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a0be98f36bab6a5870fb7b5588b3e108b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of the <a class="el" href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401" title="Walk the pattern chip through the search chip to find the best registration.">Register()</a> method's return status.  <a href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b">More...</a><br /></td></tr>
+<tr class="separator:a0be98f36bab6a5870fb7b5588b3e108b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10aaf908cfc3b8302a4af83e73316c15"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a10aaf908cfc3b8302a4af83e73316c15">GradientFilterType</a> { <a class="el" href="class_isis_1_1_auto_reg.html#a10aaf908cfc3b8302a4af83e73316c15ae81a96fd919db12574537498886403a3">None</a>
+, <a class="el" href="class_isis_1_1_auto_reg.html#a10aaf908cfc3b8302a4af83e73316c15a1902e243c75033b8ce0ba0190a56aafa">Sobel</a>
+ }</td></tr>
+<tr class="memdesc:a10aaf908cfc3b8302a4af83e73316c15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of the different types of gradient filters that can be applied to the pattern and search chips before matching them.  <a href="class_isis_1_1_auto_reg.html#a10aaf908cfc3b8302a4af83e73316c15">More...</a><br /></td></tr>
+<tr class="separator:a10aaf908cfc3b8302a4af83e73316c15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a550edafdbf9dda7d6f8a4cb569e88868"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_adaptive_gruen.html#a550edafdbf9dda7d6f8a4cb569e88868">AdaptiveGruen</a> (<a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl)</td></tr>
+<tr class="memdesc:a550edafdbf9dda7d6f8a4cb569e88868"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <a class="el" href="class_isis_1_1_adaptive_gruen.html" title="Gruen (adaptive) pattern matching.">AdaptiveGruen</a> search algorithm.  <a href="class_isis_1_1_adaptive_gruen.html#a550edafdbf9dda7d6f8a4cb569e88868">More...</a><br /></td></tr>
+<tr class="separator:a550edafdbf9dda7d6f8a4cb569e88868"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19d94832119c60d8fdabe9a124fe1b5d"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_adaptive_gruen.html#a19d94832119c60d8fdabe9a124fe1b5d">~AdaptiveGruen</a> ()</td></tr>
+<tr class="memdesc:a19d94832119c60d8fdabe9a124fe1b5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="class_isis_1_1_adaptive_gruen.html" title="Gruen (adaptive) pattern matching.">AdaptiveGruen</a>.  <a href="class_isis_1_1_adaptive_gruen.html#a19d94832119c60d8fdabe9a124fe1b5d">More...</a><br /></td></tr>
+<tr class="separator:a19d94832119c60d8fdabe9a124fe1b5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7351b54a0f901ff3ea172b2b6e98c3a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_adaptive_gruen.html#af7351b54a0f901ff3ea172b2b6e98c3a">IsAdaptive</a> ()</td></tr>
+<tr class="memdesc:af7351b54a0f901ff3ea172b2b6e98c3a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_adaptive_gruen.html" title="Gruen (adaptive) pattern matching.">AdaptiveGruen</a> is adaptive.  <a href="class_isis_1_1_adaptive_gruen.html#af7351b54a0f901ff3ea172b2b6e98c3a">More...</a><br /></td></tr>
+<tr class="separator:af7351b54a0f901ff3ea172b2b6e98c3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2340ac2124f966a92db46397dcc4e4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#ac2340ac2124f966a92db46397dcc4e4f">CallCount</a> () const</td></tr>
+<tr class="memdesc:ac2340ac2124f966a92db46397dcc4e4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current call count.  <a href="class_isis_1_1_gruen.html#ac2340ac2124f966a92db46397dcc4e4f">More...</a><br /></td></tr>
+<tr class="separator:ac2340ac2124f966a92db46397dcc4e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d679cdb45ea8ec2950b4e1184ee4d54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#a0d679cdb45ea8ec2950b4e1184ee4d54">WriteSubsearchChips</a> (const QString &amp;pattern=&quot;SubChip&quot;)</td></tr>
+<tr class="memdesc:a0d679cdb45ea8ec2950b4e1184ee4d54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up for writing subsearch for a a given registration call.  <a href="class_isis_1_1_gruen.html#a0d679cdb45ea8ec2950b4e1184ee4d54">More...</a><br /></td></tr>
+<tr class="separator:a0d679cdb45ea8ec2950b4e1184ee4d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea3bbad7b0bc8a7a2447c911d69d854d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_isis_1_1_affine_tolerance.html">AffineTolerance</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#aea3bbad7b0bc8a7a2447c911d69d854d">getAffineTolerance</a> () const</td></tr>
+<tr class="memdesc:aea3bbad7b0bc8a7a2447c911d69d854d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return set of tolerances for affine convergence.  <a href="class_isis_1_1_gruen.html#aea3bbad7b0bc8a7a2447c911d69d854d">More...</a><br /></td></tr>
+<tr class="separator:aea3bbad7b0bc8a7a2447c911d69d854d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a767dae62b7f63ab4d8aa2f2d382a47e8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#a767dae62b7f63ab4d8aa2f2d382a47e8">getSpiceConstraint</a> () const</td></tr>
+<tr class="memdesc:a767dae62b7f63ab4d8aa2f2d382a47e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the SPICE tolerance constraint as read from config file.  <a href="class_isis_1_1_gruen.html#a767dae62b7f63ab4d8aa2f2d382a47e8">More...</a><br /></td></tr>
+<tr class="separator:a767dae62b7f63ab4d8aa2f2d382a47e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a099da49b8aa8eb71bf4df6384ad0285e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#a099da49b8aa8eb71bf4df6384ad0285e">getAffineConstraint</a> () const</td></tr>
+<tr class="memdesc:a099da49b8aa8eb71bf4df6384ad0285e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> tolerance constraint as read from config file.  <a href="class_isis_1_1_gruen.html#a099da49b8aa8eb71bf4df6384ad0285e">More...</a><br /></td></tr>
+<tr class="separator:a099da49b8aa8eb71bf4df6384ad0285e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac771ffbd9227dbf544d8df34be7b0cdc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#ac771ffbd9227dbf544d8df34be7b0cdc">setAffineRadio</a> (const <a class="el" href="class_isis_1_1_affine_radio.html">AffineRadio</a> &amp;affrad)</td></tr>
+<tr class="memdesc:ac771ffbd9227dbf544d8df34be7b0cdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets initial chip transformation.  <a href="class_isis_1_1_gruen.html#ac771ffbd9227dbf544d8df34be7b0cdc">More...</a><br /></td></tr>
+<tr class="separator:ac771ffbd9227dbf544d8df34be7b0cdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71313f13643096cfad323e8e6e552fc9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#a71313f13643096cfad323e8e6e552fc9">setAffineRadio</a> ()</td></tr>
+<tr class="memdesc:a71313f13643096cfad323e8e6e552fc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set affine parameters to defaults.  <a href="class_isis_1_1_gruen.html#a71313f13643096cfad323e8e6e552fc9">More...</a><br /></td></tr>
+<tr class="separator:a71313f13643096cfad323e8e6e552fc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5667f78c857a406048b16e0b15437fdb"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_affine_radio.html">AffineRadio</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#a5667f78c857a406048b16e0b15437fdb">getDefaultAffineRadio</a> () const</td></tr>
+<tr class="memdesc:a5667f78c857a406048b16e0b15437fdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns default settings for Affine/Radiometric parameters.  <a href="class_isis_1_1_gruen.html#a5667f78c857a406048b16e0b15437fdb">More...</a><br /></td></tr>
+<tr class="separator:a5667f78c857a406048b16e0b15437fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1003ca5544e6d6ac0a701cba88d835ad"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_affine_radio.html">AffineRadio</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#a1003ca5544e6d6ac0a701cba88d835ad">getAffineRadio</a> () const</td></tr>
+<tr class="memdesc:a1003ca5544e6d6ac0a701cba88d835ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return current state of Affine/Radio state <br  />
+  <a href="class_isis_1_1_gruen.html#a1003ca5544e6d6ac0a701cba88d835ad">More...</a><br /></td></tr>
+<tr class="separator:a1003ca5544e6d6ac0a701cba88d835ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af83a5d4f189d9a42ccc195701fe8d2f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_match_point.html">MatchPoint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#af83a5d4f189d9a42ccc195701fe8d2f1">getLastMatch</a> () const</td></tr>
+<tr class="memdesc:af83a5d4f189d9a42ccc195701fe8d2f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the register state of the last successful <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> match.  <a href="class_isis_1_1_gruen.html#af83a5d4f189d9a42ccc195701fe8d2f1">More...</a><br /></td></tr>
+<tr class="separator:af83a5d4f189d9a42ccc195701fe8d2f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af242bcb99e686f85c02346072d2b77fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_chip.html">Chip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#af242bcb99e686f85c02346072d2b77fd">PatternChip</a> ()</td></tr>
+<tr class="memdesc:af242bcb99e686f85c02346072d2b77fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return pointer to pattern chip.  <a href="class_isis_1_1_auto_reg.html#af242bcb99e686f85c02346072d2b77fd">More...</a><br /></td></tr>
+<tr class="separator:af242bcb99e686f85c02346072d2b77fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3d160cfd720bff25a8b6ea5045d8fca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_chip.html">Chip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#ab3d160cfd720bff25a8b6ea5045d8fca">SearchChip</a> ()</td></tr>
+<tr class="memdesc:ab3d160cfd720bff25a8b6ea5045d8fca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return pointer to search chip.  <a href="class_isis_1_1_auto_reg.html#ab3d160cfd720bff25a8b6ea5045d8fca">More...</a><br /></td></tr>
+<tr class="separator:ab3d160cfd720bff25a8b6ea5045d8fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04962560ef5dafcaf5181b1274ba00bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_chip.html">Chip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a04962560ef5dafcaf5181b1274ba00bb">FitChip</a> ()</td></tr>
+<tr class="memdesc:a04962560ef5dafcaf5181b1274ba00bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return pointer to fit chip.  <a href="class_isis_1_1_auto_reg.html#a04962560ef5dafcaf5181b1274ba00bb">More...</a><br /></td></tr>
+<tr class="separator:a04962560ef5dafcaf5181b1274ba00bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebeaec4ca364d03cc8f4875f2f5a737a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_chip.html">Chip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#aebeaec4ca364d03cc8f4875f2f5a737a">RegistrationPatternChip</a> ()</td></tr>
+<tr class="memdesc:aebeaec4ca364d03cc8f4875f2f5a737a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return pointer to pattern chip used in registration.  <a href="class_isis_1_1_auto_reg.html#aebeaec4ca364d03cc8f4875f2f5a737a">More...</a><br /></td></tr>
+<tr class="separator:aebeaec4ca364d03cc8f4875f2f5a737a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99d1076f46aca0a309f94667b7ef66d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_chip.html">Chip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a99d1076f46aca0a309f94667b7ef66d5">RegistrationSearchChip</a> ()</td></tr>
+<tr class="memdesc:a99d1076f46aca0a309f94667b7ef66d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return pointer to search chip used in registration.  <a href="class_isis_1_1_auto_reg.html#a99d1076f46aca0a309f94667b7ef66d5">More...</a><br /></td></tr>
+<tr class="separator:a99d1076f46aca0a309f94667b7ef66d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b4e701718a52a657e010e161b40adb9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_chip.html">Chip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a2b4e701718a52a657e010e161b40adb9">ReducedPatternChip</a> ()</td></tr>
+<tr class="memdesc:a2b4e701718a52a657e010e161b40adb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return pointer to reduced pattern chip.  <a href="class_isis_1_1_auto_reg.html#a2b4e701718a52a657e010e161b40adb9">More...</a><br /></td></tr>
+<tr class="separator:a2b4e701718a52a657e010e161b40adb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad19ac35c8c41914ec4947eb0adcf1c42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_chip.html">Chip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#ad19ac35c8c41914ec4947eb0adcf1c42">ReducedSearchChip</a> ()</td></tr>
+<tr class="memdesc:ad19ac35c8c41914ec4947eb0adcf1c42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return pointer to reduced search chip.  <a href="class_isis_1_1_auto_reg.html#ad19ac35c8c41914ec4947eb0adcf1c42">More...</a><br /></td></tr>
+<tr class="separator:ad19ac35c8c41914ec4947eb0adcf1c42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c636c1465f38f06bc65e5905dbb7c61"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_chip.html">Chip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a4c636c1465f38f06bc65e5905dbb7c61">ReducedFitChip</a> ()</td></tr>
+<tr class="memdesc:a4c636c1465f38f06bc65e5905dbb7c61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return pointer to reduced fit chip.  <a href="class_isis_1_1_auto_reg.html#a4c636c1465f38f06bc65e5905dbb7c61">More...</a><br /></td></tr>
+<tr class="separator:a4c636c1465f38f06bc65e5905dbb7c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f48c041b76f8c050eb1be190b6e8478"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a9f48c041b76f8c050eb1be190b6e8478">SetSubPixelAccuracy</a> (bool on)</td></tr>
+<tr class="memdesc:a9f48c041b76f8c050eb1be190b6e8478"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the sub-pixel accuracy is enabled, the <a class="el" href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401" title="Walk the pattern chip through the search chip to find the best registration.">Register()</a> method will attempt to match the pattern chip to the search chip at sub-pixel accuracy, otherwise it will be registered at whole pixel accuracy.  <a href="class_isis_1_1_auto_reg.html#a9f48c041b76f8c050eb1be190b6e8478">More...</a><br /></td></tr>
+<tr class="separator:a9f48c041b76f8c050eb1be190b6e8478"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a770e80ed71a3740d4e11ba3665a789bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a770e80ed71a3740d4e11ba3665a789bd">SetPatternValidPercent</a> (const double percent)</td></tr>
+<tr class="memdesc:a770e80ed71a3740d4e11ba3665a789bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the amount of data in the pattern chip that must be valid.  <a href="class_isis_1_1_auto_reg.html#a770e80ed71a3740d4e11ba3665a789bd">More...</a><br /></td></tr>
+<tr class="separator:a770e80ed71a3740d4e11ba3665a789bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a502a75ac16075d75305f576a2b48223b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a502a75ac16075d75305f576a2b48223b">SetSubsearchValidPercent</a> (const double percent)</td></tr>
+<tr class="memdesc:a502a75ac16075d75305f576a2b48223b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the amount of data in the search chip's subchip that must be valid.  <a href="class_isis_1_1_auto_reg.html#a502a75ac16075d75305f576a2b48223b">More...</a><br /></td></tr>
+<tr class="separator:a502a75ac16075d75305f576a2b48223b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfbb5a41718edd5c099c96d9de203e6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#adfbb5a41718edd5c099c96d9de203e6f">SetTolerance</a> (double tolerance)</td></tr>
+<tr class="memdesc:adfbb5a41718edd5c099c96d9de203e6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the tolerance for an acceptable goodness of fit.  <a href="class_isis_1_1_auto_reg.html#adfbb5a41718edd5c099c96d9de203e6f">More...</a><br /></td></tr>
+<tr class="separator:adfbb5a41718edd5c099c96d9de203e6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5156a2f89b54754240a0f64f55dc9e6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a5156a2f89b54754240a0f64f55dc9e6e">SetChipInterpolator</a> (const QString &amp;interpolator)</td></tr>
+<tr class="memdesc:a5156a2f89b54754240a0f64f55dc9e6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <a class="el" href="class_isis_1_1_chip.html" title="A small chip of data used for pattern matching.">Chip</a> class interpolator type to be used to load pattern and search chips.  <a href="class_isis_1_1_auto_reg.html#a5156a2f89b54754240a0f64f55dc9e6e">More...</a><br /></td></tr>
+<tr class="separator:a5156a2f89b54754240a0f64f55dc9e6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeec97e870c23b1c42640b00e413135e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#aeec97e870c23b1c42640b00e413135e5">SetSurfaceModelWindowSize</a> (int size)</td></tr>
+<tr class="memdesc:aeec97e870c23b1c42640b00e413135e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the surface model window size.  <a href="class_isis_1_1_auto_reg.html#aeec97e870c23b1c42640b00e413135e5">More...</a><br /></td></tr>
+<tr class="separator:aeec97e870c23b1c42640b00e413135e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1b572a23b69c3a5e27cd48a31f4fb83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#ad1b572a23b69c3a5e27cd48a31f4fb83">SetSurfaceModelDistanceTolerance</a> (double distance)</td></tr>
+<tr class="memdesc:ad1b572a23b69c3a5e27cd48a31f4fb83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a distance the surface model solution is allowed to move away from the best whole pixel fit in the fit chip.  <a href="class_isis_1_1_auto_reg.html#ad1b572a23b69c3a5e27cd48a31f4fb83">More...</a><br /></td></tr>
+<tr class="separator:ad1b572a23b69c3a5e27cd48a31f4fb83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a842610557d068b12c22749cb1f20b32d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a842610557d068b12c22749cb1f20b32d">SetReductionFactor</a> (int reductionFactor)</td></tr>
+<tr class="memdesc:a842610557d068b12c22749cb1f20b32d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the reduction factor used to speed up the pattern matching algorithm.  <a href="class_isis_1_1_auto_reg.html#a842610557d068b12c22749cb1f20b32d">More...</a><br /></td></tr>
+<tr class="separator:a842610557d068b12c22749cb1f20b32d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe0ad9634ae8055adc0d2ef46c872e68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#abe0ad9634ae8055adc0d2ef46c872e68">SetPatternZScoreMinimum</a> (double minimum)</td></tr>
+<tr class="memdesc:abe0ad9634ae8055adc0d2ef46c872e68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the minimum pattern zscore.  <a href="class_isis_1_1_auto_reg.html#abe0ad9634ae8055adc0d2ef46c872e68">More...</a><br /></td></tr>
+<tr class="separator:abe0ad9634ae8055adc0d2ef46c872e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0821dc1a7659ddca61baf0db8ebfcb4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#af0821dc1a7659ddca61baf0db8ebfcb4">SetGradientFilterType</a> (const QString &amp;gradientFilterType)</td></tr>
+<tr class="memdesc:af0821dc1a7659ddca61baf0db8ebfcb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient filter type to be applied to the search and pattern chips.  <a href="class_isis_1_1_auto_reg.html#af0821dc1a7659ddca61baf0db8ebfcb4">More...</a><br /></td></tr>
+<tr class="separator:af0821dc1a7659ddca61baf0db8ebfcb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9b9d5a60de7a4378bd941e2bbc78916"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#ad9b9d5a60de7a4378bd941e2bbc78916">GradientFilterString</a> () const</td></tr>
+<tr class="separator:ad9b9d5a60de7a4378bd941e2bbc78916"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a959549d10ac201702b7b494cbf8331cd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a959549d10ac201702b7b494cbf8331cd">SubPixelAccuracy</a> ()</td></tr>
+<tr class="memdesc:a959549d10ac201702b7b494cbf8331cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether this object will attempt to register to whole or sub-pixel accuracy.  <a href="class_isis_1_1_auto_reg.html#a959549d10ac201702b7b494cbf8331cd">More...</a><br /></td></tr>
+<tr class="separator:a959549d10ac201702b7b494cbf8331cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f1655a457066caf31780c624828be35"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a4f1655a457066caf31780c624828be35">ReductionFactor</a> ()</td></tr>
+<tr class="memdesc:a4f1655a457066caf31780c624828be35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the reduction factor.  <a href="class_isis_1_1_auto_reg.html#a4f1655a457066caf31780c624828be35">More...</a><br /></td></tr>
+<tr class="separator:a4f1655a457066caf31780c624828be35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5aa83286c46a445b349328be8bc1eeac"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a5aa83286c46a445b349328be8bc1eeac">PatternValidPercent</a> () const</td></tr>
+<tr class="memdesc:a5aa83286c46a445b349328be8bc1eeac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return pattern chip valid percent. The default value is.  <a href="class_isis_1_1_auto_reg.html#a5aa83286c46a445b349328be8bc1eeac">More...</a><br /></td></tr>
+<tr class="separator:a5aa83286c46a445b349328be8bc1eeac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b43adab20aa3c9ddbf7359236cce0a9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a7b43adab20aa3c9ddbf7359236cce0a9">SubsearchValidPercent</a> () const</td></tr>
+<tr class="memdesc:a7b43adab20aa3c9ddbf7359236cce0a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return subsearch chip valid percent.  <a href="class_isis_1_1_auto_reg.html#a7b43adab20aa3c9ddbf7359236cce0a9">More...</a><br /></td></tr>
+<tr class="separator:a7b43adab20aa3c9ddbf7359236cce0a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af86c03aa94ae91d961acdce5e86533ea"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#af86c03aa94ae91d961acdce5e86533ea">Tolerance</a> () const</td></tr>
+<tr class="memdesc:af86c03aa94ae91d961acdce5e86533ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return match algorithm tolerance.  <a href="class_isis_1_1_auto_reg.html#af86c03aa94ae91d961acdce5e86533ea">More...</a><br /></td></tr>
+<tr class="separator:af86c03aa94ae91d961acdce5e86533ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d5e32d573e0801c82e893a33f45667d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a0d5e32d573e0801c82e893a33f45667d">WindowSize</a> () const</td></tr>
+<tr class="memdesc:a0d5e32d573e0801c82e893a33f45667d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return window size.  <a href="class_isis_1_1_auto_reg.html#a0d5e32d573e0801c82e893a33f45667d">More...</a><br /></td></tr>
+<tr class="separator:a0d5e32d573e0801c82e893a33f45667d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52700807672b9556a57f9d0d4fc9bd1b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a52700807672b9556a57f9d0d4fc9bd1b">DistanceTolerance</a> () const</td></tr>
+<tr class="memdesc:a52700807672b9556a57f9d0d4fc9bd1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return distance tolerance.  <a href="class_isis_1_1_auto_reg.html#a52700807672b9556a57f9d0d4fc9bd1b">More...</a><br /></td></tr>
+<tr class="separator:a52700807672b9556a57f9d0d4fc9bd1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3a672d906aa08262cd213d48f607aa9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#ad3a672d906aa08262cd213d48f607aa9">Distance</a> (double &amp;sampDistance, double &amp;lineDistance)</td></tr>
+<tr class="memdesc:ad3a672d906aa08262cd213d48f607aa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the distance point moved.  <a href="class_isis_1_1_auto_reg.html#ad3a672d906aa08262cd213d48f607aa9">More...</a><br /></td></tr>
+<tr class="separator:ad3a672d906aa08262cd213d48f607aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5a3428a62c4b0d282b39c91eeb0e401"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b">AutoReg::RegisterStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401">Register</a> ()</td></tr>
+<tr class="memdesc:af5a3428a62c4b0d282b39c91eeb0e401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Walk the pattern chip through the search chip to find the best registration.  <a href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401">More...</a><br /></td></tr>
+<tr class="separator:af5a3428a62c4b0d282b39c91eeb0e401"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a566c94b6a6d540f13d38bfae87b7daa1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a566c94b6a6d540f13d38bfae87b7daa1">Success</a> () const</td></tr>
+<tr class="memdesc:a566c94b6a6d540f13d38bfae87b7daa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether the match algorithm succeeded or not.  <a href="class_isis_1_1_auto_reg.html#a566c94b6a6d540f13d38bfae87b7daa1">More...</a><br /></td></tr>
+<tr class="separator:a566c94b6a6d540f13d38bfae87b7daa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22ded8dbed6ed1e8bee6522c2b880b6e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a22ded8dbed6ed1e8bee6522c2b880b6e">GoodnessOfFit</a> () const</td></tr>
+<tr class="memdesc:a22ded8dbed6ed1e8bee6522c2b880b6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the goodness of fit of the match algorithm.  <a href="class_isis_1_1_auto_reg.html#a22ded8dbed6ed1e8bee6522c2b880b6e">More...</a><br /></td></tr>
+<tr class="separator:a22ded8dbed6ed1e8bee6522c2b880b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49a1855330b71838ef5b68a7a38c9fdc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a49a1855330b71838ef5b68a7a38c9fdc">IsIdeal</a> (double fit)</td></tr>
+<tr class="memdesc:a49a1855330b71838ef5b68a7a38c9fdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the fit parameter is arbitrarily close to the ideal fit value.  <a href="class_isis_1_1_auto_reg.html#a49a1855330b71838ef5b68a7a38c9fdc">More...</a><br /></td></tr>
+<tr class="separator:a49a1855330b71838ef5b68a7a38c9fdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84101685669ee1424b29259a80c49a10"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a84101685669ee1424b29259a80c49a10">ChipSample</a> () const</td></tr>
+<tr class="memdesc:a84101685669ee1424b29259a80c49a10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the search chip sample that best matched.  <a href="class_isis_1_1_auto_reg.html#a84101685669ee1424b29259a80c49a10">More...</a><br /></td></tr>
+<tr class="separator:a84101685669ee1424b29259a80c49a10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf71471b97c959b539f6c0ff3e6ecdf1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#adf71471b97c959b539f6c0ff3e6ecdf1">ChipLine</a> () const</td></tr>
+<tr class="memdesc:adf71471b97c959b539f6c0ff3e6ecdf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the search chip line that best matched.  <a href="class_isis_1_1_auto_reg.html#adf71471b97c959b539f6c0ff3e6ecdf1">More...</a><br /></td></tr>
+<tr class="separator:adf71471b97c959b539f6c0ff3e6ecdf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e4baab372aa464579c6a239bcfd4ff4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a8e4baab372aa464579c6a239bcfd4ff4">CubeSample</a> () const</td></tr>
+<tr class="memdesc:a8e4baab372aa464579c6a239bcfd4ff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the search chip cube sample that best matched.  <a href="class_isis_1_1_auto_reg.html#a8e4baab372aa464579c6a239bcfd4ff4">More...</a><br /></td></tr>
+<tr class="separator:a8e4baab372aa464579c6a239bcfd4ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07a44fa420be58bea81553f0135067d3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a07a44fa420be58bea81553f0135067d3">CubeLine</a> () const</td></tr>
+<tr class="memdesc:a07a44fa420be58bea81553f0135067d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the search chip cube line that best matched.  <a href="class_isis_1_1_auto_reg.html#a07a44fa420be58bea81553f0135067d3">More...</a><br /></td></tr>
+<tr class="separator:a07a44fa420be58bea81553f0135067d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab90e6e12c41fd1dd7b6058034cd47636"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#ab90e6e12c41fd1dd7b6058034cd47636">MinimumZScore</a> () const</td></tr>
+<tr class="memdesc:ab90e6e12c41fd1dd7b6058034cd47636"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return minimumPatternZScore.  <a href="class_isis_1_1_auto_reg.html#ab90e6e12c41fd1dd7b6058034cd47636">More...</a><br /></td></tr>
+<tr class="separator:ab90e6e12c41fd1dd7b6058034cd47636"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a028da475d2a53552dd16840103c56dc5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a028da475d2a53552dd16840103c56dc5">ZScores</a> (double &amp;score1, double &amp;score2) const</td></tr>
+<tr class="memdesc:a028da475d2a53552dd16840103c56dc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the ZScores of the pattern chip.  <a href="class_isis_1_1_auto_reg.html#a028da475d2a53552dd16840103c56dc5">More...</a><br /></td></tr>
+<tr class="separator:a028da475d2a53552dd16840103c56dc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65561b9fcdd5cd0a4642cb29c66a4719"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a65561b9fcdd5cd0a4642cb29c66a4719">RegistrationStatistics</a> ()</td></tr>
+<tr class="memdesc:a65561b9fcdd5cd0a4642cb29c66a4719"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns the cumulative registration statistics.  <a href="class_isis_1_1_auto_reg.html#a65561b9fcdd5cd0a4642cb29c66a4719">More...</a><br /></td></tr>
+<tr class="separator:a65561b9fcdd5cd0a4642cb29c66a4719"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa448ca031cf07c47982a4767e187c38e"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#aa448ca031cf07c47982a4767e187c38e">MostLenientTolerance</a> ()</td></tr>
+<tr class="memdesc:aa448ca031cf07c47982a4767e187c38e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum tolerance specific to algorithm.  <a href="class_isis_1_1_auto_reg.html#aa448ca031cf07c47982a4767e187c38e">More...</a><br /></td></tr>
+<tr class="separator:aa448ca031cf07c47982a4767e187c38e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5150c5b0246000f848b7cdf2c83689b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a5150c5b0246000f848b7cdf2c83689b5">RegTemplate</a> ()</td></tr>
+<tr class="memdesc:a5150c5b0246000f848b7cdf2c83689b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function returns the keywords that this object was created from.  <a href="class_isis_1_1_auto_reg.html#a5150c5b0246000f848b7cdf2c83689b5">More...</a><br /></td></tr>
+<tr class="separator:a5150c5b0246000f848b7cdf2c83689b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a8aab57a25adf5ae7c1d9b97854e280"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a1a8aab57a25adf5ae7c1d9b97854e280">UpdatedTemplate</a> ()</td></tr>
+<tr class="memdesc:a1a8aab57a25adf5ae7c1d9b97854e280"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a> containing the PvlKeywords of the parameters this object was most recently run with.  <a href="class_isis_1_1_auto_reg.html#a1a8aab57a25adf5ae7c1d9b97854e280">More...</a><br /></td></tr>
+<tr class="separator:a1a8aab57a25adf5ae7c1d9b97854e280"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:acc001ead7fca89809931357e8e5d9962"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_adaptive_gruen.html#acc001ead7fca89809931357e8e5d9962">AlgorithmName</a> () const</td></tr>
+<tr class="memdesc:acc001ead7fca89809931357e8e5d9962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return name of Algorithm.  <a href="class_isis_1_1_adaptive_gruen.html#acc001ead7fca89809931357e8e5d9962">More...</a><br /></td></tr>
+<tr class="separator:acc001ead7fca89809931357e8e5d9962"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab07f20aaa26a2453c1a3bb5b37651cf1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#ab07f20aaa26a2453c1a3bb5b37651cf1">algorithm</a> (<a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;pattern, <a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;subsearch, const <a class="el" href="class_isis_1_1_radiometric.html">Radiometric</a> &amp;radio, <a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> &amp;ptsUsed, double &amp;resid, <a class="el" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;atai, <a class="el" href="class_isis_1_1_affine_radio.html">AffineRadio</a> &amp;affrad)</td></tr>
+<tr class="memdesc:ab07f20aaa26a2453c1a3bb5b37651cf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Real workhorse of the computational <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm.  <a href="class_isis_1_1_gruen.html#ab07f20aaa26a2453c1a3bb5b37651cf1">More...</a><br /></td></tr>
+<tr class="separator:ab07f20aaa26a2453c1a3bb5b37651cf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a487ad0506854678e2043f4ea15c745ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_isis_1_1_analysis.html">Analysis</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#a487ad0506854678e2043f4ea15c745ff">errorAnalysis</a> (const <a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> &amp;npts, const double &amp;resid, const <a class="el" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;atai)</td></tr>
+<tr class="memdesc:a487ad0506854678e2043f4ea15c745ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the error analysis of convergent <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> matrix.  <a href="class_isis_1_1_gruen.html#a487ad0506854678e2043f4ea15c745ff">More...</a><br /></td></tr>
+<tr class="separator:a487ad0506854678e2043f4ea15c745ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41f9e0dcda95c92b7277b8658a4afa8d"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#a41f9e0dcda95c92b7277b8658a4afa8d">MatchAlgorithm</a> (<a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;pattern, <a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;subsearch)</td></tr>
+<tr class="memdesc:a41f9e0dcda95c92b7277b8658a4afa8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimization of data set using <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm.  <a href="class_isis_1_1_gruen.html#a41f9e0dcda95c92b7277b8658a4afa8d">More...</a><br /></td></tr>
+<tr class="separator:a41f9e0dcda95c92b7277b8658a4afa8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73bd07f3f8cf6c1d52959d1f3f1ff9c8"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#a73bd07f3f8cf6c1d52959d1f3f1ff9c8">CompareFits</a> (double fit1, double fit2)</td></tr>
+<tr class="memdesc:a73bd07f3f8cf6c1d52959d1f3f1ff9c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This virtual method must return if the 1st fit is equal to or better than the second fit.  <a href="class_isis_1_1_gruen.html#a73bd07f3f8cf6c1d52959d1f3f1ff9c8">More...</a><br /></td></tr>
+<tr class="separator:a73bd07f3f8cf6c1d52959d1f3f1ff9c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a500cea4c74bcbaf960f3399dccccd6a7"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#a500cea4c74bcbaf960f3399dccccd6a7">IdealFit</a> () const</td></tr>
+<tr class="memdesc:a500cea4c74bcbaf960f3399dccccd6a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ideal fit for a perfect <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> result.  <a href="class_isis_1_1_gruen.html#a500cea4c74bcbaf960f3399dccccd6a7">More...</a><br /></td></tr>
+<tr class="separator:a500cea4c74bcbaf960f3399dccccd6a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabf2ef54a56647103b94fad617c2e516"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b">AutoReg::RegisterStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#aabf2ef54a56647103b94fad617c2e516">Registration</a> (<a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;sChip, <a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;pChip, <a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;fChip, int startSamp, int startLine, int endSamp, int endLine, int bestSamp, int bestLine)</td></tr>
+<tr class="memdesc:aabf2ef54a56647103b94fad617c2e516"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the adaptive <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm to pattern and search chips.  <a href="class_isis_1_1_gruen.html#aabf2ef54a56647103b94fad617c2e516">More...</a><br /></td></tr>
+<tr class="separator:aabf2ef54a56647103b94fad617c2e516"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad07350143ca4e2020475f64823df1c03"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_pvl.html">Pvl</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gruen.html#ad07350143ca4e2020475f64823df1c03">AlgorithmStatistics</a> (<a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl)</td></tr>
+<tr class="memdesc:ad07350143ca4e2020475f64823df1c03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> error and processing statistics <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> output.  <a href="class_isis_1_1_gruen.html#ad07350143ca4e2020475f64823df1c03">More...</a><br /></td></tr>
+<tr class="separator:ad07350143ca4e2020475f64823df1c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb5ac8caabdf15d6e412d0ef19f68817"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#acb5ac8caabdf15d6e412d0ef19f68817">SetChipSample</a> (double sample)</td></tr>
+<tr class="memdesc:acb5ac8caabdf15d6e412d0ef19f68817"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the search chip subpixel sample that matches the pattern tack sample.  <a href="class_isis_1_1_auto_reg.html#acb5ac8caabdf15d6e412d0ef19f68817">More...</a><br /></td></tr>
+<tr class="separator:acb5ac8caabdf15d6e412d0ef19f68817"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a293560bbecccedc6360b7c40f6a4acca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a293560bbecccedc6360b7c40f6a4acca">SetChipLine</a> (double line)</td></tr>
+<tr class="memdesc:a293560bbecccedc6360b7c40f6a4acca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the search chip subpixel line that matches the pattern tack line.  <a href="class_isis_1_1_auto_reg.html#a293560bbecccedc6360b7c40f6a4acca">More...</a><br /></td></tr>
+<tr class="separator:a293560bbecccedc6360b7c40f6a4acca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae03cde5093c8fbe0f1ca6a9d77f27009"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#ae03cde5093c8fbe0f1ca6a9d77f27009">SetGoodnessOfFit</a> (double fit)</td></tr>
+<tr class="memdesc:ae03cde5093c8fbe0f1ca6a9d77f27009"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the goodness of fit for adaptive algorithms.  <a href="class_isis_1_1_auto_reg.html#ae03cde5093c8fbe0f1ca6a9d77f27009">More...</a><br /></td></tr>
+<tr class="separator:ae03cde5093c8fbe0f1ca6a9d77f27009"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47f11c32a2fd3e66e2b6f20563287ecd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a47f11c32a2fd3e66e2b6f20563287ecd">Parse</a> (<a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl)</td></tr>
+<tr class="memdesc:a47f11c32a2fd3e66e2b6f20563287ecd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize parameters in the <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> class using a PVL specification.  <a href="class_isis_1_1_auto_reg.html#a47f11c32a2fd3e66e2b6f20563287ecd">More...</a><br /></td></tr>
+<tr class="separator:a47f11c32a2fd3e66e2b6f20563287ecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4c2f1c0829789b102eba7eb8769c991"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#ab4c2f1c0829789b102eba7eb8769c991">SetSubpixelPosition</a> (<a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;window)</td></tr>
+<tr class="memdesc:ab4c2f1c0829789b102eba7eb8769c991"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the search chip sample and line to subpixel values if possible.  <a href="class_isis_1_1_auto_reg.html#ab4c2f1c0829789b102eba7eb8769c991">More...</a><br /></td></tr>
+<tr class="separator:ab4c2f1c0829789b102eba7eb8769c991"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa978ec6e7add3ce7cb185c884ec3db23"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_chip.html">Chip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#aa978ec6e7add3ce7cb185c884ec3db23">Reduce</a> (<a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;chip, int reductionFactor)</td></tr>
+<tr class="memdesc:aa978ec6e7add3ce7cb185c884ec3db23"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method reduces the given chip by the given reduction factor.  <a href="class_isis_1_1_auto_reg.html#aa978ec6e7add3ce7cb185c884ec3db23">More...</a><br /></td></tr>
+<tr class="separator:aa978ec6e7add3ce7cb185c884ec3db23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a2f7642ed8ec6e0dd47836f6d9779ae04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_auto_reg.html#a2f7642ed8ec6e0dd47836f6d9779ae04">p_template</a></td></tr>
+<tr class="memdesc:a2f7642ed8ec6e0dd47836f6d9779ae04"><td class="mdescLeft">&#160;</td><td class="mdescRight">AutoRegistration object that created this projection.  <a href="class_isis_1_1_auto_reg.html#a2f7642ed8ec6e0dd47836f6d9779ae04">More...</a><br /></td></tr>
+<tr class="separator:a2f7642ed8ec6e0dd47836f6d9779ae04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> (adaptive) pattern matching. </p>
+<p>The <a class="el" href="class_isis_1_1_adaptive_gruen.html" title="Gruen (adaptive) pattern matching.">AdaptiveGruen</a> pattern/search chip registration algorithm is derived from the <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> class. It is adaptive in that it uses an <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> transform to load the subsearch chip from the search chip. The <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> transform is iteratively minimized to converge on an cummulative affine solution that best matches the pattern chip.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> MinimumGruen</dd></dl>
+<dl class="section author"><dt>Author</dt><dd>2009-09-09 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a10aaf908cfc3b8302a4af83e73316c15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10aaf908cfc3b8302a4af83e73316c15">&#9670;&nbsp;</a></span>GradientFilterType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_auto_reg.html#a10aaf908cfc3b8302a4af83e73316c15">Isis::AutoReg::GradientFilterType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enumeration of the different types of gradient filters that can be applied to the pattern and search chips before matching them. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a10aaf908cfc3b8302a4af83e73316c15ae81a96fd919db12574537498886403a3"></a>None&#160;</td><td class="fielddoc"><p>default, no gradient filter </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a10aaf908cfc3b8302a4af83e73316c15a1902e243c75033b8ce0ba0190a56aafa"></a>Sobel&#160;</td><td class="fielddoc"><p>Sobel gradient filter. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a0be98f36bab6a5870fb7b5588b3e108b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0be98f36bab6a5870fb7b5588b3e108b">&#9670;&nbsp;</a></span>RegisterStatus</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b">Isis::AutoReg::RegisterStatus</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enumeration of the <a class="el" href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401" title="Walk the pattern chip through the search chip to find the best registration.">Register()</a> method's return status. </p>
+<p>All of the enumerations describe a failure to register except "Success". These status values can be used to provide the user with more specific feedback on why registration did not succeed. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a0be98f36bab6a5870fb7b5588b3e108ba1bb6487d023f9e0195becb7eb226cfe6"></a>SuccessPixel&#160;</td><td class="fielddoc"><p>Success registering to whole pixel. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0be98f36bab6a5870fb7b5588b3e108ba75c5ec430080e0f2a120a0aeee2fd9a4"></a>SuccessSubPixel&#160;</td><td class="fielddoc"><p>Success registering to sub-pixel accuracy. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0be98f36bab6a5870fb7b5588b3e108ba14c852b0ffa592f01c20744e44ad4d8f"></a>PatternChipNotEnoughValidData&#160;</td><td class="fielddoc"><p>Not enough valid data in pattern chip. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0be98f36bab6a5870fb7b5588b3e108baba8c5f749da9e5a3763f7dadb2162ad8"></a>FitChipNoData&#160;</td><td class="fielddoc"><p>Fit chip did not have any valid data. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0be98f36bab6a5870fb7b5588b3e108bab7f201feac81ba27e28ed2148856f737"></a>FitChipToleranceNotMet&#160;</td><td class="fielddoc"><p>Goodness of fit tolerance not satisfied. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0be98f36bab6a5870fb7b5588b3e108baf9437fdd822a74bb7bdfbbccd8edcc57"></a>SurfaceModelNotEnoughValidData&#160;</td><td class="fielddoc"><p>Not enough points to fit a surface model for sub-pixel accuracy. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0be98f36bab6a5870fb7b5588b3e108ba6d275185cfa4fc776f7c2ee22b93b8da"></a>SurfaceModelSolutionInvalid&#160;</td><td class="fielddoc"><p>Could not model surface for sub-pixel accuracy. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0be98f36bab6a5870fb7b5588b3e108bad3d46f79ca9d626293b6c792a7eaa7d5"></a>SurfaceModelDistanceInvalid&#160;</td><td class="fielddoc"><p>Surface model moves registration more than one pixel. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0be98f36bab6a5870fb7b5588b3e108ba31aed2fff9571d4f5e5fa855ecc16739"></a>PatternZScoreNotMet&#160;</td><td class="fielddoc"><p>Pattern data max or min does not pass the z-score test. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0be98f36bab6a5870fb7b5588b3e108ba7e58352167573e52230edf26371fa746"></a>AdaptiveAlgorithmFailed&#160;</td><td class="fielddoc"><p>Error occured in Adaptive algorithm. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a550edafdbf9dda7d6f8a4cb569e88868"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a550edafdbf9dda7d6f8a4cb569e88868">&#9670;&nbsp;</a></span>AdaptiveGruen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::AdaptiveGruen::AdaptiveGruen </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a <a class="el" href="class_isis_1_1_adaptive_gruen.html" title="Gruen (adaptive) pattern matching.">AdaptiveGruen</a> search algorithm. </p>
+<p>This will construct an <a class="el" href="class_isis_1_1_adaptive_gruen.html" title="Gruen (adaptive) pattern matching.">AdaptiveGruen</a> search algorithm. It is recommended that you use a <a class="el" href="class_isis_1_1_auto_reg_factory.html" title="This class is used to create AutoReg objects.">AutoRegFactory</a> class as opposed to this constructor</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td>A <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> object that contains a valid automatic registration definition </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a19d94832119c60d8fdabe9a124fe1b5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19d94832119c60d8fdabe9a124fe1b5d">&#9670;&nbsp;</a></span>~AdaptiveGruen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::AdaptiveGruen::~AdaptiveGruen </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor for <a class="el" href="class_isis_1_1_adaptive_gruen.html" title="Gruen (adaptive) pattern matching.">AdaptiveGruen</a>. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab07f20aaa26a2453c1a3bb5b37651cf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab07f20aaa26a2453c1a3bb5b37651cf1">&#9670;&nbsp;</a></span>algorithm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Gruen::algorithm </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;&#160;</td>
+          <td class="paramname"><em>pattern</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;&#160;</td>
+          <td class="paramname"><em>subsearch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_radiometric.html">Radiometric</a> &amp;&#160;</td>
+          <td class="paramname"><em>radio</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> &amp;&#160;</td>
+          <td class="paramname"><em>ptsUsed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>resid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>atai</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_affine_radio.html">AffineRadio</a> &amp;&#160;</td>
+          <td class="paramname"><em>affrad</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Real workhorse of the computational <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm. </p>
+<p>This method is called for all registration requests and actually performs the registration of two chips.</p>
+<p>The pattern chip is deemed constant. The subsearch chip is generally an extraction from the search chip that has had an affine transform applied to fill it.</p>
+<p>At each iteration of the <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm, the affine transform is incrementally updated based upon the results from this method. There are six affine parameters and two radiometric (shift and gain) parameters that are solved/computed here.</p>
+<p>The algorithm itself is a first derivative computation of the subsearch chip with small radiometric adjustments applied to better tone match the two chips. This is intended to minimize the affine variability.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pattern</td><td>Fixed pattern chip which subsearch is trying to match </td></tr>
+    <tr><td class="paramname">subsearch</td><td>Affined extraction of the search chip</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns 0 if successful, otherwise returns the error number associated with the problem encountered (see ErrorTypes) </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_radiometric.html#ae1a5af32cbc92f2c60f949d775015f5e">Isis::Radiometric::Gain()</a>, <a class="el" href="class_isis_1_1_chip.html#a187e8f0cc6e4b72f5d13c17f1326a2e8">Isis::Chip::GetValue()</a>, <a class="el" href="class_isis_1_1_chip.html#a8336e95a73d100235fca2f87d192d47b">Isis::Chip::IsValid()</a>, <a class="el" href="class_isis_1_1_chip.html#a4dfcc463818453da7bd9139c1c928753">Isis::Chip::Lines()</a>, <a class="el" href="class_isis_1_1_chip.html#a216b19f49b3a1a35e75e88cb4a0c2e67">Isis::Chip::Samples()</a>, <a class="el" href="class_isis_1_1_radiometric.html#afd511b5f4645af050aede882caeb5879">Isis::Radiometric::Shift()</a>, <a class="el" href="class_isis_1_1_chip.html#ab4e9bc207792c7b93555ebe0fc8a85d9">Isis::Chip::TackLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a3a69f188eaac6b8fc92b525b6828ca7b">Isis::Chip::TackSample()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a8f6c061728818595e7493a35c8e60901">Isis::IException::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gruen.html#a41f9e0dcda95c92b7277b8658a4afa8d">Isis::Gruen::MatchAlgorithm()</a>, and <a class="el" href="class_isis_1_1_gruen.html#aabf2ef54a56647103b94fad617c2e516">Isis::Gruen::Registration()</a>.</p>
+
+</div>
+</div>
+<a id="acc001ead7fca89809931357e8e5d9962"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc001ead7fca89809931357e8e5d9962">&#9670;&nbsp;</a></span>AlgorithmName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QString Isis::AdaptiveGruen::AlgorithmName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return name of Algorithm. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString The name of the algorithm </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_gruen.html#a429d48fdeacb0485553d5268fa031a7c">Isis::Gruen</a>.</p>
+
+</div>
+</div>
+<a id="ad07350143ca4e2020475f64823df1c03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad07350143ca4e2020475f64823df1c03">&#9670;&nbsp;</a></span>AlgorithmStatistics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> Isis::Gruen::AlgorithmStatistics </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> error and processing statistics <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> output. </p>
+<p>This method generates two groups specific to the <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm: The GruenFailures group which logs all the errors enountered during processing and the GruenStatistics group which logs selected statistics gathered during a registration run.</p>
+<p>These groups are added to the <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> log output <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> container for reporting to user/log files.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td>Input <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> container to add results to</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> Output <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> container with <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> information </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_auto_reg.html#ac0ff6dc0c69d60efa11cefcb42d2c1ea">Isis::AutoReg</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_object.html#ac18c485fdccb8e8bf16866e6c6ad2e3d">Isis::PvlObject::addGroup()</a>, <a class="el" href="class_isis_1_1_gruen.html#a429d48fdeacb0485553d5268fa031a7c">Isis::Gruen::AlgorithmName()</a>, <a class="el" href="class_isis_1_1_collector_map.html#a72132d1b96597777ad730cedd4341838">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::getNth()</a>, <a class="el" href="class_isis_1_1_collector_map.html#a4490079cb06dc8c19bdf47e327422785">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::size()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="ac2340ac2124f966a92db46397dcc4e4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2340ac2124f966a92db46397dcc4e4f">&#9670;&nbsp;</a></span>CallCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> Isis::Gruen::CallCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the current call count. </p>
+
+</div>
+</div>
+<a id="adf71471b97c959b539f6c0ff3e6ecdf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf71471b97c959b539f6c0ff3e6ecdf1">&#9670;&nbsp;</a></span>ChipLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AutoReg::ChipLine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the search chip line that best matched. </p>
+
+</div>
+</div>
+<a id="a84101685669ee1424b29259a80c49a10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84101685669ee1424b29259a80c49a10">&#9670;&nbsp;</a></span>ChipSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AutoReg::ChipSample </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the search chip sample that best matched. </p>
+
+</div>
+</div>
+<a id="a73bd07f3f8cf6c1d52959d1f3f1ff9c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73bd07f3f8cf6c1d52959d1f3f1ff9c8">&#9670;&nbsp;</a></span>CompareFits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Gruen::CompareFits </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>fit1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>fit2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This virtual method must return if the 1st fit is equal to or better than the second fit. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fit1</td><td>1st goodness of fit </td></tr>
+    <tr><td class="paramname">fit2</td><td>2nd goodness of fit </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_auto_reg.html#a32e032123fc50bdf5d26ea787f1be7c5">Isis::AutoReg</a>.</p>
+
+</div>
+</div>
+<a id="a07a44fa420be58bea81553f0135067d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07a44fa420be58bea81553f0135067d3">&#9670;&nbsp;</a></span>CubeLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AutoReg::CubeLine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the search chip cube line that best matched. </p>
+
+</div>
+</div>
+<a id="a8e4baab372aa464579c6a239bcfd4ff4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e4baab372aa464579c6a239bcfd4ff4">&#9670;&nbsp;</a></span>CubeSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AutoReg::CubeSample </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the search chip cube sample that best matched. </p>
+
+</div>
+</div>
+<a id="ad3a672d906aa08262cd213d48f607aa9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3a672d906aa08262cd213d48f607aa9">&#9670;&nbsp;</a></span>Distance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::Distance </td>
+          <td>(</td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>sampDistance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>lineDistance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the distance point moved. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sampDistance</td><td>Sample movement </td></tr>
+    <tr><td class="paramname">lineDistance</td><td>Line movement </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a52700807672b9556a57f9d0d4fc9bd1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52700807672b9556a57f9d0d4fc9bd1b">&#9670;&nbsp;</a></span>DistanceTolerance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AutoReg::DistanceTolerance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return distance tolerance. </p>
+
+</div>
+</div>
+<a id="a487ad0506854678e2043f4ea15c745ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a487ad0506854678e2043f4ea15c745ff">&#9670;&nbsp;</a></span>errorAnalysis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_isis_1_1_analysis.html">Analysis</a> Isis::Gruen::errorAnalysis </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> &amp;&#160;</td>
+          <td class="paramname"><em>npts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>resid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>atai</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute the error analysis of convergent <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> matrix. </p>
+<dl class="section author"><dt>Author</dt><dd>kbecker (5/15/2011)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">npts</td><td></td></tr>
+    <tr><td class="paramname">resid</td><td></td></tr>
+    <tr><td class="paramname">atai</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="struct_isis_1_1_analysis.html" title="Error analysis of Gruen match point solution.">Analysis</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="struct_isis_1_1_analysis.html#a5fe0f3085d609f9803e52a82448bde16">Isis::Analysis::m_kmat</a>, <a class="el" href="struct_isis_1_1_analysis.html#a644151c3243ba6870ab0358698271077">Isis::Analysis::m_npts</a>, <a class="el" href="struct_isis_1_1_analysis.html#ae794636dc31d0a27aa381bf4e39bf86f">Isis::Analysis::m_sevals</a>, <a class="el" href="struct_isis_1_1_analysis.html#a61e73b0b0a279e9522ee4fea8dfb3520">Isis::Analysis::m_status</a>, <a class="el" href="struct_isis_1_1_analysis.html#a99bdb70d36bf31891607ceb3e05710aa">Isis::Analysis::m_variance</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a8f6c061728818595e7493a35c8e60901">Isis::IException::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gruen.html#a41f9e0dcda95c92b7277b8658a4afa8d">Isis::Gruen::MatchAlgorithm()</a>, and <a class="el" href="class_isis_1_1_gruen.html#aabf2ef54a56647103b94fad617c2e516">Isis::Gruen::Registration()</a>.</p>
+
+</div>
+</div>
+<a id="a04962560ef5dafcaf5181b1274ba00bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04962560ef5dafcaf5181b1274ba00bb">&#9670;&nbsp;</a></span>FitChip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_chip.html">Chip</a>* Isis::AutoReg::FitChip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return pointer to fit chip. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#a155fcb894eadb771082bba28a2e302c3">Isis::ControlMeasureEditWidget::saveChips()</a>, and <a class="el" href="class_isis_1_1_control_point_edit.html#af11f75f2c70851fbfb9b9d54f7d9a879">Isis::ControlPointEdit::saveChips()</a>.</p>
+
+</div>
+</div>
+<a id="a099da49b8aa8eb71bf4df6384ad0285e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a099da49b8aa8eb71bf4df6384ad0285e">&#9670;&nbsp;</a></span>getAffineConstraint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Gruen::getAffineConstraint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> tolerance constraint as read from config file. </p>
+
+</div>
+</div>
+<a id="a1003ca5544e6d6ac0a701cba88d835ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1003ca5544e6d6ac0a701cba88d835ad">&#9670;&nbsp;</a></span>getAffineRadio()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_affine_radio.html">AffineRadio</a>&amp; Isis::Gruen::getAffineRadio </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return current state of Affine/Radio state <br  />
+ </p>
+
+</div>
+</div>
+<a id="aea3bbad7b0bc8a7a2447c911d69d854d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea3bbad7b0bc8a7a2447c911d69d854d">&#9670;&nbsp;</a></span>getAffineTolerance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_isis_1_1_affine_tolerance.html">AffineTolerance</a> Isis::Gruen::getAffineTolerance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return set of tolerances for affine convergence. </p>
+<dl class="section author"><dt>Author</dt><dd>kbecker (5/15/2011)</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Tolerance <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> tolerances from PVL setup </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gruen.html#aabf2ef54a56647103b94fad617c2e516">Isis::Gruen::Registration()</a>.</p>
+
+</div>
+</div>
+<a id="a5667f78c857a406048b16e0b15437fdb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5667f78c857a406048b16e0b15437fdb">&#9670;&nbsp;</a></span>getDefaultAffineRadio()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_affine_radio.html">AffineRadio</a>&amp; Isis::Gruen::getDefaultAffineRadio </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns default settings for Affine/Radiometric parameters. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gruen.html#a71313f13643096cfad323e8e6e552fc9">Isis::Gruen::setAffineRadio()</a>.</p>
+
+</div>
+</div>
+<a id="af83a5d4f189d9a42ccc195701fe8d2f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af83a5d4f189d9a42ccc195701fe8d2f1">&#9670;&nbsp;</a></span>getLastMatch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_match_point.html">MatchPoint</a> Isis::Gruen::getLastMatch </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the register state of the last successful <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> match. </p>
+<p>This method returns the full match condition of the last call to <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> Register function that was successful.</p>
+<p>BEWARE: This is only valid if Register returns successfully! This is due to <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> returning conditions that occur prior to the actual <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm being called.</p>
+<dl class="section author"><dt>Author</dt><dd>Kris Becker - 6/4/2011</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_match_point.html" title="Structure containing comprehensive registration info/results.">MatchPoint</a> </dd></dl>
+
+</div>
+</div>
+<a id="a767dae62b7f63ab4d8aa2f2d382a47e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a767dae62b7f63ab4d8aa2f2d382a47e8">&#9670;&nbsp;</a></span>getSpiceConstraint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Gruen::getSpiceConstraint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the SPICE tolerance constraint as read from config file. </p>
+
+</div>
+</div>
+<a id="a22ded8dbed6ed1e8bee6522c2b880b6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22ded8dbed6ed1e8bee6522c2b880b6e">&#9670;&nbsp;</a></span>GoodnessOfFit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AutoReg::GoodnessOfFit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the goodness of fit of the match algorithm. </p>
+
+</div>
+</div>
+<a id="ad9b9d5a60de7a4378bd941e2bbc78916"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9b9d5a60de7a4378bd941e2bbc78916">&#9670;&nbsp;</a></span>GradientFilterString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::AutoReg::GradientFilterString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa765485b7074fbfe10aeff5fea59128d7">Isis::None</a>.</p>
+
+</div>
+</div>
+<a id="a500cea4c74bcbaf960f3399dccccd6a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a500cea4c74bcbaf960f3399dccccd6a7">&#9670;&nbsp;</a></span>IdealFit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double Isis::Gruen::IdealFit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the ideal fit for a perfect <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> result. </p>
+
+<p>Implements <a class="el" href="class_isis_1_1_auto_reg.html#a5701a2c7d8c78bd4d566d77cc69fa18e">Isis::AutoReg</a>.</p>
+
+</div>
+</div>
+<a id="af7351b54a0f901ff3ea172b2b6e98c3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7351b54a0f901ff3ea172b2b6e98c3a">&#9670;&nbsp;</a></span>IsAdaptive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Isis::AdaptiveGruen::IsAdaptive </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_adaptive_gruen.html" title="Gruen (adaptive) pattern matching.">AdaptiveGruen</a> is adaptive. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool Always True </dd></dl>
+
+</div>
+</div>
+<a id="a49a1855330b71838ef5b68a7a38c9fdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49a1855330b71838ef5b68a7a38c9fdc">&#9670;&nbsp;</a></span>IsIdeal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AutoReg::IsIdeal </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>fit</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the fit parameter is arbitrarily close to the ideal fit value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fit</td><td>Fit value to be compared to the ideal fit </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> Indicates whether the fit is ideal </dd></dl>
+
+</div>
+</div>
+<a id="a41f9e0dcda95c92b7277b8658a4afa8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41f9e0dcda95c92b7277b8658a4afa8d">&#9670;&nbsp;</a></span>MatchAlgorithm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Gruen::MatchAlgorithm </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;&#160;</td>
+          <td class="paramname"><em>pattern</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;&#160;</td>
+          <td class="paramname"><em>subsearch</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Minimization of data set using <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm. </p>
+<p>This is a very minimal application of the <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm that provides the ability to use it in a non-adaptive capacity. This method processes two chips of the same size, pattern and subsearch. The subsearch has typically been extracted in the same manner as the <a class="el" href="class_isis_1_1_minimum_difference.html" title="Minimum difference pattern matching.">MinimumDifference</a> or <a class="el" href="class_isis_1_1_maximum_correlation.html" title="Maximum correlation pattern matching.">MaximumCorrelation</a> routines are utilized.</p>
+<p>It simply applies the algorithm to the current state of the two chips, computes the error analysis on it and returns the eigen vector solution as an indication of chip registration integrity.</p>
+<p>Note that in this mode, most all the parameters found in the definition file that apply to the adaptive mode are ignored when utilizing the algorithm in this fashion.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pattern</td><td>[in] A <a class="el" href="class_isis_1_1_chip.html" title="A small chip of data used for pattern matching.">Chip</a> object usually containing an nxm area of a cube. Must be the same diminsions as <b>subsearch</b>. </td></tr>
+    <tr><td class="paramname">subsearch</td><td>[in] A <a class="el" href="class_isis_1_1_chip.html" title="A small chip of data used for pattern matching.">Chip</a> object usually containing an nxm area of a cube. Must be the same dimensions as <b>pattern</b>. This is normally a subarea of a larger portion of the image.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The square root of the eigen values of DN differences OR Isis::NULL if the <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm fails. </dd></dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_auto_reg.html#ae45474e61cb30362987c904df113f349">Isis::AutoReg</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gruen.html#ab07f20aaa26a2453c1a3bb5b37651cf1">Isis::Gruen::algorithm()</a>, <a class="el" href="class_isis_1_1_gruen.html#a487ad0506854678e2043f4ea15c745ff">Isis::Gruen::errorAnalysis()</a>, <a class="el" href="struct_isis_1_1_analysis.html#a3771ecd07436ac6e814011e7682a517f">Isis::Analysis::getEigen()</a>, <a class="el" href="struct_isis_1_1_analysis.html#a16820bd28dd95565df2c57c01abc3f77">Isis::Analysis::isValid()</a>, and <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+</div>
+</div>
+<a id="ab90e6e12c41fd1dd7b6058034cd47636"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab90e6e12c41fd1dd7b6058034cd47636">&#9670;&nbsp;</a></span>MinimumZScore()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AutoReg::MinimumZScore </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return minimumPatternZScore. </p>
+
+</div>
+</div>
+<a id="aa448ca031cf07c47982a4767e187c38e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa448ca031cf07c47982a4767e187c38e">&#9670;&nbsp;</a></span>MostLenientTolerance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double Isis::AutoReg::MostLenientTolerance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Minimum tolerance specific to algorithm. </p>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_minimum_difference.html#ae0183ac80a20d11e9b3a3cdded3439f5">Isis::MinimumDifference</a>.</p>
+
+</div>
+</div>
+<a id="a47f11c32a2fd3e66e2b6f20563287ecd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47f11c32a2fd3e66e2b6f20563287ecd">&#9670;&nbsp;</a></span>Parse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::Parse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize parameters in the <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> class using a PVL specification. </p>
+<p>An example of the PVL required for this is:</p>
+<div class="fragment"><div class="line">Object = AutoRegistration</div>
+<div class="line">  Group = Algorithm</div>
+<div class="line">    Name      = MaximumCorrelation</div>
+<div class="line">    <a class="code" href="class_isis_1_1_auto_reg.html#af86c03aa94ae91d961acdce5e86533ea">Tolerance</a> = 0.7</div>
+<div class="line">  EndGroup</div>
+<div class="line"> </div>
+<div class="line">  Group = <a class="code" href="class_isis_1_1_auto_reg.html#af242bcb99e686f85c02346072d2b77fd">PatternChip</a></div>
+<div class="line">    Samples = 21</div>
+<div class="line">    Lines   = 21</div>
+<div class="line">  EndGroup</div>
+<div class="line"> </div>
+<div class="line">  Group = <a class="code" href="class_isis_1_1_auto_reg.html#ab3d160cfd720bff25a8b6ea5045d8fca">SearchChip</a></div>
+<div class="line">    Samples = 51</div>
+<div class="line">    Lines = 51</div>
+<div class="line">  EndGroup</div>
+<div class="line">EndObject</div>
+<div class="ttc" id="aclass_isis_1_1_auto_reg_html_ab3d160cfd720bff25a8b6ea5045d8fca"><div class="ttname"><a href="class_isis_1_1_auto_reg.html#ab3d160cfd720bff25a8b6ea5045d8fca">Isis::AutoReg::SearchChip</a></div><div class="ttdeci">Chip * SearchChip()</div><div class="ttdoc">Return pointer to search chip.</div><div class="ttdef"><b>Definition:</b> AutoReg.h:207</div></div>
+<div class="ttc" id="aclass_isis_1_1_auto_reg_html_af242bcb99e686f85c02346072d2b77fd"><div class="ttname"><a href="class_isis_1_1_auto_reg.html#af242bcb99e686f85c02346072d2b77fd">Isis::AutoReg::PatternChip</a></div><div class="ttdeci">Chip * PatternChip()</div><div class="ttdoc">Return pointer to pattern chip.</div><div class="ttdef"><b>Definition:</b> AutoReg.h:202</div></div>
+<div class="ttc" id="aclass_isis_1_1_auto_reg_html_af86c03aa94ae91d961acdce5e86533ea"><div class="ttname"><a href="class_isis_1_1_auto_reg.html#af86c03aa94ae91d961acdce5e86533ea">Isis::AutoReg::Tolerance</a></div><div class="ttdeci">double Tolerance() const</div><div class="ttdoc">Return match algorithm tolerance.</div><div class="ttdef"><b>Definition:</b> AutoReg.h:290</div></div>
+</div><!-- fragment --><p>There are many other options that can be set via the pvl and are described in other documentation (see below).</p>
+<dl class="section see"><dt>See also</dt><dd>patternMatch.doc under the coreg application</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td>The pvl object containing the specification </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::User</td><td>"Improper format for AutoReg PVL." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a6cdb4c84baf37ecc870517b6c23ebe6d">Isis::PvlContainer::fileName()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">Isis::PvlObject::findGroup()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a4c09ebe5d216cb7711fccfe3f7ffac37">Isis::PvlObject::findObject()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a901539ec62d2075b4fd01f2eab06e80f">Isis::PvlObject::hasGroup()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>, <a class="el" href="namespace_isis.html#a1f2cfeb70c3c8098bac256b6d608b13a">Isis::ValidMaximum</a>, and <a class="el" href="namespace_isis.html#a8adedea0235fd6d17b552822149f6c4b">Isis::ValidMinimum</a>.</p>
+
+</div>
+</div>
+<a id="af242bcb99e686f85c02346072d2b77fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af242bcb99e686f85c02346072d2b77fd">&#9670;&nbsp;</a></span>PatternChip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_chip.html">Chip</a>* Isis::AutoReg::PatternChip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return pointer to pattern chip. </p>
+
+</div>
+</div>
+<a id="a5aa83286c46a445b349328be8bc1eeac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5aa83286c46a445b349328be8bc1eeac">&#9670;&nbsp;</a></span>PatternValidPercent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AutoReg::PatternValidPercent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return pattern chip valid percent. The default value is. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_maximum_correlation.html#a8747250c99e03bfcca20733a44c4541b">Isis::MaximumCorrelation::MatchAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="aa978ec6e7add3ce7cb185c884ec3db23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa978ec6e7add3ce7cb185c884ec3db23">&#9670;&nbsp;</a></span>Reduce()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_chip.html">Chip</a> Isis::AutoReg::Reduce </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;&#160;</td>
+          <td class="paramname"><em>chip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>reductionFactor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method reduces the given chip by the given reduction factor. </p>
+<p>Used to speed up the match algorithm.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chip</td><td><a class="el" href="class_isis_1_1_chip.html" title="A small chip of data used for pattern matching.">Chip</a> to be reduced </td></tr>
+    <tr><td class="paramname">reductionFactor</td><td>Factor by which to reduce chip.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_chip.html" title="A small chip of data used for pattern matching.">Chip</a></b> Reduced chip object </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_statistics.html#aa34678b074b1697cc12414d44ff2b9b9">Isis::Statistics::AddData()</a>, <a class="el" href="class_isis_1_1_statistics.html#a28f531f8a2800b24b0c659a2fa16da4c">Isis::Statistics::Average()</a>, <a class="el" href="class_isis_1_1_chip.html#a187e8f0cc6e4b72f5d13c17f1326a2e8">Isis::Chip::GetValue()</a>, <a class="el" href="class_isis_1_1_chip.html#a4dfcc463818453da7bd9139c1c928753">Isis::Chip::Lines()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_statistics.html#af53edc41f7c11082980fb5fdfebc7496">Isis::Statistics::Reset()</a>, <a class="el" href="class_isis_1_1_chip.html#a216b19f49b3a1a35e75e88cb4a0c2e67">Isis::Chip::Samples()</a>, and <a class="el" href="class_isis_1_1_chip.html#aca15554ee97ec7b48d3960073c02e874">Isis::Chip::SetValue()</a>.</p>
+
+</div>
+</div>
+<a id="a4c636c1465f38f06bc65e5905dbb7c61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c636c1465f38f06bc65e5905dbb7c61">&#9670;&nbsp;</a></span>ReducedFitChip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_chip.html">Chip</a>* Isis::AutoReg::ReducedFitChip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return pointer to reduced fit chip. </p>
+
+</div>
+</div>
+<a id="a2b4e701718a52a657e010e161b40adb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b4e701718a52a657e010e161b40adb9">&#9670;&nbsp;</a></span>ReducedPatternChip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_chip.html">Chip</a>* Isis::AutoReg::ReducedPatternChip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return pointer to reduced pattern chip. </p>
+
+</div>
+</div>
+<a id="ad19ac35c8c41914ec4947eb0adcf1c42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad19ac35c8c41914ec4947eb0adcf1c42">&#9670;&nbsp;</a></span>ReducedSearchChip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_chip.html">Chip</a>* Isis::AutoReg::ReducedSearchChip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return pointer to reduced search chip. </p>
+
+</div>
+</div>
+<a id="a4f1655a457066caf31780c624828be35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f1655a457066caf31780c624828be35">&#9670;&nbsp;</a></span>ReductionFactor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::AutoReg::ReductionFactor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the reduction factor. </p>
+
+</div>
+</div>
+<a id="af5a3428a62c4b0d282b39c91eeb0e401"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5a3428a62c4b0d282b39c91eeb0e401">&#9670;&nbsp;</a></span>Register()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b">AutoReg::RegisterStatus</a> Isis::AutoReg::Register </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Walk the pattern chip through the search chip to find the best registration. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b" title="Enumeration of the Register() method&#39;s return status.">AutoReg::RegisterStatus</a></b> Returns the status of the registration. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::User</td><td>- "Search chips samples must be at least N pixels
+       wider than the pattern chip samples for successful surface modeling" </td></tr>
+    <tr><td class="paramname">iException::User</td><td>- "Search chips lines must be at least N pixels
+       taller than the pattern chip lines for successful surface modeling" </td></tr>
+    <tr><td class="paramname">iException::User</td><td>- "Reduction factor is too large" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_chip.html#a04971a3d267fc094505c2c435af5be90">Isis::Chip::CubeLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a779776d827373e5ef7d1265f62b88676">Isis::Chip::CubeSample()</a>, <a class="el" href="class_isis_1_1_chip.html#a8336e95a73d100235fca2f87d192d47b">Isis::Chip::IsValid()</a>, <a class="el" href="class_isis_1_1_chip.html#a4dfcc463818453da7bd9139c1c928753">Isis::Chip::Lines()</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa765485b7074fbfe10aeff5fea59128d7">Isis::None</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_chip.html#a216b19f49b3a1a35e75e88cb4a0c2e67">Isis::Chip::Samples()</a>, <a class="el" href="class_isis_1_1_chip.html#a51c9abdadbb9b2ad0f640df3da285ba1">Isis::Chip::SetChipPosition()</a>, <a class="el" href="class_isis_1_1_chip.html#ab4e9bc207792c7b93555ebe0fc8a85d9">Isis::Chip::TackLine()</a>, and <a class="el" href="class_isis_1_1_chip.html#a3a69f188eaac6b8fc92b525b6828ca7b">Isis::Chip::TackSample()</a>.</p>
+
+</div>
+</div>
+<a id="aabf2ef54a56647103b94fad617c2e516"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabf2ef54a56647103b94fad617c2e516">&#9670;&nbsp;</a></span>Registration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b">AutoReg::RegisterStatus</a> Isis::Gruen::Registration </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;&#160;</td>
+          <td class="paramname"><em>sChip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;&#160;</td>
+          <td class="paramname"><em>pChip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;&#160;</td>
+          <td class="paramname"><em>fChip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>startSamp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>startLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>endSamp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>endLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bestSamp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bestLine</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Applies the adaptive <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm to pattern and search chips. </p>
+<p>This method computes the adaptive <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm for a pattern chip and search chip. The search chip is assumed to be of a larger size than the pattern chip as dictated by the contents of the registration definition file.</p>
+<p>This algorithm can be used with or without "fast geoming" the search chip. It works quite well where the two images are assumed to be nearly spatially registered. Its real intent is to compute parallax angles between two images taken at different viewing geometry. This provides an efficient process for deriving a digital elevation model (DEM) from two datasets.</p>
+<p>The <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm is applied to the chips until the algorithm converges (current iteration yields a detla affine within tolerance limits), an error is encountered, or the maximum number of iterations is exceeded.</p>
+<p>Note that bestSamp and bestLine may not be the original center of the search chip. It is subject to chip reduction matching as specified by the user. All distance tolerances are compute from this postion. The process of chip reduction processing is handled by <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> prior to calling this routine.</p>
+<dl class="section see"><dt>See also</dt><dd>getThreshHold() for <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> limit information</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sChip</td><td>Full search chip as rendered from the search image </td></tr>
+    <tr><td class="paramname">pChip</td><td>Full pattern chip as rendered from the pattern/match image </td></tr>
+    <tr><td class="paramname">fChip</td><td>Maintains the solution vector at each chip location </td></tr>
+    <tr><td class="paramname">startSamp</td><td>Starting sample of the search image range </td></tr>
+    <tr><td class="paramname">startLine</td><td>Starting line of the search image range </td></tr>
+    <tr><td class="paramname">endSamp</td><td>Ending sample of the search image range </td></tr>
+    <tr><td class="paramname">endLine</td><td>Ending line of the search image range </td></tr>
+    <tr><td class="paramname">bestSamp</td><td>Best registering sample of search chip </td></tr>
+    <tr><td class="paramname">bestLine</td><td>best registering line of search chip</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b" title="Enumeration of the Register() method&#39;s return status.">AutoReg::RegisterStatus</a> Returns <a class="el" href="class_isis_1_1_auto_reg.html#a566c94b6a6d540f13d38bfae87b7daa1" title="Return whether the match algorithm succeeded or not.">AutoReg::Success</a> if the chip is successfully registered, otherwise returns <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108ba7e58352167573e52230edf26371fa746" title="Error occured in Adaptive algorithm.">AutoReg::AdaptiveAlgorithmFailed</a>. </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_auto_reg.html#a7e31876481a639b6d15b305db746b9e7">Isis::AutoReg</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gruen.html#ab07f20aaa26a2453c1a3bb5b37651cf1">Isis::Gruen::algorithm()</a>, <a class="el" href="class_isis_1_1_gruen.html#a487ad0506854678e2043f4ea15c745ff">Isis::Gruen::errorAnalysis()</a>, <a class="el" href="class_isis_1_1_chip.html#a8db2056cbbd1280e37f4b418bfefb5e2">Isis::Chip::Extract()</a>, <a class="el" href="class_isis_1_1_gruen.html#aea3bbad7b0bc8a7a2447c911d69d854d">Isis::Gruen::getAffineTolerance()</a>, <a class="el" href="class_isis_1_1_match_point.html#a477f9d754d2bf02f28c4114f532bd0e8">Isis::MatchPoint::getEigen()</a>, <a class="el" href="class_isis_1_1_coordinate.html#a09c91029011294ffdb8a27ed98a0ae3e">Isis::Coordinate::getLine()</a>, <a class="el" href="class_isis_1_1_coordinate.html#a044ad55fa67352177caa44822cbb4ca1">Isis::Coordinate::getSample()</a>, <a class="el" href="class_isis_1_1_threshold.html#a465dca2d781090cdc9757f6568aa2566">Isis::Threshold::hasConverged()</a>, <a class="el" href="class_isis_1_1_match_point.html#ab1f518014d8714431f4988b3d77f6d3a">Isis::MatchPoint::isValid()</a>, <a class="el" href="class_isis_1_1_chip.html#a4dfcc463818453da7bd9139c1c928753">Isis::Chip::Lines()</a>, <a class="el" href="class_isis_1_1_affine_radio.html#ab3d66bacd810ccd4235d811a8b39f081">Isis::AffineRadio::m_affine</a>, <a class="el" href="class_isis_1_1_match_point.html#abf73d88d456cd6be30ec5d9e5a07bb1b">Isis::MatchPoint::m_affine</a>, <a class="el" href="class_isis_1_1_match_point.html#a903ee475aeb055776732b7120a27cc46">Isis::MatchPoint::m_analysis</a>, <a class="el" href="class_isis_1_1_match_point.html#aa8f6fa5d617b6d368643e04908a870e6">Isis::MatchPoint::m_nIters</a>, <a class="el" href="class_isis_1_1_affine_radio.html#afa0e039c70a91637d65d43462f08e047">Isis::AffineRadio::m_radio</a>, <a class="el" href="struct_isis_1_1_analysis.html#a61e73b0b0a279e9522ee4fea8dfb3520">Isis::Analysis::m_status</a>, <a class="el" href="class_isis_1_1_chip.html#a216b19f49b3a1a35e75e88cb4a0c2e67">Isis::Chip::Samples()</a>, <a class="el" href="class_isis_1_1_auto_reg.html#a293560bbecccedc6360b7c40f6a4acca">Isis::AutoReg::SetChipLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a51c9abdadbb9b2ad0f640df3da285ba1">Isis::Chip::SetChipPosition()</a>, <a class="el" href="class_isis_1_1_auto_reg.html#acb5ac8caabdf15d6e412d0ef19f68817">Isis::AutoReg::SetChipSample()</a>, <a class="el" href="class_isis_1_1_auto_reg.html#ae03cde5093c8fbe0f1ca6a9d77f27009">Isis::AutoReg::SetGoodnessOfFit()</a>, <a class="el" href="class_isis_1_1_chip.html#a148d981c958ae0d37fd87deab85862a4">Isis::Chip::SetSize()</a>, <a class="el" href="class_isis_1_1_match_point.html#af43eb0e825406cb104895bc4e920dc92">Isis::MatchPoint::setStatus()</a>, <a class="el" href="class_isis_1_1_chip.html#ab4e9bc207792c7b93555ebe0fc8a85d9">Isis::Chip::TackLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a3a69f188eaac6b8fc92b525b6828ca7b">Isis::Chip::TackSample()</a>, <a class="el" href="class_isis_1_1_affine_radio.html#acd848172e8fbd2b3b659202395cad4c1">Isis::AffineRadio::Translate()</a>, and <a class="el" href="class_isis_1_1_chip.html#a17b7136c621bad445ab546fa9564c8d7">Isis::Chip::Write()</a>.</p>
+
+</div>
+</div>
+<a id="aebeaec4ca364d03cc8f4875f2f5a737a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebeaec4ca364d03cc8f4875f2f5a737a">&#9670;&nbsp;</a></span>RegistrationPatternChip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_chip.html">Chip</a>* Isis::AutoReg::RegistrationPatternChip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return pointer to pattern chip used in registration. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_auto_reg.html#a10aaf908cfc3b8302a4af83e73316c15ae81a96fd919db12574537498886403a3">Isis::AutoReg::None</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#a155fcb894eadb771082bba28a2e302c3">Isis::ControlMeasureEditWidget::saveChips()</a>, and <a class="el" href="class_isis_1_1_control_point_edit.html#af11f75f2c70851fbfb9b9d54f7d9a879">Isis::ControlPointEdit::saveChips()</a>.</p>
+
+</div>
+</div>
+<a id="a99d1076f46aca0a309f94667b7ef66d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99d1076f46aca0a309f94667b7ef66d5">&#9670;&nbsp;</a></span>RegistrationSearchChip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_chip.html">Chip</a>* Isis::AutoReg::RegistrationSearchChip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return pointer to search chip used in registration. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_auto_reg.html#a10aaf908cfc3b8302a4af83e73316c15ae81a96fd919db12574537498886403a3">Isis::AutoReg::None</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#a155fcb894eadb771082bba28a2e302c3">Isis::ControlMeasureEditWidget::saveChips()</a>, and <a class="el" href="class_isis_1_1_control_point_edit.html#af11f75f2c70851fbfb9b9d54f7d9a879">Isis::ControlPointEdit::saveChips()</a>.</p>
+
+</div>
+</div>
+<a id="a65561b9fcdd5cd0a4642cb29c66a4719"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65561b9fcdd5cd0a4642cb29c66a4719">&#9670;&nbsp;</a></span>RegistrationStatistics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> Isis::AutoReg::RegistrationStatistics </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This returns the cumulative registration statistics. </p>
+<p>That is, the <a class="el" href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401" title="Walk the pattern chip through the search chip to find the best registration.">Register()</a> method accumulates statistics regard the errors each time is called. Invoking this method returns a PVL summary of those statisitics</p>
+<dl class="section author"><dt>Author</dt><dd>janderson (3/26/2009)</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a></b> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_object.html#ac18c485fdccb8e8bf16866e6c6ad2e3d">Isis::PvlObject::addGroup()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a5150c5b0246000f848b7cdf2c83689b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5150c5b0246000f848b7cdf2c83689b5">&#9670;&nbsp;</a></span>RegTemplate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> Isis::AutoReg::RegTemplate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This function returns the keywords that this object was created from. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a></b> The keywords this object used in initialization </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>.</p>
+
+</div>
+</div>
+<a id="ab3d160cfd720bff25a8b6ea5045d8fca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3d160cfd720bff25a8b6ea5045d8fca">&#9670;&nbsp;</a></span>SearchChip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_chip.html">Chip</a>* Isis::AutoReg::SearchChip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return pointer to search chip. </p>
+
+</div>
+</div>
+<a id="a71313f13643096cfad323e8e6e552fc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71313f13643096cfad323e8e6e552fc9">&#9670;&nbsp;</a></span>setAffineRadio() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Gruen::setAffineRadio </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set affine parameters to defaults. </p>
+<p>This method differs from the one above in that it uses the defaults as defined at construction. The basic difference is that this call sets the affine portion to the identity and the radiometric parameters to the defaults as provided in the user input auto-regististration parameters. It may have default shift and gain values to use.</p>
+<dl class="section author"><dt>Author</dt><dd>Kris Becker - 6/4/2011 </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gruen.html#a5667f78c857a406048b16e0b15437fdb">Isis::Gruen::getDefaultAffineRadio()</a>.</p>
+
+</div>
+</div>
+<a id="ac771ffbd9227dbf544d8df34be7b0cdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac771ffbd9227dbf544d8df34be7b0cdc">&#9670;&nbsp;</a></span>setAffineRadio() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Gruen::setAffineRadio </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_affine_radio.html">AffineRadio</a> &amp;&#160;</td>
+          <td class="paramname"><em>affrad</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets initial chip transformation. </p>
+<p>This method can be used with <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> registration to set initial affine transform parameters. This initial condition will be applied to the whole search chip extraction for the first subsearch chip. The caller must define the contents of the affine and radiometric parameters. See the <a class="el" href="class_isis_1_1_affine_radio.html" title="Container for affine and radiometric parameters.">AffineRadio</a> construct for details.</p>
+<dl class="section author"><dt>Author</dt><dd>kbecker (5/14/2011)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">affrad</td><td>Initial Affine/Radio parameters to apply on registration entry </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5156a2f89b54754240a0f64f55dc9e6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5156a2f89b54754240a0f64f55dc9e6e">&#9670;&nbsp;</a></span>SetChipInterpolator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetChipInterpolator </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>interpolator</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the <a class="el" href="class_isis_1_1_chip.html" title="A small chip of data used for pattern matching.">Chip</a> class interpolator type to be used to load pattern and search chips. </p>
+<p>Acceptable values for the interpolator parameter include: </p><ul>
+<li>
+NearestNeighborType </li>
+<li>
+BiLinearType </li>
+<li>
+CubicConvolutionType </li>
+</ul>
+<p>If this method is not called, the chip interpolator type defaults to CubicConvolutionType in the <a class="el" href="class_isis_1_1_chip.html" title="A small chip of data used for pattern matching.">Chip</a> class.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">interpolator</td><td>Name of interpolator type to be used. This is taken from the <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a>'s ChipInterpolator keyword value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::User</td><td>- "Invalid Interpolator type." </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Jeannie Walldren </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_interpolator.html#abdccfae8e6619bc74f09c4ae13d67f39a04b123c54c6ddae601704028c74cec7a">Isis::Interpolator::BiLinearType</a>, <a class="el" href="class_isis_1_1_interpolator.html#abdccfae8e6619bc74f09c4ae13d67f39a05e6b8629f2107ab850e4f9c9286178e">Isis::Interpolator::CubicConvolutionType</a>, and <a class="el" href="class_isis_1_1_interpolator.html#abdccfae8e6619bc74f09c4ae13d67f39a35707d35f4f11514000d89ba027b1b5a">Isis::Interpolator::NearestNeighborType</a>.</p>
+
+</div>
+</div>
+<a id="a293560bbecccedc6360b7c40f6a4acca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a293560bbecccedc6360b7c40f6a4acca">&#9670;&nbsp;</a></span>SetChipLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetChipLine </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>line</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the search chip subpixel line that matches the pattern tack line. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td>Value to set for search chip subpixel line </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gruen.html#aabf2ef54a56647103b94fad617c2e516">Isis::Gruen::Registration()</a>.</p>
+
+</div>
+</div>
+<a id="acb5ac8caabdf15d6e412d0ef19f68817"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb5ac8caabdf15d6e412d0ef19f68817">&#9670;&nbsp;</a></span>SetChipSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetChipSample </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sample</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the search chip subpixel sample that matches the pattern tack sample. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sample</td><td>Value to set for search chip subpixel sample </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gruen.html#aabf2ef54a56647103b94fad617c2e516">Isis::Gruen::Registration()</a>.</p>
+
+</div>
+</div>
+<a id="ae03cde5093c8fbe0f1ca6a9d77f27009"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae03cde5093c8fbe0f1ca6a9d77f27009">&#9670;&nbsp;</a></span>SetGoodnessOfFit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetGoodnessOfFit </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>fit</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the goodness of fit for adaptive algorithms. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fit</td><td>Fit value to set </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gruen.html#aabf2ef54a56647103b94fad617c2e516">Isis::Gruen::Registration()</a>.</p>
+
+</div>
+</div>
+<a id="af0821dc1a7659ddca61baf0db8ebfcb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0821dc1a7659ddca61baf0db8ebfcb4">&#9670;&nbsp;</a></span>SetGradientFilterType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetGradientFilterType </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>gradientFilterType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the gradient filter type to be applied to the search and pattern chips. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gradientFilterType</td><td>the gradient filter type to use </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::User</td><td>- "Invalid Gradient type." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa765485b7074fbfe10aeff5fea59128d7">Isis::None</a>.</p>
+
+</div>
+</div>
+<a id="a770e80ed71a3740d4e11ba3665a789bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a770e80ed71a3740d4e11ba3665a789bd">&#9670;&nbsp;</a></span>SetPatternValidPercent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetPatternValidPercent </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>percent</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the amount of data in the pattern chip that must be valid. </p>
+<p>For example, a 21x21 pattern chip has 441 pixels. If percent is 75 then at least 330 pixels pairs must be valid in order for a comparision between the pattern and search sub-region to occur. That is, both the pattern pixel and search pixel must be valid to be counted. Pixels are considered valid based on the min/max range specified on each of the Chips (see <a class="el" href="class_isis_1_1_chip.html#a2b74ee5b07fcd4eec7bcf3a585fc10e9" title="Set the valid range of data in the chip.">Chip::SetValidRange</a> method).</p>
+<p>If the pattern chip reduction option is used this percentage will apply to all reduced patterns. Additionally, the pattern sampling effects the pixel count. For example if pattern sampling is 50% then only 220 pixels in the 21x21 pattern are considered so 165 must be valid.</p>
+<p>If this method is not called, the PatternChip ValidPercent defaults to 50 in the <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> object constructor.</p>
+<dl class="section see"><dt>See also</dt><dd>SetValidRange() </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">percent</td><td>Percentage of valid data between 0 and 100, default is 50% if never invoked </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::User</td><td>- "Invalid value for PatternChip ValidPercent." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="abe0ad9634ae8055adc0d2ef46c872e68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe0ad9634ae8055adc0d2ef46c872e68">&#9670;&nbsp;</a></span>SetPatternZScoreMinimum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetPatternZScoreMinimum </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>minimum</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the minimum pattern zscore. </p>
+<p>This option is used to ignore pattern chips which are bland (low standard deviation). If the minimum or maximum pixel value in the pattern chip does not meet the minimum zscore value (see a statisitcs book for definition of zscore) then invalid registration will occur.</p>
+<p>If this method is not called, the z-score minimum defaults to 1.0 in the <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> object constructor.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">minimum</td><td>The minimum zscore value for the pattern chip. Default is 1.0 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::User</td><td>- "Invalid value for PatternChip MinimumZScore." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a842610557d068b12c22749cb1f20b32d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a842610557d068b12c22749cb1f20b32d">&#9670;&nbsp;</a></span>SetReductionFactor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetReductionFactor </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>factor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the reduction factor used to speed up the pattern matching algorithm. </p>
+<p>If this method is not called, the reduction factor defaults to 1 in the <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> object constructor.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">factor</td><td>Reduction factor. Must be greater than or equal to 1. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::User</td><td>- "Invalid value for Algorithm ReductionFactor." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a9f48c041b76f8c050eb1be190b6e8478"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f48c041b76f8c050eb1be190b6e8478">&#9670;&nbsp;</a></span>SetSubPixelAccuracy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetSubPixelAccuracy </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>on</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the sub-pixel accuracy is enabled, the <a class="el" href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401" title="Walk the pattern chip through the search chip to find the best registration.">Register()</a> method will attempt to match the pattern chip to the search chip at sub-pixel accuracy, otherwise it will be registered at whole pixel accuracy. </p>
+<p>If this method is not called, the sub pixel accuracy defaults to on = true in the <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> object constructor.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">on</td><td>Set the state of registration accuracy. The default is sub-pixel accuracy is on </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab4c2f1c0829789b102eba7eb8769c991"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4c2f1c0829789b102eba7eb8769c991">&#9670;&nbsp;</a></span>SetSubpixelPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AutoReg::SetSubpixelPosition </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip.html">Chip</a> &amp;&#160;</td>
+          <td class="paramname"><em>window</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the search chip sample and line to subpixel values if possible. </p>
+<p>This method uses a centroiding method to gravitate the whole pixel best fit to a subpixel extremum in the continuous image space. The weights of the centers of gravity in the centroiding algorithm are modeled by goodness of fit values within a discrete search window.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">window</td><td>The search window extracted from the fit chip </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> Returns true if the subpixel solution is valid </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a65692754384de9a3a5492375d9294e24">Isis::Chip::ChipLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a557a6c39b66b429f24ae03a34e367bb7">Isis::Chip::ChipSample()</a>, <a class="el" href="class_isis_1_1_chip.html#a187e8f0cc6e4b72f5d13c17f1326a2e8">Isis::Chip::GetValue()</a>, <a class="el" href="class_isis_1_1_chip.html#a4dfcc463818453da7bd9139c1c928753">Isis::Chip::Lines()</a>, <a class="el" href="class_isis_1_1_chip.html#a216b19f49b3a1a35e75e88cb4a0c2e67">Isis::Chip::Samples()</a>, <a class="el" href="class_isis_1_1_centroid.html#a9f209d42a30d87067a4979b61cdeabdc">Isis::Centroid::setDNRange()</a>, and <a class="el" href="class_isis_1_1_chip.html#aca15554ee97ec7b48d3960073c02e874">Isis::Chip::SetValue()</a>.</p>
+
+</div>
+</div>
+<a id="a502a75ac16075d75305f576a2b48223b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a502a75ac16075d75305f576a2b48223b">&#9670;&nbsp;</a></span>SetSubsearchValidPercent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetSubsearchValidPercent </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>percent</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the amount of data in the search chip's subchip that must be valid. </p>
+<p>If this method is not called, the SearchChip SubchipValidPercent defaults to 50 in the <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> object constructor.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">percent</td><td>Percentage of valid data between 0 and 100, default is 50% if never invoked </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_auto_reg.html#a770e80ed71a3740d4e11ba3665a789bd" title="Set the amount of data in the pattern chip that must be valid.">SetPatternValidPercent()</a> </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::User</td><td>- "Invalid value for SearchChip
+       SubchipValidPercent." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="ad1b572a23b69c3a5e27cd48a31f4fb83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1b572a23b69c3a5e27cd48a31f4fb83">&#9670;&nbsp;</a></span>SetSurfaceModelDistanceTolerance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetSurfaceModelDistanceTolerance </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>distance</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set a distance the surface model solution is allowed to move away from the best whole pixel fit in the fit chip. </p>
+<p>If this method is not called, the distance tolerance defaults to 1.5 in the <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> object constructor.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">distance</td><td>The distance allowed to move in pixels. Must be greater than 0. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::User</td><td>- "Invalid value for SurfaceModel
+       DistanceTolerance." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="aeec97e870c23b1c42640b00e413135e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeec97e870c23b1c42640b00e413135e5">&#9670;&nbsp;</a></span>SetSurfaceModelWindowSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetSurfaceModelWindowSize </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the surface model window size. </p>
+<p>The pixels in this window will be used to fit a surface model in order to compute sub-pixel accuracy. In some cases the default (3x3) and produces erroneous sub-pixel accuracy values.</p>
+<p>If this method is not called, the window size defaults to 5 in the <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> object constructor.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>The size of the window must be three or greater and odd. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::User</td><td>- "Invalid value for SurfaceModel WindowSize." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="adfbb5a41718edd5c099c96d9de203e6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfbb5a41718edd5c099c96d9de203e6f">&#9670;&nbsp;</a></span>SetTolerance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::SetTolerance </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the tolerance for an acceptable goodness of fit. </p>
+<p>If this method is not called, the tolerance value defaults to <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2" title="Value for an Isis Null pixel.">Isis::Null</a> in the <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a> object constructor.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tolerance</td><td>This tolerance is used to test against the goodness of fit returned by the MatchAlgorith method after a surface model has been fit. See TestGoodnessOfFit </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a959549d10ac201702b7b494cbf8331cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a959549d10ac201702b7b494cbf8331cd">&#9670;&nbsp;</a></span>SubPixelAccuracy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AutoReg::SubPixelAccuracy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return whether this object will attempt to register to whole or sub-pixel accuracy. </p>
+<dl class="section return"><dt>Returns</dt><dd>on Is sub-pixel accuracy enabled? </dd></dl>
+
+</div>
+</div>
+<a id="a7b43adab20aa3c9ddbf7359236cce0a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b43adab20aa3c9ddbf7359236cce0a9">&#9670;&nbsp;</a></span>SubsearchValidPercent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AutoReg::SubsearchValidPercent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return subsearch chip valid percent. </p>
+
+</div>
+</div>
+<a id="a566c94b6a6d540f13d38bfae87b7daa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a566c94b6a6d540f13d38bfae87b7daa1">&#9670;&nbsp;</a></span>Success()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AutoReg::Success </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return whether the match algorithm succeeded or not. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108ba1bb6487d023f9e0195becb7eb226cfe6">Isis::AutoReg::SuccessPixel</a>, and <a class="el" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108ba75c5ec430080e0f2a120a0aeee2fd9a4">Isis::AutoReg::SuccessSubPixel</a>.</p>
+
+</div>
+</div>
+<a id="af86c03aa94ae91d961acdce5e86533ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af86c03aa94ae91d961acdce5e86533ea">&#9670;&nbsp;</a></span>Tolerance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AutoReg::Tolerance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return match algorithm tolerance. </p>
+
+</div>
+</div>
+<a id="a1a8aab57a25adf5ae7c1d9b97854e280"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a8aab57a25adf5ae7c1d9b97854e280">&#9670;&nbsp;</a></span>UpdatedTemplate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> Isis::AutoReg::UpdatedTemplate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a> containing the PvlKeywords of the parameters this object was most recently run with. </p>
+<p>Because of publically accessible mutators, <a class="el" href="class_isis_1_1_auto_reg.html" title="Auto Registration class.">AutoReg</a>'s runtime parameters can change, and this version of the template is designed to reflect the paramters it was actually run with, as opposed to simply initialized with. If no mutators were ever called externally, then this <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a> should be the same as the one received from <a class="el" href="class_isis_1_1_auto_reg.html#a5150c5b0246000f848b7cdf2c83689b5" title="This function returns the keywords that this object was created from.">RegTemplate()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a></b> The keywords this object was most recently run with </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a4dfcc463818453da7bd9139c1c928753">Isis::Chip::Lines()</a>, <a class="el" href="class_isis_1_1_chip.html#a216b19f49b3a1a35e75e88cb4a0c2e67">Isis::Chip::Samples()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a0d5e32d573e0801c82e893a33f45667d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d5e32d573e0801c82e893a33f45667d">&#9670;&nbsp;</a></span>WindowSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::AutoReg::WindowSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return window size. </p>
+
+</div>
+</div>
+<a id="a0d679cdb45ea8ec2950b4e1184ee4d54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d679cdb45ea8ec2950b4e1184ee4d54">&#9670;&nbsp;</a></span>WriteSubsearchChips()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Gruen::WriteSubsearchChips </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>pattern</em> = <code>&quot;SubChip&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set up for writing subsearch for a a given registration call. </p>
+<p>This method is provided to request the write of the subsearch chip at each iteration. This must be invoked prior to every call to <a class="el" href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401" title="Walk the pattern chip through the search chip to find the best registration.">AutoReg::Register()</a> method. It will only write subchips from the <a class="el" href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401" title="Walk the pattern chip through the search chip to find the best registration.">Register()</a> interface as it interates to a solution. Direct calls to <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> methods don't iterate in the same fashion.</p>
+<p>The "pattern" parameter is optional but is provided to direct the location and naming convention of each subsearch chip. The format for the output file name for each subsearch chip is comprised of the pattern parameter, call number, which can be retrieved by the <a class="el" href="class_isis_1_1_gruen.html#ac2340ac2124f966a92db46397dcc4e4f" title="Returns the current call count.">CallCount()</a> method and pertains to the call after the <a class="el" href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401" title="Walk the pattern chip through the search chip to find the best registration.">Register()</a> method is invoked and the interation count. Below is a code example:</p>
+<div class="fragment"><div class="line"><a class="code" href="class_isis_1_1_gruen.html#a1ac18e65531432c3c45b221c85b30ecf">Gruen</a> gruen(myPvldef);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Set up pattern and search chips here</span></div>
+<div class="line"> </div>
+<div class="line">gruen.WriteSubsearchChips(<span class="stringliteral">&quot;/mydata/subchip&quot;</span>);</div>
+<div class="line">gruen.Register();</div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a1ac18e65531432c3c45b221c85b30ecf"><div class="ttname"><a href="class_isis_1_1_gruen.html#a1ac18e65531432c3c45b221c85b30ecf">Isis::Gruen::Gruen</a></div><div class="ttdeci">Gruen()</div><div class="ttdoc">Default constructor.</div><div class="ttdef"><b>Definition:</b> Gruen.cpp:32</div></div>
+</div><!-- fragment --><p>Note that prior to each call to <a class="el" href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401" title="Walk the pattern chip through the search chip to find the best registration.">Register()</a>, it must be called again in order for the subchips to be written. The last part of the parameter above, "subchip", cannot be a directory, but is a filename prefix. Assuming this is the first call to <a class="el" href="class_isis_1_1_auto_reg.html#af5a3428a62c4b0d282b39c91eeb0e401" title="Walk the pattern chip through the search chip to find the best registration.">Register()</a>, a series of cube subsearch chips will be written with the pattern "/work1/kbecker/subchipC000001IXXX.cub" where "C" indicates call count and the next 6 digits are the return of <a class="el" href="class_isis_1_1_gruen.html#ac2340ac2124f966a92db46397dcc4e4f" title="Returns the current call count.">CallCount()</a> method, "I" indicates the iteration count "XXX" of the <a class="el" href="class_isis_1_1_gruen.html#ab07f20aaa26a2453c1a3bb5b37651cf1" title="Real workhorse of the computational Gruen algorithm.">algorithm()</a> method. Note that the chip written for a particular iteration is what is provided as a parameter into the <a class="el" href="class_isis_1_1_gruen.html#ab07f20aaa26a2453c1a3bb5b37651cf1" title="Real workhorse of the computational Gruen algorithm.">algorithm()</a> method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pattern</td><td>Specifies an optional directory and file pattern to write the subsearch chip at each algorithm iteration. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a028da475d2a53552dd16840103c56dc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a028da475d2a53552dd16840103c56dc5">&#9670;&nbsp;</a></span>ZScores()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AutoReg::ZScores </td>
+          <td>(</td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>score1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>score2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the ZScores of the pattern chip. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">score1</td><td>First Z Score </td></tr>
+    <tr><td class="paramname">score2</td><td>Second Z Score </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2f7642ed8ec6e0dd47836f6d9779ae04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f7642ed8ec6e0dd47836f6d9779ae04">&#9670;&nbsp;</a></span>p_template</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> Isis::AutoReg::p_template</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>AutoRegistration object that created this projection. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/AdaptiveGruen/<a class="el" href="_adaptive_gruen_8h_source.html">AdaptiveGruen.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_adaptive_gruen.html">AdaptiveGruen</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

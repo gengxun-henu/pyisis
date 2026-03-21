@@ -1,0 +1,5 @@
+<map id="Isis::NewHorizonsMvicFrameCamera" name="Isis::NewHorizonsMvicFrameCamera">
+<area shape="rect" id="node1" title="This is the camera model for the New Horizons MVIC Frame mode Camera." alt="" coords="5,696,245,889"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_framing_camera.html" title="Generic class for Framing Cameras." alt="" coords="33,519,217,648"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="16,5,234,471"/>
+</map>

@@ -1,0 +1,564 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/MatchTool/MatchTool.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_match_tool_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">MatchTool.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_match_tool_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef MatchTool_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define MatchTool_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_tool_8h.html">Tool.h</a>&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_control_point_8h.html">ControlPoint.h</a>&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_serial_number_list_8h.html">SerialNumberList.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;QCloseEvent&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;QHideEvent&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;QPalette&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;QPointer&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QStatusBar&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QStringList&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_action.html">QAction</a>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">class </span>QBoxLayout;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">class </span>QCheckBox;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_combo_box.html">QComboBox</a>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">class </span>QGroupBox;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">class </span>QLabel;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_main_window.html">QMainWindow</a>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_object.html">QObject</a>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">class </span>QPainter;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">class </span>QPoint;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">class </span>QPushButton;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">class </span>QSplitter;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">class </span>QStackedWidget;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">class </span>QString;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">class </span>QTableWidget;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">class </span>QTextEdit;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_widget.html">QWidget</a>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <span class="keyword">class </span>ControlMeasure;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keyword">class </span>ControlNet;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keyword">class </span>ControlPointEdit;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keyword">class </span>Cube;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <span class="keyword">class </span>CubeViewport;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <span class="keyword">class </span>MainWindow;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keyword">class </span>MatchToolNewPointDialog;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  <span class="keyword">class </span>MdiCubeViewport;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keyword">class </span>MatchHoldPointDialog;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <span class="keyword">class </span>SerialNumberList;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <span class="keyword">class </span>Stretch;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  <span class="keyword">class </span>ToolPad;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="keyword">class </span>UniversalGroundMap;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html">  216</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_match_tool.html">MatchTool</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_tool.html">Tool</a> {</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    Q_OBJECT</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;      <a class="code" href="class_isis_1_1_match_tool.html#ae464fb50dfae3072c6a83704ba9be69c">MatchTool</a>(<a class="code" href="class_q_widget.html">QWidget</a> *parent);</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_match_tool.html#ad3ca926f5f26125a7ed8c6a6b8b7dbb9">~MatchTool</a>();</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#a7d907855dc26fd5f8e662a6765fb1158">paintViewport</a>(<a class="code" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *mvp, QPainter *painter);</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="comment">//    void addTo(Workspace *);</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;      <span class="comment">// measure column values</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8be">  227</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8be">MeasureColumns</a>{</div>
+<div class="line"><a name="l00228"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea0234c862fdd6f8e9f01a012946c41d81">  228</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea0234c862fdd6f8e9f01a012946c41d81">FILENAME</a>,</div>
+<div class="line"><a name="l00229"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea8065ecf017de2db7401212f335dfe3e5">  229</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea8065ecf017de2db7401212f335dfe3e5">CUBESN</a>,</div>
+<div class="line"><a name="l00230"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beab4a2be799c6194be7c03f9f72aee630e">  230</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beab4a2be799c6194be7c03f9f72aee630e">SAMPLE</a>,</div>
+<div class="line"><a name="l00231"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea364a6a59913fd100ea911ba32e2a3be4">  231</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea364a6a59913fd100ea911ba32e2a3be4">LINE</a>,</div>
+<div class="line"><a name="l00232"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea66f5e6669d1c9f5ace22d84204e8dc42">  232</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea66f5e6669d1c9f5ace22d84204e8dc42">APRIORISAMPLE</a>,</div>
+<div class="line"><a name="l00233"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea2162cf4794c1a6b4f6324f3441b9b5c1">  233</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea2162cf4794c1a6b4f6324f3441b9b5c1">APRIORILINE</a>,</div>
+<div class="line"><a name="l00234"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea7c8ff947c4bdf1d9693c24b0901b255b">  234</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea7c8ff947c4bdf1d9693c24b0901b255b">SAMPLERESIDUAL</a>,</div>
+<div class="line"><a name="l00235"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beaee653ca491a64be2611269f8f937f06d">  235</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beaee653ca491a64be2611269f8f937f06d">LINERESIDUAL</a>,</div>
+<div class="line"><a name="l00236"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beaf1c40fcf5cd882862887959fc1b2cae6">  236</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beaf1c40fcf5cd882862887959fc1b2cae6">RESIDUALMAGNITUDE</a>,</div>
+<div class="line"><a name="l00237"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea9cc967eda88a01565e18fbd19011d52c">  237</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea9cc967eda88a01565e18fbd19011d52c">SAMPLESHIFT</a>,</div>
+<div class="line"><a name="l00238"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea776a3ada948277c26de0b4737c05b6f7">  238</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea776a3ada948277c26de0b4737c05b6f7">LINESHIFT</a>,</div>
+<div class="line"><a name="l00239"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea607b6dc86060870a996b8eb802aecd20">  239</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea607b6dc86060870a996b8eb802aecd20">PIXELSHIFT</a>,</div>
+<div class="line"><a name="l00240"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea106cb0d3c662a969440704131afdfd8f">  240</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea106cb0d3c662a969440704131afdfd8f">GOODNESSOFFIT</a>,</div>
+<div class="line"><a name="l00241"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea20d15a35b0f8ea3b165a2a1222eef29f">  241</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea20d15a35b0f8ea3b165a2a1222eef29f">IGNORED</a>,</div>
+<div class="line"><a name="l00242"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beab065275cae2ea4c86c3066cdd2e1cfed">  242</a></span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beab065275cae2ea4c86c3066cdd2e1cfed">EDITLOCK</a>,</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea7657ec70c4be4b3b9a24688582516adf">TYPE</a></div>
+<div class="line"><a name="l00244"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea7657ec70c4be4b3b9a24688582516adf">  244</a></span>&#160;      };</div>
+<div class="line"><a name="l00245"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a8a6a18797fb805949552adbd5bf7435a">  245</a></span>&#160;      <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_match_tool.html#a8a6a18797fb805949552adbd5bf7435a">NUMCOLUMNS</a> = 16;</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;      QString <a class="code" href="class_isis_1_1_match_tool.html#aaa9100d92bec008c253bee7992caaa86">measureColumnToString</a>(<a class="code" href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8be">MeasureColumns</a> column);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    signals:</div>
+<div class="line"><a name="l00251"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#aa93768fc8a29f398ea94b9e0eee7083a">  251</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#aa93768fc8a29f398ea94b9e0eee7083a">editPointChanged</a>();</div>
+<div class="line"><a name="l00252"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#ac3affa47b86fd659ae3da5310bc7c5ef">  252</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#ac3affa47b86fd659ae3da5310bc7c5ef">ignorePointChanged</a>();</div>
+<div class="line"><a name="l00253"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a801b20502aa3ed2a50f3fd141ac89e04">  253</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#a801b20502aa3ed2a50f3fd141ac89e04">ignoreLeftChanged</a>();</div>
+<div class="line"><a name="l00254"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a7bebc44c4e06c3891a58f01cc2ea620a">  254</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#a7bebc44c4e06c3891a58f01cc2ea620a">ignoreRightChanged</a>();</div>
+<div class="line"><a name="l00255"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#aa065b0ecfaf623d0ca53dbae27986467">  255</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#aa065b0ecfaf623d0ca53dbae27986467">newControlNetwork</a>(<a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> *);</div>
+<div class="line"><a name="l00256"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#acefb61d97337c7d98faecc17b3384a96">  256</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#acefb61d97337c7d98faecc17b3384a96">stretchChipViewport</a>(<a class="code" href="class_isis_1_1_stretch.html">Stretch</a> *, <a class="code" href="class_isis_1_1_cube_viewport.html">CubeViewport</a> *);</div>
+<div class="line"><a name="l00257"></a><span class="lineno"><a class="line" href="class_isis_1_1_match_tool.html#a69c7c17c30bff533a1a405bb7a66cf74">  257</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#a69c7c17c30bff533a1a405bb7a66cf74">measureChanged</a>();</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#ac196689084b840946a1a511ea712417e">createPoint</a>(<a class="code" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *mvp, <span class="keywordtype">double</span> sample, <span class="keywordtype">double</span> line);</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#a1d4caa7fafda3568083a7dec976b489f">modifyPoint</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point);</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#a3fd75e020b368d20c7653743c9f9ace8">deletePoint</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point);</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#af9b3f5ec49236280050b7d8d5ac16987">updatePointInfo</a>(QString pointId);</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#a5b5845d79fdbf16a19252d56a12f9820">refresh</a>();</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *<a class="code" href="class_isis_1_1_match_tool.html#afb586f52af251924319f6cb14f15ef89">toolPadAction</a>(<a class="code" href="class_isis_1_1_tool_pad.html">ToolPad</a> *pad);</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_match_tool.html#a129024410dfc861c9d118906dd4b4e0b">eventFilter</a>(<a class="code" href="class_q_object.html">QObject</a> *o,QEvent *e);</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="keyword">protected</span> slots:</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_match_tool.html#a10d192c91495420ac4915663be5e9eb6">createToolBarWidget</a>(QStackedWidget *parent);</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_match_tool.html#a293f8409f38aa5024be833df6c121c12">mouseButtonRelease</a>(QPoint p, Qt::MouseButton s);</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160; </div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <span class="keyword">private</span> slots:</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;      <span class="keywordtype">void</span> showHelp();</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;      <span class="keywordtype">void</span> enterWhatsThisMode();</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;      <span class="keywordtype">void</span> paintAllViewports ();</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;      <span class="keywordtype">void</span> activateTool();</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;      <span class="keywordtype">void</span> openNet();</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;      <span class="keywordtype">void</span> saveNet();</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;      <span class="keywordtype">void</span> saveAsNet();</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;      <span class="keywordtype">void</span> setLockPoint (<span class="keywordtype">bool</span> ignore);</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;      <span class="keywordtype">void</span> setIgnorePoint (<span class="keywordtype">bool</span> ignore);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;      <span class="keywordtype">void</span> setLockLeftMeasure (<span class="keywordtype">bool</span> ignore);</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;      <span class="keywordtype">void</span> setIgnoreLeftMeasure (<span class="keywordtype">bool</span> ignore);</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;      <span class="keywordtype">void</span> setLockRightMeasure (<span class="keywordtype">bool</span> ignore);</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;      <span class="keywordtype">void</span> setIgnoreRightMeasure (<span class="keywordtype">bool</span> ignore);</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;      <span class="keywordtype">void</span> nextRightMeasure();</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;      <span class="keywordtype">void</span> previousRightMeasure();</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;      <span class="keywordtype">void</span> selectLeftMeasure (<span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;      <span class="keywordtype">void</span> selectRightMeasure (<span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;      <span class="keywordtype">void</span> updateLeftMeasureInfo ();</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;      <span class="keywordtype">void</span> updateRightMeasureInfo ();</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;      <span class="keywordtype">void</span> measureSaved();</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;      <span class="keywordtype">void</span> checkReference();</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;      <span class="keywordtype">void</span> savePoint();</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;      <span class="keywordtype">void</span> colorizeSaveButton();</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;      <span class="keywordtype">void</span> cancelNewPoint();</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;      <span class="keywordtype">void</span> doneWithMeasures();</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;      <span class="keywordtype">void</span> openTemplateFile();</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;      <span class="keywordtype">void</span> viewTemplateFile();</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;      <span class="keywordtype">void</span> saveChips();</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;      <span class="keywordtype">void</span> showHideTemplateEditor();</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;      <span class="keywordtype">void</span> saveTemplateFile();</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;      <span class="keywordtype">void</span> saveTemplateFileAs();</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;      <span class="keywordtype">void</span> setTemplateModified();</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;      <span class="keywordtype">void</span> writeTemplateFile(QString);</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;      <span class="keywordtype">void</span> clearEditPoint();</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160; </div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;      <span class="keywordtype">void</span> exiting();</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;      <span class="keywordtype">void</span> createActions();</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;      <span class="keywordtype">void</span> createMenus();</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;      <span class="keywordtype">void</span> createToolBars();</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;      <span class="keywordtype">void</span> loadPoint();</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;      <span class="keywordtype">void</span> loadMeasureTable();</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;      <span class="keywordtype">void</span> drawAllMeasurments (<a class="code" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *mvp,QPainter *painter);</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;      <span class="keywordtype">void</span> createMatchTool(<a class="code" href="class_q_widget.html">QWidget</a> *parent);</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;      QSplitter * createTopSplitter();</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;      QGroupBox * createControlPointGroupBox();</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;      QGroupBox * createLeftMeasureGroupBox();</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;      QGroupBox * createRightMeasureGroupBox();</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;      <span class="keywordtype">void</span> createTemplateEditorWidget();</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;      <span class="keywordtype">void</span> loadTemplateFile(QString);</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;      <span class="keywordtype">bool</span> okToContinue();</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;      <span class="keywordtype">bool</span> IsMeasureLocked(QString serialNumber);</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;      <span class="keywordtype">void</span> addMeasure(<a class="code" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *mvp, <span class="keywordtype">double</span> sample, <span class="keywordtype">double</span> line);</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;      <span class="keywordtype">bool</span> validateMeasureChange(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *m);</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;      QStringList missingCubes(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point);</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;      <span class="comment">// TODO  pointer, reference, what???</span></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;      <a class="code" href="class_isis_1_1_serial_number_list.html">SerialNumberList</a> serialNumberList();</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;      QString serialNumber(<a class="code" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *mvp);</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;      <span class="keywordtype">void</span> addViewportToSerialNumberList(<a class="code" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *mvp);</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;      <span class="keywordtype">void</span> readSettings();</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;      <span class="keywordtype">void</span> writeSettings() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160; </div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160; </div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;      <a class="code" href="class_q_main_window.html">QMainWindow</a> *m_matchTool;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *m_parent;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;      QStatusBar *m_statusBar;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160; </div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;      QString m_cnetFileName;</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;      QLabel *m_cnetFileNameLabel;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;      <span class="keywordtype">bool</span> m_coregNet;</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;      QString m_coregReferenceSN;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;      <span class="keywordtype">bool</span> m_netChanged;</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_createPoint;</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_modifyPoint;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_deletePoint;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_saveNet;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_saveAsNet;</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_closeMatchTool;</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_saveChips;</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_showHideTemplateEditor;</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_openTemplateFile;</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_saveTemplateFile;</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_saveTemplateFileAs;</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160; </div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_whatsThis;</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_showHelp;</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;      <a class="code" href="class_isis_1_1_control_point_edit.html">ControlPointEdit</a> *m_pointEditor;</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160; </div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;      QPushButton *m_savePoint;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;      QPalette m_saveDefaultPalette;</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160; </div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;      QTextEdit *m_templateEditor;</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *m_templateEditorWidget;</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;      <span class="keywordtype">bool</span> m_templateModified;</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160; </div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;      QLabel *m_templateFileNameLabel;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;      QLabel *m_ptIdValue;</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;      QLabel *m_numMeasures;</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160; </div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;      QCheckBox *m_lockPoint;</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;      QCheckBox *m_ignorePoint;</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;      QLabel *m_leftReference;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;      QLabel *m_leftMeasureType;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;      QLabel *m_leftSampShift;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;      QLabel *m_leftLineShift;</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;      QLabel *m_leftGoodness;</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;      QLabel *m_rightGoodness;</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;      QLabel *m_rightReference;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;      QLabel *m_rightMeasureType;</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;      QLabel *m_rightSampShift;</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;      QLabel *m_rightLineShift;</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;      QCheckBox *m_lockLeftMeasure;</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;      QCheckBox *m_ignoreLeftMeasure;</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;      QCheckBox *m_lockRightMeasure;</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;      QCheckBox *m_ignoreRightMeasure;</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160; </div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;      <a class="code" href="class_q_combo_box.html">QComboBox</a> *m_leftCombo;</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;      <a class="code" href="class_q_combo_box.html">QComboBox</a> *m_rightCombo;</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160; </div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;      <a class="code" href="class_q_main_window.html">QMainWindow</a> *m_measureWindow;</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;      QTableWidget *m_measureTable;</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160; </div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;      QPointer&lt;ControlNet&gt; m_controlNet;</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;      <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *m_editPoint;</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;      <a class="code" href="class_isis_1_1_match_tool_new_point_dialog.html">MatchToolNewPointDialog</a> *m_newPointDialog;</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;      <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *m_newPoint;</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;      QString m_lastUsedPointId;</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160; </div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;      QStringList m_pointFiles;</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160; </div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;      QString m_leftFile;</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;      <a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *m_leftMeasure;</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;      <a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *m_rightMeasure;</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;      <a class="code" href="class_isis_1_1_cube.html">Cube</a> *m_leftCube;</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;      <a class="code" href="class_isis_1_1_cube.html">Cube</a> *m_rightCube;</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160; </div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;  };</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;};</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_control_point_8h_html"><div class="ttname"><a href="_control_point_8h.html">ControlPoint.h</a></div></div>
+<div class="ttc" id="a_serial_number_list_8h_html"><div class="ttname"><a href="_serial_number_list_8h.html">SerialNumberList.h</a></div></div>
+<div class="ttc" id="a_tool_8h_html"><div class="ttname"><a href="_tool_8h.html">Tool.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_control_measure_html"><div class="ttname"><a href="class_isis_1_1_control_measure.html">Isis::ControlMeasure</a></div><div class="ttdoc">a control measurement</div><div class="ttdef"><b>Definition:</b> ControlMeasure.h:175</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html"><div class="ttname"><a href="class_isis_1_1_control_net.html">Isis::ControlNet</a></div><div class="ttdoc">a control network</div><div class="ttdef"><b>Definition:</b> ControlNet.h:258</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_edit_html"><div class="ttname"><a href="class_isis_1_1_control_point_edit.html">Isis::ControlPointEdit</a></div><div class="ttdoc">Point Editor Widget.</div><div class="ttdef"><b>Definition:</b> ControlPointEdit.h:155</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_html"><div class="ttname"><a href="class_isis_1_1_control_point.html">Isis::ControlPoint</a></div><div class="ttdoc">A single control point.</div><div class="ttdef"><b>Definition:</b> ControlPoint.h:356</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_html"><div class="ttname"><a href="class_isis_1_1_cube.html">Isis::Cube</a></div><div class="ttdoc">IO Handler for Isis Cubes.</div><div class="ttdef"><b>Definition:</b> Cube.h:168</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_viewport_html"><div class="ttname"><a href="class_isis_1_1_cube_viewport.html">Isis::CubeViewport</a></div><div class="ttdoc">Widget to display Isis cubes for qt apps.</div><div class="ttdef"><b>Definition:</b> CubeViewport.h:122</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html"><div class="ttname"><a href="class_isis_1_1_match_tool.html">Isis::MatchTool</a></div><div class="ttdoc">Match tool operations.</div><div class="ttdef"><b>Definition:</b> MatchTool.h:216</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a10d192c91495420ac4915663be5e9eb6"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a10d192c91495420ac4915663be5e9eb6">Isis::MatchTool::createToolBarWidget</a></div><div class="ttdeci">QWidget * createToolBarWidget(QStackedWidget *parent)</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:623</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a129024410dfc861c9d118906dd4b4e0b"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a129024410dfc861c9d118906dd4b4e0b">Isis::MatchTool::eventFilter</a></div><div class="ttdeci">bool eventFilter(QObject *o, QEvent *e)</div><div class="ttdoc">Event filter for MatchTool.</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:2539</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a1d4caa7fafda3568083a7dec976b489f"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a1d4caa7fafda3568083a7dec976b489f">Isis::MatchTool::modifyPoint</a></div><div class="ttdeci">void modifyPoint(ControlPoint *point)</div><div class="ttdoc">Modify control point.</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:1873</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a293f8409f38aa5024be833df6c121c12"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a293f8409f38aa5024be833df6c121c12">Isis::MatchTool::mouseButtonRelease</a></div><div class="ttdeci">void mouseButtonRelease(QPoint p, Qt::MouseButton s)</div><div class="ttdoc">Handle mouse events on CubeViewport.</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:1456</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a3fd75e020b368d20c7653743c9f9ace8"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a3fd75e020b368d20c7653743c9f9ace8">Isis::MatchTool::deletePoint</a></div><div class="ttdeci">void deletePoint(ControlPoint *point)</div><div class="ttdoc">Delete control point.</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:1692</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a5b5845d79fdbf16a19252d56a12f9820"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a5b5845d79fdbf16a19252d56a12f9820">Isis::MatchTool::refresh</a></div><div class="ttdeci">void refresh()</div><div class="ttdoc">Refresh all necessary widgets in MatchTool including the PointEditor and CubeViewports.</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:2972</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8be"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8be">Isis::MatchTool::MeasureColumns</a></div><div class="ttdeci">MeasureColumns</div><div class="ttdef"><b>Definition:</b> MatchTool.h:227</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea0234c862fdd6f8e9f01a012946c41d81"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea0234c862fdd6f8e9f01a012946c41d81">Isis::MatchTool::FILENAME</a></div><div class="ttdeci">@ FILENAME</div><div class="ttdef"><b>Definition:</b> MatchTool.h:228</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea106cb0d3c662a969440704131afdfd8f"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea106cb0d3c662a969440704131afdfd8f">Isis::MatchTool::GOODNESSOFFIT</a></div><div class="ttdeci">@ GOODNESSOFFIT</div><div class="ttdef"><b>Definition:</b> MatchTool.h:240</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea20d15a35b0f8ea3b165a2a1222eef29f"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea20d15a35b0f8ea3b165a2a1222eef29f">Isis::MatchTool::IGNORED</a></div><div class="ttdeci">@ IGNORED</div><div class="ttdef"><b>Definition:</b> MatchTool.h:241</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea2162cf4794c1a6b4f6324f3441b9b5c1"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea2162cf4794c1a6b4f6324f3441b9b5c1">Isis::MatchTool::APRIORILINE</a></div><div class="ttdeci">@ APRIORILINE</div><div class="ttdef"><b>Definition:</b> MatchTool.h:233</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea364a6a59913fd100ea911ba32e2a3be4"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea364a6a59913fd100ea911ba32e2a3be4">Isis::MatchTool::LINE</a></div><div class="ttdeci">@ LINE</div><div class="ttdef"><b>Definition:</b> MatchTool.h:231</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea607b6dc86060870a996b8eb802aecd20"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea607b6dc86060870a996b8eb802aecd20">Isis::MatchTool::PIXELSHIFT</a></div><div class="ttdeci">@ PIXELSHIFT</div><div class="ttdef"><b>Definition:</b> MatchTool.h:239</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea66f5e6669d1c9f5ace22d84204e8dc42"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea66f5e6669d1c9f5ace22d84204e8dc42">Isis::MatchTool::APRIORISAMPLE</a></div><div class="ttdeci">@ APRIORISAMPLE</div><div class="ttdef"><b>Definition:</b> MatchTool.h:232</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea7657ec70c4be4b3b9a24688582516adf"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea7657ec70c4be4b3b9a24688582516adf">Isis::MatchTool::TYPE</a></div><div class="ttdeci">@ TYPE</div><div class="ttdef"><b>Definition:</b> MatchTool.h:243</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea776a3ada948277c26de0b4737c05b6f7"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea776a3ada948277c26de0b4737c05b6f7">Isis::MatchTool::LINESHIFT</a></div><div class="ttdeci">@ LINESHIFT</div><div class="ttdef"><b>Definition:</b> MatchTool.h:238</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea7c8ff947c4bdf1d9693c24b0901b255b"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea7c8ff947c4bdf1d9693c24b0901b255b">Isis::MatchTool::SAMPLERESIDUAL</a></div><div class="ttdeci">@ SAMPLERESIDUAL</div><div class="ttdef"><b>Definition:</b> MatchTool.h:234</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea8065ecf017de2db7401212f335dfe3e5"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea8065ecf017de2db7401212f335dfe3e5">Isis::MatchTool::CUBESN</a></div><div class="ttdeci">@ CUBESN</div><div class="ttdef"><b>Definition:</b> MatchTool.h:229</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8bea9cc967eda88a01565e18fbd19011d52c"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8bea9cc967eda88a01565e18fbd19011d52c">Isis::MatchTool::SAMPLESHIFT</a></div><div class="ttdeci">@ SAMPLESHIFT</div><div class="ttdef"><b>Definition:</b> MatchTool.h:237</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8beab065275cae2ea4c86c3066cdd2e1cfed"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beab065275cae2ea4c86c3066cdd2e1cfed">Isis::MatchTool::EDITLOCK</a></div><div class="ttdeci">@ EDITLOCK</div><div class="ttdef"><b>Definition:</b> MatchTool.h:242</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8beab4a2be799c6194be7c03f9f72aee630e"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beab4a2be799c6194be7c03f9f72aee630e">Isis::MatchTool::SAMPLE</a></div><div class="ttdeci">@ SAMPLE</div><div class="ttdef"><b>Definition:</b> MatchTool.h:230</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8beaee653ca491a64be2611269f8f937f06d"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beaee653ca491a64be2611269f8f937f06d">Isis::MatchTool::LINERESIDUAL</a></div><div class="ttdeci">@ LINERESIDUAL</div><div class="ttdef"><b>Definition:</b> MatchTool.h:235</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a60855604b4355877b259abebc1e3e8beaf1c40fcf5cd882862887959fc1b2cae6"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a60855604b4355877b259abebc1e3e8beaf1c40fcf5cd882862887959fc1b2cae6">Isis::MatchTool::RESIDUALMAGNITUDE</a></div><div class="ttdeci">@ RESIDUALMAGNITUDE</div><div class="ttdef"><b>Definition:</b> MatchTool.h:236</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a69c7c17c30bff533a1a405bb7a66cf74"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a69c7c17c30bff533a1a405bb7a66cf74">Isis::MatchTool::measureChanged</a></div><div class="ttdeci">void measureChanged()</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a7bebc44c4e06c3891a58f01cc2ea620a"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a7bebc44c4e06c3891a58f01cc2ea620a">Isis::MatchTool::ignoreRightChanged</a></div><div class="ttdeci">void ignoreRightChanged()</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a7d907855dc26fd5f8e662a6765fb1158"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a7d907855dc26fd5f8e662a6765fb1158">Isis::MatchTool::paintViewport</a></div><div class="ttdeci">void paintViewport(MdiCubeViewport *mvp, QPainter *painter)</div><div class="ttdoc">Take care of drawing things on a viewPort.</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:2560</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a801b20502aa3ed2a50f3fd141ac89e04"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a801b20502aa3ed2a50f3fd141ac89e04">Isis::MatchTool::ignoreLeftChanged</a></div><div class="ttdeci">void ignoreLeftChanged()</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_a8a6a18797fb805949552adbd5bf7435a"><div class="ttname"><a href="class_isis_1_1_match_tool.html#a8a6a18797fb805949552adbd5bf7435a">Isis::MatchTool::NUMCOLUMNS</a></div><div class="ttdeci">static const int NUMCOLUMNS</div><div class="ttdef"><b>Definition:</b> MatchTool.h:245</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_aa065b0ecfaf623d0ca53dbae27986467"><div class="ttname"><a href="class_isis_1_1_match_tool.html#aa065b0ecfaf623d0ca53dbae27986467">Isis::MatchTool::newControlNetwork</a></div><div class="ttdeci">void newControlNetwork(ControlNet *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_aa93768fc8a29f398ea94b9e0eee7083a"><div class="ttname"><a href="class_isis_1_1_match_tool.html#aa93768fc8a29f398ea94b9e0eee7083a">Isis::MatchTool::editPointChanged</a></div><div class="ttdeci">void editPointChanged()</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_aaa9100d92bec008c253bee7992caaa86"><div class="ttname"><a href="class_isis_1_1_match_tool.html#aaa9100d92bec008c253bee7992caaa86">Isis::MatchTool::measureColumnToString</a></div><div class="ttdeci">QString measureColumnToString(MeasureColumns column)</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:2190</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_ac196689084b840946a1a511ea712417e"><div class="ttname"><a href="class_isis_1_1_match_tool.html#ac196689084b840946a1a511ea712417e">Isis::MatchTool::createPoint</a></div><div class="ttdeci">void createPoint(MdiCubeViewport *mvp, double sample, double line)</div><div class="ttdoc">Create new control point at given samp, line for viewport.</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:1552</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_ac3affa47b86fd659ae3da5310bc7c5ef"><div class="ttname"><a href="class_isis_1_1_match_tool.html#ac3affa47b86fd659ae3da5310bc7c5ef">Isis::MatchTool::ignorePointChanged</a></div><div class="ttdeci">void ignorePointChanged()</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_acefb61d97337c7d98faecc17b3384a96"><div class="ttname"><a href="class_isis_1_1_match_tool.html#acefb61d97337c7d98faecc17b3384a96">Isis::MatchTool::stretchChipViewport</a></div><div class="ttdeci">void stretchChipViewport(Stretch *, CubeViewport *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_ad3ca926f5f26125a7ed8c6a6b8b7dbb9"><div class="ttname"><a href="class_isis_1_1_match_tool.html#ad3ca926f5f26125a7ed8c6a6b8b7dbb9">Isis::MatchTool::~MatchTool</a></div><div class="ttdeci">virtual ~MatchTool()</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:117</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_ae464fb50dfae3072c6a83704ba9be69c"><div class="ttname"><a href="class_isis_1_1_match_tool.html#ae464fb50dfae3072c6a83704ba9be69c">Isis::MatchTool::MatchTool</a></div><div class="ttdeci">MatchTool(QWidget *parent)</div><div class="ttdoc">Consructs the Match Tool window.</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:57</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_af9b3f5ec49236280050b7d8d5ac16987"><div class="ttname"><a href="class_isis_1_1_match_tool.html#af9b3f5ec49236280050b7d8d5ac16987">Isis::MatchTool::updatePointInfo</a></div><div class="ttdeci">void updatePointInfo(QString pointId)</div><div class="ttdoc">Update the current editPoint information in the Point Editor labels.</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:2936</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_html_afb586f52af251924319f6cb14f15ef89"><div class="ttname"><a href="class_isis_1_1_match_tool.html#afb586f52af251924319f6cb14f15ef89">Isis::MatchTool::toolPadAction</a></div><div class="ttdeci">QAction * toolPadAction(ToolPad *pad)</div><div class="ttdoc">Adds the Tie tool action to the tool pad.</div><div class="ttdef"><b>Definition:</b> MatchTool.cpp:613</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_tool_new_point_dialog_html"><div class="ttname"><a href="class_isis_1_1_match_tool_new_point_dialog.html">Isis::MatchToolNewPointDialog</a></div><div class="ttdef"><b>Definition:</b> MatchToolNewPointDialog.h:22</div></div>
+<div class="ttc" id="aclass_isis_1_1_mdi_cube_viewport_html"><div class="ttname"><a href="class_isis_1_1_mdi_cube_viewport.html">Isis::MdiCubeViewport</a></div><div class="ttdoc">Cube display widget for certain Isis MDI applications.</div><div class="ttdef"><b>Definition:</b> MdiCubeViewport.h:39</div></div>
+<div class="ttc" id="aclass_isis_1_1_serial_number_list_html"><div class="ttname"><a href="class_isis_1_1_serial_number_list.html">Isis::SerialNumberList</a></div><div class="ttdoc">Serial Number list generator.</div><div class="ttdef"><b>Definition:</b> SerialNumberList.h:64</div></div>
+<div class="ttc" id="aclass_isis_1_1_stretch_html"><div class="ttname"><a href="class_isis_1_1_stretch.html">Isis::Stretch</a></div><div class="ttdoc">Pixel value mapper.</div><div class="ttdef"><b>Definition:</b> Stretch.h:58</div></div>
+<div class="ttc" id="aclass_isis_1_1_tool_html"><div class="ttname"><a href="class_isis_1_1_tool.html">Isis::Tool</a></div><div class="ttdoc">Base class for the Qisis tools.</div><div class="ttdef"><b>Definition:</b> Tool.h:67</div></div>
+<div class="ttc" id="aclass_isis_1_1_tool_pad_html"><div class="ttname"><a href="class_isis_1_1_tool_pad.html">Isis::ToolPad</a></div><div class="ttdef"><b>Definition:</b> ToolPad.h:14</div></div>
+<div class="ttc" id="aclass_q_action_html"><div class="ttname"><a href="class_q_action.html">QAction</a></div></div>
+<div class="ttc" id="aclass_q_combo_box_html"><div class="ttname"><a href="class_q_combo_box.html">QComboBox</a></div></div>
+<div class="ttc" id="aclass_q_main_window_html"><div class="ttname"><a href="class_q_main_window.html">QMainWindow</a></div></div>
+<div class="ttc" id="aclass_q_object_html"><div class="ttname"><a href="class_q_object.html">QObject</a></div></div>
+<div class="ttc" id="aclass_q_widget_html"><div class="ttname"><a href="class_q_widget.html">QWidget</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_1caabb6f329429091533ad22f57c7cbb.html">MatchTool</a></li><li class="navelem"><a class="el" href="_match_tool_8h.html">MatchTool.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

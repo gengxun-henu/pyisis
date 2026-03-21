@@ -1,0 +1,5 @@
+<map id="Isis::PvlToXmlTranslationManager" name="Isis::PvlToXmlTranslationManager">
+<area shape="rect" id="node1" title="Allows applications to translate simple text files." alt="" coords="5,680,225,1065"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_label_translation_manager.html" title="Allows applications to translate simple text files." alt="" coords="17,423,213,632"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_pvl_translation_table.html" title="Internalizes a translation table." alt="" coords="33,5,197,375"/>
+</map>

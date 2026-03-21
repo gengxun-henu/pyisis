@@ -1,0 +1,8 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ZeroBufferSmooth,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/ZeroBufferSmooth.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ZeroBufferSmooth,isis_pybind.ZeroBufferSmooth,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,"ZeroBufferSmooth() : Module(""ZeroBufferSmooth"") { }",isis_pybind.ZeroBufferSmooth(),N,抽象基类/纯虚接口
+Construction/Enum,"ZeroBufferSmooth(HiCalData &cal, const HiCalConf &conf) : Module(""ZeroBufferSmooth"") { init(cal, conf)",isis_pybind.ZeroBufferSmooth(),N,抽象基类/纯虚接口
+Public API,const Statistics &Stats() const { return (_stats); },isis_pybind.ZeroBufferSmooth.stats,N,抽象基类/纯虚接口

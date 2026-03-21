@@ -1,0 +1,5 @@
+<map id="Isis::AdjustedLongitudeSigmaFilter" name="Isis::AdjustedLongitudeSigmaFilter">
+<area shape="rect" id="node1" title="Allows filtering by adjusted surface point longitude sigma." alt="" coords="5,728,228,953"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_abstract_number_filter.html" title="Base class for filters that are number&#45;based." alt="" coords="29,519,204,680"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_abstract_filter.html" title="Base class for control net filters." alt="" coords="9,5,224,471"/>
+</map>

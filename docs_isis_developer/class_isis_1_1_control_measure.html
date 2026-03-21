@@ -1,0 +1,2319 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ControlMeasure Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_control_measure.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
+<a href="class_isis_1_1_control_measure-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ControlMeasure Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>a control measurement  
+ <a href="class_isis_1_1_control_measure.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_control_measure_8h_source.html">ControlMeasure.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ControlMeasure:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_control_measure__inherit__graph.png" border="0" usemap="#a_isis_1_1_control_measure_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_control_measure_inherit__map" id="a_isis_1_1_control_measure_inherit__map">
+<area shape="rect" title="a control measurement" alt="" coords="5,135,188,424"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="62,5,131,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ControlMeasure:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_control_measure__coll__graph.png" border="0" usemap="#a_isis_1_1_control_measure_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_control_measure_coll__map" id="a_isis_1_1_control_measure_coll__map">
+<area shape="rect" title="a control measurement" alt="" coords="5,135,188,424"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="62,5,131,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a73d1738bc0d22f1eee66ed0ebf61ffac"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">MeasureType</a> { <a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffacaa0cf346723dd99648f536b691d55810d">Candidate</a>
+, <a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffaca810e1729529beca9ebe2f38377206869">Manual</a>
+, <a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffacacd405981acede97e059712c3dfab8dcc">RegisteredPixel</a>
+, <a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffacaa9b1e26677a0cd01cf1ac4fdf559966a">RegisteredSubPixel</a>
+ }</td></tr>
+<tr class="memdesc:a73d1738bc0d22f1eee66ed0ebf61ffac"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> network measurement types.  <a href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">More...</a><br /></td></tr>
+<tr class="separator:a73d1738bc0d22f1eee66ed0ebf61ffac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa05b5bcf5cf72d92f043930517416890"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a> { <a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890a0bcba0abab2f8d216b3d32c46183244a">Success</a>
+, <a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890a049e4ba22d3e295d5c62b10f82e58e64">MeasureLocked</a>
+ }</td></tr>
+<tr class="separator:aa05b5bcf5cf72d92f043930517416890"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5c774bb13c935327b0d80e359898c8d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ad5c774bb13c935327b0d80e359898c8d">ModType</a> { <a class="el" href="class_isis_1_1_control_measure.html#ad5c774bb13c935327b0d80e359898c8da102f799319be91045b77d6b59bdddf59">IgnoredModified</a>
+ }</td></tr>
+<tr class="memdesc:ad5c774bb13c935327b0d80e359898c8d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Measure Modification Types.  <a href="class_isis_1_1_control_measure.html#ad5c774bb13c935327b0d80e359898c8d">More...</a><br /></td></tr>
+<tr class="separator:ad5c774bb13c935327b0d80e359898c8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc26e6194a0dd55398d3cb59ab6911f3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3">DataField</a> { <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3a7f99688691752c0cec7dfae02a7f5a51">AprioriLine</a> = 1
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3a85466f37b19fbcbce099cec2dc853b42">AprioriSample</a> = 2
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3abb961a7b7d41057354960c34131132f7">ChooserName</a> = 4
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3a511b13fa1da6750276e4416d762018e5">CubeSerialNumber</a> = 8
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3ab17aed6b377599d897893270b9d518d4">Coordinate</a> = 16
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3ab8762d20171755a886515c9e28dc68be">DateTime</a> = 32
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3ab247d11a896d2108220a3f0ad9c4270f">Diameter</a> = 64
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3adbbfba89612479bca134e001ea880396">EditLock</a> = 128
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3a36000d64442069c675b304fb9002d724">Rejected</a> = 256
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3aa1f9f7948e435fa8f2ffe3c3b2aded85">FocalPlaneMeasured</a> = 512
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3aa5ec805d6a575d145c2a40665616f9db">FocalPlaneComputed</a> = 1024
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3a684929523407dd59a61121ad1556dfcb">Ignore</a> = 2048
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3a2cd8f9981f4eeced669de57cebdc5f06">SampleResidual</a> = 4096
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3ae9b7ad487324a99f7c8bf5bf4aec6839">LineResidual</a> = 8192
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3a92d9ecb19bf746f99671b5cd184a699f">SampleSigma</a> = 16384
+, <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3a34164293b0323e59be35639a11ce9261">LineSigma</a> = 32768
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3aa60b5e6a795fa242d244b88eb7c4f20b">Type</a> = 65536
+<br />
+ }</td></tr>
+<tr class="separator:acc26e6194a0dd55398d3cb59ab6911f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:af488d536a535bdd94205eb9a14a806f2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#af488d536a535bdd94205eb9a14a806f2">ControlMeasure</a> ()</td></tr>
+<tr class="memdesc:af488d536a535bdd94205eb9a14a806f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new control measure and initialize it to nulls and zeros.  <a href="class_isis_1_1_control_measure.html#af488d536a535bdd94205eb9a14a806f2">More...</a><br /></td></tr>
+<tr class="separator:af488d536a535bdd94205eb9a14a806f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcc2279b30798e50c5024cb15e64b748"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#abcc2279b30798e50c5024cb15e64b748">ControlMeasure</a> (const <a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> &amp;other)</td></tr>
+<tr class="memdesc:abcc2279b30798e50c5024cb15e64b748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy the other control measure exactly.  <a href="class_isis_1_1_control_measure.html#abcc2279b30798e50c5024cb15e64b748">More...</a><br /></td></tr>
+<tr class="separator:abcc2279b30798e50c5024cb15e64b748"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad95399c45ed24a04910a006ed960ae0b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ad95399c45ed24a04910a006ed960ae0b">~ControlMeasure</a> ()</td></tr>
+<tr class="memdesc:ad95399c45ed24a04910a006ed960ae0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the memory allocated by a control.  <a href="class_isis_1_1_control_measure.html#ad95399c45ed24a04910a006ed960ae0b">More...</a><br /></td></tr>
+<tr class="separator:ad95399c45ed24a04910a006ed960ae0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2416e7bf24e53855930b57db674c13b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a2416e7bf24e53855930b57db674c13b8">Parent</a> ()</td></tr>
+<tr class="separator:a2416e7bf24e53855930b57db674c13b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bdfb5ee921b4138ac5c6a1699846c28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a8bdfb5ee921b4138ac5c6a1699846c28">SetAprioriLine</a> (double aprioriLine)</td></tr>
+<tr class="separator:a8bdfb5ee921b4138ac5c6a1699846c28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f8d35a29a5825839143a15ff4e9c825"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a6f8d35a29a5825839143a15ff4e9c825">SetAprioriSample</a> (double aprioriSample)</td></tr>
+<tr class="separator:a6f8d35a29a5825839143a15ff4e9c825"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adae44e1159e5f490032c2d568945faf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#adae44e1159e5f490032c2d568945faf9">SetCamera</a> (<a class="el" href="class_isis_1_1_camera.html">Isis::Camera</a> *camera)</td></tr>
+<tr class="memdesc:adae44e1159e5f490032c2d568945faf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set pointer to camera associated with a measure.  <a href="class_isis_1_1_control_measure.html#adae44e1159e5f490032c2d568945faf9">More...</a><br /></td></tr>
+<tr class="separator:adae44e1159e5f490032c2d568945faf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea00fda96eac639aad37ab7cf5544e89"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#aea00fda96eac639aad37ab7cf5544e89">SetChooserName</a> ()</td></tr>
+<tr class="memdesc:aea00fda96eac639aad37ab7cf5544e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set chooser name to a user who last changed the coordinate.  <a href="class_isis_1_1_control_measure.html#aea00fda96eac639aad37ab7cf5544e89">More...</a><br /></td></tr>
+<tr class="separator:aea00fda96eac639aad37ab7cf5544e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af823daeb904b677e4cc97ef426290869"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#af823daeb904b677e4cc97ef426290869">SetChooserName</a> (QString name)</td></tr>
+<tr class="memdesc:af823daeb904b677e4cc97ef426290869"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the chooser name to an application that last changed the coordinate.  <a href="class_isis_1_1_control_measure.html#af823daeb904b677e4cc97ef426290869">More...</a><br /></td></tr>
+<tr class="separator:af823daeb904b677e4cc97ef426290869"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d0c6d3a714548e7df9043bd1dbfd5cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a4d0c6d3a714548e7df9043bd1dbfd5cc">SetCoordinate</a> (double sample, double line)</td></tr>
+<tr class="memdesc:a4d0c6d3a714548e7df9043bd1dbfd5cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the coordinate of the measurement.  <a href="class_isis_1_1_control_measure.html#a4d0c6d3a714548e7df9043bd1dbfd5cc">More...</a><br /></td></tr>
+<tr class="separator:a4d0c6d3a714548e7df9043bd1dbfd5cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45a104fb45b39bb8e8962c4e1d782055"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a45a104fb45b39bb8e8962c4e1d782055">SetCoordinate</a> (double sample, double line, <a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">MeasureType</a> type)</td></tr>
+<tr class="memdesc:a45a104fb45b39bb8e8962c4e1d782055"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the coordinate of the measurement.  <a href="class_isis_1_1_control_measure.html#a45a104fb45b39bb8e8962c4e1d782055">More...</a><br /></td></tr>
+<tr class="separator:a45a104fb45b39bb8e8962c4e1d782055"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d7b8de51e3f73f0ddc390adf9f667bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a0d7b8de51e3f73f0ddc390adf9f667bb">SetCubeSerialNumber</a> (QString newSerialNumber)</td></tr>
+<tr class="memdesc:a0d7b8de51e3f73f0ddc390adf9f667bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set cube serial number.  <a href="class_isis_1_1_control_measure.html#a0d7b8de51e3f73f0ddc390adf9f667bb">More...</a><br /></td></tr>
+<tr class="separator:a0d7b8de51e3f73f0ddc390adf9f667bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac92d16496908a6e99d036f2e8d323e93"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ac92d16496908a6e99d036f2e8d323e93">SetDateTime</a> ()</td></tr>
+<tr class="memdesc:ac92d16496908a6e99d036f2e8d323e93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Date Time - Creation Time.  <a href="class_isis_1_1_control_measure.html#ac92d16496908a6e99d036f2e8d323e93">More...</a><br /></td></tr>
+<tr class="separator:ac92d16496908a6e99d036f2e8d323e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81ed8b5260e27885400a53841853f7fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a81ed8b5260e27885400a53841853f7fa">SetDateTime</a> (QString datetime)</td></tr>
+<tr class="memdesc:a81ed8b5260e27885400a53841853f7fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set date/time the coordinate was last changed to specified date/time.  <a href="class_isis_1_1_control_measure.html#a81ed8b5260e27885400a53841853f7fa">More...</a><br /></td></tr>
+<tr class="separator:a81ed8b5260e27885400a53841853f7fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f4890506eb815654c6006d5428aa6a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a9f4890506eb815654c6006d5428aa6a9">SetDiameter</a> (double diameter)</td></tr>
+<tr class="memdesc:a9f4890506eb815654c6006d5428aa6a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the crater diameter at the coordinate.  <a href="class_isis_1_1_control_measure.html#a9f4890506eb815654c6006d5428aa6a9">More...</a><br /></td></tr>
+<tr class="separator:a9f4890506eb815654c6006d5428aa6a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdb2328069eedce9c9beb51e15984d3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#afdb2328069eedce9c9beb51e15984d3d">SetEditLock</a> (bool editLock)</td></tr>
+<tr class="separator:afdb2328069eedce9c9beb51e15984d3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9801b932a8c1d0b87fa275176bfdfcb0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a9801b932a8c1d0b87fa275176bfdfcb0">SetFocalPlaneMeasured</a> (double x, double y)</td></tr>
+<tr class="memdesc:a9801b932a8c1d0b87fa275176bfdfcb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the focal plane x/y for the measured line/sample.  <a href="class_isis_1_1_control_measure.html#a9801b932a8c1d0b87fa275176bfdfcb0">More...</a><br /></td></tr>
+<tr class="separator:a9801b932a8c1d0b87fa275176bfdfcb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68ef28a0ee434ae977be98adc261b167"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a68ef28a0ee434ae977be98adc261b167">SetFocalPlaneComputed</a> (double x, double y)</td></tr>
+<tr class="memdesc:a68ef28a0ee434ae977be98adc261b167"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the computed focal plane x/y for the apriori lat/lon.  <a href="class_isis_1_1_control_measure.html#a68ef28a0ee434ae977be98adc261b167">More...</a><br /></td></tr>
+<tr class="separator:a68ef28a0ee434ae977be98adc261b167"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3255b757886a3ad1cb8ca721338c61a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ae3255b757886a3ad1cb8ca721338c61a">SetIgnored</a> (bool newIgnoredStatus)</td></tr>
+<tr class="separator:ae3255b757886a3ad1cb8ca721338c61a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a071522726b3997f0a2d937a3390c93cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a071522726b3997f0a2d937a3390c93cb">SetLineSigma</a> (double lineSigma)</td></tr>
+<tr class="separator:a071522726b3997f0a2d937a3390c93cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae38b153bb97536b84cefd4d91aa87cc9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ae38b153bb97536b84cefd4d91aa87cc9">SetRejected</a> (bool rejected)</td></tr>
+<tr class="memdesc:ae38b153bb97536b84cefd4d91aa87cc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set "jigsaw" rejected flag for a measure.  <a href="class_isis_1_1_control_measure.html#ae38b153bb97536b84cefd4d91aa87cc9">More...</a><br /></td></tr>
+<tr class="separator:ae38b153bb97536b84cefd4d91aa87cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad071c9f90a831daa6821d4c6edf7cf90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ad071c9f90a831daa6821d4c6edf7cf90">SetResidual</a> (double sampResidual, double lineResidual)</td></tr>
+<tr class="memdesc:ad071c9f90a831daa6821d4c6edf7cf90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <a class="el" href="class_isis_1_1_bundle_adjust.html" title="An image bundle adjustment object.">BundleAdjust</a> Residual of the coordinate.  <a href="class_isis_1_1_control_measure.html#ad071c9f90a831daa6821d4c6edf7cf90">More...</a><br /></td></tr>
+<tr class="separator:ad071c9f90a831daa6821d4c6edf7cf90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44954b91fbaae66f0adfaef28b9abf20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a44954b91fbaae66f0adfaef28b9abf20">SetSampleSigma</a> (double sampleSigma)</td></tr>
+<tr class="separator:a44954b91fbaae66f0adfaef28b9abf20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e5b9b9b671e87d43bc44e7debe23d68"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a9e5b9b9b671e87d43bc44e7debe23d68">SetType</a> (<a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">MeasureType</a> type)</td></tr>
+<tr class="memdesc:a9e5b9b9b671e87d43bc44e7debe23d68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set how the coordinate was obtained.  <a href="class_isis_1_1_control_measure.html#a9e5b9b9b671e87d43bc44e7debe23d68">More...</a><br /></td></tr>
+<tr class="separator:a9e5b9b9b671e87d43bc44e7debe23d68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57d5776b6174ea0ff20d28e911d8d706"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a57d5776b6174ea0ff20d28e911d8d706">DeleteLogData</a> (long dataType)</td></tr>
+<tr class="memdesc:a57d5776b6174ea0ff20d28e911d8d706"><td class="mdescLeft">&#160;</td><td class="mdescRight">This deletes log data of the specified type.  <a href="class_isis_1_1_control_measure.html#a57d5776b6174ea0ff20d28e911d8d706">More...</a><br /></td></tr>
+<tr class="separator:a57d5776b6174ea0ff20d28e911d8d706"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab95b95d4d258f4f57308da889c062980"><td class="memItemLeft" align="right" valign="top">QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ab95b95d4d258f4f57308da889c062980">GetLogValue</a> (long dataType) const</td></tr>
+<tr class="memdesc:ab95b95d4d258f4f57308da889c062980"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value of the log data with the specified type as a variant.  <a href="class_isis_1_1_control_measure.html#ab95b95d4d258f4f57308da889c062980">More...</a><br /></td></tr>
+<tr class="separator:ab95b95d4d258f4f57308da889c062980"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f22cd219af3b56a8ab7af8e409faf66"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a3f22cd219af3b56a8ab7af8e409faf66">HasLogData</a> (long dataType) const</td></tr>
+<tr class="memdesc:a3f22cd219af3b56a8ab7af8e409faf66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if we have a valid log data value of the specified type.  <a href="class_isis_1_1_control_measure.html#a3f22cd219af3b56a8ab7af8e409faf66">More...</a><br /></td></tr>
+<tr class="separator:a3f22cd219af3b56a8ab7af8e409faf66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0fa43e7be6d19f5dba6b3cecbe4a690"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ab0fa43e7be6d19f5dba6b3cecbe4a690">SetLogData</a> (<a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a>)</td></tr>
+<tr class="memdesc:ab0fa43e7be6d19f5dba6b3cecbe4a690"><td class="mdescLeft">&#160;</td><td class="mdescRight">This adds or updates the log data information associated with data's type.  <a href="class_isis_1_1_control_measure.html#ab0fa43e7be6d19f5dba6b3cecbe4a690">More...</a><br /></td></tr>
+<tr class="separator:ab0fa43e7be6d19f5dba6b3cecbe4a690"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7537d4d7a2de3495127a96c36438ea8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ac7537d4d7a2de3495127a96c36438ea8">UpdateLogData</a> (<a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a>)</td></tr>
+<tr class="memdesc:ac7537d4d7a2de3495127a96c36438ea8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This updates existing log data information associated with data's type.  <a href="class_isis_1_1_control_measure.html#ac7537d4d7a2de3495127a96c36438ea8">More...</a><br /></td></tr>
+<tr class="separator:ac7537d4d7a2de3495127a96c36438ea8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bb121cb51445e88ef00a75df3da1655"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a3bb121cb51445e88ef00a75df3da1655">GetAprioriLine</a> () const</td></tr>
+<tr class="separator:a3bb121cb51445e88ef00a75df3da1655"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae345d0c234fa79b061139f1e69763049"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ae345d0c234fa79b061139f1e69763049">GetAprioriSample</a> () const</td></tr>
+<tr class="separator:ae345d0c234fa79b061139f1e69763049"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fd3aec680e53e49664047e7a56e8f9c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_camera.html">Isis::Camera</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a8fd3aec680e53e49664047e7a56e8f9c">Camera</a> () const</td></tr>
+<tr class="separator:a8fd3aec680e53e49664047e7a56e8f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5faf3f9bb2000a1479b4f1f873383f82"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a5faf3f9bb2000a1479b4f1f873383f82">GetChooserName</a> () const</td></tr>
+<tr class="memdesc:a5faf3f9bb2000a1479b4f1f873383f82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the chooser name.  <a href="class_isis_1_1_control_measure.html#a5faf3f9bb2000a1479b4f1f873383f82">More...</a><br /></td></tr>
+<tr class="separator:a5faf3f9bb2000a1479b4f1f873383f82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae60d7daf0b07ee35de351dfcf9c65fa8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ae60d7daf0b07ee35de351dfcf9c65fa8">HasChooserName</a> () const</td></tr>
+<tr class="memdesc:ae60d7daf0b07ee35de351dfcf9c65fa8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the choosername is not empty.  <a href="class_isis_1_1_control_measure.html#ae60d7daf0b07ee35de351dfcf9c65fa8">More...</a><br /></td></tr>
+<tr class="separator:ae60d7daf0b07ee35de351dfcf9c65fa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a634a1d293b8c149ae0804cb70b98e283"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a634a1d293b8c149ae0804cb70b98e283">GetCubeSerialNumber</a> () const</td></tr>
+<tr class="memdesc:a634a1d293b8c149ae0804cb70b98e283"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the serial number of the cube containing the coordinate.  <a href="class_isis_1_1_control_measure.html#a634a1d293b8c149ae0804cb70b98e283">More...</a><br /></td></tr>
+<tr class="separator:a634a1d293b8c149ae0804cb70b98e283"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c134625e9941e67b6b9df493c26a9b8"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a1c134625e9941e67b6b9df493c26a9b8">GetDateTime</a> () const</td></tr>
+<tr class="memdesc:a1c134625e9941e67b6b9df493c26a9b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the date/time the coordinate was last changed.  <a href="class_isis_1_1_control_measure.html#a1c134625e9941e67b6b9df493c26a9b8">More...</a><br /></td></tr>
+<tr class="separator:a1c134625e9941e67b6b9df493c26a9b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3dd96df0c20fcfb6446938822026870"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ab3dd96df0c20fcfb6446938822026870">HasDateTime</a> () const</td></tr>
+<tr class="memdesc:ab3dd96df0c20fcfb6446938822026870"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the datetime is not empty.  <a href="class_isis_1_1_control_measure.html#ab3dd96df0c20fcfb6446938822026870">More...</a><br /></td></tr>
+<tr class="separator:ab3dd96df0c20fcfb6446938822026870"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae935fc57b3858c560c466a39be4f9502"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ae935fc57b3858c560c466a39be4f9502">GetDiameter</a> () const</td></tr>
+<tr class="memdesc:ae935fc57b3858c560c466a39be4f9502"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the diameter of the crater in pixels (0 implies no crater)  <a href="class_isis_1_1_control_measure.html#ae935fc57b3858c560c466a39be4f9502">More...</a><br /></td></tr>
+<tr class="separator:ae935fc57b3858c560c466a39be4f9502"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcfdefadfd0575cf8a7211e1080f5108"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#abcfdefadfd0575cf8a7211e1080f5108">GetLogData</a> (long dataType) const</td></tr>
+<tr class="separator:abcfdefadfd0575cf8a7211e1080f5108"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a2116a761c01f1f84fe9954466e7fbc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a0a2116a761c01f1f84fe9954466e7fbc">IsEditLocked</a> () const</td></tr>
+<tr class="memdesc:a0a2116a761c01f1f84fe9954466e7fbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return value for p_editLock or implicit lock on reference measure.  <a href="class_isis_1_1_control_measure.html#a0a2116a761c01f1f84fe9954466e7fbc">More...</a><br /></td></tr>
+<tr class="separator:a0a2116a761c01f1f84fe9954466e7fbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0a8e5cbe4864045afeefdadd1098497"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ac0a8e5cbe4864045afeefdadd1098497">IsRejected</a> () const</td></tr>
+<tr class="separator:ac0a8e5cbe4864045afeefdadd1098497"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73b49f7af387d70b8d829dac74133b80"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a73b49f7af387d70b8d829dac74133b80">GetFocalPlaneComputedX</a> () const</td></tr>
+<tr class="separator:a73b49f7af387d70b8d829dac74133b80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae71a3e2c31a2b4166ff47690c9d2176a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ae71a3e2c31a2b4166ff47690c9d2176a">GetFocalPlaneComputedY</a> () const</td></tr>
+<tr class="separator:ae71a3e2c31a2b4166ff47690c9d2176a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfde3eab9c07de8ab42b6d3d17436b3a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#acfde3eab9c07de8ab42b6d3d17436b3a">GetFocalPlaneMeasuredX</a> () const</td></tr>
+<tr class="separator:acfde3eab9c07de8ab42b6d3d17436b3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5373df3fa38643e3f73703d2f1810993"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a5373df3fa38643e3f73703d2f1810993">GetFocalPlaneMeasuredY</a> () const</td></tr>
+<tr class="separator:a5373df3fa38643e3f73703d2f1810993"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6febc17670dedad33e6c89d396e34daf"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a6febc17670dedad33e6c89d396e34daf">GetMeasureData</a> (QString) const</td></tr>
+<tr class="memdesc:a6febc17670dedad33e6c89d396e34daf"><td class="mdescLeft">&#160;</td><td class="mdescRight">One Getter to rule them all.  <a href="class_isis_1_1_control_measure.html#a6febc17670dedad33e6c89d396e34daf">More...</a><br /></td></tr>
+<tr class="separator:a6febc17670dedad33e6c89d396e34daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b58506887286ca0211bd459481b393c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a6b58506887286ca0211bd459481b393c">IsIgnored</a> () const</td></tr>
+<tr class="separator:a6b58506887286ca0211bd459481b393c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bc2183d33525aaea27c13e28f726847"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a9bc2183d33525aaea27c13e28f726847">IsMeasured</a> () const</td></tr>
+<tr class="separator:a9bc2183d33525aaea27c13e28f726847"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac41aa6a0dfb6e33bf5b99c603db120d1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ac41aa6a0dfb6e33bf5b99c603db120d1">IsRegistered</a> () const</td></tr>
+<tr class="separator:ac41aa6a0dfb6e33bf5b99c603db120d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9124bbd0b56d7b62892b2a18dcba309d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a9124bbd0b56d7b62892b2a18dcba309d">IsStatisticallyRelevant</a> (<a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3">DataField</a> field) const</td></tr>
+<tr class="separator:a9124bbd0b56d7b62892b2a18dcba309d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f53895260756278df7d22931179d0fe"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a1f53895260756278df7d22931179d0fe">GetLine</a> () const</td></tr>
+<tr class="separator:a1f53895260756278df7d22931179d0fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c63f29abdb99a5dbe4baf6a654866ed"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a8c63f29abdb99a5dbe4baf6a654866ed">GetLineResidual</a> () const</td></tr>
+<tr class="separator:a8c63f29abdb99a5dbe4baf6a654866ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd2311c423a53793d6b793d841f7febf"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#abd2311c423a53793d6b793d841f7febf">GetLineSigma</a> () const</td></tr>
+<tr class="separator:abd2311c423a53793d6b793d841f7febf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd039ff991ad6b0388129ed85d4fb10b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; <a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#afd039ff991ad6b0388129ed85d4fb10b">GetLogDataEntries</a> () const</td></tr>
+<tr class="memdesc:afd039ff991ad6b0388129ed85d4fb10b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return all of the log data for the measure.  <a href="class_isis_1_1_control_measure.html#afd039ff991ad6b0388129ed85d4fb10b">More...</a><br /></td></tr>
+<tr class="separator:afd039ff991ad6b0388129ed85d4fb10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9478d5920d8bf561af4c7f459eb886d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; <a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ac9478d5920d8bf561af4c7f459eb886d">GetLastRunLogDataEntries</a> () const</td></tr>
+<tr class="separator:ac9478d5920d8bf561af4c7f459eb886d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5b91bd885344066241b5b1302179941"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#af5b91bd885344066241b5b1302179941">GetResidualMagnitude</a> () const</td></tr>
+<tr class="memdesc:af5b91bd885344066241b5b1302179941"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return Residual magnitude.  <a href="class_isis_1_1_control_measure.html#af5b91bd885344066241b5b1302179941">More...</a><br /></td></tr>
+<tr class="separator:af5b91bd885344066241b5b1302179941"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88505083032a39e2f2a381b3a4469d59"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a88505083032a39e2f2a381b3a4469d59">GetSample</a> () const</td></tr>
+<tr class="separator:a88505083032a39e2f2a381b3a4469d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a969fd448a638197cbe725406c712390b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a969fd448a638197cbe725406c712390b">GetSampleResidual</a> () const</td></tr>
+<tr class="separator:a969fd448a638197cbe725406c712390b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68cfba03c588a1be816d6ef02ea8af56"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a68cfba03c588a1be816d6ef02ea8af56">GetSampleSigma</a> () const</td></tr>
+<tr class="separator:a68cfba03c588a1be816d6ef02ea8af56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40ce4707e484c14b67c429de6593d4fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">MeasureType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a40ce4707e484c14b67c429de6593d4fe">GetType</a> () const</td></tr>
+<tr class="separator:a40ce4707e484c14b67c429de6593d4fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5c29c7b2d44457281c8f84a7bf27858"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#af5c29c7b2d44457281c8f84a7bf27858">GetPointId</a> () const</td></tr>
+<tr class="separator:af5c29c7b2d44457281c8f84a7bf27858"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8348a8c1893f565cb29982921bf9b9a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ad8348a8c1893f565cb29982921bf9b9a">GetSampleShift</a> () const</td></tr>
+<tr class="separator:ad8348a8c1893f565cb29982921bf9b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8be66b0e320a5c302e34b013ad3fd1ba"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a8be66b0e320a5c302e34b013ad3fd1ba">GetLineShift</a> () const</td></tr>
+<tr class="separator:a8be66b0e320a5c302e34b013ad3fd1ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab352e523518af2da2a9bccd26fd0b57d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ab352e523518af2da2a9bccd26fd0b57d">GetPixelShift</a> () const</td></tr>
+<tr class="separator:ab352e523518af2da2a9bccd26fd0b57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4776465a1d48d63758fc5c4c2587005c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; QStringList &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a4776465a1d48d63758fc5c4c2587005c">PrintableClassData</a> () const</td></tr>
+<tr class="memdesc:a4776465a1d48d63758fc5c4c2587005c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data accessor method, provides access to string representations of all variable values and names.  <a href="class_isis_1_1_control_measure.html#a4776465a1d48d63758fc5c4c2587005c">More...</a><br /></td></tr>
+<tr class="separator:a4776465a1d48d63758fc5c4c2587005c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad726d74d347b7a7e9309700b3047b213"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ad726d74d347b7a7e9309700b3047b213">GetMeasureTypeString</a> () const</td></tr>
+<tr class="memdesc:ad726d74d347b7a7e9309700b3047b213"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtain a string representation of the MeasureType.  <a href="class_isis_1_1_control_measure.html#ad726d74d347b7a7e9309700b3047b213">More...</a><br /></td></tr>
+<tr class="separator:ad726d74d347b7a7e9309700b3047b213"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba06ccdcd1ab5b67e82cac47318b4ae1"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#aba06ccdcd1ab5b67e82cac47318b4ae1">operator=</a> (const <a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> &amp;other)</td></tr>
+<tr class="memdesc:aba06ccdcd1ab5b67e82cac47318b4ae1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator.  <a href="class_isis_1_1_control_measure.html#aba06ccdcd1ab5b67e82cac47318b4ae1">More...</a><br /></td></tr>
+<tr class="separator:aba06ccdcd1ab5b67e82cac47318b4ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39cee0ab7b6fefc10c4ff75e15e66ef3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a39cee0ab7b6fefc10c4ff75e15e66ef3">operator!=</a> (const <a class="el" href="class_isis_1_1_control_measure.html">Isis::ControlMeasure</a> &amp;pMeasure) const</td></tr>
+<tr class="memdesc:a39cee0ab7b6fefc10c4ff75e15e66ef3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare 2 <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Measures for inequality.  <a href="class_isis_1_1_control_measure.html#a39cee0ab7b6fefc10c4ff75e15e66ef3">More...</a><br /></td></tr>
+<tr class="separator:a39cee0ab7b6fefc10c4ff75e15e66ef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8efea4f652ffea6080d4f2a43ea0d573"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a8efea4f652ffea6080d4f2a43ea0d573">operator==</a> (const <a class="el" href="class_isis_1_1_control_measure.html">Isis::ControlMeasure</a> &amp;pMeasure) const</td></tr>
+<tr class="memdesc:a8efea4f652ffea6080d4f2a43ea0d573"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Measures equality.  <a href="class_isis_1_1_control_measure.html#a8efea4f652ffea6080d4f2a43ea0d573">More...</a><br /></td></tr>
+<tr class="separator:a8efea4f652ffea6080d4f2a43ea0d573"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ae3ffa8163870b04897f5d71d34aec71c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_q_vector.html">QVector</a>&lt; QString &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#ae3ffa8163870b04897f5d71d34aec71c">GetMeasureDataNames</a> ()</td></tr>
+<tr class="memdesc:ae3ffa8163870b04897f5d71d34aec71c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all valid options to pass to GetMeasureData.  <a href="class_isis_1_1_control_measure.html#ae3ffa8163870b04897f5d71d34aec71c">More...</a><br /></td></tr>
+<tr class="separator:ae3ffa8163870b04897f5d71d34aec71c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3666cffa950032f909204fecd492dffb"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a3666cffa950032f909204fecd492dffb">MeasureTypeToString</a> (<a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">MeasureType</a> type)</td></tr>
+<tr class="memdesc:a3666cffa950032f909204fecd492dffb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the String <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Measure type.  <a href="class_isis_1_1_control_measure.html#a3666cffa950032f909204fecd492dffb">More...</a><br /></td></tr>
+<tr class="separator:a3666cffa950032f909204fecd492dffb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5291c61e6337f0ee0a901f6376b2971e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">MeasureType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a5291c61e6337f0ee0a901f6376b2971e">StringToMeasureType</a> (QString str)</td></tr>
+<tr class="separator:a5291c61e6337f0ee0a901f6376b2971e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a74c9a2f2af5cc478715170a2650481e4"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_measure.html#a74c9a2f2af5cc478715170a2650481e4">ControlPoint</a></td></tr>
+<tr class="separator:a74c9a2f2af5cc478715170a2650481e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>a control measurement </p>
+<p>This class is used to record a coordinate (measurement) on a cube for a control point.</p>
+<dl class="section author"><dt>Author</dt><dd>2005-07-29 Jeff Anderson</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_point.html" title="A single control point.">ControlPoint</a> <a class="el" href="class_isis_1_1_control_net.html" title="a control network">ControlNet</a> </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="acc26e6194a0dd55398d3cb59ab6911f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc26e6194a0dd55398d3cb59ab6911f3">&#9670;&nbsp;</a></span>DataField</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3">Isis::ControlMeasure::DataField</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3a7f99688691752c0cec7dfae02a7f5a51"></a>AprioriLine&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3a85466f37b19fbcbce099cec2dc853b42"></a>AprioriSample&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3abb961a7b7d41057354960c34131132f7"></a>ChooserName&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3a511b13fa1da6750276e4416d762018e5"></a>CubeSerialNumber&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3ab17aed6b377599d897893270b9d518d4"></a>Coordinate&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3ab8762d20171755a886515c9e28dc68be"></a>DateTime&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3ab247d11a896d2108220a3f0ad9c4270f"></a>Diameter&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3adbbfba89612479bca134e001ea880396"></a>EditLock&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3a36000d64442069c675b304fb9002d724"></a>Rejected&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3aa1f9f7948e435fa8f2ffe3c3b2aded85"></a>FocalPlaneMeasured&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3aa5ec805d6a575d145c2a40665616f9db"></a>FocalPlaneComputed&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3a684929523407dd59a61121ad1556dfcb"></a>Ignore&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3a2cd8f9981f4eeced669de57cebdc5f06"></a>SampleResidual&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3ae9b7ad487324a99f7c8bf5bf4aec6839"></a>LineResidual&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3a92d9ecb19bf746f99671b5cd184a699f"></a>SampleSigma&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3a34164293b0323e59be35639a11ce9261"></a>LineSigma&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acc26e6194a0dd55398d3cb59ab6911f3aa60b5e6a795fa242d244b88eb7c4f20b"></a>Type&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a73d1738bc0d22f1eee66ed0ebf61ffac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73d1738bc0d22f1eee66ed0ebf61ffac">&#9670;&nbsp;</a></span>MeasureType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">Isis::ControlMeasure::MeasureType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> network measurement types. </p>
+<p>OLD VERSION: Manual implies the coordinate was selected by a human but still may be in error. It is subject to refinement by other computer programs.</p>
+<p>Estimated implies the coordinate was selected by a computer program but has not been sub-pixel registered and is more than likely in error. It is subject to refinement by other computer programs</p>
+<p>AutomaticPixel implies the coordinate was selected by a computer program and met registration criteria (but still may be in error). It is subject to refinement by other computer programs.</p>
+<p>ValidatedManual implies the coordinate was manually selected by a human, was validated by a human, and should not be changed by any automated means.</p>
+<p>ValidatedAutomatic implies the coordinate was automatically selected by a computer program, was validated by a human, and should not be changed by any automated means. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a73d1738bc0d22f1eee66ed0ebf61ffacaa0cf346723dd99648f536b691d55810d"></a>Candidate&#160;</td><td class="fielddoc"><p>(e.g., autoseed, interest) AKA predicted, unmeasured, unverified </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a73d1738bc0d22f1eee66ed0ebf61ffaca810e1729529beca9ebe2f38377206869"></a>Manual&#160;</td><td class="fielddoc"><p>Hand Measured (e.g., qnet) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a73d1738bc0d22f1eee66ed0ebf61ffacacd405981acede97e059712c3dfab8dcc"></a>RegisteredPixel&#160;</td><td class="fielddoc"><p>Registered to whole pixel (e.g.,pointreg) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a73d1738bc0d22f1eee66ed0ebf61ffacaa9b1e26677a0cd01cf1ac4fdf559966a"></a>RegisteredSubPixel&#160;</td><td class="fielddoc"><p>Registered to sub-pixel (e.g., pointreg) </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="ad5c774bb13c935327b0d80e359898c8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5c774bb13c935327b0d80e359898c8d">&#9670;&nbsp;</a></span>ModType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_control_measure.html#ad5c774bb13c935327b0d80e359898c8d">Isis::ControlMeasure::ModType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Measure Modification Types. </p>
+<p>This enum is designed to represent the different types of modifications that can be made to a <a class="el" href="class_isis_1_1_control_measure.html" title="a control measurement">ControlMeasure</a>.</p>
+<p>IgnoredModified means that the <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Measure had it's IGNORED flag changed. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ad5c774bb13c935327b0d80e359898c8da102f799319be91045b77d6b59bdddf59"></a>IgnoredModified&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="aa05b5bcf5cf72d92f043930517416890"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa05b5bcf5cf72d92f043930517416890">&#9670;&nbsp;</a></span>Status</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">Isis::ControlMeasure::Status</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa05b5bcf5cf72d92f043930517416890a0bcba0abab2f8d216b3d32c46183244a"></a>Success&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa05b5bcf5cf72d92f043930517416890a049e4ba22d3e295d5c62b10f82e58e64"></a>MeasureLocked&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af488d536a535bdd94205eb9a14a806f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af488d536a535bdd94205eb9a14a806f2">&#9670;&nbsp;</a></span>ControlMeasure() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlMeasure::ControlMeasure </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a new control measure and initialize it to nulls and zeros. </p>
+
+</div>
+</div>
+<a id="abcc2279b30798e50c5024cb15e64b748"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcc2279b30798e50c5024cb15e64b748">&#9670;&nbsp;</a></span>ControlMeasure() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlMeasure::ControlMeasure </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy the other control measure exactly. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The control measure to copy all of the values from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad95399c45ed24a04910a006ed960ae0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad95399c45ed24a04910a006ed960ae0b">&#9670;&nbsp;</a></span>~ControlMeasure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlMeasure::~ControlMeasure </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Free the memory allocated by a control. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8fd3aec680e53e49664047e7a56e8f9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fd3aec680e53e49664047e7a56e8f9c">&#9670;&nbsp;</a></span>Camera()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_camera.html">Isis::Camera</a> * Isis::ControlMeasure::Camera </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_measure.html#ae06ef95aa954778b376e28e9ffbbd86f">Isis::BundleMeasure::camera()</a>, <a class="el" href="class_isis_1_1_control_point.html#aeaac8f53c1e1f072b8c073904c605606">Isis::ControlPoint::ComputeApriori()</a>, <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_lidar_control_point.html#a32231b8bb9ce1460f8cc6325e2a2d1c2">Isis::LidarControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_control_point.html#a506980495f17f124f3d73cd7c16fe3b4">Isis::ControlPoint::ComputeResiduals_Millimeters()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#aa9b642182f33f3474eadb2d2742b3646">Isis::BundleMeasure::setImage()</a>, and <a class="el" href="class_isis_1_1_bundle_measure.html#a1a2be6b85ed6bb8c7371de74080f613f">Isis::BundleMeasure::setSigma()</a>.</p>
+
+</div>
+</div>
+<a id="a57d5776b6174ea0ff20d28e911d8d706"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57d5776b6174ea0ff20d28e911d8d706">&#9670;&nbsp;</a></span>DeleteLogData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlMeasure::DeleteLogData </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>dataType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This deletes log data of the specified type. </p>
+<p>If none exist, this does nothing.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dataType</td><td>A <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b" title="Please do not change existing values in this list except the size - it will break backwards compadibi...">ControlMeasureLogData::NumericLogDataType</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_measure_log_data.html#a5693eeb081e3c2a1e1319ab821f2553c">Isis::ControlMeasureLogData::GetDataType()</a>.</p>
+
+</div>
+</div>
+<a id="a3bb121cb51445e88ef00a75df3da1655"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bb121cb51445e88ef00a75df3da1655">&#9670;&nbsp;</a></span>GetAprioriLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetAprioriLine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, and <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="ae345d0c234fa79b061139f1e69763049"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae345d0c234fa79b061139f1e69763049">&#9670;&nbsp;</a></span>GetAprioriSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetAprioriSample </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, and <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a5faf3f9bb2000a1479b4f1f873383f82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5faf3f9bb2000a1479b4f1f873383f82">&#9670;&nbsp;</a></span>GetChooserName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ControlMeasure::GetChooserName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the chooser name. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_name.html#a5ac7c4ccd0692dc427e117a5c9a2df79">Isis::FileName::name()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a634a1d293b8c149ae0804cb70b98e283"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a634a1d293b8c149ae0804cb70b98e283">&#9670;&nbsp;</a></span>GetCubeSerialNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ControlMeasure::GetCubeSerialNumber </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the serial number of the cube containing the coordinate. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_net_vitals.html#a93eb9f811455f964dedc468a8fec461b">Isis::ControlNetVitals::addMeasure()</a>, <a class="el" href="class_isis_1_1_control_point.html#aeaac8f53c1e1f072b8c073904c605606">Isis::ControlPoint::ComputeApriori()</a>, <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a1f3ffd66cd8963fafd9594c786065dee">Isis::ControlNetFilter::CubeDistanceFilter()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#ac6e09ef7fb567947e6dd73a9f2a38ed0">Isis::BundleMeasure::cubeSerialNumber()</a>, <a class="el" href="class_isis_1_1_control_point.html#a6c1091194f9e749e51dabc16ecb4973c">Isis::ControlPoint::Delete()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a4cab669e8e704e83dee3b0a2518fe932">Isis::ControlNetVitals::deleteMeasure()</a>, <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a08df9092a66b20e7cd72cfec2d4e1b57">Isis::ControlPointEditWidget::deletePoint()</a>, <a class="el" href="class_isis_1_1_match_tool.html#a3fd75e020b368d20c7653743c9f9ace8">Isis::MatchTool::deletePoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#abfaf674c2f75bfcad758b45219691bdc">Isis::QnetTool::deletePoint()</a>, <a class="el" href="class_isis_1_1_image_id_filter.html#af8dba974ab03b5a6d99b243c654717ad">Isis::ImageIdFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_qnet_point_distance_filter.html#ad660645816ee824d7e4c8c50756994ed">Isis::QnetPointDistanceFilter::filter()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a7956b2a5be7856276ef82355bcc3fb45">Isis::CnetEditorWidget::filteredNetwork()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a07587ceeb00befbcb0ccbbbd54d47c9f">Isis::InterestOperator::FindOverlap()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#a3090d3bed1f4ff3eeefbba05eb180ac4">Isis::AbstractPointItem::getData()</a>, <a class="el" href="class_isis_1_1_control_point.html#afaa1466c7df794d8d742eb29a963752b">Isis::ControlPoint::GetReferenceSN()</a>, <a class="el" href="class_isis_1_1_control_point.html#addbd83405051ae688c9dade198748919">Isis::ControlPoint::IndexOf()</a>, <a class="el" href="class_isis_1_1_control_point.html#a8ad960e1ac76628b4febdd353f403a22">Isis::ControlPoint::IndexOfRefMeasure()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a2226245e0893d63f25e4f50fca6bb37d">Isis::InterestOperator::InterestByMeasure()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#ab210908e1c542774647295b2653e21c3">Isis::InterestOperator::InterestByPoint()</a>, <a class="el" href="class_isis_1_1_control_net_vitals.html#a862e927aceb962374df0be29b9ebe5d2">Isis::ControlNetVitals::measureModified()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#aaaca1c6526f3ae4c16be5fb6c754d177">Isis::ControlNetFilter::PointCubeNamesFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a43ff52aed4f6f3773601615bc89c6b75">Isis::ControlNetFilter::PointDistanceFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a2bb87194721a98c127e9954d5ee0f51b">Isis::ControlNetFilter::PointLatLonFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a4c64e024a2f626daeaaeb93841df848c">Isis::ControlNetFilter::PointMeasurePropertiesFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#ad67672916f5e9a590a8360a47e44c6bb">Isis::ControlNetFilter::PrintCubeFileSerialNum()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a5d9c71fcca78bbaa9c5629cbcf02b01b">Isis::InterestOperator::ProcessLocked_Point_Reference()</a>, <a class="el" href="class_isis_1_1_point_table_delegate.html#a0b5ec0bcccda3cd619a3eba9318c75ef">Isis::PointTableDelegate::readData()</a>, <a class="el" href="class_isis_1_1_lidar_data.html#a5e0a8ffcc6bac823f4f422b942305879">Isis::LidarData::SetImages()</a>, <a class="el" href="class_isis_1_1_control_net.html#a64311223a6bcad08b30b2dfde920fd8c">Isis::ControlNet::SetImages()</a>, <a class="el" href="class_isis_1_1_chip_viewports_widget.html#aa52e9c3351a274e7d37969e58b028af0">Isis::ChipViewportsWidget::setPoint()</a>, <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>, and <a class="el" href="class_isis_1_1_lidar_data.html#a94701c09ffdad264d0febba2ae9b1913">Isis::LidarData::write()</a>.</p>
+
+</div>
+</div>
+<a id="a1c134625e9941e67b6b9df493c26a9b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c134625e9941e67b6b9df493c26a9b8">&#9670;&nbsp;</a></span>GetDateTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ControlMeasure::GetDateTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the date/time the coordinate was last changed. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="ae935fc57b3858c560c466a39be4f9502"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae935fc57b3858c560c466a39be4f9502">&#9670;&nbsp;</a></span>GetDiameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetDiameter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the diameter of the crater in pixels (0 implies no crater) </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, and <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a73b49f7af387d70b8d829dac74133b80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73b49f7af387d70b8d829dac74133b80">&#9670;&nbsp;</a></span>GetFocalPlaneComputedX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetFocalPlaneComputedX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#aef02133e3b811a4aa4c580912075cf13">Isis::BundleMeasure::focalPlaneComputedX()</a>, and <a class="el" href="class_isis_1_1_bundle_measure.html#a72aa20f9fad7ea218a05219716c2ef5b">Isis::BundleMeasure::setFocalPlaneResidualsMillimeters()</a>.</p>
+
+</div>
+</div>
+<a id="ae71a3e2c31a2b4166ff47690c9d2176a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae71a3e2c31a2b4166ff47690c9d2176a">&#9670;&nbsp;</a></span>GetFocalPlaneComputedY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetFocalPlaneComputedY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#a937114a4b3bc9c72feb3c8092882ed32">Isis::BundleMeasure::focalPlaneComputedY()</a>, and <a class="el" href="class_isis_1_1_bundle_measure.html#a72aa20f9fad7ea218a05219716c2ef5b">Isis::BundleMeasure::setFocalPlaneResidualsMillimeters()</a>.</p>
+
+</div>
+</div>
+<a id="acfde3eab9c07de8ab42b6d3d17436b3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfde3eab9c07de8ab42b6d3d17436b3a">&#9670;&nbsp;</a></span>GetFocalPlaneMeasuredX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetFocalPlaneMeasuredX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#a39aad2b0f1b8daed793b12f598e8b4f6">Isis::BundleMeasure::focalPlaneMeasuredX()</a>, and <a class="el" href="class_isis_1_1_bundle_measure.html#a72aa20f9fad7ea218a05219716c2ef5b">Isis::BundleMeasure::setFocalPlaneResidualsMillimeters()</a>.</p>
+
+</div>
+</div>
+<a id="a5373df3fa38643e3f73703d2f1810993"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5373df3fa38643e3f73703d2f1810993">&#9670;&nbsp;</a></span>GetFocalPlaneMeasuredY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetFocalPlaneMeasuredY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#af2a09146f5282fe36c21a847ff1a8390">Isis::BundleMeasure::focalPlaneMeasuredY()</a>, and <a class="el" href="class_isis_1_1_bundle_measure.html#a72aa20f9fad7ea218a05219716c2ef5b">Isis::BundleMeasure::setFocalPlaneResidualsMillimeters()</a>.</p>
+
+</div>
+</div>
+<a id="ac9478d5920d8bf561af4c7f459eb886d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9478d5920d8bf561af4c7f459eb886d">&#9670;&nbsp;</a></span>GetLastRunLogDataEntries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt;<a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a>&gt; Isis::ControlMeasure::GetLastRunLogDataEntries </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1f53895260756278df7d22931179d0fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f53895260756278df7d22931179d0fe">&#9670;&nbsp;</a></span>GetLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetLine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#aeaac8f53c1e1f072b8c073904c605606">Isis::ControlPoint::ComputeApriori()</a>, <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_control_point.html#a506980495f17f124f3d73cd7c16fe3b4">Isis::ControlPoint::ComputeResiduals_Millimeters()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a1f3ffd66cd8963fafd9594c786065dee">Isis::ControlNetFilter::CubeDistanceFilter()</a>, <a class="el" href="class_isis_1_1_line_filter.html#a97434bc3d6e165237aae702b48a6a2dc">Isis::LineFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_qnet_cube_distance_filter.html#a5d1dc9aa703a48b127558dbaf46fc42b">Isis::QnetCubeDistanceFilter::filter()</a>, <a class="el" href="class_isis_1_1_qnet_point_distance_filter.html#ad660645816ee824d7e4c8c50756994ed">Isis::QnetPointDistanceFilter::filter()</a>, <a class="el" href="class_isis_1_1_control_net.html#a96f8d394e5d88b95be042d3682db2d24">Isis::ControlNet::FindClosest()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, <a class="el" href="class_isis_1_1_control_net_statistics.html#acd99f93f2ce89dda684348a9e184c287">Isis::ControlNetStatistics::GenerateImageStats()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a2226245e0893d63f25e4f50fca6bb37d">Isis::InterestOperator::InterestByMeasure()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#a9574aade8873f6aa7844954999f433cb">Isis::BundleMeasure::line()</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#a5e410484f4050dfbf4bed8a3aa955bfb">Isis::ChipViewport::paintEvent()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#acdd7e8f131058463a04030eb70dce41b">Isis::StereoTool::paintViewport()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a43ff52aed4f6f3773601615bc89c6b75">Isis::ControlNetFilter::PointDistanceFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a2bb87194721a98c127e9954d5ee0f51b">Isis::ControlNetFilter::PointLatLonFilter()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a5d9c71fcca78bbaa9c5629cbcf02b01b">Isis::InterestOperator::ProcessLocked_Point_Reference()</a>, <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#a155fcb894eadb771082bba28a2e302c3">Isis::ControlMeasureEditWidget::saveChips()</a>, <a class="el" href="class_isis_1_1_control_point_edit.html#af11f75f2c70851fbfb9b9d54f7d9a879">Isis::ControlPointEdit::saveChips()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#aa9b642182f33f3474eadb2d2742b3646">Isis::BundleMeasure::setImage()</a>, <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#a35c157934ad259feb71cc8d85834b537">Isis::ControlMeasureEditWidget::setLeftMeasure()</a>, <a class="el" href="class_isis_1_1_control_point_edit.html#adb7e74d229af5815183e9f770fa1cd14">Isis::ControlPointEdit::setLeftMeasure()</a>, <a class="el" href="class_isis_1_1_chip_viewports_widget.html#aa52e9c3351a274e7d37969e58b028af0">Isis::ChipViewportsWidget::setPoint()</a>, <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#aed2d4ca6f5eaf85406d2afae04a0c7ed">Isis::ControlMeasureEditWidget::setRightMeasure()</a>, <a class="el" href="class_isis_1_1_control_point_edit.html#a65ceea173e366f35ccda5918c682951b">Isis::ControlPointEdit::setRightMeasure()</a>, <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>, <a class="el" href="class_isis_1_1_control_net_valid_measure.html#a44c71eec7ab270158220b5ca1b360d63">Isis::ControlNetValidMeasure::ValidStandardOptions()</a>, and <a class="el" href="class_isis_1_1_lidar_data.html#a94701c09ffdad264d0febba2ae9b1913">Isis::LidarData::write()</a>.</p>
+
+</div>
+</div>
+<a id="a8c63f29abdb99a5dbe4baf6a654866ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c63f29abdb99a5dbe4baf6a654866ed">&#9670;&nbsp;</a></span>GetLineResidual()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetLineResidual </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_line_residual_filter.html#a2e701982e6baef6ebfc5a65d250c9a76">Isis::LineResidualFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_control_point.html#a926ffa79bf3e5dafdff6e77354770986">Isis::ControlPoint::GetLineResidualRms()</a>, <a class="el" href="class_isis_1_1_control_point.html#a4baf0540c67ed2d89c9297f3cb6a0ed5">Isis::ControlPoint::GetResidualRms()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#acc400f7329898ffc09bb9789a6918263">Isis::BundleMeasure::lineResidual()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>, <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>, and <a class="el" href="class_isis_1_1_control_net_valid_measure.html#a5eb011b6370e5f076fcae0f93826f4ec">Isis::ControlNetValidMeasure::ValidStandardOptions()</a>.</p>
+
+</div>
+</div>
+<a id="a8be66b0e320a5c302e34b013ad3fd1ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8be66b0e320a5c302e34b013ad3fd1ba">&#9670;&nbsp;</a></span>GetLineShift()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetLineShift </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_line_shift_filter.html#a0023d0ead3e2e711078d5e87ab45d29f">Isis::LineShiftFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, and <a class="el" href="class_isis_1_1_control_net_valid_measure.html#a5eb011b6370e5f076fcae0f93826f4ec">Isis::ControlNetValidMeasure::ValidStandardOptions()</a>.</p>
+
+</div>
+</div>
+<a id="abd2311c423a53793d6b793d841f7febf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd2311c423a53793d6b793d841f7febf">&#9670;&nbsp;</a></span>GetLineSigma()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetLineSigma </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, and <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="abcfdefadfd0575cf8a7211e1080f5108"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcfdefadfd0575cf8a7211e1080f5108">&#9670;&nbsp;</a></span>GetLogData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a> Isis::ControlMeasure::GetLogData </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>dataType</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_measure_log_data.html#a5693eeb081e3c2a1e1319ab821f2553c">Isis::ControlMeasureLogData::GetDataType()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_goodness_of_fit_filter.html#a7060c90487a4ca8e2769fd900b2cafb4">Isis::GoodnessOfFitFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_control_point.html#a9dfc07d2063814a500d1996e0b593c48">Isis::ControlPoint::GetStatistic()</a>, and <a class="el" href="class_isis_1_1_control_net_filter.html#a26cc39c076117ab05959653ab99e20de">Isis::ControlNetFilter::PointGoodnessOfFitFilter()</a>.</p>
+
+</div>
+</div>
+<a id="afd039ff991ad6b0388129ed85d4fb10b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd039ff991ad6b0388129ed85d4fb10b">&#9670;&nbsp;</a></span>GetLogDataEntries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; <a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a> &gt; Isis::ControlMeasure::GetLogDataEntries </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return all of the log data for the measure. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>QVector&lt;ControlMeasureLogData&gt;</b> All of the log data for the measure. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="ab95b95d4d258f4f57308da889c062980"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab95b95d4d258f4f57308da889c062980">&#9670;&nbsp;</a></span>GetLogValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariant Isis::ControlMeasure::GetLogValue </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>dataType</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the value of the log data with the specified type as a variant. </p>
+<p>This should work for all types of log data. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_measure_log_data.html#a5693eeb081e3c2a1e1319ab821f2553c">Isis::ControlMeasureLogData::GetDataType()</a>, and <a class="el" href="class_isis_1_1_control_measure_log_data.html#afb28aa91105c3ce796d397f3553ebe1d">Isis::ControlMeasureLogData::GetValue()</a>.</p>
+
+</div>
+</div>
+<a id="a6febc17670dedad33e6c89d396e34daf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6febc17670dedad33e6c89d396e34daf">&#9670;&nbsp;</a></span>GetMeasureData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetMeasureData </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>One Getter to rule them all. </p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="ae3ffa8163870b04897f5d71d34aec71c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3ffa8163870b04897f5d71d34aec71c">&#9670;&nbsp;</a></span>GetMeasureDataNames()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; QString &gt; Isis::ControlMeasure::GetMeasureDataNames </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a list of all valid options to pass to GetMeasureData. </p>
+
+</div>
+</div>
+<a id="ad726d74d347b7a7e9309700b3047b213"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad726d74d347b7a7e9309700b3047b213">&#9670;&nbsp;</a></span>GetMeasureTypeString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ControlMeasure::GetMeasureTypeString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Obtain a string representation of the MeasureType. </p>
+<dl class="section return"><dt>Returns</dt><dd>A string representation of the MeasureType </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_measure_type_filter.html#ac32e51a0a64f9ae39f6a7256828f5938">Isis::MeasureTypeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a26cc39c076117ab05959653ab99e20de">Isis::ControlNetFilter::PointGoodnessOfFitFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a4c64e024a2f626daeaaeb93841df848c">Isis::ControlNetFilter::PointMeasurePropertiesFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#ad1d40b96a7238d174f650b072a4dccd0">Isis::ControlNetFilter::PointMeasuresFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a5a49f12613e707398bf985b47799d15d">Isis::ControlNetFilter::PointNumMeasuresEditLockFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a355386946d2edb3ba94c1681b326d60d">Isis::ControlNetFilter::PointPixelShiftFilter()</a>, and <a class="el" href="class_isis_1_1_control_net_filter.html#afce2004c1cab1dcc0d88f59e87e19997">Isis::ControlNetFilter::PointResMagnitudeFilter()</a>.</p>
+
+</div>
+</div>
+<a id="ab352e523518af2da2a9bccd26fd0b57d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab352e523518af2da2a9bccd26fd0b57d">&#9670;&nbsp;</a></span>GetPixelShift()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetPixelShift </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_qnet_point_registration_error_filter.html#a96abd107c20fb371766f445c22662bf2">Isis::QnetPointRegistrationErrorFilter::filter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a355386946d2edb3ba94c1681b326d60d">Isis::ControlNetFilter::PointPixelShiftFilter()</a>, and <a class="el" href="class_isis_1_1_control_net_valid_measure.html#a5eb011b6370e5f076fcae0f93826f4ec">Isis::ControlNetValidMeasure::ValidStandardOptions()</a>.</p>
+
+</div>
+</div>
+<a id="af5c29c7b2d44457281c8f84a7bf27858"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5c29c7b2d44457281c8f84a7bf27858">&#9670;&nbsp;</a></span>GetPointId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ControlMeasure::GetPointId </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="af5b91bd885344066241b5b1302179941"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5b91bd885344066241b5b1302179941">&#9670;&nbsp;</a></span>GetResidualMagnitude()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetResidualMagnitude </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return Residual magnitude. </p>
+<p>Returns <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a>:Null when p_lineResidual or p_sampleResidual not specifically set after call to constructor. (This calculation is normally done within the jigsaw app)</p>
+<dl class="section return"><dt>Returns</dt><dd>(double) The residual magnitude </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, and <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_residual_magnitude_filter.html#a116e38062a8b5e4ef825a90f4806c901">Isis::ResidualMagnitudeFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_qnet_point_jigsaw_error_filter.html#a861251ed9b0ae10393860aeda7f3ef82">Isis::QnetPointJigsawErrorFilter::filter()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_control_point_graphics_item.html#a80ff3291333420c19b6d238736c481c8">Isis::ControlPointGraphicsItem::paint()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#afce2004c1cab1dcc0d88f59e87e19997">Isis::ControlNetFilter::PointResMagnitudeFilter()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#a09c39edfab62de352fb147747f8343d3">Isis::BundleMeasure::residualMagnitude()</a>, and <a class="el" href="class_isis_1_1_control_net_valid_measure.html#a5eb011b6370e5f076fcae0f93826f4ec">Isis::ControlNetValidMeasure::ValidStandardOptions()</a>.</p>
+
+</div>
+</div>
+<a id="a88505083032a39e2f2a381b3a4469d59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88505083032a39e2f2a381b3a4469d59">&#9670;&nbsp;</a></span>GetSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetSample </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#aeaac8f53c1e1f072b8c073904c605606">Isis::ControlPoint::ComputeApriori()</a>, <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_control_point.html#a506980495f17f124f3d73cd7c16fe3b4">Isis::ControlPoint::ComputeResiduals_Millimeters()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a1f3ffd66cd8963fafd9594c786065dee">Isis::ControlNetFilter::CubeDistanceFilter()</a>, <a class="el" href="class_isis_1_1_sample_filter.html#a863998c000492fa4210083a21252153f">Isis::SampleFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_qnet_cube_distance_filter.html#a5d1dc9aa703a48b127558dbaf46fc42b">Isis::QnetCubeDistanceFilter::filter()</a>, <a class="el" href="class_isis_1_1_qnet_point_distance_filter.html#ad660645816ee824d7e4c8c50756994ed">Isis::QnetPointDistanceFilter::filter()</a>, <a class="el" href="class_isis_1_1_control_net.html#a96f8d394e5d88b95be042d3682db2d24">Isis::ControlNet::FindClosest()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, <a class="el" href="class_isis_1_1_control_net_statistics.html#acd99f93f2ce89dda684348a9e184c287">Isis::ControlNetStatistics::GenerateImageStats()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a2226245e0893d63f25e4f50fca6bb37d">Isis::InterestOperator::InterestByMeasure()</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#a5e410484f4050dfbf4bed8a3aa955bfb">Isis::ChipViewport::paintEvent()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#acdd7e8f131058463a04030eb70dce41b">Isis::StereoTool::paintViewport()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a43ff52aed4f6f3773601615bc89c6b75">Isis::ControlNetFilter::PointDistanceFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a2bb87194721a98c127e9954d5ee0f51b">Isis::ControlNetFilter::PointLatLonFilter()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a5d9c71fcca78bbaa9c5629cbcf02b01b">Isis::InterestOperator::ProcessLocked_Point_Reference()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#a8a9e10c4da29e92b176ca612a834f05d">Isis::BundleMeasure::sample()</a>, <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#a155fcb894eadb771082bba28a2e302c3">Isis::ControlMeasureEditWidget::saveChips()</a>, <a class="el" href="class_isis_1_1_control_point_edit.html#af11f75f2c70851fbfb9b9d54f7d9a879">Isis::ControlPointEdit::saveChips()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#aa9b642182f33f3474eadb2d2742b3646">Isis::BundleMeasure::setImage()</a>, <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#a35c157934ad259feb71cc8d85834b537">Isis::ControlMeasureEditWidget::setLeftMeasure()</a>, <a class="el" href="class_isis_1_1_control_point_edit.html#adb7e74d229af5815183e9f770fa1cd14">Isis::ControlPointEdit::setLeftMeasure()</a>, <a class="el" href="class_isis_1_1_chip_viewports_widget.html#aa52e9c3351a274e7d37969e58b028af0">Isis::ChipViewportsWidget::setPoint()</a>, <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#aed2d4ca6f5eaf85406d2afae04a0c7ed">Isis::ControlMeasureEditWidget::setRightMeasure()</a>, <a class="el" href="class_isis_1_1_control_point_edit.html#a65ceea173e366f35ccda5918c682951b">Isis::ControlPointEdit::setRightMeasure()</a>, <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>, <a class="el" href="class_isis_1_1_control_net_valid_measure.html#a44c71eec7ab270158220b5ca1b360d63">Isis::ControlNetValidMeasure::ValidStandardOptions()</a>, and <a class="el" href="class_isis_1_1_lidar_data.html#a94701c09ffdad264d0febba2ae9b1913">Isis::LidarData::write()</a>.</p>
+
+</div>
+</div>
+<a id="a969fd448a638197cbe725406c712390b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a969fd448a638197cbe725406c712390b">&#9670;&nbsp;</a></span>GetSampleResidual()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetSampleResidual </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sample_residual_filter.html#af5ee54c4963de60d7ba9e2d95bf687bb">Isis::SampleResidualFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_control_point.html#a4baf0540c67ed2d89c9297f3cb6a0ed5">Isis::ControlPoint::GetResidualRms()</a>, <a class="el" href="class_isis_1_1_control_point.html#aa1c072c252514cd4ee0fde72e7738222">Isis::ControlPoint::GetSampleResidualRms()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#a66ef3eed4672263f1e2a44741ad99d0b">Isis::BundleMeasure::sampleResidual()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>, <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>, and <a class="el" href="class_isis_1_1_control_net_valid_measure.html#a5eb011b6370e5f076fcae0f93826f4ec">Isis::ControlNetValidMeasure::ValidStandardOptions()</a>.</p>
+
+</div>
+</div>
+<a id="ad8348a8c1893f565cb29982921bf9b9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8348a8c1893f565cb29982921bf9b9a">&#9670;&nbsp;</a></span>GetSampleShift()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetSampleShift </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sample_shift_filter.html#a86b67148b72ae0c6132aeb7c014cb597">Isis::SampleShiftFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, and <a class="el" href="class_isis_1_1_control_net_valid_measure.html#a5eb011b6370e5f076fcae0f93826f4ec">Isis::ControlNetValidMeasure::ValidStandardOptions()</a>.</p>
+
+</div>
+</div>
+<a id="a68cfba03c588a1be816d6ef02ea8af56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68cfba03c588a1be816d6ef02ea8af56">&#9670;&nbsp;</a></span>GetSampleSigma()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ControlMeasure::GetSampleSigma </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, and <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a40ce4707e484c14b67c429de6593d4fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40ce4707e484c14b67c429de6593d4fe">&#9670;&nbsp;</a></span>GetType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">ControlMeasure::MeasureType</a> Isis::ControlMeasure::GetType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a4c64e024a2f626daeaaeb93841df848c">Isis::ControlNetFilter::PointMeasurePropertiesFilter()</a>, and <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="ae60d7daf0b07ee35de351dfcf9c65fa8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae60d7daf0b07ee35de351dfcf9c65fa8">&#9670;&nbsp;</a></span>HasChooserName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasure::HasChooserName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if the choosername is not empty. </p>
+
+</div>
+</div>
+<a id="ab3dd96df0c20fcfb6446938822026870"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3dd96df0c20fcfb6446938822026870">&#9670;&nbsp;</a></span>HasDateTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasure::HasDateTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if the datetime is not empty. </p>
+
+</div>
+</div>
+<a id="a3f22cd219af3b56a8ab7af8e409faf66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f22cd219af3b56a8ab7af8e409faf66">&#9670;&nbsp;</a></span>HasLogData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasure::HasLogData </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>dataType</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Test if we have a valid log data value of the specified type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dataType</td><td>A <a class="el" href="class_isis_1_1_control_measure_log_data.html#a89a47e377f531cc59cd0d25dd2d4850b" title="Please do not change existing values in this list except the size - it will break backwards compadibi...">ControlMeasureLogData::NumericLogDataType</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_measure_log_data.html#a5693eeb081e3c2a1e1319ab821f2553c">Isis::ControlMeasureLogData::GetDataType()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_goodness_of_fit_filter.html#a7060c90487a4ca8e2769fd900b2cafb4">Isis::GoodnessOfFitFilter::evaluate()</a>.</p>
+
+</div>
+</div>
+<a id="a0a2116a761c01f1f84fe9954466e7fbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a2116a761c01f1f84fe9954466e7fbc">&#9670;&nbsp;</a></span>IsEditLocked()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasure::IsEditLocked </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return value for p_editLock or implicit lock on reference measure. </p>
+<p>This method returns p_editLock unless the measure is a reference measure. In the case of a reference measure the value of the parent point's editLock is returned. An editLock on a control point implicitly locks the points reference measure as well.</p>
+<dl class="section return"><dt>Returns</dt><dd>value of p_editLock </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#abef4d7b637c26d9edca39b0fff8514f7">Isis::ControlPoint::Delete()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#a51320c4f203fcca7df94761d82324824">Isis::AbstractMeasureItem::deleteSource()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, <a class="el" href="class_isis_1_1_control_net_statistics.html#acd99f93f2ce89dda684348a9e184c287">Isis::ControlNetStatistics::GenerateImageStats()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afc9855fd4f1f79d9e8b91ca6970c2c5d">Isis::AbstractMeasureItem::isDataEditable()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#aaaca1c6526f3ae4c16be5fb6c754d177">Isis::ControlNetFilter::PointCubeNamesFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a26cc39c076117ab05959653ab99e20de">Isis::ControlNetFilter::PointGoodnessOfFitFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a4c64e024a2f626daeaaeb93841df848c">Isis::ControlNetFilter::PointMeasurePropertiesFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#ad1d40b96a7238d174f650b072a4dccd0">Isis::ControlNetFilter::PointMeasuresFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a5a49f12613e707398bf985b47799d15d">Isis::ControlNetFilter::PointNumMeasuresEditLockFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a355386946d2edb3ba94c1681b326d60d">Isis::ControlNetFilter::PointPixelShiftFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#afce2004c1cab1dcc0d88f59e87e19997">Isis::ControlNetFilter::PointResMagnitudeFilter()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a5d9c71fcca78bbaa9c5629cbcf02b01b">Isis::InterestOperator::ProcessLocked_Point_Reference()</a>, <a class="el" href="class_isis_1_1_measure_table_delegate.html#a6c62444f8aba2679d45809ef025dffbf">Isis::MeasureTableDelegate::readData()</a>, and <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a6b58506887286ca0211bd459481b393c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b58506887286ca0211bd459481b393c">&#9670;&nbsp;</a></span>IsIgnored()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasure::IsIgnored </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a4033f1b83f3e5f04e051fef670e6a642">Isis::BundleControlPoint::BundleControlPoint()</a>, <a class="el" href="class_isis_1_1_control_point.html#aeaac8f53c1e1f072b8c073904c605606">Isis::ControlPoint::ComputeApriori()</a>, <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_lidar_control_point.html#a32231b8bb9ce1460f8cc6325e2a2d1c2">Isis::LidarControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_control_point.html#a506980495f17f124f3d73cd7c16fe3b4">Isis::ControlPoint::ComputeResiduals_Millimeters()</a>, <a class="el" href="class_isis_1_1_control_point.html#abef4d7b637c26d9edca39b0fff8514f7">Isis::ControlPoint::Delete()</a>, <a class="el" href="class_isis_1_1_measure_ignored_filter.html#ad6deabf61f5c2f64ae97d113ade678cb">Isis::MeasureIgnoredFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_control_point.html#a926ffa79bf3e5dafdff6e77354770986">Isis::ControlPoint::GetLineResidualRms()</a>, <a class="el" href="class_isis_1_1_control_point.html#ad6be4979cfc59837b7f1f086da27bb92">Isis::ControlPoint::getMeasures()</a>, <a class="el" href="class_isis_1_1_control_point.html#a4baf0540c67ed2d89c9297f3cb6a0ed5">Isis::ControlPoint::GetResidualRms()</a>, <a class="el" href="class_isis_1_1_control_point.html#aa1c072c252514cd4ee0fde72e7738222">Isis::ControlPoint::GetSampleResidualRms()</a>, <a class="el" href="class_isis_1_1_control_point.html#aaba81a2eb81993803a2f2dd28634aa43">Isis::ControlPoint::GetStatistic()</a>, <a class="el" href="class_isis_1_1_lidar_data.html#a5de27ea4e184cad36b3ea03ac51b7567">Isis::LidarData::GetValidMeasuresInCube()</a>, <a class="el" href="class_isis_1_1_control_net.html#aede559d78dddef97ee6fac98bd1dc79f">Isis::ControlNet::GetValidMeasuresInCube()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#ab210908e1c542774647295b2653e21c3">Isis::InterestOperator::InterestByPoint()</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#a5e410484f4050dfbf4bed8a3aa955bfb">Isis::ChipViewport::paintEvent()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#acdd7e8f131058463a04030eb70dce41b">Isis::StereoTool::paintViewport()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#aaaca1c6526f3ae4c16be5fb6c754d177">Isis::ControlNetFilter::PointCubeNamesFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a26cc39c076117ab05959653ab99e20de">Isis::ControlNetFilter::PointGoodnessOfFitFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a4c64e024a2f626daeaaeb93841df848c">Isis::ControlNetFilter::PointMeasurePropertiesFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#ad1d40b96a7238d174f650b072a4dccd0">Isis::ControlNetFilter::PointMeasuresFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a5a49f12613e707398bf985b47799d15d">Isis::ControlNetFilter::PointNumMeasuresEditLockFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a355386946d2edb3ba94c1681b326d60d">Isis::ControlNetFilter::PointPixelShiftFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#afce2004c1cab1dcc0d88f59e87e19997">Isis::ControlNetFilter::PointResMagnitudeFilter()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a5d9c71fcca78bbaa9c5629cbcf02b01b">Isis::InterestOperator::ProcessLocked_Point_Reference()</a>, <a class="el" href="class_isis_1_1_measure_table_delegate.html#a6c62444f8aba2679d45809ef025dffbf">Isis::MeasureTableDelegate::readData()</a>, <a class="el" href="class_isis_1_1_lidar_data.html#a5e0a8ffcc6bac823f4f422b942305879">Isis::LidarData::SetImages()</a>, <a class="el" href="class_isis_1_1_control_net.html#a64311223a6bcad08b30b2dfde920fd8c">Isis::ControlNet::SetImages()</a>, <a class="el" href="class_isis_1_1_control_net.html#a5b7c4e56e681ad0f6a02301e34931af7">Isis::ControlNet::sortedMeasureList()</a>, and <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a9bc2183d33525aaea27c13e28f726847"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bc2183d33525aaea27c13e28f726847">&#9670;&nbsp;</a></span>IsMeasured()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasure::IsMeasured </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac41aa6a0dfb6e33bf5b99c603db120d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac41aa6a0dfb6e33bf5b99c603db120d1">&#9670;&nbsp;</a></span>IsRegistered()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasure::IsRegistered </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac0a8e5cbe4864045afeefdadd1098497"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0a8e5cbe4864045afeefdadd1098497">&#9670;&nbsp;</a></span>IsRejected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasure::IsRejected </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_measure_jigsaw_rejected_filter.html#a50413cedd675311881edc746d29553cd">Isis::MeasureJigsawRejectedFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_control_point.html#a926ffa79bf3e5dafdff6e77354770986">Isis::ControlPoint::GetLineResidualRms()</a>, <a class="el" href="class_isis_1_1_control_point.html#a4baf0540c67ed2d89c9297f3cb6a0ed5">Isis::ControlPoint::GetResidualRms()</a>, <a class="el" href="class_isis_1_1_control_point.html#aa1c072c252514cd4ee0fde72e7738222">Isis::ControlPoint::GetSampleResidualRms()</a>, <a class="el" href="class_isis_1_1_bundle_measure.html#ab6f68f8d383012614361f49d0816c69f">Isis::BundleMeasure::isRejected()</a>, and <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a9124bbd0b56d7b62892b2a18dcba309d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9124bbd0b56d7b62892b2a18dcba309d">&#9670;&nbsp;</a></span>IsStatisticallyRelevant()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasure::IsStatisticallyRelevant </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure.html#acc26e6194a0dd55398d3cb59ab6911f3">DataField</a>&#160;</td>
+          <td class="paramname"><em>field</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a3666cffa950032f909204fecd492dffb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3666cffa950032f909204fecd492dffb">&#9670;&nbsp;</a></span>MeasureTypeToString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ControlMeasure::MeasureTypeToString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">MeasureType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the String <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Measure type. </p>
+<dl class="section return"><dt>Returns</dt><dd>string - Measure Type</dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (10/1/2010) </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>.</p>
+
+</div>
+</div>
+<a id="a39cee0ab7b6fefc10c4ff75e15e66ef3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39cee0ab7b6fefc10c4ff75e15e66ef3">&#9670;&nbsp;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasure::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_measure.html">Isis::ControlMeasure</a> &amp;&#160;</td>
+          <td class="paramname"><em>pMeasure</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare 2 <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Measures for inequality. </p>
+<dl class="section author"><dt>Author</dt><dd>sprasad (4/20/2010)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pMeasure</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+</div>
+</div>
+<a id="aba06ccdcd1ab5b67e82cac47318b4ae1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba06ccdcd1ab5b67e82cac47318b4ae1">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> &amp; Isis::ControlMeasure::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Assignment operator. </p>
+
+</div>
+</div>
+<a id="a8efea4f652ffea6080d4f2a43ea0d573"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8efea4f652ffea6080d4f2a43ea0d573">&#9670;&nbsp;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlMeasure::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_measure.html">Isis::ControlMeasure</a> &amp;&#160;</td>
+          <td class="paramname"><em>pMeasure</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check for <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> Measures equality. </p>
+<dl class="section author"><dt>Author</dt><dd>sprasad (4/20/2010) </dd></dl>
+
+</div>
+</div>
+<a id="a2416e7bf24e53855930b57db674c13b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2416e7bf24e53855930b57db674c13b8">&#9670;&nbsp;</a></span>Parent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a>* Isis::ControlMeasure::Parent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#a51320c4f203fcca7df94761d82324824">Isis::AbstractMeasureItem::deleteSource()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a7956b2a5be7856276ef82355bcc3fb45">Isis::CnetEditorWidget::filteredNetwork()</a>, <a class="el" href="class_isis_1_1_control_net.html#a96f8d394e5d88b95be042d3682db2d24">Isis::ControlNet::FindClosest()</a>, <a class="el" href="class_isis_1_1_control_net_statistics.html#acd99f93f2ce89dda684348a9e184c287">Isis::ControlNetStatistics::GenerateImageStats()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afc9855fd4f1f79d9e8b91ca6970c2c5d">Isis::AbstractMeasureItem::isDataEditable()</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#a5e410484f4050dfbf4bed8a3aa955bfb">Isis::ChipViewport::paintEvent()</a>, and <a class="el" href="class_isis_1_1_stereo_tool.html#acdd7e8f131058463a04030eb70dce41b">Isis::StereoTool::paintViewport()</a>.</p>
+
+</div>
+</div>
+<a id="a4776465a1d48d63758fc5c4c2587005c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4776465a1d48d63758fc5c4c2587005c">&#9670;&nbsp;</a></span>PrintableClassData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; QStringList &gt; Isis::ControlMeasure::PrintableClassData </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Data accessor method, provides access to string representations of all variable values and names. </p>
+<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="class_q_list.html" title="This is free and unencumbered software released into the public domain.">QList</a> containing QStringLists, the QStringLists contain name value pairs such that element 0 is the name and element 1 is the value of the variable. </dd></dl>
+
+</div>
+</div>
+<a id="a8bdfb5ee921b4138ac5c6a1699846c28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8bdfb5ee921b4138ac5c6a1699846c28">&#9670;&nbsp;</a></span>SetAprioriLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetAprioriLine </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>aprioriLine</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a69adf9d128fe460983f7690ce70222a7">Isis::ControlPointEditWidget::createControlPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#ad4e1262bbfb710620d942e393b68b7cf">Isis::QnetTool::createPoint()</a>, and <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="a6f8d35a29a5825839143a15ff4e9c825"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f8d35a29a5825839143a15ff4e9c825">&#9670;&nbsp;</a></span>SetAprioriSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetAprioriSample </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>aprioriSample</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a69adf9d128fe460983f7690ce70222a7">Isis::ControlPointEditWidget::createControlPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#ad4e1262bbfb710620d942e393b68b7cf">Isis::QnetTool::createPoint()</a>, and <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="adae44e1159e5f490032c2d568945faf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adae44e1159e5f490032c2d568945faf9">&#9670;&nbsp;</a></span>SetCamera()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetCamera </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_camera.html">Isis::Camera</a> *&#160;</td>
+          <td class="paramname"><em>camera</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set pointer to camera associated with a measure. </p>
+<p>This method is used to set a pointer to the camera associated with a <a class="el" href="class_isis_1_1_control_measure.html" title="a control measurement">ControlMeasure</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">*camera</td><td>Pointer to camera</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Status Success </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a69adf9d128fe460983f7690ce70222a7">Isis::ControlPointEditWidget::createControlPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#aa37d7345df4346f4ecdd3cc7ea0b7227">Isis::QnetTool::createFixedPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#ad4e1262bbfb710620d942e393b68b7cf">Isis::QnetTool::createPoint()</a>, <a class="el" href="class_isis_1_1_lidar_data.html#a5e0a8ffcc6bac823f4f422b942305879">Isis::LidarData::SetImages()</a>, and <a class="el" href="class_isis_1_1_control_net.html#a64311223a6bcad08b30b2dfde920fd8c">Isis::ControlNet::SetImages()</a>.</p>
+
+</div>
+</div>
+<a id="aea00fda96eac639aad37ab7cf5544e89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea00fda96eac639aad37ab7cf5544e89">&#9670;&nbsp;</a></span>SetChooserName() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetChooserName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set chooser name to a user who last changed the coordinate. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a69adf9d128fe460983f7690ce70222a7">Isis::ControlPointEditWidget::createControlPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#aa37d7345df4346f4ecdd3cc7ea0b7227">Isis::QnetTool::createFixedPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#ad4e1262bbfb710620d942e393b68b7cf">Isis::QnetTool::createPoint()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#a27622d66249a3ae11cb7e34c5b54be8f">Isis::StereoTool::createPoint()</a>, <a class="el" href="class_isis_1_1_match_tool.html#ac196689084b840946a1a511ea712417e">Isis::MatchTool::createPoint()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, and <a class="el" href="class_isis_1_1_interest_operator.html#a5d9c71fcca78bbaa9c5629cbcf02b01b">Isis::InterestOperator::ProcessLocked_Point_Reference()</a>.</p>
+
+</div>
+</div>
+<a id="af823daeb904b677e4cc97ef426290869"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af823daeb904b677e4cc97ef426290869">&#9670;&nbsp;</a></span>SetChooserName() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetChooserName </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the chooser name to an application that last changed the coordinate. </p>
+
+</div>
+</div>
+<a id="a4d0c6d3a714548e7df9043bd1dbfd5cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d0c6d3a714548e7df9043bd1dbfd5cc">&#9670;&nbsp;</a></span>SetCoordinate() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetCoordinate </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>line</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the coordinate of the measurement. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sample</td><td>Sample coordinate of the measurement </td></tr>
+    <tr><td class="paramname">line</td><td>Line coordinate of the measurement, </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lidar_control_point.html#a32231b8bb9ce1460f8cc6325e2a2d1c2">Isis::LidarControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a69adf9d128fe460983f7690ce70222a7">Isis::ControlPointEditWidget::createControlPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#aa37d7345df4346f4ecdd3cc7ea0b7227">Isis::QnetTool::createFixedPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#ad4e1262bbfb710620d942e393b68b7cf">Isis::QnetTool::createPoint()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#a27622d66249a3ae11cb7e34c5b54be8f">Isis::StereoTool::createPoint()</a>, <a class="el" href="class_isis_1_1_match_tool.html#ac196689084b840946a1a511ea712417e">Isis::MatchTool::createPoint()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, <a class="el" href="class_isis_1_1_lidar_data.html#a7eb2720026452c6649deff4fbbc94297">Isis::LidarData::read()</a>, and <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="a45a104fb45b39bb8e8962c4e1d782055"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45a104fb45b39bb8e8962c4e1d782055">&#9670;&nbsp;</a></span>SetCoordinate() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetCoordinate </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">MeasureType</a>&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the coordinate of the measurement. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sample</td><td>Sample coordinate of the measurement </td></tr>
+    <tr><td class="paramname">line</td><td>Line coordinate of the measurement </td></tr>
+    <tr><td class="paramname">type</td><td>The type of the coordinate </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0d7b8de51e3f73f0ddc390adf9f667bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d7b8de51e3f73f0ddc390adf9f667bb">&#9670;&nbsp;</a></span>SetCubeSerialNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetCubeSerialNumber </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>newSerialNumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set cube serial number. </p>
+<p>This method is used to set the serial number of the cube. That is, the coordinate was selected from a cube with this unique serial number</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sn</td><td>Serial number of the cube where the coordinate was selected </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Status Success or MeasureLocked </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a69adf9d128fe460983f7690ce70222a7">Isis::ControlPointEditWidget::createControlPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#aa37d7345df4346f4ecdd3cc7ea0b7227">Isis::QnetTool::createFixedPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#ad4e1262bbfb710620d942e393b68b7cf">Isis::QnetTool::createPoint()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#a27622d66249a3ae11cb7e34c5b54be8f">Isis::StereoTool::createPoint()</a>, <a class="el" href="class_isis_1_1_match_tool.html#ac196689084b840946a1a511ea712417e">Isis::MatchTool::createPoint()</a>, <a class="el" href="class_isis_1_1_lidar_data.html#a7eb2720026452c6649deff4fbbc94297">Isis::LidarData::read()</a>, and <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="ac92d16496908a6e99d036f2e8d323e93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac92d16496908a6e99d036f2e8d323e93">&#9670;&nbsp;</a></span>SetDateTime() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetDateTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Date Time - Creation Time. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_stereo_tool.html#a27622d66249a3ae11cb7e34c5b54be8f">Isis::StereoTool::createPoint()</a>, <a class="el" href="class_isis_1_1_match_tool.html#ac196689084b840946a1a511ea712417e">Isis::MatchTool::createPoint()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, and <a class="el" href="class_isis_1_1_interest_operator.html#a5d9c71fcca78bbaa9c5629cbcf02b01b">Isis::InterestOperator::ProcessLocked_Point_Reference()</a>.</p>
+
+</div>
+</div>
+<a id="a81ed8b5260e27885400a53841853f7fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81ed8b5260e27885400a53841853f7fa">&#9670;&nbsp;</a></span>SetDateTime() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetDateTime </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>datetime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set date/time the coordinate was last changed to specified date/time. </p>
+
+</div>
+</div>
+<a id="a9f4890506eb815654c6006d5428aa6a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f4890506eb815654c6006d5428aa6a9">&#9670;&nbsp;</a></span>SetDiameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetDiameter </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>diameter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the crater diameter at the coordinate. </p>
+<p>This method sets the crater diameter at the coordinate. If left unset a diameter of 0 is assumed which implies no crater</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">diameter</td><td>The diameter of the crater in pixels </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="afdb2328069eedce9c9beb51e15984d3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdb2328069eedce9c9beb51e15984d3d">&#9670;&nbsp;</a></span>SetEditLock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetEditLock </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>editLock</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a7956b2a5be7856276ef82355bcc3fb45">Isis::CnetEditorWidget::filteredNetwork()</a>, and <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="a68ef28a0ee434ae977be98adc261b167"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68ef28a0ee434ae977be98adc261b167">&#9670;&nbsp;</a></span>SetFocalPlaneComputed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetFocalPlaneComputed </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the computed focal plane x/y for the apriori lat/lon. </p>
+<p>This is a convenience method for the BundleAdjustment class to avoid having to go redo the calculation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">*camera</td><td>Pointer to camera</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Status Success </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lidar_control_point.html#a32231b8bb9ce1460f8cc6325e2a2d1c2">Isis::LidarControlPoint::ComputeResiduals()</a>, and <a class="el" href="class_isis_1_1_control_point.html#a506980495f17f124f3d73cd7c16fe3b4">Isis::ControlPoint::ComputeResiduals_Millimeters()</a>.</p>
+
+</div>
+</div>
+<a id="a9801b932a8c1d0b87fa275176bfdfcb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9801b932a8c1d0b87fa275176bfdfcb0">&#9670;&nbsp;</a></span>SetFocalPlaneMeasured()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetFocalPlaneMeasured </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the focal plane x/y for the measured line/sample. </p>
+<p>This is a convenience method for the BundleAdjustment class to avoid having to go redo the calculation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">*camera</td><td>Pointer to camera</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Status Success </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#aeaac8f53c1e1f072b8c073904c605606">Isis::ControlPoint::ComputeApriori()</a>, and <a class="el" href="class_isis_1_1_lidar_control_point.html#a32231b8bb9ce1460f8cc6325e2a2d1c2">Isis::LidarControlPoint::ComputeResiduals()</a>.</p>
+
+</div>
+</div>
+<a id="ae3255b757886a3ad1cb8ca721338c61a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3255b757886a3ad1cb8ca721338c61a">&#9670;&nbsp;</a></span>SetIgnored()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetIgnored </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>newIgnoredStatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a5d9c71fcca78bbaa9c5629cbcf02b01b">Isis::InterestOperator::ProcessLocked_Point_Reference()</a>, and <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="a071522726b3997f0a2d937a3390c93cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a071522726b3997f0a2d937a3390c93cb">&#9670;&nbsp;</a></span>SetLineSigma()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetLineSigma </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>lineSigma</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="ab0fa43e7be6d19f5dba6b3cecbe4a690"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0fa43e7be6d19f5dba6b3cecbe4a690">&#9670;&nbsp;</a></span>SetLogData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlMeasure::SetLogData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a>&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This adds or updates the log data information associated with data's type. </p>
+<p>In most cases, this is what you want to use to assign log data. </p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#a5693eeb081e3c2a1e1319ab821f2553c">Isis::ControlMeasureLogData::GetDataType()</a>, and <a class="el" href="class_isis_1_1_control_measure_log_data.html#acf4d336a98c6a16c7f9faae03e1a6f80">Isis::ControlMeasureLogData::IsValid()</a>.</p>
+
+</div>
+</div>
+<a id="ae38b153bb97536b84cefd4d91aa87cc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae38b153bb97536b84cefd4d91aa87cc9">&#9670;&nbsp;</a></span>SetRejected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetRejected </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>reject</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set "jigsaw" rejected flag for a measure. </p>
+<p>This method is used to set the "jigsaw"-rejected flag for the current measure. It should only be used by jigsaw.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">*reject</td><td>rejected flag</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Status Success </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#a2e47c3bdebbcfde5eaa608570489cebc">Isis::ControlPoint::ClearJigsawRejected()</a>, <a class="el" href="class_isis_1_1_lidar_control_point.html#a32231b8bb9ce1460f8cc6325e2a2d1c2">Isis::LidarControlPoint::ComputeResiduals()</a>, and <a class="el" href="class_isis_1_1_bundle_measure.html#a27cdf3f9c7d31897e22cc0cea4ae23d9">Isis::BundleMeasure::setRejected()</a>.</p>
+
+</div>
+</div>
+<a id="ad071c9f90a831daa6821d4c6edf7cf90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad071c9f90a831daa6821d4c6edf7cf90">&#9670;&nbsp;</a></span>SetResidual()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetResidual </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sampResidual</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>lineResidual</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the <a class="el" href="class_isis_1_1_bundle_adjust.html" title="An image bundle adjustment object.">BundleAdjust</a> Residual of the coordinate. </p>
+<p>***Warning: This method should only be used by <a class="el" href="class_isis_1_1_bundle_adjust.html" title="An image bundle adjustment object.">BundleAdjust</a> and its applications.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sampResidual</td><td>Sample Residual </td></tr>
+    <tr><td class="paramname">lineResidual</td><td>Line Residual </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#ace2cf8dd98635b7d77702ddf0d4dc715">Isis::ControlPoint::ComputeResiduals()</a>, <a class="el" href="class_isis_1_1_lidar_control_point.html#a32231b8bb9ce1460f8cc6325e2a2d1c2">Isis::LidarControlPoint::ComputeResiduals()</a>, and <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="a44954b91fbaae66f0adfaef28b9abf20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44954b91fbaae66f0adfaef28b9abf20">&#9670;&nbsp;</a></span>SetSampleSigma()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetSampleSigma </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sampleSigma</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="a9e5b9b9b671e87d43bc44e7debe23d68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e5b9b9b671e87d43bc44e7debe23d68">&#9670;&nbsp;</a></span>SetType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#aa05b5bcf5cf72d92f043930517416890">ControlMeasure::Status</a> Isis::ControlMeasure::SetType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">MeasureType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set how the coordinate was obtained. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a69adf9d128fe460983f7690ce70222a7">Isis::ControlPointEditWidget::createControlPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#aa37d7345df4346f4ecdd3cc7ea0b7227">Isis::QnetTool::createFixedPoint()</a>, <a class="el" href="class_isis_1_1_qnet_tool.html#ad4e1262bbfb710620d942e393b68b7cf">Isis::QnetTool::createPoint()</a>, <a class="el" href="class_isis_1_1_stereo_tool.html#a27622d66249a3ae11cb7e34c5b54be8f">Isis::StereoTool::createPoint()</a>, <a class="el" href="class_isis_1_1_match_tool.html#ac196689084b840946a1a511ea712417e">Isis::MatchTool::createPoint()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, and <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="a5291c61e6337f0ee0a901f6376b2971e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5291c61e6337f0ee0a901f6376b2971e">&#9670;&nbsp;</a></span>StringToMeasureType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_measure.html#a73d1738bc0d22f1eee66ed0ebf61ffac">ControlMeasure::MeasureType</a> Isis::ControlMeasure::StringToMeasureType </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to get a MeasureType from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A Measure Type given a string </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_measure_table_delegate.html#a6c62444f8aba2679d45809ef025dffbf">Isis::MeasureTableDelegate::readData()</a>, and <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="ac7537d4d7a2de3495127a96c36438ea8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7537d4d7a2de3495127a96c36438ea8">&#9670;&nbsp;</a></span>UpdateLogData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlMeasure::UpdateLogData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure_log_data.html">ControlMeasureLogData</a>&#160;</td>
+          <td class="paramname"><em>newLogData</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This updates existing log data information associated with data's type. </p>
+<p>If none exist, an error is thrown.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_measure.html#ab0fa43e7be6d19f5dba6b3cecbe4a690" title="This adds or updates the log data information associated with data&#39;s type.">SetLogData</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_control_measure_log_data.html#aae9a96432a2fec6d8447f505948d9763">Isis::ControlMeasureLogData::DataTypeToName()</a>, and <a class="el" href="class_isis_1_1_control_measure_log_data.html#a5693eeb081e3c2a1e1319ab821f2553c">Isis::ControlMeasureLogData::GetDataType()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a74c9a2f2af5cc478715170a2650481e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74c9a2f2af5cc478715170a2650481e4">&#9670;&nbsp;</a></span>ControlPoint</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/ControlMeasure/<a class="el" href="_control_measure_8h_source.html">ControlMeasure.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/ControlMeasure/<a class="el" href="_control_measure_8cpp.html">ControlMeasure.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+<map id="Isis::ProcessGroundPolygons" name="Isis::ProcessGroundPolygons">
+<area shape="rect" id="node1" title="Process cube polygons to map or camera projections." alt="" coords="5,552,200,809"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_process_polygons.html" title=" " alt="" coords="19,295,186,504"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_process.html" title="Base class for all cube processing derivatives." alt="" coords="16,5,189,247"/>
+</map>

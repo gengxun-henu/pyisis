@@ -1,0 +1,38 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+PvlKeyword,Parsing,isis/src/base/objs/PvlKeyword/PvlKeyword.h,isis_pybind_standalone/src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,PvlKeyword,isis_pybind.PvlKeyword,Y,Python class symbol is exported; Qt 类型/信号槽较多
+Construction/Enum,PvlKeyword(),isis_pybind.PvlKeyword(),Y,Constructor is explicitly bound
+Mutation/Configuration,void setName(QString name),isis_pybind.PvlKeyword.set_name,N,Qt 类型/信号槽较多
+Public API,QString name() const { if(m_name) return m_name,isis_pybind.PvlKeyword.name,N,Qt 类型/信号槽较多
+Query,"bool isNamed(QString name) const { return stringEqual(name, this->name())",isis_pybind.PvlKeyword.is_named,N,Qt 类型/信号槽较多
+Mutation/Configuration,"void setValue(QString value, QString unit = """")",isis_pybind.PvlKeyword.set_value,N,Qt 类型/信号槽较多
+Mutation/Configuration,"void setJsonValue(nlohmann::json jsonobj, QString unit = """")",isis_pybind.PvlKeyword.set_json_value,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setUnits(QString units),isis_pybind.PvlKeyword.set_units,N,Qt 类型/信号槽较多
+Mutation/Configuration,"void setUnits(QString value, QString units)",isis_pybind.PvlKeyword.set_units,N,Qt 类型/信号槽较多
+Mutation/Configuration,"void addValue(QString value, QString unit = """")",isis_pybind.PvlKeyword.add_value,N,Qt 类型/信号槽较多
+Mutation/Configuration,"void addJsonValue(nlohmann::json jsonobj, QString unit = """")",isis_pybind.PvlKeyword.add_json_value,N,Qt 类型/信号槽较多
+Query,int size() const { return m_values.size(),isis_pybind.PvlKeyword.size,N,Qt 类型/信号槽较多
+Query,bool isNull(const int index = 0) const,isis_pybind.PvlKeyword.is_null,N,Qt 类型/信号槽较多
+Mutation/Configuration,void clear(),isis_pybind.PvlKeyword.clear,N,Qt 类型/信号槽较多
+Public API,QString unit(const int index = 0) const,isis_pybind.PvlKeyword.unit,N,Qt 类型/信号槽较多
+Mutation/Configuration,void addComment(QString comment),isis_pybind.PvlKeyword.add_comment,N,Qt 类型/信号槽较多
+Mutation/Configuration,void addCommentWrapped(QString comment),isis_pybind.PvlKeyword.add_comment_wrapped,N,Qt 类型/信号槽较多
+Mutation/Configuration,void addComments(const std::vector<QString> &comments),isis_pybind.PvlKeyword.add_comments,N,Qt 类型/信号槽较多
+Public API,int comments() const { return (m_comments ? m_comments->size() : 0),isis_pybind.PvlKeyword.comments,N,Qt 类型/信号槽较多
+Public API,QString comment(const int index) const,isis_pybind.PvlKeyword.comment,N,Qt 类型/信号槽较多
+Mutation/Configuration,void clearComment(),isis_pybind.PvlKeyword.clear_comment,N,Qt 类型/信号槽较多
+Query,"bool isEquivalent(QString string1, int index = 0) const",isis_pybind.PvlKeyword.is_equivalent,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setWidth(int width) { m_width = width,isis_pybind.PvlKeyword.set_width,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setIndent(int indent) { m_indent = indent,isis_pybind.PvlKeyword.set_indent,N,Qt 类型/信号槽较多
+Public API,int width() const { return m_width,isis_pybind.PvlKeyword.width,N,Qt 类型/信号槽较多
+Public API,int indent() const { return m_indent,isis_pybind.PvlKeyword.indent,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setFormat(PvlFormat *formatter),isis_pybind.PvlKeyword.set_format,N,Qt 类型/信号槽较多
+Public API,PvlFormat *format(),isis_pybind.PvlKeyword.format,N,Qt 类型/信号槽较多
+Static/Factory,"static bool stringEqual(const QString &string1, const QString &string2)",isis_pybind.PvlKeyword.string_equal,N,Qt 类型/信号槽较多
+Static/Factory,"static QString readLine(std::istream &is, bool insideComment)",isis_pybind.PvlKeyword.read_line,N,Qt 类型/信号槽较多
+Static/Factory,"static bool readCleanKeyword(QString keyword, std::vector< QString > &keywordComments, QString &keywordName, std::vector< std::pair<QString, QString> > &keywordValues)",isis_pybind.PvlKeyword.read_clean_keyword,N,Qt 类型/信号槽较多
+Static/Factory,"static QString readValue(QString &keyword, bool &quoteProblem)",isis_pybind.PvlKeyword.read_value,N,Qt 类型/信号槽较多
+Static/Factory,"static QString readValue(QString &keyword, bool &quoteProblem, const std::vector< std::pair<char, char> > & otherDelimiters)",isis_pybind.PvlKeyword.read_value,N,Qt 类型/信号槽较多
+Query,"void validateKeyword(PvlKeyword & pvlKwrd, QString psValueType="""", PvlKeyword* pvlKwrdRange=NULL)",isis_pybind.PvlKeyword.validate_keyword,N,Qt 类型/信号槽较多

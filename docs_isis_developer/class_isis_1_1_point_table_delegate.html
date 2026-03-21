@@ -1,0 +1,514 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::PointTableDelegate Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_point_table_delegate.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_point_table_delegate-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::PointTableDelegate Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Delegate for creating, reading, and saving data in the point table.  
+ <a href="class_isis_1_1_point_table_delegate.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_point_table_delegate_8h_source.html">PointTableDelegate.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::PointTableDelegate:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_point_table_delegate__inherit__graph.png" border="0" usemap="#a_isis_1_1_point_table_delegate_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_point_table_delegate_inherit__map" id="a_isis_1_1_point_table_delegate_inherit__map">
+<area shape="rect" title="Delegate for creating, reading, and saving data in the point table." alt="" coords="15,344,178,505"/>
+<area shape="rect" href="class_isis_1_1_abstract_table_delegate.html" title="Base class for delegates which create, read, and save data in the tables." alt="" coords="5,135,188,296"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="62,5,131,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::PointTableDelegate:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_point_table_delegate__coll__graph.png" border="0" usemap="#a_isis_1_1_point_table_delegate_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_point_table_delegate_coll__map" id="a_isis_1_1_point_table_delegate_coll__map">
+<area shape="rect" title="Delegate for creating, reading, and saving data in the point table." alt="" coords="15,344,178,505"/>
+<area shape="rect" href="class_isis_1_1_abstract_table_delegate.html" title="Base class for delegates which create, read, and save data in the tables." alt="" coords="5,135,188,296"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="62,5,131,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:abf9744165a5f0abd0bc77bcde753b044"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_point_table_delegate.html#abf9744165a5f0abd0bc77bcde753b044">PointTableDelegate</a> ()</td></tr>
+<tr class="separator:abf9744165a5f0abd0bc77bcde753b044"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6cca2e89f1006e981932deb9d547cda"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_point_table_delegate.html#ad6cca2e89f1006e981932deb9d547cda">~PointTableDelegate</a> ()</td></tr>
+<tr class="separator:ad6cca2e89f1006e981932deb9d547cda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6487fd39d7d3ac9cf61cd9a111e32323"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_point_table_delegate.html#a6487fd39d7d3ac9cf61cd9a111e32323">getWidget</a> (<a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *) const</td></tr>
+<tr class="separator:a6487fd39d7d3ac9cf61cd9a111e32323"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b5ec0bcccda3cd619a3eba9318c75ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_point_table_delegate.html#a0b5ec0bcccda3cd619a3eba9318c75ef">readData</a> (<a class="el" href="class_q_widget.html">QWidget</a> *, <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> *, <a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *) const</td></tr>
+<tr class="separator:a0b5ec0bcccda3cd619a3eba9318c75ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a99c5bae9c318ba6a89faa884b15cf2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_point_table_delegate.html#a6a99c5bae9c318ba6a89faa884b15cf2">readData</a> (<a class="el" href="class_q_widget.html">QWidget</a> *, <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> *, <a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *, QString) const</td></tr>
+<tr class="separator:a6a99c5bae9c318ba6a89faa884b15cf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2effd1610504601240870944a091e2ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_point_table_delegate.html#a2effd1610504601240870944a091e2ae">saveData</a> (<a class="el" href="class_q_widget.html">QWidget</a> *, <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> *, <a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *) const</td></tr>
+<tr class="separator:a2effd1610504601240870944a091e2ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Delegate for creating, reading, and saving data in the point table. </p>
+<p>This class is responsible for creating widgets that can be used to edit cells in the point table. It is also responsible for populating the widgets with values and for saving the values.</p>
+<dl class="section author"><dt>Author</dt><dd>????-??-?? Eric Hyer </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="abf9744165a5f0abd0bc77bcde753b044"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf9744165a5f0abd0bc77bcde753b044">&#9670;&nbsp;</a></span>PointTableDelegate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PointTableDelegate::PointTableDelegate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad6cca2e89f1006e981932deb9d547cda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6cca2e89f1006e981932deb9d547cda">&#9670;&nbsp;</a></span>~PointTableDelegate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PointTableDelegate::~PointTableDelegate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6487fd39d7d3ac9cf61cd9a111e32323"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6487fd39d7d3ac9cf61cd9a111e32323">&#9670;&nbsp;</a></span>getWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::PointTableDelegate::getWidget </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *&#160;</td>
+          <td class="paramname"><em>col</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_isis_1_1_abstract_table_delegate.html#a52d571ede38f41113c161b39c43a2436">Isis::AbstractTableDelegate</a>.</p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaa9ae33525e68d1f6a661423aab06a01b">Isis::AbstractPointItem::APrioriRadiusSource</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea75885f93bdee817d43530ee3fb871fe2">Isis::AbstractPointItem::APrioriSPSource</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea4f9b56a1e071862256619505dbf48680">Isis::AbstractPointItem::EditLock</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ad45d848a28ad49d2df84e826171c604b">Isis::AbstractPointItem::getColumn()</a>, <a class="el" href="class_isis_1_1_table_column.html#a42794c4f5e7a6906066d753a61a0c512">Isis::TableColumn::getTitle()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaacbb48e0a5be2217a3aa8edf18a191c8">Isis::AbstractPointItem::Ignored</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaf9a5d09d69d3b485c06345a3f5dce790">Isis::AbstractPointItem::PointType</a>, <a class="el" href="class_isis_1_1_control_point.html#af5301f5c7651362afbbb95ba3b31d453">Isis::ControlPoint::PointTypeCount</a>, <a class="el" href="class_isis_1_1_control_point.html#ac82e2436229ff4c7b58cb20ce266e57c">Isis::ControlPoint::PointTypeToString()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea0b7971eb960ae27ba047d050d164ca5d">Isis::AbstractPointItem::Reference</a>.</p>
+
+</div>
+</div>
+<a id="a0b5ec0bcccda3cd619a3eba9318c75ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b5ec0bcccda3cd619a3eba9318c75ef">&#9670;&nbsp;</a></span>readData() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PointTableDelegate::readData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>widget</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> *&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *&#160;</td>
+          <td class="paramname"><em>col</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_isis_1_1_abstract_table_delegate.html#ac307b1bf68bcac9f455f5adcc9edc179">Isis::AbstractTableDelegate</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaa9ae33525e68d1f6a661423aab06a01b">Isis::AbstractPointItem::APrioriRadiusSource</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea75885f93bdee817d43530ee3fb871fe2">Isis::AbstractPointItem::APrioriSPSource</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea4f9b56a1e071862256619505dbf48680">Isis::AbstractPointItem::EditLock</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ad45d848a28ad49d2df84e826171c604b">Isis::AbstractPointItem::getColumn()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a634a1d293b8c149ae0804cb70b98e283">Isis::ControlMeasure::GetCubeSerialNumber()</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#a1f98097b555d95ec6b355b4719970921">Isis::AbstractTreeItem::getFormattedData()</a>, <a class="el" href="class_isis_1_1_control_point.html#a8c33071678ad5770264f91334bd36c25">Isis::ControlPoint::GetMeasure()</a>, <a class="el" href="class_isis_1_1_control_point.html#a67b6b1404e65a70643eccbaa2e26ce8a">Isis::ControlPoint::GetNumMeasures()</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#a3b70f61d25489a1a5a4b6e94a45fed14">Isis::AbstractTreeItem::getPointer()</a>, <a class="el" href="class_isis_1_1_table_column.html#a42794c4f5e7a6906066d753a61a0c512">Isis::TableColumn::getTitle()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaacbb48e0a5be2217a3aa8edf18a191c8">Isis::AbstractPointItem::Ignored</a>, <a class="el" href="class_isis_1_1_control_point.html#a8ad960e1ac76628b4febdd353f403a22">Isis::ControlPoint::IndexOfRefMeasure()</a>, <a class="el" href="class_isis_1_1_control_point.html#a0ee93c06a75fa7ae07cd7fd4e0420c2e">Isis::ControlPoint::IsEditLocked()</a>, <a class="el" href="class_isis_1_1_control_point.html#ac08f4fbe0a29e6f02264247db7be65a1">Isis::ControlPoint::IsIgnored()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaf9a5d09d69d3b485c06345a3f5dce790">Isis::AbstractPointItem::PointType</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea0b7971eb960ae27ba047d050d164ca5d">Isis::AbstractPointItem::Reference</a>, <a class="el" href="class_isis_1_1_control_point.html#ac9be2148c109e25430b2976d76735fcb">Isis::ControlPoint::StringToPointType()</a>, <a class="el" href="class_isis_1_1_control_point.html#a28da59935561d5f316787d13c0f76e45">Isis::ControlPoint::StringToRadiusSource()</a>, and <a class="el" href="class_isis_1_1_control_point.html#a0c43c1c613562085fb07950ac0f4aed6">Isis::ControlPoint::StringToSurfacePointSource()</a>.</p>
+
+</div>
+</div>
+<a id="a6a99c5bae9c318ba6a89faa884b15cf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a99c5bae9c318ba6a89faa884b15cf2">&#9670;&nbsp;</a></span>readData() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PointTableDelegate::readData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>widget</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> *&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *&#160;</td>
+          <td class="paramname"><em>col</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>newData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_isis_1_1_abstract_table_delegate.html#aa113423039d5e5fc39967a0ad0e71582">Isis::AbstractTableDelegate</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaa9ae33525e68d1f6a661423aab06a01b">Isis::AbstractPointItem::APrioriRadiusSource</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea75885f93bdee817d43530ee3fb871fe2">Isis::AbstractPointItem::APrioriSPSource</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea4f9b56a1e071862256619505dbf48680">Isis::AbstractPointItem::EditLock</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ad45d848a28ad49d2df84e826171c604b">Isis::AbstractPointItem::getColumn()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a634a1d293b8c149ae0804cb70b98e283">Isis::ControlMeasure::GetCubeSerialNumber()</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#a1f98097b555d95ec6b355b4719970921">Isis::AbstractTreeItem::getFormattedData()</a>, <a class="el" href="class_isis_1_1_control_point.html#a8c33071678ad5770264f91334bd36c25">Isis::ControlPoint::GetMeasure()</a>, <a class="el" href="class_isis_1_1_control_point.html#a67b6b1404e65a70643eccbaa2e26ce8a">Isis::ControlPoint::GetNumMeasures()</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#a3b70f61d25489a1a5a4b6e94a45fed14">Isis::AbstractTreeItem::getPointer()</a>, <a class="el" href="class_isis_1_1_table_column.html#a42794c4f5e7a6906066d753a61a0c512">Isis::TableColumn::getTitle()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaacbb48e0a5be2217a3aa8edf18a191c8">Isis::AbstractPointItem::Ignored</a>, <a class="el" href="class_isis_1_1_control_point.html#a8ad960e1ac76628b4febdd353f403a22">Isis::ControlPoint::IndexOfRefMeasure()</a>, <a class="el" href="class_isis_1_1_control_point.html#a0ee93c06a75fa7ae07cd7fd4e0420c2e">Isis::ControlPoint::IsEditLocked()</a>, <a class="el" href="class_isis_1_1_control_point.html#ac08f4fbe0a29e6f02264247db7be65a1">Isis::ControlPoint::IsIgnored()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaf9a5d09d69d3b485c06345a3f5dce790">Isis::AbstractPointItem::PointType</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea0b7971eb960ae27ba047d050d164ca5d">Isis::AbstractPointItem::Reference</a>, <a class="el" href="class_isis_1_1_control_point.html#ac9be2148c109e25430b2976d76735fcb">Isis::ControlPoint::StringToPointType()</a>, <a class="el" href="class_isis_1_1_control_point.html#a28da59935561d5f316787d13c0f76e45">Isis::ControlPoint::StringToRadiusSource()</a>, and <a class="el" href="class_isis_1_1_control_point.html#a0c43c1c613562085fb07950ac0f4aed6">Isis::ControlPoint::StringToSurfacePointSource()</a>.</p>
+
+</div>
+</div>
+<a id="a2effd1610504601240870944a091e2ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2effd1610504601240870944a091e2ae">&#9670;&nbsp;</a></span>saveData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PointTableDelegate::saveData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>widget</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> *&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_column.html">TableColumn</a> const *&#160;</td>
+          <td class="paramname"><em>col</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_isis_1_1_abstract_table_delegate.html#a16740d6295d41dc0423f42aede66e55b">Isis::AbstractTableDelegate</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaa9ae33525e68d1f6a661423aab06a01b">Isis::AbstractPointItem::APrioriRadiusSource</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea75885f93bdee817d43530ee3fb871fe2">Isis::AbstractPointItem::APrioriSPSource</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea4f9b56a1e071862256619505dbf48680">Isis::AbstractPointItem::EditLock</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ad45d848a28ad49d2df84e826171c604b">Isis::AbstractPointItem::getColumn()</a>, <a class="el" href="class_isis_1_1_point_table_model.html#a776e25d07a31a23dfcf1763827e0ad00">Isis::PointTableModel::getPointWarningMessage()</a>, <a class="el" href="class_isis_1_1_table_column.html#a42794c4f5e7a6906066d753a61a0c512">Isis::TableColumn::getTitle()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaacbb48e0a5be2217a3aa8edf18a191c8">Isis::AbstractPointItem::Ignored</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814eaf9a5d09d69d3b485c06345a3f5dce790">Isis::AbstractPointItem::PointType</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab173ab169c16503613b117b763f3814ea0b7971eb960ae27ba047d050d164ca5d">Isis::AbstractPointItem::Reference</a>, and <a class="el" href="class_isis_1_1_abstract_tree_item.html#a88e85cf2a6306623d84870bdd61213b2">Isis::AbstractTreeItem::setData()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_point_table_delegate_8h_source.html">PointTableDelegate.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_point_table_delegate_8cpp.html">PointTableDelegate.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_point_table_delegate.html">PointTableDelegate</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

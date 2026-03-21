@@ -1,0 +1,261 @@
+[2026-03-21] Standalone licensing baseline: isis_pybind_standalone moved to MIT
+- Added `isis_pybind_standalone/LICENSE` with standard MIT text for the authored binding layer.
+- Documented licensing boundary in `isis_pybind_standalone/README.md`: standalone binding glue stays MIT while upstream ISIS remains under its existing top-level terms.
+- Added concise MIT file headers to the authored binding sources under `isis_pybind_standalone/src/**` and the package entrypoint `python/isis_pybind/__init__.py`.
+- Scope note: this licensing pass intentionally avoided bulk edits to test files and generated docs; the standalone project root license now covers them unless later overridden.
+- Follow-up completed: `isis_pybind_standalone/CMakeLists.txt` now copies `LICENSE` into `build/python/isis_pybind/` and installs it into the final `isis_pybind` package directory so install artifacts carry the MIT text explicitly.
+- Documentation sync completed in `README.md`, `packaging.md`, `testing.md`, and `pyisis-发布前检查清单.md` to treat installed `LICENSE` presence as part of install-tree validation.
+
+[2026-03-20] Pybind methods CSV inventory generation
+- Added generator: `isis_pybind_standalone/class_bind_methods_details/generate_methods_csv.py`
+- Input sources:
+  - `isis_pybind_standalone/todo_pybind11.csv`
+  - `_tmp_pybind_inventory.json`
+  - class headers under `isis/src/**` and `SensorUtilities/**`
+  - binding sources under `isis_pybind_standalone/src/**`
+- Output:
+  - Generated 313 `*_methods.csv` files in `isis_pybind_standalone/class_bind_methods_details/`
+  - CSV content is in English and comma-separated
+  - Each file includes class metadata, Python naming column, per-method converted status, and notes
+- Verified samples:
+  - `base_cube_methods.csv`
+  - `control_control_point_methods.csv`
+  - `base_interpolator_methods.csv`
+  - `isis_mdis_camera_methods.csv`
+- Parser improvements made during this batch:
+  - Correctly handles chained `py::class_...def(...)` statements with lambdas
+  - Better splits inline method definitions in headers
+- Known limitations / follow-up:
+  - Some complex headers with heavy inline Qt-style code may still need manual cleanup
+  - Helper-template-based bindings may under-report some method-level `Y` states when methods are inherited or generated indirectly
+  - Mission camera classes exported as symbols without explicit constructors are marked as class-symbol `Y` but constructor `N` when no `py::init` is found
+
+[2026-03-20] Methods inventory summary table
+- Extended `generate_methods_csv.py` to also write:
+  - `isis_pybind_standalone/class_bind_methods_details/methods_inventory_summary.csv`
+- Summary columns include:
+  - `Y Count`, `N Count`, `Partial Count`, `Open Items`, `Total Items`, `Completion Percent`
+  - `Suggested Priority`, `Priority Reason`
+- Current priority heuristic:
+  - Exported classes with small remaining API gaps are sorted as `High`
+  - Unexported classes with small public API size are also treated as `High` quick wins
+  - Larger remaining surfaces are sorted into `Medium` / `Low`
+- Sorting order in summary CSV:
+  - `Priority Rank` ascending
+  - `Open Items` ascending
+  - `Completion Percent` descending
+  - then module/category and class name
+
+[2026-03-20] First sorted batch bindings: Geometry (part 1)
+- Added bindings in `isis_pybind_standalone/src/base/bind_base_geometry.cpp` for:
+  - `Transform`
+  - `Interpolator`
+  - `Enlarge`
+  - `Reduce`
+- Added Python package exports in `isis_pybind_standalone/python/isis_pybind/__init__.py`
+- Added smoke symbol checks in `isis_pybind_standalone/tests/smoke_import.py`
+- Added focused unit test file: `isis_pybind_standalone/tests/unitTest/geometry_unit_test.py`
+- Validation status:
+  - Pending build and targeted test execution with `/home/gengxun/miniconda3/envs/asp360_new/bin/python`
+
+[2026-03-21] Control Networks priority batch: core control objects + ControlNetDiff
+- Added and validated core Control Networks bindings in `isis_pybind_standalone/src/control/bind_control_core.cpp` for:
+  - `ControlMeasureLogData`
+  - `ControlMeasure`
+  - `ControlPoint`
+  - `ControlNet`
+- Extended the same control binding batch with high-priority quick win `ControlNetDiff`
+- Added another Control Networks quick win `ControlPointList`
+- Updated package exports in `isis_pybind_standalone/python/isis_pybind/__init__.py`
+- Updated broad smoke coverage in `isis_pybind_standalone/tests/smoke_import.py`
+- Added focused unit coverage in `isis_pybind_standalone/tests/unitTest/control_core_unit_test.py` for:
+  - control measure log data round-trip
+  - control point / measure relationships
+  - control net basic graph + PVL IO
+  - `ControlNetDiff.compare()` basic difference reporting
+  - `ControlPointList` file-backed point-id lookup and statistics registration
+- Validation completed with `/home/gengxun/miniconda3/envs/asp360_new/bin/python`:
+  - `PYTHONPATH=tests/unitTest /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v control_core_unit_test`
+  - `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+- Notes / follow-up:
+  - `class_bind_methods_details/*.csv` status tables are now stale for several control classes and should be regenerated or synchronized in a later maintenance pass.
+  - Next high-priority Control Networks candidates need dependency triage:
+    - `BundleAdjust` depends on unbound `BundleSettings` / bundle utility types.
+    - `InterestOperatorFactory` is only useful once `InterestOperator` (or factory return handling) is exposed.
+
+[2026-03-21] Low Level Cube I/O quick win: BandManager
+- Added `BandManager` binding in `isis_pybind_standalone/src/bind_low_level_cube_io.cpp`
+  - constructor: `BandManager(cube, reverse=False)`
+  - method: `set_band(sample, line=1)`
+- Re-exported `BandManager` in `isis_pybind_standalone/python/isis_pybind/__init__.py`
+- Added smoke symbol coverage in `isis_pybind_standalone/tests/smoke_import.py`
+- Added focused unit coverage in `isis_pybind_standalone/tests/unitTest/low_level_cube_io_unit_test.py`
+  - constructs a temporary cube
+  - validates `begin()` state
+  - validates `set_band()` and `next()` on the exposed Python API
+- Validation completed with `/home/gengxun/miniconda3/envs/asp360_new/bin/python`:
+  - `tests/unitTest/low_level_cube_io_unit_test.py`
+  - `tests/smoke_import.py`
+- Notes / follow-up:
+  - The observed `BandManager.set_band()` position update in Python reflects the current underlying C++ behavior; tests were aligned to actual exposed semantics instead of inferred documentation wording.
+
+[2026-03-21] Control Networks dependency cleanup: BundleSettings core subset
+- Added `BundleSettings` binding in `isis_pybind_standalone/src/control/bind_control_core.cpp`
+  - bound constructor, copy, repr
+  - bound validation / solve / outlier / convergence configuration APIs
+  - bound maximum-likelihood model configuration via Python-facing `BundleSettings.MaximumLikelihoodModel`
+  - bound target-body query accessors that are safe without exposing `BundleTargetBody`
+  - bound output-prefix and cube-list configuration
+- Re-exported `BundleSettings` in `isis_pybind_standalone/python/isis_pybind/__init__.py`
+- Extended focused unit coverage in `isis_pybind_standalone/tests/unitTest/control_core_unit_test.py`
+  - validates solve options, convergence criteria, maximum-likelihood model round-trip, and output configuration
+- Extended broad smoke coverage in `isis_pybind_standalone/tests/smoke_import.py`
+- Validation completed with `/home/gengxun/miniconda3/envs/asp360_new/bin/python`:
+  - `cmake --build build -j2`
+  - `PYTHONPATH=tests/unitTest /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v control_core_unit_test`
+  - `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+- Dependency cleanup note:
+  - standalone build needed `${CONDA_PREFIX}/include/csm` on the include path because ISIS `BundleObservationSolveSettings.h` uses legacy `#include <csm.h>` while the conda environment installs the header as `include/csm/csm.h`
+- Remaining BundleSettings gaps / next follow-up:
+  - `BundleObservationSolveSettings`-dependent APIs remain unbound (`setObservationSolveOptions`, `observationSolveSettings(...)`)
+  - `BundleTargetBody` setter/getter remain unbound
+  - XML IO methods remain unbound
+  - `setSCPVLFilename()` / `SCPVLFilename()` are declared in the header inventory but do not appear implemented in the linked ISIS build and were intentionally skipped for now
+
+[2026-03-21] Control Networks dependency cleanup: BundleObservationSolveSettings + BundleTargetBody minimal layer
+- Extended `isis_pybind_standalone/src/control/bind_control_core.cpp` with a validated minimal `BundleObservationSolveSettings` binding:
+  - CSM solve option/set/type enums and string conversions
+  - instrument ID / observation-number configuration
+  - pointing and position solve configuration round-trip
+  - `BundleSettings.set_observation_solve_options(...)`
+  - `BundleSettings.observation_solve_settings(...)` overloads for list / index / observation number
+- Added a validated minimal `BundleTargetBody` binding in the same file:
+  - nested enums `TargetRadiiSolveMethod` and `TargetSolveCodes`
+  - `set_solve_settings(...)`
+  - readonly coefficient/radius accessors: `pole_ra_coefs`, `pole_dec_coefs`, `pm_coefs`, `radii`, `mean_radius`
+  - solve-state queries, parameter-count queries, `vtpv()`, `local_radius()`, copy/repr
+- Re-exported `BundleObservationSolveSettings` and `BundleTargetBody` in `isis_pybind_standalone/python/isis_pybind/__init__.py`
+- Extended focused unit coverage in `isis_pybind_standalone/tests/unitTest/control_core_unit_test.py`
+  - added `BundleObservationSolveSettings` round-trip test
+  - added `BundleTargetBody` minimal solve-settings test
+- Extended broad smoke coverage in `isis_pybind_standalone/tests/smoke_import.py`
+- Validation completed with `/home/gengxun/miniconda3/envs/asp360_new/bin/python`:
+  - `cmake --build build -j2`
+  - `PYTHONPATH=tests/unitTest /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v control_core_unit_test`
+  - `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+- Remaining follow-up / blockers before `BundleAdjust`:
+  - `BundleTargetBody` PVL/formatting APIs remain unbound
+  - `BundleTargetBody` `LinearAlgebra::Vector` mutator/accessor surfaces remain deferred until a safe vector binding strategy exists
+  - `BundleAdjust` still depends on broader Bundle execution/result types and is not yet a quick win despite summary-CSV heuristics
+
+[2026-03-21] Control Networks dependency cleanup: BundleSettings target-body linkage
+- Extended `isis_pybind_standalone/src/control/bind_control_core.cpp` to expose:
+  - `BundleSettings.set_bundle_target_body(BundleTargetBody)`
+  - `BundleSettings.bundle_target_body()`
+- Binding strategy:
+  - Python passes/receives `BundleTargetBody` by value
+  - C++ internally stores the object as `BundleTargetBodyQsp`
+  - getter returns `None` when no target body is configured, otherwise returns a copied `BundleTargetBody`
+- Extended `isis_pybind_standalone/tests/unitTest/control_core_unit_test.py`
+  - verifies default `None`
+  - verifies setting a target body enables `solve_target_body()` and target-body solve queries
+  - verifies round-trip access to pole RA and mean-radius values through `BundleSettings`
+- Extended `isis_pybind_standalone/tests/smoke_import.py` with a minimal target-body linkage smoke path
+- Validation completed with `/home/gengxun/miniconda3/envs/asp360_new/bin/python`:
+  - `cmake --build build -j2`
+  - `PYTHONPATH=tests/unitTest /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v control_core_unit_test`
+  - `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+- Remaining follow-up before a realistic `BundleAdjust` binding attempt:
+  - `BundleTargetBody` PVL/formatting APIs remain unbound
+  - `BundleTargetBody` vector-like correction/weight surfaces remain deferred
+  - `BundleAdjust` still lacks its own minimum viable dependency surface (`BundleSolutionInfo`, image-list/results ownership, abort/control flow)
+
+[2026-03-21] Control Networks dependency cleanup: BundleTargetBody formatting helpers
+- Extended `isis_pybind_standalone/src/control/bind_control_core.cpp` to expose:
+  - `BundleTargetBody.format_bundle_output_string(error_propagation)`
+  - `BundleTargetBody.parameter_list()`
+- These bindings intentionally stay on the safe readonly side:
+  - no `LinearAlgebra::Vector` exposure yet
+  - no PVL parsing / formatting-helper micro-APIs yet
+- Extended `isis_pybind_standalone/tests/unitTest/control_core_unit_test.py`
+  - verifies formatted output contains expected parameter names and formatted values
+  - verifies `parameter_list()` ordering after `format_bundle_output_string(False)`
+- Extended `isis_pybind_standalone/tests/smoke_import.py` with a minimal formatting smoke check
+- Validation completed with `/home/gengxun/miniconda3/envs/asp360_new/bin/python`:
+  - `cmake --build build -j2`
+  - `PYTHONPATH=tests/unitTest /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v control_core_unit_test`
+  - `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+- Remaining `BundleTargetBody` gaps:
+  - `read_from_pvl()`
+  - formatting helper micro-APIs (`format_value`, adjusted/apriori sigma formatting helpers)
+  - vector-like corrections/weights/solutions surfaces
+
+[2026-03-21] Measure-level geometry helper: Sensor.get_surface_point()
+- Extended `isis_pybind_standalone/src/bind_sensor.cpp` to expose:
+  - `Sensor.get_surface_point()` returning a copied `SurfacePoint`
+- Rationale:
+  - unblocks measure-level workflows of the form `measure sample/line -> camera.set_image() -> SurfacePoint -> DOM projection`
+  - avoids fragile reconstruction from only `universal_latitude()` / `universal_longitude()` without direct radius access
+- Extended `isis_pybind_standalone/tests/unitTest/camera_unit_test.py`
+  - verifies `camera.get_surface_point()` on a local `mosrange` MDIS cube after `set_image()`
+  - checks the returned surface point is valid, radius is positive, and lat/lon match the camera ground solution
+- Extended `isis_pybind_standalone/tests/smoke_import.py` with method-presence checks for `Sensor.get_surface_point()` / `Camera.get_surface_point()`
+- Validation completed with `/home/gengxun/miniconda3/envs/asp360_new/bin/python`:
+  - `cmake --build build -j2`
+  - `PYTHONPATH=tests/unitTest /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v camera_unit_test`
+  - `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+
+[2026-03-21] Control/geometry bridge batch: SerialNumber + SerialNumberList + ObservationNumber
+- Added validated serial-number support bindings in `isis_pybind_standalone/src/base/bind_base_support.cpp` for:
+  - `SerialNumber`
+  - `SerialNumberList`
+  - `ObservationNumber`
+- Exposed the core Python-facing surfaces needed for serial/observation workflows:
+  - `SerialNumber.compose(...)`
+  - `SerialNumber.compose_observation(...)`
+  - `SerialNumberList` construction, add/remove, membership, filename/serial lookup, observation lookup, and possible-serial queries
+  - `ObservationNumber.compose(...)`
+  - `ObservationNumber.possible_serial(...)`
+- Re-exported the new symbols in `isis_pybind_standalone/python/isis_pybind/__init__.py`
+- Extended broad smoke coverage in `isis_pybind_standalone/tests/smoke_import.py`
+- Added focused unit coverage in `isis_pybind_standalone/tests/unitTest/serial_number_unit_test.py`
+  - compose from filename and `Cube`
+  - single-file `SerialNumberList` round-trip
+  - observation-number lookup across a list of cubes
+  - membership and removal semantics
+- Validation completed with `/home/gengxun/miniconda3/envs/asp360_new/bin/python`:
+  - `cmake --build build -j2`
+  - `PYTHONPATH=tests/unitTest /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v serial_number_unit_test`
+  - `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+- Workflow note:
+  - this batch completes the baseline chain `ControlMeasure serial -> SerialNumberList -> cube filename -> Cube -> Camera`, which is the direct precursor for `UniversalGroundMap` work.
+
+[2026-03-21] Control Networks quick-win batch: MeasureValidationResults + BundleImage
+- Extended `isis_pybind_standalone/src/control/bind_control_core.cpp` with validated lightweight bindings for:
+  - `MeasureValidationResults`
+    - nested enum `Option`
+    - `is_valid()` / `get_valid_status(...)`
+    - all `to_string(...)` overloads
+    - both `add_failure(...)` overloads
+    - `get_failure_prefix(...)`
+  - `BundleImage`
+    - constructor from `Camera *`, serial number, and file name
+    - readonly accessors `camera()`, `serial_number()`, `file_name()`
+    - lightweight `has_parent_observation()` probe
+    - copy / repr support
+- Re-exported `MeasureValidationResults` and `BundleImage` in `isis_pybind_standalone/python/isis_pybind/__init__.py`
+- Updated `isis_pybind_standalone/todo_pybind11.csv` to mark both classes as converted so the control priority table matches the real code state
+- Extended focused unit coverage in `isis_pybind_standalone/tests/unitTest/control_core_unit_test.py`
+  - added `MeasureValidationResults` status / formatting round-trip checks
+  - added `BundleImage` accessor checks against a local `mosrange` MDIS camera fixture
+- Extended broad smoke coverage in `isis_pybind_standalone/tests/smoke_import.py`
+  - added symbol-presence checks for `MeasureValidationResults` / `BundleImage`
+  - added minimum runtime checks for validation-result formatting and `BundleImage` construction
+  - added local `ISISDATA` mockup fallback logic so camera-dependent smoke paths do not fail when the active environment lacks leap-second kernels
+- Validation completed with `/home/gengxun/miniconda3/envs/asp360_new/bin/python`:
+  - `cmake --build build -j2`
+  - `PYTHONPATH=tests/unitTest /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v control_core_unit_test`
+  - `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+- Notes / follow-up:
+  - `methods_inventory_summary.csv` and the per-class CSV inventory under `class_bind_methods_details/` are now further out of date for these two classes and should be regenerated or synchronized in a later maintenance pass.
+  - The next control-side quick wins are still the versioned control-point wrappers (`ControlPointV0001/V0002/V0003`) or another lightweight validation/helper class, not `BundleAdjust`.

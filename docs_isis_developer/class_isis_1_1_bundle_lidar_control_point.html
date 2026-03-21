@@ -1,0 +1,2272 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::BundleLidarControlPoint Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_bundle_lidar_control_point.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_bundle_lidar_control_point-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::BundleLidarControlPoint Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This class holds information about a lidar control point that <a class="el" href="class_isis_1_1_bundle_adjust.html" title="An image bundle adjustment object.">BundleAdjust</a> requires.  
+ <a href="class_isis_1_1_bundle_lidar_control_point.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_bundle_lidar_control_point_8h_source.html">BundleLidarControlPoint.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::BundleLidarControlPoint:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bundle_lidar_control_point__inherit__graph.png" border="0" usemap="#a_isis_1_1_bundle_lidar_control_point_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_bundle_lidar_control_point_inherit__map" id="a_isis_1_1_bundle_lidar_control_point_inherit__map">
+<area shape="rect" title="This class holds information about a lidar control point that BundleAdjust requires." alt="" coords="17,424,222,713"/>
+<area shape="rect" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly." alt="" coords="5,135,234,376"/>
+<area shape="rect" href="class_q_vector.html" title=" " alt="" coords="16,5,223,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::BundleLidarControlPoint:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bundle_lidar_control_point__coll__graph.png" border="0" usemap="#a_isis_1_1_bundle_lidar_control_point_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_bundle_lidar_control_point_coll__map" id="a_isis_1_1_bundle_lidar_control_point_coll__map">
+<area shape="rect" title="This class holds information about a lidar control point that BundleAdjust requires." alt="" coords="121,713,326,1003"/>
+<area shape="rect" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly." alt="" coords="110,423,338,664"/>
+<area shape="rect" href="class_q_vector.html" title=" " alt="" coords="5,141,213,223"/>
+<area shape="rect" href="class_isis_1_1_control_point.html" title="A single control point." alt="" coords="237,5,442,359"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a22010abf6e336467578497077de00ea1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#a22010abf6e336467578497077de00ea1">BundleLidarControlPoint</a> (<a class="el" href="namespace_isis.html#a2a8ce6eaf289ace3131997657b683c9c">BundleSettingsQsp</a> bundleSettings, <a class="el" href="namespace_isis.html#a79ca2a3d962f59efba8e0d1192a3ad7e">LidarControlPointQsp</a> lidarControlPoint)</td></tr>
+<tr class="memdesc:a22010abf6e336467578497077de00ea1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a> object from a <a class="el" href="class_isis_1_1_lidar_control_point.html" title="A lidar control ControlPoint.">LidarControlPoint</a>.  <a href="class_isis_1_1_bundle_lidar_control_point.html#a22010abf6e336467578497077de00ea1">More...</a><br /></td></tr>
+<tr class="separator:a22010abf6e336467578497077de00ea1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af79e29c735c5c8c67d60844e6461967c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#af79e29c735c5c8c67d60844e6461967c">~BundleLidarControlPoint</a> ()</td></tr>
+<tr class="memdesc:af79e29c735c5c8c67d60844e6461967c"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO: implement? Copy constructor.  <a href="class_isis_1_1_bundle_lidar_control_point.html#af79e29c735c5c8c67d60844e6461967c">More...</a><br /></td></tr>
+<tr class="separator:af79e29c735c5c8c67d60844e6461967c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f8824f8da92694a994ccb3378b38e8d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html">BundleLidarControlPoint</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#a3f8824f8da92694a994ccb3378b38e8d">operator=</a> (const <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html">BundleLidarControlPoint</a> &amp;src)</td></tr>
+<tr class="separator:a3f8824f8da92694a994ccb3378b38e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeaa48dfe605385dcad1e779f48921b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#adeaa48dfe605385dcad1e779f48921b8">copy</a> (const <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html">BundleLidarControlPoint</a> &amp;src)</td></tr>
+<tr class="memdesc:adeaa48dfe605385dcad1e779f48921b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies given <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a> to this <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a>.  <a href="class_isis_1_1_bundle_lidar_control_point.html#adeaa48dfe605385dcad1e779f48921b8">More...</a><br /></td></tr>
+<tr class="separator:adeaa48dfe605385dcad1e779f48921b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae809a6e1b9bf71a6f4d86fcec803c676"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#ae809a6e1b9bf71a6f4d86fcec803c676">initializeRangeConstraints</a> ()</td></tr>
+<tr class="memdesc:ae809a6e1b9bf71a6f4d86fcec803c676"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize range constraints.  <a href="class_isis_1_1_bundle_lidar_control_point.html#ae809a6e1b9bf71a6f4d86fcec803c676">More...</a><br /></td></tr>
+<tr class="separator:ae809a6e1b9bf71a6f4d86fcec803c676"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09fe848f5547800fac981ae6bf96418f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#a09fe848f5547800fac981ae6bf96418f">applyLidarRangeConstraints</a> (<a class="el" href="class_isis_1_1_sparse_block_matrix.html">SparseBlockMatrix</a> &amp;normalsMatrix, <a class="el" href="class_isis_1_1_linear_algebra.html#aeebbc4478f51cd0dd412967e688577cf">LinearAlgebra::MatrixUpperTriangular</a> &amp;N22, <a class="el" href="class_isis_1_1_sparse_block_column_matrix.html">SparseBlockColumnMatrix</a> &amp;N12, <a class="el" href="class_isis_1_1_linear_algebra.html#a1fb29d9abe918737c7559914271956fd">LinearAlgebra::VectorCompressed</a> &amp;n1, <a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;n2)</td></tr>
+<tr class="memdesc:a09fe848f5547800fac981ae6bf96418f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies range constraint between image and lidar point acquired simultaneously.  <a href="class_isis_1_1_bundle_lidar_control_point.html#a09fe848f5547800fac981ae6bf96418f">More...</a><br /></td></tr>
+<tr class="separator:a09fe848f5547800fac981ae6bf96418f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f8dbca7072a204c57825e7f868a55b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#a9f8dbca7072a204c57825e7f868a55b7">computeResiduals</a> ()</td></tr>
+<tr class="memdesc:a9f8dbca7072a204c57825e7f868a55b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the residuals for this <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a>.  <a href="class_isis_1_1_bundle_lidar_control_point.html#a9f8dbca7072a204c57825e7f868a55b7">More...</a><br /></td></tr>
+<tr class="separator:a9f8dbca7072a204c57825e7f868a55b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9fce05e77bd4307de85b9234c0202f5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#ab9fce05e77bd4307de85b9234c0202f5">applyParameterCorrections</a> (<a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> imageSolution, <a class="el" href="class_isis_1_1_sparse_block_matrix.html">SparseBlockMatrix</a> &amp;sparseNormals, const <a class="el" href="namespace_isis.html#a8ad1a208b8261d34b5ee7ced0bd2d4e9">BundleTargetBodyQsp</a> target)</td></tr>
+<tr class="memdesc:ab9fce05e77bd4307de85b9234c0202f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the parameter corrections to the lidar range.  <a href="class_isis_1_1_bundle_lidar_control_point.html#ab9fce05e77bd4307de85b9234c0202f5">More...</a><br /></td></tr>
+<tr class="separator:ab9fce05e77bd4307de85b9234c0202f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a243dba25aafbe9e9c039af0a943217"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#a2a919de837916b3b914166a640049152">BundleLidarRangeConstraintQsp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#a5a243dba25aafbe9e9c039af0a943217">rangeConstraint</a> (int n)</td></tr>
+<tr class="memdesc:a5a243dba25aafbe9e9c039af0a943217"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns range constraint at index n.  <a href="class_isis_1_1_bundle_lidar_control_point.html#a5a243dba25aafbe9e9c039af0a943217">More...</a><br /></td></tr>
+<tr class="separator:a5a243dba25aafbe9e9c039af0a943217"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7df664ff48b8d72f433c768efeb12cc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#af7df664ff48b8d72f433c768efeb12cc">vtpvRangeContribution</a> ()</td></tr>
+<tr class="memdesc:af7df664ff48b8d72f433c768efeb12cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns Weighted sum of squares of range residuals for this point.  <a href="class_isis_1_1_bundle_lidar_control_point.html#af7df664ff48b8d72f433c768efeb12cc">More...</a><br /></td></tr>
+<tr class="separator:af7df664ff48b8d72f433c768efeb12cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77775bceb2899245b5753e0a004f336b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#a77775bceb2899245b5753e0a004f336b">numberRangeConstraints</a> ()</td></tr>
+<tr class="memdesc:a77775bceb2899245b5753e0a004f336b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns number of range constraints between this lidar point &amp; images acquired simultaneously.  <a href="class_isis_1_1_bundle_lidar_control_point.html#a77775bceb2899245b5753e0a004f336b">More...</a><br /></td></tr>
+<tr class="separator:a77775bceb2899245b5753e0a004f336b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8cbdc00f257a37535553bd1463b7fa6"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#ac8cbdc00f257a37535553bd1463b7fa6">range</a> ()</td></tr>
+<tr class="memdesc:ac8cbdc00f257a37535553bd1463b7fa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns range between this point and ???  <a href="class_isis_1_1_bundle_lidar_control_point.html#ac8cbdc00f257a37535553bd1463b7fa6">More...</a><br /></td></tr>
+<tr class="separator:ac8cbdc00f257a37535553bd1463b7fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb4297b4c0e0813bd9a2c0502105e4e4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#afb4297b4c0e0813bd9a2c0502105e4e4">sigmaRange</a> ()</td></tr>
+<tr class="memdesc:afb4297b4c0e0813bd9a2c0502105e4e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns sigma of observed range.  <a href="class_isis_1_1_bundle_lidar_control_point.html#afb4297b4c0e0813bd9a2c0502105e4e4">More...</a><br /></td></tr>
+<tr class="separator:afb4297b4c0e0813bd9a2c0502105e4e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad27243bdd1527972e18d18b1f3ecf613"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#ad27243bdd1527972e18d18b1f3ecf613">copy</a> (const <a class="el" href="class_isis_1_1_bundle_control_point.html">BundleControlPoint</a> &amp;src)</td></tr>
+<tr class="memdesc:ad27243bdd1527972e18d18b1f3ecf613"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies given <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a> to this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#ad27243bdd1527972e18d18b1f3ecf613">More...</a><br /></td></tr>
+<tr class="separator:ad27243bdd1527972e18d18b1f3ecf613"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9f58a5f0b997d2dc7122934ffa16a38"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#ac1df1e0ca6a1aa8d39787123150589e8">BundleMeasureQsp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#ac9f58a5f0b997d2dc7122934ffa16a38">addMeasure</a> (<a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *controlMeasure)</td></tr>
+<tr class="memdesc:ac9f58a5f0b997d2dc7122934ffa16a38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="class_isis_1_1_bundle_measure.html" title="A container class for a ControlMeasure.">BundleMeasure</a> from the given <a class="el" href="class_isis_1_1_control_measure.html" title="a control measurement">ControlMeasure</a> and appends it to this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s measure list.  <a href="class_isis_1_1_bundle_control_point.html#ac9f58a5f0b997d2dc7122934ffa16a38">More...</a><br /></td></tr>
+<tr class="separator:ac9f58a5f0b997d2dc7122934ffa16a38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab82ce2ab6730e25c6f26eac5929cfbef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#ab82ce2ab6730e25c6f26eac5929cfbef">setAdjustedSurfacePoint</a> (<a class="el" href="class_isis_1_1_surface_point.html">SurfacePoint</a> surfacePoint)</td></tr>
+<tr class="memdesc:ab82ce2ab6730e25c6f26eac5929cfbef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the adjusted surface point for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#ab82ce2ab6730e25c6f26eac5929cfbef">More...</a><br /></td></tr>
+<tr class="separator:ab82ce2ab6730e25c6f26eac5929cfbef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a176172b5739fefd4c541b7a7029a90f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a176172b5739fefd4c541b7a7029a90f3">setNumberOfRejectedMeasures</a> (int numRejected)</td></tr>
+<tr class="memdesc:a176172b5739fefd4c541b7a7029a90f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the number of rejected measures for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#a176172b5739fefd4c541b7a7029a90f3">More...</a><br /></td></tr>
+<tr class="separator:a176172b5739fefd4c541b7a7029a90f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32eb30de5fb4c5a1daf021f1640d34bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a32eb30de5fb4c5a1daf021f1640d34bf">setRejected</a> (bool reject)</td></tr>
+<tr class="memdesc:a32eb30de5fb4c5a1daf021f1640d34bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a> to rejected or not rejected.  <a href="class_isis_1_1_bundle_control_point.html#a32eb30de5fb4c5a1daf021f1640d34bf">More...</a><br /></td></tr>
+<tr class="separator:a32eb30de5fb4c5a1daf021f1640d34bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addb3401d8d5eaa3606b503afde521002"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#addb3401d8d5eaa3606b503afde521002">setWeights</a> (const <a class="el" href="namespace_isis.html#a2a8ce6eaf289ace3131997657b683c9c">BundleSettingsQsp</a> settings)</td></tr>
+<tr class="memdesc:addb3401d8d5eaa3606b503afde521002"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the weights using the given <a class="el" href="class_isis_1_1_bundle_settings.html" title="Container class for BundleAdjustment settings.">BundleSettings</a> <a class="el" href="class_q_shared_pointer.html">QSharedPointer</a> and a conversion value for meters to radians.  <a href="class_isis_1_1_bundle_control_point.html#addb3401d8d5eaa3606b503afde521002">More...</a><br /></td></tr>
+<tr class="separator:addb3401d8d5eaa3606b503afde521002"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2e88730e187431683ac0ae4ac42f024"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#ae2e88730e187431683ac0ae4ac42f024">setSigmaWeightFromGlobals</a> (double gSigma, int index)</td></tr>
+<tr class="memdesc:ae2e88730e187431683ac0ae4ac42f024"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the member sigmas and weights from a global sigma.  <a href="class_isis_1_1_bundle_control_point.html#ae2e88730e187431683ac0ae4ac42f024">More...</a><br /></td></tr>
+<tr class="separator:ae2e88730e187431683ac0ae4ac42f024"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac14d9e7c5fa38ed3de4a73382b1fbf59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#ac14d9e7c5fa38ed3de4a73382b1fbf59">setSigmaWeightFromGlobals</a> (double gSigma, int index, double cFactor)</td></tr>
+<tr class="separator:ac14d9e7c5fa38ed3de4a73382b1fbf59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bb7dd520b4cd4549cc062e9c17ebfc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a6bb7dd520b4cd4549cc062e9c17ebfc8">zeroNumberOfRejectedMeasures</a> ()</td></tr>
+<tr class="memdesc:a6bb7dd520b4cd4549cc062e9c17ebfc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the number of rejected measures for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a> to zero.  <a href="class_isis_1_1_bundle_control_point.html#a6bb7dd520b4cd4549cc062e9c17ebfc8">More...</a><br /></td></tr>
+<tr class="separator:a6bb7dd520b4cd4549cc062e9c17ebfc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47800404cd32a255bcdc991956277b4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a47800404cd32a255bcdc991956277b4d">productAlphaAV</a> (double alpha, <a class="el" href="class_isis_1_1_sparse_block_matrix.html">SparseBlockMatrix</a> &amp;sparseNormals, <a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;v1)</td></tr>
+<tr class="memdesc:a47800404cd32a255bcdc991956277b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform the matrix multiplication v2 = alpha ( Q x v1 ).  <a href="class_isis_1_1_bundle_control_point.html#a47800404cd32a255bcdc991956277b4d">More...</a><br /></td></tr>
+<tr class="separator:a47800404cd32a255bcdc991956277b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c40392352df81b4062ff568b70eeb91"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a9c40392352df81b4062ff568b70eeb91">vtpv</a> ()</td></tr>
+<tr class="memdesc:a9c40392352df81b4062ff568b70eeb91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute vtpv, the weighted sum of squares of constrained point residuals.  <a href="class_isis_1_1_bundle_control_point.html#a9c40392352df81b4062ff568b70eeb91">More...</a><br /></td></tr>
+<tr class="separator:a9c40392352df81b4062ff568b70eeb91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a575e21847a0562be9ef02b3cfe24d8de"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a575e21847a0562be9ef02b3cfe24d8de">vtpvMeasures</a> ()</td></tr>
+<tr class="memdesc:a575e21847a0562be9ef02b3cfe24d8de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute vtpv of image measures (weighted sum of squares of measure residuals).  <a href="class_isis_1_1_bundle_control_point.html#a575e21847a0562be9ef02b3cfe24d8de">More...</a><br /></td></tr>
+<tr class="separator:a575e21847a0562be9ef02b3cfe24d8de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebd3fd76858866ab01c8d1cb87e6f1f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#aebd3fd76858866ab01c8d1cb87e6f1f8">rawControlPoint</a> () const</td></tr>
+<tr class="memdesc:aebd3fd76858866ab01c8d1cb87e6f1f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor for the raw <a class="el" href="class_isis_1_1_control_point.html" title="A single control point.">ControlPoint</a> object used for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#aebd3fd76858866ab01c8d1cb87e6f1f8">More...</a><br /></td></tr>
+<tr class="separator:aebd3fd76858866ab01c8d1cb87e6f1f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab37b106c3cc07fdb9aee57608e26937b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#ab37b106c3cc07fdb9aee57608e26937b">isRejected</a> () const</td></tr>
+<tr class="memdesc:ab37b106c3cc07fdb9aee57608e26937b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method used to determine whether this control point is rejected.  <a href="class_isis_1_1_bundle_control_point.html#ab37b106c3cc07fdb9aee57608e26937b">More...</a><br /></td></tr>
+<tr class="separator:ab37b106c3cc07fdb9aee57608e26937b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea1c954427bc26191da8837e51ae6688"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#aea1c954427bc26191da8837e51ae6688">numberOfMeasures</a> () const</td></tr>
+<tr class="memdesc:aea1c954427bc26191da8837e51ae6688"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses number of measures associated with this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#aea1c954427bc26191da8837e51ae6688">More...</a><br /></td></tr>
+<tr class="separator:aea1c954427bc26191da8837e51ae6688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b852070ba85979f671a294a19564ef6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a4b852070ba85979f671a294a19564ef6">numberOfRejectedMeasures</a> () const</td></tr>
+<tr class="memdesc:a4b852070ba85979f671a294a19564ef6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the number of rejected measures for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#a4b852070ba85979f671a294a19564ef6">More...</a><br /></td></tr>
+<tr class="separator:a4b852070ba85979f671a294a19564ef6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1322fbff8b3eb9264b117c8bbdf16d28"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a1322fbff8b3eb9264b117c8bbdf16d28">residualRms</a> () const</td></tr>
+<tr class="memdesc:a1322fbff8b3eb9264b117c8bbdf16d28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the root-mean-square (rms) of the <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s residuals.  <a href="class_isis_1_1_bundle_control_point.html#a1322fbff8b3eb9264b117c8bbdf16d28">More...</a><br /></td></tr>
+<tr class="separator:a1322fbff8b3eb9264b117c8bbdf16d28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b2635d612b3405c4cfe3c7054eaeb78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_surface_point.html">SurfacePoint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a7b2635d612b3405c4cfe3c7054eaeb78">adjustedSurfacePoint</a> () const</td></tr>
+<tr class="memdesc:a7b2635d612b3405c4cfe3c7054eaeb78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the adjusted <a class="el" href="class_isis_1_1_surface_point.html" title="This class defines a body-fixed surface point.">SurfacePoint</a> associated with this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#a7b2635d612b3405c4cfe3c7054eaeb78">More...</a><br /></td></tr>
+<tr class="separator:a7b2635d612b3405c4cfe3c7054eaeb78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8b901357e80f84f56bb88df3c3e2798"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#af8b901357e80f84f56bb88df3c3e2798">id</a> () const</td></tr>
+<tr class="memdesc:af8b901357e80f84f56bb88df3c3e2798"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the Point <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> associated with this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#af8b901357e80f84f56bb88df3c3e2798">More...</a><br /></td></tr>
+<tr class="separator:af8b901357e80f84f56bb88df3c3e2798"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9eac9c9ff61fd0a469b5f0be95ea0fbb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_point.html#a807b76bbf1e01dabe9755f9aeb7269f7">ControlPoint::PointType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a9eac9c9ff61fd0a469b5f0be95ea0fbb">type</a> () const</td></tr>
+<tr class="memdesc:a9eac9c9ff61fd0a469b5f0be95ea0fbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s type.  <a href="class_isis_1_1_bundle_control_point.html#a9eac9c9ff61fd0a469b5f0be95ea0fbb">More...</a><br /></td></tr>
+<tr class="separator:a9eac9c9ff61fd0a469b5f0be95ea0fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29dcfa3440480d45807a7db22d6ec67f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a29dcfa3440480d45807a7db22d6ec67f">coordTypeReports</a> () const</td></tr>
+<tr class="memdesc:a29dcfa3440480d45807a7db22d6ec67f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s coordinate type for reports.  <a href="class_isis_1_1_bundle_control_point.html#a29dcfa3440480d45807a7db22d6ec67f">More...</a><br /></td></tr>
+<tr class="separator:a29dcfa3440480d45807a7db22d6ec67f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83e73b9607a3d8a2d7ad73e175e13255"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a83e73b9607a3d8a2d7ad73e175e13255">coordTypeBundle</a> () const</td></tr>
+<tr class="memdesc:a83e73b9607a3d8a2d7ad73e175e13255"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s control point coordinate type for the bundle adjustment.  <a href="class_isis_1_1_bundle_control_point.html#a83e73b9607a3d8a2d7ad73e175e13255">More...</a><br /></td></tr>
+<tr class="separator:a83e73b9607a3d8a2d7ad73e175e13255"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2b8f93851286e781a999be3c81198e3"><td class="memItemLeft" align="right" valign="top">boost::numeric::ublas::bounded_vector&lt; double, 3 &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#ac2b8f93851286e781a999be3c81198e3">corrections</a> ()</td></tr>
+<tr class="memdesc:ac2b8f93851286e781a999be3c81198e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the 3 dimensional ordered vector of correction values associated with coord1, coord2, and coord 3 (latitude, longitude, and radius or X, Y, and Z.  <a href="class_isis_1_1_bundle_control_point.html#ac2b8f93851286e781a999be3c81198e3">More...</a><br /></td></tr>
+<tr class="separator:ac2b8f93851286e781a999be3c81198e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2c1e24cab6d422a5b6a532082e5107b"><td class="memItemLeft" align="right" valign="top">boost::numeric::ublas::bounded_vector&lt; double, 3 &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#ac2c1e24cab6d422a5b6a532082e5107b">aprioriSigmas</a> ()</td></tr>
+<tr class="memdesc:ac2c1e24cab6d422a5b6a532082e5107b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the 3 dimensional ordered vector of apriori sigmas (apriori coordinate1, apriori coordinate2, apriori coordinate3).  <a href="class_isis_1_1_bundle_control_point.html#ac2c1e24cab6d422a5b6a532082e5107b">More...</a><br /></td></tr>
+<tr class="separator:ac2c1e24cab6d422a5b6a532082e5107b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4e833c7afdeebeec55e90d88ae61dba"><td class="memItemLeft" align="right" valign="top">boost::numeric::ublas::bounded_vector&lt; double, 3 &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#ad4e833c7afdeebeec55e90d88ae61dba">adjustedSigmas</a> ()</td></tr>
+<tr class="memdesc:ad4e833c7afdeebeec55e90d88ae61dba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the 3 dimensional ordered vector of adjusted sigmas (adjusted coordinate1, adjusted coordinate2, adjusted coordinate3).  <a href="class_isis_1_1_bundle_control_point.html#ad4e833c7afdeebeec55e90d88ae61dba">More...</a><br /></td></tr>
+<tr class="separator:ad4e833c7afdeebeec55e90d88ae61dba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae8d2564cf86316e162b6109dbfbf9da"><td class="memItemLeft" align="right" valign="top">boost::numeric::ublas::bounded_vector&lt; double, 3 &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#aae8d2564cf86316e162b6109dbfbf9da">weights</a> ()</td></tr>
+<tr class="memdesc:aae8d2564cf86316e162b6109dbfbf9da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the 3 dimensional ordered vector of weight values associated with coordinate1, coordinate2, and coordinate3.  <a href="class_isis_1_1_bundle_control_point.html#aae8d2564cf86316e162b6109dbfbf9da">More...</a><br /></td></tr>
+<tr class="separator:aae8d2564cf86316e162b6109dbfbf9da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a205945f38b927b955eb3f3126b6d6b"><td class="memItemLeft" align="right" valign="top">boost::numeric::ublas::bounded_vector&lt; double, 3 &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a9a205945f38b927b955eb3f3126b6d6b">nicVector</a> ()</td></tr>
+<tr class="memdesc:a9a205945f38b927b955eb3f3126b6d6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the 3 dimensional ordered NIC vector.  <a href="class_isis_1_1_bundle_control_point.html#a9a205945f38b927b955eb3f3126b6d6b">More...</a><br /></td></tr>
+<tr class="separator:a9a205945f38b927b955eb3f3126b6d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1883bd48b8280d0e4521339636ebc02c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html">SparseBlockRowMatrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a1883bd48b8280d0e4521339636ebc02c">cholmodQMatrix</a> ()</td></tr>
+<tr class="memdesc:a1883bd48b8280d0e4521339636ebc02c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the CholMod matrix associated with this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#a1883bd48b8280d0e4521339636ebc02c">More...</a><br /></td></tr>
+<tr class="separator:a1883bd48b8280d0e4521339636ebc02c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adde2a3c46025267c7fc30a727b44984f"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#adde2a3c46025267c7fc30a727b44984f">formatBundleOutputSummaryString</a> (bool errorPropagation) const</td></tr>
+<tr class="memdesc:adde2a3c46025267c7fc30a727b44984f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats an output summary string for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#adde2a3c46025267c7fc30a727b44984f">More...</a><br /></td></tr>
+<tr class="separator:adde2a3c46025267c7fc30a727b44984f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a218e222b089f22d329050f1165e1bb9c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a218e222b089f22d329050f1165e1bb9c">formatBundleOutputDetailString</a> (bool errorPropagation, bool solveRadius=false) const</td></tr>
+<tr class="memdesc:a218e222b089f22d329050f1165e1bb9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats a detailed output string table for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#a218e222b089f22d329050f1165e1bb9c">More...</a><br /></td></tr>
+<tr class="separator:a218e222b089f22d329050f1165e1bb9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a517e713c5e3f4b09f2204da730ba33ae"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">formatBundleLatitudinalOutputDetailString</a> (bool errorPropagation, bool solveRadius=false) const</td></tr>
+<tr class="memdesc:a517e713c5e3f4b09f2204da730ba33ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats a detailed output string table for this Latitudinal <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">More...</a><br /></td></tr>
+<tr class="separator:a517e713c5e3f4b09f2204da730ba33ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3982610a839f0757222d7495398f7f5e"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">formatBundleRectangularOutputDetailString</a> (bool errorPropagation) const</td></tr>
+<tr class="memdesc:a3982610a839f0757222d7495398f7f5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats a detailed output string table for this Rectangular <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>.  <a href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">More...</a><br /></td></tr>
+<tr class="separator:a3982610a839f0757222d7495398f7f5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a054fa81ac7924b3a902114afe67447b2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a054fa81ac7924b3a902114afe67447b2">formatValue</a> (double value, int fieldWidth, int precision) const</td></tr>
+<tr class="memdesc:a054fa81ac7924b3a902114afe67447b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats the given double precision value using the specified field width and precision.  <a href="class_isis_1_1_bundle_control_point.html#a054fa81ac7924b3a902114afe67447b2">More...</a><br /></td></tr>
+<tr class="separator:a054fa81ac7924b3a902114afe67447b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dbf7b4daf22b106a498bba76a689f61"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a5dbf7b4daf22b106a498bba76a689f61">formatAprioriSigmaString</a> (<a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7f">SurfacePoint::CoordIndex</a> index, int fieldWidth, int precision, bool solveRadius=false) const</td></tr>
+<tr class="memdesc:a5dbf7b4daf22b106a498bba76a689f61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats the apriori sigma value indicated by the given type code.  <a href="class_isis_1_1_bundle_control_point.html#a5dbf7b4daf22b106a498bba76a689f61">More...</a><br /></td></tr>
+<tr class="separator:a5dbf7b4daf22b106a498bba76a689f61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac296bdceb660eee65c43ff352be7d099"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#ac296bdceb660eee65c43ff352be7d099">formatCoordAprioriSigmaString</a> (<a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7f">SurfacePoint::CoordIndex</a> index, int fieldWidth, int precision, bool solveRadius=false) const</td></tr>
+<tr class="memdesc:ac296bdceb660eee65c43ff352be7d099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats the apriori coordinate 1 (latitude or X) sigma value.  <a href="class_isis_1_1_bundle_control_point.html#ac296bdceb660eee65c43ff352be7d099">More...</a><br /></td></tr>
+<tr class="separator:ac296bdceb660eee65c43ff352be7d099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd68d37182c127c0106fe3411b0502c2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#abd68d37182c127c0106fe3411b0502c2">formatAdjustedSigmaString</a> (<a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7f">SurfacePoint::CoordIndex</a>, int fieldWidth, int precision, bool errorPropagation) const</td></tr>
+<tr class="memdesc:abd68d37182c127c0106fe3411b0502c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats the adjusted sigma value indicated by the given type code.  <a href="class_isis_1_1_bundle_control_point.html#abd68d37182c127c0106fe3411b0502c2">More...</a><br /></td></tr>
+<tr class="separator:abd68d37182c127c0106fe3411b0502c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81e3b18255a7ac4fdaf3f43369b27918"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#a81e3b18255a7ac4fdaf3f43369b27918">formatCoordAdjustedSigmaString</a> (<a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7f">SurfacePoint::CoordIndex</a>, int fieldWidth, int precision, bool errorPropagation) const</td></tr>
+<tr class="memdesc:a81e3b18255a7ac4fdaf3f43369b27918"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats the adjusted coordinate sigma value.  <a href="class_isis_1_1_bundle_control_point.html#a81e3b18255a7ac4fdaf3f43369b27918">More...</a><br /></td></tr>
+<tr class="separator:a81e3b18255a7ac4fdaf3f43369b27918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:abbcafb10745b11596be1ba3cbaf3a2f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">m_controlPoint</a></td></tr>
+<tr class="memdesc:abbcafb10745b11596be1ba3cbaf3a2f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">&lt; pointer to the control point object this represents  <a href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">More...</a><br /></td></tr>
+<tr class="separator:abbcafb10745b11596be1ba3cbaf3a2f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class holds information about a lidar control point that <a class="el" href="class_isis_1_1_bundle_adjust.html" title="An image bundle adjustment object.">BundleAdjust</a> requires. </p>
+<p>This class was created to extract functionality from <a class="el" href="class_isis_1_1_bundle_adjust.html" title="An image bundle adjustment object.">BundleAdjust</a> and wrap a <a class="el" href="class_isis_1_1_lidar_control_point.html" title="A lidar control ControlPoint.">LidarControlPoint</a> with the extra necessary information to correctly perform a bundle adjustment.</p>
+<p>Note that only non-ignored lidar control points should be used to construct a <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a>. Similarly, a <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a> should only contain non-ignored control measures.</p>
+<dl class="section author"><dt>Author</dt><dd>2018-02-08 Ken Edmundson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a22010abf6e336467578497077de00ea1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22010abf6e336467578497077de00ea1">&#9670;&nbsp;</a></span>BundleLidarControlPoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleLidarControlPoint::BundleLidarControlPoint </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#a2a8ce6eaf289ace3131997657b683c9c">BundleSettingsQsp</a>&#160;</td>
+          <td class="paramname"><em>bundleSettings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#a79ca2a3d962f59efba8e0d1192a3ad7e">LidarControlPointQsp</a>&#160;</td>
+          <td class="paramname"><em>lidarControlPoint</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a> object from a <a class="el" href="class_isis_1_1_lidar_control_point.html" title="A lidar control ControlPoint.">LidarControlPoint</a>. </p>
+<p>Only the non-ignored measures are added to the <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bundleSettings</td><td><a class="el" href="class_isis_1_1_bundle_settings.html" title="Container class for BundleAdjustment settings.">BundleSettings</a>.</td></tr>
+    <tr><td class="paramname">controlPoint</td><td>Pointer to a <a class="el" href="class_isis_1_1_control_point.html" title="A single control point.">ControlPoint</a> that will be used to construct this <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>TODO: is the typecast expensive? </p>
+
+</div>
+</div>
+<a id="af79e29c735c5c8c67d60844e6461967c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af79e29c735c5c8c67d60844e6461967c">&#9670;&nbsp;</a></span>~BundleLidarControlPoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleLidarControlPoint::~BundleLidarControlPoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>TODO: implement? Copy constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a> to be copied. Destructor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac9f58a5f0b997d2dc7122934ffa16a38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9f58a5f0b997d2dc7122934ffa16a38">&#9670;&nbsp;</a></span>addMeasure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#ac1df1e0ca6a1aa8d39787123150589e8">BundleMeasureQsp</a> Isis::BundleControlPoint::addMeasure </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *&#160;</td>
+          <td class="paramname"><em>controlMeasure</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a <a class="el" href="class_isis_1_1_bundle_measure.html" title="A container class for a ControlMeasure.">BundleMeasure</a> from the given <a class="el" href="class_isis_1_1_control_measure.html" title="a control measurement">ControlMeasure</a> and appends it to this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s measure list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">controlMeasure</td><td>The <a class="el" href="class_isis_1_1_control_measure.html" title="a control measurement">ControlMeasure</a> to be converted.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>BundleMeasure*</b> A pointer to the new <a class="el" href="class_isis_1_1_bundle_measure.html" title="A container class for a ControlMeasure.">BundleMeasure</a>. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a4033f1b83f3e5f04e051fef670e6a642">Isis::BundleControlPoint::BundleControlPoint()</a>.</p>
+
+</div>
+</div>
+<a id="ad4e833c7afdeebeec55e90d88ae61dba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4e833c7afdeebeec55e90d88ae61dba">&#9670;&nbsp;</a></span>adjustedSigmas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::numeric::ublas::bounded_vector&lt; double, 3 &gt; &amp; Isis::BundleControlPoint::adjustedSigmas </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the 3 dimensional ordered vector of adjusted sigmas (adjusted coordinate1, adjusted coordinate2, adjusted coordinate3). </p>
+<dl class="section return"><dt>Returns</dt><dd><b>boost::numeric::ublas::bounded_vector&lt;double,3&gt;&amp;</b> The vector of adjusted sigmas. </dd></dl>
+
+</div>
+</div>
+<a id="a7b2635d612b3405c4cfe3c7054eaeb78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b2635d612b3405c4cfe3c7054eaeb78">&#9670;&nbsp;</a></span>adjustedSurfacePoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_surface_point.html">SurfacePoint</a> Isis::BundleControlPoint::adjustedSurfacePoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the adjusted <a class="el" href="class_isis_1_1_surface_point.html" title="This class defines a body-fixed surface point.">SurfacePoint</a> associated with this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_surface_point.html" title="This class defines a body-fixed surface point.">SurfacePoint</a></b> The adjusted surface point. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_point.html#aaca58e0f80e9142b054781d8d1e84bd7">Isis::ControlPoint::GetAdjustedSurfacePoint()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a4faf068f9daec8d701fade4d35cfb380">Isis::CsmBundleObservation::computeImagePartials()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#ab77fb3497def055e436c301031e02568">Isis::IsisBundleObservation::computePoint3DPartials()</a>, <a class="el" href="class_isis_1_1_csm_bundle_observation.html#ab150eda0eccd7abbf9dbc45b54213273">Isis::CsmBundleObservation::computePoint3DPartials()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a8b91240a38568b0ab9aad6af07012685">Isis::IsisBundleObservation::computeRHSPartials()</a>, <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a1e9f7fb10bb959480177cdc87e9fc14c">Isis::CsmBundleObservation::computeRHSPartials()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#ae8111581fc9b02ee1b549798bf802b43">Isis::IsisBundleObservation::computeTargetPartials()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#abd68d37182c127c0106fe3411b0502c2">Isis::BundleControlPoint::formatAdjustedSigmaString()</a>.</p>
+
+</div>
+</div>
+<a id="a09fe848f5547800fac981ae6bf96418f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09fe848f5547800fac981ae6bf96418f">&#9670;&nbsp;</a></span>applyLidarRangeConstraints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BundleLidarControlPoint::applyLidarRangeConstraints </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_sparse_block_matrix.html">SparseBlockMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>normalsMatrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#aeebbc4478f51cd0dd412967e688577cf">LinearAlgebra::MatrixUpperTriangular</a> &amp;&#160;</td>
+          <td class="paramname"><em>N22</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_sparse_block_column_matrix.html">SparseBlockColumnMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>N12</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#a1fb29d9abe918737c7559914271956fd">LinearAlgebra::VectorCompressed</a> &amp;&#160;</td>
+          <td class="paramname"><em>n1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>n2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies range constraint between image and lidar point acquired simultaneously. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">normalsMatrix</td><td>Bundle Adjustment normal equations matrix. </td></tr>
+    <tr><td class="paramname">N22</td><td>Normal equation matrix for the point. </td></tr>
+    <tr><td class="paramname">N12</td><td>Normal equations block between image and point. </td></tr>
+    <tr><td class="paramname">n1</td><td>Right hand side vector for the images and target body. </td></tr>
+    <tr><td class="paramname">n2</td><td>Right hand side vector for the point.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int Number of constraints successfully applied. </dd></dl>
+
+</div>
+</div>
+<a id="ab9fce05e77bd4307de85b9234c0202f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9fce05e77bd4307de85b9234c0202f5">&#9670;&nbsp;</a></span>applyParameterCorrections()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleLidarControlPoint::applyParameterCorrections </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a>&#160;</td>
+          <td class="paramname"><em>imageSolution</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_sparse_block_matrix.html">SparseBlockMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>sparseNormals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#a8ad1a208b8261d34b5ee7ced0bd2d4e9">BundleTargetBodyQsp</a>&#160;</td>
+          <td class="paramname"><em>target</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Apply the parameter corrections to the lidar range. </p>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_bundle_control_point.html#a1e629d25ec3344e4464a1403b4b9ab6c">Isis::BundleControlPoint</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#a1e629d25ec3344e4464a1403b4b9ab6c">Isis::BundleControlPoint::applyParameterCorrections()</a>.</p>
+
+</div>
+</div>
+<a id="ac2c1e24cab6d422a5b6a532082e5107b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2c1e24cab6d422a5b6a532082e5107b">&#9670;&nbsp;</a></span>aprioriSigmas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::numeric::ublas::bounded_vector&lt; double, 3 &gt; &amp; Isis::BundleControlPoint::aprioriSigmas </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the 3 dimensional ordered vector of apriori sigmas (apriori coordinate1, apriori coordinate2, apriori coordinate3). </p>
+<dl class="section return"><dt>Returns</dt><dd><b>boost::numeric::ublas::bounded_vector&lt;double,3&gt;&amp;</b> The vector of apriori sigmas. </dd></dl>
+
+</div>
+</div>
+<a id="a1883bd48b8280d0e4521339636ebc02c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1883bd48b8280d0e4521339636ebc02c">&#9670;&nbsp;</a></span>cholmodQMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html">SparseBlockRowMatrix</a> &amp; Isis::BundleControlPoint::cholmodQMatrix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the CholMod matrix associated with this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_sparse_block_row_matrix.html" title="SparseBlockRowMatrix.">SparseBlockRowMatrix</a>&amp;</b> The CholMod row matrix. </dd></dl>
+
+</div>
+</div>
+<a id="a9f8dbca7072a204c57825e7f868a55b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f8dbca7072a204c57825e7f868a55b7">&#9670;&nbsp;</a></span>computeResiduals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleLidarControlPoint::computeResiduals </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the residuals for this <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a>. </p>
+
+</div>
+</div>
+<a id="a83e73b9607a3d8a2d7ad73e175e13255"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83e73b9607a3d8a2d7ad73e175e13255">&#9670;&nbsp;</a></span>coordTypeBundle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a> Isis::BundleControlPoint::coordTypeBundle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s control point coordinate type for the bundle adjustment. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>ControlPoint::CoordinateType</b> The <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s coordinate type. See <a class="el" href="class_isis_1_1_surface_point.html" title="This class defines a body-fixed surface point.">SurfacePoint</a> for the options.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>ControlPoint::getCoordTypeBundle() </dd></dl>
+
+</div>
+</div>
+<a id="a29dcfa3440480d45807a7db22d6ec67f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29dcfa3440480d45807a7db22d6ec67f">&#9670;&nbsp;</a></span>coordTypeReports()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a> Isis::BundleControlPoint::coordTypeReports </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s coordinate type for reports. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>ControlPoint::CoordinateType</b> The <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s coordinate type. See <a class="el" href="class_isis_1_1_surface_point.html" title="This class defines a body-fixed surface point.">SurfacePoint</a> for the options.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>ControlPoint::getCoordType() </dd></dl>
+
+</div>
+</div>
+<a id="ad27243bdd1527972e18d18b1f3ecf613"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad27243bdd1527972e18d18b1f3ecf613">&#9670;&nbsp;</a></span>copy() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleControlPoint::copy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bundle_control_point.html">BundleControlPoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Copies given <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a> to this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a> to be copied. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#abda44bc68ed79fbaac153cb5edfd7af1">Isis::BundleControlPoint::BundleControlPoint()</a>, and <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#adeaa48dfe605385dcad1e779f48921b8">copy()</a>.</p>
+
+</div>
+</div>
+<a id="adeaa48dfe605385dcad1e779f48921b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adeaa48dfe605385dcad1e779f48921b8">&#9670;&nbsp;</a></span>copy() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleLidarControlPoint::copy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html">BundleLidarControlPoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies given <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a> to this <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires.">BundleLidarControlPoint</a> to be copied. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#ad27243bdd1527972e18d18b1f3ecf613">Isis::BundleControlPoint::copy()</a>.</p>
+
+</div>
+</div>
+<a id="ac2b8f93851286e781a999be3c81198e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2b8f93851286e781a999be3c81198e3">&#9670;&nbsp;</a></span>corrections()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::numeric::ublas::bounded_vector&lt; double, 3 &gt; &amp; Isis::BundleControlPoint::corrections </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the 3 dimensional ordered vector of correction values associated with coord1, coord2, and coord 3 (latitude, longitude, and radius or X, Y, and Z. </p>
+<p>A bounded vector is recommended because the size will always be 3.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>boost::numeric::ublas::bounded_vector&lt;double,3&gt;&amp;</b> The vector of correction values. </dd></dl>
+
+</div>
+</div>
+<a id="abd68d37182c127c0106fe3411b0502c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd68d37182c127c0106fe3411b0502c2">&#9670;&nbsp;</a></span>formatAdjustedSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleControlPoint::formatAdjustedSigmaString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7f">SurfacePoint::CoordIndex</a>&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>errorPropagation</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Formats the adjusted sigma value indicated by the given type code. </p>
+<p>If error propagation is false or the selected sigma type was set to Null, then only "N/A" will be returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>CoordIndex <a class="el" href="class_isis_1_1_coordinate.html" title="Define a generic Y/X container.">Coordinate</a> index One: <a class="el" href="class_isis_1_1_latitude.html" title="This class is designed to encapsulate the concept of a Latitude.">Latitude</a> or X, Two: <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> or Y, or Three: Radius or Z </td></tr>
+    <tr><td class="paramname">fieldWidth</td><td>The return string's field width. </td></tr>
+    <tr><td class="paramname">precision</td><td>The precision of the double to be saved off. </td></tr>
+    <tr><td class="paramname">errorPropagation</td><td>Indicates whether error propagation was selected.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The formatted value, as a string. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#a7b2635d612b3405c4cfe3c7054eaeb78">Isis::BundleControlPoint::adjustedSurfacePoint()</a>, <a class="el" href="class_isis_1_1_surface_point.html#ad9dfafeefaca2eecff8bc47d82e6125b">Isis::SurfacePoint::GetSigmaDistance()</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_distance.html#ae4eab0580e1b5f23b444d18b071624c2">Isis::Distance::meters()</a>, and <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a81e3b18255a7ac4fdaf3f43369b27918">Isis::BundleControlPoint::formatCoordAdjustedSigmaString()</a>.</p>
+
+</div>
+</div>
+<a id="a5dbf7b4daf22b106a498bba76a689f61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dbf7b4daf22b106a498bba76a689f61">&#9670;&nbsp;</a></span>formatAprioriSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleControlPoint::formatAprioriSigmaString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7f">SurfacePoint::CoordIndex</a>&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>solveRadius</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Formats the apriori sigma value indicated by the given type code. </p>
+<p>If no sigma was set, then the string "N/A" will be returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>CoordIndex <a class="el" href="class_isis_1_1_coordinate.html" title="Define a generic Y/X container.">Coordinate</a> index One: <a class="el" href="class_isis_1_1_latitude.html" title="This class is designed to encapsulate the concept of a Latitude.">Latitude</a> or X, Two: <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> or Y, or Three: Radius or Z </td></tr>
+    <tr><td class="paramname">fieldWidth</td><td>The return string's field width. </td></tr>
+    <tr><td class="paramname">precision</td><td>The precision of the double to be saved off. </td></tr>
+    <tr><td class="paramname">solveRadius</td><td>A flag indicating to solve for each points individual radius. When solveRadius is false, the point radius is heavily weighted</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The formatted value, as a string. </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_control_point.html#ac82e2436229ff4c7b58cb20ce266e57c">Isis::ControlPoint::PointTypeToString()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#a9eac9c9ff61fd0a469b5f0be95ea0fbb">Isis::BundleControlPoint::type()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#ac296bdceb660eee65c43ff352be7d099">Isis::BundleControlPoint::formatCoordAprioriSigmaString()</a>.</p>
+
+</div>
+</div>
+<a id="a517e713c5e3f4b09f2204da730ba33ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a517e713c5e3f4b09f2204da730ba33ae">&#9670;&nbsp;</a></span>formatBundleLatitudinalOutputDetailString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleControlPoint::formatBundleLatitudinalOutputDetailString </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>errorPropagation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>solveRadius</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Formats a detailed output string table for this Latitudinal <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">errorPropagation</td><td>Indicates whether error propagation was selected. </td></tr>
+    <tr><td class="paramname">RTM</td><td>Conversion factor from radians to meters. Used to convert the latitude and longitude corrections to meters. </td></tr>
+    <tr><td class="paramname">solveRadius</td><td>A flag indicating to solve for each points individual radius. When solveRadius is false, the point radius is heavily weighted</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The formatted output detailed string. </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="namespace_isis.html#a75c1877cbfaa3d1055461a967972bed7">Isis::DEG2RAD</a>, <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">Isis::Angle::degrees()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a81e3b18255a7ac4fdaf3f43369b27918">Isis::BundleControlPoint::formatCoordAdjustedSigmaString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#ac296bdceb660eee65c43ff352be7d099">Isis::BundleControlPoint::formatCoordAprioriSigmaString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a054fa81ac7924b3a902114afe67447b2">Isis::BundleControlPoint::formatValue()</a>, <a class="el" href="class_isis_1_1_control_point.html#aaca58e0f80e9142b054781d8d1e84bd7">Isis::ControlPoint::GetAdjustedSurfacePoint()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a3511b4a037cf6ade1d36c61fd064ffc3">Isis::SurfacePoint::GetLatitude()</a>, <a class="el" href="class_isis_1_1_surface_point.html#af9e0909d191837a7ddf3687fe0916da5">Isis::SurfacePoint::GetLocalRadius()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a82c81ac1b8df9113d2d81f339e3d2fb9">Isis::SurfacePoint::GetLongitude()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a0388ff25949f65d8807d1d7f9189096c">Isis::SurfacePoint::GetX()</a>, <a class="el" href="class_isis_1_1_surface_point.html#ac89d827155f6d247a06b66f74cd52ceb">Isis::SurfacePoint::GetY()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a058c3858b46444b5ab62ded578fc13f6">Isis::SurfacePoint::GetZ()</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24a450ed854f58f46db0b546707ee4f741e">Isis::Displacement::Kilometers</a>, <a class="el" href="class_isis_1_1_displacement.html#a2c89062171bb611a9c0809ea7945582a">Isis::Displacement::kilometers()</a>, <a class="el" href="class_isis_1_1_distance.html#a758c909952d591390686a315120ed4b7">Isis::Distance::kilometers()</a>, <a class="el" href="class_isis_1_1_surface_point.html#aa1c69185207e4dfb9213b066a01b82d1">Isis::SurfacePoint::LatitudeToMeters()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223a256c8dadbfa862853fc27317f7a17978">Isis::SurfacePoint::Latitudinal</a>, <a class="el" href="class_isis_1_1_surface_point.html#a71f5830d052f042779f9411239a243fb">Isis::SurfacePoint::LongitudeToMeters()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#aea1c954427bc26191da8837e51ae6688">Isis::BundleControlPoint::numberOfMeasures()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a4b852070ba85979f671a294a19564ef6">Isis::BundleControlPoint::numberOfRejectedMeasures()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7fa0253996d69116d8ac16be36159f43d8b">Isis::SurfacePoint::One</a>, <a class="el" href="class_isis_1_1_control_point.html#ac82e2436229ff4c7b58cb20ce266e57c">Isis::ControlPoint::PointTypeToString()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="namespace_isis.html#ab34c61c8c6c42fbb79b3ff40e954da21">Isis::RAD2DEG</a>, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223aff75c0a79b627c5f3926eb325e582139">Isis::SurfacePoint::Rectangular</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7fa2d31e638ee2e4b114cbf22b85e850be0">Isis::SurfacePoint::Three</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7faa6154049b86a82cf235d92b85f5e836f">Isis::SurfacePoint::Two</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#a9eac9c9ff61fd0a469b5f0be95ea0fbb">Isis::BundleControlPoint::type()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a218e222b089f22d329050f1165e1bb9c">Isis::BundleControlPoint::formatBundleOutputDetailString()</a>.</p>
+
+</div>
+</div>
+<a id="a218e222b089f22d329050f1165e1bb9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a218e222b089f22d329050f1165e1bb9c">&#9670;&nbsp;</a></span>formatBundleOutputDetailString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleControlPoint::formatBundleOutputDetailString </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>errorPropagation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>solveRadius</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Formats a detailed output string table for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">errorPropagation</td><td>Indicates whether error propagation was selected. </td></tr>
+    <tr><td class="paramname">RTM</td><td>Conversion factor from radians to meters. Used to convert the latitude and longitude corrections to meters. </td></tr>
+    <tr><td class="paramname">solveRadius</td><td>A flag indicating to solve for each points individual radius. When solveRadius is false, the point radius is heavily weighted</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The formatted output detailed string. </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">Isis::BundleControlPoint::formatBundleLatitudinalOutputDetailString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">Isis::BundleControlPoint::formatBundleRectangularOutputDetailString()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223a256c8dadbfa862853fc27317f7a17978">Isis::SurfacePoint::Latitudinal</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223aff75c0a79b627c5f3926eb325e582139">Isis::SurfacePoint::Rectangular</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="adde2a3c46025267c7fc30a727b44984f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adde2a3c46025267c7fc30a727b44984f">&#9670;&nbsp;</a></span>formatBundleOutputSummaryString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleControlPoint::formatBundleOutputSummaryString </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>errorPropagation</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Formats an output summary string for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<p>This string includes <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a>, point type, number of rays from non-rejected measures, residual RMS, adjusted coordinate1, adjusted coordinate 2, and adjusted coordinate 3 followed by the adjusted sigmas. In the case of Latitudinal coordinates, the coordinates will be adjusted latitude and longitude (in degrees), the adjusted radius (in km), and the adjusted sigmas for latitude, longitude and radius all in meters. In the case of Rectangular coordinates, the coordinates will be X, Y, Z (in km), and the adjusted sigmas for X, Y, and Z all in meters.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">errorPropagation</td><td>Indicates whether error propagation was selected.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The formatted output summary string. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_surface_point.html#a8ed4bcb72008cdfcdad796e22aea8603a723b2524a227cacf8b8fc9c41f034e94">Isis::SurfacePoint::Degrees</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a81e3b18255a7ac4fdaf3f43369b27918">Isis::BundleControlPoint::formatCoordAdjustedSigmaString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a054fa81ac7924b3a902114afe67447b2">Isis::BundleControlPoint::formatValue()</a>, <a class="el" href="class_isis_1_1_control_point.html#aaca58e0f80e9142b054781d8d1e84bd7">Isis::ControlPoint::GetAdjustedSurfacePoint()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9cc73c18e4f33914706802a574b0ecca">Isis::SurfacePoint::GetCoord()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a8ed4bcb72008cdfcdad796e22aea8603a4ace44315d7ad134992de1165b6af20e">Isis::SurfacePoint::Kilometers</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#aea1c954427bc26191da8837e51ae6688">Isis::BundleControlPoint::numberOfMeasures()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a4b852070ba85979f671a294a19564ef6">Isis::BundleControlPoint::numberOfRejectedMeasures()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7fa0253996d69116d8ac16be36159f43d8b">Isis::SurfacePoint::One</a>, <a class="el" href="class_isis_1_1_control_point.html#ac82e2436229ff4c7b58cb20ce266e57c">Isis::ControlPoint::PointTypeToString()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223aff75c0a79b627c5f3926eb325e582139">Isis::SurfacePoint::Rectangular</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a1322fbff8b3eb9264b117c8bbdf16d28">Isis::BundleControlPoint::residualRms()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7fa2d31e638ee2e4b114cbf22b85e850be0">Isis::SurfacePoint::Three</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7faa6154049b86a82cf235d92b85f5e836f">Isis::SurfacePoint::Two</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#a9eac9c9ff61fd0a469b5f0be95ea0fbb">Isis::BundleControlPoint::type()</a>.</p>
+
+</div>
+</div>
+<a id="a3982610a839f0757222d7495398f7f5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3982610a839f0757222d7495398f7f5e">&#9670;&nbsp;</a></span>formatBundleRectangularOutputDetailString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleControlPoint::formatBundleRectangularOutputDetailString </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>errorPropagation</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Formats a detailed output string table for this Rectangular <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">errorPropagation</td><td>Indicates whether error propagation was selected.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The formatted output detailed string. </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">Isis::Angle::degrees()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a81e3b18255a7ac4fdaf3f43369b27918">Isis::BundleControlPoint::formatCoordAdjustedSigmaString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#ac296bdceb660eee65c43ff352be7d099">Isis::BundleControlPoint::formatCoordAprioriSigmaString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a054fa81ac7924b3a902114afe67447b2">Isis::BundleControlPoint::formatValue()</a>, <a class="el" href="class_isis_1_1_control_point.html#aaca58e0f80e9142b054781d8d1e84bd7">Isis::ControlPoint::GetAdjustedSurfacePoint()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a3511b4a037cf6ade1d36c61fd064ffc3">Isis::SurfacePoint::GetLatitude()</a>, <a class="el" href="class_isis_1_1_surface_point.html#af9e0909d191837a7ddf3687fe0916da5">Isis::SurfacePoint::GetLocalRadius()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a82c81ac1b8df9113d2d81f339e3d2fb9">Isis::SurfacePoint::GetLongitude()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a0388ff25949f65d8807d1d7f9189096c">Isis::SurfacePoint::GetX()</a>, <a class="el" href="class_isis_1_1_surface_point.html#ac89d827155f6d247a06b66f74cd52ceb">Isis::SurfacePoint::GetY()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a058c3858b46444b5ab62ded578fc13f6">Isis::SurfacePoint::GetZ()</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_displacement.html#a2c89062171bb611a9c0809ea7945582a">Isis::Displacement::kilometers()</a>, <a class="el" href="class_isis_1_1_distance.html#accb6199bc155f11ff0f36236c6c1a902a92d8820f17a47638b5d9f7e4e62e7069">Isis::Distance::Kilometers</a>, <a class="el" href="class_isis_1_1_distance.html#a758c909952d591390686a315120ed4b7">Isis::Distance::kilometers()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223a256c8dadbfa862853fc27317f7a17978">Isis::SurfacePoint::Latitudinal</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#aea1c954427bc26191da8837e51ae6688">Isis::BundleControlPoint::numberOfMeasures()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a4b852070ba85979f671a294a19564ef6">Isis::BundleControlPoint::numberOfRejectedMeasures()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7fa0253996d69116d8ac16be36159f43d8b">Isis::SurfacePoint::One</a>, <a class="el" href="class_isis_1_1_control_point.html#ac82e2436229ff4c7b58cb20ce266e57c">Isis::ControlPoint::PointTypeToString()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="namespace_isis.html#ab34c61c8c6c42fbb79b3ff40e954da21">Isis::RAD2DEG</a>, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223aff75c0a79b627c5f3926eb325e582139">Isis::SurfacePoint::Rectangular</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7fa2d31e638ee2e4b114cbf22b85e850be0">Isis::SurfacePoint::Three</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7faa6154049b86a82cf235d92b85f5e836f">Isis::SurfacePoint::Two</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#a9eac9c9ff61fd0a469b5f0be95ea0fbb">Isis::BundleControlPoint::type()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a218e222b089f22d329050f1165e1bb9c">Isis::BundleControlPoint::formatBundleOutputDetailString()</a>.</p>
+
+</div>
+</div>
+<a id="a81e3b18255a7ac4fdaf3f43369b27918"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81e3b18255a7ac4fdaf3f43369b27918">&#9670;&nbsp;</a></span>formatCoordAdjustedSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleControlPoint::formatCoordAdjustedSigmaString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7f">SurfacePoint::CoordIndex</a>&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>errorPropagation</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Formats the adjusted coordinate sigma value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The coordinate index of the sigma to return. </td></tr>
+    <tr><td class="paramname">fieldWidth</td><td>The return string's field width. </td></tr>
+    <tr><td class="paramname">precision</td><td>The precision of the double to be saved off. </td></tr>
+    <tr><td class="paramname">errorPropagation</td><td>Indicates whether error propagation was selected.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The formatted adjusted coordinate sigma value, as a string.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_control_point.html#abd68d37182c127c0106fe3411b0502c2" title="Formats the adjusted sigma value indicated by the given type code.">formatAdjustedSigmaString()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#abd68d37182c127c0106fe3411b0502c2">Isis::BundleControlPoint::formatAdjustedSigmaString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">Isis::BundleControlPoint::formatBundleLatitudinalOutputDetailString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#adde2a3c46025267c7fc30a727b44984f">Isis::BundleControlPoint::formatBundleOutputSummaryString()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">Isis::BundleControlPoint::formatBundleRectangularOutputDetailString()</a>.</p>
+
+</div>
+</div>
+<a id="ac296bdceb660eee65c43ff352be7d099"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac296bdceb660eee65c43ff352be7d099">&#9670;&nbsp;</a></span>formatCoordAprioriSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleControlPoint::formatCoordAprioriSigmaString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7f">SurfacePoint::CoordIndex</a>&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>solveRadius</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Formats the apriori coordinate 1 (latitude or X) sigma value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fieldWidth</td><td>The return string's field width. </td></tr>
+    <tr><td class="paramname">precision</td><td>The precision of the double to be saved off.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The formatted apriori coordinate 1 sigma value, as a string.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_control_point.html#a5dbf7b4daf22b106a498bba76a689f61" title="Formats the apriori sigma value indicated by the given type code.">formatAprioriSigmaString()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#a5dbf7b4daf22b106a498bba76a689f61">Isis::BundleControlPoint::formatAprioriSigmaString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">Isis::BundleControlPoint::formatBundleLatitudinalOutputDetailString()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">Isis::BundleControlPoint::formatBundleRectangularOutputDetailString()</a>.</p>
+
+</div>
+</div>
+<a id="a054fa81ac7924b3a902114afe67447b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a054fa81ac7924b3a902114afe67447b2">&#9670;&nbsp;</a></span>formatValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleControlPoint::formatValue </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Formats the given double precision value using the specified field width and precision. </p>
+<p>If the given value is special, then "Null" is returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The double value to be formattted. </td></tr>
+    <tr><td class="paramname">fieldWidth</td><td>The return string's field width. </td></tr>
+    <tr><td class="paramname">precision</td><td>The precision of the given double value to be saved off.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The formatted value, as a string. </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">Isis::BundleControlPoint::formatBundleLatitudinalOutputDetailString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#adde2a3c46025267c7fc30a727b44984f">Isis::BundleControlPoint::formatBundleOutputSummaryString()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">Isis::BundleControlPoint::formatBundleRectangularOutputDetailString()</a>.</p>
+
+</div>
+</div>
+<a id="af8b901357e80f84f56bb88df3c3e2798"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8b901357e80f84f56bb88df3c3e2798">&#9670;&nbsp;</a></span>id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleControlPoint::id </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the Point <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> associated with this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> for this point. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_point.html#ace3f3b0b01139b97ce3ad8ad681d9f3a">Isis::ControlPoint::GetId()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a8b91240a38568b0ab9aad6af07012685">Isis::IsisBundleObservation::computeRHSPartials()</a>, and <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a1e9f7fb10bb959480177cdc87e9fc14c">Isis::CsmBundleObservation::computeRHSPartials()</a>.</p>
+
+</div>
+</div>
+<a id="ae809a6e1b9bf71a6f4d86fcec803c676"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae809a6e1b9bf71a6f4d86fcec803c676">&#9670;&nbsp;</a></span>initializeRangeConstraints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleLidarControlPoint::initializeRangeConstraints </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize range constraints. </p>
+
+</div>
+</div>
+<a id="ab37b106c3cc07fdb9aee57608e26937b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab37b106c3cc07fdb9aee57608e26937b">&#9670;&nbsp;</a></span>isRejected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleControlPoint::isRejected </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Method used to determine whether this control point is rejected. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> Indicates whether this control point is rejected. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_point.html#a2dd41aa35db96f7556472fa3c3756443">Isis::ControlPoint::IsRejected()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a1e629d25ec3344e4464a1403b4b9ab6c">Isis::BundleControlPoint::applyParameterCorrections()</a>.</p>
+
+</div>
+</div>
+<a id="a9a205945f38b927b955eb3f3126b6d6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a205945f38b927b955eb3f3126b6d6b">&#9670;&nbsp;</a></span>nicVector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::numeric::ublas::bounded_vector&lt; double, 3 &gt; &amp; Isis::BundleControlPoint::nicVector </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the 3 dimensional ordered NIC vector. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>boost::numeric::ublas::bounded_vector&lt;double,3&gt;&amp;</b> The NIC vector. </dd></dl>
+
+</div>
+</div>
+<a id="aea1c954427bc26191da8837e51ae6688"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea1c954427bc26191da8837e51ae6688">&#9670;&nbsp;</a></span>numberOfMeasures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BundleControlPoint::numberOfMeasures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses number of measures associated with this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The number of measures for this point. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">Isis::BundleControlPoint::formatBundleLatitudinalOutputDetailString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#adde2a3c46025267c7fc30a727b44984f">Isis::BundleControlPoint::formatBundleOutputSummaryString()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">Isis::BundleControlPoint::formatBundleRectangularOutputDetailString()</a>.</p>
+
+</div>
+</div>
+<a id="a4b852070ba85979f671a294a19564ef6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b852070ba85979f671a294a19564ef6">&#9670;&nbsp;</a></span>numberOfRejectedMeasures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BundleControlPoint::numberOfRejectedMeasures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the number of rejected measures for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> Returns the number of rejected measures.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_point.html#adc193e9745105344ddbf596fd2b04483" title="Get the number of rejected measures on the control point.">ControlPoint::GetNumberOfRejectedMeasures()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_point.html#adc193e9745105344ddbf596fd2b04483">Isis::ControlPoint::GetNumberOfRejectedMeasures()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">Isis::BundleControlPoint::formatBundleLatitudinalOutputDetailString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#adde2a3c46025267c7fc30a727b44984f">Isis::BundleControlPoint::formatBundleOutputSummaryString()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">Isis::BundleControlPoint::formatBundleRectangularOutputDetailString()</a>.</p>
+
+</div>
+</div>
+<a id="a77775bceb2899245b5753e0a004f336b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77775bceb2899245b5753e0a004f336b">&#9670;&nbsp;</a></span>numberRangeConstraints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BundleLidarControlPoint::numberRangeConstraints </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns number of range constraints between this lidar point &amp; images acquired simultaneously. </p>
+<dl class="section return"><dt>Returns</dt><dd>int Number of range constraints </dd></dl>
+
+</div>
+</div>
+<a id="a3f8824f8da92694a994ccb3378b38e8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f8824f8da92694a994ccb3378b38e8d">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html">BundleLidarControlPoint</a>&amp; Isis::BundleLidarControlPoint::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html">BundleLidarControlPoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a47800404cd32a255bcdc991956277b4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47800404cd32a255bcdc991956277b4d">&#9670;&nbsp;</a></span>productAlphaAV()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleControlPoint::productAlphaAV </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_sparse_block_matrix.html">SparseBlockMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>sparseNormals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>v1</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Perform the matrix multiplication v2 = alpha ( Q x v1 ). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">alpha</td><td>A constant multiplier. </td></tr>
+    <tr><td class="paramname">sparseNormals</td><td>The sparse block normal equations matrix. </td></tr>
+    <tr><td class="paramname">v2</td><td>The output vector. </td></tr>
+    <tr><td class="paramname">Q</td><td>A sparse block matrix. </td></tr>
+    <tr><td class="paramname">v1</td><td>A vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a1e629d25ec3344e4464a1403b4b9ab6c">Isis::BundleControlPoint::applyParameterCorrections()</a>.</p>
+
+</div>
+</div>
+<a id="ac8cbdc00f257a37535553bd1463b7fa6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8cbdc00f257a37535553bd1463b7fa6">&#9670;&nbsp;</a></span>range()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BundleLidarControlPoint::range </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns range between this point and ??? </p>
+<dl class="section return"><dt>Returns</dt><dd>double range. </dd></dl>
+
+</div>
+</div>
+<a id="a5a243dba25aafbe9e9c039af0a943217"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a243dba25aafbe9e9c039af0a943217">&#9670;&nbsp;</a></span>rangeConstraint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#a2a919de837916b3b914166a640049152">BundleLidarRangeConstraintQsp</a> Isis::BundleLidarControlPoint::rangeConstraint </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns range constraint at index n. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">int</td><td>Index of range constraint to return.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>BundleLidarRangeConstraintQsp <a class="el" href="class_q_shared_pointer.html">QSharedPointer</a> to range constraint at index n. </dd></dl>
+
+</div>
+</div>
+<a id="aebd3fd76858866ab01c8d1cb87e6f1f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebd3fd76858866ab01c8d1cb87e6f1f8">&#9670;&nbsp;</a></span>rawControlPoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> * Isis::BundleControlPoint::rawControlPoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accessor for the raw <a class="el" href="class_isis_1_1_control_point.html" title="A single control point.">ControlPoint</a> object used for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>ControlPoint*</b> A pointer to the raw <a class="el" href="class_isis_1_1_control_point.html" title="A single control point.">ControlPoint</a>. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>.</p>
+
+</div>
+</div>
+<a id="a1322fbff8b3eb9264b117c8bbdf16d28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1322fbff8b3eb9264b117c8bbdf16d28">&#9670;&nbsp;</a></span>residualRms()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BundleControlPoint::residualRms </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the root-mean-square (rms) of the <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s residuals. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> Returns the rms of the residuals.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_point.html#a4baf0540c67ed2d89c9297f3cb6a0ed5" title="Get rms of residuals.">ControlPoint::GetResidualRms()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_point.html#a4baf0540c67ed2d89c9297f3cb6a0ed5">Isis::ControlPoint::GetResidualRms()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#adde2a3c46025267c7fc30a727b44984f">Isis::BundleControlPoint::formatBundleOutputSummaryString()</a>.</p>
+
+</div>
+</div>
+<a id="ab82ce2ab6730e25c6f26eac5929cfbef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab82ce2ab6730e25c6f26eac5929cfbef">&#9670;&nbsp;</a></span>setAdjustedSurfacePoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleControlPoint::setAdjustedSurfacePoint </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_surface_point.html">SurfacePoint</a>&#160;</td>
+          <td class="paramname"><em>surfacePoint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the adjusted surface point for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">surfacePoint</td><td>The surface point to be set. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>, and <a class="el" href="class_isis_1_1_control_point.html#a7796926e88a323daa4ece62ba3ed7495">Isis::ControlPoint::SetAdjustedSurfacePoint()</a>.</p>
+
+</div>
+</div>
+<a id="a176172b5739fefd4c541b7a7029a90f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a176172b5739fefd4c541b7a7029a90f3">&#9670;&nbsp;</a></span>setNumberOfRejectedMeasures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleControlPoint::setNumberOfRejectedMeasures </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numRejected</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the number of rejected measures for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">numRejected</td><td>Number of rejected measures.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_point.html#adec8f33c667a9d164faebb62e5224ff6" title="Set (update) the number of rejected measures for the control point.">ControlPoint::SetNumberOfRejectedMeasures(int numRejected)</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>, and <a class="el" href="class_isis_1_1_control_point.html#adec8f33c667a9d164faebb62e5224ff6">Isis::ControlPoint::SetNumberOfRejectedMeasures()</a>.</p>
+
+</div>
+</div>
+<a id="a32eb30de5fb4c5a1daf021f1640d34bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32eb30de5fb4c5a1daf021f1640d34bf">&#9670;&nbsp;</a></span>setRejected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleControlPoint::setRejected </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>reject</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a> to rejected or not rejected. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">reject</td><td>True will set the <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a> to rejected.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_point.html#a70571011962d186b67dc82c7461b0043" title="Set the jigsawRejected state.">ControlPoint::SetRejected(bool reject)</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>, and <a class="el" href="class_isis_1_1_control_point.html#a70571011962d186b67dc82c7461b0043">Isis::ControlPoint::SetRejected()</a>.</p>
+
+</div>
+</div>
+<a id="ae2e88730e187431683ac0ae4ac42f024"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2e88730e187431683ac0ae4ac42f024">&#9670;&nbsp;</a></span>setSigmaWeightFromGlobals() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleControlPoint::setSigmaWeightFromGlobals </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>gSigma</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the member sigmas and weights from a global sigma. </p>
+<p>TODO *** Should index be <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7f">SurfacePoint::CoordIndex</a>? </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gSigma</td><td>The global sigma to assign. </td></tr>
+    <tr><td class="paramname">index</td><td>The index of the point coordinate being set (0, 1, or 2). </td></tr>
+    <tr><td class="paramname">cFactor</td><td>The conversion factor applied to gSigma to match bundle variable units.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_control_point.html#a5dbf7b4daf22b106a498bba76a689f61" title="Formats the apriori sigma value indicated by the given type code.">formatAprioriSigmaString()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_control_point.html#a58ae2702c594292b334e4a8cc582b758">Isis::ControlPoint::GetAprioriSurfacePoint()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223a256c8dadbfa862853fc27317f7a17978">Isis::SurfacePoint::Latitudinal</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>, <a class="el" href="class_isis_1_1_surface_point.html#aaf2eadfb07510243bb8ec42f8f2a81e8">Isis::SurfacePoint::MetersToLatitude()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a582a0e6e1b4ef087ecdda33660ffde0c">Isis::SurfacePoint::MetersToLongitude()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223aff75c0a79b627c5f3926eb325e582139">Isis::SurfacePoint::Rectangular</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#addb3401d8d5eaa3606b503afde521002">Isis::BundleControlPoint::setWeights()</a>.</p>
+
+</div>
+</div>
+<a id="ac14d9e7c5fa38ed3de4a73382b1fbf59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac14d9e7c5fa38ed3de4a73382b1fbf59">&#9670;&nbsp;</a></span>setSigmaWeightFromGlobals() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleControlPoint::setSigmaWeightFromGlobals </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>gSigma</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>cFactor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="addb3401d8d5eaa3606b503afde521002"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addb3401d8d5eaa3606b503afde521002">&#9670;&nbsp;</a></span>setWeights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleControlPoint::setWeights </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#a2a8ce6eaf289ace3131997657b683c9c">BundleSettingsQsp</a>&#160;</td>
+          <td class="paramname"><em>settings</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the weights using the given <a class="el" href="class_isis_1_1_bundle_settings.html" title="Container class for BundleAdjustment settings.">BundleSettings</a> <a class="el" href="class_q_shared_pointer.html">QSharedPointer</a> and a conversion value for meters to radians. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">settings</td><td>A <a class="el" href="class_q_shared_pointer.html">QSharedPointer</a> to <a class="el" href="class_isis_1_1_bundle_settings.html" title="Container class for BundleAdjustment settings.">BundleSettings</a> object. </td></tr>
+    <tr><td class="paramname">metersToRadians</td><td>A double precision conversion factor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_point.html#a807b76bbf1e01dabe9755f9aeb7269f7a02d926e8f4bd2657b36ae82fde729fe1">Isis::ControlPoint::Constrained</a>, <a class="el" href="class_isis_1_1_control_point.html#a807b76bbf1e01dabe9755f9aeb7269f7af8f7631225c0bcaf44d4060a58df892a">Isis::ControlPoint::Fixed</a>, <a class="el" href="class_isis_1_1_control_point.html#a807b76bbf1e01dabe9755f9aeb7269f7a75b19978640de073252273ef91fc379c">Isis::ControlPoint::Free</a>, <a class="el" href="class_isis_1_1_control_point.html#a58ae2702c594292b334e4a8cc582b758">Isis::ControlPoint::GetAprioriSurfacePoint()</a>, <a class="el" href="class_isis_1_1_surface_point.html#ad9dfafeefaca2eecff8bc47d82e6125b">Isis::SurfacePoint::GetSigmaDistance()</a>, <a class="el" href="class_isis_1_1_control_point.html#a74e2401daed4c3e33bee8526c7718f6b">Isis::ControlPoint::GetType()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a46834e3fe995be4f87fd7d2f8ab8b28c">Isis::SurfacePoint::GetWeight()</a>, <a class="el" href="class_isis_1_1_control_point.html#a9df8e89545dbc5cee26b630fd20c6868">Isis::ControlPoint::IsCoord1Constrained()</a>, <a class="el" href="class_isis_1_1_control_point.html#a991935af5e3c2f8bb1ae49966ca18471">Isis::ControlPoint::IsCoord2Constrained()</a>, <a class="el" href="class_isis_1_1_control_point.html#aa825f18f6330c66345e16dfd114573eb">Isis::ControlPoint::IsCoord3Constrained()</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223a256c8dadbfa862853fc27317f7a17978">Isis::SurfacePoint::Latitudinal</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>, <a class="el" href="class_isis_1_1_distance.html#ae4eab0580e1b5f23b444d18b071624c2">Isis::Distance::meters()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7fa0253996d69116d8ac16be36159f43d8b">Isis::SurfacePoint::One</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#ae2e88730e187431683ac0ae4ac42f024">Isis::BundleControlPoint::setSigmaWeightFromGlobals()</a>, <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7fa2d31e638ee2e4b114cbf22b85e850be0">Isis::SurfacePoint::Three</a>, and <a class="el" href="class_isis_1_1_surface_point.html#a9ce3a182eb64a8be0fcca994c3643d7faa6154049b86a82cf235d92b85f5e836f">Isis::SurfacePoint::Two</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a4033f1b83f3e5f04e051fef670e6a642">Isis::BundleControlPoint::BundleControlPoint()</a>.</p>
+
+</div>
+</div>
+<a id="afb4297b4c0e0813bd9a2c0502105e4e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb4297b4c0e0813bd9a2c0502105e4e4">&#9670;&nbsp;</a></span>sigmaRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BundleLidarControlPoint::sigmaRange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns sigma of observed range. </p>
+<dl class="section return"><dt>Returns</dt><dd>double Sigma of observed range. </dd></dl>
+
+</div>
+</div>
+<a id="a9eac9c9ff61fd0a469b5f0be95ea0fbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9eac9c9ff61fd0a469b5f0be95ea0fbb">&#9670;&nbsp;</a></span>type()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_point.html#a807b76bbf1e01dabe9755f9aeb7269f7">ControlPoint::PointType</a> Isis::BundleControlPoint::type </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s type. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_control_point.html#a807b76bbf1e01dabe9755f9aeb7269f7" title="These are the valid &#39;types&#39; of point.">ControlPoint::PointType</a></b> The <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a>'s type. Options are: Fixed = 0, Constrained = 1, Free = 2.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_point.html#a74e2401daed4c3e33bee8526c7718f6b">ControlPoint::GetType()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_point.html#a74e2401daed4c3e33bee8526c7718f6b">Isis::ControlPoint::GetType()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a5dbf7b4daf22b106a498bba76a689f61">Isis::BundleControlPoint::formatAprioriSigmaString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">Isis::BundleControlPoint::formatBundleLatitudinalOutputDetailString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#adde2a3c46025267c7fc30a727b44984f">Isis::BundleControlPoint::formatBundleOutputSummaryString()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">Isis::BundleControlPoint::formatBundleRectangularOutputDetailString()</a>.</p>
+
+</div>
+</div>
+<a id="a9c40392352df81b4062ff568b70eeb91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c40392352df81b4062ff568b70eeb91">&#9670;&nbsp;</a></span>vtpv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BundleControlPoint::vtpv </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute vtpv, the weighted sum of squares of constrained point residuals. </p>
+<dl class="section return"><dt>Returns</dt><dd>double Weighted sum of squares of constrained point residuals. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a575e21847a0562be9ef02b3cfe24d8de">Isis::BundleControlPoint::vtpvMeasures()</a>, and <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#af7df664ff48b8d72f433c768efeb12cc">vtpvRangeContribution()</a>.</p>
+
+</div>
+</div>
+<a id="a575e21847a0562be9ef02b3cfe24d8de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a575e21847a0562be9ef02b3cfe24d8de">&#9670;&nbsp;</a></span>vtpvMeasures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BundleControlPoint::vtpvMeasures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute vtpv of image measures (weighted sum of squares of measure residuals). </p>
+<dl class="section return"><dt>Returns</dt><dd>double weighted sum of squares of measure residuals (vtpv). </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#a9c40392352df81b4062ff568b70eeb91">Isis::BundleControlPoint::vtpv()</a>.</p>
+
+</div>
+</div>
+<a id="af7df664ff48b8d72f433c768efeb12cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7df664ff48b8d72f433c768efeb12cc">&#9670;&nbsp;</a></span>vtpvRangeContribution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BundleLidarControlPoint::vtpvRangeContribution </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns Weighted sum of squares of range residuals for this point. </p>
+<dl class="section return"><dt>Returns</dt><dd>double Weighted sum of squares of range residuals for this point. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#a9c40392352df81b4062ff568b70eeb91">Isis::BundleControlPoint::vtpv()</a>.</p>
+
+</div>
+</div>
+<a id="aae8d2564cf86316e162b6109dbfbf9da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae8d2564cf86316e162b6109dbfbf9da">&#9670;&nbsp;</a></span>weights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::numeric::ublas::bounded_vector&lt; double, 3 &gt; &amp; Isis::BundleControlPoint::weights </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the 3 dimensional ordered vector of weight values associated with coordinate1, coordinate2, and coordinate3. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>boost::numeric::ublas::bounded_vector&lt;double,3&gt;&amp;</b> The vector of weight values. </dd></dl>
+
+</div>
+</div>
+<a id="a6bb7dd520b4cd4549cc062e9c17ebfc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bb7dd520b4cd4549cc062e9c17ebfc8">&#9670;&nbsp;</a></span>zeroNumberOfRejectedMeasures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleControlPoint::zeroNumberOfRejectedMeasures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Resets the number of rejected measures for this <a class="el" href="class_isis_1_1_bundle_control_point.html" title="This class holds information about a control point that BundleAdjust needs to run correctly.">BundleControlPoint</a> to zero. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_point.html#ada6bd23f53b93e0d049a42646007e62a" title="Initialize the number of rejected measures to 0.">ControlPoint::ZeroNumberOfRejectedMeasures()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_control_point.html#abbcafb10745b11596be1ba3cbaf3a2f4">Isis::BundleControlPoint::m_controlPoint</a>, and <a class="el" href="class_isis_1_1_control_point.html#ada6bd23f53b93e0d049a42646007e62a">Isis::ControlPoint::ZeroNumberOfRejectedMeasures()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="abbcafb10745b11596be1ba3cbaf3a2f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbcafb10745b11596be1ba3cbaf3a2f4">&#9670;&nbsp;</a></span>m_controlPoint</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a>* Isis::BundleControlPoint::m_controlPoint</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&lt; pointer to the control point object this represents </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_control_point.html#a7b2635d612b3405c4cfe3c7054eaeb78">Isis::BundleControlPoint::adjustedSurfacePoint()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a4033f1b83f3e5f04e051fef670e6a642">Isis::BundleControlPoint::BundleControlPoint()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a7408658febb08f5388f5ffd4e7ce931e">Isis::BundleControlPoint::computeResiduals()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#ad27243bdd1527972e18d18b1f3ecf613">Isis::BundleControlPoint::copy()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">Isis::BundleControlPoint::formatBundleLatitudinalOutputDetailString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#adde2a3c46025267c7fc30a727b44984f">Isis::BundleControlPoint::formatBundleOutputSummaryString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">Isis::BundleControlPoint::formatBundleRectangularOutputDetailString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#af8b901357e80f84f56bb88df3c3e2798">Isis::BundleControlPoint::id()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#ab37b106c3cc07fdb9aee57608e26937b">Isis::BundleControlPoint::isRejected()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a4b852070ba85979f671a294a19564ef6">Isis::BundleControlPoint::numberOfRejectedMeasures()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#aebd3fd76858866ab01c8d1cb87e6f1f8">Isis::BundleControlPoint::rawControlPoint()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a1322fbff8b3eb9264b117c8bbdf16d28">Isis::BundleControlPoint::residualRms()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#ab82ce2ab6730e25c6f26eac5929cfbef">Isis::BundleControlPoint::setAdjustedSurfacePoint()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a176172b5739fefd4c541b7a7029a90f3">Isis::BundleControlPoint::setNumberOfRejectedMeasures()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a32eb30de5fb4c5a1daf021f1640d34bf">Isis::BundleControlPoint::setRejected()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#ae2e88730e187431683ac0ae4ac42f024">Isis::BundleControlPoint::setSigmaWeightFromGlobals()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#addb3401d8d5eaa3606b503afde521002">Isis::BundleControlPoint::setWeights()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a9eac9c9ff61fd0a469b5f0be95ea0fbb">Isis::BundleControlPoint::type()</a>, and <a class="el" href="class_isis_1_1_bundle_control_point.html#a6bb7dd520b4cd4549cc062e9c17ebfc8">Isis::BundleControlPoint::zeroNumberOfRejectedMeasures()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleUtilities/<a class="el" href="_bundle_lidar_control_point_8h_source.html">BundleLidarControlPoint.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleUtilities/<a class="el" href="_bundle_lidar_control_point_8cpp.html">BundleLidarControlPoint.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_bundle_lidar_control_point.html">BundleLidarControlPoint</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

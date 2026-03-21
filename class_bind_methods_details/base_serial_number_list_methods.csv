@@ -1,0 +1,22 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+SerialNumberList,Control Networks,isis/src/base/objs/SerialNumberList/SerialNumberList.h,isis_pybind_standalone/src/base/bind_base_support.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,SerialNumberList,isis_pybind.SerialNumberList,Y,Python class symbol is exported from `bind_base_support.cpp`
+Construction/Enum,SerialNumberList(),isis_pybind.SerialNumberList(),Y,Zero-argument construction is available via the default `check_target` argument
+Mutation/Configuration,"void add(const QString &filename, bool def2filename = false)",isis_pybind.SerialNumberList.add,Y,Bound in `bind_base_support.cpp`
+Mutation/Configuration,"void add(const QString &serialNumber, const QString &filename)",isis_pybind.SerialNumberList.add,Y,Bound in `bind_base_support.cpp`
+Mutation/Configuration,"void add(const char *serialNumber, const char *filename)",isis_pybind.SerialNumberList.add,Y,Covered by the Python string overload bound in `bind_base_support.cpp`
+Query,bool hasSerialNumber(QString sn),isis_pybind.SerialNumberList.has_serial_number,Y,Bound in `bind_base_support.cpp`
+Mutation/Configuration,void remove(const QString &sn),isis_pybind.SerialNumberList.remove,Y,Bound in `bind_base_support.cpp`
+Query,int size() const,isis_pybind.SerialNumberList.size,Y,Bound in `bind_base_support.cpp`
+Public API,QString fileName(const QString &sn),isis_pybind.SerialNumberList.file_name,Y,Bound in `bind_base_support.cpp`
+Public API,QString fileName(int index),isis_pybind.SerialNumberList.file_name,Y,Bound in `bind_base_support.cpp`
+Public API,QString serialNumber(const QString &filename),isis_pybind.SerialNumberList.serial_number,Y,Bound in `bind_base_support.cpp`
+Public API,QString serialNumber(int index),isis_pybind.SerialNumberList.serial_number,Y,Bound in `bind_base_support.cpp`
+Public API,QString observationNumber(int index),isis_pybind.SerialNumberList.observation_number,Y,Bound in `bind_base_support.cpp`
+Public API,QString spacecraftInstrumentId(int index),isis_pybind.SerialNumberList.spacecraft_instrument_id,Y,Bound in `bind_base_support.cpp`
+Public API,QString spacecraftInstrumentId(const QString &sn),isis_pybind.SerialNumberList.spacecraft_instrument_id,Y,Bound in `bind_base_support.cpp`
+Public API,int serialNumberIndex(const QString &sn),isis_pybind.SerialNumberList.serial_number_index,Y,Bound in `bind_base_support.cpp`
+Public API,int fileNameIndex(const QString &filename),isis_pybind.SerialNumberList.file_name_index,Y,Bound in `bind_base_support.cpp`
+Public API,std::vector<QString> possibleSerialNumbers(const QString &on),isis_pybind.SerialNumberList.possible_serial_numbers,Y,Bound in `bind_base_support.cpp`

@@ -1,0 +1,14 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+LineScanCameraDetectorMap,"Spice, Instruments, and Cameras",isis/src/base/objs/LineScanCameraDetectorMap/LineScanCameraDetectorMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,第七批已补基础单测（独立构造/时间参数）
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,LineScanCameraDetectorMap,isis_pybind.LineScanCameraDetectorMap,Y,Python class symbol is exported; constructor exposure may be limited; 第七批已补基础单测（独立构造/时间参数）
+Construction/Enum,LineScanCameraDetectorMap(),isis_pybind.LineScanCameraDetectorMap(),N,第七批已补基础单测（独立构造/时间参数）
+Mutation/Configuration,void SetStartTime(const double etStart),isis_pybind.LineScanCameraDetectorMap.set_start_time,N,第七批已补基础单测（独立构造/时间参数）
+Mutation/Configuration,void SetLineRate(const double lineRate),isis_pybind.LineScanCameraDetectorMap.set_line_rate,N,第七批已补基础单测（独立构造/时间参数）
+Public API,double LineRate() const,isis_pybind.LineScanCameraDetectorMap.line_rate,N,第七批已补基础单测（独立构造/时间参数）
+Public API,"virtual double exposureDuration(const double sample, const double line, const int band) const",isis_pybind.LineScanCameraDetectorMap.exposure_duration,N,第七批已补基础单测（独立构造/时间参数）
+Mutation/Configuration,"virtual bool SetParent(const double sample, const double line)",isis_pybind.LineScanCameraDetectorMap.set_parent,N,第七批已补基础单测（独立构造/时间参数）
+Mutation/Configuration,"virtual bool SetParent(const double sample, const double line, const double deltaT)",isis_pybind.LineScanCameraDetectorMap.set_parent,N,第七批已补基础单测（独立构造/时间参数）
+Mutation/Configuration,"virtual bool SetDetector(const double sample, const double line)",isis_pybind.LineScanCameraDetectorMap.set_detector,N,第七批已补基础单测（独立构造/时间参数）
+Public API,double StartTime() const,isis_pybind.LineScanCameraDetectorMap.start_time,N,第七批已补基础单测（独立构造/时间参数）

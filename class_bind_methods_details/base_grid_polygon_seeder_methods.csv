@@ -1,0 +1,9 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+GridPolygonSeeder,Pattern Matching,isis/src/base/objs/GridPolygonSeeder/GridPolygonSeeder.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,GridPolygonSeeder,isis_pybind.GridPolygonSeeder,N,Python class symbol not found in current binding files
+Construction/Enum,GridPolygonSeeder(),isis_pybind.GridPolygonSeeder(),N,Constructor binding not detected in current binding files
+Public API,std::vector<geos::geom::Point *> Seed(const geos::geom::MultiPolygon *mp),isis_pybind.GridPolygonSeeder.seed,N,Method not found in current binding files
+Public API,bool SubGrid() { return p_subGrid,isis_pybind.GridPolygonSeeder.sub_grid,N,Method not found in current binding files
+Public API,virtual PvlGroup PluginParameters(QString grpName),isis_pybind.GridPolygonSeeder.plugin_parameters,N,Method not found in current binding files

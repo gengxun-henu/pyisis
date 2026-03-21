@@ -1,0 +1,723 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: File Members</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('globals_func.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="contents">
+&#160;
+
+<h3><a id="index_a"></a>- a -</h3><ul>
+<li>Abort()
+: <a class="el" href="_isis_8h.html#a0f2012757a139e62078e466a7c2850aa">Isis.h</a>
+</li>
+<li>AdaptiveGruenPlugin()
+: <a class="el" href="_adaptive_gruen_8cpp.html#ab104f2fa4c0aa24ca2bb432da43ddc02">AdaptiveGruen.cpp</a>
+</li>
+<li>AlbedoAtmPlugin()
+: <a class="el" href="_albedo_atm_8cpp.html#a87846e06f0ef708e220a00046ee24ac5">AlbedoAtm.cpp</a>
+</li>
+<li>AlbedoPlugin()
+: <a class="el" href="_albedo_8cpp.html#ad9bc298474ce9729d6b0ce9398eb30d1">Albedo.cpp</a>
+</li>
+<li>Anisotropic1Plugin()
+: <a class="el" href="_anisotropic1_8cpp.html#a4f7d578d67687ab352126862104a4080">Anisotropic1.cpp</a>
+</li>
+<li>Anisotropic2Plugin()
+: <a class="el" href="_anisotropic2_8cpp.html#a243a6ce316563c34b84ff5c2ba26fa22">Anisotropic2.cpp</a>
+</li>
+<li>ApolloMetricCameraPlugin()
+: <a class="el" href="_apollo_metric_camera_8cpp.html#a1c64fe74e662213df0299aba0b7b44c3">ApolloMetricCamera.cpp</a>
+</li>
+<li>ApolloPanoramicCameraPlugin()
+: <a class="el" href="_apollo_panoramic_camera_8cpp.html#a2ede539b59ed118f7ca8bb9af3af134d">ApolloPanoramicCamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_c"></a>- c -</h3><ul>
+<li>Chandrayaan1M3CameraPlugin()
+: <a class="el" href="_chandrayaan1_m3_camera_8cpp.html#a1cbfb4cff87158edeed96380e34a0eb5">Chandrayaan1M3Camera.cpp</a>
+</li>
+<li>ck3sdn()
+: <a class="el" href="ck3sdn_8cpp.html#a8aa713aa705bae89cc1f32547125aade">ck3sdn.cpp</a>
+, <a class="el" href="_spice_rotation_8cpp.html#a8aa713aa705bae89cc1f32547125aade">SpiceRotation.cpp</a>
+</li>
+<li>ClipperNacRollingShutterCameraPlugin()
+: <a class="el" href="_clipper_nac_rolling_shutter_camera_8cpp.html#a8dec9623677c4b4eda64be971132132e">ClipperNacRollingShutterCamera.cpp</a>
+</li>
+<li>ClipperPushBroomCameraPlugin()
+: <a class="el" href="_clipper_push_broom_camera_8cpp.html#a63f1a632cfc539b2481255891edd3f4a">ClipperPushBroomCamera.cpp</a>
+</li>
+<li>ClipperWacFcCameraPlugin()
+: <a class="el" href="_clipper_wac_fc_camera_8cpp.html#a81d20f635c24c7f327072d2347dc34ee">ClipperWacFcCamera.cpp</a>
+</li>
+<li>CrismCameraPlugin()
+: <a class="el" href="_crism_camera_8cpp.html#ab2c5dc970e82c0bd68df34e7f6387d6f">CrismCamera.cpp</a>
+</li>
+<li>CTXCameraPlugin()
+: <a class="el" href="_c_t_x_camera_8cpp.html#a26ed286da0d84d634fe867cbf74a04e6">CTXCamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_d"></a>- d -</h3><ul>
+<li>DawnFcCameraPlugin()
+: <a class="el" href="_dawn_fc_camera_8cpp.html#a09fb61630d8c625c750d22421f3cd4cd">DawnFcCamera.cpp</a>
+</li>
+<li>DawnVirCameraPlugin()
+: <a class="el" href="_dawn_vir_camera_8cpp.html#af2ab2062e708b46ec9ded09b8dd1b989">DawnVirCamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_e"></a>- e -</h3><ul>
+<li>EquirectangularPlugin()
+: <a class="el" href="_equirectangular_8cpp.html#a628742946107ebf8424918be9e7b9512">Equirectangular.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_f"></a>- f -</h3><ul>
+<li>ForstnerOperatorPlugin()
+: <a class="el" href="_forstner_operator_8cpp.html#a91bfff92e8241745bf89e424dec8e12b">ForstnerOperator.cpp</a>
+</li>
+<li>frmchg_()
+: <a class="el" href="_spice_rotation_8cpp.html#a01353057a97b8867e3e1282ff19bd690">SpiceRotation.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_g"></a>- g -</h3><ul>
+<li>GradientOperatorPlugin()
+: <a class="el" href="_gradient_operator_8cpp.html#a44e2cc7adc74a5a95e20704ff93819e8">GradientOperator.cpp</a>
+</li>
+<li>GridPolygonSeederPlugin()
+: <a class="el" href="_grid_polygon_seeder_8cpp.html#a0cf77a1c85459267ad6265cc44f8fa4e">GridPolygonSeeder.cpp</a>
+</li>
+<li>GuiHelpers()
+: <a class="el" href="group___utility.html#ga27e5b0c473efa7b46b271f09c1d8c760">Isis.h</a>
+</li>
+</ul>
+
+
+<h3><a id="index_h"></a>- h -</h3><ul>
+<li>HapkeAtm1Plugin()
+: <a class="el" href="_hapke_atm1_8cpp.html#a7e0e90028e868661e4c7398884eb3ffe">HapkeAtm1.cpp</a>
+</li>
+<li>HapkeAtm2Plugin()
+: <a class="el" href="_hapke_atm2_8cpp.html#ae7ba8103a3df1001aa8849ccfd261951">HapkeAtm2.cpp</a>
+</li>
+<li>HapkePlugin()
+: <a class="el" href="_hapke_8cpp.html#a58e1a9ce2b91b8d1dfe6d642b5eb84a3">Hapke.cpp</a>
+</li>
+<li>HayabusaAmicaCameraPlugin()
+: <a class="el" href="_hayabusa_amica_camera_8cpp.html#aba0755ee5d368c24357357110d5f5ffa">HayabusaAmicaCamera.cpp</a>
+</li>
+<li>HayabusaNirsCameraPlugin()
+: <a class="el" href="_hayabusa_nirs_camera_8cpp.html#ad713394a4cf0e504f8b0207ec929aaa9">HayabusaNirsCamera.cpp</a>
+</li>
+<li>HiresCameraPlugin()
+: <a class="el" href="_hires_camera_8cpp.html#a870e75af8de16913758dd98556d4bda3">HiresCamera.cpp</a>
+</li>
+<li>HiriseCameraPlugin()
+: <a class="el" href="_hirise_camera_8cpp.html#a566dbacafb7a0fcde4804cf23bdd8184">HiriseCamera.cpp</a>
+</li>
+<li>HrscCameraPlugin()
+: <a class="el" href="_hrsc_camera_8cpp.html#a2b104181f01c16abb59594d02abe14d2">HrscCamera.cpp</a>
+</li>
+<li>Hyb2OncCameraPlugin()
+: <a class="el" href="_hyb2_onc_camera_8cpp.html#a26644eb8922ba25bd6eeb9d482a59b75">Hyb2OncCamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_i"></a>- i -</h3><ul>
+<li>IdealCameraPlugin()
+: <a class="el" href="_ideal_camera_8cpp.html#a9ef1796137348c7b725df92e7a5d86c6">IdealCamera.cpp</a>
+</li>
+<li>InterruptSignal()
+: <a class="el" href="_isis_8h.html#af9183abe8e69ea7acdd379216e296943">Isis.h</a>
+</li>
+<li>invstm_()
+: <a class="el" href="_spice_rotation_8cpp.html#a407a9a932b71b15ae2b19f7c7b1f559e">SpiceRotation.cpp</a>
+</li>
+<li>Isotropic1Plugin()
+: <a class="el" href="_isotropic1_8cpp.html#aa49e87dfbef5eae673b08b1b8c19d009">Isotropic1.cpp</a>
+</li>
+<li>Isotropic2Plugin()
+: <a class="el" href="_isotropic2_8cpp.html#a35ae7e72c93439815e24e154e98ca909">Isotropic2.cpp</a>
+</li>
+<li>IssNACameraPlugin()
+: <a class="el" href="_iss_n_a_camera_8cpp.html#ae092170d14a1a81d6b93fcfd9742046a">IssNACamera.cpp</a>
+</li>
+<li>IssWACameraPlugin()
+: <a class="el" href="_iss_w_a_camera_8cpp.html#a0abc00e9c313056451a10fa136a93025">IssWACamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_j"></a>- j -</h3><ul>
+<li>JunoCameraPlugin()
+: <a class="el" href="_juno_camera_8cpp.html#ae66d702922e403c1af7bff9a13570912">JunoCamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_k"></a>- k -</h3><ul>
+<li>KaguyaMiCameraPlugin()
+: <a class="el" href="_kaguya_mi_camera_8cpp.html#a255f370399c65d2a1a1642dc95156cc4">KaguyaMiCamera.cpp</a>
+</li>
+<li>KaguyaTcCameraPlugin()
+: <a class="el" href="_kaguya_tc_camera_8cpp.html#a69fa0107db6fde72bc2e8155fa69c8f0">KaguyaTcCamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_l"></a>- l -</h3><ul>
+<li>LambertConformalPlugin()
+: <a class="el" href="_lambert_conformal_8cpp.html#a84b4da3678922e7b345d9d35b6e8c6e4">LambertConformal.cpp</a>
+</li>
+<li>LambertPlugin()
+: <a class="el" href="_lambert_8cpp.html#ac9c938c7e8a58ffc7f143b2391cc8687">Lambert.cpp</a>
+</li>
+<li>LimitPolygonSeederPlugin()
+: <a class="el" href="_limit_polygon_seeder_8cpp.html#a4dafa4a2c4e04451ef87bd4ee09f75f4">LimitPolygonSeeder.cpp</a>
+</li>
+<li>LoHighCameraPlugin()
+: <a class="el" href="_lo_high_camera_8cpp.html#af92acea4fcc7175fd5154ffe1915aa54">LoHighCamera.cpp</a>
+</li>
+<li>LoMediumCameraPlugin()
+: <a class="el" href="_lo_medium_camera_8cpp.html#a4719871cd7e43698f678d3577e45cd6a">LoMediumCamera.cpp</a>
+</li>
+<li>LommelSeeligerPlugin()
+: <a class="el" href="_lommel_seeliger_8cpp.html#a826aff60ddeb834e465302473f0d595c">LommelSeeliger.cpp</a>
+</li>
+<li>LroNarrowAngleCameraPlugin()
+: <a class="el" href="_lro_narrow_angle_camera_8cpp.html#a4411026aba7d213fa8f4ab8116212211">LroNarrowAngleCamera.cpp</a>
+</li>
+<li>LroWideAngleCameraPlugin()
+: <a class="el" href="_lro_wide_angle_camera_8cpp.html#a6597aafee4e3fc9454e47e68ed350ae9">LroWideAngleCamera.cpp</a>
+</li>
+<li>LunarAzimuthalEqualAreaPlugin()
+: <a class="el" href="_lunar_azimuthal_equal_area_8cpp.html#a6c7d614545c4e7989e1e9f4111e3ba47">LunarAzimuthalEqualArea.cpp</a>
+</li>
+<li>LunarLambertEmpiricalPlugin()
+: <a class="el" href="_lunar_lambert_empirical_8cpp.html#ad9abd468642c0a1645446cf09a506d19">LunarLambertEmpirical.cpp</a>
+</li>
+<li>LunarLambertMcEwenPlugin()
+: <a class="el" href="_lunar_lambert_mc_ewen_8cpp.html#a8e60ce78b531f78af3cf80c92549e21f">LunarLambertMcEwen.cpp</a>
+</li>
+<li>LunarLambertPlugin()
+: <a class="el" href="_lunar_lambert_8cpp.html#a29eaf0cc9f6b6e6ddc3c2ac0bc80a402">LunarLambert.cpp</a>
+</li>
+<li>LwirCameraPlugin()
+: <a class="el" href="_lwir_camera_8cpp.html#a7f74dfde0ec1d747dc33106d6091e08b">LwirCamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_m"></a>- m -</h3><ul>
+<li>main()
+: <a class="el" href="_isis_8h.html#a0ddf1224851353fc92bfbff6f499fa97">Isis.h</a>
+, <a class="el" href="unit_test__disabled_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">unitTest_disabled.cpp</a>
+</li>
+<li>MarciCameraPlugin()
+: <a class="el" href="_marci_camera_8cpp.html#a1a34a99ea0fe8339be7fee6d452a7731">MarciCamera.cpp</a>
+</li>
+<li>Mariner10CameraPlugin()
+: <a class="el" href="_mariner10_camera_8cpp.html#a1889d728a446d538f8bf23d3d0752abe">Mariner10Camera.cpp</a>
+</li>
+<li>MaximumCorrelationPlugin()
+: <a class="el" href="_maximum_correlation_8cpp.html#ab39ed58ef4f4104a6a4d33dc25226fed">MaximumCorrelation.cpp</a>
+</li>
+<li>MdisCameraPlugin()
+: <a class="el" href="_mdis_camera_8cpp.html#a02eecaf9bfe4ebb279d4f3320337bf83">MdisCamera.cpp</a>
+</li>
+<li>MercatorPlugin()
+: <a class="el" href="_mercator_8cpp.html#a9eee5f0f81590c7f79249dcb9d5d4414">Mercator.cpp</a>
+</li>
+<li>MexHrscSrcCameraPlugin()
+: <a class="el" href="_mex_hrsc_src_camera_8cpp.html#ae1f39d24503121256f937a44f60f95fb">MexHrscSrcCamera.cpp</a>
+</li>
+<li>MinimumDifferencePlugin()
+: <a class="el" href="_minimum_difference_8cpp.html#a54a0e2f3616a0cdf3b21eea046706838">MinimumDifference.cpp</a>
+</li>
+<li>MiniRFPlugin()
+: <a class="el" href="_mini_r_f_8cpp.html#a666f700d94a377c6bca25dd28f64d49a">MiniRF.cpp</a>
+</li>
+<li>MinnaertEmpiricalPlugin()
+: <a class="el" href="_minnaert_empirical_8cpp.html#a78142a39957384d23916c04264939ff8">MinnaertEmpirical.cpp</a>
+</li>
+<li>MinnaertPlugin()
+: <a class="el" href="_minnaert_8cpp.html#a9db3aa1832e7e59d6f22f66281619fac">Minnaert.cpp</a>
+</li>
+<li>MixedPlugin()
+: <a class="el" href="_mixed_8cpp.html#a27bc5d96e3ed314fa0301b2b90b78ff9">Mixed.cpp</a>
+</li>
+<li>MocNarrowAngleCameraPlugin()
+: <a class="el" href="_moc_narrow_angle_camera_8cpp.html#a354d0f0f92264f16f21ab0c627c75f3d">MocNarrowAngleCamera.cpp</a>
+</li>
+<li>MocWideAngleCameraPlugin()
+: <a class="el" href="_moc_wide_angle_camera_8cpp.html#a99758bba71990aa78ef2094b1b0a49d4">MocWideAngleCamera.cpp</a>
+</li>
+<li>MollweidePlugin()
+: <a class="el" href="_mollweide_8cpp.html#ac9c27351ea19122310b41c9c8bb38b9d">Mollweide.cpp</a>
+</li>
+<li>MoonAlbedoPlugin()
+: <a class="el" href="_moon_albedo_8cpp.html#a55322bfde1232b546094bf2b606032f6">MoonAlbedo.cpp</a>
+</li>
+<li>MoravecOperatorPlugin()
+: <a class="el" href="_moravec_operator_8cpp.html#a75ea01ee1de34142464974a8b572eb4c">MoravecOperator.cpp</a>
+</li>
+<li>moved_()
+: <a class="el" href="ck3sdn_8cpp.html#a1d677d7489a454079de0ecc3f5629dce">ck3sdn.cpp</a>
+</li>
+<li>MsiCameraPlugin()
+: <a class="el" href="_msi_camera_8cpp.html#a64bd6e761a2f0795b3f2d6156460873b">MsiCamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_n"></a>- n -</h3><ul>
+<li>NewHorizonsLeisaCameraPlugin()
+: <a class="el" href="_new_horizons_leisa_camera_8cpp.html#a1f3e06fcb09ab670cf23c40825db5a45">NewHorizonsLeisaCamera.cpp</a>
+</li>
+<li>NewHorizonsLorriCameraPlugin()
+: <a class="el" href="_new_horizons_lorri_camera_8cpp.html#ac364dcf7968bb6af546e8125eba62375">NewHorizonsLorriCamera.cpp</a>
+</li>
+<li>NewHorizonsMvicFrameCameraPlugin()
+: <a class="el" href="_new_horizons_mvic_frame_camera_8cpp.html#ab41488046526fcf9a76dbdf410c8859a">NewHorizonsMvicFrameCamera.cpp</a>
+</li>
+<li>NewHorizonsMvicTdiCameraPlugin()
+: <a class="el" href="_new_horizons_mvic_tdi_camera_8cpp.html#a7daf84d4682885020904134ab952b3f8">NewHorizonsMvicTdiCamera.cpp</a>
+</li>
+<li>NirCameraPlugin()
+: <a class="el" href="_nir_camera_8cpp.html#a553490ee1a0eb99fa7a12b8a79856ace">NirCamera.cpp</a>
+</li>
+<li>NoNormalizationPlugin()
+: <a class="el" href="_no_normalization_8cpp.html#a7dc2e5d2464ab5fa220847f9c6292bcb">NoNormalization.cpp</a>
+</li>
+<li>NoOperatorPlugin()
+: <a class="el" href="_no_operator_8cpp.html#afbea25e15d47d0567101f5c765935557">NoOperator.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_o"></a>- o -</h3><ul>
+<li>ObliqueCylindricalPlugin()
+: <a class="el" href="_oblique_cylindrical_8cpp.html#acb06297040744d24c584d903b109e4c7">ObliqueCylindrical.cpp</a>
+</li>
+<li>operator&lt;&lt;()
+: <a class="el" href="_angle_8cpp.html#a429e763e73672c442070910930101597">Angle.cpp</a>
+, <a class="el" href="_angle_8h.html#a429e763e73672c442070910930101597">Angle.h</a>
+, <a class="el" href="_isis_x_m_l_ch_trans_8h.html#a8c36f960709d293e18c1843086f12e27">IsisXMLChTrans.h</a>
+</li>
+<li>OrthographicPlugin()
+: <a class="el" href="_orthographic_8cpp.html#a1f18a90dab5311956574aba35441a2de">Orthographic.cpp</a>
+</li>
+<li>OsirisRexOcamsCameraPlugin()
+: <a class="el" href="_osiris_rex_ocams_camera_8cpp.html#ad1468fca44788037b9be21a351fb8c13">OsirisRexOcamsCamera.cpp</a>
+</li>
+<li>OsirisRexTagcamsCameraPlugin()
+: <a class="el" href="_osiris_rex_tagcams_camera_8cpp.html#a57f5b82436a10f9e75dac8665321f241">OsirisRexTagcamsCamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_p"></a>- p -</h3><ul>
+<li>PlanarPlugin()
+: <a class="el" href="_planar_8cpp.html#a4b119d587754472650010b5a7f8c69b3">Planar.cpp</a>
+</li>
+<li>PointPerspectivePlugin()
+: <a class="el" href="_point_perspective_8cpp.html#a84c8bdf78041278523c441fb5373120d">PointPerspective.cpp</a>
+</li>
+<li>PolarStereographicPlugin()
+: <a class="el" href="_polar_stereographic_8cpp.html#a74e81662e64209c544a08bf79d7c3815">PolarStereographic.cpp</a>
+</li>
+<li>ptXLessThan()
+: <a class="el" href="_line_scan_camera_ground_map_8cpp.html#a9f599e83fd42ed7be6e1e40cdf54002d">LineScanCameraGroundMap.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_q"></a>- q -</h3><ul>
+<li>Q_COREAPP_STARTUP_FUNCTION()
+: <a class="el" href="_environment_8cpp.html#ad1ad79ea2edd84ee0fbf8320c26894ad">Environment.cpp</a>
+</li>
+<li>Q_DECLARE_METATYPE()
+: <a class="el" href="_gui_camera_list_8h.html#ae5100a921ffe36df2e00a6e56351e066">GuiCameraList.h</a>
+, <a class="el" href="_cube_8h.html#a9b08cb22b875ec83696d96419852a73b">Cube.h</a>
+, <a class="el" href="_image_8h.html#a22da09dbd9fe617b5c75ffd7227a537c">Image.h</a>
+, <a class="el" href="_image_display_properties_8h.html#a04137c92928d6fa6859825eed885a3d3">ImageDisplayProperties.h</a>
+, <a class="el" href="_image_list_8h.html#a5dd379e7acd389abaaa8daf55d68c0d4">ImageList.h</a>
+, <a class="el" href="_mdi_cube_viewport_8h.html#a1581d37a3909c17422dacab6ed45999b">MdiCubeViewport.h</a>
+, <a class="el" href="_plot_window_8h.html#acc2c5011674537826dad6da32fce266d">PlotWindow.h</a>
+, <a class="el" href="_project_8h.html#ab0e4fd23d46c0e2bde01f2a66258f468">Project.h</a>
+, <a class="el" href="_project_item_8h.html#a60d98f039058d8c831c58726dfe49fbc">ProjectItem.h</a>
+, <a class="el" href="_shape_8h.html#a5905ee3d0f714c7a3f383e6d3b69a539">Shape.h</a>
+, <a class="el" href="_shape_display_properties_8h.html#aba247ccd18187b91f4b47d35f1963b74">ShapeDisplayProperties.h</a>
+, <a class="el" href="_shape_list_8h.html#a68fd41058a9635a759e7d8bc3f32ccb8">ShapeList.h</a>
+, <a class="el" href="_target_body_8h.html#a36c35ab34615bddb2c1df04d52e42b82">TargetBody.h</a>
+, <a class="el" href="_target_body_display_properties_8h.html#a3a90e6e0578e237512353ef6aa12ef01">TargetBodyDisplayProperties.h</a>
+, <a class="el" href="_target_body_list_8h.html#ad8923d1776beec05f1a4f41eeb6b1346">TargetBodyList.h</a>
+, <a class="el" href="_template_8h.html#abb2a985d661aa60bfda8e4afae6fb8b2">Template.h</a>
+, <a class="el" href="_work_order_8h.html#a45f41407f6edd036bb1d39f28c69abc8">WorkOrder.h</a>
+, <a class="el" href="_gui_camera_8h.html#ac04c302c48c4236ccf9590983794b5a2">GuiCamera.h</a>
+, <a class="el" href="_gis_geometry_8h.html#ab91c0e7e5c1fed59ab9b60ab6a7a0f8b">GisGeometry.h</a>
+, <a class="el" href="_pvl_object_8h.html#ae8f75751694235be00a0f1fcbf9b5886">PvlObject.h</a>
+, <a class="el" href="_resource_8h.html#af89f3541327ff78b8985a578a99b11aa">Resource.h</a>
+, <a class="el" href="_strategy_8h.html#ae1f7eb21613ae642364aeebf5a0668ec">Strategy.h</a>
+, <a class="el" href="_bundle_results_8h.html#a1d124ba7e37d4314d03ccda03c065a03">BundleResults.h</a>
+, <a class="el" href="_bundle_settings_8h.html#a5741ef29e21a75d819d31dcf0c8f31ed">BundleSettings.h</a>
+, <a class="el" href="_bundle_solution_info_8h.html#aea3f36bba1f7816198caea9b855b6aae">BundleSolutionInfo.h</a>
+, <a class="el" href="_control_net_8h.html#af3442879452ddaef34b29279dc586d28">ControlNet.h</a>
+, <a class="el" href="_correlation_matrix_8h.html#ab323e59ecc40fce1b8ba143081b8948a">CorrelationMatrix.h</a>
+, <a class="el" href="_control_8h.html#a9306b4b5b085bcf0cc433b54be4d710c">Control.h</a>
+, <a class="el" href="_control_display_properties_8h.html#a2d1256d982c0b6faf5a0d7ec36763ca6">ControlDisplayProperties.h</a>
+, <a class="el" href="_control_list_8h.html#a9c1b684b5e6f85671555999c55d9230f">ControlList.h</a>
+, <a class="el" href="_cube_plot_curve_8h.html#a4ed1d97f36a6fdb411e7174fe4d33cc6">CubePlotCurve.h</a>
+, <a class="el" href="_feature_nomenclature_8h.html#adb8b114f0b1ad368a0f4273feae3e82d">FeatureNomenclature.h</a>
+, <a class="el" href="_gui_camera_display_properties_8h.html#a37e991595f0db0db6f074077dfd41461">GuiCameraDisplayProperties.h</a>
+</li>
+<li>Q_DECLARE_OPAQUE_POINTER()
+: <a class="el" href="_plot_window_8h.html#af04312f00a3ffec801d20ea1a7a9c48f">PlotWindow.h</a>
+</li>
+<li>qmini()
+: <a class="el" href="ck3sdn_8cpp.html#acaf0f875bc81210fba006ce958f840e6">ck3sdn.cpp</a>
+, <a class="el" href="qmini_8cpp.html#acde5caf35dc71c089a7fa662c470b4e1">qmini.cpp</a>
+</li>
+<li>QStartup()
+: <a class="el" href="_environment_8cpp.html#a47d797a2ba1416ec56ebc15194dccadb">Environment.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_r"></a>- r -</h3><ul>
+<li>refchg_()
+: <a class="el" href="_spice_rotation_8cpp.html#a32841b73be25b609f86c52f49e06cca1">SpiceRotation.cpp</a>
+</li>
+<li>Report()
+: <a class="el" href="unit_test__disabled_8cpp.html#af90222cdb4545377425435452071185d">unitTest_disabled.cpp</a>
+</li>
+<li>RingCylindricalPlugin()
+: <a class="el" href="_ring_cylindrical_8cpp.html#adaaf8820f01fc47dcbe0acd2a4da97b6">RingCylindrical.cpp</a>
+</li>
+<li>RobinsonPlugin()
+: <a class="el" href="_robinson_8cpp.html#a9ebe3486c958be370934ff1287c34b6c">Robinson.cpp</a>
+</li>
+<li>RosettaOsirisCameraPlugin()
+: <a class="el" href="_rosetta_osiris_camera_8cpp.html#a3088d79d8b88a51948d8597687fabf1b">RosettaOsirisCamera.cpp</a>
+</li>
+<li>RosettaVirtisCameraPlugin()
+: <a class="el" href="_rosetta_virtis_camera_8cpp.html#a4e716d6396b08e2b765ac6213f0c0f05">RosettaVirtisCamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_s"></a>- s -</h3><ul>
+<li>SegmentationFault()
+: <a class="el" href="_isis_8h.html#a107bc891bdb0fcb2d6487ee84fcedffe">Isis.h</a>
+</li>
+<li>ShadeAtmPlugin()
+: <a class="el" href="_shade_atm_8cpp.html#af270903e48a2d11c3478c6de4f9eea9a">ShadeAtm.cpp</a>
+</li>
+<li>ShadePlugin()
+: <a class="el" href="_shade_8cpp.html#a0da266fbac05408f96e1256321fcaf62">Shade.cpp</a>
+</li>
+<li>SimpleCylindricalPlugin()
+: <a class="el" href="_simple_cylindrical_8cpp.html#a2eb1a640fb923863c0bc8bb01fb11800">SimpleCylindrical.cpp</a>
+</li>
+<li>SinusoidalPlugin()
+: <a class="el" href="_sinusoidal_8cpp.html#a0512261db73f0640d17ce0abe5faba33">Sinusoidal.cpp</a>
+</li>
+<li>SsiCameraPlugin()
+: <a class="el" href="_ssi_camera_8cpp.html#ad885fbf3f0fd3b3701b10f7baf4ae8a4">SsiCamera.cpp</a>
+</li>
+<li>StandardDeviationOperatorPlugin()
+: <a class="el" href="_standard_deviation_operator_8cpp.html#a435387b80090bff266ce32354789362a">StandardDeviationOperator.cpp</a>
+</li>
+<li>startMonitoringMemory()
+: <a class="el" href="_isis_8h.html#a80d1c42547ba2e2b58b3ff460895e522">Isis.h</a>
+</li>
+<li>stopMonitoringMemory()
+: <a class="el" href="_isis_8h.html#abcdf0a6a07bb01457ac80215a91bee4a">Isis.h</a>
+</li>
+<li>StripPolygonSeederPlugin()
+: <a class="el" href="_strip_polygon_seeder_8cpp.html#a4751c225820a0e176df7caf3bcf94cbd">StripPolygonSeeder.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_t"></a>- t -</h3><ul>
+<li>TgoCassisCameraPlugin()
+: <a class="el" href="_tgo_cassis_camera_8cpp.html#ad2acb09a86e7f708e4c283cec8059344">TgoCassisCamera.cpp</a>
+</li>
+<li>ThemisIrCameraPlugin()
+: <a class="el" href="_themis_ir_camera_8cpp.html#aaa93dd940444d417527c3883f94c0a01">ThemisIrCamera.cpp</a>
+</li>
+<li>ThemisVisCameraPlugin()
+: <a class="el" href="_themis_vis_camera_8cpp.html#abbb089ae11a71b8c600be07156f0dfcb">ThemisVisCamera.cpp</a>
+</li>
+<li>TopoAtmPlugin()
+: <a class="el" href="_topo_atm_8cpp.html#a5c9d50276143202e56449e63a18ba92f">TopoAtm.cpp</a>
+</li>
+<li>TopoPlugin()
+: <a class="el" href="_topo_8cpp.html#ad64005b6208ce9dddf3694e0c351669c">Topo.cpp</a>
+</li>
+<li>TransverseMercatorPlugin()
+: <a class="el" href="_transverse_mercator_8cpp.html#a2549936652980ccbef27b698cbddc0ba">TransverseMercator.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_u"></a>- u -</h3><ul>
+<li>UvvisCameraPlugin()
+: <a class="el" href="_uvvis_camera_8cpp.html#a3db61dc475a2aaf0ace2d0602b7681a9">UvvisCamera.cpp</a>
+</li>
+</ul>
+
+
+<h3><a id="index_v"></a>- v -</h3><ul>
+<li>VikingCameraPlugin()
+: <a class="el" href="_viking_camera_8cpp.html#a9425689404a403ff5343aa3d6d310da2">VikingCamera.cpp</a>
+</li>
+<li>VimsCameraPlugin()
+: <a class="el" href="_vims_camera_8cpp.html#aa3ad152cd48aa14affdefa0fcdedb1ed">VimsCamera.cpp</a>
+</li>
+<li>VoyagerCameraPlugin()
+: <a class="el" href="_voyager_camera_8cpp.html#ad122847a4c3ae5489a7d7cf7c964795a">VoyagerCamera.cpp</a>
+</li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

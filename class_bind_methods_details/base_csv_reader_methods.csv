@@ -1,0 +1,30 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+CSVReader,Parsing,isis/src/base/objs/CSVReader/CSVReader.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,CSVReader,isis_pybind.CSVReader,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,CSVReader(),isis_pybind.CSVReader(),N,抽象基类/纯虚接口
+Query,int size() const { return (_lines.size()),isis_pybind.CSVReader.size,N,抽象基类/纯虚接口
+Public API,int rows() const { int nrows(_lines.size() - firstRowIndex()),isis_pybind.CSVReader.rows,N,抽象基类/纯虚接口
+Public API,int columns() const,isis_pybind.CSVReader.columns,N,抽象基类/纯虚接口
+Public API,int columns(const CSVTable &table) const,isis_pybind.CSVReader.columns,N,抽象基类/纯虚接口
+Mutation/Configuration,void setComment(const bool ignore = true) { _ignoreComments = ignore,isis_pybind.CSVReader.set_comment,N,抽象基类/纯虚接口
+Mutation/Configuration,void setSkip(int nskip) { if(nskip >= 0) _skip = nskip,isis_pybind.CSVReader.set_skip,N,抽象基类/纯虚接口
+Public API,int getSkip() const { return (_skip),isis_pybind.CSVReader.get_skip,N,抽象基类/纯虚接口
+Public API,bool haveHeader() const { return (_header),isis_pybind.CSVReader.have_header,N,抽象基类/纯虚接口
+Mutation/Configuration,void setHeader(const bool gotIt = true) { _header = gotIt,isis_pybind.CSVReader.set_header,N,抽象基类/纯虚接口
+Mutation/Configuration,void setDelimiter(const char &delimiter) { _delimiter = delimiter,isis_pybind.CSVReader.set_delimiter,N,抽象基类/纯虚接口
+Public API,char getDelimiter() const { return (_delimiter),isis_pybind.CSVReader.get_delimiter,N,抽象基类/纯虚接口
+Mutation/Configuration,void setKeepEmptyParts() { _keepParts = true,isis_pybind.CSVReader.set_keep_empty_parts,N,抽象基类/纯虚接口
+Mutation/Configuration,void setSkipEmptyParts() { _keepParts = false,isis_pybind.CSVReader.set_skip_empty_parts,N,抽象基类/纯虚接口
+Public API,bool keepEmptyParts() const { return (_keepParts),isis_pybind.CSVReader.keep_empty_parts,N,抽象基类/纯虚接口
+Read/Write IO,void read(const QString &fname),isis_pybind.CSVReader.read,N,抽象基类/纯虚接口
+Public API,CSVAxis getHeader() const,isis_pybind.CSVReader.get_header,N,抽象基类/纯虚接口
+Public API,CSVAxis getRow(int index) const,isis_pybind.CSVReader.get_row,N,抽象基类/纯虚接口
+Public API,CSVAxis getColumn(int index) const,isis_pybind.CSVReader.get_column,N,抽象基类/纯虚接口
+Public API,CSVAxis getColumn(const QString &hname) const,isis_pybind.CSVReader.get_column,N,抽象基类/纯虚接口
+Public API,CSVTable getTable() const,isis_pybind.CSVReader.get_table,N,抽象基类/纯虚接口
+Query,bool isTableValid(const CSVTable &table) const,isis_pybind.CSVReader.is_table_valid,N,抽象基类/纯虚接口
+Public API,CSVColumnSummary getColumnSummary(const CSVTable &table) const,isis_pybind.CSVReader.get_column_summary,N,抽象基类/纯虚接口
+Public API,template <typename T> TNT::Array1D<T> convert(const CSVAxis &data) const,isis_pybind.CSVReader.convert,N,抽象基类/纯虚接口
+Mutation/Configuration,void clear() { _lines.clear(),isis_pybind.CSVReader.clear,N,抽象基类/纯虚接口

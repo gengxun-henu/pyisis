@@ -1,0 +1,474 @@
+import unittest
+
+from _unit_test_support import ip, temporary_directory, workspace_test_data_path
+
+
+class ControlCoreUnitTest(unittest.TestCase):
+    def open_cube(self, path):
+        cube = ip.Cube()
+        cube.open(str(path), "r")
+        self.addCleanup(cube.close)
+        return cube
+
+    def test_bundle_target_body_minimal_configuration(self):
+        target_body = ip.BundleTargetBody()
+        target_body.set_solve_settings(
+            [
+                ip.BundleTargetBody.TargetSolveCodes.PoleRA,
+                ip.BundleTargetBody.TargetSolveCodes.PoleDec,
+                ip.BundleTargetBody.TargetSolveCodes.PM,
+                ip.BundleTargetBody.TargetSolveCodes.MeanRadius,
+            ],
+            ip.Angle(10.0, ip.Angle.Units.Degrees),
+            ip.Angle(0.1, ip.Angle.Units.Degrees),
+            ip.Angle(1.0, ip.Angle.Units.Degrees),
+            ip.Angle(-1.0, ip.Angle.Units.Degrees),
+            ip.Angle(20.0, ip.Angle.Units.Degrees),
+            ip.Angle(0.2, ip.Angle.Units.Degrees),
+            ip.Angle(2.0, ip.Angle.Units.Degrees),
+            ip.Angle(-1.0, ip.Angle.Units.Degrees),
+            ip.Angle(30.0, ip.Angle.Units.Degrees),
+            ip.Angle(0.3, ip.Angle.Units.Degrees),
+            ip.Angle(3.0, ip.Angle.Units.Degrees),
+            ip.Angle(-1.0, ip.Angle.Units.Degrees),
+            ip.BundleTargetBody.TargetRadiiSolveMethod.Mean,
+            ip.Distance(1000.0, ip.Distance.Units.Kilometers),
+            ip.Distance(0.0, ip.Distance.Units.Kilometers),
+            ip.Distance(1001.0, ip.Distance.Units.Kilometers),
+            ip.Distance(0.0, ip.Distance.Units.Kilometers),
+            ip.Distance(1002.0, ip.Distance.Units.Kilometers),
+            ip.Distance(0.0, ip.Distance.Units.Kilometers),
+            ip.Distance(1003.0, ip.Distance.Units.Kilometers),
+            ip.Distance(0.5, ip.Distance.Units.Kilometers),
+        )
+
+        self.assertEqual(target_body.number_parameters(), 4)
+        self.assertEqual(target_body.number_radius_parameters(), 1)
+        self.assertTrue(target_body.solve_pole_ra())
+        self.assertFalse(target_body.solve_pole_ra_velocity())
+        self.assertTrue(target_body.solve_pole_dec())
+        self.assertTrue(target_body.solve_pm())
+        self.assertFalse(target_body.solve_triaxial_radii())
+        self.assertTrue(target_body.solve_mean_radius())
+        self.assertEqual(
+            ip.BundleTargetBody.target_radii_option_to_string(
+                ip.BundleTargetBody.TargetRadiiSolveMethod.Mean
+            ),
+            "MeanRadius",
+        )
+        self.assertEqual(
+            ip.BundleTargetBody.string_to_target_radii_option("ALL"),
+            ip.BundleTargetBody.TargetRadiiSolveMethod.All,
+        )
+        self.assertAlmostEqual(target_body.pole_ra_coefs()[0].degrees(), 10.0)
+        self.assertAlmostEqual(target_body.pole_dec_coefs()[0].degrees(), 20.0)
+        self.assertAlmostEqual(target_body.pm_coefs()[0].degrees(), 30.0)
+        self.assertAlmostEqual(target_body.mean_radius().kilometers(), 1003.0)
+
+        formatted = target_body.format_bundle_output_string(False)
+        self.assertIn("POLE RA", formatted)
+        self.assertIn("MeanRadius", formatted)
+        self.assertIn("0.1", formatted)
+        self.assertIn("N/A", formatted)
+        self.assertEqual(
+            [entry.strip() for entry in target_body.parameter_list()],
+            ["POLE RA", "POLE DEC", "PM", "MeanRadius"],
+        )
+
+    def test_bundle_observation_solve_settings_round_trip(self):
+        settings = ip.BundleObservationSolveSettings()
+        settings.set_instrument_id("MDIS-WAC")
+        settings.add_observation_number("OBS-2")
+        settings.add_observation_number("OBS-1")
+        settings.set_csm_solve_set(
+            ip.BundleObservationSolveSettings.CSMSolveSet.ADJUSTABLE
+        )
+        settings.set_csm_solve_parameter_list(["PARAM_A", "PARAM_B"])
+        settings.set_instrument_pointing_settings(
+            ip.BundleObservationSolveSettings.InstrumentPointingSolveOption.AnglesVelocityAcceleration,
+            True,
+            2,
+            2,
+            True,
+            0.1,
+            0.2,
+            0.3,
+            [0.4],
+        )
+        settings.set_instrument_position_settings(
+            ip.BundleObservationSolveSettings.InstrumentPositionSolveOption.PositionVelocity,
+            2,
+            2,
+            False,
+            10.0,
+            20.0,
+            -1.0,
+            [30.0],
+        )
+
+        self.assertEqual(settings.instrument_id(), "MDIS-WAC")
+        self.assertEqual(settings.observation_numbers(), ["OBS-1", "OBS-2"])
+        self.assertEqual(
+            settings.csm_solve_option(),
+            ip.BundleObservationSolveSettings.CSMSolveOption.List,
+        )
+        self.assertEqual(settings.csm_parameter_set(), ip.BundleObservationSolveSettings.CSMSolveSet.ADJUSTABLE)
+        self.assertEqual(settings.csm_parameter_list(), ["PARAM_A", "PARAM_B"])
+        self.assertEqual(
+            ip.BundleObservationSolveSettings.csm_solve_set_to_string(
+                ip.BundleObservationSolveSettings.CSMSolveSet.NON_ADJUSTABLE
+            ),
+            "NON_ADJUSTABLE",
+        )
+        self.assertEqual(
+            ip.BundleObservationSolveSettings.string_to_csm_solve_type("REAL"),
+            ip.BundleObservationSolveSettings.CSMSolveType.REAL,
+        )
+        self.assertEqual(
+            settings.instrument_pointing_solve_option(),
+            ip.BundleObservationSolveSettings.InstrumentPointingSolveOption.AnglesVelocityAcceleration,
+        )
+        self.assertTrue(settings.solve_twist())
+        self.assertTrue(settings.solve_poly_over_pointing())
+        self.assertEqual(settings.number_camera_angle_coefficients_solved(), 3)
+        self.assertEqual(settings.apriori_pointing_sigmas(), [0.1, 0.2, 0.3, 0.4])
+        self.assertEqual(
+            settings.pointing_interpolation_type(),
+            ip.BundleObservationSolveSettings.PointingInterpolationType.PolyFunctionOverSpice,
+        )
+        self.assertEqual(
+            settings.instrument_position_solve_option(),
+            ip.BundleObservationSolveSettings.InstrumentPositionSolveOption.PositionVelocity,
+        )
+        self.assertFalse(settings.solve_position_over_hermite())
+        self.assertEqual(settings.number_camera_position_coefficients_solved(), 2)
+        self.assertEqual(settings.apriori_position_sigmas(), [10.0, 20.0, 30.0])
+        self.assertEqual(
+            settings.position_interpolation_type(),
+            ip.BundleObservationSolveSettings.PositionInterpolationType.PolyFunction,
+        )
+
+    def test_bundle_settings_basic_configuration(self):
+        settings = ip.BundleSettings()
+
+        self.assertTrue(settings.validate_network())
+        self.assertEqual(settings.number_solve_settings(), 1)
+        self.assertFalse(settings.solve_target_body())
+        self.assertEqual(settings.number_target_body_parameters(), 0)
+        self.assertIsNone(settings.bundle_target_body())
+
+        settings.set_validate_network(False)
+        settings.set_solve_options(
+            True,
+            True,
+            True,
+            False,
+            ip.SurfacePoint.CoordinateType.Rectangular,
+            ip.SurfacePoint.CoordinateType.Latitudinal,
+            1.25,
+            2.5,
+            -1.0,
+        )
+        settings.set_create_inverse_matrix(True)
+        settings.set_outlier_rejection(True, 2.75)
+        settings.set_convergence_criteria(
+            ip.BundleSettings.ConvergenceCriteria.ParameterCorrections,
+            1.0e-6,
+            15,
+        )
+        settings.add_maximum_likelihood_estimator_model(
+            ip.BundleSettings.MaximumLikelihoodModel.Huber,
+            1.345,
+        )
+        settings.set_output_file_prefix("bundle/run_")
+        settings.set_cube_list("cubes.lis")
+
+        observation_settings = ip.BundleObservationSolveSettings()
+        observation_settings.set_instrument_id("CTX")
+        observation_settings.add_observation_number("OBS-CTX-1")
+        settings.set_observation_solve_options([observation_settings])
+
+        target_body = ip.BundleTargetBody()
+        target_body.set_solve_settings(
+            [
+                ip.BundleTargetBody.TargetSolveCodes.PoleRA,
+                ip.BundleTargetBody.TargetSolveCodes.MeanRadius,
+            ],
+            ip.Angle(5.0, ip.Angle.Units.Degrees),
+            ip.Angle(0.1, ip.Angle.Units.Degrees),
+            ip.Angle(0.0, ip.Angle.Units.Degrees),
+            ip.Angle(-1.0, ip.Angle.Units.Degrees),
+            ip.Angle(0.0, ip.Angle.Units.Degrees),
+            ip.Angle(-1.0, ip.Angle.Units.Degrees),
+            ip.Angle(0.0, ip.Angle.Units.Degrees),
+            ip.Angle(-1.0, ip.Angle.Units.Degrees),
+            ip.Angle(0.0, ip.Angle.Units.Degrees),
+            ip.Angle(-1.0, ip.Angle.Units.Degrees),
+            ip.Angle(0.0, ip.Angle.Units.Degrees),
+            ip.Angle(-1.0, ip.Angle.Units.Degrees),
+            ip.BundleTargetBody.TargetRadiiSolveMethod.Mean,
+            ip.Distance(1000.0, ip.Distance.Units.Kilometers),
+            ip.Distance(0.0, ip.Distance.Units.Kilometers),
+            ip.Distance(1001.0, ip.Distance.Units.Kilometers),
+            ip.Distance(0.0, ip.Distance.Units.Kilometers),
+            ip.Distance(1002.0, ip.Distance.Units.Kilometers),
+            ip.Distance(0.0, ip.Distance.Units.Kilometers),
+            ip.Distance(1003.0, ip.Distance.Units.Kilometers),
+            ip.Distance(0.5, ip.Distance.Units.Kilometers),
+        )
+        settings.set_bundle_target_body(target_body)
+
+        self.assertFalse(settings.validate_network())
+        self.assertTrue(settings.solve_observation_mode())
+        self.assertTrue(settings.update_cube_label())
+        self.assertTrue(settings.error_propagation())
+        self.assertTrue(settings.create_inverse_matrix())
+        self.assertFalse(settings.solve_radius())
+        self.assertEqual(
+            settings.control_point_coord_type_bundle(),
+            ip.SurfacePoint.CoordinateType.Rectangular,
+        )
+        self.assertEqual(
+            settings.control_point_coord_type_reports(),
+            ip.SurfacePoint.CoordinateType.Latitudinal,
+        )
+        self.assertAlmostEqual(settings.global_point_coord1_apriori_sigma(), 1.25)
+        self.assertAlmostEqual(settings.global_point_coord2_apriori_sigma(), 2.5)
+        self.assertTrue(settings.outlier_rejection())
+        self.assertAlmostEqual(settings.outlier_rejection_multiplier(), 2.75)
+        self.assertEqual(
+            settings.convergence_criteria(),
+            ip.BundleSettings.ConvergenceCriteria.ParameterCorrections,
+        )
+        self.assertAlmostEqual(settings.convergence_criteria_threshold(), 1.0e-6)
+        self.assertEqual(settings.convergence_criteria_maximum_iterations(), 15)
+        self.assertEqual(
+            ip.BundleSettings.convergence_criteria_to_string(
+                ip.BundleSettings.ConvergenceCriteria.ParameterCorrections
+            ),
+            "ParameterCorrections",
+        )
+        self.assertEqual(
+            ip.BundleSettings.string_to_convergence_criteria("Sigma0"),
+            ip.BundleSettings.ConvergenceCriteria.Sigma0,
+        )
+
+        maximum_likelihood_models = settings.maximum_likelihood_estimator_models()
+        self.assertEqual(len(maximum_likelihood_models), 1)
+        self.assertEqual(
+            maximum_likelihood_models[0][0],
+            ip.BundleSettings.MaximumLikelihoodModel.Huber,
+        )
+        self.assertAlmostEqual(maximum_likelihood_models[0][1], 1.345)
+        self.assertEqual(settings.output_file_prefix(), "bundle/run_")
+        self.assertEqual(settings.cube_list(), "cubes.lis")
+        self.assertEqual(settings.number_solve_settings(), 1)
+        self.assertEqual(settings.observation_solve_settings()[0].instrument_id(), "CTX")
+        self.assertEqual(settings.observation_solve_settings(0).instrument_id(), "CTX")
+        self.assertEqual(
+            settings.observation_solve_settings("OBS-CTX-1").instrument_id(),
+            "CTX",
+        )
+        bound_target_body = settings.bundle_target_body()
+        self.assertIsNotNone(bound_target_body)
+        self.assertTrue(settings.solve_target_body())
+        self.assertEqual(settings.number_target_body_parameters(), 2)
+        self.assertTrue(settings.solve_pole_ra())
+        self.assertTrue(settings.solve_mean_radius())
+        self.assertAlmostEqual(bound_target_body.pole_ra_coefs()[0].degrees(), 5.0)
+        self.assertAlmostEqual(bound_target_body.mean_radius().kilometers(), 1003.0)
+
+    def test_control_measure_log_data_round_trip(self):
+        log_data = ip.ControlMeasureLogData(
+            ip.ControlMeasureLogData.NumericLogDataType.GoodnessOfFit,
+            0.25,
+        )
+        self.assertTrue(log_data.is_valid())
+        self.assertEqual(
+            log_data.get_data_type(),
+            ip.ControlMeasureLogData.NumericLogDataType.GoodnessOfFit,
+        )
+        self.assertAlmostEqual(log_data.get_numerical_value(), 0.25, places=12)
+        self.assertEqual(
+            log_data.data_type_to_name(
+                ip.ControlMeasureLogData.NumericLogDataType.GoodnessOfFit
+            ),
+            "GoodnessOfFit",
+        )
+
+    def test_control_point_and_measure_relationships(self):
+        point = ip.ControlPoint("P1")
+        point.set_type(ip.ControlPoint.PointType.Free)
+
+        measure = ip.ControlMeasure()
+        measure.set_cube_serial_number("SN-001")
+        measure.set_coordinate(12.5, 22.5)
+        measure.set_type(ip.ControlMeasure.MeasureType.Manual)
+        measure.set_chooser_name("pytest")
+        measure.set_date_time("2026-03-17T00:00:00")
+        measure.set_log_data(
+            ip.ControlMeasureLogData(
+                ip.ControlMeasureLogData.NumericLogDataType.GoodnessOfFit,
+                0.9,
+            )
+        )
+
+        point.add_measure(measure)
+        point.set_ref_measure(0)
+
+        self.assertEqual(point.get_num_measures(), 1)
+        self.assertTrue(point.has_ref_measure())
+        self.assertEqual(point.get_measure(0).get_cube_serial_number(), "SN-001")
+        self.assertEqual(point.get_ref_measure().get_cube_serial_number(), "SN-001")
+        self.assertEqual(point.get_cube_serial_numbers(), ["SN-001"])
+        self.assertEqual(point.index_of("SN-001"), 0)
+        self.assertEqual(point.get_measure(0).get_log_data_entries()[0].get_numerical_value(), 0.9)
+
+    def test_control_net_basic_graph_and_io(self):
+        net = ip.ControlNet()
+        net.set_network_id("ExampleNet")
+        net.set_user_name("pytest")
+        net.set_created_date("2026-03-17T00:00:00")
+        net.set_modified_date("2026-03-17T00:01:00")
+        net.set_description("unit test")
+
+        point = ip.ControlPoint("P1")
+        measure1 = ip.ControlMeasure()
+        measure1.set_cube_serial_number("ALPHA")
+        measure1.set_coordinate(1.0, 2.0)
+        point.add_measure(measure1)
+
+        measure2 = ip.ControlMeasure()
+        measure2.set_cube_serial_number("BRAVO")
+        measure2.set_coordinate(3.0, 4.0)
+        point.add_measure(measure2)
+        point.set_ref_measure(0)
+
+        net.add_point(point)
+
+        self.assertEqual(net.get_num_points(), 1)
+        self.assertEqual(net.get_num_measures(), 2)
+        self.assertEqual(net.get_network_id(), "ExampleNet")
+        self.assertEqual(sorted(net.get_cube_serials()), ["ALPHA", "BRAVO"])
+        self.assertEqual(net.get_point_ids(), ["P1"])
+        self.assertEqual(net.get_adjacent_images("ALPHA"), ["BRAVO"])
+        self.assertEqual(net.get_edge_count(), 1)
+        self.assertIn("ALPHA", net.graph_to_string())
+
+        with temporary_directory() as temp_dir:
+            output_path = temp_dir / "example.net"
+            net.write(str(output_path), True)
+            loaded = ip.ControlNet(str(output_path))
+            self.assertEqual(loaded.get_num_points(), 1)
+            self.assertEqual(loaded.get_num_measures(), 2)
+            self.assertEqual(loaded.get_point("P1").get_ref_measure().get_cube_serial_number(), "ALPHA")
+
+    def test_control_net_diff_reports_basic_difference(self):
+        diff = ip.ControlNetDiff()
+
+        net1 = ip.ControlNet()
+        net1.set_network_id("NetA")
+        point1 = ip.ControlPoint("P1")
+        measure1 = ip.ControlMeasure()
+        measure1.set_cube_serial_number("ALPHA")
+        measure1.set_coordinate(1.0, 2.0)
+        point1.add_measure(measure1)
+        point1.set_ref_measure(0)
+        net1.add_point(point1)
+
+        net2 = ip.ControlNet()
+        net2.set_network_id("NetB")
+        point2 = ip.ControlPoint("P1")
+        measure2 = ip.ControlMeasure()
+        measure2.set_cube_serial_number("ALPHA")
+        measure2.set_coordinate(1.0, 2.0)
+        point2.add_measure(measure2)
+        point2.set_ref_measure(0)
+        net2.add_point(point2)
+
+        with temporary_directory() as temp_dir:
+            net1_path = temp_dir / "net1.net"
+            net2_path = temp_dir / "net2.net"
+            net1.write(str(net1_path), True)
+            net2.write(str(net2_path), True)
+
+            report = diff.compare(ip.FileName(str(net1_path)), ip.FileName(str(net2_path)))
+            report_text = str(report)
+            self.assertIn("NetworkId", report_text)
+
+    def test_control_point_list_reads_ids(self):
+        with temporary_directory() as temp_dir:
+            point_list_path = temp_dir / "points.lis"
+            point_list_path.write_text("P1\nP2\nP3\n", encoding="utf-8")
+
+            point_list = ip.ControlPointList(ip.FileName(str(point_list_path)))
+
+            self.assertEqual(len(point_list), 3)
+            self.assertEqual(point_list.control_point_id(0), "P1")
+            self.assertEqual(point_list.control_point_id(2), "P3")
+            self.assertEqual(point_list.control_point_index("P2"), 1)
+            self.assertTrue(point_list.has_control_point("P3"))
+            self.assertFalse(point_list.has_control_point("P4"))
+
+            pvl_log = ip.Pvl()
+            point_list.register_statistics(pvl_log)
+            self.assertTrue(pvl_log.has_keyword("TotalPoints"))
+            self.assertEqual(pvl_log.find_keyword("TotalPoints")[0], "3")
+            self.assertTrue(pvl_log.has_keyword("InvalidPoints"))
+
+    def test_measure_validation_results_round_trip(self):
+        results = ip.MeasureValidationResults()
+
+        self.assertTrue(results.is_valid())
+        self.assertEqual(results.to_string(), "succeeded")
+        self.assertTrue(
+            results.get_valid_status(ip.MeasureValidationResults.Option.EmissionAngle)
+        )
+
+        results.add_failure(
+            ip.MeasureValidationResults.Option.EmissionAngle,
+            35.5,
+            "greater",
+        )
+        self.assertFalse(results.is_valid())
+        self.assertFalse(
+            results.get_valid_status(ip.MeasureValidationResults.Option.EmissionAngle)
+        )
+        self.assertIn(
+            "Emission Angle",
+            results.get_failure_prefix(ip.MeasureValidationResults.Option.EmissionAngle),
+        )
+        self.assertIn("greater than tolerance 35.5", results.to_string())
+
+        ranged = ip.MeasureValidationResults()
+        ranged.add_failure(
+            ip.MeasureValidationResults.Option.PixelShift,
+            4.25,
+            0.0,
+            3.0,
+        )
+        formatted = ranged.to_string("120.5", "220.5", "SN-42", "P42")
+        self.assertIn("Control Measure with position (120.5, 220.5)", formatted)
+        self.assertIn("Pixel Shift 4.25 is outside range [0, 3]", formatted)
+
+    def test_bundle_image_basic_accessors(self):
+        cube = self.open_cube(
+            workspace_test_data_path("mosrange", "EN0108828322M_iof.cub")
+        )
+        camera = cube.camera()
+
+        bundle_image = ip.BundleImage(
+            camera,
+            "SN-MDIS-1",
+            "/tmp/EN0108828322M_iof.cub",
+        )
+
+        self.assertIs(bundle_image.camera(), camera)
+        self.assertEqual(bundle_image.serial_number(), "SN-MDIS-1")
+        self.assertEqual(bundle_image.file_name(), "/tmp/EN0108828322M_iof.cub")
+        self.assertFalse(bundle_image.has_parent_observation())
+        self.assertIn("BundleImage(serial_number='SN-MDIS-1'", repr(bundle_image))
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,329 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/LidarControlPoint/LidarControlPoint.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_lidar_control_point_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">LidarControlPoint.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_lidar_control_point_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef LidarControlPoint_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define LidarControlPoint_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;QPointer&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;QSharedPointer&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_control_measure_8h.html">ControlMeasure.h</a>&quot;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_control_point_8h.html">ControlPoint.h</a>&quot;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_cube_8h.html">Cube.h</a>&quot;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="i_time_8h.html">iTime.h</a>&quot;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="class_isis_1_1_lidar_control_point.html">   60</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_lidar_control_point.html">LidarControlPoint</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <a class="code" href="class_isis_1_1_lidar_control_point.html#a29d48237c9846ec58606399af7cbe03e">LidarControlPoint</a>();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <a class="code" href="class_isis_1_1_lidar_control_point.html#a551bc51d689747ea7945ff5aed42a8b0">~LidarControlPoint</a>();</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <a class="code" href="class_isis_1_1_control_point.html#a0e5ad5b7ba2db4756e4589fcc2ed2673">ControlPoint::Status</a> <a class="code" href="class_isis_1_1_lidar_control_point.html#acf65ea294d5974a70ed9ac3efe7d537c">setRange</a>(<span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_lidar_control_point.html#a4cf13088f1058798a166afca92164ad8">range</a>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="class_isis_1_1_control_point.html#a0e5ad5b7ba2db4756e4589fcc2ed2673">ControlPoint::Status</a> <a class="code" href="class_isis_1_1_lidar_control_point.html#adaf9efd78c163ee3387c12f421366f8f">setSigmaRange</a>(<span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_lidar_control_point.html#ac6b24e7465b39b125c448d5689a07d38">sigmaRange</a>);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <a class="code" href="class_isis_1_1_control_point.html#a0e5ad5b7ba2db4756e4589fcc2ed2673">ControlPoint::Status</a> <a class="code" href="class_isis_1_1_lidar_control_point.html#a7f2c0fe317d108497e6288698ac2d0a4">setTime</a>(<a class="code" href="class_isis_1_1i_time.html">iTime</a> <a class="code" href="class_isis_1_1_lidar_control_point.html#a7e16f7e8d2816195f27c0f66d78bd701">time</a>);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <a class="code" href="class_isis_1_1_control_point.html#a0e5ad5b7ba2db4756e4589fcc2ed2673">ControlPoint::Status</a> <a class="code" href="class_isis_1_1_lidar_control_point.html#a9444e327f8fabebda61a92bea6a4b8e0">addSimultaneous</a>(QString newSerial);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="class_isis_1_1_control_point.html#a0e5ad5b7ba2db4756e4589fcc2ed2673">ControlPoint::Status</a> <a class="code" href="class_isis_1_1_lidar_control_point.html#a32231b8bb9ce1460f8cc6325e2a2d1c2">ComputeResiduals</a>();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="comment">//  Functor predicate for sorting LidarControlPoints</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="struct_isis_1_1_lidar_control_point_1_1_lidar_control_point_less_than_functor.html">   76</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_isis_1_1_lidar_control_point_1_1_lidar_control_point_less_than_functor.html">LidarControlPointLessThanFunctor</a> :</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <span class="keyword">public</span> std::function&lt;bool(QSharedPointer&lt;LidarControlPoint&gt;, QSharedPointer&lt;LidarControlPoint&gt;)&gt; {</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="struct_isis_1_1_lidar_control_point_1_1_lidar_control_point_less_than_functor.html#ae730f5b101f8fa8e1e9744ae6e8c9e47">   78</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="struct_isis_1_1_lidar_control_point_1_1_lidar_control_point_less_than_functor.html#ae730f5b101f8fa8e1e9744ae6e8c9e47">operator() </a>( <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;LidarControlPoint&gt;</a> lcp1,</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                                    <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;LidarControlPoint&gt;</a> lcp2)</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;          {</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;           <span class="keywordflow">return</span> (lcp1-&gt;GetId() &lt; lcp2-&gt;GetId());</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;          }</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    };</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_lidar_control_point.html#a4cf13088f1058798a166afca92164ad8">range</a>();</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_lidar_control_point.html#ac6b24e7465b39b125c448d5689a07d38">sigmaRange</a>();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <a class="code" href="class_isis_1_1i_time.html">iTime</a> <a class="code" href="class_isis_1_1_lidar_control_point.html#a7e16f7e8d2816195f27c0f66d78bd701">time</a>();</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    QStringList <a class="code" href="class_isis_1_1_lidar_control_point.html#ae46c13751e267224b91d3e03df468dc4">snSimultaneous</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_lidar_control_point.html#a5cd9f1c89d325051f7bfa1139f5d8119">isSimultaneous</a>(QString serialNumber);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordtype">double</span> m_range;                </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">double</span> m_sigmaRange;           </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <a class="code" href="class_isis_1_1i_time.html">iTime</a> m_time;                  </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    QStringList *m_snSimultaneous; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  };</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  <span class="comment">// typedefs</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="namespace_isis.html#a79ca2a3d962f59efba8e0d1192a3ad7e">  101</a></span>&#160;<span class="comment"></span>  <span class="keyword">typedef</span> <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;LidarControlPoint&gt;</a> <a class="code" href="namespace_isis.html#a79ca2a3d962f59efba8e0d1192a3ad7e">LidarControlPointQsp</a>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;}</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    </div>
+<div class="ttc" id="a_control_measure_8h_html"><div class="ttname"><a href="_control_measure_8h.html">ControlMeasure.h</a></div></div>
+<div class="ttc" id="a_control_point_8h_html"><div class="ttname"><a href="_control_point_8h.html">ControlPoint.h</a></div></div>
+<div class="ttc" id="a_cube_8h_html"><div class="ttname"><a href="_cube_8h.html">Cube.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_html"><div class="ttname"><a href="class_isis_1_1_control_point.html">Isis::ControlPoint</a></div><div class="ttdoc">A single control point.</div><div class="ttdef"><b>Definition:</b> ControlPoint.h:356</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_html_a0e5ad5b7ba2db4756e4589fcc2ed2673"><div class="ttname"><a href="class_isis_1_1_control_point.html#a0e5ad5b7ba2db4756e4589fcc2ed2673">Isis::ControlPoint::Status</a></div><div class="ttdeci">Status</div><div class="ttdoc">This is a return status for many of the mutating (setter) method calls.</div><div class="ttdef"><b>Definition:</b> ControlPoint.h:395</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html">Isis::LidarControlPoint</a></div><div class="ttdoc">A lidar control ControlPoint.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.h:60</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_a29d48237c9846ec58606399af7cbe03e"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#a29d48237c9846ec58606399af7cbe03e">Isis::LidarControlPoint::LidarControlPoint</a></div><div class="ttdeci">LidarControlPoint()</div><div class="ttdoc">Constructs a LidarControlPoint with the given time, range, and sigma range.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:25</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_a32231b8bb9ce1460f8cc6325e2a2d1c2"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#a32231b8bb9ce1460f8cc6325e2a2d1c2">Isis::LidarControlPoint::ComputeResiduals</a></div><div class="ttdeci">ControlPoint::Status ComputeResiduals()</div><div class="ttdoc">TODO: clean up code and document why this is different from the ComputeResiduals method for a normal ...</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:169</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_a4cf13088f1058798a166afca92164ad8"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#a4cf13088f1058798a166afca92164ad8">Isis::LidarControlPoint::range</a></div><div class="ttdeci">double range()</div><div class="ttdoc">Returns the range of the point.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:105</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_a551bc51d689747ea7945ff5aed42a8b0"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#a551bc51d689747ea7945ff5aed42a8b0">Isis::LidarControlPoint::~LidarControlPoint</a></div><div class="ttdeci">~LidarControlPoint()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:38</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_a5cd9f1c89d325051f7bfa1139f5d8119"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#a5cd9f1c89d325051f7bfa1139f5d8119">Isis::LidarControlPoint::isSimultaneous</a></div><div class="ttdeci">bool isSimultaneous(QString serialNumber)</div><div class="ttdoc">Determines if input serial number is in list of simultaneous measure serial numbers.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:147</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_a7e16f7e8d2816195f27c0f66d78bd701"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#a7e16f7e8d2816195f27c0f66d78bd701">Isis::LidarControlPoint::time</a></div><div class="ttdeci">iTime time()</div><div class="ttdoc">Returns the time of the point.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:115</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_a7f2c0fe317d108497e6288698ac2d0a4"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#a7f2c0fe317d108497e6288698ac2d0a4">Isis::LidarControlPoint::setTime</a></div><div class="ttdeci">ControlPoint::Status setTime(iTime time)</div><div class="ttdoc">Set the time of the LidarControlPoint.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:52</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_a9444e327f8fabebda61a92bea6a4b8e0"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#a9444e327f8fabebda61a92bea6a4b8e0">Isis::LidarControlPoint::addSimultaneous</a></div><div class="ttdeci">ControlPoint::Status addSimultaneous(QString newSerial)</div><div class="ttdoc">Add a measure to the list of simultaneous images of a LidarControlPoint.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:94</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_ac6b24e7465b39b125c448d5689a07d38"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#ac6b24e7465b39b125c448d5689a07d38">Isis::LidarControlPoint::sigmaRange</a></div><div class="ttdeci">double sigmaRange()</div><div class="ttdoc">Returns the sigma range of the point.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:125</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_acf65ea294d5974a70ed9ac3efe7d537c"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#acf65ea294d5974a70ed9ac3efe7d537c">Isis::LidarControlPoint::setRange</a></div><div class="ttdeci">ControlPoint::Status setRange(double range)</div><div class="ttdoc">Set the range of the LidarControlPoint.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:66</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_adaf9efd78c163ee3387c12f421366f8f"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#adaf9efd78c163ee3387c12f421366f8f">Isis::LidarControlPoint::setSigmaRange</a></div><div class="ttdeci">ControlPoint::Status setSigmaRange(double sigmaRange)</div><div class="ttdoc">Sets the sigma range.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:80</div></div>
+<div class="ttc" id="aclass_isis_1_1_lidar_control_point_html_ae46c13751e267224b91d3e03df468dc4"><div class="ttname"><a href="class_isis_1_1_lidar_control_point.html#ae46c13751e267224b91d3e03df468dc4">Isis::LidarControlPoint::snSimultaneous</a></div><div class="ttdeci">QStringList snSimultaneous() const</div><div class="ttdoc">Returns the list of serial numbers of simultaneous images of the Lidar point.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.cpp:135</div></div>
+<div class="ttc" id="aclass_isis_1_1i_time_html"><div class="ttname"><a href="class_isis_1_1i_time.html">Isis::iTime</a></div><div class="ttdoc">Parse and return pieces of a time string.</div><div class="ttdef"><b>Definition:</b> iTime.h:65</div></div>
+<div class="ttc" id="aclass_q_shared_pointer_html"><div class="ttname"><a href="class_q_shared_pointer.html">QSharedPointer&lt; LidarControlPoint &gt;</a></div></div>
+<div class="ttc" id="ai_time_8h_html"><div class="ttname"><a href="i_time_8h.html">iTime.h</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a79ca2a3d962f59efba8e0d1192a3ad7e"><div class="ttname"><a href="namespace_isis.html#a79ca2a3d962f59efba8e0d1192a3ad7e">Isis::LidarControlPointQsp</a></div><div class="ttdeci">QSharedPointer&lt; LidarControlPoint &gt; LidarControlPointQsp</div><div class="ttdoc">Definition for a shared pointer to a LidarControlPoint.</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.h:101</div></div>
+<div class="ttc" id="astruct_isis_1_1_lidar_control_point_1_1_lidar_control_point_less_than_functor_html"><div class="ttname"><a href="struct_isis_1_1_lidar_control_point_1_1_lidar_control_point_less_than_functor.html">Isis::LidarControlPoint::LidarControlPointLessThanFunctor</a></div><div class="ttdef"><b>Definition:</b> LidarControlPoint.h:77</div></div>
+<div class="ttc" id="astruct_isis_1_1_lidar_control_point_1_1_lidar_control_point_less_than_functor_html_ae730f5b101f8fa8e1e9744ae6e8c9e47"><div class="ttname"><a href="struct_isis_1_1_lidar_control_point_1_1_lidar_control_point_less_than_functor.html#ae730f5b101f8fa8e1e9744ae6e8c9e47">Isis::LidarControlPoint::LidarControlPointLessThanFunctor::operator()</a></div><div class="ttdeci">bool operator()(QSharedPointer&lt; LidarControlPoint &gt; lcp1, QSharedPointer&lt; LidarControlPoint &gt; lcp2)</div><div class="ttdef"><b>Definition:</b> LidarControlPoint.h:78</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_a576af9f1f3bb26b082d16585a91e73c.html">control</a></li><li class="navelem"><a class="el" href="dir_8e87adfb2431123dc47fe3f2bd06feca.html">objs</a></li><li class="navelem"><a class="el" href="dir_4621ed1f78dd4d40263f298ae68177d6.html">LidarControlPoint</a></li><li class="navelem"><a class="el" href="_lidar_control_point_8h.html">LidarControlPoint.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+<map id="Isis::CubeCachingAlgorithm" name="Isis::CubeCachingAlgorithm">
+<area shape="rect" id="node1" title="This is the parent of the caching algorithms." alt="" coords="336,5,530,119"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_boxcar_caching_algorithm.html" title="This algorithm is designed for applications that jump around between a couple of spots in the cube wi..." alt="" coords="5,167,200,280"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_filter_caching_algorithm.html" title="This algorithm is designed for applications that use ProcessByQuickFilter or very similar I/O pattern..." alt="" coords="224,167,418,280"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_regional_caching_algorithm.html" title="This algorithm recommends chunks to be freed that are not within the last IO." alt="" coords="443,183,647,264"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_unique_i_o_caching_algorithm.html" title="This algorithm is designed for applications that jump around between a couple of spots in the cube wi..." alt="" coords="672,167,880,280"/>
+</map>

@@ -1,0 +1,34 @@
+<map id="Isis::Tool" name="Isis::Tool">
+<area shape="rect" id="node1" title="Base class for the Qisis tools." alt="" coords="2587,135,2761,776"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_abstract_plot_tool.html" title="Parent class for plotting tools which provides common functionality." alt="" coords="309,952,471,1273"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_advanced_track_tool.html" title="Tool to display info for a point on a cube." alt="" coords="495,1016,661,1209"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_band_tool.html" title=" " alt="" coords="685,1040,847,1185"/>
+<area shape="rect" id="node10" href="$class_isis_1_1_blink_tool.html" title=" " alt="" coords="871,1016,1010,1209"/>
+<area shape="rect" id="node11" href="$class_isis_1_1_control_net_tool.html" title="ControlNetTool Handles mouse events on CubeDnViews for control point editing for the ipce app." alt="" coords="1034,1024,1199,1201"/>
+<area shape="rect" id="node12" href="$class_isis_1_1_edit_tool.html" title="Interactive image edit tool." alt="" coords="1223,1016,1397,1209"/>
+<area shape="rect" id="node13" href="$class_isis_1_1_feature_nomenclature_tool.html" title="Display nomenclature on MDI Cube Viewports." alt="" coords="1421,928,1620,1297"/>
+<area shape="rect" id="node14" href="$class_isis_1_1_file_tool.html" title=" " alt="" coords="1645,896,1815,1329"/>
+<area shape="rect" id="node16" href="$class_isis_1_1_find_tool.html" title="Tool to locate a point on a cube that is projected and/or has a camera model." alt="" coords="1839,1000,2005,1225"/>
+<area shape="rect" id="node17" href="$class_isis_1_1_help_tool.html" title="Qisis Help Tool." alt="" coords="2028,1040,2168,1185"/>
+<area shape="rect" id="node18" href="$class_isis_1_1_lat_lon_grid_tool.html" title="Lat Lon Grid View Tool." alt="" coords="2192,1040,2353,1185"/>
+<area shape="rect" id="node19" href="$class_isis_1_1_match_tool.html" title="Match tool operations." alt="" coords="2378,976,2562,1249"/>
+<area shape="rect" id="node20" href="$class_isis_1_1_measure_tool.html" title="Tool for measuring distances." alt="" coords="2587,992,2761,1233"/>
+<area shape="rect" id="node21" href="$class_isis_1_1_pan_tool.html" title=" " alt="" coords="2785,1016,2950,1209"/>
+<area shape="rect" id="node22" href="$class_isis_1_1_qnet_nav_tool.html" title="Qnet Navigation Tool." alt="" coords="2974,960,3152,1265"/>
+<area shape="rect" id="node23" href="$class_isis_1_1_qnet_tool.html" title="Qnet tool operations." alt="" coords="3176,912,3361,1313"/>
+<area shape="rect" id="node24" href="$class_isis_1_1_rubber_band_tool.html" title="Rubber banding tool." alt="" coords="3385,936,3590,1289"/>
+<area shape="rect" id="node25" href="$class_isis_1_1_scatter_plot_tool.html" title="Scatter Plot Tool." alt="" coords="3614,984,3827,1241"/>
+<area shape="rect" id="node26" href="$class_isis_1_1_special_pixel_tool.html" title="Sets the colors for the special pixel values." alt="" coords="3851,1008,3998,1217"/>
+<area shape="rect" id="node27" href="$class_isis_1_1_statistics_tool.html" title=" " alt="" coords="4022,1032,4187,1193"/>
+<area shape="rect" id="node28" href="$class_isis_1_1_stretch_tool.html" title="Stretch image edit tool." alt="" coords="4212,824,4403,1401"/>
+<area shape="rect" id="node29" href="$class_isis_1_1_sun_shadow_tool.html" title="Tool for measuring shadow heights." alt="" coords="4427,1008,4593,1217"/>
+<area shape="rect" id="node30" href="$class_isis_1_1_track_tool.html" title="This tool is part of the Qisis namespace and displays the statusbar of the window." alt="" coords="4617,1016,4773,1209"/>
+<area shape="rect" id="node31" href="$class_isis_1_1_window_tool.html" title=" " alt="" coords="4797,1016,4953,1209"/>
+<area shape="rect" id="node32" href="$class_isis_1_1_zoom_tool.html" title="Handles zoom operations for Isis qt apps." alt="" coords="4977,1016,5152,1209"/>
+<area shape="rect" id="node2" href="$class_q_object.html" title=" " alt="" coords="2639,5,2709,87"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_histogram_tool.html" title="Tool for histograms." alt="" coords="5,1473,180,1683"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_spatial_plot_tool.html" title="Spatial Plots." alt="" coords="204,1465,378,1691"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_spectral_plot_tool.html" title="Plot cube DN statistics against the cube band numbers." alt="" coords="403,1449,577,1707"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_stereo_tool.html" title="Tool for computing parallax." alt="" coords="601,1449,776,1707"/>
+<area shape="rect" id="node15" href="$class_isis_1_1_qnet_file_tool.html" title="Qnet File operations." alt="" coords="1660,1449,1800,1707"/>
+</map>

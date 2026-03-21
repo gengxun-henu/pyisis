@@ -1,0 +1,607 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ScatterPlotConfigDialog Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_scatter_plot_config_dialog.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_scatter_plot_config_dialog-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ScatterPlotConfigDialog Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This configuration dialog is for users to determine the scatter plot parameters required to create a scatter plot.  
+ <a href="class_isis_1_1_scatter_plot_config_dialog.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_scatter_plot_config_dialog_8h_source.html">ScatterPlotConfigDialog.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ScatterPlotConfigDialog:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_scatter_plot_config_dialog__inherit__graph.png" border="0" usemap="#a_isis_1_1_scatter_plot_config_dialog_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_scatter_plot_config_dialog_inherit__map" id="a_isis_1_1_scatter_plot_config_dialog_inherit__map">
+<area shape="rect" title="This configuration dialog is for users to determine the scatter plot parameters required to create a ..." alt="" coords="5,135,196,392"/>
+<area shape="rect" href="class_q_dialog.html" title=" " alt="" coords="66,5,135,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ScatterPlotConfigDialog:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_scatter_plot_config_dialog__coll__graph.png" border="0" usemap="#a_isis_1_1_scatter_plot_config_dialog_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_scatter_plot_config_dialog_coll__map" id="a_isis_1_1_scatter_plot_config_dialog_coll__map">
+<area shape="rect" title="This configuration dialog is for users to determine the scatter plot parameters required to create a ..." alt="" coords="5,135,196,392"/>
+<area shape="rect" href="class_q_dialog.html" title=" " alt="" coords="66,5,135,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ae446d186197a2edefe02ce6bc6c54fc9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#ae446d186197a2edefe02ce6bc6c54fc9">ScatterPlotConfigDialog</a> (<a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *activeViewport, <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> *workspace, <a class="el" href="class_q_widget.html">QWidget</a> *parent=NULL)</td></tr>
+<tr class="memdesc:ae446d186197a2edefe02ce6bc6c54fc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method creates all the dialog boxes required for the scatter plot window.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#ae446d186197a2edefe02ce6bc6c54fc9">More...</a><br /></td></tr>
+<tr class="separator:ae446d186197a2edefe02ce6bc6c54fc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54577ce9acfba128931466131216f705"><td class="memItemLeft" align="right" valign="top">virtual QSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a54577ce9acfba128931466131216f705">sizeHint</a> () const</td></tr>
+<tr class="memdesc:a54577ce9acfba128931466131216f705"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is overridden to give a better default size than what Qt calculates by default.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#a54577ce9acfba128931466131216f705">More...</a><br /></td></tr>
+<tr class="separator:a54577ce9acfba128931466131216f705"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71db14010769def3199e86ddfa395f3a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a71db14010769def3199e86ddfa395f3a">xAxisCube</a> () const</td></tr>
+<tr class="memdesc:a71db14010769def3199e86ddfa395f3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current user selection for a cube for the x-axis data for a scatter plot.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#a71db14010769def3199e86ddfa395f3a">More...</a><br /></td></tr>
+<tr class="separator:a71db14010769def3199e86ddfa395f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a82a6c886d8f18032e6c66085db59f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a2a82a6c886d8f18032e6c66085db59f8">yAxisCube</a> () const</td></tr>
+<tr class="memdesc:a2a82a6c886d8f18032e6c66085db59f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current user selection for a cube for the x-axis data for a scatter plot.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#a2a82a6c886d8f18032e6c66085db59f8">More...</a><br /></td></tr>
+<tr class="separator:a2a82a6c886d8f18032e6c66085db59f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a128604b9344dbd818e6285f3028ec2d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a128604b9344dbd818e6285f3028ec2d4">xAxisCubeBand</a> () const</td></tr>
+<tr class="memdesc:a128604b9344dbd818e6285f3028ec2d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current user selection for the band in the x-axis cube to get data from.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#a128604b9344dbd818e6285f3028ec2d4">More...</a><br /></td></tr>
+<tr class="separator:a128604b9344dbd818e6285f3028ec2d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59112c3e2eefbe04da310b3e41962ff4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a59112c3e2eefbe04da310b3e41962ff4">yAxisCubeBand</a> () const</td></tr>
+<tr class="memdesc:a59112c3e2eefbe04da310b3e41962ff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current user selection for the band in the y-axis cube to get data from.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#a59112c3e2eefbe04da310b3e41962ff4">More...</a><br /></td></tr>
+<tr class="separator:a59112c3e2eefbe04da310b3e41962ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdbf123fdeb4712f8ab2240f856adf3f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#afdbf123fdeb4712f8ab2240f856adf3f">xAxisBinCount</a> () const</td></tr>
+<tr class="memdesc:afdbf123fdeb4712f8ab2240f856adf3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current user selection for the resolution of the scatter plot's x data.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#afdbf123fdeb4712f8ab2240f856adf3f">More...</a><br /></td></tr>
+<tr class="separator:afdbf123fdeb4712f8ab2240f856adf3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d51b11a11769ff56a2c82bd89946f3c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a7d51b11a11769ff56a2c82bd89946f3c">yAxisBinCount</a> () const</td></tr>
+<tr class="memdesc:a7d51b11a11769ff56a2c82bd89946f3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current user selection for the resolution of the scatter plot's y data.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#a7d51b11a11769ff56a2c82bd89946f3c">More...</a><br /></td></tr>
+<tr class="separator:a7d51b11a11769ff56a2c82bd89946f3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26712777b112d02df438d3f25b36b16c"><td class="memItemLeft" align="right" valign="top">QwtInterval&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a26712777b112d02df438d3f25b36b16c">sampleRange</a> () const</td></tr>
+<tr class="memdesc:a26712777b112d02df438d3f25b36b16c"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the sample range from which the scatter plot should be created.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#a26712777b112d02df438d3f25b36b16c">More...</a><br /></td></tr>
+<tr class="separator:a26712777b112d02df438d3f25b36b16c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2df8e888fd0dbb28385e085e82d0f26b"><td class="memItemLeft" align="right" valign="top">QwtInterval&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a2df8e888fd0dbb28385e085e82d0f26b">lineRange</a> () const</td></tr>
+<tr class="memdesc:a2df8e888fd0dbb28385e085e82d0f26b"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the line range from which the scatter plot should be created.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#a2df8e888fd0dbb28385e085e82d0f26b">More...</a><br /></td></tr>
+<tr class="separator:a2df8e888fd0dbb28385e085e82d0f26b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4e14168e0dfe8b317d3af20b6dd9c6b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#ad4e14168e0dfe8b317d3af20b6dd9c6b">xAxisCubeViewport</a> () const</td></tr>
+<tr class="memdesc:ad4e14168e0dfe8b317d3af20b6dd9c6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns a viewport which contains the x-axis cube.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#ad4e14168e0dfe8b317d3af20b6dd9c6b">More...</a><br /></td></tr>
+<tr class="separator:ad4e14168e0dfe8b317d3af20b6dd9c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82b52a2db201203f3543e21545345642"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a82b52a2db201203f3543e21545345642">yAxisCubeViewport</a> () const</td></tr>
+<tr class="memdesc:a82b52a2db201203f3543e21545345642"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns a viewport which contains the y-axis cube.  <a href="class_isis_1_1_scatter_plot_config_dialog.html#a82b52a2db201203f3543e21545345642">More...</a><br /></td></tr>
+<tr class="separator:a82b52a2db201203f3543e21545345642"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This configuration dialog is for users to determine the scatter plot parameters required to create a scatter plot. </p>
+<dl class="section author"><dt>Author</dt><dd>2012-01-18 Steven Lambright </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae446d186197a2edefe02ce6bc6c54fc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae446d186197a2edefe02ce6bc6c54fc9">&#9670;&nbsp;</a></span>ScatterPlotConfigDialog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ScatterPlotConfigDialog::ScatterPlotConfigDialog </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td>
+          <td class="paramname"><em>activeViewport</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_workspace.html">Workspace</a> *&#160;</td>
+          <td class="paramname"><em>workspace</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method creates all the dialog boxes required for the scatter plot window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">activeViewport</td><td>The current user-selected viewport </td></tr>
+    <tr><td class="paramname">workspace</td><td>The workspace containing all of the viewports </td></tr>
+    <tr><td class="paramname">parent</td><td>The Qt-parent for this dialog </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_viewport.html#a0cd043ff7aa84543b08a56cf95490dea">Isis::CubeViewport::cube()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2df8e888fd0dbb28385e085e82d0f26b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2df8e888fd0dbb28385e085e82d0f26b">&#9670;&nbsp;</a></span>lineRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QwtInterval Isis::ScatterPlotConfigDialog::lineRange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is the line range from which the scatter plot should be created. </p>
+<p>The return value is 1-based (lines start at 1) and inclusive. The range 1 and nlines is the entire line range.</p>
+<dl class="section return"><dt>Returns</dt><dd>The line range for the scatter plot data </dd></dl>
+
+</div>
+</div>
+<a id="a26712777b112d02df438d3f25b36b16c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26712777b112d02df438d3f25b36b16c">&#9670;&nbsp;</a></span>sampleRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QwtInterval Isis::ScatterPlotConfigDialog::sampleRange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is the sample range from which the scatter plot should be created. </p>
+<p>The return value is 1-based (samples start at 1) and inclusive. The range 1 and nsamples is the entire sample range.</p>
+<dl class="section return"><dt>Returns</dt><dd>The sample range for the scatter plot data </dd></dl>
+
+</div>
+</div>
+<a id="a54577ce9acfba128931466131216f705"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54577ce9acfba128931466131216f705">&#9670;&nbsp;</a></span>sizeHint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSize Isis::ScatterPlotConfigDialog::sizeHint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is overridden to give a better default size than what Qt calculates by default. </p>
+<dl class="section return"><dt>Returns</dt><dd>The recommended size for this dialog </dd></dl>
+
+</div>
+</div>
+<a id="afdbf123fdeb4712f8ab2240f856adf3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdbf123fdeb4712f8ab2240f856adf3f">&#9670;&nbsp;</a></span>xAxisBinCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ScatterPlotConfigDialog::xAxisBinCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The current user selection for the resolution of the scatter plot's x data. </p>
+<dl class="section return"><dt>Returns</dt><dd>The x-axis data's bin count for a histogram/spectrogram </dd></dl>
+
+</div>
+</div>
+<a id="a71db14010769def3199e86ddfa395f3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71db14010769def3199e86ddfa395f3a">&#9670;&nbsp;</a></span>xAxisCube()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cube.html">Cube</a> * Isis::ScatterPlotConfigDialog::xAxisCube </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The current user selection for a cube for the x-axis data for a scatter plot. </p>
+<p>This never returns null if the dialog was accepted().</p>
+<dl class="section return"><dt>Returns</dt><dd>The x-axis cube or NULL if there isn't one selected. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#ad4e14168e0dfe8b317d3af20b6dd9c6b">xAxisCubeViewport()</a>.</p>
+
+</div>
+</div>
+<a id="a128604b9344dbd818e6285f3028ec2d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a128604b9344dbd818e6285f3028ec2d4">&#9670;&nbsp;</a></span>xAxisCubeBand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ScatterPlotConfigDialog::xAxisCubeBand </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The current user selection for the band in the x-axis cube to get data from. </p>
+<p>This isn't valid unless there is an <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a71db14010769def3199e86ddfa395f3a" title="The current user selection for a cube for the x-axis data for a scatter plot.">xAxisCube()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>The x-axis cube's band to get data from. </dd></dl>
+
+</div>
+</div>
+<a id="ad4e14168e0dfe8b317d3af20b6dd9c6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4e14168e0dfe8b317d3af20b6dd9c6b">&#9670;&nbsp;</a></span>xAxisCubeViewport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> * Isis::ScatterPlotConfigDialog::xAxisCubeViewport </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns a viewport which contains the x-axis cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>a viewport which contains the x-axis cube </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_viewport.html#a0cd043ff7aa84543b08a56cf95490dea">Isis::CubeViewport::cube()</a>, <a class="el" href="class_isis_1_1_workspace.html#af3b152677561be2478777752b04dbbd5">Isis::Workspace::cubeViewportList()</a>, and <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a71db14010769def3199e86ddfa395f3a">xAxisCube()</a>.</p>
+
+</div>
+</div>
+<a id="a7d51b11a11769ff56a2c82bd89946f3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d51b11a11769ff56a2c82bd89946f3c">&#9670;&nbsp;</a></span>yAxisBinCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ScatterPlotConfigDialog::yAxisBinCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The current user selection for the resolution of the scatter plot's y data. </p>
+<dl class="section return"><dt>Returns</dt><dd>The y-axis data's bin count for a histogram/spectrogram </dd></dl>
+
+</div>
+</div>
+<a id="a2a82a6c886d8f18032e6c66085db59f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a82a6c886d8f18032e6c66085db59f8">&#9670;&nbsp;</a></span>yAxisCube()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cube.html">Cube</a> * Isis::ScatterPlotConfigDialog::yAxisCube </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The current user selection for a cube for the x-axis data for a scatter plot. </p>
+<p>This never returns null if the dialog was accepted().</p>
+<dl class="section return"><dt>Returns</dt><dd>The y-axis cube or NULL if there isn't one selected. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a82b52a2db201203f3543e21545345642">yAxisCubeViewport()</a>.</p>
+
+</div>
+</div>
+<a id="a59112c3e2eefbe04da310b3e41962ff4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59112c3e2eefbe04da310b3e41962ff4">&#9670;&nbsp;</a></span>yAxisCubeBand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ScatterPlotConfigDialog::yAxisCubeBand </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The current user selection for the band in the y-axis cube to get data from. </p>
+<p>This isn't valid unless there is an <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a2a82a6c886d8f18032e6c66085db59f8" title="The current user selection for a cube for the x-axis data for a scatter plot.">yAxisCube()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>The y-axis cube's band to get data from. </dd></dl>
+
+</div>
+</div>
+<a id="a82b52a2db201203f3543e21545345642"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82b52a2db201203f3543e21545345642">&#9670;&nbsp;</a></span>yAxisCubeViewport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> * Isis::ScatterPlotConfigDialog::yAxisCubeViewport </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns a viewport which contains the y-axis cube. </p>
+<dl class="section return"><dt>Returns</dt><dd>a viewport which contains the y-axis cube </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_viewport.html#a0cd043ff7aa84543b08a56cf95490dea">Isis::CubeViewport::cube()</a>, <a class="el" href="class_isis_1_1_workspace.html#af3b152677561be2478777752b04dbbd5">Isis::Workspace::cubeViewportList()</a>, and <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a2a82a6c886d8f18032e6c66085db59f8">yAxisCube()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ScatterPlotTool/<a class="el" href="_scatter_plot_config_dialog_8h_source.html">ScatterPlotConfigDialog.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ScatterPlotTool/<a class="el" href="_scatter_plot_config_dialog_8cpp.html">ScatterPlotConfigDialog.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html">ScatterPlotConfigDialog</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

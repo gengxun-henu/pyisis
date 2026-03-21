@@ -1,0 +1,18 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ProcessByTile,High Level Cube I/O,isis/src/base/objs/ProcessByTile/ProcessByTile.h,isis_pybind_standalone/src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ProcessByTile,isis_pybind.ProcessByTile,Y,Python class symbol is exported; 流程/回调接口较多
+Construction/Enum,ProcessByTile(),isis_pybind.ProcessByTile(),Y,Constructor is explicitly bound
+Mutation/Configuration,"void SetTileSize(const int ns, const int nl)",isis_pybind.ProcessByTile.set_tile_size,Y,Current Python name
+Public API,void EndProcess(),isis_pybind.ProcessByTile.end_process,Y,Current Python name
+Public API,void Finalize(),isis_pybind.ProcessByTile.finalize,Y,Current Python name
+Public API,"template <typename Functor> void ProcessCubeInPlace(const Functor & funct, bool threaded = true) { VerifyCubes(InPlace)",isis_pybind.ProcessByTile.process_cube_in_place,N,流程/回调接口较多
+Mutation/Configuration,SetBricks(InPlace),isis_pybind.ProcessByTile.set_bricks,N,流程/回调接口较多
+Public API,"ProcessByBrick::ProcessCubeInPlace(funct, threaded)",isis_pybind.ProcessByTile.process_cube_in_place,N,流程/回调接口较多
+Public API,"template <typename Functor> void ProcessCube(const Functor & funct, bool threaded = true) { VerifyCubes(InputOutput)",isis_pybind.ProcessByTile.process_cube,N,流程/回调接口较多
+Mutation/Configuration,SetBricks(InputOutput),isis_pybind.ProcessByTile.set_bricks,N,流程/回调接口较多
+Public API,"ProcessByBrick::ProcessCube(funct, threaded)",isis_pybind.ProcessByTile.process_cube,N,流程/回调接口较多
+Public API,"template <typename Functor> void ProcessCubes(const Functor & funct, bool threaded = true) { VerifyCubes(InputOutputList)",isis_pybind.ProcessByTile.process_cubes,N,流程/回调接口较多
+Mutation/Configuration,SetBricks(InputOutputList),isis_pybind.ProcessByTile.set_bricks,N,流程/回调接口较多
+Public API,"ProcessByBrick::ProcessCubes(funct, threaded)",isis_pybind.ProcessByTile.process_cubes,N,流程/回调接口较多

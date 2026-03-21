@@ -1,0 +1,6 @@
+<map id="Isis::RingPlaneProjection" name="Isis::RingPlaneProjection">
+<area shape="rect" id="node1" title="Base class for Map Projections of plane shapes." alt="" coords="92,567,302,1000"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_planar.html" title="Planar Map Projection." alt="" coords="5,1056,186,1345"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_ring_cylindrical.html" title="Ring Cylindrical Map Projection." alt="" coords="209,1048,390,1353"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_projection.html" title="Base class for Map Projections." alt="" coords="118,5,276,519"/>
+</map>

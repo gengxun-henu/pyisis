@@ -1,0 +1,25 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+FunctionTools,Math,isis/src/base/objs/FunctionTools/FunctionTools.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,FunctionTools,isis_pybind.FunctionTools,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Static/Factory,"static QList <double> realLinearRoots(double coeffLinearTerm, double coeffConstTerm) { double m=coeffLinearTerm, b=coeffConstTerm",isis_pybind.FunctionTools.real_linear_roots,N,抽象基类/纯虚接口
+Static/Factory,"static QList <double> realQuadraticRoots(double coeffQuadTerm, double coeffLinearTerm, double coeffConstTerm) { double A=coeffQuadTerm, B=coeffLinearTerm, C=coeffConstTerm",isis_pybind.FunctionTools.real_quadratic_roots,N,抽象基类/纯虚接口
+Public API,"if (A==0.0) return realLinearRoots(coeffLinearTerm, coeffConstTerm)",isis_pybind.FunctionTools.if,N,抽象基类/纯虚接口
+Static/Factory,"static QList <double> realCubicRoots(double coeffCubicTerm, double coeffQuadTerm, double coeffLinearTerm, double coeffConstTerm) { double a=coeffQuadTerm, b=coeffLinearTerm, c=coeffConstTerm",isis_pybind.FunctionTools.real_cubic_roots,N,抽象基类/纯虚接口
+Public API,"if (coeffCubicTerm == 0.0) return realQuadraticRoots(coeffQuadTerm,coeffLinearTerm,coeffConstTerm)",isis_pybind.FunctionTools.if,N,抽象基类/纯虚接口
+Public API,if ( coeffCubicTerm != 1.0) { a /= coeffCubicTerm,isis_pybind.FunctionTools.if,N,抽象基类/纯虚接口
+Public API,"if ( a == 0.0 && b == 0.0 ) { roots << (c < 0 ? 1.0 : -1.0)*pow(fabs(c),1.0/3.0)",isis_pybind.FunctionTools.if,N,抽象基类/纯虚接口
+Public API,"else if (R*R <= Q*Q*Q) { double theta = acos(R/sqrt(Q*Q*Q)),temp",isis_pybind.FunctionTools.if,N,抽象基类/纯虚接口
+Public API,Q = -2.0*sqrt(Q),isis_pybind.FunctionTools.sqrt,N,抽象基类/纯虚接口
+Static/Factory,"template <typename Functor> static bool brentsRootFinder(Functor &func, const QList<double> pt1, const QList<double> pt2, double tol, int maxIter, double &root) { double a = pt1[0], b = pt2[0], c, d = 0",isis_pybind.FunctionTools.brents_root_finder,N,抽象基类/纯虚接口
+Public API,"throw IException(IException::Programmer, msg, _FILEINFO_)",isis_pybind.FunctionTools.i_exception,N,抽象基类/纯虚接口
+Public API,for (int iter = 0; iter < maxIter; iter++) { tol1 = DBL_EPSILON * 2.0 * fabs(b),isis_pybind.FunctionTools.for,N,抽象基类/纯虚接口
+Public API,if (a != c && b != c) { r = fb / fc,isis_pybind.FunctionTools.if,N,抽象基类/纯虚接口
+Public API,deltaI = fabs(b - bnew),isis_pybind.FunctionTools.fabs,N,抽象基类/纯虚接口
+Public API,try { fbnew = func(bnew + offset),isis_pybind.FunctionTools.func,N,抽象基类/纯虚接口
+Public API,"catch (IException &e) { QString msg = ""Function evaluation failed at:"" + toString(bnew) + "". Function must be continuous and defined for the entire interval "" ""inorder to gaurentee brentsRootFinder will work.""",isis_pybind.FunctionTools.catch,N,抽象基类/纯虚接口
+Public API,"throw IException(e, IException::Programmer, msg, _FILEINFO_)",isis_pybind.FunctionTools.i_exception,N,抽象基类/纯虚接口
+Public API,if ( (fa > 0) - (fa < 0) == (fbnew > 0) - (fbnew < 0) ) { deltaF = fabs(a - bnew),isis_pybind.FunctionTools.if,N,抽象基类/纯虚接口
+Public API,else { deltaF = fabs(b - bnew),isis_pybind.FunctionTools.fabs,N,抽象基类/纯虚接口
+Public API,else if (deltaF < tol1) { return false,isis_pybind.FunctionTools.if,N,抽象基类/纯虚接口

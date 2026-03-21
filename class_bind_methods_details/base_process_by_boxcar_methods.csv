@@ -1,0 +1,10 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ProcessByBoxcar,High Level Cube I/O,isis/src/base/objs/ProcessByBoxcar/ProcessByBoxcar.h,isis_pybind_standalone/src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ProcessByBoxcar,isis_pybind.ProcessByBoxcar,Y,Python class symbol is exported; 流程/回调接口较多
+Construction/Enum,ProcessByBoxcar(),isis_pybind.ProcessByBoxcar(),Y,Constructor is explicitly bound
+Mutation/Configuration,"void SetBoxcarSize(const int ns, const int nl)",isis_pybind.ProcessByBoxcar.set_boxcar_size,Y,Current Python name
+Public API,"void ProcessCube(void funct(Isis::Buffer &in, double &out)) { StartProcess(funct)",isis_pybind.ProcessByBoxcar.process_cube,N,流程/回调接口较多
+Public API,void EndProcess(),isis_pybind.ProcessByBoxcar.end_process,Y,Current Python name
+Public API,void Finalize(),isis_pybind.ProcessByBoxcar.finalize,Y,Current Python name

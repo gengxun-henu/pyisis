@@ -1,0 +1,1733 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ChipViewport Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_chip_viewport.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_chip_viewport-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ChipViewport Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Viewport for <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> Chips.  
+ <a href="class_isis_1_1_chip_viewport.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_chip_viewport_8h_source.html">ChipViewport.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ChipViewport:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_chip_viewport__inherit__graph.png" border="0" usemap="#a_isis_1_1_chip_viewport_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_chip_viewport_inherit__map" id="a_isis_1_1_chip_viewport_inherit__map">
+<area shape="rect" title="Viewport for Isis Chips." alt="" coords="5,135,199,664"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="66,5,138,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ChipViewport:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_chip_viewport__coll__graph.png" border="0" usemap="#a_isis_1_1_chip_viewport_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_chip_viewport_coll__map" id="a_isis_1_1_chip_viewport_coll__map">
+<area shape="rect" title="Viewport for Isis Chips." alt="" coords="5,135,199,664"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="66,5,138,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:aa2bd08174756cd8984f60fd9d5044c9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#aa2bd08174756cd8984f60fd9d5044c9e">autoStretch</a> ()</td></tr>
+<tr class="memdesc:aa2bd08174756cd8984f60fd9d5044c9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply automatic stretch using data from entire chip.  <a href="class_isis_1_1_chip_viewport.html#aa2bd08174756cd8984f60fd9d5044c9e">More...</a><br /></td></tr>
+<tr class="separator:aa2bd08174756cd8984f60fd9d5044c9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2393d70a5d75e7b4398b0a1d60f80d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#ab2393d70a5d75e7b4398b0a1d60f80d6">stretchFromCubeViewport</a> (<a class="el" href="class_isis_1_1_stretch.html">Stretch</a> *, <a class="el" href="class_isis_1_1_cube_viewport.html">CubeViewport</a> *)</td></tr>
+<tr class="memdesc:ab2393d70a5d75e7b4398b0a1d60f80d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a new stretch to the specified cube viewport.  <a href="class_isis_1_1_chip_viewport.html#ab2393d70a5d75e7b4398b0a1d60f80d6">More...</a><br /></td></tr>
+<tr class="separator:ab2393d70a5d75e7b4398b0a1d60f80d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab86b7c7958bf1eae6206acef9c4cc75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#aab86b7c7958bf1eae6206acef9c4cc75">changeStretchLock</a> (int)</td></tr>
+<tr class="memdesc:aab86b7c7958bf1eae6206acef9c4cc75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locks or unlocks the stretch on the chip viewport during transformations (zoom, pan, etc.)  <a href="class_isis_1_1_chip_viewport.html#aab86b7c7958bf1eae6206acef9c4cc75">More...</a><br /></td></tr>
+<tr class="separator:aab86b7c7958bf1eae6206acef9c4cc75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1df9b3c0d227ee3ad2ab1d1ecbfcc70d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a1df9b3c0d227ee3ad2ab1d1ecbfcc70d">setPoints</a> (bool checked)</td></tr>
+<tr class="memdesc:a1df9b3c0d227ee3ad2ab1d1ecbfcc70d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot to set whether control points are drawn.  <a href="class_isis_1_1_chip_viewport.html#a1df9b3c0d227ee3ad2ab1d1ecbfcc70d">More...</a><br /></td></tr>
+<tr class="separator:a1df9b3c0d227ee3ad2ab1d1ecbfcc70d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2b218bcf2c56c80e0025f4929e6ab13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#ad2b218bcf2c56c80e0025f4929e6ab13">setCross</a> (bool checked)</td></tr>
+<tr class="memdesc:ad2b218bcf2c56c80e0025f4929e6ab13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot to change state of crosshair.  <a href="class_isis_1_1_chip_viewport.html#ad2b218bcf2c56c80e0025f4929e6ab13">More...</a><br /></td></tr>
+<tr class="separator:ad2b218bcf2c56c80e0025f4929e6ab13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59791918690610bbfaedce986fab580e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a59791918690610bbfaedce986fab580e">rotateChip</a> (int rotation)</td></tr>
+<tr class="memdesc:a59791918690610bbfaedce986fab580e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot to rotate chip.  <a href="class_isis_1_1_chip_viewport.html#a59791918690610bbfaedce986fab580e">More...</a><br /></td></tr>
+<tr class="separator:a59791918690610bbfaedce986fab580e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29a72105a635fb07699b148a4f014d11"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a29a72105a635fb07699b148a4f014d11">setCircle</a> (bool checked)</td></tr>
+<tr class="memdesc:a29a72105a635fb07699b148a4f014d11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot to change state of circle.  <a href="class_isis_1_1_chip_viewport.html#a29a72105a635fb07699b148a4f014d11">More...</a><br /></td></tr>
+<tr class="separator:a29a72105a635fb07699b148a4f014d11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafe0ceecbececea398f25663ff04622b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#aafe0ceecbececea398f25663ff04622b">setCircleSize</a> (int size)</td></tr>
+<tr class="memdesc:aafe0ceecbececea398f25663ff04622b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the size of the circle.  <a href="class_isis_1_1_chip_viewport.html#aafe0ceecbececea398f25663ff04622b">More...</a><br /></td></tr>
+<tr class="separator:aafe0ceecbececea398f25663ff04622b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa461b3abd8ad1160a0d6c3ca84790041"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#aa461b3abd8ad1160a0d6c3ca84790041">geomChip</a> (<a class="el" href="class_isis_1_1_chip.html">Chip</a> *matchChip, <a class="el" href="class_isis_1_1_cube.html">Cube</a> *matchChipCube)</td></tr>
+<tr class="memdesc:aa461b3abd8ad1160a0d6c3ca84790041"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot to geom chip (apply geometry transformation)  <a href="class_isis_1_1_chip_viewport.html#aa461b3abd8ad1160a0d6c3ca84790041">More...</a><br /></td></tr>
+<tr class="separator:aa461b3abd8ad1160a0d6c3ca84790041"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a591ae8e62092b7d9f4d53d6c67c8b9e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a591ae8e62092b7d9f4d53d6c67c8b9e9">nogeomChip</a> ()</td></tr>
+<tr class="memdesc:a591ae8e62092b7d9f4d53d6c67c8b9e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot to un-geom chip (revert geometry transformation)  <a href="class_isis_1_1_chip_viewport.html#a591ae8e62092b7d9f4d53d6c67c8b9e9">More...</a><br /></td></tr>
+<tr class="separator:a591ae8e62092b7d9f4d53d6c67c8b9e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a867fd4c7e359090c41efc56c8015c45f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a867fd4c7e359090c41efc56c8015c45f">panUp</a> ()</td></tr>
+<tr class="memdesc:a867fd4c7e359090c41efc56c8015c45f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pan up.  <a href="class_isis_1_1_chip_viewport.html#a867fd4c7e359090c41efc56c8015c45f">More...</a><br /></td></tr>
+<tr class="separator:a867fd4c7e359090c41efc56c8015c45f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa240c87ae02fba89c6f4a4a99736b030"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#aa240c87ae02fba89c6f4a4a99736b030">panDown</a> ()</td></tr>
+<tr class="memdesc:aa240c87ae02fba89c6f4a4a99736b030"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pan down.  <a href="class_isis_1_1_chip_viewport.html#aa240c87ae02fba89c6f4a4a99736b030">More...</a><br /></td></tr>
+<tr class="separator:aa240c87ae02fba89c6f4a4a99736b030"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d39c415366ad86db4894dd615df9c78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a6d39c415366ad86db4894dd615df9c78">panLeft</a> ()</td></tr>
+<tr class="memdesc:a6d39c415366ad86db4894dd615df9c78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pan left.  <a href="class_isis_1_1_chip_viewport.html#a6d39c415366ad86db4894dd615df9c78">More...</a><br /></td></tr>
+<tr class="separator:a6d39c415366ad86db4894dd615df9c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c1d7051f417cfdca5a2a274c17d5764"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a7c1d7051f417cfdca5a2a274c17d5764">panRight</a> ()</td></tr>
+<tr class="memdesc:a7c1d7051f417cfdca5a2a274c17d5764"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pan right.  <a href="class_isis_1_1_chip_viewport.html#a7c1d7051f417cfdca5a2a274c17d5764">More...</a><br /></td></tr>
+<tr class="separator:a7c1d7051f417cfdca5a2a274c17d5764"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4f00f449a09a99fc002d7902b2c70d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#ab4f00f449a09a99fc002d7902b2c70d8">zoomIn</a> ()</td></tr>
+<tr class="memdesc:ab4f00f449a09a99fc002d7902b2c70d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zoom in.  <a href="class_isis_1_1_chip_viewport.html#ab4f00f449a09a99fc002d7902b2c70d8">More...</a><br /></td></tr>
+<tr class="separator:ab4f00f449a09a99fc002d7902b2c70d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d3dbe07f49f6975d23f79ebda1fda18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a4d3dbe07f49f6975d23f79ebda1fda18">zoomOut</a> ()</td></tr>
+<tr class="memdesc:a4d3dbe07f49f6975d23f79ebda1fda18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zoom out.  <a href="class_isis_1_1_chip_viewport.html#a4d3dbe07f49f6975d23f79ebda1fda18">More...</a><br /></td></tr>
+<tr class="separator:a4d3dbe07f49f6975d23f79ebda1fda18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adda664f23df03fa4d1e9ad10437808c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#adda664f23df03fa4d1e9ad10437808c3">zoom1</a> ()</td></tr>
+<tr class="memdesc:adda664f23df03fa4d1e9ad10437808c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zoom by a factor of one.  <a href="class_isis_1_1_chip_viewport.html#adda664f23df03fa4d1e9ad10437808c3">More...</a><br /></td></tr>
+<tr class="separator:adda664f23df03fa4d1e9ad10437808c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56185cd44dc03a40bb5ee5b804d4eaaa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a56185cd44dc03a40bb5ee5b804d4eaaa">zoom</a> (double <a class="el" href="class_isis_1_1_chip_viewport.html#a5985d1d0e6b8a45c4692f8f67a798f76">zoomFactor</a>)</td></tr>
+<tr class="memdesc:a56185cd44dc03a40bb5ee5b804d4eaaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zoom by a specified factor.  <a href="class_isis_1_1_chip_viewport.html#a56185cd44dc03a40bb5ee5b804d4eaaa">More...</a><br /></td></tr>
+<tr class="separator:a56185cd44dc03a40bb5ee5b804d4eaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4c87f74c8d1b0bcd3c9ea323afb6b79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#ae4c87f74c8d1b0bcd3c9ea323afb6b79">refreshView</a> (double <a class="el" href="class_isis_1_1_chip_viewport.html#a470af21d44f6db7e4793cbd9457748f4">tackSample</a>, double <a class="el" href="class_isis_1_1_chip_viewport.html#a4e3d46bd66b0383b8a540adcf03d3b09">tackLine</a>)</td></tr>
+<tr class="memdesc:ae4c87f74c8d1b0bcd3c9ea323afb6b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot to refresh viewport when the tack point has changed.  <a href="class_isis_1_1_chip_viewport.html#ae4c87f74c8d1b0bcd3c9ea323afb6b79">More...</a><br /></td></tr>
+<tr class="separator:ae4c87f74c8d1b0bcd3c9ea323afb6b79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ab4a7475e7fdbf13cfb28450b345fea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a3ab4a7475e7fdbf13cfb28450b345fea">setControlNet</a> (<a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *newControlNet)</td></tr>
+<tr class="memdesc:a3ab4a7475e7fdbf13cfb28450b345fea"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the <a class="el" href="class_isis_1_1_control_net.html" title="a control network">ControlNet</a> to be used for drawing measure locations  <a href="class_isis_1_1_chip_viewport.html#a3ab4a7475e7fdbf13cfb28450b345fea">More...</a><br /></td></tr>
+<tr class="separator:a3ab4a7475e7fdbf13cfb28450b345fea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:ab269a7a51078333adfc5451b1ba1f145"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#ab269a7a51078333adfc5451b1ba1f145">tackPointChanged</a> (double)</td></tr>
+<tr class="memdesc:ab269a7a51078333adfc5451b1ba1f145"><td class="mdescLeft">&#160;</td><td class="mdescRight">&lt; Signal sent when tack point changes  <a href="class_isis_1_1_chip_viewport.html#ab269a7a51078333adfc5451b1ba1f145">More...</a><br /></td></tr>
+<tr class="separator:ab269a7a51078333adfc5451b1ba1f145"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5185525967553eeafd523999faeb9914"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a5185525967553eeafd523999faeb9914">userMovedTackPoint</a> ()</td></tr>
+<tr class="separator:a5185525967553eeafd523999faeb9914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a44f7f3865bad1cfe414251368c8d9405"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a44f7f3865bad1cfe414251368c8d9405">ChipViewport</a> (int width, int height, <a class="el" href="class_q_widget.html">QWidget</a> *parent=0)</td></tr>
+<tr class="memdesc:a44f7f3865bad1cfe414251368c8d9405"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct an empty viewport.  <a href="class_isis_1_1_chip_viewport.html#a44f7f3865bad1cfe414251368c8d9405">More...</a><br /></td></tr>
+<tr class="separator:a44f7f3865bad1cfe414251368c8d9405"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cc1ca62c3977bf32a8d36ac62ae9ed1"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a2cc1ca62c3977bf32a8d36ac62ae9ed1">~ChipViewport</a> ()</td></tr>
+<tr class="memdesc:a2cc1ca62c3977bf32a8d36ac62ae9ed1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_chip_viewport.html#a2cc1ca62c3977bf32a8d36ac62ae9ed1">More...</a><br /></td></tr>
+<tr class="separator:a2cc1ca62c3977bf32a8d36ac62ae9ed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fc3f3bc2a3b3bcaf98be1509b92c33b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a9fc3f3bc2a3b3bcaf98be1509b92c33b">cubeToViewport</a> (double samp, double line, int &amp;x, int &amp;y)</td></tr>
+<tr class="memdesc:a9fc3f3bc2a3b3bcaf98be1509b92c33b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get viewport x and y from cube sample and line.  <a href="class_isis_1_1_chip_viewport.html#a9fc3f3bc2a3b3bcaf98be1509b92c33b">More...</a><br /></td></tr>
+<tr class="separator:a9fc3f3bc2a3b3bcaf98be1509b92c33b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af68928071923e21d1b8ff881a0f341ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#af68928071923e21d1b8ff881a0f341ca">setChip</a> (<a class="el" href="class_isis_1_1_chip.html">Chip</a> *<a class="el" href="class_isis_1_1_chip_viewport.html#ad80f89b0aedee7ea65627aec4b110f13">chip</a>, <a class="el" href="class_isis_1_1_cube.html">Cube</a> *<a class="el" href="class_isis_1_1_chip_viewport.html#ab96dfc5edfe766286ce0c2b38cd693a4">chipCube</a>)</td></tr>
+<tr class="memdesc:af68928071923e21d1b8ff881a0f341ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set chip.  <a href="class_isis_1_1_chip_viewport.html#af68928071923e21d1b8ff881a0f341ca">More...</a><br /></td></tr>
+<tr class="separator:af68928071923e21d1b8ff881a0f341ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c2e86d233470c8dc15d0c2fff0a4d1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a1c2e86d233470c8dc15d0c2fff0a4d1d">loadView</a> (<a class="el" href="class_isis_1_1_chip_viewport.html">ChipViewport</a> &amp;newView)</td></tr>
+<tr class="memdesc:a1c2e86d233470c8dc15d0c2fff0a4d1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load with another <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a>, used for blinking.  <a href="class_isis_1_1_chip_viewport.html#a1c2e86d233470c8dc15d0c2fff0a4d1d">More...</a><br /></td></tr>
+<tr class="separator:a1c2e86d233470c8dc15d0c2fff0a4d1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad80f89b0aedee7ea65627aec4b110f13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_chip.html">Chip</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#ad80f89b0aedee7ea65627aec4b110f13">chip</a> () const</td></tr>
+<tr class="memdesc:ad80f89b0aedee7ea65627aec4b110f13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return chip.  <a href="class_isis_1_1_chip_viewport.html#ad80f89b0aedee7ea65627aec4b110f13">More...</a><br /></td></tr>
+<tr class="separator:ad80f89b0aedee7ea65627aec4b110f13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab96dfc5edfe766286ce0c2b38cd693a4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#ab96dfc5edfe766286ce0c2b38cd693a4">chipCube</a> () const</td></tr>
+<tr class="separator:ab96dfc5edfe766286ce0c2b38cd693a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac84219aa8a33ba3d27773609b1989f45"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#ac84219aa8a33ba3d27773609b1989f45">chipSamples</a> () const</td></tr>
+<tr class="memdesc:ac84219aa8a33ba3d27773609b1989f45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of samples in the chip.  <a href="class_isis_1_1_chip_viewport.html#ac84219aa8a33ba3d27773609b1989f45">More...</a><br /></td></tr>
+<tr class="separator:ac84219aa8a33ba3d27773609b1989f45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae18151eef963b0d0ab0c4b95e4b34064"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#ae18151eef963b0d0ab0c4b95e4b34064">chipLines</a> () const</td></tr>
+<tr class="memdesc:ae18151eef963b0d0ab0c4b95e4b34064"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of lines in the chip.  <a href="class_isis_1_1_chip_viewport.html#ae18151eef963b0d0ab0c4b95e4b34064">More...</a><br /></td></tr>
+<tr class="separator:ae18151eef963b0d0ab0c4b95e4b34064"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a772141b17b0d1d9c2497a9a63eb710e3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a772141b17b0d1d9c2497a9a63eb710e3">grayBand</a> () const</td></tr>
+<tr class="memdesc:a772141b17b0d1d9c2497a9a63eb710e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the gray band currently viewed.  <a href="class_isis_1_1_chip_viewport.html#a772141b17b0d1d9c2497a9a63eb710e3">More...</a><br /></td></tr>
+<tr class="separator:a772141b17b0d1d9c2497a9a63eb710e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a470af21d44f6db7e4793cbd9457748f4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a470af21d44f6db7e4793cbd9457748f4">tackSample</a> ()</td></tr>
+<tr class="memdesc:a470af21d44f6db7e4793cbd9457748f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the position of cube under cross hair.  <a href="class_isis_1_1_chip_viewport.html#a470af21d44f6db7e4793cbd9457748f4">More...</a><br /></td></tr>
+<tr class="separator:a470af21d44f6db7e4793cbd9457748f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e3d46bd66b0383b8a540adcf03d3b09"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a4e3d46bd66b0383b8a540adcf03d3b09">tackLine</a> ()</td></tr>
+<tr class="memdesc:a4e3d46bd66b0383b8a540adcf03d3b09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns tack line.  <a href="class_isis_1_1_chip_viewport.html#a4e3d46bd66b0383b8a540adcf03d3b09">More...</a><br /></td></tr>
+<tr class="separator:a4e3d46bd66b0383b8a540adcf03d3b09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5985d1d0e6b8a45c4692f8f67a798f76"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a5985d1d0e6b8a45c4692f8f67a798f76">zoomFactor</a> ()</td></tr>
+<tr class="memdesc:a5985d1d0e6b8a45c4692f8f67a798f76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the zoom factor.  <a href="class_isis_1_1_chip_viewport.html#a5985d1d0e6b8a45c4692f8f67a798f76">More...</a><br /></td></tr>
+<tr class="separator:a5985d1d0e6b8a45c4692f8f67a798f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60061d87388f3e225e790181a902b6ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_stretch.html">Stretch</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a60061d87388f3e225e790181a902b6ae">grayStretch</a> () const</td></tr>
+<tr class="memdesc:a60061d87388f3e225e790181a902b6ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw X on point.  <a href="class_isis_1_1_chip_viewport.html#a60061d87388f3e225e790181a902b6ae">More...</a><br /></td></tr>
+<tr class="separator:a60061d87388f3e225e790181a902b6ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a5e410484f4050dfbf4bed8a3aa955bfb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a5e410484f4050dfbf4bed8a3aa955bfb">paintEvent</a> (QPaintEvent *e)</td></tr>
+<tr class="memdesc:a5e410484f4050dfbf4bed8a3aa955bfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repaint the viewport.  <a href="class_isis_1_1_chip_viewport.html#a5e410484f4050dfbf4bed8a3aa955bfb">More...</a><br /></td></tr>
+<tr class="separator:a5e410484f4050dfbf4bed8a3aa955bfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dda73a445c04ba45a1a246cfe952a86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#a2dda73a445c04ba45a1a246cfe952a86">enterEvent</a> (QEvent *e)</td></tr>
+<tr class="memdesc:a2dda73a445c04ba45a1a246cfe952a86"><td class="mdescLeft">&#160;</td><td class="mdescRight">If mouse enters, make sure key events are processed w/o clicking.  <a href="class_isis_1_1_chip_viewport.html#a2dda73a445c04ba45a1a246cfe952a86">More...</a><br /></td></tr>
+<tr class="separator:a2dda73a445c04ba45a1a246cfe952a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0e62bc2da842cf40f493b501c44d928"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#af0e62bc2da842cf40f493b501c44d928">keyPressEvent</a> (QKeyEvent *e)</td></tr>
+<tr class="memdesc:af0e62bc2da842cf40f493b501c44d928"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_process.html" title="Base class for all cube processing derivatives.">Process</a> arrow keystrokes on cube.  <a href="class_isis_1_1_chip_viewport.html#af0e62bc2da842cf40f493b501c44d928">More...</a><br /></td></tr>
+<tr class="separator:af0e62bc2da842cf40f493b501c44d928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0de354d6d5673dfcf4dcfd7ee15a55c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_chip_viewport.html#ad0de354d6d5673dfcf4dcfd7ee15a55c">mousePressEvent</a> (QMouseEvent *event)</td></tr>
+<tr class="memdesc:ad0de354d6d5673dfcf4dcfd7ee15a55c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_process.html" title="Base class for all cube processing derivatives.">Process</a> mouse events.  <a href="class_isis_1_1_chip_viewport.html#ad0de354d6d5673dfcf4dcfd7ee15a55c">More...</a><br /></td></tr>
+<tr class="separator:ad0de354d6d5673dfcf4dcfd7ee15a55c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Viewport for <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> Chips. </p>
+<dl class="section author"><dt>Author</dt><dd>2007-05-01 Tracie Sucharski </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a44f7f3865bad1cfe414251368c8d9405"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44f7f3865bad1cfe414251368c8d9405">&#9670;&nbsp;</a></span>ChipViewport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ChipViewport::ChipViewport </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct an empty viewport. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>The width of the viewport </td></tr>
+    <tr><td class="paramname">height</td><td>The height of the viewport </td></tr>
+    <tr><td class="paramname">parent</td><td>The parent widget </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2cc1ca62c3977bf32a8d36ac62ae9ed1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cc1ca62c3977bf32a8d36ac62ae9ed1">&#9670;&nbsp;</a></span>~ChipViewport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ChipViewport::~ChipViewport </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa2bd08174756cd8984f60fd9d5044c9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2bd08174756cd8984f60fd9d5044c9e">&#9670;&nbsp;</a></span>autoStretch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::autoStretch </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Apply automatic stretch using data from entire chip. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip_viewport.html#aa461b3abd8ad1160a0d6c3ca84790041">geomChip()</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#a591ae8e62092b7d9f4d53d6c67c8b9e9">nogeomChip()</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#a59791918690610bbfaedce986fab580e">rotateChip()</a>, and <a class="el" href="class_isis_1_1_chip_viewport.html#af68928071923e21d1b8ff881a0f341ca">setChip()</a>.</p>
+
+</div>
+</div>
+<a id="aab86b7c7958bf1eae6206acef9c4cc75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab86b7c7958bf1eae6206acef9c4cc75">&#9670;&nbsp;</a></span>changeStretchLock</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::changeStretchLock </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>newStatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Locks or unlocks the stretch on the chip viewport during transformations (zoom, pan, etc.) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newStatus</td><td>Non-zero locks the stretch </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad80f89b0aedee7ea65627aec4b110f13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad80f89b0aedee7ea65627aec4b110f13">&#9670;&nbsp;</a></span>chip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_chip.html">Chip</a>* Isis::ChipViewport::chip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return chip. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip_viewport.html#af68928071923e21d1b8ff881a0f341ca">setChip()</a>.</p>
+
+</div>
+</div>
+<a id="ab96dfc5edfe766286ce0c2b38cd693a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab96dfc5edfe766286ce0c2b38cd693a4">&#9670;&nbsp;</a></span>chipCube()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cube.html">Cube</a>* Isis::ChipViewport::chipCube </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip_viewport.html#af68928071923e21d1b8ff881a0f341ca">setChip()</a>.</p>
+
+</div>
+</div>
+<a id="ae18151eef963b0d0ab0c4b95e4b34064"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae18151eef963b0d0ab0c4b95e4b34064">&#9670;&nbsp;</a></span>chipLines()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ChipViewport::chipLines </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the number of lines in the chip. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a4dfcc463818453da7bd9139c1c928753">Isis::Chip::Lines()</a>.</p>
+
+</div>
+</div>
+<a id="ac84219aa8a33ba3d27773609b1989f45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac84219aa8a33ba3d27773609b1989f45">&#9670;&nbsp;</a></span>chipSamples()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ChipViewport::chipSamples </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the number of samples in the chip. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a216b19f49b3a1a35e75e88cb4a0c2e67">Isis::Chip::Samples()</a>.</p>
+
+</div>
+</div>
+<a id="a9fc3f3bc2a3b3bcaf98be1509b92c33b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fc3f3bc2a3b3bcaf98be1509b92c33b">&#9670;&nbsp;</a></span>cubeToViewport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ChipViewport::cubeToViewport </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>samp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get viewport x and y from cube sample and line. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">samp</td><td>Sample in cube </td></tr>
+    <tr><td class="paramname">line</td><td>Line in cube </td></tr>
+    <tr><td class="paramname">x</td><td>Calcualated viewport x coordinate </td></tr>
+    <tr><td class="paramname">y</td><td>Calcualated viewport y coordinate</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> true if the point is contained in the viewport, false otherwise </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a65692754384de9a3a5492375d9294e24">Isis::Chip::ChipLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a557a6c39b66b429f24ae03a34e367bb7">Isis::Chip::ChipSample()</a>, <a class="el" href="class_isis_1_1_chip.html#a4a26840ee2d171554fcd7675196f4389">Isis::Chip::IsInsideChip()</a>, and <a class="el" href="class_isis_1_1_chip.html#aca03ae650a1e60bffc3743c232c76b1b">Isis::Chip::SetCubePosition()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip_viewport.html#a5e410484f4050dfbf4bed8a3aa955bfb">paintEvent()</a>.</p>
+
+</div>
+</div>
+<a id="a2dda73a445c04ba45a1a246cfe952a86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dda73a445c04ba45a1a246cfe952a86">&#9670;&nbsp;</a></span>enterEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::enterEvent </td>
+          <td>(</td>
+          <td class="paramtype">QEvent *&#160;</td>
+          <td class="paramname"><em>e</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If mouse enters, make sure key events are processed w/o clicking. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">e</td><td>QEvent </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa461b3abd8ad1160a0d6c3ca84790041"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa461b3abd8ad1160a0d6c3ca84790041">&#9670;&nbsp;</a></span>geomChip</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::geomChip </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip.html">Chip</a> *&#160;</td>
+          <td class="paramname"><em>matchChip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td>
+          <td class="paramname"><em>matchChipCube</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Slot to geom chip (apply geometry transformation) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">matchChip</td><td>The matching chip for the geometry </td></tr>
+    <tr><td class="paramname">matchChipCube</td><td>The matching chip's cube for the geometry </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip_viewport.html#aa2bd08174756cd8984f60fd9d5044c9e">autoStretch()</a>, <a class="el" href="class_isis_1_1_chip.html#aaa7241a70f9ea84891a905d62c5eddd4">Isis::Chip::Load()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a8f6c061728818595e7493a35c8e60901">Isis::IException::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a772141b17b0d1d9c2497a9a63eb710e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a772141b17b0d1d9c2497a9a63eb710e3">&#9670;&nbsp;</a></span>grayBand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ChipViewport::grayBand </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the gray band currently viewed. </p>
+
+</div>
+</div>
+<a id="a60061d87388f3e225e790181a902b6ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60061d87388f3e225e790181a902b6ae">&#9670;&nbsp;</a></span>grayStretch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_stretch.html">Stretch</a> Isis::ChipViewport::grayStretch </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draw X on point. </p>
+<p>Return the gray band stretch </p>
+
+</div>
+</div>
+<a id="af0e62bc2da842cf40f493b501c44d928"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0e62bc2da842cf40f493b501c44d928">&#9670;&nbsp;</a></span>keyPressEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::keyPressEvent </td>
+          <td>(</td>
+          <td class="paramtype">QKeyEvent *&#160;</td>
+          <td class="paramname"><em>e</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_process.html" title="Base class for all cube processing derivatives.">Process</a> arrow keystrokes on cube. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">e</td><td>QKeyEvent </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a04971a3d267fc094505c2c435af5be90">Isis::Chip::CubeLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a779776d827373e5ef7d1265f62b88676">Isis::Chip::CubeSample()</a>, <a class="el" href="class_isis_1_1_chip.html#a51c9abdadbb9b2ad0f640df3da285ba1">Isis::Chip::SetChipPosition()</a>, <a class="el" href="class_isis_1_1_chip.html#ab4e9bc207792c7b93555ebe0fc8a85d9">Isis::Chip::TackLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a3a69f188eaac6b8fc92b525b6828ca7b">Isis::Chip::TackSample()</a>, and <a class="el" href="class_isis_1_1_chip_viewport.html#a5185525967553eeafd523999faeb9914">userMovedTackPoint()</a>.</p>
+
+</div>
+</div>
+<a id="a1c2e86d233470c8dc15d0c2fff0a4d1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c2e86d233470c8dc15d0c2fff0a4d1d">&#9670;&nbsp;</a></span>loadView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::loadView </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip_viewport.html">ChipViewport</a> &amp;&#160;</td>
+          <td class="paramname"><em>newView</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Load with another <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a>, used for blinking. </p>
+<p>Load with info from given <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newView</td><td>The chip viewport to load from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad0de354d6d5673dfcf4dcfd7ee15a55c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0de354d6d5673dfcf4dcfd7ee15a55c">&#9670;&nbsp;</a></span>mousePressEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::mousePressEvent </td>
+          <td>(</td>
+          <td class="paramtype">QMouseEvent *&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_process.html" title="Base class for all cube processing derivatives.">Process</a> mouse events. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>QMouseEvent </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a04971a3d267fc094505c2c435af5be90">Isis::Chip::CubeLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a779776d827373e5ef7d1265f62b88676">Isis::Chip::CubeSample()</a>, <a class="el" href="class_isis_1_1_chip.html#a51c9abdadbb9b2ad0f640df3da285ba1">Isis::Chip::SetChipPosition()</a>, and <a class="el" href="class_isis_1_1_chip_viewport.html#a5185525967553eeafd523999faeb9914">userMovedTackPoint()</a>.</p>
+
+</div>
+</div>
+<a id="a591ae8e62092b7d9f4d53d6c67c8b9e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a591ae8e62092b7d9f4d53d6c67c8b9e9">&#9670;&nbsp;</a></span>nogeomChip</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::nogeomChip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Slot to un-geom chip (revert geometry transformation) </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip_viewport.html#aa2bd08174756cd8984f60fd9d5044c9e">autoStretch()</a>, <a class="el" href="class_isis_1_1_chip.html#aaa7241a70f9ea84891a905d62c5eddd4">Isis::Chip::Load()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a8f6c061728818595e7493a35c8e60901">Isis::IException::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a5e410484f4050dfbf4bed8a3aa955bfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e410484f4050dfbf4bed8a3aa955bfb">&#9670;&nbsp;</a></span>paintEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::paintEvent </td>
+          <td>(</td>
+          <td class="paramtype">QPaintEvent *&#160;</td>
+          <td class="paramname"><em>e</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Repaint the viewport. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">e</td><td>QPaintEvent </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_serial_number.html#a52f1a3aa3b2121cf1557c8f4e6fd808d">Isis::SerialNumber::Compose()</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#a9fc3f3bc2a3b3bcaf98be1509b92c33b">cubeToViewport()</a>, <a class="el" href="class_isis_1_1_control_point.html#a807b76bbf1e01dabe9755f9aeb7269f7af8f7631225c0bcaf44d4060a58df892a">Isis::ControlPoint::Fixed</a>, <a class="el" href="class_isis_1_1_control_net.html#ae07d72d19611ee35af8987fe8959414c">Isis::ControlNet::GetCubeSerials()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a1f53895260756278df7d22931179d0fe">Isis::ControlMeasure::GetLine()</a>, <a class="el" href="class_isis_1_1_control_net.html#ab1556ef525e16324c21d44d0b5e8afdc">Isis::ControlNet::GetMeasuresInCube()</a>, <a class="el" href="class_isis_1_1_control_net.html#a41a4e6eb7f0861800c444c6124e79992">Isis::ControlNet::GetNumPoints()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a88505083032a39e2f2a381b3a4469d59">Isis::ControlMeasure::GetSample()</a>, <a class="el" href="class_isis_1_1_control_point.html#a74e2401daed4c3e33bee8526c7718f6b">Isis::ControlPoint::GetType()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a6b58506887286ca0211bd459481b393c">Isis::ControlMeasure::IsIgnored()</a>, <a class="el" href="class_isis_1_1_control_point.html#ac08f4fbe0a29e6f02264247db7be65a1">Isis::ControlPoint::IsIgnored()</a>, and <a class="el" href="class_isis_1_1_control_measure.html#a2416e7bf24e53855930b57db674c13b8">Isis::ControlMeasure::Parent()</a>.</p>
+
+</div>
+</div>
+<a id="aa240c87ae02fba89c6f4a4a99736b030"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa240c87ae02fba89c6f4a4a99736b030">&#9670;&nbsp;</a></span>panDown</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::panDown </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pan down. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a04971a3d267fc094505c2c435af5be90">Isis::Chip::CubeLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a779776d827373e5ef7d1265f62b88676">Isis::Chip::CubeSample()</a>, <a class="el" href="class_isis_1_1_chip.html#a51c9abdadbb9b2ad0f640df3da285ba1">Isis::Chip::SetChipPosition()</a>, <a class="el" href="class_isis_1_1_chip.html#ab4e9bc207792c7b93555ebe0fc8a85d9">Isis::Chip::TackLine()</a>, and <a class="el" href="class_isis_1_1_chip.html#a3a69f188eaac6b8fc92b525b6828ca7b">Isis::Chip::TackSample()</a>.</p>
+
+</div>
+</div>
+<a id="a6d39c415366ad86db4894dd615df9c78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d39c415366ad86db4894dd615df9c78">&#9670;&nbsp;</a></span>panLeft</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::panLeft </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pan left. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a04971a3d267fc094505c2c435af5be90">Isis::Chip::CubeLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a779776d827373e5ef7d1265f62b88676">Isis::Chip::CubeSample()</a>, <a class="el" href="class_isis_1_1_chip.html#a51c9abdadbb9b2ad0f640df3da285ba1">Isis::Chip::SetChipPosition()</a>, <a class="el" href="class_isis_1_1_chip.html#ab4e9bc207792c7b93555ebe0fc8a85d9">Isis::Chip::TackLine()</a>, and <a class="el" href="class_isis_1_1_chip.html#a3a69f188eaac6b8fc92b525b6828ca7b">Isis::Chip::TackSample()</a>.</p>
+
+</div>
+</div>
+<a id="a7c1d7051f417cfdca5a2a274c17d5764"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c1d7051f417cfdca5a2a274c17d5764">&#9670;&nbsp;</a></span>panRight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::panRight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pan right. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a04971a3d267fc094505c2c435af5be90">Isis::Chip::CubeLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a779776d827373e5ef7d1265f62b88676">Isis::Chip::CubeSample()</a>, <a class="el" href="class_isis_1_1_chip.html#a51c9abdadbb9b2ad0f640df3da285ba1">Isis::Chip::SetChipPosition()</a>, <a class="el" href="class_isis_1_1_chip.html#ab4e9bc207792c7b93555ebe0fc8a85d9">Isis::Chip::TackLine()</a>, and <a class="el" href="class_isis_1_1_chip.html#a3a69f188eaac6b8fc92b525b6828ca7b">Isis::Chip::TackSample()</a>.</p>
+
+</div>
+</div>
+<a id="a867fd4c7e359090c41efc56c8015c45f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a867fd4c7e359090c41efc56c8015c45f">&#9670;&nbsp;</a></span>panUp</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::panUp </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pan up. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a04971a3d267fc094505c2c435af5be90">Isis::Chip::CubeLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a779776d827373e5ef7d1265f62b88676">Isis::Chip::CubeSample()</a>, <a class="el" href="class_isis_1_1_chip.html#a51c9abdadbb9b2ad0f640df3da285ba1">Isis::Chip::SetChipPosition()</a>, <a class="el" href="class_isis_1_1_chip.html#ab4e9bc207792c7b93555ebe0fc8a85d9">Isis::Chip::TackLine()</a>, and <a class="el" href="class_isis_1_1_chip.html#a3a69f188eaac6b8fc92b525b6828ca7b">Isis::Chip::TackSample()</a>.</p>
+
+</div>
+</div>
+<a id="ae4c87f74c8d1b0bcd3c9ea323afb6b79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4c87f74c8d1b0bcd3c9ea323afb6b79">&#9670;&nbsp;</a></span>refreshView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::refreshView </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tackSample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tackLine</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Slot to refresh viewport when the tack point has changed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tackSample</td><td>Sample on the cube to load the chip viewport at (center) </td></tr>
+    <tr><td class="paramname">tackLine</td><td>Line on the cube to load the chip viewport at (center) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip_viewport.html#a4e3d46bd66b0383b8a540adcf03d3b09">tackLine()</a>, and <a class="el" href="class_isis_1_1_chip_viewport.html#a470af21d44f6db7e4793cbd9457748f4">tackSample()</a>.</p>
+
+</div>
+</div>
+<a id="a59791918690610bbfaedce986fab580e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59791918690610bbfaedce986fab580e">&#9670;&nbsp;</a></span>rotateChip</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::rotateChip </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rotation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Slot to rotate chip. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rotation</td><td>How much to rotate the chip </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip_viewport.html#aa2bd08174756cd8984f60fd9d5044c9e">autoStretch()</a>, <a class="el" href="class_isis_1_1_chip.html#aaa7241a70f9ea84891a905d62c5eddd4">Isis::Chip::Load()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a8f6c061728818595e7493a35c8e60901">Isis::IException::toString()</a>.</p>
+
+</div>
+</div>
+<a id="af68928071923e21d1b8ff881a0f341ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af68928071923e21d1b8ff881a0f341ca">&#9670;&nbsp;</a></span>setChip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::setChip </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_chip.html">Chip</a> *&#160;</td>
+          <td class="paramname"><em>chip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td>
+          <td class="paramname"><em>chipCube</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set chip. </p>
+<p>Set the chip for this <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chip</td><td>Pointer to the chip to set the viewport with </td></tr>
+    <tr><td class="paramname">chipCube</td><td>Pointer to the chip's cube</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"Can not view NULL chip pointer"</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Tracie Sucharski </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#aa2bd08174756cd8984f60fd9d5044c9e">autoStretch()</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#ad80f89b0aedee7ea65627aec4b110f13">chip()</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#ab96dfc5edfe766286ce0c2b38cd693a4">chipCube()</a>, <a class="el" href="class_isis_1_1_chip.html#a4dfcc463818453da7bd9139c1c928753">Isis::Chip::Lines()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_chip.html#a216b19f49b3a1a35e75e88cb4a0c2e67">Isis::Chip::Samples()</a>, and <a class="el" href="class_isis_1_1_chip_viewport.html#ab269a7a51078333adfc5451b1ba1f145">tackPointChanged()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#a35c157934ad259feb71cc8d85834b537">Isis::ControlMeasureEditWidget::setLeftMeasure()</a>, <a class="el" href="class_isis_1_1_control_point_edit.html#adb7e74d229af5815183e9f770fa1cd14">Isis::ControlPointEdit::setLeftMeasure()</a>, <a class="el" href="class_isis_1_1_chip_viewports_widget.html#aa52e9c3351a274e7d37969e58b028af0">Isis::ChipViewportsWidget::setPoint()</a>, <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#aed2d4ca6f5eaf85406d2afae04a0c7ed">Isis::ControlMeasureEditWidget::setRightMeasure()</a>, and <a class="el" href="class_isis_1_1_control_point_edit.html#a65ceea173e366f35ccda5918c682951b">Isis::ControlPointEdit::setRightMeasure()</a>.</p>
+
+</div>
+</div>
+<a id="a29a72105a635fb07699b148a4f014d11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29a72105a635fb07699b148a4f014d11">&#9670;&nbsp;</a></span>setCircle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::setCircle </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checked</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Slot to change state of circle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">checked</td><td>Circle set to be drawn if true </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aafe0ceecbececea398f25663ff04622b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafe0ceecbececea398f25663ff04622b">&#9670;&nbsp;</a></span>setCircleSize</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::setCircleSize </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the size of the circle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>The size of the circle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3ab4a7475e7fdbf13cfb28450b345fea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ab4a7475e7fdbf13cfb28450b345fea">&#9670;&nbsp;</a></span>setControlNet</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::setControlNet </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *&#160;</td>
+          <td class="paramname"><em>newControlNet</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>sets the <a class="el" href="class_isis_1_1_control_net.html" title="a control network">ControlNet</a> to be used for drawing measure locations </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newControlNet</td><td>The new <a class="el" href="class_isis_1_1_control_net.html" title="a control network">ControlNet</a> to be used </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip_viewports_widget.html#aa52e9c3351a274e7d37969e58b028af0">Isis::ChipViewportsWidget::setPoint()</a>.</p>
+
+</div>
+</div>
+<a id="ad2b218bcf2c56c80e0025f4929e6ab13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2b218bcf2c56c80e0025f4929e6ab13">&#9670;&nbsp;</a></span>setCross</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::setCross </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checked</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Slot to change state of crosshair. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">checked</td><td>Crosshair set to be drawn if true </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1df9b3c0d227ee3ad2ab1d1ecbfcc70d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1df9b3c0d227ee3ad2ab1d1ecbfcc70d">&#9670;&nbsp;</a></span>setPoints</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::setPoints </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checked</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Slot to set whether control points are drawn. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">checked</td><td><a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> points are set to be drawn if true </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip_viewports_widget.html#aa52e9c3351a274e7d37969e58b028af0">Isis::ChipViewportsWidget::setPoint()</a>.</p>
+
+</div>
+</div>
+<a id="ab2393d70a5d75e7b4398b0a1d60f80d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2393d70a5d75e7b4398b0a1d60f80d6">&#9670;&nbsp;</a></span>stretchFromCubeViewport</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::stretchFromCubeViewport </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_stretch.html">Stretch</a> *&#160;</td>
+          <td class="paramname"><em>newStretch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube_viewport.html">CubeViewport</a> *&#160;</td>
+          <td class="paramname"><em>cvp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Applies a new stretch to the specified cube viewport. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newStretch</td><td>Pointer to the new stretch to apply </td></tr>
+    <tr><td class="paramname">cvp</td><td>Pointer to the cube viewport to apply the stretch to </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_viewport.html#a0cd043ff7aa84543b08a56cf95490dea">Isis::CubeViewport::cube()</a>, and <a class="el" href="class_isis_1_1_cube.html#ac880a03b1f5464fb972f12e33be517a9">Isis::Cube::fileName()</a>.</p>
+
+</div>
+</div>
+<a id="a4e3d46bd66b0383b8a540adcf03d3b09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e3d46bd66b0383b8a540adcf03d3b09">&#9670;&nbsp;</a></span>tackLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ChipViewport::tackLine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns tack line. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> The tack line for the chip </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a04971a3d267fc094505c2c435af5be90">Isis::Chip::CubeLine()</a>, <a class="el" href="class_isis_1_1_chip.html#a51c9abdadbb9b2ad0f640df3da285ba1">Isis::Chip::SetChipPosition()</a>, <a class="el" href="class_isis_1_1_chip.html#ab4e9bc207792c7b93555ebe0fc8a85d9">Isis::Chip::TackLine()</a>, and <a class="el" href="class_isis_1_1_chip.html#a3a69f188eaac6b8fc92b525b6828ca7b">Isis::Chip::TackSample()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip_viewport.html#ae4c87f74c8d1b0bcd3c9ea323afb6b79">refreshView()</a>.</p>
+
+</div>
+</div>
+<a id="ab269a7a51078333adfc5451b1ba1f145"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab269a7a51078333adfc5451b1ba1f145">&#9670;&nbsp;</a></span>tackPointChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::tackPointChanged </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&lt; Signal sent when tack point changes </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip_viewport.html#af68928071923e21d1b8ff881a0f341ca">setChip()</a>.</p>
+
+</div>
+</div>
+<a id="a470af21d44f6db7e4793cbd9457748f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a470af21d44f6db7e4793cbd9457748f4">&#9670;&nbsp;</a></span>tackSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ChipViewport::tackSample </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the position of cube under cross hair. </p>
+<p>Returns tack sample.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> The tack sample for the chip </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip.html#a779776d827373e5ef7d1265f62b88676">Isis::Chip::CubeSample()</a>, <a class="el" href="class_isis_1_1_chip.html#a51c9abdadbb9b2ad0f640df3da285ba1">Isis::Chip::SetChipPosition()</a>, <a class="el" href="class_isis_1_1_chip.html#ab4e9bc207792c7b93555ebe0fc8a85d9">Isis::Chip::TackLine()</a>, and <a class="el" href="class_isis_1_1_chip.html#a3a69f188eaac6b8fc92b525b6828ca7b">Isis::Chip::TackSample()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip_viewport.html#ae4c87f74c8d1b0bcd3c9ea323afb6b79">refreshView()</a>.</p>
+
+</div>
+</div>
+<a id="a5185525967553eeafd523999faeb9914"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5185525967553eeafd523999faeb9914">&#9670;&nbsp;</a></span>userMovedTackPoint</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::userMovedTackPoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip_viewport.html#af0e62bc2da842cf40f493b501c44d928">keyPressEvent()</a>, and <a class="el" href="class_isis_1_1_chip_viewport.html#ad0de354d6d5673dfcf4dcfd7ee15a55c">mousePressEvent()</a>.</p>
+
+</div>
+</div>
+<a id="a56185cd44dc03a40bb5ee5b804d4eaaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56185cd44dc03a40bb5ee5b804d4eaaa">&#9670;&nbsp;</a></span>zoom</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::zoom </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>zoomFactor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Zoom by a specified factor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zoomFactor</td><td>The zoom factor </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_chip_viewport.html#a5985d1d0e6b8a45c4692f8f67a798f76">zoomFactor()</a>.</p>
+
+</div>
+</div>
+<a id="adda664f23df03fa4d1e9ad10437808c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adda664f23df03fa4d1e9ad10437808c3">&#9670;&nbsp;</a></span>zoom1</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::zoom1 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Zoom by a factor of one. </p>
+
+</div>
+</div>
+<a id="a5985d1d0e6b8a45c4692f8f67a798f76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5985d1d0e6b8a45c4692f8f67a798f76">&#9670;&nbsp;</a></span>zoomFactor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ChipViewport::zoomFactor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the zoom factor. </p>
+<p>Returns the current zoom factor.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> The current zoom factor </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip_viewport.html#a56185cd44dc03a40bb5ee5b804d4eaaa">zoom()</a>.</p>
+
+</div>
+</div>
+<a id="ab4f00f449a09a99fc002d7902b2c70d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4f00f449a09a99fc002d7902b2c70d8">&#9670;&nbsp;</a></span>zoomIn</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::zoomIn </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Zoom in. </p>
+
+</div>
+</div>
+<a id="a4d3dbe07f49f6975d23f79ebda1fda18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d3dbe07f49f6975d23f79ebda1fda18">&#9670;&nbsp;</a></span>zoomOut</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ChipViewport::zoomOut </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Zoom out. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ChipViewport/<a class="el" href="_chip_viewport_8h_source.html">ChipViewport.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ChipViewport/<a class="el" href="_chip_viewport_8cpp.html">ChipViewport.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_chip_viewport.html">ChipViewport</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+FileName,Parsing,isis/src/base/objs/FileName/FileName.h,isis_pybind_standalone/src/base/bind_base_support.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,FileName,isis_pybind.FileName,Y,Python class symbol is exported
+Construction/Enum,FileName(),isis_pybind.FileName(),Y,Constructor is explicitly bound
+Public API,QString originalPath() const,isis_pybind.FileName.original_path,Y,Current Python name
+Public API,QString path() const,isis_pybind.FileName.path,Y,Current Python name
+Public API,QString attributes() const,isis_pybind.FileName.attributes,Y,Current Python name
+Public API,QString baseName() const,isis_pybind.FileName.base_name,Y,Current Python name
+Public API,QString name() const,isis_pybind.FileName.name,Y,Current Python name
+Public API,QString extension() const,isis_pybind.FileName.extension,Y,Current Python name
+Public API,QString expanded() const,isis_pybind.FileName.expanded,Y,Current Python name
+Public API,QString original() const,isis_pybind.FileName.original,Y,Current Python name
+Mutation/Configuration,FileName addExtension(const QString &extension) const,isis_pybind.FileName.add_extension,Y,Current Python name
+Mutation/Configuration,FileName removeExtension() const,isis_pybind.FileName.remove_extension,Y,Current Python name
+Mutation/Configuration,FileName setExtension(const QString &extension) const,isis_pybind.FileName.set_extension,Y,Current Python name
+Query,bool isVersioned() const,isis_pybind.FileName.is_versioned,Y,Current Python name
+Query,bool isNumericallyVersioned() const,isis_pybind.FileName.is_numerically_versioned,Y,Current Python name
+Query,bool isDateVersioned() const,isis_pybind.FileName.is_date_versioned,Y,Current Python name
+Public API,FileName highestVersion() const,isis_pybind.FileName.highest_version,Y,Current Python name
+Public API,FileName newVersion() const,isis_pybind.FileName.new_version,Y,Current Python name
+Public API,bool fileExists() const,isis_pybind.FileName.file_exists,Y,Current Python name
+Public API,QDir dir() const,isis_pybind.FileName.dir,N,Method not found in current binding files
+Static/Factory,"static FileName createTempFile(FileName templateFileName = ""$TEMPORARY/temp"")",isis_pybind.FileName.create_temp_file,N,Method not found in current binding files
+Public API,QString toString() const,isis_pybind.FileName.to_string,Y,Current Python name
+Public API,Data(),isis_pybind.FileName.data,N,Method not found in current binding files
+Public API,Data(const Data &other),isis_pybind.FileName.data,N,Method not found in current binding files
+Public API,QString original(bool includeAttributes) const,isis_pybind.FileName.original,Y,Current Python name
+Mutation/Configuration,void setOriginal(const QString &originalStr),isis_pybind.FileName.set_original,N,Method not found in current binding files
+Public API,QString expanded(bool includeAttributes) const,isis_pybind.FileName.expanded,Y,Current Python name

@@ -1,0 +1,11 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+BufferManager,Low Level Cube I/O,isis/src/base/objs/BufferManager/BufferManager.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,需注意内存生命周期与数据视图映射
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,BufferManager,isis_pybind.TileManager,Y,Python class symbol is exported; 需注意内存生命周期与数据视图映射
+Construction/Enum,BufferManager(),isis_pybind.TileManager(),Y,Constructor is explicitly bound
+Public API,bool begin() { return (setpos(0)),isis_pybind.TileManager.begin,Y,Current Python name
+Public API,bool next() { return (setpos(p_currentMap + 1)),isis_pybind.TileManager.next,Y,Current Python name
+Public API,bool end() const { return (p_currentMap >= p_nmaps),isis_pybind.TileManager.end,Y,Current Python name
+Mutation/Configuration,bool setpos(BigInt map),isis_pybind.TileManager.setpos,N,需注意内存生命周期与数据视图映射
+Public API,void swap(BufferManager &other),isis_pybind.TileManager.swap,N,需注意内存生命周期与数据视图映射

@@ -1,0 +1,842 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Workspace Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_workspace.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-slots">Protected Slots</a> &#124;
+<a href="class_isis_1_1_workspace-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Workspace Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_workspace_8h_source.html">Workspace.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::Workspace:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_workspace__inherit__graph.png" border="0" usemap="#a_isis_1_1_workspace_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_workspace_inherit__map" id="a_isis_1_1_workspace_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,135,201,424"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="67,5,139,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::Workspace:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_workspace__coll__graph.png" border="0" usemap="#a_isis_1_1_workspace_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_workspace_coll__map" id="a_isis_1_1_workspace_coll__map">
+<area shape="rect" title=" " alt="" coords="5,135,201,424"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="67,5,139,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a637f4fc35d5b063f1f067bd9a07c6a87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a637f4fc35d5b063f1f067bd9a07c6a87">addCubeViewport</a> (QString cubename)</td></tr>
+<tr class="memdesc:a637f4fc35d5b063f1f067bd9a07c6a87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method adds the name of a cube into <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> as a <a class="el" href="class_isis_1_1_cube_viewport.html" title="Widget to display Isis cubes for qt apps.">CubeViewport</a>.  <a href="class_isis_1_1_workspace.html#a637f4fc35d5b063f1f067bd9a07c6a87">More...</a><br /></td></tr>
+<tr class="separator:a637f4fc35d5b063f1f067bd9a07c6a87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d6e17ae88043f5a134f28e87b2e3440"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a8d6e17ae88043f5a134f28e87b2e3440">addCubeViewportFromList</a> (QString cubelist)</td></tr>
+<tr class="memdesc:a8d6e17ae88043f5a134f28e87b2e3440"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method adds cubes into <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> as a <a class="el" href="class_isis_1_1_cube_viewport.html" title="Widget to display Isis cubes for qt apps.">CubeViewport</a> from a list of cubes.  <a href="class_isis_1_1_workspace.html#a8d6e17ae88043f5a134f28e87b2e3440">More...</a><br /></td></tr>
+<tr class="separator:a8d6e17ae88043f5a134f28e87b2e3440"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9413378c15c50c34882084e3ed82ef56"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a9413378c15c50c34882084e3ed82ef56">addCubeViewport</a> (<a class="el" href="class_isis_1_1_cube.html">Cube</a> *cube)</td></tr>
+<tr class="memdesc:a9413378c15c50c34882084e3ed82ef56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method adds a cube into the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> as a <a class="el" href="class_isis_1_1_cube_viewport.html" title="Widget to display Isis cubes for qt apps.">CubeViewport</a>.  <a href="class_isis_1_1_workspace.html#a9413378c15c50c34882084e3ed82ef56">More...</a><br /></td></tr>
+<tr class="separator:a9413378c15c50c34882084e3ed82ef56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94f6da95a68e0a4d2ddcdccd2af87bae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a94f6da95a68e0a4d2ddcdccd2af87bae">addBrowseView</a> (QString cube)</td></tr>
+<tr class="memdesc:a94f6da95a68e0a4d2ddcdccd2af87bae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method is called to add a <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> from BrowseView.  <a href="class_isis_1_1_workspace.html#a94f6da95a68e0a4d2ddcdccd2af87bae">More...</a><br /></td></tr>
+<tr class="separator:a94f6da95a68e0a4d2ddcdccd2af87bae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a8b6e72c600bf124e4230365c3e4db8f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a8b6e72c600bf124e4230365c3e4db8f3">cubeViewportAdded</a> (<a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *)</td></tr>
+<tr class="memdesc:a8b6e72c600bf124e4230365c3e4db8f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal triggered when a <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> is added to the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a>.  <a href="class_isis_1_1_workspace.html#a8b6e72c600bf124e4230365c3e4db8f3">More...</a><br /></td></tr>
+<tr class="separator:a8b6e72c600bf124e4230365c3e4db8f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59233615acb670bfe126c8c6423599ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a59233615acb670bfe126c8c6423599ec">cubeViewportActivated</a> (<a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *)</td></tr>
+<tr class="memdesc:a59233615acb670bfe126c8c6423599ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal triggered when a <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> is activated in the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a>.  <a href="class_isis_1_1_workspace.html#a59233615acb670bfe126c8c6423599ec">More...</a><br /></td></tr>
+<tr class="separator:a59233615acb670bfe126c8c6423599ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ad267ab4211a7676eae11a34d3c92ac92"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#ad267ab4211a7676eae11a34d3c92ac92">Workspace</a> (bool selfContained, <a class="el" href="class_q_widget.html">QWidget</a> *parent=0)</td></tr>
+<tr class="memdesc:ad267ab4211a7676eae11a34d3c92ac92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="class_isis_1_1_workspace.html">Workspace</a>.  <a href="class_isis_1_1_workspace.html#ad267ab4211a7676eae11a34d3c92ac92">More...</a><br /></td></tr>
+<tr class="separator:ad267ab4211a7676eae11a34d3c92ac92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3064b2be4ba413f97b7da47ef4e8c001"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a3064b2be4ba413f97b7da47ef4e8c001">Workspace</a> (const <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> &amp;other)</td></tr>
+<tr class="memdesc:a3064b2be4ba413f97b7da47ef4e8c001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="class_isis_1_1_workspace.html">Workspace</a>.  <a href="class_isis_1_1_workspace.html#a3064b2be4ba413f97b7da47ef4e8c001">More...</a><br /></td></tr>
+<tr class="separator:a3064b2be4ba413f97b7da47ef4e8c001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16a3814b755b940f624e5423901dff4f"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a16a3814b755b940f624e5423901dff4f">~Workspace</a> ()</td></tr>
+<tr class="memdesc:a16a3814b755b940f624e5423901dff4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deconstructor.  <a href="class_isis_1_1_workspace.html#a16a3814b755b940f624e5423901dff4f">More...</a><br /></td></tr>
+<tr class="separator:a16a3814b755b940f624e5423901dff4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3b152677561be2478777752b04dbbd5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; <a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#af3b152677561be2478777752b04dbbd5">cubeViewportList</a> ()</td></tr>
+<tr class="memdesc:af3b152677561be2478777752b04dbbd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method returns a Vector of MdiCubeViewports.  <a href="class_isis_1_1_workspace.html#af3b152677561be2478777752b04dbbd5">More...</a><br /></td></tr>
+<tr class="separator:af3b152677561be2478777752b04dbbd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b6367aec5b8bac286a3a8c780b61f65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_workspace.html">Workspace</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a0b6367aec5b8bac286a3a8c780b61f65">operator=</a> (<a class="el" href="class_isis_1_1_workspace.html">Workspace</a> other)</td></tr>
+<tr class="memdesc:a0b6367aec5b8bac286a3a8c780b61f65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is equal to comparsion.  <a href="class_isis_1_1_workspace.html#a0b6367aec5b8bac286a3a8c780b61f65">More...</a><br /></td></tr>
+<tr class="separator:a0b6367aec5b8bac286a3a8c780b61f65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af14b25bb1fe37409c91ac9ca72c68c98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#af14b25bb1fe37409c91ac9ca72c68c98">addImages</a> (<a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *images)</td></tr>
+<tr class="memdesc:af14b25bb1fe37409c91ac9ca72c68c98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a list of Images to a viewport.  <a href="class_isis_1_1_workspace.html#af14b25bb1fe37409c91ac9ca72c68c98">More...</a><br /></td></tr>
+<tr class="separator:af14b25bb1fe37409c91ac9ca72c68c98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74007d9f7041393b0bd52a85fd002e1c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a74007d9f7041393b0bd52a85fd002e1c">confirmClose</a> ()</td></tr>
+<tr class="memdesc:a74007d9f7041393b0bd52a85fd002e1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Confirms that the user wishes toc lose the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a>.  <a href="class_isis_1_1_workspace.html#a74007d9f7041393b0bd52a85fd002e1c">More...</a><br /></td></tr>
+<tr class="separator:a74007d9f7041393b0bd52a85fd002e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a698fcabc68315ac5d33fb93dc64d9818"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a698fcabc68315ac5d33fb93dc64d9818">cubeToMdiWidget</a> (<a class="el" href="class_isis_1_1_cube.html">Cube</a> *cube)</td></tr>
+<tr class="memdesc:a698fcabc68315ac5d33fb93dc64d9818"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a cube to an MdiWidget.  <a href="class_isis_1_1_workspace.html#a698fcabc68315ac5d33fb93dc64d9818">More...</a><br /></td></tr>
+<tr class="separator:a698fcabc68315ac5d33fb93dc64d9818"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35ee5b290380bd247faea0575cecdc36"><td class="memItemLeft" align="right" valign="top">QMdiArea *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#a35ee5b290380bd247faea0575cecdc36">mdiArea</a> ()</td></tr>
+<tr class="memdesc:a35ee5b290380bd247faea0575cecdc36"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method returns the QMdiArea.  <a href="class_isis_1_1_workspace.html#a35ee5b290380bd247faea0575cecdc36">More...</a><br /></td></tr>
+<tr class="separator:a35ee5b290380bd247faea0575cecdc36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-slots"></a>
+Protected Slots</h2></td></tr>
+<tr class="memitem:afae2f5c25028a45630a4d3aba89a831e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_workspace.html#afae2f5c25028a45630a4d3aba89a831e">activateViewport</a> (<a class="el" href="class_q_mdi_sub_window.html">QMdiSubWindow</a> *w)</td></tr>
+<tr class="memdesc:afae2f5c25028a45630a4d3aba89a831e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method activates the Viewport.  <a href="class_isis_1_1_workspace.html#afae2f5c25028a45630a4d3aba89a831e">More...</a><br /></td></tr>
+<tr class="separator:afae2f5c25028a45630a4d3aba89a831e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="section author"><dt>Author</dt><dd>????-??-?? Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad267ab4211a7676eae11a34d3c92ac92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad267ab4211a7676eae11a34d3c92ac92">&#9670;&nbsp;</a></span>Workspace() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Workspace::Workspace </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>selfContained</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor for <a class="el" href="class_isis_1_1_workspace.html">Workspace</a>. </p>
+<p><a class="el" href="class_isis_1_1_workspace.html">Workspace</a> constructor.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">selfContained</td><td>if this <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> should be self contained or note </td></tr>
+    <tr><td class="paramname">parent</td><td>The parent <a class="el" href="class_q_widget.html">QWidget</a>, defaults to 0</td></tr>
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tool.html#a9ae575a1659b99222874cfbbab6d5b38">Isis::Tool::activate()</a>, <a class="el" href="class_isis_1_1_workspace.html#afae2f5c25028a45630a4d3aba89a831e">activateViewport()</a>, <a class="el" href="class_isis_1_1_tool.html#a1a456ff8f54037585cae90e226dc88f8">Isis::Tool::addTo()</a>, <a class="el" href="class_isis_1_1_tool.html#ad20fc5a47916262650832855cd8facae">Isis::Tool::addToActive()</a>, <a class="el" href="class_isis_1_1_tool.html#ac94ccefc589b1dc1f5832bbb45ec71e3">Isis::Tool::addToPermanent()</a>, <a class="el" href="class_isis_1_1_tool_list.html#a2f3715be11329e74693132b1dbd4837a">Isis::ToolList::append()</a>, <a class="el" href="class_isis_1_1_tool_list.html#a360b044baae0a5ad2030fc278079f070">Isis::ToolList::count()</a>, and <a class="el" href="class_isis_1_1_tool.html#a50a7c37ae8e722a168b4bf84ad6b432f">Isis::Tool::menuName()</a>.</p>
+
+</div>
+</div>
+<a id="a3064b2be4ba413f97b7da47ef4e8c001"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3064b2be4ba413f97b7da47ef4e8c001">&#9670;&nbsp;</a></span>Workspace() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Workspace::Workspace </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor for <a class="el" href="class_isis_1_1_workspace.html">Workspace</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The other <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> to load from. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a16a3814b755b940f624e5423901dff4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16a3814b755b940f624e5423901dff4f">&#9670;&nbsp;</a></span>~Workspace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Workspace::~Workspace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Deconstructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="afae2f5c25028a45630a4d3aba89a831e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afae2f5c25028a45630a4d3aba89a831e">&#9670;&nbsp;</a></span>activateViewport</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Workspace::activateViewport </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_mdi_sub_window.html">QMdiSubWindow</a> *&#160;</td>
+          <td class="paramname"><em>w</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method activates the Viewport. </p>
+<p>This gets called when a window is activated or the workspace loses focus.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">w</td><td>The subwindow to activate</td></tr>
+    <tr><td class="paramname">w</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_workspace.html#a59233615acb670bfe126c8c6423599ec">cubeViewportActivated()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_workspace.html#ad267ab4211a7676eae11a34d3c92ac92">Workspace()</a>.</p>
+
+</div>
+</div>
+<a id="a94f6da95a68e0a4d2ddcdccd2af87bae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94f6da95a68e0a4d2ddcdccd2af87bae">&#9670;&nbsp;</a></span>addBrowseView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Workspace::addBrowseView </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>cube</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Method is called to add a <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> from BrowseView. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cube</td><td>The cube being browsed </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_workspace.html#a637f4fc35d5b063f1f067bd9a07c6a87">addCubeViewport()</a>.</p>
+
+</div>
+</div>
+<a id="a9413378c15c50c34882084e3ed82ef56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9413378c15c50c34882084e3ed82ef56">&#9670;&nbsp;</a></span>addCubeViewport <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> * Isis::Workspace::addCubeViewport </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td>
+          <td class="paramname"><em>cube</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Method adds a cube into the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> as a <a class="el" href="class_isis_1_1_cube_viewport.html" title="Widget to display Isis cubes for qt apps.">CubeViewport</a>. </p>
+<p>Add a cubeViewport to the workspace.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cube</td><td>The cube to be added into the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a>.</td></tr>
+    <tr><td class="paramname">cube</td><td>(<a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> *) cube information </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_workspace.html#a8b6e72c600bf124e4230365c3e4db8f3">cubeViewportAdded()</a>, <a class="el" href="class_isis_1_1_cube.html#ac880a03b1f5464fb972f12e33be517a9">Isis::Cube::fileName()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_viewport_mdi_sub_window.html#a1b6abc353c9b57a70b13d38c693feb7e">Isis::ViewportMdiSubWindow::viewport()</a>.</p>
+
+</div>
+</div>
+<a id="a637f4fc35d5b063f1f067bd9a07c6a87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a637f4fc35d5b063f1f067bd9a07c6a87">&#9670;&nbsp;</a></span>addCubeViewport <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Workspace::addCubeViewport </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Method adds the name of a cube into <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> as a <a class="el" href="class_isis_1_1_cube_viewport.html" title="Widget to display Isis cubes for qt apps.">CubeViewport</a>. </p>
+<p>Add a cubeViewport to the workspace, open the cube.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cubename</td><td>The cube to be added to the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a></td></tr>
+    <tr><td class="paramname">cubename</td><td>(QString) cubename </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_workspace.html#a8d6e17ae88043f5a134f28e87b2e3440">addCubeViewportFromList()</a>, <a class="el" href="class_isis_1_1_cube_attribute_input.html#aeab6d577937cbff276b252844fcea450">Isis::CubeAttributeInput::bands()</a>, <a class="el" href="class_isis_1_1_cube.html#aa05a4870a3d19b9a5b57f12ede21ca86">Isis::Cube::open()</a>, <a class="el" href="class_isis_1_1_cube.html#aa8bd2a4216ae1efd05b99de65974fd89">Isis::Cube::setVirtualBands()</a>, <a class="el" href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">Isis::IString::ToInteger()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a8f6c061728818595e7493a35c8e60901">Isis::IException::toString()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>, and <a class="el" href="class_isis_1_1_mdi_cube_viewport.html#aff003d79a79eacba00827778ac738cd0">Isis::MdiCubeViewport::viewRGB()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_workspace.html#a94f6da95a68e0a4d2ddcdccd2af87bae">addBrowseView()</a>, <a class="el" href="class_isis_1_1_workspace.html#a8d6e17ae88043f5a134f28e87b2e3440">addCubeViewportFromList()</a>, and <a class="el" href="class_isis_1_1_workspace.html#af14b25bb1fe37409c91ac9ca72c68c98">addImages()</a>.</p>
+
+</div>
+</div>
+<a id="a8d6e17ae88043f5a134f28e87b2e3440"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d6e17ae88043f5a134f28e87b2e3440">&#9670;&nbsp;</a></span>addCubeViewportFromList</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Workspace::addCubeViewportFromList </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>cubelist</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Method adds cubes into <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> as a <a class="el" href="class_isis_1_1_cube_viewport.html" title="Widget to display Isis cubes for qt apps.">CubeViewport</a> from a list of cubes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cubename</td><td>The name of the cube list file.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="history"><dt><b><a class="el" href="history.html#_history000083">History:</a></b></dt><dd>2018-09-12 Adam Goins - Added this method to attempt to open a file as a cube list.</dd></dl>
+<p>It's called by <a class="el" href="class_isis_1_1_workspace.html#a637f4fc35d5b063f1f067bd9a07c6a87" title="Method adds the name of a cube into Workspace as a CubeViewport.">addCubeViewport()</a> when that method attempts to open a file as a cube but fails. Fixes #5439, Fixes #5476. </p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_workspace.html#a637f4fc35d5b063f1f067bd9a07c6a87">addCubeViewport()</a>, <a class="el" href="class_isis_1_1_cube_attribute_input.html#aeab6d577937cbff276b252844fcea450">Isis::CubeAttributeInput::bands()</a>, <a class="el" href="class_isis_1_1_cube.html#aa05a4870a3d19b9a5b57f12ede21ca86">Isis::Cube::open()</a>, <a class="el" href="class_isis_1_1_cube.html#aa8bd2a4216ae1efd05b99de65974fd89">Isis::Cube::setVirtualBands()</a>, <a class="el" href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">Isis::IString::ToInteger()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>, and <a class="el" href="class_isis_1_1_mdi_cube_viewport.html#aff003d79a79eacba00827778ac738cd0">Isis::MdiCubeViewport::viewRGB()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_workspace.html#a637f4fc35d5b063f1f067bd9a07c6a87">addCubeViewport()</a>.</p>
+
+</div>
+</div>
+<a id="af14b25bb1fe37409c91ac9ca72c68c98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af14b25bb1fe37409c91ac9ca72c68c98">&#9670;&nbsp;</a></span>addImages()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Workspace::addImages </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *&#160;</td>
+          <td class="paramname"><em>images</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a list of Images to a viewport. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">images</td><td>The <a class="el" href="class_isis_1_1_image_list.html" title="Internalizes a list of images and allows for operations on the entire list.">ImageList</a> of images to add to the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_workspace.html#a637f4fc35d5b063f1f067bd9a07c6a87">addCubeViewport()</a>, and <a class="el" href="class_isis_1_1_image.html#a05d6cbd0cc8c11b667c48e6aa655f48d">Isis::Image::cube()</a>.</p>
+
+</div>
+</div>
+<a id="a74007d9f7041393b0bd52a85fd002e1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74007d9f7041393b0bd52a85fd002e1c">&#9670;&nbsp;</a></span>confirmClose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Workspace::confirmClose </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Confirms that the user wishes toc lose the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>True of False if the user wishes to close the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_workspace.html#af3b152677561be2478777752b04dbbd5">cubeViewportList()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_viewport_main_window.html#a5c81c61b4e76caff118d28cdbfb0e14c">Isis::ViewportMainWindow::closeEvent()</a>.</p>
+
+</div>
+</div>
+<a id="a698fcabc68315ac5d33fb93dc64d9818"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a698fcabc68315ac5d33fb93dc64d9818">&#9670;&nbsp;</a></span>cubeToMdiWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::Workspace::cubeToMdiWidget </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td>
+          <td class="paramname"><em>cube</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a cube to an MdiWidget. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cube</td><td>The cube to reference </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_widget.html">QWidget</a> The widget associated with the cube </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube_viewport.html#a0cd043ff7aa84543b08a56cf95490dea">Isis::CubeViewport::cube()</a>.</p>
+
+</div>
+</div>
+<a id="a59233615acb670bfe126c8c6423599ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59233615acb670bfe126c8c6423599ec">&#9670;&nbsp;</a></span>cubeViewportActivated</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Workspace::cubeViewportActivated </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Signal triggered when a <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> is activated in the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a>. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_workspace.html#afae2f5c25028a45630a4d3aba89a831e">activateViewport()</a>.</p>
+
+</div>
+</div>
+<a id="a8b6e72c600bf124e4230365c3e4db8f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b6e72c600bf124e4230365c3e4db8f3">&#9670;&nbsp;</a></span>cubeViewportAdded</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Workspace::cubeViewportAdded </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Signal triggered when a <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> is added to the <a class="el" href="class_isis_1_1_workspace.html">Workspace</a>. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_workspace.html#a9413378c15c50c34882084e3ed82ef56">addCubeViewport()</a>.</p>
+
+</div>
+</div>
+<a id="af3b152677561be2478777752b04dbbd5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3b152677561be2478777752b04dbbd5">&#9670;&nbsp;</a></span>cubeViewportList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; <a class="el" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> * &gt; * Isis::Workspace::cubeViewportList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method returns a Vector of MdiCubeViewports. </p>
+<p>Repopulates the list of MdiCubeViewports and returns a pointer to this list.</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_vector.html" title="This is free and unencumbered software released into the public domain.">QVector</a> a vector of MdiCubeViewports</dd></dl>
+<p>Ownership is not given to the caller.</p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;MdiCubeViewport*&gt;* </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_workspace.html#a74007d9f7041393b0bd52a85fd002e1c">confirmClose()</a>, <a class="el" href="class_isis_1_1_tool.html#a9d6b6336bb81d71ff4d908e82f3b14d7">Isis::Tool::cubeViewportList()</a>, <a class="el" href="class_isis_1_1_qnet_file_tool.html#a49ee7a16dbe4abb299a2c724f1e1fa7b">Isis::QnetFileTool::loadImage()</a>, <a class="el" href="class_isis_1_1_cube_dn_view.html#a5fefa524fd8fa9eb6abf2b6a7d543cab">Isis::CubeDnView::save()</a>, <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#ad4e14168e0dfe8b317d3af20b6dd9c6b">Isis::ScatterPlotConfigDialog::xAxisCubeViewport()</a>, and <a class="el" href="class_isis_1_1_scatter_plot_config_dialog.html#a82b52a2db201203f3543e21545345642">Isis::ScatterPlotConfigDialog::yAxisCubeViewport()</a>.</p>
+
+</div>
+</div>
+<a id="a35ee5b290380bd247faea0575cecdc36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35ee5b290380bd247faea0575cecdc36">&#9670;&nbsp;</a></span>mdiArea()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMdiArea * Isis::Workspace::mdiArea </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method returns the QMdiArea. </p>
+<dl class="section return"><dt>Returns</dt><dd>QMdiArea the Area of the mdi </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_file_tool.html#a6473b035a811048c08686cbc381d1ad3">Isis::FileTool::addTo()</a>, <a class="el" href="class_isis_1_1_window_tool.html#ab21d0b4289d0d3292db01bae6881f5ee">Isis::WindowTool::addTo()</a>, <a class="el" href="class_isis_1_1_cube_dn_view.html#aaac938f364481bfc65e8ede31bcdebc1">Isis::CubeDnView::CubeDnView()</a>, and <a class="el" href="class_isis_1_1_qnet_file_tool.html#a49ee7a16dbe4abb299a2c724f1e1fa7b">Isis::QnetFileTool::loadImage()</a>.</p>
+
+</div>
+</div>
+<a id="a0b6367aec5b8bac286a3a8c780b61f65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b6367aec5b8bac286a3a8c780b61f65">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_workspace.html">Workspace</a> &amp; Isis::Workspace::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_workspace.html">Workspace</a>&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Is equal to comparsion. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The <a class="el" href="class_isis_1_1_workspace.html">Workspace</a> to compare against </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True of False if they're equal to eachother . </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/Workspace/<a class="el" href="_workspace_8h_source.html">Workspace.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/Workspace/<a class="el" href="_workspace_8cpp.html">Workspace.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_workspace.html">Workspace</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

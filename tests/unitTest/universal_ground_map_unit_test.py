@@ -1,0 +1,80 @@
+import math
+import unittest
+
+from _unit_test_support import ip, workspace_test_data_path
+
+
+CAMERA_CUBE = workspace_test_data_path("mosrange", "EN0108828322M_iof.cub")
+PROJECTED_CUBE = workspace_test_data_path(
+    "map2map", "WAC_GLD100_V1.0_GLOBAL_with_LOLA_30M_POLE.10km_cropped.cub"
+)
+
+
+class UniversalGroundMapUnitTest(unittest.TestCase):
+    def open_cube(self, path):
+        cube = ip.Cube()
+        cube.open(str(path), "r")
+        self.addCleanup(cube.close)
+        return cube
+
+    def test_camera_backed_ground_map_round_trip(self):
+        cube = self.open_cube(CAMERA_CUBE)
+        ground_map = ip.UniversalGroundMap(cube)
+
+        self.assertTrue(ground_map.has_camera())
+        self.assertFalse(ground_map.has_projection())
+        self.assertIsInstance(ground_map.camera(), ip.Camera)
+        self.assertIsNone(ground_map.projection())
+
+        center_sample = cube.sample_count() / 2.0
+        center_line = cube.line_count() / 2.0
+        self.assertTrue(ground_map.set_image(center_sample, center_line))
+
+        latitude = ground_map.universal_latitude()
+        longitude = ground_map.universal_longitude()
+        self.assertTrue(math.isfinite(latitude))
+        self.assertTrue(math.isfinite(longitude))
+        self.assertGreater(ground_map.resolution(), 0.0)
+
+        ground_map.set_band(1)
+        self.assertTrue(ground_map.set_universal_ground(latitude, longitude))
+        self.assertAlmostEqual(ground_map.sample(), center_sample, places=3)
+        self.assertAlmostEqual(ground_map.line(), center_line, places=3)
+
+        surface_point = ground_map.camera().get_surface_point()
+        self.assertTrue(surface_point.valid())
+        self.assertTrue(ground_map.set_ground(surface_point))
+
+    def test_projection_backed_ground_map_round_trip(self):
+        cube = self.open_cube(PROJECTED_CUBE)
+        ground_map = ip.UniversalGroundMap(cube)
+
+        self.assertFalse(ground_map.has_camera())
+        self.assertTrue(ground_map.has_projection())
+        self.assertIsNone(ground_map.camera())
+        self.assertIsInstance(ground_map.projection(), ip.Projection)
+
+        sample = 100.0
+        line = 100.0
+        self.assertTrue(ground_map.set_image(sample, line))
+
+        latitude = ground_map.universal_latitude()
+        longitude = ground_map.universal_longitude()
+        self.assertTrue(math.isfinite(latitude))
+        self.assertTrue(math.isfinite(longitude))
+        self.assertGreater(ground_map.resolution(), 0.0)
+
+        self.assertTrue(ground_map.set_universal_ground(latitude, longitude))
+        self.assertAlmostEqual(ground_map.sample(), sample, places=6)
+        self.assertAlmostEqual(ground_map.line(), line, places=6)
+
+        ground_range = ground_map.ground_range(cube)
+        self.assertIsNotNone(ground_range)
+        self.assertEqual(len(ground_range), 4)
+        min_lat, max_lat, min_lon, max_lon = ground_range
+        self.assertLess(min_lat.degrees(), max_lat.degrees())
+        self.assertLess(min_lon.degrees(), max_lon.degrees())
+
+
+if __name__ == "__main__":
+    unittest.main()

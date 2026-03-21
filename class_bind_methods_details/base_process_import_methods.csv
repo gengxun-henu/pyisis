@@ -1,0 +1,69 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ProcessImport,High Level Cube I/O,isis/src/base/objs/ProcessImport/ProcessImport.h,isis_pybind_standalone/src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ProcessImport,isis_pybind.ProcessImportVicar,Y,Python class symbol is exported; 流程/回调接口较多
+Construction/Enum,"VAXDataType enum (VAX_REAL, VAX_INT)",isis_pybind.ProcessImportVicar.VAXDataType,N,流程/回调接口较多
+Construction/Enum,"VAXSpecialPixel enum (VAX_MIN4, VAX_NULL4, VAX_LRS4, VAX_LIS4, VAX_HIS4, VAX_HRS4)",isis_pybind.ProcessImportVicar.VAXSpecialPixel,N,流程/回调接口较多
+Construction/Enum,"Interleave enum (InterleaveUndefined, JP2, BSQ, BIL, BIP)",isis_pybind.ProcessImportVicar.Interleave,N,流程/回调接口较多
+Construction/Enum,ProcessImport(),isis_pybind.ProcessImportVicar(),Y,Constructor is explicitly bound
+Public API,virtual void StartProcess(),isis_pybind.ProcessImportVicar.start_process,N,流程/回调接口较多
+Mutation/Configuration,void SetInputFile(const QString &file),isis_pybind.ProcessImportVicar.set_input_file,N,流程/回调接口较多
+Public API,QString InputFile(),isis_pybind.ProcessImportVicar.input_file,N,流程/回调接口较多
+Mutation/Configuration,Isis::Cube *SetOutputCube(const QString &parameter),isis_pybind.ProcessImportVicar.set_output_cube,N,流程/回调接口较多
+Mutation/Configuration,"Isis::Cube *SetOutputCube(const QString &parameter, UserInterface &ui)",isis_pybind.ProcessImportVicar.set_output_cube,N,流程/回调接口较多
+Mutation/Configuration,"virtual Isis::Cube *SetOutputCube(const QString &fname, Isis::CubeAttributeOutput &att)",isis_pybind.ProcessImportVicar.set_output_cube,N,流程/回调接口较多
+Mutation/Configuration,void SetAttributes(CubeAttributeOutput &att),isis_pybind.ProcessImportVicar.set_attributes,N,流程/回调接口较多
+Mutation/Configuration,void SetPixelType(const Isis::PixelType type),isis_pybind.ProcessImportVicar.set_pixel_type,N,流程/回调接口较多
+Public API,Isis::PixelType PixelType() { return p_pixelType,isis_pybind.ProcessImportVicar.pixel_type,N,流程/回调接口较多
+Mutation/Configuration,"void SetDimensions(const int ns, const int nl, const int nb)",isis_pybind.ProcessImportVicar.set_dimensions,N,流程/回调接口较多
+Public API,int Samples() { return p_ns,isis_pybind.ProcessImportVicar.samples,N,流程/回调接口较多
+Public API,int Lines() { return p_nl,isis_pybind.ProcessImportVicar.lines,N,流程/回调接口较多
+Public API,int Bands() { return p_nb,isis_pybind.ProcessImportVicar.bands,N,流程/回调接口较多
+Mutation/Configuration,void SetByteOrder(const Isis::ByteOrder order),isis_pybind.ProcessImportVicar.set_byte_order,N,流程/回调接口较多
+Public API,Isis::ByteOrder ByteOrder() { return p_byteOrder,isis_pybind.ProcessImportVicar.byte_order,N,流程/回调接口较多
+Query,"bool IsVAXSpecial(unsigned int *vax, VAXSpecialPixel pix)",isis_pybind.ProcessImportVicar.is_vax_special,N,流程/回调接口较多
+Public API,double VAXConversion(void *ibuf),isis_pybind.ProcessImportVicar.vax_conversion,N,流程/回调接口较多
+Mutation/Configuration,"void SetSuffixOffset(int samples,int lines, int coreBands, int itemBytes)",isis_pybind.ProcessImportVicar.set_suffix_offset,N,流程/回调接口较多
+Mutation/Configuration,void SetSuffixPixelType(const Isis::PixelType type),isis_pybind.ProcessImportVicar.set_suffix_pixel_type,N,流程/回调接口较多
+Mutation/Configuration,void SetVAXConvert(const bool vax_convert),isis_pybind.ProcessImportVicar.set_vax_convert,N,流程/回调接口较多
+Mutation/Configuration,void SetFileHeaderBytes(const int bytes),isis_pybind.ProcessImportVicar.set_file_header_bytes,N,流程/回调接口较多
+Mutation/Configuration,void SetFileTrailerBytes(const int bytes),isis_pybind.ProcessImportVicar.set_file_trailer_bytes,N,流程/回调接口较多
+Mutation/Configuration,void SetDataHeaderBytes(const int bytes),isis_pybind.ProcessImportVicar.set_data_header_bytes,N,流程/回调接口较多
+Mutation/Configuration,void SetDataTrailerBytes(const int bytes),isis_pybind.ProcessImportVicar.set_data_trailer_bytes,N,流程/回调接口较多
+Mutation/Configuration,void SetDataPrefixBytes(const int bytes),isis_pybind.ProcessImportVicar.set_data_prefix_bytes,N,流程/回调接口较多
+Mutation/Configuration,void SetDataSuffixBytes(const int bytes),isis_pybind.ProcessImportVicar.set_data_suffix_bytes,N,流程/回调接口较多
+Read/Write IO,void SaveFileHeader(),isis_pybind.ProcessImportVicar.save_file_header,N,流程/回调接口较多
+Read/Write IO,void SaveFileTrailer(),isis_pybind.ProcessImportVicar.save_file_trailer,N,流程/回调接口较多
+Read/Write IO,void SaveDataHeader(),isis_pybind.ProcessImportVicar.save_data_header,N,流程/回调接口较多
+Read/Write IO,void SaveDataTrailer(),isis_pybind.ProcessImportVicar.save_data_trailer,N,流程/回调接口较多
+Read/Write IO,void SaveDataPrefix(),isis_pybind.ProcessImportVicar.save_data_prefix,N,流程/回调接口较多
+Read/Write IO,void SaveDataSuffix(),isis_pybind.ProcessImportVicar.save_data_suffix,N,流程/回调接口较多
+Public API,int FileHeaderBytes() const,isis_pybind.ProcessImportVicar.file_header_bytes,N,流程/回调接口较多
+Public API,int FileTrailerBytes() const,isis_pybind.ProcessImportVicar.file_trailer_bytes,N,流程/回调接口较多
+Public API,int DataHeaderBytes() const,isis_pybind.ProcessImportVicar.data_header_bytes,N,流程/回调接口较多
+Public API,int DataTrailerBytes() const,isis_pybind.ProcessImportVicar.data_trailer_bytes,N,流程/回调接口较多
+Public API,int DataPrefixBytes() const,isis_pybind.ProcessImportVicar.data_prefix_bytes,N,流程/回调接口较多
+Public API,int DataSuffixBytes() const,isis_pybind.ProcessImportVicar.data_suffix_bytes,N,流程/回调接口较多
+Public API,char *FileHeader(),isis_pybind.ProcessImportVicar.file_header,N,流程/回调接口较多
+Public API,char *FileTrailer(),isis_pybind.ProcessImportVicar.file_trailer,N,流程/回调接口较多
+Public API,std::vector<char *> DataHeader(),isis_pybind.ProcessImportVicar.data_header,N,流程/回调接口较多
+Public API,std::vector<char *> DataTrailer(),isis_pybind.ProcessImportVicar.data_trailer,N,流程/回调接口较多
+Public API,std::vector<std::vector<char *> > DataPrefix(),isis_pybind.ProcessImportVicar.data_prefix,N,流程/回调接口较多
+Public API,std::vector<std::vector<char *> > DataSuffix(),isis_pybind.ProcessImportVicar.data_suffix,N,流程/回调接口较多
+Mutation/Configuration,void SetOrganization(const ProcessImport::Interleave org),isis_pybind.ProcessImportVicar.set_organization,N,流程/回调接口较多
+Public API,Interleave Organization() const,isis_pybind.ProcessImportVicar.organization,N,流程/回调接口较多
+Mutation/Configuration,void SetBase(const double base),isis_pybind.ProcessImportVicar.set_base,N,流程/回调接口较多
+Mutation/Configuration,void SetMultiplier(const double mult),isis_pybind.ProcessImportVicar.set_multiplier,N,流程/回调接口较多
+Mutation/Configuration,void SetBase(const std::vector<double> base),isis_pybind.ProcessImportVicar.set_base,N,流程/回调接口较多
+Mutation/Configuration,void SetMultiplier(const std::vector<double> mult),isis_pybind.ProcessImportVicar.set_multiplier,N,流程/回调接口较多
+Mutation/Configuration,"void SetSpecialValues(const double null, const double lrs, const double lis, const double hrs, const double his)",isis_pybind.ProcessImportVicar.set_special_values,N,流程/回调接口较多
+Mutation/Configuration,"void SetNull(const double null_min, const double null_max)",isis_pybind.ProcessImportVicar.set_null,N,流程/回调接口较多
+Mutation/Configuration,"void SetLRS(const double lrs_min, const double lrs_max)",isis_pybind.ProcessImportVicar.set_lrs,N,流程/回调接口较多
+Mutation/Configuration,"void SetLIS(const double lis_min, const double lis_max)",isis_pybind.ProcessImportVicar.set_lis,N,流程/回调接口较多
+Mutation/Configuration,"void SetHRS(const double hrs_min, const double hrs_max)",isis_pybind.ProcessImportVicar.set_hrs,N,流程/回调接口较多
+Mutation/Configuration,"void SetHIS(const double his_min, const double his_max)",isis_pybind.ProcessImportVicar.set_his,N,流程/回调接口较多
+Public API,double TestPixel(const double pixel),isis_pybind.ProcessImportVicar.test_pixel,N,流程/回调接口较多
+Public API,"void CheckPixelRange(QString pixelName, double min, double max)",isis_pybind.ProcessImportVicar.check_pixel_range,N,流程/回调接口较多
+Mutation/Configuration,#if 0 void AddImportLabel(Isis::Pvl &importLab),isis_pybind.ProcessImportVicar.add_import_label,N,流程/回调接口较多
+Mutation/Configuration,void AddLabel(Isis::Pvl &label),isis_pybind.ProcessImportVicar.add_label,N,流程/回调接口较多

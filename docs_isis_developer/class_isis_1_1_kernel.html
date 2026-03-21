@@ -1,0 +1,747 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Kernel Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_kernel.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_kernel-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Kernel Class Reference<div class="ingroups"><a class="el" href="group___system.html">System</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This class stores <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> information, including Type and kernel file names.  
+ <a href="class_isis_1_1_kernel.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_kernel_8h_source.html">Kernel.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::Kernel:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_kernel__coll__graph.png" border="0" usemap="#a_isis_1_1_kernel_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_kernel_coll__map" id="a_isis_1_1_kernel_coll__map">
+<area shape="rect" title="This class stores Kernel information, including Type and kernel file names." alt="" coords="5,5,110,295"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:afc46687c97a261a962b1e44ca2f3082c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Type</a> { <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082ca56b772ec337c3db09cee4d625a88714b">Predicted</a> = 1
+, <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082caed096853771455527f32f5445170806c">Nadir</a> = 2
+, <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082ca82325cc8d6634a627d3def53175b034a">Reconstructed</a> = 4
+, <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082ca8cd3e5499c6e4d7463b9a67eb9dff253">Smithed</a> = 8
+ }</td></tr>
+<tr class="memdesc:afc46687c97a261a962b1e44ca2f3082c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration for type of kernel.  <a href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">More...</a><br /></td></tr>
+<tr class="separator:afc46687c97a261a962b1e44ca2f3082c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a9ccb8805a915ddef6b802c0bd8d893da"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#a9ccb8805a915ddef6b802c0bd8d893da">Kernel</a> ()</td></tr>
+<tr class="memdesc:a9ccb8805a915ddef6b802c0bd8d893da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> object with "Unknown" Type.  <a href="class_isis_1_1_kernel.html#a9ccb8805a915ddef6b802c0bd8d893da">More...</a><br /></td></tr>
+<tr class="separator:a9ccb8805a915ddef6b802c0bd8d893da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ac3c76e76ec3e9ed3aa1596168ed729"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#a9ac3c76e76ec3e9ed3aa1596168ed729">Kernel</a> (<a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Type</a> <a class="el" href="class_isis_1_1_kernel.html#aafb5d2a0be8e11f0522a0c7597c2c7aa">type</a>, const QStringList &amp;data)</td></tr>
+<tr class="memdesc:a9ac3c76e76ec3e9ed3aa1596168ed729"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> object with given Type and kernels data.  <a href="class_isis_1_1_kernel.html#a9ac3c76e76ec3e9ed3aa1596168ed729">More...</a><br /></td></tr>
+<tr class="separator:a9ac3c76e76ec3e9ed3aa1596168ed729"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a228e227f9c4915929ec1cdcb82263746"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#a228e227f9c4915929ec1cdcb82263746">~Kernel</a> ()</td></tr>
+<tr class="memdesc:a228e227f9c4915929ec1cdcb82263746"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructs <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> object.  <a href="class_isis_1_1_kernel.html#a228e227f9c4915929ec1cdcb82263746">More...</a><br /></td></tr>
+<tr class="separator:a228e227f9c4915929ec1cdcb82263746"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a153ae44975c92be49d1005928677d6"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#a4a153ae44975c92be49d1005928677d6">kernels</a> ()</td></tr>
+<tr class="memdesc:a4a153ae44975c92be49d1005928677d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the list of kernel data file names.  <a href="class_isis_1_1_kernel.html#a4a153ae44975c92be49d1005928677d6">More...</a><br /></td></tr>
+<tr class="separator:a4a153ae44975c92be49d1005928677d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafb5d2a0be8e11f0522a0c7597c2c7aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#aafb5d2a0be8e11f0522a0c7597c2c7aa">type</a> ()</td></tr>
+<tr class="memdesc:aafb5d2a0be8e11f0522a0c7597c2c7aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the stored <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c" title="Enumeration for type of kernel.">Kernel::Type</a>.  <a href="class_isis_1_1_kernel.html#aafb5d2a0be8e11f0522a0c7597c2c7aa">More...</a><br /></td></tr>
+<tr class="separator:aafb5d2a0be8e11f0522a0c7597c2c7aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb8e7e52f549762a73ef789c13f30b31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#adb8e7e52f549762a73ef789c13f30b31">setKernels</a> (QStringList data)</td></tr>
+<tr class="memdesc:adb8e7e52f549762a73ef789c13f30b31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the kernel data file names to the given list.  <a href="class_isis_1_1_kernel.html#adb8e7e52f549762a73ef789c13f30b31">More...</a><br /></td></tr>
+<tr class="separator:adb8e7e52f549762a73ef789c13f30b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a065591c22001ca89c827d5fd3917fb59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#a065591c22001ca89c827d5fd3917fb59">setType</a> (const <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Type</a> &amp;<a class="el" href="class_isis_1_1_kernel.html#aafb5d2a0be8e11f0522a0c7597c2c7aa">type</a>)</td></tr>
+<tr class="memdesc:a065591c22001ca89c827d5fd3917fb59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> type.  <a href="class_isis_1_1_kernel.html#a065591c22001ca89c827d5fd3917fb59">More...</a><br /></td></tr>
+<tr class="separator:a065591c22001ca89c827d5fd3917fb59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bd35919edddcb7b69931d3b7e3cf96a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#a9bd35919edddcb7b69931d3b7e3cf96a">size</a> ()</td></tr>
+<tr class="memdesc:a9bd35919edddcb7b69931d3b7e3cf96a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor method to determine the number of kernel files.  <a href="class_isis_1_1_kernel.html#a9bd35919edddcb7b69931d3b7e3cf96a">More...</a><br /></td></tr>
+<tr class="separator:a9bd35919edddcb7b69931d3b7e3cf96a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39a62ac2fb2c656a03367235208ff950"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#a39a62ac2fb2c656a03367235208ff950">push_back</a> (const QString &amp;str)</td></tr>
+<tr class="memdesc:a39a62ac2fb2c656a03367235208ff950"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the string (file name) to the kernel data file list.  <a href="class_isis_1_1_kernel.html#a39a62ac2fb2c656a03367235208ff950">More...</a><br /></td></tr>
+<tr class="separator:a39a62ac2fb2c656a03367235208ff950"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d4b57355ad6cf693d47c578aaedd0cd"><td class="memItemLeft" align="right" valign="top">QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#a9d4b57355ad6cf693d47c578aaedd0cd">operator[]</a> (const int index)</td></tr>
+<tr class="memdesc:a9d4b57355ad6cf693d47c578aaedd0cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value (file name) in the kernel data list at the given index value.  <a href="class_isis_1_1_kernel.html#a9d4b57355ad6cf693d47c578aaedd0cd">More...</a><br /></td></tr>
+<tr class="separator:a9d4b57355ad6cf693d47c578aaedd0cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5a0829da1cd201e243a737156c5cbd0"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#ab5a0829da1cd201e243a737156c5cbd0">operator[]</a> (const int index) const</td></tr>
+<tr class="memdesc:ab5a0829da1cd201e243a737156c5cbd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">A constant method that returns the value of the kernel data list at the given index value.  <a href="class_isis_1_1_kernel.html#ab5a0829da1cd201e243a737156c5cbd0">More...</a><br /></td></tr>
+<tr class="separator:ab5a0829da1cd201e243a737156c5cbd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad78d6b483897b0bce9c9cc98cf87c95f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#ad78d6b483897b0bce9c9cc98cf87c95f">operator&lt;</a> (const <a class="el" href="class_isis_1_1_kernel.html">Kernel</a> &amp;other) const</td></tr>
+<tr class="memdesc:ad78d6b483897b0bce9c9cc98cf87c95f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares which <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> object has a higher quality Type, i.e.  <a href="class_isis_1_1_kernel.html#ad78d6b483897b0bce9c9cc98cf87c95f">More...</a><br /></td></tr>
+<tr class="separator:ad78d6b483897b0bce9c9cc98cf87c95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a808991a7f51b92cb746fb36054f1969c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#a808991a7f51b92cb746fb36054f1969c">typeEnum</a> (const QString &amp;<a class="el" href="class_isis_1_1_kernel.html#aafb5d2a0be8e11f0522a0c7597c2c7aa">type</a>)</td></tr>
+<tr class="memdesc:a808991a7f51b92cb746fb36054f1969c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the given string to a character as follows.  <a href="class_isis_1_1_kernel.html#a808991a7f51b92cb746fb36054f1969c">More...</a><br /></td></tr>
+<tr class="separator:a808991a7f51b92cb746fb36054f1969c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ce7fdd0bf21ea08f0e8cd5f2c0740e3"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_kernel.html#a5ce7fdd0bf21ea08f0e8cd5f2c0740e3">typeEnum</a> (const <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Type</a> &amp;<a class="el" href="class_isis_1_1_kernel.html#aafb5d2a0be8e11f0522a0c7597c2c7aa">type</a>)</td></tr>
+<tr class="memdesc:a5ce7fdd0bf21ea08f0e8cd5f2c0740e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the given Type to a character as follows.  <a href="class_isis_1_1_kernel.html#a5ce7fdd0bf21ea08f0e8cd5f2c0740e3">More...</a><br /></td></tr>
+<tr class="separator:a5ce7fdd0bf21ea08f0e8cd5f2c0740e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class stores <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> information, including Type and kernel file names. </p>
+<dl class="section author"><dt>Author</dt><dd>????-??-?? Unknown </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="afc46687c97a261a962b1e44ca2f3082c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc46687c97a261a962b1e44ca2f3082c">&#9670;&nbsp;</a></span>Type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Isis::Kernel::Type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enumeration for type of kernel. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="afc46687c97a261a962b1e44ca2f3082ca56b772ec337c3db09cee4d625a88714b"></a>Predicted&#160;</td><td class="fielddoc"><p>Predicted <a class="el" href="class_isis_1_1_kernels.html" title="Determine SPICE kernels defined in an ISIS file.">Kernels</a> are based on predicted location of the spacecraft. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afc46687c97a261a962b1e44ca2f3082caed096853771455527f32f5445170806c"></a>Nadir&#160;</td><td class="fielddoc"><p>Nadir <a class="el" href="class_isis_1_1_kernels.html" title="Determine SPICE kernels defined in an ISIS file.">Kernels</a> mimic spacecraft pointing. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afc46687c97a261a962b1e44ca2f3082ca82325cc8d6634a627d3def53175b034a"></a>Reconstructed&#160;</td><td class="fielddoc"><p>Reconstructed <a class="el" href="class_isis_1_1_kernels.html" title="Determine SPICE kernels defined in an ISIS file.">Kernels</a> are supplemented with information on the actual position of targets and/or spacecrafts. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="afc46687c97a261a962b1e44ca2f3082ca8cd3e5499c6e4d7463b9a67eb9dff253"></a>Smithed&#160;</td><td class="fielddoc"><p>Smithed <a class="el" href="class_isis_1_1_kernels.html" title="Determine SPICE kernels defined in an ISIS file.">Kernels</a> are generally reconstructed kernels that have been corrected. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a9ccb8805a915ddef6b802c0bd8d893da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ccb8805a915ddef6b802c0bd8d893da">&#9670;&nbsp;</a></span>Kernel() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Kernel::Kernel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> object with "Unknown" Type. </p>
+
+</div>
+</div>
+<a id="a9ac3c76e76ec3e9ed3aa1596168ed729"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ac3c76e76ec3e9ed3aa1596168ed729">&#9670;&nbsp;</a></span>Kernel() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Kernel::Kernel </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Type</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> object with given Type and kernels data. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>Type of kernel to be constructed, see <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c" title="Enumeration for type of kernel.">Kernel::Type</a> enumerations </td></tr>
+    <tr><td class="paramname">data</td><td>Vector containing kernel file name(s) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a228e227f9c4915929ec1cdcb82263746"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a228e227f9c4915929ec1cdcb82263746">&#9670;&nbsp;</a></span>~Kernel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Kernel::~Kernel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructs <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4a153ae44975c92be49d1005928677d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a153ae44975c92be49d1005928677d6">&#9670;&nbsp;</a></span>kernels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::Kernel::kernels </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the list of kernel data file names. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>QStringList</b> List of file names for the kernel </dd></dl>
+
+</div>
+</div>
+<a id="ad78d6b483897b0bce9c9cc98cf87c95f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad78d6b483897b0bce9c9cc98cf87c95f">&#9670;&nbsp;</a></span>operator&lt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Kernel::operator&lt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_kernel.html">Kernel</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compares which <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> object has a higher quality Type, i.e. </p>
+<p>which type has a higher enumeration value. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> whose type value will be compared </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> Indicates whether the <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> object to the left of the operator has a larger Type enumeration than the object on the right of the operator. </dd></dl>
+
+</div>
+</div>
+<a id="a9d4b57355ad6cf693d47c578aaedd0cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d4b57355ad6cf693d47c578aaedd0cd">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString &amp; Isis::Kernel::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the value (file name) in the kernel data list at the given index value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index value of the kernel data list </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The kernel file name stored in the given index </dd></dl>
+
+</div>
+</div>
+<a id="ab5a0829da1cd201e243a737156c5cbd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5a0829da1cd201e243a737156c5cbd0">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Kernel::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A constant method that returns the value of the kernel data list at the given index value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index value of the kernel data list </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The kernel data stored in the given index </dd></dl>
+
+</div>
+</div>
+<a id="a39a62ac2fb2c656a03367235208ff950"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39a62ac2fb2c656a03367235208ff950">&#9670;&nbsp;</a></span>push_back()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Kernel::push_back </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds the string (file name) to the kernel data file list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>String containing kernel file name to be added. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adb8e7e52f549762a73ef789c13f30b31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb8e7e52f549762a73ef789c13f30b31">&#9670;&nbsp;</a></span>setKernels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Kernel::setKernels </td>
+          <td>(</td>
+          <td class="paramtype">QStringList&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the kernel data file names to the given list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>A list containing kernel data (file names) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a065591c22001ca89c827d5fd3917fb59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a065591c22001ca89c827d5fd3917fb59">&#9670;&nbsp;</a></span>setType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Kernel::setType </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Type</a> &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>The <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> type enumeration value to be set. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9bd35919edddcb7b69931d3b7e3cf96a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bd35919edddcb7b69931d3b7e3cf96a">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Kernel::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Accessor method to determine the number of kernel files. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>const</b> <b>int</b> Number of items in the kernel data list </dd></dl>
+
+</div>
+</div>
+<a id="aafb5d2a0be8e11f0522a0c7597c2c7aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafb5d2a0be8e11f0522a0c7597c2c7aa">&#9670;&nbsp;</a></span>type()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Kernel::Type</a> Isis::Kernel::type </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the stored <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c" title="Enumeration for type of kernel.">Kernel::Type</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>Type</b> Enumerated kernel type value </dd></dl>
+
+</div>
+</div>
+<a id="a808991a7f51b92cb746fb36054f1969c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a808991a7f51b92cb746fb36054f1969c">&#9670;&nbsp;</a></span>typeEnum() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Kernel::Type</a> Isis::Kernel::typeEnum </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts the given string to a character as follows. </p>
+<ul>
+<li>
+"Predicted" = 1 </li>
+<li>
+"Nadir" = 2 </li>
+<li>
+"Reconstructed" = 4 </li>
+<li>
+"Smithed" = 8 </li>
+<li>
+Anything else = 0 </li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>A QString containing a <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> Type. These strings are not case dependent (the type maybe written all caps, all lower, camel). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>Type</b> The <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> type enumeration value </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_kernel_db.html#a9df4ef24a81acf509ef892c4e2508d37">Isis::KernelDb::findAll()</a>.</p>
+
+</div>
+</div>
+<a id="a5ce7fdd0bf21ea08f0e8cd5f2c0740e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ce7fdd0bf21ea08f0e8cd5f2c0740e3">&#9670;&nbsp;</a></span>typeEnum() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * Isis::Kernel::typeEnum </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c">Type</a> &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts the given Type to a character as follows. </p>
+<ul>
+<li>
+1 = Predicted </li>
+<li>
+2 = Nadir </li>
+<li>
+4 = Reconstructed </li>
+<li>
+8 = Smithed </li>
+<li>
+Anything else = Unknown </li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>The <a class="el" href="class_isis_1_1_kernel.html" title="This class stores Kernel information, including Type and kernel file names.">Kernel</a> type enumeration value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>const</b> <b>char*</b> A character array corresponding to the passed in <a class="el" href="class_isis_1_1_kernel.html#afc46687c97a261a962b1e44ca2f3082c" title="Enumeration for type of kernel.">Kernel::Type</a>. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/system/objs/Kernel/<a class="el" href="_kernel_8h_source.html">Kernel.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/system/objs/Kernel/<a class="el" href="_kernel_8cpp.html">Kernel.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_kernel.html">Kernel</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

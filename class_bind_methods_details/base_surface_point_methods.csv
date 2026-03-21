@@ -1,0 +1,64 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+SurfacePoint,Geometry,isis/src/base/objs/SurfacePoint/SurfacePoint.h,isis_pybind_standalone/src/base/bind_base_surface.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,SurfacePoint,isis_pybind.SurfacePoint,Y,Python class symbol is exported
+Construction/Enum,"CoordinateType enum (Latitudinal, Rectangular)",isis_pybind.SurfacePoint.CoordinateType,N,Enum exposure not detected in current binding files
+Construction/Enum,"CoordUnits enum (Degrees, Kilometers, Meters, Radians)",isis_pybind.SurfacePoint.CoordUnits,N,Enum exposure not detected in current binding files
+Construction/Enum,"CoordIndex enum (One, Two, Three)",isis_pybind.SurfacePoint.CoordIndex,N,Enum exposure not detected in current binding files
+Construction/Enum,SurfacePoint(),isis_pybind.SurfacePoint(),Y,Constructor is explicitly bound
+Mutation/Configuration,"void SetRectangular(const Displacement x, const Displacement y, const Displacement z, const boost::numeric::ublas::symmetric_matrix<double,boost::numeric::ublas::upper>& covar)",isis_pybind.SurfacePoint.set_rectangular,N,Method not found in current binding files
+Mutation/Configuration,"void SetRectangularCoordinates(const Displacement &x, const Displacement &y, const Displacement &z)",isis_pybind.SurfacePoint.set_rectangular_coordinates,N,Method not found in current binding files
+Mutation/Configuration,"void SetRectangularSigmas(const Distance &xSigma, const Distance &ySigma, const Distance &zSigma)",isis_pybind.SurfacePoint.set_rectangular_sigmas,N,Method not found in current binding files
+Mutation/Configuration,"void SetRectangularMatrix( const boost::numeric::ublas::symmetric_matrix<double,boost::numeric::ublas::upper>& covar, SurfacePoint::CoordUnits units = SurfacePoint::Meters)",isis_pybind.SurfacePoint.set_rectangular_matrix,N,Method not found in current binding files
+Mutation/Configuration,"void SetSpherical (const Latitude &lat, const Longitude &lon, const Distance &radius, const boost::numeric::ublas::symmetric_matrix <double,boost::numeric::ublas::upper>& covar)",isis_pybind.SurfacePoint.set_spherical,N,Method not found in current binding files
+Mutation/Configuration,"void SetSphericalCoordinates(const Latitude &lat, const Longitude &lon, const Distance &radius)",isis_pybind.SurfacePoint.set_spherical_coordinates,N,Method not found in current binding files
+Mutation/Configuration,"void SetSphericalMatrix( const boost::numeric::ublas::symmetric_matrix<double,boost::numeric::ublas::upper>& covar, SurfacePoint::CoordUnits units = SurfacePoint::Meters)",isis_pybind.SurfacePoint.set_spherical_matrix,N,Method not found in current binding files
+Mutation/Configuration,"void SetSphericalSigmas(const Angle &latSigma, const Angle &lonSigma, const Distance &radiusSigma)",isis_pybind.SurfacePoint.set_spherical_sigmas,N,Method not found in current binding files
+Mutation/Configuration,"void SetSphericalSigmasDistance(const Distance &latSigma, const Distance &lonSigma, const Distance &radiusSigma)",isis_pybind.SurfacePoint.set_spherical_sigmas_distance,N,Method not found in current binding files
+Public API,void ResetLocalRadius(const Distance &radius),isis_pybind.SurfacePoint.reset_local_radius,N,Method not found in current binding files
+Query,bool Valid() const,isis_pybind.SurfacePoint.valid,N,Method not found in current binding files
+Mutation/Configuration,"void SetMatrix(CoordinateType type, const boost::numeric::ublas::symmetric_matrix<double,boost::numeric::ublas::upper>& covar)",isis_pybind.SurfacePoint.set_matrix,N,Method not found in current binding files
+Public API,"std::vector<double> Partial(CoordinateType type, CoordIndex index)",isis_pybind.SurfacePoint.partial,N,Method not found in current binding files
+Public API,"double GetCoord(CoordinateType type, CoordIndex index, CoordUnits units)",isis_pybind.SurfacePoint.get_coord,N,Method not found in current binding files
+Public API,"double GetSigma(CoordinateType type, CoordIndex index, CoordUnits units)",isis_pybind.SurfacePoint.get_sigma,N,Method not found in current binding files
+Public API,"Distance GetSigmaDistance(CoordinateType type, CoordIndex index)",isis_pybind.SurfacePoint.get_sigma_distance,N,Method not found in current binding files
+Public API,"double GetWeight(CoordinateType type, CoordIndex index)",isis_pybind.SurfacePoint.get_weight,N,Method not found in current binding files
+Public API,Displacement GetX() const,isis_pybind.SurfacePoint.get_x,N,Method not found in current binding files
+Public API,Displacement GetY() const,isis_pybind.SurfacePoint.get_y,N,Method not found in current binding files
+Public API,Displacement GetZ() const,isis_pybind.SurfacePoint.get_z,N,Method not found in current binding files
+Public API,Distance GetXSigma() const,isis_pybind.SurfacePoint.get_x_sigma,N,Method not found in current binding files
+Public API,Distance GetYSigma() const,isis_pybind.SurfacePoint.get_y_sigma,N,Method not found in current binding files
+Public API,Distance GetZSigma() const,isis_pybind.SurfacePoint.get_z_sigma,N,Method not found in current binding files
+Public API,double GetXWeight() const,isis_pybind.SurfacePoint.get_x_weight,N,Method not found in current binding files
+Public API,double GetYWeight() const,isis_pybind.SurfacePoint.get_y_weight,N,Method not found in current binding files
+Public API,double GetZWeight() const,isis_pybind.SurfacePoint.get_z_weight,N,Method not found in current binding files
+Public API,"boost::numeric::ublas::symmetric_matrix<double,boost::numeric::ublas::upper> GetRectangularMatrix(SurfacePoint::CoordUnits units = SurfacePoint::Meters) const",isis_pybind.SurfacePoint.get_rectangular_matrix,N,Method not found in current binding files
+Public API,Latitude GetLatitude() const,isis_pybind.SurfacePoint.get_latitude,N,Method not found in current binding files
+Public API,Longitude GetLongitude() const,isis_pybind.SurfacePoint.get_longitude,N,Method not found in current binding files
+Public API,Distance GetLocalRadius() const,isis_pybind.SurfacePoint.get_local_radius,N,Method not found in current binding files
+Public API,Angle GetLatSigma() const,isis_pybind.SurfacePoint.get_lat_sigma,N,Method not found in current binding files
+Public API,Distance GetLatSigmaDistance() const,isis_pybind.SurfacePoint.get_lat_sigma_distance,N,Method not found in current binding files
+Public API,double GetLatWeight() const,isis_pybind.SurfacePoint.get_lat_weight,N,Method not found in current binding files
+Public API,Angle GetLonSigma() const,isis_pybind.SurfacePoint.get_lon_sigma,N,Method not found in current binding files
+Public API,Distance GetLonSigmaDistance() const,isis_pybind.SurfacePoint.get_lon_sigma_distance,N,Method not found in current binding files
+Public API,double GetLonWeight() const,isis_pybind.SurfacePoint.get_lon_weight,N,Method not found in current binding files
+Public API,Distance GetLocalRadiusSigma() const,isis_pybind.SurfacePoint.get_local_radius_sigma,N,Method not found in current binding files
+Public API,double GetLocalRadiusWeight() const,isis_pybind.SurfacePoint.get_local_radius_weight,N,Method not found in current binding files
+Public API,"boost::numeric::ublas::symmetric_matrix <double,boost::numeric::ublas::upper> GetSphericalMatrix (SurfacePoint::CoordUnits units = SurfacePoint::Meters) const",isis_pybind.SurfacePoint.get_spherical_matrix,N,Method not found in current binding files
+Public API,"double DisplacementToDouble(Displacement disp, CoordUnits units)",isis_pybind.SurfacePoint.displacement_to_double,N,Method not found in current binding files
+Public API,"double DistanceToDouble(Distance dist, CoordUnits units)",isis_pybind.SurfacePoint.distance_to_double,N,Method not found in current binding files
+Public API,double MetersToLatitude(double latLength),isis_pybind.SurfacePoint.meters_to_latitude,N,Method not found in current binding files
+Public API,double MetersToLongitude(double lonLength),isis_pybind.SurfacePoint.meters_to_longitude,N,Method not found in current binding files
+Public API,double LatitudeToMeters(double latitude) const,isis_pybind.SurfacePoint.latitude_to_meters,N,Method not found in current binding files
+Public API,double LongitudeToMeters(double longitude) const,isis_pybind.SurfacePoint.longitude_to_meters,N,Method not found in current binding files
+Public API,"double LatToDouble(Latitude lat, CoordUnits units)",isis_pybind.SurfacePoint.lat_to_double,N,Method not found in current binding files
+Public API,"double LonToDouble(Longitude lon, CoordUnits units)",isis_pybind.SurfacePoint.lon_to_double,N,Method not found in current binding files
+Static/Factory,static CoordinateType stringToCoordinateType(QString type),isis_pybind.SurfacePoint.string_to_coordinate_type,N,Method not found in current binding files
+Static/Factory,static QString coordinateTypeToString(CoordinateType type),isis_pybind.SurfacePoint.coordinate_type_to_string,N,Method not found in current binding files
+Public API,Distance GetDistanceToPoint(const SurfacePoint &other) const,isis_pybind.SurfacePoint.get_distance_to_point,N,Method not found in current binding files
+Public API,"Distance GetDistanceToPoint(const SurfacePoint &other, const Distance &sphereRadius) const",isis_pybind.SurfacePoint.get_distance_to_point,N,Method not found in current binding files
+Public API,std::vector<double> LatitudinalDerivative(CoordIndex index),isis_pybind.SurfacePoint.latitudinal_derivative,N,Method not found in current binding files
+Public API,std::vector<double> RectangularDerivative(CoordIndex index),isis_pybind.SurfacePoint.rectangular_derivative,N,Method not found in current binding files
+Public API,void ToNaifArray(double naifOutput[3]) const,isis_pybind.SurfacePoint.to_naif_array,N,Method not found in current binding files
+Public API,void FromNaifArray(const double naifValues[3]),isis_pybind.SurfacePoint.from_naif_array,N,Method not found in current binding files

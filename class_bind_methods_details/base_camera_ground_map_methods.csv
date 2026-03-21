@@ -1,0 +1,22 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+CameraGroundMap,"Spice, Instruments, and Cameras",isis/src/base/objs/CameraGroundMap/CameraGroundMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,第六批已补基础单测（相机派生地面几何）
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,CameraGroundMap,isis_pybind.CameraGroundMap,Y,Python class symbol is exported; constructor exposure may be limited; 第六批已补基础单测（相机派生地面几何）
+Construction/Enum,"PartialType enum (WRT_Latitude, WRT_Longitude, WRT_Radius, WRT_MajorAxis, WRT_MinorAxis, WRT_PolarAxis)",isis_pybind.CameraGroundMap.PartialType,N,第六批已补基础单测（相机派生地面几何）
+Construction/Enum,CameraGroundMap(),isis_pybind.CameraGroundMap(),N,第六批已补基础单测（相机派生地面几何）
+Mutation/Configuration,"virtual bool SetFocalPlane(const double ux, const double uy, const double uz)",isis_pybind.CameraGroundMap.set_focal_plane,N,第六批已补基础单测（相机派生地面几何）
+Mutation/Configuration,"virtual bool SetGround(const Latitude &lat, const Longitude &lon)",isis_pybind.CameraGroundMap.set_ground,N,第六批已补基础单测（相机派生地面几何）
+Mutation/Configuration,virtual bool SetGround(const SurfacePoint &surfacePoint),isis_pybind.CameraGroundMap.set_ground,N,第六批已补基础单测（相机派生地面几何）
+Public API,"virtual bool GetXY(const SurfacePoint &spoint, double *cudx, double *cudy, bool test=true)",isis_pybind.CameraGroundMap.get_xy,N,第六批已补基础单测（相机派生地面几何）
+Public API,"virtual bool GetXY(const double lat, const double lon, const double radius, double *cudx, double *cudy)",isis_pybind.CameraGroundMap.get_xy,N,第六批已补基础单测（相机派生地面几何）
+Public API,"virtual bool GetdXYdPosition(const SpicePosition::PartialType varType, int coefIndex, double *cudx, double *cudy)",isis_pybind.CameraGroundMap.getd_x_yd_position,N,第六批已补基础单测（相机派生地面几何）
+Public API,"virtual bool GetdXYdOrientation(const SpiceRotation::PartialType varType, int coefIndex, double *cudx, double *cudy)",isis_pybind.CameraGroundMap.getd_x_yd_orientation,N,第六批已补基础单测（相机派生地面几何）
+Public API,"virtual bool GetdXYdTOrientation(const SpiceRotation::PartialType varType, int coefIndex, double *cudx, double *cudy)",isis_pybind.CameraGroundMap.getd_x_yd_t_orientation,N,第六批已补基础单测（相机派生地面几何）
+Public API,"virtual bool GetdXYdPoint(std::vector<double> d_pB, double *dx, double *dy)",isis_pybind.CameraGroundMap.getd_x_yd_point,N,第六批已补基础单测（相机派生地面几何）
+Public API,"std::vector<double> PointPartial(SurfacePoint spoint, PartialType wrt)",isis_pybind.CameraGroundMap.point_partial,N,第六批已补基础单测（相机派生地面几何）
+Public API,"std::vector<double> EllipsoidPartial(SurfacePoint spoint, PartialType raxis)",isis_pybind.CameraGroundMap.ellipsoid_partial,N,第六批已补基础单测（相机派生地面几何）
+Public API,"std::vector<double> MeanRadiusPartial(SurfacePoint spoint, Distance meanRadius)",isis_pybind.CameraGroundMap.mean_radius_partial,N,第六批已补基础单测（相机派生地面几何）
+Public API,"double DQuotient(std::vector<double> &look, std::vector<double> &dlook, int index)",isis_pybind.CameraGroundMap.d_quotient,N,第六批已补基础单测（相机派生地面几何）
+Public API,inline double FocalPlaneX() const { return p_focalPlaneX,isis_pybind.CameraGroundMap.focal_plane_x,N,第六批已补基础单测（相机派生地面几何）
+Public API,inline double FocalPlaneY() const { return p_focalPlaneY,isis_pybind.CameraGroundMap.focal_plane_y,N,第六批已补基础单测（相机派生地面几何）

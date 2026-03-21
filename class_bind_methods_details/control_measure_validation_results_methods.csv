@@ -1,0 +1,15 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+MeasureValidationResults,Control Networks,isis/src/control/objs/ControlNetValidMeasure/MeasureValidationResults.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,MeasureValidationResults,isis_pybind.MeasureValidationResults,N,Python class symbol not found in current binding files
+Construction/Enum,"Option enum (EmissionAngle, IncidenceAngle, DNValue, Resolution, PixelsFromEdge, MetersFromEdge, SampleResidual, LineResidual, ResidualMagnitude, SampleShift)",isis_pybind.MeasureValidationResults.Option,N,Enum exposure not detected in current binding files
+Construction/Enum,MeasureValidationResults(),isis_pybind.MeasureValidationResults(),N,Constructor binding not detected in current binding files
+Query,bool isValid(),isis_pybind.MeasureValidationResults.is_valid,N,Method not found in current binding files
+Public API,bool getValidStatus(Option opt),isis_pybind.MeasureValidationResults.get_valid_status,N,Method not found in current binding files
+Public API,QString toString(),isis_pybind.MeasureValidationResults.to_string,N,Method not found in current binding files
+Public API,"QString toString(QString serialNumber, QString pointID)",isis_pybind.MeasureValidationResults.to_string,N,Method not found in current binding files
+Public API,"QString toString(QString sample, QString line, QString serialNumber, QString pointID)",isis_pybind.MeasureValidationResults.to_string,N,Method not found in current binding files
+Mutation/Configuration,"void addFailure(Option opt, double tolerance, const char* compare=""less"")",isis_pybind.MeasureValidationResults.add_failure,N,Method not found in current binding files
+Mutation/Configuration,"void addFailure(Option opt, double computed, double min, double max)",isis_pybind.MeasureValidationResults.add_failure,N,Method not found in current binding files
+Public API,QString getFailurePrefix(Option opt),isis_pybind.MeasureValidationResults.get_failure_prefix,N,Method not found in current binding files

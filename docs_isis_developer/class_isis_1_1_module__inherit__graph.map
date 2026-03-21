@@ -1,0 +1,16 @@
+<map id="Isis::Module" name="Isis::Module">
+<area shape="rect" id="node1" title="Module manages HiRISE calibration vectors from various sources." alt="" coords="1065,5,1178,359"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_gain_channel_normalize.html" title="Computes a gain correction for each sample GainChannelNormalize." alt="" coords="5,471,190,584"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_gain_flat_field.html" title="GainFlatField Module &#45; Computes flat field correction for sample." alt="" coords="214,463,341,592"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_gain_line_drift.html" title="Computes a gain correction for each line (Zg Module)" alt="" coords="365,471,491,584"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_gain_non_linearity.html" title="GainNonLinearity Module &#45; Applies non&#45;linear, line&#45;dependant gain." alt="" coords="516,471,666,584"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_gain_temperature.html" title="GaingTemperature Module &#45; Applies temperature&#45;dependant gain correction (column)" alt="" coords="690,471,839,584"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_gain_unit_conversion.html" title="Computes units parameters for HiRISE data calibration (Ziof Module)" alt="" coords="863,471,1031,584"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_low_pass_filter.html" title="Compute a low pass filter from a Module class content." alt="" coords="1055,439,1188,616"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_spline_fill.html" title="Compute a low pass filter from a Module class content." alt="" coords="1213,439,1316,616"/>
+<area shape="rect" id="node10" href="$class_isis_1_1_zero_buffer_fit.html" title="Computes non&#45;linear lsq fit of HiRISE Drift (Zd module)" alt="" coords="1340,407,1466,648"/>
+<area shape="rect" id="node11" href="$class_isis_1_1_zero_buffer_smooth.html" title="Processes Buffer calibration data (ZeroBufferSmooth Module)" alt="" coords="1490,463,1646,592"/>
+<area shape="rect" id="node12" href="$class_isis_1_1_zero_dark.html" title="Computes a complex dark subtraction component (ZeroDark module)" alt="" coords="1671,463,1775,592"/>
+<area shape="rect" id="node13" href="$class_isis_1_1_zero_dark_rate.html" title="Computes a complex dark subtraction component (ZeroDarkRate module)" alt="" coords="1799,463,1932,592"/>
+<area shape="rect" id="node14" href="$class_isis_1_1_zero_reverse.html" title="Processes Reverse Clock calibration data (ZeroReverse Module)" alt="" coords="1956,455,2082,600"/>
+</map>

@@ -1,0 +1,322 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/ProcessBySample/ProcessBySample.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_process_by_sample_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">ProcessBySample.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_process_by_sample_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef ProcessBySample_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define ProcessBySample_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_buffer_8h.html">Buffer.h</a>&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_process_by_brick_8h.html">ProcessByBrick.h</a>&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="class_isis_1_1_process_by_sample.html">   37</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_process_by_sample.html">ProcessBySample</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_process_by_brick.html">Isis::ProcessByBrick</a> {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="class_isis_1_1_process_by_sample.html#a6b9a4eb09a0b0c7454600678354fd374">   39</a></span>&#160;      <a class="code" href="class_isis_1_1_process_by_sample.html#a6b9a4eb09a0b0c7454600678354fd374">ProcessBySample</a>(): <a class="code" href="class_isis_1_1_process_by_brick.html">ProcessByBrick</a>() {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="code" href="class_isis_1_1_process_by_brick.html#ab93e91b7510f2f187ab959199cdbeb84">SetWrap</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;      };</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;      <span class="keyword">using</span> <a class="code" href="class_isis_1_1_process_by_brick.html#ad208f1c88c7d72af1babe59efcbf47a4">Isis::ProcessByBrick::SetInputCube</a>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;      <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_by_brick.html#ad208f1c88c7d72af1babe59efcbf47a4">SetInputCube</a>(<span class="keyword">const</span> QString &amp;parameter,</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                               <span class="keywordtype">int</span> requirements = 0);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;      <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_by_brick.html#ad208f1c88c7d72af1babe59efcbf47a4">SetInputCube</a>(<span class="keyword">const</span> QString &amp;file,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                               <a class="code" href="class_isis_1_1_cube_attribute_input.html">Isis::CubeAttributeInput</a> &amp;att,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                               <span class="keywordtype">int</span> requirements = 0);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process_by_sample.html#a39dc1b8c2fcef8f74b9979a62f72fc93">StartProcess</a>(<span class="keywordtype">void</span> funct(<a class="code" href="class_isis_1_1_buffer.html">Isis::Buffer</a> &amp;inout));</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process_by_sample.html#a39dc1b8c2fcef8f74b9979a62f72fc93">StartProcess</a>(<span class="keywordtype">void</span> funct(<a class="code" href="class_isis_1_1_buffer.html">Isis::Buffer</a> &amp;in, <a class="code" href="class_isis_1_1_buffer.html">Isis::Buffer</a> &amp;out));</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process_by_sample.html#a39dc1b8c2fcef8f74b9979a62f72fc93">StartProcess</a>(<span class="keywordtype">void</span> funct(std::vector&lt;Isis::Buffer *&gt; &amp;in,</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                                   std::vector&lt;Isis::Buffer *&gt; &amp;out));</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Functor&gt;</div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="class_isis_1_1_process_by_sample.html#abccdb966835917df0fbecefb752e5465">   62</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process_by_sample.html#abccdb966835917df0fbecefb752e5465">ProcessCubeInPlace</a>(<span class="keyword">const</span> Functor &amp; funct, <span class="keywordtype">bool</span> threaded = <span class="keyword">true</span>) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="code" href="class_isis_1_1_process_by_brick.html#a723b662ea1b9d461d3623851cb7d53b7">VerifyCubes</a>(<a class="code" href="class_isis_1_1_process_by_brick.html#abb3b6e97170414b5ade38ce603b8a8cdaf6df4cc03d46a2de231263e9bc54f7ae">InPlace</a>);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        SetBricks(<a class="code" href="class_isis_1_1_process_by_brick.html#abb3b6e97170414b5ade38ce603b8a8cdaf6df4cc03d46a2de231263e9bc54f7ae">InPlace</a>);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="comment">//SetBrickSizesForProcessCubeInPlace();</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="code" href="class_isis_1_1_process_by_brick.html#a6106e67123fb400e36594cfc6c6fddbe">ProcessByBrick::ProcessCubeInPlace</a>(funct, threaded);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Functor&gt;</div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="class_isis_1_1_process_by_sample.html#aa73a342643aea741f51b464c21dc2590">   77</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process_by_sample.html#aa73a342643aea741f51b464c21dc2590">ProcessCube</a>(<span class="keyword">const</span> Functor &amp; funct, <span class="keywordtype">bool</span> threaded = <span class="keyword">true</span>) {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <a class="code" href="class_isis_1_1_process_by_brick.html#a723b662ea1b9d461d3623851cb7d53b7">VerifyCubes</a>(<a class="code" href="class_isis_1_1_process_by_brick.html#abb3b6e97170414b5ade38ce603b8a8cda424a22e98f33e6fc25dd673421e1830a">InputOutput</a>);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        SetBricks(<a class="code" href="class_isis_1_1_process_by_brick.html#abb3b6e97170414b5ade38ce603b8a8cda424a22e98f33e6fc25dd673421e1830a">InputOutput</a>);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <a class="code" href="class_isis_1_1_process_by_brick.html#a8ddb7dfbe32455698768fc76dfa9bd29">ProcessByBrick::ProcessCube</a>(funct, threaded);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      }</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Functor&gt;</div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="class_isis_1_1_process_by_sample.html#a8527129935bcea4d63ff0af6df88b332">   91</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_process_by_sample.html#a8527129935bcea4d63ff0af6df88b332">ProcessCubes</a>(<span class="keyword">const</span> Functor &amp; funct, <span class="keywordtype">bool</span> threaded = <span class="keyword">true</span>) {</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <a class="code" href="class_isis_1_1_process_by_brick.html#a723b662ea1b9d461d3623851cb7d53b7">VerifyCubes</a>(<a class="code" href="class_isis_1_1_process_by_brick.html#abb3b6e97170414b5ade38ce603b8a8cda42aacaef80593cd3bdd19245970d477a">InputOutputList</a>);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        SetBricks(<a class="code" href="class_isis_1_1_process_by_brick.html#abb3b6e97170414b5ade38ce603b8a8cda42aacaef80593cd3bdd19245970d477a">InputOutputList</a>);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <a class="code" href="class_isis_1_1_process_by_brick.html#a69123ff11587c540dcf9ab10319cd607">ProcessByBrick::ProcessCubes</a>(funct, threaded);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;      }</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      <span class="keywordtype">void</span> SetBricks(<a class="code" href="class_isis_1_1_process_by_brick.html#abb3b6e97170414b5ade38ce603b8a8cd">IOCubes</a> cn);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  };</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;};</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_buffer_8h_html"><div class="ttname"><a href="_buffer_8h.html">Buffer.h</a></div></div>
+<div class="ttc" id="a_process_by_brick_8h_html"><div class="ttname"><a href="_process_by_brick_8h.html">ProcessByBrick.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_buffer_html"><div class="ttname"><a href="class_isis_1_1_buffer.html">Isis::Buffer</a></div><div class="ttdoc">Buffer for reading and writing cube data.</div><div class="ttdef"><b>Definition:</b> Buffer.h:53</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_attribute_input_html"><div class="ttname"><a href="class_isis_1_1_cube_attribute_input.html">Isis::CubeAttributeInput</a></div><div class="ttdoc">Manipulate and parse attributes of input cube filenames.</div><div class="ttdef"><b>Definition:</b> CubeAttribute.h:381</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_html"><div class="ttname"><a href="class_isis_1_1_cube.html">Isis::Cube</a></div><div class="ttdoc">IO Handler for Isis Cubes.</div><div class="ttdef"><b>Definition:</b> Cube.h:168</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_brick_html"><div class="ttname"><a href="class_isis_1_1_process_by_brick.html">Isis::ProcessByBrick</a></div><div class="ttdoc">Process cubes by brick.</div><div class="ttdef"><b>Definition:</b> ProcessByBrick.h:83</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_brick_html_a6106e67123fb400e36594cfc6c6fddbe"><div class="ttname"><a href="class_isis_1_1_process_by_brick.html#a6106e67123fb400e36594cfc6c6fddbe">Isis::ProcessByBrick::ProcessCubeInPlace</a></div><div class="ttdeci">void ProcessCubeInPlace(const Functor &amp;functor, bool threaded=true)</div><div class="ttdoc">Operate over a single cube (either input or output).</div><div class="ttdef"><b>Definition:</b> ProcessByBrick.h:167</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_brick_html_a69123ff11587c540dcf9ab10319cd607"><div class="ttname"><a href="class_isis_1_1_process_by_brick.html#a69123ff11587c540dcf9ab10319cd607">Isis::ProcessByBrick::ProcessCubes</a></div><div class="ttdeci">void ProcessCubes(const Functor &amp;functor, bool threaded=true)</div><div class="ttdoc">Operate over an arbitrary number of input cubes given an arbitrary number of output cubes.</div><div class="ttdef"><b>Definition:</b> ProcessByBrick.h:243</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_brick_html_a723b662ea1b9d461d3623851cb7d53b7"><div class="ttname"><a href="class_isis_1_1_process_by_brick.html#a723b662ea1b9d461d3623851cb7d53b7">Isis::ProcessByBrick::VerifyCubes</a></div><div class="ttdeci">void VerifyCubes(IOCubes cn)</div><div class="ttdoc">Verifies the dimensions of the input/output cubes.</div><div class="ttdef"><b>Definition:</b> ProcessByBrick.cpp:120</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_brick_html_a8ddb7dfbe32455698768fc76dfa9bd29"><div class="ttname"><a href="class_isis_1_1_process_by_brick.html#a8ddb7dfbe32455698768fc76dfa9bd29">Isis::ProcessByBrick::ProcessCube</a></div><div class="ttdeci">void ProcessCube(const Functor &amp;functor, bool threaded=true)</div><div class="ttdoc">Operate over a single input cube creating a separate output cube.</div><div class="ttdef"><b>Definition:</b> ProcessByBrick.h:204</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_brick_html_ab93e91b7510f2f187ab959199cdbeb84"><div class="ttname"><a href="class_isis_1_1_process_by_brick.html#ab93e91b7510f2f187ab959199cdbeb84">Isis::ProcessByBrick::SetWrap</a></div><div class="ttdeci">void SetWrap(bool wrap)</div><div class="ttdoc">This wrapping option only applys when there are two or more input cubes.</div><div class="ttdef"><b>Definition:</b> ProcessByBrick.cpp:409</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_brick_html_abb3b6e97170414b5ade38ce603b8a8cd"><div class="ttname"><a href="class_isis_1_1_process_by_brick.html#abb3b6e97170414b5ade38ce603b8a8cd">Isis::ProcessByBrick::IOCubes</a></div><div class="ttdeci">IOCubes</div><div class="ttdef"><b>Definition:</b> ProcessByBrick.h:91</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_brick_html_abb3b6e97170414b5ade38ce603b8a8cda424a22e98f33e6fc25dd673421e1830a"><div class="ttname"><a href="class_isis_1_1_process_by_brick.html#abb3b6e97170414b5ade38ce603b8a8cda424a22e98f33e6fc25dd673421e1830a">Isis::ProcessByBrick::InputOutput</a></div><div class="ttdeci">@ InputOutput</div><div class="ttdef"><b>Definition:</b> ProcessByBrick.h:92</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_brick_html_abb3b6e97170414b5ade38ce603b8a8cda42aacaef80593cd3bdd19245970d477a"><div class="ttname"><a href="class_isis_1_1_process_by_brick.html#abb3b6e97170414b5ade38ce603b8a8cda42aacaef80593cd3bdd19245970d477a">Isis::ProcessByBrick::InputOutputList</a></div><div class="ttdeci">@ InputOutputList</div><div class="ttdef"><b>Definition:</b> ProcessByBrick.h:93</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_brick_html_abb3b6e97170414b5ade38ce603b8a8cdaf6df4cc03d46a2de231263e9bc54f7ae"><div class="ttname"><a href="class_isis_1_1_process_by_brick.html#abb3b6e97170414b5ade38ce603b8a8cdaf6df4cc03d46a2de231263e9bc54f7ae">Isis::ProcessByBrick::InPlace</a></div><div class="ttdeci">@ InPlace</div><div class="ttdef"><b>Definition:</b> ProcessByBrick.h:91</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_brick_html_ad208f1c88c7d72af1babe59efcbf47a4"><div class="ttname"><a href="class_isis_1_1_process_by_brick.html#ad208f1c88c7d72af1babe59efcbf47a4">Isis::ProcessByBrick::SetInputCube</a></div><div class="ttdeci">virtual Isis::Cube * SetInputCube(const QString &amp;parameter, const int requirements=0)</div><div class="ttdoc">Opens an input cube specified by the user and verifies requirements are met.</div><div class="ttdef"><b>Definition:</b> Process.cpp:139</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_sample_html"><div class="ttname"><a href="class_isis_1_1_process_by_sample.html">Isis::ProcessBySample</a></div><div class="ttdoc">Process cubes by sample.</div><div class="ttdef"><b>Definition:</b> ProcessBySample.h:37</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_sample_html_a39dc1b8c2fcef8f74b9979a62f72fc93"><div class="ttname"><a href="class_isis_1_1_process_by_sample.html#a39dc1b8c2fcef8f74b9979a62f72fc93">Isis::ProcessBySample::StartProcess</a></div><div class="ttdeci">void StartProcess(void funct(Isis::Buffer &amp;inout))</div><div class="ttdoc">This method invokes the process by sample operation over a single input or output cube.</div><div class="ttdef"><b>Definition:</b> ProcessBySample.cpp:77</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_sample_html_a6b9a4eb09a0b0c7454600678354fd374"><div class="ttname"><a href="class_isis_1_1_process_by_sample.html#a6b9a4eb09a0b0c7454600678354fd374">Isis::ProcessBySample::ProcessBySample</a></div><div class="ttdeci">ProcessBySample()</div><div class="ttdef"><b>Definition:</b> ProcessBySample.h:39</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_sample_html_a8527129935bcea4d63ff0af6df88b332"><div class="ttname"><a href="class_isis_1_1_process_by_sample.html#a8527129935bcea4d63ff0af6df88b332">Isis::ProcessBySample::ProcessCubes</a></div><div class="ttdeci">void ProcessCubes(const Functor &amp;funct, bool threaded=true)</div><div class="ttdef"><b>Definition:</b> ProcessBySample.h:91</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_sample_html_aa73a342643aea741f51b464c21dc2590"><div class="ttname"><a href="class_isis_1_1_process_by_sample.html#aa73a342643aea741f51b464c21dc2590">Isis::ProcessBySample::ProcessCube</a></div><div class="ttdeci">void ProcessCube(const Functor &amp;funct, bool threaded=true)</div><div class="ttdef"><b>Definition:</b> ProcessBySample.h:77</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_by_sample_html_abccdb966835917df0fbecefb752e5465"><div class="ttname"><a href="class_isis_1_1_process_by_sample.html#abccdb966835917df0fbecefb752e5465">Isis::ProcessBySample::ProcessCubeInPlace</a></div><div class="ttdeci">void ProcessCubeInPlace(const Functor &amp;funct, bool threaded=true)</div><div class="ttdef"><b>Definition:</b> ProcessBySample.h:62</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_dc7c96e7fcbcad9d1764f768280a3675.html">ProcessBySample</a></li><li class="navelem"><a class="el" href="_process_by_sample_8h.html">ProcessBySample.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

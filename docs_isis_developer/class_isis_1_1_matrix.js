@@ -1,0 +1,25 @@
+var class_isis_1_1_matrix =
+[
+    [ "Matrix", "class_isis_1_1_matrix.html#a5d8f5828de63a7c2331d732cea046b93", null ],
+    [ "Matrix", "class_isis_1_1_matrix.html#ab4f0bb6d4b72961247fa822d93b6e07b", null ],
+    [ "~Matrix", "class_isis_1_1_matrix.html#aa311696a852d69f596d3fb31b8c337da", null ],
+    [ "Add", "class_isis_1_1_matrix.html#ad05d0557b901022f88389ab434354b87", null ],
+    [ "Columns", "class_isis_1_1_matrix.html#a111b3404881a12a0b39260219a0f658d", null ],
+    [ "Determinant", "class_isis_1_1_matrix.html#a1d2e796206f81f60113be583a925a303", null ],
+    [ "Eigenvalues", "class_isis_1_1_matrix.html#a378f9710f64871eff6c0ac6c2c08477a", null ],
+    [ "Eigenvectors", "class_isis_1_1_matrix.html#a565adff67eff2d81b2e53de5ed0ab40a", null ],
+    [ "Identity", "class_isis_1_1_matrix.html#ae2140c4855739919c7c60f374ed6b77c", null ],
+    [ "Inverse", "class_isis_1_1_matrix.html#ab34372c13369e47e62f95c183835cdf1", null ],
+    [ "Multiply", "class_isis_1_1_matrix.html#a69bb379f25ffb7de2192816cc0a4fb8c", null ],
+    [ "Multiply", "class_isis_1_1_matrix.html#af5ec2e11bdf828561f9ec5bb8db641b5", null ],
+    [ "MultiplyElementWise", "class_isis_1_1_matrix.html#aeb93296b8fb30ddae85a903e0a19866d", null ],
+    [ "operator*", "class_isis_1_1_matrix.html#a5ef2d5c65b8d715f06a5b09965fe5cef", null ],
+    [ "operator*", "class_isis_1_1_matrix.html#a8095051b66555edd113b3a986bff6029", null ],
+    [ "operator+", "class_isis_1_1_matrix.html#afba611e8a56eccbc5068a553472bc957", null ],
+    [ "operator-", "class_isis_1_1_matrix.html#ab6e9f70ee15cbb1ceb27a0f151859917", null ],
+    [ "operator[]", "class_isis_1_1_matrix.html#a9dfa15accd5193733492dbd581cd6a60", null ],
+    [ "Rows", "class_isis_1_1_matrix.html#adf769f14ad8e2e5d1bc7d48dacab2ef6", null ],
+    [ "Subtract", "class_isis_1_1_matrix.html#a50266043857873a822a1a510c90180a2", null ],
+    [ "Trace", "class_isis_1_1_matrix.html#a607642d272e6a3259c480a242581becc", null ],
+    [ "Transpose", "class_isis_1_1_matrix.html#a38fa48161fb46dbde556c765a2647193", null ]
+];

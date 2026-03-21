@@ -1,0 +1,18 @@
+<map id="Isis::AbstractTreeItem" name="Isis::AbstractTreeItem">
+<area shape="rect" id="node1" title="Base class for an item in the tree." alt="" coords="728,135,882,440"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_abstract_image_item.html" title="Base class for an image item in the tree." alt="" coords="434,520,595,761"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_abstract_leaf_item.html" title="Base class for leaf items in the tree." alt="" coords="1009,520,1163,761"/>
+<area shape="rect" id="node11" href="$class_isis_1_1_abstract_measure_item.html" title="Base class for a measure item in the tree." alt="" coords="1209,496,1385,785"/>
+<area shape="rect" id="node12" href="$class_isis_1_1_abstract_null_data_item.html" title="Base class for an item without data." alt="" coords="619,520,796,761"/>
+<area shape="rect" id="node14" href="$class_isis_1_1_abstract_parent_item.html" title="Base class for an item that is a parent in the tree." alt="" coords="246,520,409,761"/>
+<area shape="rect" id="node16" href="$class_isis_1_1_abstract_point_item.html" title="Base class for a point item in the tree." alt="" coords="820,488,984,793"/>
+<area shape="rect" id="node2" href="$class_q_object.html" title=" " alt="" coords="770,5,840,87"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_connection_parent_item.html" title="Tree item that is a parent and represents an image." alt="" coords="5,849,186,963"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_image_leaf_item.html" title="Tree item that is a leaf and represents an image." alt="" coords="770,857,907,955"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_image_parent_item.html" title="Tree item that is a parent and represents an image." alt="" coords="210,857,360,955"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_busy_leaf_item.html" title="A leaf item that is not ready for user interaction." alt="" coords="931,841,1063,971"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_measure_leaf_item.html" title="A leaf node in the tree structure that represents a control measure." alt="" coords="1243,857,1394,955"/>
+<area shape="rect" id="node10" href="$class_isis_1_1_point_leaf_item.html" title="A leaf node in the tree structure that represents a control point." alt="" coords="1087,857,1219,955"/>
+<area shape="rect" id="node13" href="$class_isis_1_1_root_item.html" title="The root of a tree." alt="" coords="385,841,577,971"/>
+<area shape="rect" id="node15" href="$class_isis_1_1_point_parent_item.html" title="Tree item that is a parent and represents a control point." alt="" coords="601,849,745,963"/>
+</map>

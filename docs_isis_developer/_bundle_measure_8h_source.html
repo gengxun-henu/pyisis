@@ -1,0 +1,367 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleUtilities/BundleMeasure.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_bundle_measure_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">BundleMeasure.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_bundle_measure_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef BundleMeasure_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define BundleMeasure_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QSharedPointer&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <span class="keyword">class </span>BundleControlPoint;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <span class="keyword">class </span>BundleImage;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="keyword">class </span>BundleObservation;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keyword">class </span>BundleObservationSolveSettings;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="keyword">class </span>Camera;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <span class="keyword">class </span>ControlMeasure;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="class_isis_1_1_bundle_measure.html">   55</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;      <span class="comment">// constructor</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;      <a class="code" href="class_isis_1_1_bundle_measure.html#af4890aa0349457a210ee673a6bdd8f9b">BundleMeasure</a>(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *controlMeasure, <a class="code" href="class_isis_1_1_bundle_control_point.html">BundleControlPoint</a> *bundleControlPoint);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      <span class="comment">// copy constructor</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      <a class="code" href="class_isis_1_1_bundle_measure.html#af4890aa0349457a210ee673a6bdd8f9b">BundleMeasure</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;src);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <span class="comment">// destructor</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      <a class="code" href="class_isis_1_1_bundle_measure.html#aeb6afb95286450f985c1ed6b44f2da98">~BundleMeasure</a>();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      <a class="code" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;<a class="code" href="class_isis_1_1_bundle_measure.html#a6357f7d5bff3f6ba2cd4a25e25a02d1f">operator=</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;src);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a86ddb52f701c3951790bcde23b85290e">setParentObservation</a>(<a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;BundleObservation&gt;</a> observation);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a4db559e82bc8a2a886bfed4e19c6c7ff">setParentImage</a>(<a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;BundleImage&gt;</a> image);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a27cdf3f9c7d31897e22cc0cea4ae23d9">setRejected</a>(<span class="keywordtype">bool</span> reject);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_measure.html#aa9b642182f33f3474eadb2d2742b3646">setImage</a>();</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a3dacb91fb18f3806c0fba1f6c17d0a05">setNormalsPositionBlockIndex</a>(<span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_measure.html#ac9eaa077ad4ddd04c0273019d312b56d">setNormalsPointingBlockIndex</a>(<span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a72aa20f9fad7ea218a05219716c2ef5b">setFocalPlaneResidualsMillimeters</a>();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a1a2be6b85ed6bb8c7371de74080f613f">setSigma</a>(<span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a1d4dfcf85c589a03edc7aa605c79a785">sigma</a>);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bundle_measure.html#ab6f68f8d383012614361f49d0816c69f">isRejected</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      <a class="code" href="class_isis_1_1_camera.html">Camera</a> *<a class="code" href="class_isis_1_1_bundle_measure.html#ae06ef95aa954778b376e28e9ffbbd86f">camera</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <a class="code" href="class_isis_1_1_bundle_control_point.html">BundleControlPoint</a> *<a class="code" href="class_isis_1_1_bundle_measure.html#ac8a9e9014404071e391d9043b452184b">parentControlPoint</a>();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;BundleImage&gt;</a> <a class="code" href="class_isis_1_1_bundle_measure.html#a3ac89d0b9bcfbe5d1fc72fc53dcc31c3">parentBundleImage</a>();</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;BundleObservation&gt;</a> <a class="code" href="class_isis_1_1_bundle_measure.html#a8697c037ab30a53c8b71afd6f4160fb6">parentBundleObservation</a>();</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;BundleObservationSolveSettings&gt;</a> <a class="code" href="class_isis_1_1_bundle_measure.html#a08f46264aba4bd5816278c1508e07d24">observationSolveSettings</a>();</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a8a9e10c4da29e92b176ca612a834f05d">sample</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a66ef3eed4672263f1e2a44741ad99d0b">sampleResidual</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a9574aade8873f6aa7844954999f433cb">line</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#acc400f7329898ffc09bb9789a6918263">lineResidual</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a1d4dfcf85c589a03edc7aa605c79a785">sigma</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a6179a549f5313d373b6a2809a2e0a886">weight</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#af6948614dde53547e8dc592a0314fe62">weightSqrt</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a09c39edfab62de352fb147747f8343d3">residualMagnitude</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a6bd59656c2011aa62b8538a58ef0a2f9">xFocalPlaneResidual</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#aa1cb0e19dd93736e88a98ba589a00e71">yFocalPlaneResidual</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      QString <a class="code" href="class_isis_1_1_bundle_measure.html#ac6e09ef7fb567947e6dd73a9f2a38ed0">cubeSerialNumber</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#aef02133e3b811a4aa4c580912075cf13">focalPlaneComputedX</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a937114a4b3bc9c72feb3c8092882ed32">focalPlaneComputedY</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a39aad2b0f1b8daed793b12f598e8b4f6">focalPlaneMeasuredX</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bundle_measure.html#af2a09146f5282fe36c21a847ff1a8390">focalPlaneMeasuredY</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_bundle_measure.html#aa25b478be644a2e612e13172ae196a2d">observationIndex</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a22f6ae6f871507265a0514f7f3dee26d">positionNormalsBlockIndex</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_bundle_measure.html#a1b6937ecc0df57e4ca49c1671e755309">pointingNormalsBlockIndex</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *m_controlMeasure;         </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      <a class="code" href="class_isis_1_1_bundle_control_point.html">BundleControlPoint</a> *m_parentControlPoint; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;BundleImage&gt;</a> m_parentBundleImage; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;BundleObservation&gt;</a> m_parentObservation; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      <span class="keywordtype">int</span> m_normalsPositionBlockIndex; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      <span class="keywordtype">int</span> m_normalsPointingBlockIndex; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      <span class="keywordtype">double</span> m_xFocalPlaneResidual;    </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;      <span class="keywordtype">double</span> m_yFocalPlaneResidual;    </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      <span class="keywordtype">double</span> m_sigma;                  </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      <span class="keywordtype">double</span> m_weightSqrt;             </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  };</div>
+<div class="line"><a name="l00120"></a><span class="lineno"><a class="line" href="namespace_isis.html#ac1df1e0ca6a1aa8d39787123150589e8">  120</a></span>&#160;  <span class="keyword">typedef</span> <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;BundleMeasure&gt;</a> <a class="code" href="namespace_isis.html#ac1df1e0ca6a1aa8d39787123150589e8">BundleMeasureQsp</a>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;}</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// BundleMeasure_h</span></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_control_point_html"><div class="ttname"><a href="class_isis_1_1_bundle_control_point.html">Isis::BundleControlPoint</a></div><div class="ttdoc">This class holds information about a control point that BundleAdjust needs to run correctly.</div><div class="ttdef"><b>Definition:</b> BundleControlPoint.h:91</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html">Isis::BundleMeasure</a></div><div class="ttdoc">A container class for a ControlMeasure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.h:55</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a08f46264aba4bd5816278c1508e07d24"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a08f46264aba4bd5816278c1508e07d24">Isis::BundleMeasure::observationSolveSettings</a></div><div class="ttdeci">const QSharedPointer&lt; BundleObservationSolveSettings &gt; observationSolveSettings()</div><div class="ttdoc">Accesses the parent observation's solve settings.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:238</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a09c39edfab62de352fb147747f8343d3"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a09c39edfab62de352fb147747f8343d3">Isis::BundleMeasure::residualMagnitude</a></div><div class="ttdeci">double residualMagnitude() const</div><div class="ttdoc">Accesses the residual magnitude for this control measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:353</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a1a2be6b85ed6bb8c7371de74080f613f"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a1a2be6b85ed6bb8c7371de74080f613f">Isis::BundleMeasure::setSigma</a></div><div class="ttdeci">void setSigma(double sigma)</div><div class="ttdoc">Sets sigma (i.e.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:439</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a1b6937ecc0df57e4ca49c1671e755309"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a1b6937ecc0df57e4ca49c1671e755309">Isis::BundleMeasure::pointingNormalsBlockIndex</a></div><div class="ttdeci">int pointingNormalsBlockIndex() const</div><div class="ttdoc">Accesses block index into normal equations matrix of pointing piecewise polynomial segment.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:170</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a1d4dfcf85c589a03edc7aa605c79a785"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a1d4dfcf85c589a03edc7aa605c79a785">Isis::BundleMeasure::sigma</a></div><div class="ttdeci">double sigma() const</div><div class="ttdoc">Accesses the measure sigma.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:321</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a22f6ae6f871507265a0514f7f3dee26d"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a22f6ae6f871507265a0514f7f3dee26d">Isis::BundleMeasure::positionNormalsBlockIndex</a></div><div class="ttdeci">int positionNormalsBlockIndex() const</div><div class="ttdoc">Accesses block index into normal equations matrix of position piecewise polynomial segment.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:159</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a27cdf3f9c7d31897e22cc0cea4ae23d9"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a27cdf3f9c7d31897e22cc0cea4ae23d9">Isis::BundleMeasure::setRejected</a></div><div class="ttdeci">void setRejected(bool reject)</div><div class="ttdoc">Sets the BundleMeasure's status to rejected or not rejected.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:113</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a39aad2b0f1b8daed793b12f598e8b4f6"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a39aad2b0f1b8daed793b12f598e8b4f6">Isis::BundleMeasure::focalPlaneMeasuredX</a></div><div class="ttdeci">double focalPlaneMeasuredX() const</div><div class="ttdoc">Accesses the measured focal plane x value for this control measure //TODO verify?</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:401</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a3ac89d0b9bcfbe5d1fc72fc53dcc31c3"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a3ac89d0b9bcfbe5d1fc72fc53dcc31c3">Isis::BundleMeasure::parentBundleImage</a></div><div class="ttdeci">QSharedPointer&lt; BundleImage &gt; parentBundleImage()</div><div class="ttdoc">Access the parent BundleImage for this bundle measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:212</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a3dacb91fb18f3806c0fba1f6c17d0a05"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a3dacb91fb18f3806c0fba1f6c17d0a05">Isis::BundleMeasure::setNormalsPositionBlockIndex</a></div><div class="ttdeci">void setNormalsPositionBlockIndex(int index)</div><div class="ttdoc">Sets block index into normal equations for position piecewise polynomial segment.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:137</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a4db559e82bc8a2a886bfed4e19c6c7ff"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a4db559e82bc8a2a886bfed4e19c6c7ff">Isis::BundleMeasure::setParentImage</a></div><div class="ttdeci">void setParentImage(QSharedPointer&lt; BundleImage &gt; image)</div><div class="ttdoc">Sets the parent bundle image.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:101</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a6179a549f5313d373b6a2809a2e0a886"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a6179a549f5313d373b6a2809a2e0a886">Isis::BundleMeasure::weight</a></div><div class="ttdeci">double weight() const</div><div class="ttdoc">Accesses measure weight for bundle.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:341</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a6357f7d5bff3f6ba2cd4a25e25a02d1f"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a6357f7d5bff3f6ba2cd4a25e25a02d1f">Isis::BundleMeasure::operator=</a></div><div class="ttdeci">BundleMeasure &amp; operator=(const BundleMeasure &amp;src)</div><div class="ttdoc">Assignment operator.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:71</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a66ef3eed4672263f1e2a44741ad99d0b"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a66ef3eed4672263f1e2a44741ad99d0b">Isis::BundleMeasure::sampleResidual</a></div><div class="ttdeci">double sampleResidual() const</div><div class="ttdoc">Accesses the sample residual for this control measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:279</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a6bd59656c2011aa62b8538a58ef0a2f9"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a6bd59656c2011aa62b8538a58ef0a2f9">Isis::BundleMeasure::xFocalPlaneResidual</a></div><div class="ttdeci">double xFocalPlaneResidual() const</div><div class="ttdoc">Accesses the focal plane x-coordinate residual in millimeters.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:301</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a72aa20f9fad7ea218a05219716c2ef5b"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a72aa20f9fad7ea218a05219716c2ef5b">Isis::BundleMeasure::setFocalPlaneResidualsMillimeters</a></div><div class="ttdeci">void setFocalPlaneResidualsMillimeters()</div><div class="ttdoc">Computes and sets measure focal plane residuals in millimeters.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:422</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a8697c037ab30a53c8b71afd6f4160fb6"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a8697c037ab30a53c8b71afd6f4160fb6">Isis::BundleMeasure::parentBundleObservation</a></div><div class="ttdeci">QSharedPointer&lt; BundleObservation &gt; parentBundleObservation()</div><div class="ttdoc">Accesses the parent BundleObservation for this bundle measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:222</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a86ddb52f701c3951790bcde23b85290e"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a86ddb52f701c3951790bcde23b85290e">Isis::BundleMeasure::setParentObservation</a></div><div class="ttdeci">void setParentObservation(QSharedPointer&lt; BundleObservation &gt; observation)</div><div class="ttdoc">Sets the parent bundle observation.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:91</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a8a9e10c4da29e92b176ca612a834f05d"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a8a9e10c4da29e92b176ca612a834f05d">Isis::BundleMeasure::sample</a></div><div class="ttdeci">double sample() const</div><div class="ttdoc">Accesses the current sample measurement for this control measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:255</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a937114a4b3bc9c72feb3c8092882ed32"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a937114a4b3bc9c72feb3c8092882ed32">Isis::BundleMeasure::focalPlaneComputedY</a></div><div class="ttdeci">double focalPlaneComputedY() const</div><div class="ttdoc">Accesses the computed focal plane y value for this control measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:389</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_a9574aade8873f6aa7844954999f433cb"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#a9574aade8873f6aa7844954999f433cb">Isis::BundleMeasure::line</a></div><div class="ttdeci">double line() const</div><div class="ttdoc">Accesses the current line measurement for this control measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:267</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_aa1cb0e19dd93736e88a98ba589a00e71"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#aa1cb0e19dd93736e88a98ba589a00e71">Isis::BundleMeasure::yFocalPlaneResidual</a></div><div class="ttdeci">double yFocalPlaneResidual() const</div><div class="ttdoc">Accesses the focal plane y-coordinate residual in millimeters.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:311</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_aa25b478be644a2e612e13172ae196a2d"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#aa25b478be644a2e612e13172ae196a2d">Isis::BundleMeasure::observationIndex</a></div><div class="ttdeci">int observationIndex() const</div><div class="ttdoc">Accesses the observation index for the parent observation.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:462</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_aa9b642182f33f3474eadb2d2742b3646"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#aa9b642182f33f3474eadb2d2742b3646">Isis::BundleMeasure::setImage</a></div><div class="ttdeci">void setImage()</div><div class="ttdoc">Sets the BundleMeasure's status to rejected or not rejected.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:125</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_ab6f68f8d383012614361f49d0816c69f"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#ab6f68f8d383012614361f49d0816c69f">Isis::BundleMeasure::isRejected</a></div><div class="ttdeci">bool isRejected() const</div><div class="ttdoc">Determines whether or not this BundleMeasure is rejected.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:180</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_ac6e09ef7fb567947e6dd73a9f2a38ed0"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#ac6e09ef7fb567947e6dd73a9f2a38ed0">Isis::BundleMeasure::cubeSerialNumber</a></div><div class="ttdeci">QString cubeSerialNumber() const</div><div class="ttdoc">Accesses the serial number of the cube containing this control measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:365</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_ac8a9e9014404071e391d9043b452184b"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#ac8a9e9014404071e391d9043b452184b">Isis::BundleMeasure::parentControlPoint</a></div><div class="ttdeci">BundleControlPoint * parentControlPoint()</div><div class="ttdoc">Accesses the parent BundleControlPoint for this bundle measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:202</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_ac9eaa077ad4ddd04c0273019d312b56d"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#ac9eaa077ad4ddd04c0273019d312b56d">Isis::BundleMeasure::setNormalsPointingBlockIndex</a></div><div class="ttdeci">void setNormalsPointingBlockIndex(int index)</div><div class="ttdoc">Sets block index into normal equations for pointing piecewise polynomial segment.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:148</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_acc400f7329898ffc09bb9789a6918263"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#acc400f7329898ffc09bb9789a6918263">Isis::BundleMeasure::lineResidual</a></div><div class="ttdeci">double lineResidual() const</div><div class="ttdoc">Accesses the line residual for this control measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:291</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_ae06ef95aa954778b376e28e9ffbbd86f"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#ae06ef95aa954778b376e28e9ffbbd86f">Isis::BundleMeasure::camera</a></div><div class="ttdeci">Camera * camera() const</div><div class="ttdoc">Accesses the associated camera for this bundle measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:192</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_aeb6afb95286450f985c1ed6b44f2da98"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#aeb6afb95286450f985c1ed6b44f2da98">Isis::BundleMeasure::~BundleMeasure</a></div><div class="ttdeci">~BundleMeasure()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_aef02133e3b811a4aa4c580912075cf13"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#aef02133e3b811a4aa4c580912075cf13">Isis::BundleMeasure::focalPlaneComputedX</a></div><div class="ttdeci">double focalPlaneComputedX() const</div><div class="ttdoc">Accesses the computed focal plane x value for this control measure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:377</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_af2a09146f5282fe36c21a847ff1a8390"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#af2a09146f5282fe36c21a847ff1a8390">Isis::BundleMeasure::focalPlaneMeasuredY</a></div><div class="ttdeci">double focalPlaneMeasuredY() const</div><div class="ttdoc">Accesses the measured focal plane y value for this control measure //TODO verify?</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:413</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_af4890aa0349457a210ee673a6bdd8f9b"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#af4890aa0349457a210ee673a6bdd8f9b">Isis::BundleMeasure::BundleMeasure</a></div><div class="ttdeci">BundleMeasure(ControlMeasure *controlMeasure, BundleControlPoint *bundleControlPoint)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:29</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_measure_html_af6948614dde53547e8dc592a0314fe62"><div class="ttname"><a href="class_isis_1_1_bundle_measure.html#af6948614dde53547e8dc592a0314fe62">Isis::BundleMeasure::weightSqrt</a></div><div class="ttdeci">double weightSqrt() const</div><div class="ttdoc">Accesses sqrt of measure weight for bundle.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.cpp:331</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_html"><div class="ttname"><a href="class_isis_1_1_camera.html">Isis::Camera</a></div><div class="ttdef"><b>Definition:</b> Camera.h:236</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_measure_html"><div class="ttname"><a href="class_isis_1_1_control_measure.html">Isis::ControlMeasure</a></div><div class="ttdoc">a control measurement</div><div class="ttdef"><b>Definition:</b> ControlMeasure.h:175</div></div>
+<div class="ttc" id="aclass_q_shared_pointer_html"><div class="ttname"><a href="class_q_shared_pointer.html">QSharedPointer&lt; BundleObservation &gt;</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_ac1df1e0ca6a1aa8d39787123150589e8"><div class="ttname"><a href="namespace_isis.html#ac1df1e0ca6a1aa8d39787123150589e8">Isis::BundleMeasureQsp</a></div><div class="ttdeci">QSharedPointer&lt; BundleMeasure &gt; BundleMeasureQsp</div><div class="ttdoc">Definition for BundleMeasureQsp, a shared pointer to a BundleMeasure.</div><div class="ttdef"><b>Definition:</b> BundleMeasure.h:120</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_a576af9f1f3bb26b082d16585a91e73c.html">control</a></li><li class="navelem"><a class="el" href="dir_8e87adfb2431123dc47fe3f2bd06feca.html">objs</a></li><li class="navelem"><a class="el" href="dir_f1b2b15c0fdc7941b318316dd9deb5c1.html">BundleUtilities</a></li><li class="navelem"><a class="el" href="_bundle_measure_8h.html">BundleMeasure.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

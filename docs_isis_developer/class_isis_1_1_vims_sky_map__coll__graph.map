@@ -1,0 +1,6 @@
+<map id="Isis::VimsSkyMap" name="Isis::VimsSkyMap">
+<area shape="rect" id="node1" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="13,795,142,940"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_camera_sky_map.html" title="Convert between undistorted focal plane and ra/dec coordinates." alt="" coords="5,568,150,745"/>
+<area shape="rect" id="node3" title=" " alt="" coords="48,5,107,87"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_camera.html" title=" " alt="" coords="175,167,393,504"/>
+</map>

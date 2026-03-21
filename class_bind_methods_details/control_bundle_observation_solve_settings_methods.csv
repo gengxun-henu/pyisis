@@ -1,0 +1,51 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+BundleObservationSolveSettings,Control Networks,isis/src/control/objs/BundleUtilities/BundleObservationSolveSettings.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,BundleObservationSolveSettings,isis_pybind.BundleObservationSolveSettings,N,Python class symbol not found in current binding files; Qt 类型/信号槽较多
+Construction/Enum,"CSMSolveOption enum (NoCSMParameters, Set, Type, List)",isis_pybind.BundleObservationSolveSettings.CSMSolveOption,N,Qt 类型/信号槽较多
+Construction/Enum,"InstrumentPointingSolveOption enum (NoPointingFactors, AnglesOnly, AnglesVelocity, AnglesVelocityAcceleration, AllPointingCoefficients)",isis_pybind.BundleObservationSolveSettings.InstrumentPointingSolveOption,N,Qt 类型/信号槽较多
+Construction/Enum,"InstrumentPositionSolveOption enum (NoPositionFactors, PositionOnly, PositionVelocity, PositionVelocityAcceleration, AllPositionCoefficients)",isis_pybind.BundleObservationSolveSettings.InstrumentPositionSolveOption,N,Qt 类型/信号槽较多
+Construction/Enum,BundleObservationSolveSettings(),isis_pybind.BundleObservationSolveSettings(),N,Qt 类型/信号槽较多
+Public API,void initialize(),isis_pybind.BundleObservationSolveSettings.initialize,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setInstrumentId(QString instrumentId),isis_pybind.BundleObservationSolveSettings.set_instrument_id,N,Qt 类型/信号槽较多
+Public API,QString instrumentId() const,isis_pybind.BundleObservationSolveSettings.instrument_id,N,Qt 类型/信号槽较多
+Mutation/Configuration,void addObservationNumber(QString observationNumber),isis_pybind.BundleObservationSolveSettings.add_observation_number,N,Qt 类型/信号槽较多
+Mutation/Configuration,bool removeObservationNumber(QString observationNumber),isis_pybind.BundleObservationSolveSettings.remove_observation_number,N,Qt 类型/信号槽较多
+Public API,QSet<QString> observationNumbers() const,isis_pybind.BundleObservationSolveSettings.observation_numbers,N,Qt 类型/信号槽较多
+Static/Factory,static CSMSolveOption stringToCSMSolveOption(QString option),isis_pybind.BundleObservationSolveSettings.string_to_csm_solve_option,N,Qt 类型/信号槽较多
+Static/Factory,static QString csmSolveOptionToString(CSMSolveOption option),isis_pybind.BundleObservationSolveSettings.csm_solve_option_to_string,N,Qt 类型/信号槽较多
+Static/Factory,static csm::param::Set stringToCSMSolveSet(QString set),isis_pybind.BundleObservationSolveSettings.string_to_csm_solve_set,N,Qt 类型/信号槽较多
+Static/Factory,static QString csmSolveSetToString(csm::param::Set set),isis_pybind.BundleObservationSolveSettings.csm_solve_set_to_string,N,Qt 类型/信号槽较多
+Static/Factory,static csm::param::Type stringToCSMSolveType(QString type),isis_pybind.BundleObservationSolveSettings.string_to_csm_solve_type,N,Qt 类型/信号槽较多
+Static/Factory,static QString csmSolveTypeToString(csm::param::Type type),isis_pybind.BundleObservationSolveSettings.csm_solve_type_to_string,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setCSMSolveSet(csm::param::Set set),isis_pybind.BundleObservationSolveSettings.set_csm_solve_set,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setCSMSolveType(csm::param::Type type),isis_pybind.BundleObservationSolveSettings.set_csm_solve_type,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setCSMSolveParameterList(QStringList list),isis_pybind.BundleObservationSolveSettings.set_csm_solve_parameter_list,N,Qt 类型/信号槽较多
+Public API,CSMSolveOption csmSolveOption() const,isis_pybind.BundleObservationSolveSettings.csm_solve_option,N,Qt 类型/信号槽较多
+Public API,csm::param::Set csmParameterSet() const,isis_pybind.BundleObservationSolveSettings.csm_parameter_set,N,Qt 类型/信号槽较多
+Public API,csm::param::Type csmParameterType() const,isis_pybind.BundleObservationSolveSettings.csm_parameter_type,N,Qt 类型/信号槽较多
+Public API,QStringList csmParameterList() const,isis_pybind.BundleObservationSolveSettings.csm_parameter_list,N,Qt 类型/信号槽较多
+Static/Factory,static InstrumentPointingSolveOption stringToInstrumentPointingSolveOption(QString option),isis_pybind.BundleObservationSolveSettings.string_to_instrument_pointing_solve_option,N,Qt 类型/信号槽较多
+Static/Factory,static QString instrumentPointingSolveOptionToString(InstrumentPointingSolveOption option),isis_pybind.BundleObservationSolveSettings.instrument_pointing_solve_option_to_string,N,Qt 类型/信号槽较多
+Mutation/Configuration,"void setInstrumentPointingSettings(InstrumentPointingSolveOption option, bool solveTwist, int ckDegree = 2, int ckSolveDegree = 2, bool solvePolynomialOverExisting = false, double anglesAprioriSigma = -1.0, double angularVelocityAprioriSigma = -1.0, double angularAccelerationAprioriSigma = -1.0, QList<double> * additionalPointingSigmas=nullptr)",isis_pybind.BundleObservationSolveSettings.set_instrument_pointing_settings,N,Qt 类型/信号槽较多
+Public API,InstrumentPointingSolveOption instrumentPointingSolveOption() const,isis_pybind.BundleObservationSolveSettings.instrument_pointing_solve_option,N,Qt 类型/信号槽较多
+Public API,bool solveTwist() const,isis_pybind.BundleObservationSolveSettings.solve_twist,N,Qt 类型/信号槽较多
+Public API,int ckDegree() const,isis_pybind.BundleObservationSolveSettings.ck_degree,N,Qt 类型/信号槽较多
+Public API,int ckSolveDegree() const,isis_pybind.BundleObservationSolveSettings.ck_solve_degree,N,Qt 类型/信号槽较多
+Public API,int numberCameraAngleCoefficientsSolved() const,isis_pybind.BundleObservationSolveSettings.number_camera_angle_coefficients_solved,N,Qt 类型/信号槽较多
+Public API,bool solvePolyOverPointing() const,isis_pybind.BundleObservationSolveSettings.solve_poly_over_pointing,N,Qt 类型/信号槽较多
+Public API,QList<double> aprioriPointingSigmas() const,isis_pybind.BundleObservationSolveSettings.apriori_pointing_sigmas,N,Qt 类型/信号槽较多
+Public API,SpiceRotation::Source pointingInterpolationType() const,isis_pybind.BundleObservationSolveSettings.pointing_interpolation_type,N,Qt 类型/信号槽较多
+Static/Factory,static InstrumentPositionSolveOption stringToInstrumentPositionSolveOption(QString option),isis_pybind.BundleObservationSolveSettings.string_to_instrument_position_solve_option,N,Qt 类型/信号槽较多
+Static/Factory,static QString instrumentPositionSolveOptionToString(InstrumentPositionSolveOption option),isis_pybind.BundleObservationSolveSettings.instrument_position_solve_option_to_string,N,Qt 类型/信号槽较多
+Mutation/Configuration,"void setInstrumentPositionSettings(InstrumentPositionSolveOption option, int spkDegree = 2, int spkSolveDegree = 2, bool positionOverHermite = false, double positionAprioriSigma = -1.0, double velocityAprioriSigma = -1.0, double accelerationAprioriSigma = -1.0, QList<double> * additionalPositionSigmas=nullptr)",isis_pybind.BundleObservationSolveSettings.set_instrument_position_settings,N,Qt 类型/信号槽较多
+Public API,InstrumentPositionSolveOption instrumentPositionSolveOption() const,isis_pybind.BundleObservationSolveSettings.instrument_position_solve_option,N,Qt 类型/信号槽较多
+Public API,int spkDegree() const,isis_pybind.BundleObservationSolveSettings.spk_degree,N,Qt 类型/信号槽较多
+Public API,int spkSolveDegree() const,isis_pybind.BundleObservationSolveSettings.spk_solve_degree,N,Qt 类型/信号槽较多
+Public API,int numberCameraPositionCoefficientsSolved() const,isis_pybind.BundleObservationSolveSettings.number_camera_position_coefficients_solved,N,Qt 类型/信号槽较多
+Public API,bool solvePositionOverHermite() const,isis_pybind.BundleObservationSolveSettings.solve_position_over_hermite,N,Qt 类型/信号槽较多
+Public API,QList<double> aprioriPositionSigmas() const,isis_pybind.BundleObservationSolveSettings.apriori_position_sigmas,N,Qt 类型/信号槽较多
+Public API,SpicePosition::Source positionInterpolationType() const,isis_pybind.BundleObservationSolveSettings.position_interpolation_type,N,Qt 类型/信号槽较多
+Read/Write IO,"void save(QXmlStreamWriter &stream, const Project *project) const",isis_pybind.BundleObservationSolveSettings.save,N,Qt 类型/信号槽较多
+Read/Write IO,void readSolveSettings(QXmlStreamReader *xmlReader),isis_pybind.BundleObservationSolveSettings.read_solve_settings,N,Qt 类型/信号槽较多

@@ -1,0 +1,24 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+CameraDetectorMap,"Spice, Instruments, and Cameras",isis/src/base/objs/CameraDetectorMap/CameraDetectorMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,CameraDetectorMap,isis_pybind.CameraDetectorMap,Y,Python class symbol is exported; constructor exposure may be limited; 第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Construction/Enum,CameraDetectorMap(),isis_pybind.CameraDetectorMap(),N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Mutation/Configuration,"virtual bool SetParent(const double sample, const double line)",isis_pybind.CameraDetectorMap.set_parent,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Mutation/Configuration,"virtual bool SetParent(const double sample, const double line, const double deltaT)",isis_pybind.CameraDetectorMap.set_parent,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Mutation/Configuration,"virtual bool SetDetector(const double sample, const double line)",isis_pybind.CameraDetectorMap.set_detector,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Public API,double AdjustedStartingSample() const,isis_pybind.CameraDetectorMap.adjusted_starting_sample,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Public API,double AdjustedStartingLine() const,isis_pybind.CameraDetectorMap.adjusted_starting_line,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Public API,double ParentSample() const,isis_pybind.CameraDetectorMap.parent_sample,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Public API,double ParentLine() const,isis_pybind.CameraDetectorMap.parent_line,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Public API,double DetectorSample() const,isis_pybind.CameraDetectorMap.detector_sample,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Public API,double DetectorLine() const,isis_pybind.CameraDetectorMap.detector_line,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Mutation/Configuration,inline void SetStartingDetectorSample(const double sample) { p_startingDetectorSample = sample,isis_pybind.CameraDetectorMap.set_starting_detector_sample,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Public API,Compute(),isis_pybind.CameraDetectorMap.compute,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Mutation/Configuration,inline void SetStartingDetectorLine(const double line) { p_startingDetectorLine = line,isis_pybind.CameraDetectorMap.set_starting_detector_line,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Mutation/Configuration,inline void SetDetectorSampleSumming(const double summing) { p_detectorSampleSumming = summing,isis_pybind.CameraDetectorMap.set_detector_sample_summing,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Mutation/Configuration,inline void SetDetectorLineSumming(const double summing) { p_detectorLineSumming = summing,isis_pybind.CameraDetectorMap.set_detector_line_summing,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Public API,virtual double SampleScaleFactor() const,isis_pybind.CameraDetectorMap.sample_scale_factor,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Public API,virtual double LineScaleFactor() const,isis_pybind.CameraDetectorMap.line_scale_factor,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Public API,virtual double LineRate() const,isis_pybind.CameraDetectorMap.line_rate,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
+Public API,"virtual double exposureDuration(const double sample, const double line, const int band) const",isis_pybind.CameraDetectorMap.exposure_duration,N,第六批已补基础单测（局部几何 round-trip / framing 失败路径）

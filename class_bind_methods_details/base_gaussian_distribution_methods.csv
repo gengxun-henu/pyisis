@@ -1,0 +1,11 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+GaussianDistribution,Statistics,isis/src/base/objs/GaussianDistribution/GaussianDistribution.h,isis_pybind_standalone/src/bind_statistics.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,GaussianDistribution,isis_pybind.GaussianDistribution,Y,Python class symbol is exported
+Construction/Enum,GaussianDistribution(),isis_pybind.GaussianDistribution(),Y,Constructor is explicitly bound
+Public API,double Probability(const double value),isis_pybind.GaussianDistribution.probability,Y,Current Python name
+Public API,double CumulativeDistribution(const double value),isis_pybind.GaussianDistribution.cumulative_distribution,Y,Current Python name
+Public API,double InverseCumulativeDistribution(const double percent),isis_pybind.GaussianDistribution.inverse_cumulative_distribution,Y,Current Python name
+Public API,inline double Mean() const { return p_mean,isis_pybind.GaussianDistribution.mean,Y,Current Python name
+Public API,inline double StandardDeviation() const { return p_stdev,isis_pybind.GaussianDistribution.standard_deviation,N,Method not found in current binding files

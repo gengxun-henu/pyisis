@@ -1,0 +1,11 @@
+<map id="Isis::MainWindow" name="Isis::MainWindow">
+<area shape="rect" id="node1" title="Base class for the Qisis main windows." alt="" coords="339,135,482,296"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_mosaic_main_window.html" title=" " alt="" coords="41,480,209,801"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_plot_window.html" title=" " alt="" coords="233,352,401,929"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_table_main_window.html" title="a subclass of the qisis mainwindow, tablemainwindow handles all of the table tasks." alt="" coords="424,344,583,937"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_viewport_main_window.html" title="This was called the Qisis MainWindow." alt="" coords="607,520,784,761"/>
+<area shape="rect" id="node2" href="$class_q_main_window.html" title=" " alt="" coords="357,5,463,87"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_histogram_plot_window.html" title=" " alt="" coords="5,1049,186,1211"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_scatter_plot_window.html" title="Scatter Plot Window." alt="" coords="210,985,424,1275"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_spectral_plot_window.html" title=" " alt="" coords="448,1049,623,1211"/>
+</map>

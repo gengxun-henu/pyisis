@@ -1,0 +1,1280 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::TableField Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_table_field.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_table_field-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::TableField Class Reference<div class="ingroups"><a class="el" href="group___low_level_cube_i_o.html">Low Level Cube I/O</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Class for storing an <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Isis::Table</a>'s field information.  
+ <a href="class_isis_1_1_table_field.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_table_field_8h_source.html">TableField.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::TableField:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_table_field__coll__graph.png" border="0" usemap="#a_isis_1_1_table_field_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_table_field_coll__map" id="a_isis_1_1_table_field_coll__map">
+<area shape="rect" title="Class for storing an Isis::Table&#39;s field information." alt="" coords="5,5,115,263"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a9880361eaafe81fcad05f3c94c058717"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717">Type</a> { <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717a06725c359651c2b8441d744b31722322">Integer</a>
+, <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717aec51189ae36d3153680302822a39406a">Double</a>
+, <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717ac4b7aaa437a3290384427e39e6360da6">Text</a>
+, <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717a58fa1c8530317a39c474b89d303ee22c">Real</a>
+ }</td></tr>
+<tr class="memdesc:a9880361eaafe81fcad05f3c94c058717"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum describes the value type for the <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a>.  <a href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717">More...</a><br /></td></tr>
+<tr class="separator:a9880361eaafe81fcad05f3c94c058717"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ac18d2f153aaf29034605d21bc836cf76"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#ac18d2f153aaf29034605d21bc836cf76">TableField</a> (const QString &amp;<a class="el" href="class_isis_1_1_table_field.html#a9401beb9de587d1c4349d5d8f3750d70">name</a>, <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717">Type</a> <a class="el" href="class_isis_1_1_table_field.html#ac4e1b3806ad45119f7a6aefef5a4a704">type</a>, int <a class="el" href="class_isis_1_1_table_field.html#a993dee14a83cb6eefbd9c739daad6cd6">size</a>=1)</td></tr>
+<tr class="memdesc:ac18d2f153aaf29034605d21bc836cf76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> object with the given field name, field value type, and field size.  <a href="class_isis_1_1_table_field.html#ac18d2f153aaf29034605d21bc836cf76">More...</a><br /></td></tr>
+<tr class="separator:ac18d2f153aaf29034605d21bc836cf76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5e1ce99dce7a64f46db25d4ed86d191"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#ab5e1ce99dce7a64f46db25d4ed86d191">TableField</a> (<a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;field)</td></tr>
+<tr class="memdesc:ab5e1ce99dce7a64f46db25d4ed86d191"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> object from a <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a>.  <a href="class_isis_1_1_table_field.html#ab5e1ce99dce7a64f46db25d4ed86d191">More...</a><br /></td></tr>
+<tr class="separator:ab5e1ce99dce7a64f46db25d4ed86d191"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2f361c746e4b8d33609e98a1518c0a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#ae2f361c746e4b8d33609e98a1518c0a2">~TableField</a> ()</td></tr>
+<tr class="memdesc:ae2f361c746e4b8d33609e98a1518c0a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> object.  <a href="class_isis_1_1_table_field.html#ae2f361c746e4b8d33609e98a1518c0a2">More...</a><br /></td></tr>
+<tr class="separator:ae2f361c746e4b8d33609e98a1518c0a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9401beb9de587d1c4349d5d8f3750d70"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a9401beb9de587d1c4349d5d8f3750d70">name</a> () const</td></tr>
+<tr class="memdesc:a9401beb9de587d1c4349d5d8f3750d70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a>.  <a href="class_isis_1_1_table_field.html#a9401beb9de587d1c4349d5d8f3750d70">More...</a><br /></td></tr>
+<tr class="separator:a9401beb9de587d1c4349d5d8f3750d70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4e1b3806ad45119f7a6aefef5a4a704"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#ac4e1b3806ad45119f7a6aefef5a4a704">type</a> () const</td></tr>
+<tr class="memdesc:ac4e1b3806ad45119f7a6aefef5a4a704"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the enumerated value of the <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> value's type.  <a href="class_isis_1_1_table_field.html#ac4e1b3806ad45119f7a6aefef5a4a704">More...</a><br /></td></tr>
+<tr class="separator:ac4e1b3806ad45119f7a6aefef5a4a704"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a199fb4cf963788e0fb3934da4974c431"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a199fb4cf963788e0fb3934da4974c431">isInteger</a> () const</td></tr>
+<tr class="memdesc:a199fb4cf963788e0fb3934da4974c431"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the field type is Integer.  <a href="class_isis_1_1_table_field.html#a199fb4cf963788e0fb3934da4974c431">More...</a><br /></td></tr>
+<tr class="separator:a199fb4cf963788e0fb3934da4974c431"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30382740e598bafef2e39b6f692d1080"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a30382740e598bafef2e39b6f692d1080">isDouble</a> () const</td></tr>
+<tr class="memdesc:a30382740e598bafef2e39b6f692d1080"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the field type is Double.  <a href="class_isis_1_1_table_field.html#a30382740e598bafef2e39b6f692d1080">More...</a><br /></td></tr>
+<tr class="separator:a30382740e598bafef2e39b6f692d1080"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4180230c33dad4216dfc5e2f5f82adb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#aa4180230c33dad4216dfc5e2f5f82adb">isText</a> () const</td></tr>
+<tr class="memdesc:aa4180230c33dad4216dfc5e2f5f82adb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the field type is Text.  <a href="class_isis_1_1_table_field.html#aa4180230c33dad4216dfc5e2f5f82adb">More...</a><br /></td></tr>
+<tr class="separator:aa4180230c33dad4216dfc5e2f5f82adb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8714be72f4c01c06d65c637181390314"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a8714be72f4c01c06d65c637181390314">isReal</a> () const</td></tr>
+<tr class="memdesc:a8714be72f4c01c06d65c637181390314"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the field type is Text.  <a href="class_isis_1_1_table_field.html#a8714be72f4c01c06d65c637181390314">More...</a><br /></td></tr>
+<tr class="separator:a8714be72f4c01c06d65c637181390314"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad444e14b6f9084916379911a2b675cf9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#ad444e14b6f9084916379911a2b675cf9">bytes</a> () const</td></tr>
+<tr class="memdesc:ad444e14b6f9084916379911a2b675cf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of bytes in the field value.  <a href="class_isis_1_1_table_field.html#ad444e14b6f9084916379911a2b675cf9">More...</a><br /></td></tr>
+<tr class="separator:ad444e14b6f9084916379911a2b675cf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a993dee14a83cb6eefbd9c739daad6cd6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a993dee14a83cb6eefbd9c739daad6cd6">size</a> () const</td></tr>
+<tr class="memdesc:a993dee14a83cb6eefbd9c739daad6cd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of values stored for the field at each record.  <a href="class_isis_1_1_table_field.html#a993dee14a83cb6eefbd9c739daad6cd6">More...</a><br /></td></tr>
+<tr class="separator:a993dee14a83cb6eefbd9c739daad6cd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa29d87175904770c923b78f8131483af"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#aa29d87175904770c923b78f8131483af">operator int</a> () const</td></tr>
+<tr class="memdesc:aa29d87175904770c923b78f8131483af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Casts the table field value to int if the type is Integer and the size is.  <a href="class_isis_1_1_table_field.html#aa29d87175904770c923b78f8131483af">More...</a><br /></td></tr>
+<tr class="separator:aa29d87175904770c923b78f8131483af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6499af9a7ce29893f9737b96563794b3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a6499af9a7ce29893f9737b96563794b3">operator double</a> () const</td></tr>
+<tr class="memdesc:a6499af9a7ce29893f9737b96563794b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Casts the table field value to double if the type is Double and the size is.  <a href="class_isis_1_1_table_field.html#a6499af9a7ce29893f9737b96563794b3">More...</a><br /></td></tr>
+<tr class="separator:a6499af9a7ce29893f9737b96563794b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c831dbd1a06e84323ac3a3c7171feb3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a6c831dbd1a06e84323ac3a3c7171feb3">operator float</a> () const</td></tr>
+<tr class="memdesc:a6c831dbd1a06e84323ac3a3c7171feb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Casts the table field value to float if the type is Real and the size is.  <a href="class_isis_1_1_table_field.html#a6c831dbd1a06e84323ac3a3c7171feb3">More...</a><br /></td></tr>
+<tr class="separator:a6c831dbd1a06e84323ac3a3c7171feb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cbb1ada34c26f0b96a089ad3650b77d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a2cbb1ada34c26f0b96a089ad3650b77d">operator QString</a> () const</td></tr>
+<tr class="memdesc:a2cbb1ada34c26f0b96a089ad3650b77d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Casts the table field value to string if the type is Text.  <a href="class_isis_1_1_table_field.html#a2cbb1ada34c26f0b96a089ad3650b77d">More...</a><br /></td></tr>
+<tr class="separator:a2cbb1ada34c26f0b96a089ad3650b77d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab7b738f24a3a49a4f5d36462298308f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#aab7b738f24a3a49a4f5d36462298308f">operator std::vector&lt; int &gt;</a> () const</td></tr>
+<tr class="memdesc:aab7b738f24a3a49a4f5d36462298308f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Casts the table field value to a vector of ints if the type is Integer.  <a href="class_isis_1_1_table_field.html#aab7b738f24a3a49a4f5d36462298308f">More...</a><br /></td></tr>
+<tr class="separator:aab7b738f24a3a49a4f5d36462298308f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9185a41ea1aeaacde61d496517e5a40c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a9185a41ea1aeaacde61d496517e5a40c">operator std::vector&lt; double &gt;</a> () const</td></tr>
+<tr class="memdesc:a9185a41ea1aeaacde61d496517e5a40c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Casts the table field value to a vector of doubles if the type is Double.  <a href="class_isis_1_1_table_field.html#a9185a41ea1aeaacde61d496517e5a40c">More...</a><br /></td></tr>
+<tr class="separator:a9185a41ea1aeaacde61d496517e5a40c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa92a6414f424a0ea5621449920ced9cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#aa92a6414f424a0ea5621449920ced9cf">operator std::vector&lt; float &gt;</a> () const</td></tr>
+<tr class="memdesc:aa92a6414f424a0ea5621449920ced9cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Casts the table field value to a vector of floats if the type is Real.  <a href="class_isis_1_1_table_field.html#aa92a6414f424a0ea5621449920ced9cf">More...</a><br /></td></tr>
+<tr class="separator:aa92a6414f424a0ea5621449920ced9cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f151cdf6781c81b045616b2b0e31e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#af8f151cdf6781c81b045616b2b0e31e3">operator=</a> (const int value)</td></tr>
+<tr class="memdesc:af8f151cdf6781c81b045616b2b0e31e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets field value equal to input if <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Integer and size is 1.  <a href="class_isis_1_1_table_field.html#af8f151cdf6781c81b045616b2b0e31e3">More...</a><br /></td></tr>
+<tr class="separator:af8f151cdf6781c81b045616b2b0e31e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab46fe5f841e5a877d4b95db65057a97a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#ab46fe5f841e5a877d4b95db65057a97a">operator=</a> (const double value)</td></tr>
+<tr class="memdesc:ab46fe5f841e5a877d4b95db65057a97a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets field value equal to input if <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Double and size is 1.  <a href="class_isis_1_1_table_field.html#ab46fe5f841e5a877d4b95db65057a97a">More...</a><br /></td></tr>
+<tr class="separator:ab46fe5f841e5a877d4b95db65057a97a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a404765ae88a75e84421e3fa5cf7a216a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a404765ae88a75e84421e3fa5cf7a216a">operator=</a> (const float value)</td></tr>
+<tr class="memdesc:a404765ae88a75e84421e3fa5cf7a216a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets field value equal to input if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Real and the size is 1.  <a href="class_isis_1_1_table_field.html#a404765ae88a75e84421e3fa5cf7a216a">More...</a><br /></td></tr>
+<tr class="separator:a404765ae88a75e84421e3fa5cf7a216a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4a3a3e0049bc111615e8c931880b7cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#ad4a3a3e0049bc111615e8c931880b7cd">operator=</a> (const QString &amp;value)</td></tr>
+<tr class="memdesc:ad4a3a3e0049bc111615e8c931880b7cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets field value equal to input if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Text.  <a href="class_isis_1_1_table_field.html#ad4a3a3e0049bc111615e8c931880b7cd">More...</a><br /></td></tr>
+<tr class="separator:ad4a3a3e0049bc111615e8c931880b7cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a152de21233aa839bfe4095bf1114b8e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a152de21233aa839bfe4095bf1114b8e8">operator=</a> (const std::vector&lt; int &gt; &amp;values)</td></tr>
+<tr class="memdesc:a152de21233aa839bfe4095bf1114b8e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets field value equal to input if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Integer and the input vector size matches the field size.  <a href="class_isis_1_1_table_field.html#a152de21233aa839bfe4095bf1114b8e8">More...</a><br /></td></tr>
+<tr class="separator:a152de21233aa839bfe4095bf1114b8e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbb7565cb0879bbeb37190790977ebe3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#afbb7565cb0879bbeb37190790977ebe3">operator=</a> (const std::vector&lt; double &gt; &amp;values)</td></tr>
+<tr class="memdesc:afbb7565cb0879bbeb37190790977ebe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets field value equal to the input if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Double and the input vector size matches the field size.  <a href="class_isis_1_1_table_field.html#afbb7565cb0879bbeb37190790977ebe3">More...</a><br /></td></tr>
+<tr class="separator:afbb7565cb0879bbeb37190790977ebe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee4004c8dcbf6d2947b45811091abc66"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#aee4004c8dcbf6d2947b45811091abc66">operator=</a> (const std::vector&lt; float &gt; &amp;value)</td></tr>
+<tr class="memdesc:aee4004c8dcbf6d2947b45811091abc66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets field value equal to the input if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Real and the input vector size matches the field size.  <a href="class_isis_1_1_table_field.html#aee4004c8dcbf6d2947b45811091abc66">More...</a><br /></td></tr>
+<tr class="separator:aee4004c8dcbf6d2947b45811091abc66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71af92d6643c5813198b469e1a3e841a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a71af92d6643c5813198b469e1a3e841a">operator=</a> (const char *buf)</td></tr>
+<tr class="memdesc:a71af92d6643c5813198b469e1a3e841a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets field value equal to the values found in the character string array if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Text.  <a href="class_isis_1_1_table_field.html#a71af92d6643c5813198b469e1a3e841a">More...</a><br /></td></tr>
+<tr class="separator:a71af92d6643c5813198b469e1a3e841a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14e346ccb283fc27d449ef0f5a91912f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a14e346ccb283fc27d449ef0f5a91912f">operator=</a> (const void *buf)</td></tr>
+<tr class="memdesc:a14e346ccb283fc27d449ef0f5a91912f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets field value equal to the values found in the input binary buffer.  <a href="class_isis_1_1_table_field.html#a14e346ccb283fc27d449ef0f5a91912f">More...</a><br /></td></tr>
+<tr class="separator:a14e346ccb283fc27d449ef0f5a91912f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b0dc02a67ca0c8042f59d76ece5cc17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a9b0dc02a67ca0c8042f59d76ece5cc17">pvlGroup</a> ()</td></tr>
+<tr class="memdesc:a9b0dc02a67ca0c8042f59d76ece5cc17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and returns a <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a> named "Field" containing the following keywords and their respective values: "Name", "Type", and "Size".  <a href="class_isis_1_1_table_field.html#a9b0dc02a67ca0c8042f59d76ece5cc17">More...</a><br /></td></tr>
+<tr class="separator:a9b0dc02a67ca0c8042f59d76ece5cc17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a55cd7b5e650ea1b33459ac44147ded9d"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_table_field.html#a55cd7b5e650ea1b33459ac44147ded9d">toString</a> (const <a class="el" href="class_isis_1_1_table_field.html">TableField</a> &amp;field, QString delimiter=&quot;,&quot;)</td></tr>
+<tr class="separator:a55cd7b5e650ea1b33459ac44147ded9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class for storing an <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Isis::Table</a>'s field information. </p>
+<p>This class represents the field values of an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> table. In Isis3, fields correspond to column values. Each <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> object is a single table entry for a column value at a specific row (or record) of the table.</p>
+<p>Be careful to note that the size of a field is the number of array values for a single column entry. It is not the number of rows or records of the table.</p>
+<dl class="section author"><dt>Author</dt><dd>2004-09-01 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a9880361eaafe81fcad05f3c94c058717"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9880361eaafe81fcad05f3c94c058717">&#9670;&nbsp;</a></span>Type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717">Isis::TableField::Type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This enum describes the value type for the <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a>. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9880361eaafe81fcad05f3c94c058717a06725c359651c2b8441d744b31722322"></a>Integer&#160;</td><td class="fielddoc"><p>The values in the field are 4 byte integers. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9880361eaafe81fcad05f3c94c058717aec51189ae36d3153680302822a39406a"></a>Double&#160;</td><td class="fielddoc"><p>The values in the field are 8 byte doubles. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9880361eaafe81fcad05f3c94c058717ac4b7aaa437a3290384427e39e6360da6"></a>Text&#160;</td><td class="fielddoc"><p>The values in the field are text strings with 1 byte per character. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9880361eaafe81fcad05f3c94c058717a58fa1c8530317a39c474b89d303ee22c"></a>Real&#160;</td><td class="fielddoc"><p>The values in the field are 4 byte reals or floats. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ac18d2f153aaf29034605d21bc836cf76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac18d2f153aaf29034605d21bc836cf76">&#9670;&nbsp;</a></span>TableField() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableField::TableField </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717">TableField::Type</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> object with the given field name, field value type, and field size. </p>
+<p>The size defaults to 1 entry value per field.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the field. </td></tr>
+    <tr><td class="paramname">type</td><td>The type of the field value. </td></tr>
+    <tr><td class="paramname">size</td><td>The size of the field. This is the number of values for a single table entry. Defaults to 1. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa9d4d014905f2f0b9922e0f3bc5db865e">Isis::Double</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530faa557465bb7a2ccac7e045deea97f906e">Isis::Real</a>.</p>
+
+</div>
+</div>
+<a id="ab5e1ce99dce7a64f46db25d4ed86d191"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5e1ce99dce7a64f46db25d4ed86d191">&#9670;&nbsp;</a></span>TableField() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableField::TableField </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;&#160;</td>
+          <td class="paramname"><em>field</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> object from a <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a>. </p>
+<p>The given group must contain the PvlKeywords "Name", "Size", and "Type". "Size" must be an integer value and valid values for "Type" are "Integer", "Double", "Text", or "Real".</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">field</td><td><a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a> containing Name, Size, and Type for new <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> object</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Invalid field type </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa9d4d014905f2f0b9922e0f3bc5db865e">Isis::Double</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530faa557465bb7a2ccac7e045deea97f906e">Isis::Real</a>.</p>
+
+</div>
+</div>
+<a id="ae2f361c746e4b8d33609e98a1518c0a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2f361c746e4b8d33609e98a1518c0a2">&#9670;&nbsp;</a></span>~TableField()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableField::~TableField </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys the <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad444e14b6f9084916379911a2b675cf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad444e14b6f9084916379911a2b675cf9">&#9670;&nbsp;</a></span>bytes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::TableField::bytes </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of bytes in the field value. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The number of bytes in the <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_record.html#ac855bd52f3a5f0f757119aef5701f6af">Isis::TableRecord::Swap()</a>, and <a class="el" href="class_isis_1_1_table_record.html#a3069f3b227a4b9b32e2fc57116bae6dd">Isis::TableRecord::Unpack()</a>.</p>
+
+</div>
+</div>
+<a id="a30382740e598bafef2e39b6f692d1080"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30382740e598bafef2e39b6f692d1080">&#9670;&nbsp;</a></span>isDouble()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TableField::isDouble </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines whether the field type is Double. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> Returns true if field type is Double, and false if it is not. </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa9d4d014905f2f0b9922e0f3bc5db865e">Isis::Double</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_blobber.html#a653ba7cf5124d077afba742fc7b5343a">Isis::Blobber::load()</a>, <a class="el" href="class_isis_1_1_table_record.html#aa80c1559e41764d931790eb423329b49">Isis::TableRecord::Pack()</a>, <a class="el" href="class_isis_1_1_table_record.html#ac855bd52f3a5f0f757119aef5701f6af">Isis::TableRecord::Swap()</a>, and <a class="el" href="class_isis_1_1_table_field.html#a55cd7b5e650ea1b33459ac44147ded9d">toString()</a>.</p>
+
+</div>
+</div>
+<a id="a199fb4cf963788e0fb3934da4974c431"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a199fb4cf963788e0fb3934da4974c431">&#9670;&nbsp;</a></span>isInteger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TableField::isInteger </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines whether the field type is Integer. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> Returns true if field type is Integer, and false if it is not. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_blobber.html#a653ba7cf5124d077afba742fc7b5343a">Isis::Blobber::load()</a>, <a class="el" href="class_isis_1_1_table_record.html#aa80c1559e41764d931790eb423329b49">Isis::TableRecord::Pack()</a>, <a class="el" href="class_isis_1_1_table_record.html#ac855bd52f3a5f0f757119aef5701f6af">Isis::TableRecord::Swap()</a>, and <a class="el" href="class_isis_1_1_table_field.html#a55cd7b5e650ea1b33459ac44147ded9d">toString()</a>.</p>
+
+</div>
+</div>
+<a id="a8714be72f4c01c06d65c637181390314"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8714be72f4c01c06d65c637181390314">&#9670;&nbsp;</a></span>isReal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TableField::isReal </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines whether the field type is Text. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> Returns true if field type is Text, and false if it is not. </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530faa557465bb7a2ccac7e045deea97f906e">Isis::Real</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_record.html#aa80c1559e41764d931790eb423329b49">Isis::TableRecord::Pack()</a>, and <a class="el" href="class_isis_1_1_table_record.html#ac855bd52f3a5f0f757119aef5701f6af">Isis::TableRecord::Swap()</a>.</p>
+
+</div>
+</div>
+<a id="aa4180230c33dad4216dfc5e2f5f82adb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4180230c33dad4216dfc5e2f5f82adb">&#9670;&nbsp;</a></span>isText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TableField::isText </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines whether the field type is Text. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> Returns true if field type is Text, and false if it is not. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_record.html#aa80c1559e41764d931790eb423329b49">Isis::TableRecord::Pack()</a>, <a class="el" href="class_isis_1_1_table_record.html#ac855bd52f3a5f0f757119aef5701f6af">Isis::TableRecord::Swap()</a>, and <a class="el" href="class_isis_1_1_table_field.html#a55cd7b5e650ea1b33459ac44147ded9d">toString()</a>.</p>
+
+</div>
+</div>
+<a id="a9401beb9de587d1c4349d5d8f3750d70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9401beb9de587d1c4349d5d8f3750d70">&#9670;&nbsp;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::TableField::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the name of the <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>string</b> Name of <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tracking_table.html#a1d8085bd5e6d779fc55cf2fe90b37083">Isis::TrackingTable::toTable()</a>.</p>
+
+</div>
+</div>
+<a id="a6499af9a7ce29893f9737b96563794b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6499af9a7ce29893f9737b96563794b3">&#9670;&nbsp;</a></span>operator double()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableField::operator double </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Casts the table field value to double if the type is Double and the size is. </p>
+<ol type="1">
+<li></li>
+</ol>
+<p><code> <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> field("Field 1", FieldType::Double, 1); // The following lines are equivalent double value = double(field); double value = (double) field; </code></p>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> The value of the field.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not a Double </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field has multiple Double values </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa9d4d014905f2f0b9922e0f3bc5db865e">Isis::Double</a>.</p>
+
+</div>
+</div>
+<a id="a6c831dbd1a06e84323ac3a3c7171feb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c831dbd1a06e84323ac3a3c7171feb3">&#9670;&nbsp;</a></span>operator float()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableField::operator float </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Casts the table field value to float if the type is Real and the size is. </p>
+<ol type="1">
+<li></li>
+</ol>
+<p><code> <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> field("Field 1", FieldType::Real, 1); // The following lines are equivalent float value = float(field); float value = (float) field; </code></p>
+<dl class="section return"><dt>Returns</dt><dd><b>float</b> The value of the field.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not a Real </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field has multiple Real values </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530faa557465bb7a2ccac7e045deea97f906e">Isis::Real</a>.</p>
+
+</div>
+</div>
+<a id="aa29d87175904770c923b78f8131483af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa29d87175904770c923b78f8131483af">&#9670;&nbsp;</a></span>operator int()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableField::operator int </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Casts the table field value to int if the type is Integer and the size is. </p>
+<ol type="1">
+<li></li>
+</ol>
+<p><code> <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> field("Field 1", FieldType::Integer, 1); // The following lines are equivalent int value = int(field); int value = (int) field; </code></p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The value of the field.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not an Integer </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field has multiple Integer values </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a2cbb1ada34c26f0b96a089ad3650b77d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cbb1ada34c26f0b96a089ad3650b77d">&#9670;&nbsp;</a></span>operator QString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableField::operator QString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Casts the table field value to string if the type is Text. </p>
+<p><code> <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> field("Field 1", FieldType::Text, 9); // The following lines are equivalent string value = QString(field); string value = (QString) field; </code></p>
+<dl class="section return"><dt>Returns</dt><dd><b>string</b> The value of the field.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not a string </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a9185a41ea1aeaacde61d496517e5a40c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9185a41ea1aeaacde61d496517e5a40c">&#9670;&nbsp;</a></span>operator std::vector&lt; double &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableField::operator std::vector&lt; double &gt; </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Casts the table field value to a vector of doubles if the type is Double. </p>
+<p><code> <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> field("Field 1", FieldType::Double, 3); vector&lt;double&gt; values = std::vector&lt;double&gt;(field); </code></p>
+<dl class="section return"><dt>Returns</dt><dd>The value of the field.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not a Double array </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa9d4d014905f2f0b9922e0f3bc5db865e">Isis::Double</a>.</p>
+
+</div>
+</div>
+<a id="aa92a6414f424a0ea5621449920ced9cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa92a6414f424a0ea5621449920ced9cf">&#9670;&nbsp;</a></span>operator std::vector&lt; float &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableField::operator std::vector&lt; float &gt; </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Casts the table field value to a vector of floats if the type is Real. </p>
+<p><code> <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> field("Field 1", FieldType::Real, 3); vector&lt;float&gt; values = std::vector&lt;float&gt;(field); </code></p>
+<dl class="section return"><dt>Returns</dt><dd>The value of the field.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not an Integer array </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530faa557465bb7a2ccac7e045deea97f906e">Isis::Real</a>.</p>
+
+</div>
+</div>
+<a id="aab7b738f24a3a49a4f5d36462298308f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab7b738f24a3a49a4f5d36462298308f">&#9670;&nbsp;</a></span>operator std::vector&lt; int &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TableField::operator std::vector&lt; int &gt; </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Casts the table field value to a vector of ints if the type is Integer. </p>
+<p><code> <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> field("Field 1", FieldType::Integer, 3); vector&lt;int&gt; values = std::vector&lt;int&gt;(field); </code></p>
+<dl class="section return"><dt>Returns</dt><dd>The value of the field.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not an Integer array </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a71af92d6643c5813198b469e1a3e841a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71af92d6643c5813198b469e1a3e841a">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableField::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>buf</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets field value equal to the values found in the character string array if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Text. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf</td><td>Character array conataining text values to be assigned to the field value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not Text </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="ab46fe5f841e5a877d4b95db65057a97a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab46fe5f841e5a877d4b95db65057a97a">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableField::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets field value equal to input if <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Double and size is 1. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Double to be assigned to field value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not a Double </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field has multiple Double values </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa9d4d014905f2f0b9922e0f3bc5db865e">Isis::Double</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a404765ae88a75e84421e3fa5cf7a216a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a404765ae88a75e84421e3fa5cf7a216a">&#9670;&nbsp;</a></span>operator=() <span class="overload">[3/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableField::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets field value equal to input if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Real and the size is 1. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>float to be assigned to field value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not a Real </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field has multiple Real values </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530faa557465bb7a2ccac7e045deea97f906e">Isis::Real</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="af8f151cdf6781c81b045616b2b0e31e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8f151cdf6781c81b045616b2b0e31e3">&#9670;&nbsp;</a></span>operator=() <span class="overload">[4/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableField::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets field value equal to input if <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Integer and size is 1. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Integer to be assigned to field value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not an Integer </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field has multiple Integer values </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="ad4a3a3e0049bc111615e8c931880b7cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4a3a3e0049bc111615e8c931880b7cd">&#9670;&nbsp;</a></span>operator=() <span class="overload">[5/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableField::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets field value equal to input if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Text. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>string to be assigned to field value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not a string </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="afbb7565cb0879bbeb37190790977ebe3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbb7565cb0879bbeb37190790977ebe3">&#9670;&nbsp;</a></span>operator=() <span class="overload">[6/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableField::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>values</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets field value equal to the input if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Double and the input vector size matches the field size. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">values</td><td>Double vector of values to be assigned to field value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not a Double </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Vector is not the correct size </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa9d4d014905f2f0b9922e0f3bc5db865e">Isis::Double</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="aee4004c8dcbf6d2947b45811091abc66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee4004c8dcbf6d2947b45811091abc66">&#9670;&nbsp;</a></span>operator=() <span class="overload">[7/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableField::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>values</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets field value equal to the input if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Real and the input vector size matches the field size. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">values</td><td>Float vector of values to be assigned to field value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not a Real </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Vector is not the correct size </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530faa557465bb7a2ccac7e045deea97f906e">Isis::Real</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a152de21233aa839bfe4095bf1114b8e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a152de21233aa839bfe4095bf1114b8e8">&#9670;&nbsp;</a></span>operator=() <span class="overload">[8/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableField::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>values</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets field value equal to input if the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a> is Integer and the input vector size matches the field size. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">values</td><td>Integer vector of values to be assigned to field value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Field is not an Integer </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>- Vector is not the correct size </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a14e346ccb283fc27d449ef0f5a91912f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14e346ccb283fc27d449ef0f5a91912f">&#9670;&nbsp;</a></span>operator=() <span class="overload">[9/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TableField::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>ibuf</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets field value equal to the values found in the input binary buffer. </p>
+<p>This method reads the buffer by assuming that the buffer values are stored in the same number of bytes as the <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ibuf</td><td>Binary buffer containing values to be assigned to the field value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::Programmer</td><td>- Undefined field type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa9d4d014905f2f0b9922e0f3bc5db865e">Isis::Double</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530faa557465bb7a2ccac7e045deea97f906e">Isis::Real</a>.</p>
+
+</div>
+</div>
+<a id="a9b0dc02a67ca0c8042f59d76ece5cc17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b0dc02a67ca0c8042f59d76ece5cc17">&#9670;&nbsp;</a></span>pvlGroup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> Isis::TableField::pvlGroup </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates and returns a <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a> named "Field" containing the following keywords and their respective values: "Name", "Type", and "Size". </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a> containing field Name, Type, and Size </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa9d4d014905f2f0b9922e0f3bc5db865e">Isis::Double</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530faa557465bb7a2ccac7e045deea97f906e">Isis::Real</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a993dee14a83cb6eefbd9c739daad6cd6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a993dee14a83cb6eefbd9c739daad6cd6">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::TableField::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of values stored for the field at each record. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The size of the <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_table_record.html#aa80c1559e41764d931790eb423329b49">Isis::TableRecord::Pack()</a>, <a class="el" href="class_isis_1_1_table_record.html#ac855bd52f3a5f0f757119aef5701f6af">Isis::TableRecord::Swap()</a>, and <a class="el" href="class_isis_1_1_table_field.html#a55cd7b5e650ea1b33459ac44147ded9d">toString()</a>.</p>
+
+</div>
+</div>
+<a id="a55cd7b5e650ea1b33459ac44147ded9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55cd7b5e650ea1b33459ac44147ded9d">&#9670;&nbsp;</a></span>toString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::TableField::toString </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_table_field.html">TableField</a> &amp;&#160;</td>
+          <td class="paramname"><em>field</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>delimiter</em> = <code>&quot;,&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_table_field.html#a30382740e598bafef2e39b6f692d1080">isDouble()</a>, <a class="el" href="class_isis_1_1_table_field.html#a199fb4cf963788e0fb3934da4974c431">isInteger()</a>, <a class="el" href="class_isis_1_1_table_field.html#aa4180230c33dad4216dfc5e2f5f82adb">isText()</a>, <a class="el" href="class_isis_1_1_table_field.html#a993dee14a83cb6eefbd9c739daad6cd6">size()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="ac4e1b3806ad45119f7a6aefef5a4a704"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4e1b3806ad45119f7a6aefef5a4a704">&#9670;&nbsp;</a></span>type()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717">TableField::Type</a> Isis::TableField::type </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the enumerated value of the <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> value's type. </p>
+<ul>
+<li>
+0 = Integer </li>
+<li>
+1 = Double </li>
+<li>
+2 = Text </li>
+<li>
+3 = Real </li>
+</ul>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717" title="This enum describes the value type for the TableField.">TableField::Type</a></b> Name of <a class="el" href="class_isis_1_1_table_field.html" title="Class for storing an Isis::Table&#39;s field information.">TableField</a> </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/TableField/<a class="el" href="_table_field_8h_source.html">TableField.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/TableField/<a class="el" href="_table_field_8cpp.html">TableField.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_table_field.html">TableField</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+AlphaCube,Low Level Cube I/O,isis/src/base/objs/AlphaCube/AlphaCube.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,AlphaCube,isis_pybind.AlphaCube,Y,Python class symbol is exported
+Construction/Enum,AlphaCube(),isis_pybind.AlphaCube(),Y,Constructor is explicitly bound
+Public API,inline int AlphaLines() const { return p_alphaLines,isis_pybind.AlphaCube.alpha_lines,Y,Current Python name
+Public API,inline int AlphaSamples() const { return p_alphaSamples,isis_pybind.AlphaCube.alpha_samples,Y,Current Python name
+Public API,inline int BetaLines() const { return p_betaLines,isis_pybind.AlphaCube.beta_lines,Y,Current Python name
+Public API,inline int BetaSamples() const { return p_betaSamples,isis_pybind.AlphaCube.beta_samples,Y,Current Python name
+Public API,inline double AlphaLine(double betaLine) { return p_lineSlope * (betaLine - 0.5) + p_alphaStartingLine,isis_pybind.AlphaCube.alpha_line,Y,Current Python name
+Public API,inline double AlphaSample(double betaSample) { return p_sampSlope * (betaSample - 0.5) + p_alphaStartingSample,isis_pybind.AlphaCube.alpha_sample,Y,Current Python name
+Public API,inline double BetaLine(double alphaLine) { return (alphaLine - p_alphaStartingLine) / p_lineSlope + 0.5,isis_pybind.AlphaCube.beta_line,Y,Current Python name
+Public API,inline double BetaSample(double alphaSample) { return (alphaSample - p_alphaStartingSample) / p_sampSlope + 0.5,isis_pybind.AlphaCube.beta_sample,Y,Current Python name
+Public API,void UpdateGroup(Cube &cube),isis_pybind.AlphaCube.update_group,Y,Current Python name
+Public API,void Rehash(AlphaCube &alphaCube),isis_pybind.AlphaCube.rehash,N,Method not found in current binding files

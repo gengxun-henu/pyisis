@@ -1,0 +1,15 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+SimpleCylindrical,Map Projection,isis/src/base/objs/SimpleCylindrical/SimpleCylindrical.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,第四批已补单测（构造/坐标互转/mapping 导出）
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,SimpleCylindrical,isis_pybind.SimpleCylindrical,Y,Python class symbol is exported; constructor exposure may be limited; 第四批已补单测（构造/坐标互转/mapping 导出）
+Construction/Enum,SimpleCylindrical(),isis_pybind.SimpleCylindrical(),N,第四批已补单测（构造/坐标互转/mapping 导出）
+Public API,QString Name() const,isis_pybind.SimpleCylindrical.name,N,第四批已补单测（构造/坐标互转/mapping 导出）
+Public API,QString Version() const,isis_pybind.SimpleCylindrical.version,N,第四批已补单测（构造/坐标互转/mapping 导出）
+Query,bool IsEquatorialCylindrical(),isis_pybind.SimpleCylindrical.is_equatorial_cylindrical,N,第四批已补单测（构造/坐标互转/mapping 导出）
+Mutation/Configuration,"bool SetGround(const double lat, const double lon)",isis_pybind.SimpleCylindrical.set_ground,N,第四批已补单测（构造/坐标互转/mapping 导出）
+Mutation/Configuration,"bool SetCoordinate(const double x, const double y)",isis_pybind.SimpleCylindrical.set_coordinate,N,第四批已补单测（构造/坐标互转/mapping 导出）
+Public API,"bool XYRange(double &minX, double &maxX, double &minY, double &maxY)",isis_pybind.SimpleCylindrical.xy_range,N,第四批已补单测（构造/坐标互转/mapping 导出）
+Public API,PvlGroup Mapping(),isis_pybind.SimpleCylindrical.mapping,N,第四批已补单测（构造/坐标互转/mapping 导出）
+Public API,PvlGroup MappingLatitudes(),isis_pybind.SimpleCylindrical.mapping_latitudes,N,第四批已补单测（构造/坐标互转/mapping 导出）
+Public API,PvlGroup MappingLongitudes(),isis_pybind.SimpleCylindrical.mapping_longitudes,N,第四批已补单测（构造/坐标互转/mapping 导出）

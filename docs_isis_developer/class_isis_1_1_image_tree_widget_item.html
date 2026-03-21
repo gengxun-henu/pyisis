@@ -1,0 +1,568 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ImageTreeWidgetItem Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_image_tree_widget_item.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_image_tree_widget_item-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ImageTreeWidgetItem Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_image_tree_widget_item_8h_source.html">ImageTreeWidgetItem.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ImageTreeWidgetItem:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_image_tree_widget_item__inherit__graph.png" border="0" usemap="#a_isis_1_1_image_tree_widget_item_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_image_tree_widget_item_inherit__map" id="a_isis_1_1_image_tree_widget_item_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,135,216,328"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="16,5,85,87"/>
+<area shape="rect" href="class_q_tree_widget_item.html" title=" " alt="" coords="110,5,234,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ImageTreeWidgetItem:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_image_tree_widget_item__coll__graph.png" border="0" usemap="#a_isis_1_1_image_tree_widget_item_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_image_tree_widget_item_coll__map" id="a_isis_1_1_image_tree_widget_item_coll__map">
+<area shape="rect" title=" " alt="" coords="5,135,216,328"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="16,5,85,87"/>
+<area shape="rect" href="class_q_tree_widget_item.html" title=" " alt="" coords="110,5,234,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ab35636e4ccdc34ea227477a9d33362f0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0">TreeColumn</a> { <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a6bfd601433cab4c4ed18400c6ca8e1e1">NameColumn</a> = 0
+, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a069d440d7945140191ce9e20b9f3a4f7">FootprintColumn</a>
+, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a9ab3ac92c4eaeb788c94217586eb27e2">OutlineColumn</a>
+, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a089f479e004841b7ad69ee875670feae">ImageColumn</a>
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a2d8ca6e62e9a5d4f59e2750386fa2fe9">LabelColumn</a>
+, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a8abaeb82f79c3a593bab5ea2ce4a232c">ResolutionColumn</a>
+, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a709b5940a7db71b662c5541107ff4e00">EmissionAngleColumn</a>
+, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a2e84170398fa5521d44f1c558ebdf496">IncidenceAngleColumn</a>
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a4ab8757078bc621353f52a07ac3ac330">PhaseAngleColumn</a>
+, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a7f92e6337a796467a254ec7fc057bb4b">AspectRatioColumn</a>
+, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a8a4a6a31c29b1a2c0e9baf763856727b">SampleResolutionColumn</a>
+, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a3ca878befabd2251676bfccc97819aaa">LineResolutionColumn</a>
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a3e9f7faf2fb2948cdd003b8c5d4c96c8">NorthAzimuthColumn</a>
+, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a526a35512bd0dffb397505ffb8daaac7">BlankColumn</a>
+<br />
+ }</td></tr>
+<tr class="separator:ab35636e4ccdc34ea227477a9d33362f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:aa5d90152cfc9193483410644209d86d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_tree_widget_item.html#aa5d90152cfc9193483410644209d86d2">onDisplayPropertiesChanged</a> ()</td></tr>
+<tr class="separator:aa5d90152cfc9193483410644209d86d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ace94c742084e9c6181a236b32b335a65"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_tree_widget_item.html#ace94c742084e9c6181a236b32b335a65">ImageTreeWidgetItem</a> (<a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *imageList, <a class="el" href="class_isis_1_1_image.html">Image</a> *<a class="el" href="class_isis_1_1_image_tree_widget_item.html#aff8314b3b1b5dddf056bf3dc6a4bdfec">image</a>, <a class="el" href="class_q_tree_widget.html">QTreeWidget</a> *parent=0)</td></tr>
+<tr class="memdesc:ace94c742084e9c6181a236b32b335a65"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_image_tree_widget.html">ImageTreeWidget</a> constructor.  <a href="class_isis_1_1_image_tree_widget_item.html#ace94c742084e9c6181a236b32b335a65">More...</a><br /></td></tr>
+<tr class="separator:ace94c742084e9c6181a236b32b335a65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fa316b91245bd050e114636af639dfe"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_tree_widget_item.html#a0fa316b91245bd050e114636af639dfe">~ImageTreeWidgetItem</a> ()</td></tr>
+<tr class="separator:a0fa316b91245bd050e114636af639dfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff8314b3b1b5dddf056bf3dc6a4bdfec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_image.html">Image</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_tree_widget_item.html#aff8314b3b1b5dddf056bf3dc6a4bdfec">image</a> ()</td></tr>
+<tr class="separator:aff8314b3b1b5dddf056bf3dc6a4bdfec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad45afe97204f8f3bc36816978ee7063c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_tree_widget_item.html#ad45afe97204f8f3bc36816978ee7063c">imageListName</a> () const</td></tr>
+<tr class="separator:ad45afe97204f8f3bc36816978ee7063c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d86905b9b08843fe2a24c444b7a3005"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_tree_widget_item.html#a2d86905b9b08843fe2a24c444b7a3005">forgetImage</a> ()</td></tr>
+<tr class="separator:a2d86905b9b08843fe2a24c444b7a3005"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95cc0f9ff84b0887ee53b479333a079a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_tree_widget_item.html#a95cc0f9ff84b0887ee53b479333a079a">update</a> (bool save)</td></tr>
+<tr class="separator:a95cc0f9ff84b0887ee53b479333a079a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:afaa52090cb6182494a35a2ba6b6b4a32"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_tree_widget_item.html#afaa52090cb6182494a35a2ba6b6b4a32">treeColumnToString</a> (<a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0">TreeColumn</a>)</td></tr>
+<tr class="separator:afaa52090cb6182494a35a2ba6b6b4a32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="section author"><dt>Author</dt><dd>????-??-?? Unknown </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="ab35636e4ccdc34ea227477a9d33362f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab35636e4ccdc34ea227477a9d33362f0">&#9670;&nbsp;</a></span>TreeColumn</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0">Isis::ImageTreeWidgetItem::TreeColumn</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a6bfd601433cab4c4ed18400c6ca8e1e1"></a>NameColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a069d440d7945140191ce9e20b9f3a4f7"></a>FootprintColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a9ab3ac92c4eaeb788c94217586eb27e2"></a>OutlineColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a089f479e004841b7ad69ee875670feae"></a>ImageColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a2d8ca6e62e9a5d4f59e2750386fa2fe9"></a>LabelColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a8abaeb82f79c3a593bab5ea2ce4a232c"></a>ResolutionColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a709b5940a7db71b662c5541107ff4e00"></a>EmissionAngleColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a2e84170398fa5521d44f1c558ebdf496"></a>IncidenceAngleColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a4ab8757078bc621353f52a07ac3ac330"></a>PhaseAngleColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a7f92e6337a796467a254ec7fc057bb4b"></a>AspectRatioColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a8a4a6a31c29b1a2c0e9baf763856727b"></a>SampleResolutionColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a3ca878befabd2251676bfccc97819aaa"></a>LineResolutionColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a3e9f7faf2fb2948cdd003b8c5d4c96c8"></a>NorthAzimuthColumn&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab35636e4ccdc34ea227477a9d33362f0a526a35512bd0dffb397505ffb8daaac7"></a>BlankColumn&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ace94c742084e9c6181a236b32b335a65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace94c742084e9c6181a236b32b335a65">&#9670;&nbsp;</a></span>ImageTreeWidgetItem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ImageTreeWidgetItem::ImageTreeWidgetItem </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *&#160;</td>
+          <td class="paramname"><em>imageList</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image.html">Image</a> *&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_tree_widget.html">QTreeWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_image_tree_widget.html">ImageTreeWidget</a> constructor. </p>
+<p><a class="el" href="class_isis_1_1_image_tree_widget.html">ImageTreeWidget</a> is derived from <a class="el" href="class_q_tree_widget.html">QTreeWidget</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_display_properties.html#af95c300a633935408fa541962c8804db">Isis::DisplayProperties::addSupport()</a>, <a class="el" href="class_isis_1_1_image.html#a871257ca0be92c9f1effc6f58972ec51">Isis::Image::aspectRatio()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a7f92e6337a796467a254ec7fc057bb4b">AspectRatioColumn</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a26f7a9bb8c3126648bd63529ef1e036cad87c2fe78701200ad67b3fd69f191059">Isis::ImageDisplayProperties::Color</a>, <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">Isis::Angle::degrees()</a>, <a class="el" href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">Isis::DisplayProperties::displayName()</a>, <a class="el" href="class_isis_1_1_image.html#ac5ea75c23d016a4873a81d4e492807dc">Isis::Image::displayProperties()</a>, <a class="el" href="class_isis_1_1_image.html#a64d0118421279f83ea01a194700357e8">Isis::Image::emissionAngle()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a709b5940a7db71b662c5541107ff4e00">EmissionAngleColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#aff8314b3b1b5dddf056bf3dc6a4bdfec">image()</a>, <a class="el" href="class_isis_1_1_image.html#a0c80bd7af6e7a188c81896f0ae2e8f70">Isis::Image::incidenceAngle()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a2e84170398fa5521d44f1c558ebdf496">IncidenceAngleColumn</a>, <a class="el" href="class_isis_1_1_image.html#a7073d87ae10bdc8ce8b7740d25b83305">Isis::Image::lineResolution()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a3ca878befabd2251676bfccc97819aaa">LineResolutionColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a6bfd601433cab4c4ed18400c6ca8e1e1">NameColumn</a>, <a class="el" href="class_isis_1_1_image.html#ac8b4d2a67ab71e00e0250b2052462752">Isis::Image::northAzimuth()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a3e9f7faf2fb2948cdd003b8c5d4c96c8">NorthAzimuthColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#aa5d90152cfc9193483410644209d86d2">onDisplayPropertiesChanged()</a>, <a class="el" href="class_isis_1_1_image.html#a1fc552ac673a8278cfb9a469577e5949">Isis::Image::phaseAngle()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a4ab8757078bc621353f52a07ac3ac330">PhaseAngleColumn</a>, <a class="el" href="class_isis_1_1_image.html#aea275a3b15a25a5f2c24e968c86718a2">Isis::Image::resolution()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a8abaeb82f79c3a593bab5ea2ce4a232c">ResolutionColumn</a>, <a class="el" href="class_isis_1_1_image.html#aff540bbfbe066ca6dc43423c578bb489">Isis::Image::sampleResolution()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a8a4a6a31c29b1a2c0e9baf763856727b">SampleResolutionColumn</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a26f7a9bb8c3126648bd63529ef1e036ca47549dec8a5f914acfb6a2e2a6885f24">Isis::ImageDisplayProperties::Selected</a>, and <a class="el" href="class_isis_1_1_image_tree_widget_item.html#a95cc0f9ff84b0887ee53b479333a079a">update()</a>.</p>
+
+</div>
+</div>
+<a id="a0fa316b91245bd050e114636af639dfe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fa316b91245bd050e114636af639dfe">&#9670;&nbsp;</a></span>~ImageTreeWidgetItem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ImageTreeWidgetItem::~ImageTreeWidgetItem </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2d86905b9b08843fe2a24c444b7a3005"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d86905b9b08843fe2a24c444b7a3005">&#9670;&nbsp;</a></span>forgetImage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageTreeWidgetItem::forgetImage </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aff8314b3b1b5dddf056bf3dc6a4bdfec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff8314b3b1b5dddf056bf3dc6a4bdfec">&#9670;&nbsp;</a></span>image()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_image.html">Image</a> * Isis::ImageTreeWidgetItem::image </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_file_list_widget.html#ad161328ae392c3b4892bda3476561146">Isis::ImageFileListWidget::filterFileList()</a>, <a class="el" href="class_isis_1_1_image_tree_widget.html#a1be0b65e1f1b1608ff7d3367070f983f">Isis::ImageTreeWidget::imagesInView()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ace94c742084e9c6181a236b32b335a65">ImageTreeWidgetItem()</a>, <a class="el" href="class_isis_1_1_image_file_list_widget.html#a5948ed7e127f5ba6da304cec6658c7a8">Isis::ImageFileListWidget::removeImages()</a>, and <a class="el" href="class_isis_1_1_image_file_list_widget.html#a9181aa5404f44bb8617aa013e56311f2">Isis::ImageFileListWidget::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="ad45afe97204f8f3bc36816978ee7063c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad45afe97204f8f3bc36816978ee7063c">&#9670;&nbsp;</a></span>imageListName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ImageTreeWidgetItem::imageListName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_list.html#adbfe19817125d0a9337e29bca8cdd5d4">Isis::ImageList::name()</a>.</p>
+
+</div>
+</div>
+<a id="aa5d90152cfc9193483410644209d86d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5d90152cfc9193483410644209d86d2">&#9670;&nbsp;</a></span>onDisplayPropertiesChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageTreeWidgetItem::onDisplayPropertiesChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_tree_widget.html#a743b2979a3d05fb999b378ed1bbf0949">Isis::ImageTreeWidget::enqueueReadDisplayProperties()</a>, and <a class="el" href="class_isis_1_1_image_tree_widget_item.html#a95cc0f9ff84b0887ee53b479333a079a">update()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ace94c742084e9c6181a236b32b335a65">ImageTreeWidgetItem()</a>.</p>
+
+</div>
+</div>
+<a id="afaa52090cb6182494a35a2ba6b6b4a32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afaa52090cb6182494a35a2ba6b6b4a32">&#9670;&nbsp;</a></span>treeColumnToString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ImageTreeWidgetItem::treeColumnToString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0">TreeColumn</a>&#160;</td>
+          <td class="paramname"><em>column</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a7f92e6337a796467a254ec7fc057bb4b">AspectRatioColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a526a35512bd0dffb397505ffb8daaac7">BlankColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a709b5940a7db71b662c5541107ff4e00">EmissionAngleColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a069d440d7945140191ce9e20b9f3a4f7">FootprintColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a089f479e004841b7ad69ee875670feae">ImageColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a2e84170398fa5521d44f1c558ebdf496">IncidenceAngleColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a2d8ca6e62e9a5d4f59e2750386fa2fe9">LabelColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a3ca878befabd2251676bfccc97819aaa">LineResolutionColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a6bfd601433cab4c4ed18400c6ca8e1e1">NameColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a3e9f7faf2fb2948cdd003b8c5d4c96c8">NorthAzimuthColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a9ab3ac92c4eaeb788c94217586eb27e2">OutlineColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a4ab8757078bc621353f52a07ac3ac330">PhaseAngleColumn</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a8abaeb82f79c3a593bab5ea2ce4a232c">ResolutionColumn</a>, and <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a8a4a6a31c29b1a2c0e9baf763856727b">SampleResolutionColumn</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_file_list_widget.html#ae2f856dccc52f9a93369fd69fc6bcd76">Isis::ImageFileListWidget::fromPvl()</a>, <a class="el" href="class_isis_1_1_image_tree_widget.html#ad102ebce193f3e76429e3de9bbc56bfc">Isis::ImageTreeWidget::ImageTreeWidget()</a>, <a class="el" href="class_isis_1_1_image_file_list_widget.html#af6f3e55a74ee766a684f333339831dbc">Isis::ImageFileListWidget::save()</a>, <a class="el" href="class_isis_1_1_image_file_list_widget.html#a9181aa5404f44bb8617aa013e56311f2">Isis::ImageFileListWidget::toPvl()</a>, and <a class="el" href="class_isis_1_1_image_tree_widget.html#a97bf925d27b06302636604745810667b">Isis::ImageTreeWidget::updateViewActs()</a>.</p>
+
+</div>
+</div>
+<a id="a95cc0f9ff84b0887ee53b479333a079a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95cc0f9ff84b0887ee53b479333a079a">&#9670;&nbsp;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageTreeWidgetItem::update </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>save</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_display_properties.html#a26f7a9bb8c3126648bd63529ef1e036cad87c2fe78701200ad67b3fd69f191059">Isis::ImageDisplayProperties::Color</a>, <a class="el" href="class_isis_1_1_image.html#ac5ea75c23d016a4873a81d4e492807dc">Isis::Image::displayProperties()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a069d440d7945140191ce9e20b9f3a4f7">FootprintColumn</a>, <a class="el" href="class_isis_1_1_display_properties.html#a0d97af1b302bf03ba93f922c684822f2">Isis::DisplayProperties::getValue()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a089f479e004841b7ad69ee875670feae">ImageColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a2d8ca6e62e9a5d4f59e2750386fa2fe9">LabelColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a6bfd601433cab4c4ed18400c6ca8e1e1">NameColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a9ab3ac92c4eaeb788c94217586eb27e2">OutlineColumn</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a26f7a9bb8c3126648bd63529ef1e036ca47549dec8a5f914acfb6a2e2a6885f24">Isis::ImageDisplayProperties::Selected</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#aeb13f12ae5cdb653a3bf831983ad4698">Isis::ImageDisplayProperties::setSelected()</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a1a654c86e6505cd72bc54073f6d249bb">Isis::ImageDisplayProperties::setShowDNs()</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a1576edd8363f36c3452fbea1ae40cd8b">Isis::ImageDisplayProperties::setShowFill()</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a1566c3be4c4bb5c3228fb3986bf56fc1">Isis::ImageDisplayProperties::setShowLabel()</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#aa88a628fef2563fa21baf4dce976a068">Isis::ImageDisplayProperties::setShowOutline()</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a26f7a9bb8c3126648bd63529ef1e036ca444030e6d68a4a9e2285f772dde5c909">Isis::ImageDisplayProperties::ShowDNs</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a26f7a9bb8c3126648bd63529ef1e036ca356da2586d9463d8c06eff12bc39f623">Isis::ImageDisplayProperties::ShowFill</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a26f7a9bb8c3126648bd63529ef1e036ca0e4c5551e816453b66be067d2bc00853">Isis::ImageDisplayProperties::ShowLabel</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a26f7a9bb8c3126648bd63529ef1e036cada7a246b71a93e73a05c3a9a4f84f47d">Isis::ImageDisplayProperties::ShowOutline</a>, and <a class="el" href="class_isis_1_1_display_properties.html#aca5be380b20c567e20c0ac73be06d904">Isis::DisplayProperties::supports()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ace94c742084e9c6181a236b32b335a65">ImageTreeWidgetItem()</a>, and <a class="el" href="class_isis_1_1_image_tree_widget_item.html#aa5d90152cfc9193483410644209d86d2">onDisplayPropertiesChanged()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ImageFileListWidget/<a class="el" href="_image_tree_widget_item_8h_source.html">ImageTreeWidgetItem.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ImageFileListWidget/<a class="el" href="_image_tree_widget_item_8cpp.html">ImageTreeWidgetItem.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_image_tree_widget_item.html">ImageTreeWidgetItem</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Process,High Level Cube I/O,isis/src/base/objs/Process/Process.h,isis_pybind_standalone/src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Process,isis_pybind.ProcessImport,Y,Python class symbol is exported; 流程/回调接口较多
+Construction/Enum,Process(),isis_pybind.ProcessImport(),Y,Constructor is explicitly bound
+Public API,virtual void StartProcess(void funct()) { funct(),isis_pybind.ProcessImport.start_process,N,流程/回调接口较多
+Public API,virtual void EndProcess(),isis_pybind.ProcessImport.end_process,Y,Current Python name
+Public API,virtual void Finalize(),isis_pybind.ProcessImport.finalize,Y,Current Python name
+Mutation/Configuration,"virtual Isis::Cube *SetInputCube(const QString &parameter, const int requirements = 0)",isis_pybind.ProcessImport.set_input_cube,Y,Current Python name
+Mutation/Configuration,"virtual Isis::Cube *SetInputCube(const QString &fname, const Isis::CubeAttributeInput &att, int requirements = 0)",isis_pybind.ProcessImport.set_input_cube,Y,Current Python name
+Mutation/Configuration,"virtual void SetInputCube(Isis::Cube *inCube, int requirements = 0)",isis_pybind.ProcessImport.set_input_cube,Y,Current Python name
+Mutation/Configuration,virtual Isis::Cube *SetOutputCube(const QString &parameter),isis_pybind.ProcessImport.set_output_cube,Y,Current Python name
+Mutation/Configuration,"virtual Isis::Cube *SetOutputCubeStretch(const QString &parameter, UserInterface *ui=nullptr)",isis_pybind.ProcessImport.set_output_cube_stretch,Y,Current Python name
+Mutation/Configuration,"virtual Isis::Cube *SetOutputCube(const QString &parameter, const int nsamps, const int nlines, const int nbands = 1)",isis_pybind.ProcessImport.set_output_cube,Y,Current Python name
+Mutation/Configuration,"virtual Isis::Cube *SetOutputCubeStretch(const QString &parameter, const int nsamps, const int nlines, const int nbands = 1, UserInterface *ui=nullptr)",isis_pybind.ProcessImport.set_output_cube_stretch,Y,Current Python name
+Mutation/Configuration,"virtual Isis::Cube *SetOutputCube(const QString &fname, const Isis::CubeAttributeOutput &att, const int nsamps, const int nlines, const int nbands = 1)",isis_pybind.ProcessImport.set_output_cube,Y,Current Python name
+Mutation/Configuration,"void AddInputCube(Cube *cube, bool owned = true)",isis_pybind.ProcessImport.add_input_cube,Y,Current Python name
+Mutation/Configuration,"void AddOutputCube(Cube *cube, bool owned = true)",isis_pybind.ProcessImport.add_output_cube,Y,Current Python name
+Public API,"void CheckRequirements(const Cube *cube, const int requirements)",isis_pybind.ProcessImport.check_requirements,Y,Current Python name
+Mutation/Configuration,void ClearCubes(),isis_pybind.ProcessImport.clear_cubes,Y,Current Python name
+Mutation/Configuration,void ClearInputCubes(),isis_pybind.ProcessImport.clear_input_cubes,Y,Current Python name
+Mutation/Configuration,void ClearOutputCubes(),isis_pybind.ProcessImport.clear_output_cubes,Y,Current Python name
+Public API,void PropagateLabels(const bool prop),isis_pybind.ProcessImport.propagate_labels,Y,Current Python name
+Public API,void PropagateLabels(const QString &cube),isis_pybind.ProcessImport.propagate_labels,Y,Current Python name
+Public API,void PropagateTables(const bool prop),isis_pybind.ProcessImport.propagate_tables,Y,Current Python name
+Public API,void PropagatePolygons(const bool prop),isis_pybind.ProcessImport.propagate_polygons,Y,Current Python name
+Public API,void PropagateHistory(const bool prop),isis_pybind.ProcessImport.propagate_history,Y,Current Python name
+Public API,void PropagateOriginalLabel(const bool prop),isis_pybind.ProcessImport.propagate_original_label,Y,Current Python name
+Public API,Isis::Progress *Progress() { return p_progress,isis_pybind.ProcessImport.progress,Y,Current Python name
+Public API,"QString MissionData(const QString &mission, const QString &file, bool highestVersion = false)",isis_pybind.ProcessImport.mission_data,Y,Current Python name
+Read/Write IO,void WriteHistory(Cube &cube),isis_pybind.ProcessImport.write_history,Y,Current Python name
+Public API,void CalculateStatistics(),isis_pybind.ProcessImport.calculate_statistics,Y,Current Python name
+Public API,inline std::vector<Isis::Statistics *> BandStatistics( const unsigned index) { return p_bandStats[index],isis_pybind.ProcessImport.band_statistics,Y,Current Python name
+Public API,inline Isis::Statistics *CubeStatistics( const unsigned index) { return p_cubeStats[index],isis_pybind.ProcessImport.cube_statistics,Y,Current Python name

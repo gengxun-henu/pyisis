@@ -1,0 +1,20 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Selection,Utility,isis/src/base/objs/Selection/Selection.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Selection,isis_pybind.Selection,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,Selection(),isis_pybind.Selection(),N,抽象基类/纯虚接口
+Public API,"virtual int select(Chip *inputChip,Chip *selectionChip)=0",isis_pybind.Selection.select,N,抽象基类/纯虚接口
+Public API,"virtual int elipticalReduction(Chip *selectionChip, double percent_selected, double play, int patience_limit)",isis_pybind.Selection.eliptical_reduction,N,抽象基类/纯虚接口
+Public API,"int centerOfMass(Chip *selectionChip, double *sample, double *line)",isis_pybind.Selection.center_of_mass,N,抽象基类/纯虚接口
+Public API,"int centerOfMassWeighted(Chip *inputChip, Chip *selectionChip, double *sample, double *line)",isis_pybind.Selection.center_of_mass_weighted,N,抽象基类/纯虚接口
+Public API,"bool ellipseFrom5Pts(Ellipse *ell,double pts[5][2])",isis_pybind.Selection.ellipse_from5_pts,N,抽象基类/纯虚接口
+Public API,"double elipsePercentSelected(Chip *selectionChip,Ellipse *ell)",isis_pybind.Selection.elipse_percent_selected,N,抽象基类/纯虚接口
+Public API,"std::vector<double> minimumBoundingElipse( std::vector< std::vector<int> > pts,Ellipse *ell)",isis_pybind.Selection.minimum_bounding_elipse,N,抽象基类/纯虚接口
+Public API,"bool ellipseFromCubic(Ellipse *ell, double cubic[6])",isis_pybind.Selection.ellipse_from_cubic,N,抽象基类/纯虚接口
+Public API,bool ellipseAxesAreaFromMatrix(Ellipse *ell),isis_pybind.Selection.ellipse_axes_area_from_matrix,N,抽象基类/纯虚接口
+Public API,"bool bestFitEllipse(Ellipse *ell, std::vector < std::vector<int> > *pts,double play,unsigned int max_iter)",isis_pybind.Selection.best_fit_ellipse,N,抽象基类/纯虚接口
+Public API,"bool pointInEllipse(Ellipse *ell, double pt[2],double play)",isis_pybind.Selection.point_in_ellipse,N,抽象基类/纯虚接口
+Public API,"bool ellipseInChip(Ellipse *ell, Chip *chip)",isis_pybind.Selection.ellipse_in_chip,N,抽象基类/纯虚接口
+Public API,"bool ellipseFromCenterAxesAngle(Ellipse *ell, double centerSample, double centerLine, double semiMajor, double semiMinor, double theta)",isis_pybind.Selection.ellipse_from_center_axes_angle,N,抽象基类/纯虚接口
+Public API,"void selectionEdge(Chip *selectionChip, std::vector < std::vector <int> > *pts)",isis_pybind.Selection.selection_edge,N,抽象基类/纯虚接口

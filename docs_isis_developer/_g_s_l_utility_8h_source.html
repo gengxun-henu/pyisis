@@ -1,0 +1,354 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/GSLUtility/GSLUtility.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_g_s_l_utility_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">GSLUtility.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_g_s_l_utility_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef GSLUtility_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define GSLUtility_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;sstream&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;tnt/tnt_array1d.h&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;tnt/tnt_array1d_utils.h&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;tnt/tnt_array2d.h&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;tnt/tnt_array2d_utils.h&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;gsl/gsl_vector.h&gt;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;gsl/gsl_matrix.h&gt;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">//  Some GSL optimization on by default, off if DEBUG or SAFE_GSL is defined</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#ifndef DEBUG</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#ifndef SAFE_GSL</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="_g_s_l_utility_8h.html#a09f6b3f804ed006f45f3c04a0342331f">   29</a></span>&#160;<span class="preprocessor">#define GSL_RANGE_CHECK_OFF 1</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_i_exception_8h.html">IException.h</a>&quot;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keyword">namespace </span>GSL {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html">   69</a></span>&#160;    <span class="keyword">class </span><a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html">GSLUtility</a> {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">   71</a></span>&#160;        <span class="keyword">typedef</span> TNT::Array1D&lt;double&gt; <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">GSLVector</a>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">   72</a></span>&#160;        <span class="keyword">typedef</span> TNT::Array2D&lt;double&gt; <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keyword">static</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html">GSLUtility</a> *<a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae26e52636a08f5e04caabd1ea8f993c4">getInstance</a>();</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a86b0eaf14b041cd426f07f1797e166df">   77</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a86b0eaf14b041cd426f07f1797e166df">success</a>(<span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae30b25f688e5210eabf607070448ab6a">status</a>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;          <span class="keywordflow">return</span> (<a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae30b25f688e5210eabf607070448ab6a">status</a> == GSL_SUCCESS);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        }</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae30b25f688e5210eabf607070448ab6a">   87</a></span>&#160;        <span class="keyword">inline</span> QString <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae30b25f688e5210eabf607070448ab6a">status</a>(<span class="keywordtype">int</span> gsl_errno)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;          <span class="keywordflow">return</span> (QString(gsl_strerror(gsl_errno)));</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        }</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ac87bfb687484447f78f8b8891e4857bf">check</a>(<span class="keywordtype">int</span> gsl_status, <span class="keyword">const</span> <span class="keywordtype">char</span> *src = __FILE__, <span class="keywordtype">int</span> line = __LINE__)</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a0dac4e7856739c681876abfd1d410726">Rows</a>(<span class="keyword">const</span> gsl_matrix *m) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af112fc48a3b39088efba9a56715fc815">Columns</a>(<span class="keyword">const</span> gsl_matrix *m) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a0dac4e7856739c681876abfd1d410726">Rows</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a> &amp;m) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af112fc48a3b39088efba9a56715fc815">Columns</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a> &amp;m) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a174bcbf826514da27ab74636fa8d0385">size</a>(<span class="keyword">const</span> gsl_vector *v) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a174bcbf826514da27ab74636fa8d0385">size</a>(<span class="keyword">const</span> gsl_matrix *m) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        gsl_vector *<a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af521f5fb7aaee11eefb88313c9d88e39">vector</a>(<span class="keywordtype">size_t</span> n, <span class="keywordtype">bool</span> zero = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        gsl_matrix *<a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae002183ecb759cadd98e40ee289ff85a">matrix</a>(<span class="keywordtype">size_t</span> n1, <span class="keywordtype">size_t</span> n2, <span class="keywordtype">bool</span> zero = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        gsl_matrix *<a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#afa24801a4006551f91f9c12912120118">identity</a>(<span class="keywordtype">size_t</span> n1, <span class="keywordtype">size_t</span> n2) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a25691ce3a5797e63a58525096f3c0848">setIdentity</a>(gsl_matrix *m) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a164233abced1532ea5df6f0f5659bb1f">free</a>(gsl_vector *v) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a164233abced1532ea5df6f0f5659bb1f">free</a>(gsl_matrix *m) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">GSLVector</a> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a18850c00f882e7b84c419d0e99048eab">gslToGSL</a>(<span class="keyword">const</span> gsl_vector *v) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a18850c00f882e7b84c419d0e99048eab">gslToGSL</a>(<span class="keyword">const</span> gsl_matrix *m) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        gsl_vector *<a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a2c4a0bf550c22278bf9dc734f3561602">GSLTogsl</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">GSLVector</a> &amp;v, gsl_vector *gv = 0) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        gsl_matrix *<a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a2c4a0bf550c22278bf9dc734f3561602">GSLTogsl</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a> &amp;m, gsl_matrix *gm = 0) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;      <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="comment">//  Private Constructor/Destructor makes this a singleton</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html">GSLUtility</a>();</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        ~<a class="code" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html">GSLUtility</a>() { }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keyword">static</span> GSLUtility *_instance;  </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> handler(<span class="keyword">const</span> <span class="keywordtype">char</span> *reason, <span class="keyword">const</span> <span class="keywordtype">char</span> *file, <span class="keywordtype">int</span> line,</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                            <span class="keywordtype">int</span> gsl_errno);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    };</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;  } <span class="comment">// namespace GSL</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;}     <span class="comment">// namespace Isis</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="ttc" id="a_i_exception_8h_html"><div class="ttname"><a href="_i_exception_8h.html">IException.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html">Isis::GSL::GSLUtility</a></div><div class="ttdoc">GSLUtility Provides top level interface to the GNU GSL.</div><div class="ttdef"><b>Definition:</b> GSLUtility.h:69</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_a07456502a51850872a757df8a920ac85"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">Isis::GSL::GSLUtility::GSLMatrix</a></div><div class="ttdeci">TNT::Array2D&lt; double &gt; GSLMatrix</div><div class="ttdef"><b>Definition:</b> GSLUtility.h:72</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_a0dac4e7856739c681876abfd1d410726"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a0dac4e7856739c681876abfd1d410726">Isis::GSL::GSLUtility::Rows</a></div><div class="ttdeci">size_t Rows(const gsl_matrix *m) const</div><div class="ttdoc">Returns number of rows in a GSL matrix.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:267</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_a164233abced1532ea5df6f0f5659bb1f"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a164233abced1532ea5df6f0f5659bb1f">Isis::GSL::GSLUtility::free</a></div><div class="ttdeci">void free(gsl_vector *v) const</div><div class="ttdoc">Frees a GSL vector.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:141</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_a174bcbf826514da27ab74636fa8d0385"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a174bcbf826514da27ab74636fa8d0385">Isis::GSL::GSLUtility::size</a></div><div class="ttdeci">size_t size(const gsl_vector *v) const</div><div class="ttdoc">Returns the size of a GSL vector.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:287</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_a18850c00f882e7b84c419d0e99048eab"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a18850c00f882e7b84c419d0e99048eab">Isis::GSL::GSLUtility::gslToGSL</a></div><div class="ttdeci">GSLVector gslToGSL(const gsl_vector *v) const</div><div class="ttdoc">Converts a GSL vector to a TNT-based vector.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:171</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_a25691ce3a5797e63a58525096f3c0848"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a25691ce3a5797e63a58525096f3c0848">Isis::GSL::GSLUtility::setIdentity</a></div><div class="ttdeci">void setIdentity(gsl_matrix *m) const</div><div class="ttdoc">Initializes an existing GSL matrix to the identity matrix.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:125</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_a2c4a0bf550c22278bf9dc734f3561602"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a2c4a0bf550c22278bf9dc734f3561602">Isis::GSL::GSLUtility::GSLTogsl</a></div><div class="ttdeci">gsl_vector * GSLTogsl(const GSLVector &amp;v, gsl_vector *gv=0) const</div><div class="ttdoc">Converts TNT-based vector to GSL vector.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:212</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_a86b0eaf14b041cd426f07f1797e166df"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a86b0eaf14b041cd426f07f1797e166df">Isis::GSL::GSLUtility::success</a></div><div class="ttdeci">bool success(int status) const</div><div class="ttdoc">Tests if status is success.</div><div class="ttdef"><b>Definition:</b> GSLUtility.h:77</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_a91ddc93180cb7735ccfde78885142b09"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">Isis::GSL::GSLUtility::GSLVector</a></div><div class="ttdeci">TNT::Array1D&lt; double &gt; GSLVector</div><div class="ttdef"><b>Definition:</b> GSLUtility.h:71</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_ac87bfb687484447f78f8b8891e4857bf"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ac87bfb687484447f78f8b8891e4857bf">Isis::GSL::GSLUtility::check</a></div><div class="ttdeci">void check(int gsl_status, const char *src=__FILE__, int line=__LINE__) const</div><div class="ttdoc">Performs a check on GSL library function return status.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:307</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_ae002183ecb759cadd98e40ee289ff85a"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae002183ecb759cadd98e40ee289ff85a">Isis::GSL::GSLUtility::matrix</a></div><div class="ttdeci">gsl_matrix * matrix(size_t n1, size_t n2, bool zero=false) const</div><div class="ttdoc">Creates a GSL matrix.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:93</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_ae26e52636a08f5e04caabd1ea8f993c4"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae26e52636a08f5e04caabd1ea8f993c4">Isis::GSL::GSLUtility::getInstance</a></div><div class="ttdeci">static GSLUtility * getInstance()</div><div class="ttdoc">Return a reference to the GSL (singleton) object.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:49</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_ae30b25f688e5210eabf607070448ab6a"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae30b25f688e5210eabf607070448ab6a">Isis::GSL::GSLUtility::status</a></div><div class="ttdeci">QString status(int gsl_errno) const</div><div class="ttdoc">Returns GSL specific error text.</div><div class="ttdef"><b>Definition:</b> GSLUtility.h:87</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_af112fc48a3b39088efba9a56715fc815"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af112fc48a3b39088efba9a56715fc815">Isis::GSL::GSLUtility::Columns</a></div><div class="ttdeci">size_t Columns(const gsl_matrix *m) const</div><div class="ttdoc">Returns the number of coulumns in a GSL matrix.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:272</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_af521f5fb7aaee11eefb88313c9d88e39"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af521f5fb7aaee11eefb88313c9d88e39">Isis::GSL::GSLUtility::vector</a></div><div class="ttdeci">gsl_vector * vector(size_t n, bool zero=false) const</div><div class="ttdoc">Creates a GSL vector.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:70</div></div>
+<div class="ttc" id="aclass_isis_1_1_g_s_l_1_1_g_s_l_utility_html_afa24801a4006551f91f9c12912120118"><div class="ttname"><a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#afa24801a4006551f91f9c12912120118">Isis::GSL::GSLUtility::identity</a></div><div class="ttdeci">gsl_matrix * identity(size_t n1, size_t n2) const</div><div class="ttdoc">Returns a GSL identity matrix of the specified size.</div><div class="ttdef"><b>Definition:</b> GSLUtility.cpp:114</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_c723ba722ea951a5929a8b3503a8d30e.html">GSLUtility</a></li><li class="navelem"><a class="el" href="_g_s_l_utility_8h.html">GSLUtility.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

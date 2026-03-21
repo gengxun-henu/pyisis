@@ -1,0 +1,1366 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::iTime Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1i_time.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
+<a href="class_isis_1_1i_time-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::iTime Class Reference<div class="ingroups"><a class="el" href="group___parsing.html">Parsing</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Parse and return pieces of a time string.  
+ <a href="class_isis_1_1i_time.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="i_time_8h_source.html">iTime.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::iTime:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1i_time__coll__graph.png" border="0" usemap="#a_isis_1_1i_time_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1i_time_coll__map" id="a_isis_1_1i_time_coll__map">
+<area shape="rect" title="Parse and return pieces of a time string." alt="" coords="5,5,150,279"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aea35f1c20d47c0f2e58fc660904d3a5d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#aea35f1c20d47c0f2e58fc660904d3a5d">iTime</a> ()</td></tr>
+<tr class="memdesc:aea35f1c20d47c0f2e58fc660904d3a5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an empty <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object.  <a href="class_isis_1_1i_time.html#aea35f1c20d47c0f2e58fc660904d3a5d">More...</a><br /></td></tr>
+<tr class="separator:aea35f1c20d47c0f2e58fc660904d3a5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8902a0f473103433a6e65051b625881"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#ad8902a0f473103433a6e65051b625881">iTime</a> (const QString &amp;time)</td></tr>
+<tr class="memdesc:ad8902a0f473103433a6e65051b625881"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object and initializes it to the time from the argument.  <a href="class_isis_1_1i_time.html#ad8902a0f473103433a6e65051b625881">More...</a><br /></td></tr>
+<tr class="separator:ad8902a0f473103433a6e65051b625881"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76587de949c4bffe1bdc4cc6b38c9e93"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a76587de949c4bffe1bdc4cc6b38c9e93">iTime</a> (const double time)</td></tr>
+<tr class="memdesc:a76587de949c4bffe1bdc4cc6b38c9e93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object and initializes it to the time from the argument.  <a href="class_isis_1_1i_time.html#a76587de949c4bffe1bdc4cc6b38c9e93">More...</a><br /></td></tr>
+<tr class="separator:a76587de949c4bffe1bdc4cc6b38c9e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad160a25ab50d3d92c2024394fc43f0ea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#ad160a25ab50d3d92c2024394fc43f0ea">~iTime</a> ()</td></tr>
+<tr class="separator:ad160a25ab50d3d92c2024394fc43f0ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4be80e246dc3ad40cb234d3913f21b8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a4be80e246dc3ad40cb234d3913f21b8a">operator=</a> (const QString &amp;time)</td></tr>
+<tr class="memdesc:a4be80e246dc3ad40cb234d3913f21b8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the value of the <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object.  <a href="class_isis_1_1i_time.html#a4be80e246dc3ad40cb234d3913f21b8a">More...</a><br /></td></tr>
+<tr class="separator:a4be80e246dc3ad40cb234d3913f21b8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5700c6f90b064ede2fff76d97baad984"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a5700c6f90b064ede2fff76d97baad984">operator=</a> (const char *time)</td></tr>
+<tr class="separator:a5700c6f90b064ede2fff76d97baad984"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73e2346eabd553c5b4e4d10efcda3ff8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a73e2346eabd553c5b4e4d10efcda3ff8">operator=</a> (const double time)</td></tr>
+<tr class="separator:a73e2346eabd553c5b4e4d10efcda3ff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0844d5fabae0a98f86ddc19f440cd7e7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a0844d5fabae0a98f86ddc19f440cd7e7">operator&gt;=</a> (const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;time)</td></tr>
+<tr class="memdesc:a0844d5fabae0a98f86ddc19f440cd7e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for greater than or equal.  <a href="class_isis_1_1i_time.html#a0844d5fabae0a98f86ddc19f440cd7e7">More...</a><br /></td></tr>
+<tr class="separator:a0844d5fabae0a98f86ddc19f440cd7e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca7c3dc6f6d636eb1fc02a177c6413eb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#aca7c3dc6f6d636eb1fc02a177c6413eb">operator&lt;=</a> (const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;time)</td></tr>
+<tr class="memdesc:aca7c3dc6f6d636eb1fc02a177c6413eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for less than or equal.  <a href="class_isis_1_1i_time.html#aca7c3dc6f6d636eb1fc02a177c6413eb">More...</a><br /></td></tr>
+<tr class="separator:aca7c3dc6f6d636eb1fc02a177c6413eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ca6fc008906afa53a9a0c530b4f01e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a5ca6fc008906afa53a9a0c530b4f01e5">operator&gt;</a> (const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;time)</td></tr>
+<tr class="memdesc:a5ca6fc008906afa53a9a0c530b4f01e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for greater than.  <a href="class_isis_1_1i_time.html#a5ca6fc008906afa53a9a0c530b4f01e5">More...</a><br /></td></tr>
+<tr class="separator:a5ca6fc008906afa53a9a0c530b4f01e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81eb4f3f5ced8b3d0469a4d620d0c3cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a81eb4f3f5ced8b3d0469a4d620d0c3cb">operator&lt;</a> (const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;time)</td></tr>
+<tr class="memdesc:a81eb4f3f5ced8b3d0469a4d620d0c3cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for less than.  <a href="class_isis_1_1i_time.html#a81eb4f3f5ced8b3d0469a4d620d0c3cb">More...</a><br /></td></tr>
+<tr class="separator:a81eb4f3f5ced8b3d0469a4d620d0c3cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34722e915469a678846a38a485bfe754"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a34722e915469a678846a38a485bfe754">operator!=</a> (const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;time)</td></tr>
+<tr class="memdesc:a34722e915469a678846a38a485bfe754"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for inequality.  <a href="class_isis_1_1i_time.html#a34722e915469a678846a38a485bfe754">More...</a><br /></td></tr>
+<tr class="separator:a34722e915469a678846a38a485bfe754"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2c80ce1701caf306ffc45652c0cd9fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#af2c80ce1701caf306ffc45652c0cd9fe">operator==</a> (const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;time)</td></tr>
+<tr class="memdesc:af2c80ce1701caf306ffc45652c0cd9fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for equality.  <a href="class_isis_1_1i_time.html#af2c80ce1701caf306ffc45652c0cd9fe">More...</a><br /></td></tr>
+<tr class="separator:af2c80ce1701caf306ffc45652c0cd9fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad87a0cba988258683918599bce8ec67"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#aad87a0cba988258683918599bce8ec67">operator+</a> (const double &amp;secondsToAdd) const</td></tr>
+<tr class="separator:aad87a0cba988258683918599bce8ec67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefb089ecab45e4d616bbd63b60d2f5e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#aefb089ecab45e4d616bbd63b60d2f5e6">operator+=</a> (const double &amp;secondsToAdd)</td></tr>
+<tr class="separator:aefb089ecab45e4d616bbd63b60d2f5e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3856ddff40976c4f07bfdc6f818f671d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a3856ddff40976c4f07bfdc6f818f671d">operator-</a> (const double &amp;secondsToSubtract) const</td></tr>
+<tr class="separator:a3856ddff40976c4f07bfdc6f818f671d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adade2c661fa446c1acc66c7f84cc8725"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#adade2c661fa446c1acc66c7f84cc8725">operator-</a> (const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;iTimeToSubtract) const</td></tr>
+<tr class="separator:adade2c661fa446c1acc66c7f84cc8725"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbbb12a1ef7177d064d525b2ee07facc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#acbbb12a1ef7177d064d525b2ee07facc">operator-=</a> (const double &amp;secondsToSubtract)</td></tr>
+<tr class="separator:acbbb12a1ef7177d064d525b2ee07facc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa932d46ea65ba5c871ed998dd959c63f"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#aa932d46ea65ba5c871ed998dd959c63f">YearString</a> () const</td></tr>
+<tr class="memdesc:aa932d46ea65ba5c871ed998dd959c63f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the year portion of the time as a string.  <a href="class_isis_1_1i_time.html#aa932d46ea65ba5c871ed998dd959c63f">More...</a><br /></td></tr>
+<tr class="separator:aa932d46ea65ba5c871ed998dd959c63f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5ad0d24f46e1aae3bad010199a24926"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#ae5ad0d24f46e1aae3bad010199a24926">Year</a> () const</td></tr>
+<tr class="memdesc:ae5ad0d24f46e1aae3bad010199a24926"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the year portion of the time as an int.  <a href="class_isis_1_1i_time.html#ae5ad0d24f46e1aae3bad010199a24926">More...</a><br /></td></tr>
+<tr class="separator:ae5ad0d24f46e1aae3bad010199a24926"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65e0eb1338d7e670baaa77ba1aceb9c8"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a65e0eb1338d7e670baaa77ba1aceb9c8">MonthString</a> () const</td></tr>
+<tr class="memdesc:a65e0eb1338d7e670baaa77ba1aceb9c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the month portion of the time as a string.  <a href="class_isis_1_1i_time.html#a65e0eb1338d7e670baaa77ba1aceb9c8">More...</a><br /></td></tr>
+<tr class="separator:a65e0eb1338d7e670baaa77ba1aceb9c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93c6d768b952328ac5cfda0c80c2236b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a93c6d768b952328ac5cfda0c80c2236b">Month</a> () const</td></tr>
+<tr class="memdesc:a93c6d768b952328ac5cfda0c80c2236b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the month portion of the time as an int.  <a href="class_isis_1_1i_time.html#a93c6d768b952328ac5cfda0c80c2236b">More...</a><br /></td></tr>
+<tr class="separator:a93c6d768b952328ac5cfda0c80c2236b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5961c1437807c92a014e6bf894dffbc3"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a5961c1437807c92a014e6bf894dffbc3">DayString</a> () const</td></tr>
+<tr class="memdesc:a5961c1437807c92a014e6bf894dffbc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the dat portion of the time as a string.  <a href="class_isis_1_1i_time.html#a5961c1437807c92a014e6bf894dffbc3">More...</a><br /></td></tr>
+<tr class="separator:a5961c1437807c92a014e6bf894dffbc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59a04649b1dc3254d0949ce540bd3a82"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a59a04649b1dc3254d0949ce540bd3a82">Day</a> () const</td></tr>
+<tr class="memdesc:a59a04649b1dc3254d0949ce540bd3a82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the day portion of the time as an int.  <a href="class_isis_1_1i_time.html#a59a04649b1dc3254d0949ce540bd3a82">More...</a><br /></td></tr>
+<tr class="separator:a59a04649b1dc3254d0949ce540bd3a82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04fbf96cea2210ad9b32227d3f11f4a2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a04fbf96cea2210ad9b32227d3f11f4a2">HourString</a> () const</td></tr>
+<tr class="memdesc:a04fbf96cea2210ad9b32227d3f11f4a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the hour portion of the time as a string.  <a href="class_isis_1_1i_time.html#a04fbf96cea2210ad9b32227d3f11f4a2">More...</a><br /></td></tr>
+<tr class="separator:a04fbf96cea2210ad9b32227d3f11f4a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b056db65c0be20cd650ddce7a1e60e3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a0b056db65c0be20cd650ddce7a1e60e3">Hour</a> () const</td></tr>
+<tr class="memdesc:a0b056db65c0be20cd650ddce7a1e60e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the hour portion of the time as an int.  <a href="class_isis_1_1i_time.html#a0b056db65c0be20cd650ddce7a1e60e3">More...</a><br /></td></tr>
+<tr class="separator:a0b056db65c0be20cd650ddce7a1e60e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a691e8dbd1f2b5cdcbf91b02c2848555d"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a691e8dbd1f2b5cdcbf91b02c2848555d">MinuteString</a> () const</td></tr>
+<tr class="memdesc:a691e8dbd1f2b5cdcbf91b02c2848555d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the minute portion of the time as a string.  <a href="class_isis_1_1i_time.html#a691e8dbd1f2b5cdcbf91b02c2848555d">More...</a><br /></td></tr>
+<tr class="separator:a691e8dbd1f2b5cdcbf91b02c2848555d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa33c884d05d0408ae8f7e918594e884f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#aa33c884d05d0408ae8f7e918594e884f">Minute</a> () const</td></tr>
+<tr class="memdesc:aa33c884d05d0408ae8f7e918594e884f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the minute portion of the time as an int.  <a href="class_isis_1_1i_time.html#aa33c884d05d0408ae8f7e918594e884f">More...</a><br /></td></tr>
+<tr class="separator:aa33c884d05d0408ae8f7e918594e884f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c5c55c6e3bba06359199144ba9f6706"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a5c5c55c6e3bba06359199144ba9f6706">SecondString</a> (int precision=8) const</td></tr>
+<tr class="memdesc:a5c5c55c6e3bba06359199144ba9f6706"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the second portion of the time as a string.  <a href="class_isis_1_1i_time.html#a5c5c55c6e3bba06359199144ba9f6706">More...</a><br /></td></tr>
+<tr class="separator:a5c5c55c6e3bba06359199144ba9f6706"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f317f67f6e68cee981dbf64a6c38b7e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a2f317f67f6e68cee981dbf64a6c38b7e">Second</a> () const</td></tr>
+<tr class="memdesc:a2f317f67f6e68cee981dbf64a6c38b7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the second portion of the time as a double.  <a href="class_isis_1_1i_time.html#a2f317f67f6e68cee981dbf64a6c38b7e">More...</a><br /></td></tr>
+<tr class="separator:a2f317f67f6e68cee981dbf64a6c38b7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22407183c85901048bc6bb918d92d559"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a22407183c85901048bc6bb918d92d559">DayOfYearString</a> () const</td></tr>
+<tr class="memdesc:a22407183c85901048bc6bb918d92d559"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the day of year portion of the time as a string.  <a href="class_isis_1_1i_time.html#a22407183c85901048bc6bb918d92d559">More...</a><br /></td></tr>
+<tr class="separator:a22407183c85901048bc6bb918d92d559"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4a5a7753158acf8ef0e9526442e8988"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#aa4a5a7753158acf8ef0e9526442e8988">DayOfYear</a> () const</td></tr>
+<tr class="memdesc:aa4a5a7753158acf8ef0e9526442e8988"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the day of year portion of the time as an int.  <a href="class_isis_1_1i_time.html#aa4a5a7753158acf8ef0e9526442e8988">More...</a><br /></td></tr>
+<tr class="separator:aa4a5a7753158acf8ef0e9526442e8988"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3eee36499d0e84da1c01ef5e866d44e2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a3eee36499d0e84da1c01ef5e866d44e2">EtString</a> () const</td></tr>
+<tr class="memdesc:a3eee36499d0e84da1c01ef5e866d44e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ephemeris time (TDB) representation of the time as a string.  <a href="class_isis_1_1i_time.html#a3eee36499d0e84da1c01ef5e866d44e2">More...</a><br /></td></tr>
+<tr class="separator:a3eee36499d0e84da1c01ef5e866d44e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c6a5003750470e995c04af9c8b60927"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a4c6a5003750470e995c04af9c8b60927">Et</a> () const</td></tr>
+<tr class="memdesc:a4c6a5003750470e995c04af9c8b60927"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ephemeris time (TDB) representation of the time as a double.  <a href="class_isis_1_1i_time.html#a4c6a5003750470e995c04af9c8b60927">More...</a><br /></td></tr>
+<tr class="separator:a4c6a5003750470e995c04af9c8b60927"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab015714074c94547cd84a4862a19dfee"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#ab015714074c94547cd84a4862a19dfee">UTC</a> (int precision=8) const</td></tr>
+<tr class="memdesc:ab015714074c94547cd84a4862a19dfee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the internally stored time, formatted as a UTC time.  <a href="class_isis_1_1i_time.html#ab015714074c94547cd84a4862a19dfee">More...</a><br /></td></tr>
+<tr class="separator:ab015714074c94547cd84a4862a19dfee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71f7d363891c96ef35e089ae3b877d55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a71f7d363891c96ef35e089ae3b877d55">setEt</a> (double et)</td></tr>
+<tr class="separator:a71f7d363891c96ef35e089ae3b877d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a437abf70dc8fda474df4466dbbfd7686"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a437abf70dc8fda474df4466dbbfd7686">setUtc</a> (QString utcString)</td></tr>
+<tr class="separator:a437abf70dc8fda474df4466dbbfd7686"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a956dc17ee66df1e3a277321b63ef92e7"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a956dc17ee66df1e3a277321b63ef92e7">CurrentGMT</a> ()</td></tr>
+<tr class="memdesc:a956dc17ee66df1e3a277321b63ef92e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current Greenwich Mean <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> The time is based on the system time, so it is only as accurate as the local system clock.  <a href="class_isis_1_1i_time.html#a956dc17ee66df1e3a277321b63ef92e7">More...</a><br /></td></tr>
+<tr class="separator:a956dc17ee66df1e3a277321b63ef92e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bbd150759d0fefe811671c52e91d97b"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a4bbd150759d0fefe811671c52e91d97b">CurrentLocalTime</a> ()</td></tr>
+<tr class="memdesc:a4bbd150759d0fefe811671c52e91d97b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current local time This time is taken directly from the system clock, so if the system clock is off, this will be, too.  <a href="class_isis_1_1i_time.html#a4bbd150759d0fefe811671c52e91d97b">More...</a><br /></td></tr>
+<tr class="separator:a4bbd150759d0fefe811671c52e91d97b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a78545bfd1b450108da0a71d1b4648e04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a78545bfd1b450108da0a71d1b4648e04">operator+</a> (const double &amp;secondsToAdd, <a class="el" href="class_isis_1_1i_time.html">iTime</a> time)</td></tr>
+<tr class="separator:a78545bfd1b450108da0a71d1b4648e04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e30ae11057b7eca463644d82b234769"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1i_time.html#a1e30ae11057b7eca463644d82b234769">operator-</a> (const double &amp;secondsToSubtract, <a class="el" href="class_isis_1_1i_time.html">iTime</a> time)</td></tr>
+<tr class="separator:a1e30ae11057b7eca463644d82b234769"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Parse and return pieces of a time string. </p>
+<p>This class parses a date/time string into individual components. The input time string can be in a variety of formats (see the NAIF routine str2et_c). The components and different representation can then be returned using the member functions.</p>
+<dl class="section author"><dt>Author</dt><dd>2003-10-24 Stuart Sides </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aea35f1c20d47c0f2e58fc660904d3a5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea35f1c20d47c0f2e58fc660904d3a5d">&#9670;&nbsp;</a></span>iTime() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::iTime::iTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an empty <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object. </p>
+
+</div>
+</div>
+<a id="ad8902a0f473103433a6e65051b625881"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8902a0f473103433a6e65051b625881">&#9670;&nbsp;</a></span>iTime() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::iTime::iTime </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object and initializes it to the time from the argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>A time string formatted in standard UTC or similar format. Example:"2000/12/31 23:59:01.6789" or "2000-12-31T23:59:01.6789" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a76587de949c4bffe1bdc4cc6b38c9e93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76587de949c4bffe1bdc4cc6b38c9e93">&#9670;&nbsp;</a></span>iTime() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::iTime::iTime </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object and initializes it to the time from the argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>An ephemeris time (ET). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad160a25ab50d3d92c2024394fc43f0ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad160a25ab50d3d92c2024394fc43f0ea">&#9670;&nbsp;</a></span>~iTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::iTime::~iTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a956dc17ee66df1e3a277321b63ef92e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a956dc17ee66df1e3a277321b63ef92e7">&#9670;&nbsp;</a></span>CurrentGMT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::iTime::CurrentGMT </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the current Greenwich Mean <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> The time is based on the system time, so it is only as accurate as the local system clock. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString The Current GMT </dd></dl>
+
+</div>
+</div>
+<a id="a4bbd150759d0fefe811671c52e91d97b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bbd150759d0fefe811671c52e91d97b">&#9670;&nbsp;</a></span>CurrentLocalTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::iTime::CurrentLocalTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the current local time This time is taken directly from the system clock, so if the system clock is off, this will be, too. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString The cutrrent local time </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_jigsaw_run_widget.html#af71621d5fc0e661b842bf7465e6b45cb">Isis::JigsawRunWidget::bundleFinished()</a>, and <a class="el" href="class_isis_1_1_bundle_solution_info.html#ad2f0ed86670dbbe9d937841c784f8411">Isis::BundleSolutionInfo::outputHeader()</a>.</p>
+
+</div>
+</div>
+<a id="a59a04649b1dc3254d0949ce540bd3a82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59a04649b1dc3254d0949ce540bd3a82">&#9670;&nbsp;</a></span>Day()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::iTime::Day </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the day portion of the time as an int. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">Isis::IString::ToInteger()</a>.</p>
+
+</div>
+</div>
+<a id="aa4a5a7753158acf8ef0e9526442e8988"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4a5a7753158acf8ef0e9526442e8988">&#9670;&nbsp;</a></span>DayOfYear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::iTime::DayOfYear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the day of year portion of the time as an int. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">Isis::IString::ToInteger()</a>.</p>
+
+</div>
+</div>
+<a id="a22407183c85901048bc6bb918d92d559"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22407183c85901048bc6bb918d92d559">&#9670;&nbsp;</a></span>DayOfYearString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::iTime::DayOfYearString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the day of year portion of the time as a string. </p>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a5961c1437807c92a014e6bf894dffbc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5961c1437807c92a014e6bf894dffbc3">&#9670;&nbsp;</a></span>DayString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::iTime::DayString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the dat portion of the time as a string. </p>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a4c6a5003750470e995c04af9c8b60927"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c6a5003750470e995c04af9c8b60927">&#9670;&nbsp;</a></span>Et()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::iTime::Et </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the ephemeris time (TDB) representation of the time as a double. </p>
+
+<p class="reference">Referenced by <a class="el" href="group___mars_reconnaissance_orbiter.html#gaa2961a0d1b22ff4c863afb9186ff0338">Isis::Chandrayaan1M3Camera::Chandrayaan1M3Camera()</a>, <a class="el" href="class_isis_1_1_clipper_nac_rolling_shutter_camera.html#aa04790bb0966aa885f45b93497768bdb">Isis::ClipperNacRollingShutterCamera::ClipperNacRollingShutterCamera()</a>, <a class="el" href="class_isis_1_1_clipper_push_broom_camera.html#a25a29b46174884c9df0f635f780eb0e1">Isis::ClipperPushBroomCamera::ClipperPushBroomCamera()</a>, <a class="el" href="class_isis_1_1_clipper_wac_fc_camera.html#a3d9ff3ecf2a7580875a23c6a6d8d6dc9">Isis::ClipperWacFcCamera::ClipperWacFcCamera()</a>, <a class="el" href="class_isis_1_1_spice.html#a4566eff137aaadd65210250838f6ba15">Isis::Spice::computeSolarLongitude()</a>, <a class="el" href="class_isis_1_1_spice.html#a5de3ec960830a28a88a682115fa0a750">Isis::Spice::createCache()</a>, <a class="el" href="class_isis_1_1_crism_camera.html#a140a2397a1035544a59f584df5228ea6">Isis::CrismCamera::CrismCamera()</a>, <a class="el" href="class_isis_1_1_c_t_x_camera.html#a57b1a9eb8d72daab7e1d22000ce818a0">Isis::CTXCamera::CTXCamera()</a>, <a class="el" href="class_isis_1_1_dawn_fc_camera.html#a681968ed3697a89997d9ce3742f56fcc">Isis::DawnFcCamera::DawnFcCamera()</a>, <a class="el" href="class_isis_1_1_line_scan_camera_ground_map.html#a1f943e11dbd5161b7aec1380ec4ef3ce">Isis::LineScanCameraGroundMap::FindFocalPlane()</a>, <a class="el" href="class_isis_1_1_hires_camera.html#a180c7e99246c852d64b1841e720d8259">Isis::HiresCamera::HiresCamera()</a>, <a class="el" href="class_isis_1_1_hirise_camera.html#a034da3530dce257d36fa71c34ee6605e">Isis::HiriseCamera::HiriseCamera()</a>, <a class="el" href="class_isis_1_1_vims_ground_map.html#acba916653b591fe5acee66bb46c53cd9">Isis::VimsGroundMap::Init()</a>, <a class="el" href="class_isis_1_1_vims_sky_map.html#a5f4b97d3a1a0a5912f1219bc74a17d5e">Isis::VimsSkyMap::Init()</a>, <a class="el" href="class_isis_1_1_iss_n_a_camera.html#ae1379469ffc23988311c1f281c6a4be4">Isis::IssNACamera::IssNACamera()</a>, <a class="el" href="class_isis_1_1_iss_w_a_camera.html#a40939367de14f4ceab92e63cbac5483f">Isis::IssWACamera::IssWACamera()</a>, <a class="el" href="class_isis_1_1_juno_camera.html#a96ed76797e1ab321f76904fcdf0ab3be">Isis::JunoCamera::JunoCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_mi_camera.html#aff13b02798fc8d4ada958ec542d8c832">Isis::KaguyaMiCamera::KaguyaMiCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_tc_camera.html#aa3a277ae3b92dd76f39e3afcb2259ad0">Isis::KaguyaTcCamera::KaguyaTcCamera()</a>, <a class="el" href="class_isis_1_1_lo_high_camera.html#a5d1c553aa0747b7e8278fe7c04710368">Isis::LoHighCamera::LoHighCamera()</a>, <a class="el" href="class_isis_1_1_lo_medium_camera.html#a867c099f83e4b758eedc59e08208c573">Isis::LoMediumCamera::LoMediumCamera()</a>, <a class="el" href="class_isis_1_1_lro_narrow_angle_camera.html#a7e310784f7229b84c9e5cdaa8a7487dd">Isis::LroNarrowAngleCamera::LroNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera.html#acce0f513400fbbb2adcb751f7a320d79">Isis::LroWideAngleCamera::LroWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_lwir_camera.html#a3de974cfebf81e9d0e8418af30ca0dae">Isis::LwirCamera::LwirCamera()</a>, <a class="el" href="class_isis_1_1_marci_camera.html#ab1c614622a0615f3e54eaad3e99e818e">Isis::MarciCamera::MarciCamera()</a>, <a class="el" href="class_isis_1_1_mini_r_f.html#abfbbad9e21bfe48dade11108298f9a80">Isis::MiniRF::MiniRF()</a>, <a class="el" href="class_isis_1_1_moc_narrow_angle_camera.html#afd8e7c069fbe9162dfae5f5cc0389124">Isis::MocNarrowAngleCamera::MocNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_moc_wide_angle_camera.html#a03c12a9dfe9b300937e1944311955351">Isis::MocWideAngleCamera::MocWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_msi_camera.html#a26cd32f4b430371dac263ae065a336ea">Isis::MsiCamera::MsiCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a1f6437c5488c941495cea26ae543ffb5">Isis::NewHorizonsLeisaCamera::NewHorizonsLeisaCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_lorri_camera.html#a7c9ad07352411bdec6111ffb87088528">Isis::NewHorizonsLorriCamera::NewHorizonsLorriCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_frame_camera.html#aa48c3e21156c83a7d54963f0240b501a">Isis::NewHorizonsMvicFrameCamera::NewHorizonsMvicFrameCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_tdi_camera.html#acd1c6614f017d336ba407044aa76526f">Isis::NewHorizonsMvicTdiCamera::NewHorizonsMvicTdiCamera()</a>, <a class="el" href="class_isis_1_1_nir_camera.html#ab4115fe38276b4964d91c60b20765efe">Isis::NirCamera::NirCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_camera.html#a04a1d8ee6e5f7a0b894bea4c632c723a">Isis::OsirisRexOcamsCamera::OsirisRexOcamsCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_tagcams_camera.html#abfe161a325a14b8ee463f4bf36f2e8fd">Isis::OsirisRexTagcamsCamera::OsirisRexTagcamsCamera()</a>, <a class="el" href="class_isis_1_1_rosetta_osiris_camera.html#a07c6aefe99418ce646206f2e97b6ee30">Isis::RosettaOsirisCamera::RosettaOsirisCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_frame_camera.html#a8b2169eac30192eaf01102b4241d5aad">Isis::NewHorizonsMvicFrameCamera::SetBand()</a>, <a class="el" href="class_isis_1_1_line_scan_camera_detector_map.html#a2333a7830f3d56370a5c6d125e3485ca">Isis::LineScanCameraDetectorMap::SetDetector()</a>, <a class="el" href="class_isis_1_1_radar_pulse_map.html#a49152e3372c95ef321517f125a9e294b">Isis::RadarPulseMap::SetDetector()</a>, <a class="el" href="class_isis_1_1_variable_line_scan_camera_detector_map.html#a020f7d540418523f335518e9bbdc6b83">Isis::VariableLineScanCameraDetectorMap::SetDetector()</a>, <a class="el" href="class_isis_1_1_radar_slant_range_map.html#af9fe30da54558d03541223bc8bdbac08">Isis::RadarSlantRangeMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_camera_detector_map.html#af7f1e8daeeb924e306190ff1639c1219">Isis::CameraDetectorMap::SetParent()</a>, <a class="el" href="class_isis_1_1_rolling_shutter_camera_detector_map.html#ae95d85080321cad08503e4a8362a535b">Isis::RollingShutterCameraDetectorMap::SetParent()</a>, <a class="el" href="class_isis_1_1_spice.html#a03c9f95754aa3316be17605a93ebfb3e">Isis::Spice::setTime()</a>, <a class="el" href="class_isis_1_1_radar_slant_range_map.html#a652ed381cf8b5bb6507adf5375bed30b">Isis::RadarSlantRangeMap::SetUndistortedFocalPlane()</a>, <a class="el" href="class_isis_1_1_viking_camera.html#a5294aa8f07fefac21e9c2443b8960047">Isis::VikingCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_voyager_camera.html#ad1170f356b20e62e73b3bf2e8aeda603">Isis::VoyagerCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_ssi_camera.html#a9dcb28e566215656e1983c90bf316651">Isis::SsiCamera::SsiCamera()</a>, <a class="el" href="class_isis_1_1_camera.html#a0802954432c931a411fe274a14cc9fab">Isis::Camera::StartEndEphemerisTimes()</a>, <a class="el" href="class_isis_1_1_themis_ir_camera.html#ad6d3d29693ab5150652d6b7431e6cf94">Isis::ThemisIrCamera::ThemisIrCamera()</a>, <a class="el" href="class_isis_1_1_themis_vis_camera.html#abadb84893241b18757bec392b81d63c4">Isis::ThemisVisCamera::ThemisVisCamera()</a>, <a class="el" href="class_isis_1_1_uvvis_camera.html#aad2dd78ca84967f7d8817576805ad2ea">Isis::UvvisCamera::UvvisCamera()</a>, <a class="el" href="class_isis_1_1_viking_camera.html#a2a1a860e2ca961eb38e8f08361708875">Isis::VikingCamera::VikingCamera()</a>, and <a class="el" href="class_isis_1_1_voyager_camera.html#afe52641e45e4a3845a056d32bbf5740a">Isis::VoyagerCamera::VoyagerCamera()</a>.</p>
+
+</div>
+</div>
+<a id="a3eee36499d0e84da1c01ef5e866d44e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3eee36499d0e84da1c01ef5e866d44e2">&#9670;&nbsp;</a></span>EtString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::iTime::EtString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the ephemeris time (TDB) representation of the time as a string. </p>
+<p>See the Naif documentation "time.req" for more information.</p>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a0b056db65c0be20cd650ddce7a1e60e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b056db65c0be20cd650ddce7a1e60e3">&#9670;&nbsp;</a></span>Hour()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::iTime::Hour </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the hour portion of the time as an int. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">Isis::IString::ToInteger()</a>.</p>
+
+</div>
+</div>
+<a id="a04fbf96cea2210ad9b32227d3f11f4a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04fbf96cea2210ad9b32227d3f11f4a2">&#9670;&nbsp;</a></span>HourString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::iTime::HourString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the hour portion of the time as a string. </p>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="aa33c884d05d0408ae8f7e918594e884f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa33c884d05d0408ae8f7e918594e884f">&#9670;&nbsp;</a></span>Minute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::iTime::Minute </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the minute portion of the time as an int. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">Isis::IString::ToInteger()</a>.</p>
+
+</div>
+</div>
+<a id="a691e8dbd1f2b5cdcbf91b02c2848555d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a691e8dbd1f2b5cdcbf91b02c2848555d">&#9670;&nbsp;</a></span>MinuteString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::iTime::MinuteString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the minute portion of the time as a string. </p>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a93c6d768b952328ac5cfda0c80c2236b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93c6d768b952328ac5cfda0c80c2236b">&#9670;&nbsp;</a></span>Month()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::iTime::Month </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the month portion of the time as an int. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">Isis::IString::ToInteger()</a>.</p>
+
+</div>
+</div>
+<a id="a65e0eb1338d7e670baaa77ba1aceb9c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65e0eb1338d7e670baaa77ba1aceb9c8">&#9670;&nbsp;</a></span>MonthString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::iTime::MonthString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the month portion of the time as a string. </p>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a34722e915469a678846a38a485bfe754"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34722e915469a678846a38a485bfe754">&#9670;&nbsp;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::iTime::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for inequality. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>The <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object to be compared to "this"</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+</div>
+</div>
+<a id="aad87a0cba988258683918599bce8ec67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad87a0cba988258683918599bce8ec67">&#9670;&nbsp;</a></span>operator+()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1i_time.html">iTime</a> Isis::iTime::operator+ </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>secondsToAdd</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aefb089ecab45e4d616bbd63b60d2f5e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefb089ecab45e4d616bbd63b60d2f5e6">&#9670;&nbsp;</a></span>operator+=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::iTime::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>secondsToAdd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>.</p>
+
+</div>
+</div>
+<a id="a3856ddff40976c4f07bfdc6f818f671d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3856ddff40976c4f07bfdc6f818f671d">&#9670;&nbsp;</a></span>operator-() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1i_time.html">iTime</a> Isis::iTime::operator- </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>secondsToSubtract</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adade2c661fa446c1acc66c7f84cc8725"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adade2c661fa446c1acc66c7f84cc8725">&#9670;&nbsp;</a></span>operator-() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::iTime::operator- </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;&#160;</td>
+          <td class="paramname"><em>iTimeToSubtract</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acbbb12a1ef7177d064d525b2ee07facc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbbb12a1ef7177d064d525b2ee07facc">&#9670;&nbsp;</a></span>operator-=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::iTime::operator-= </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>secondsToSubtract</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>.</p>
+
+</div>
+</div>
+<a id="a81eb4f3f5ced8b3d0469a4d620d0c3cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81eb4f3f5ced8b3d0469a4d620d0c3cb">&#9670;&nbsp;</a></span>operator&lt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::iTime::operator&lt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for less than. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>The <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object to be compared to "this"</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+</div>
+</div>
+<a id="aca7c3dc6f6d636eb1fc02a177c6413eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca7c3dc6f6d636eb1fc02a177c6413eb">&#9670;&nbsp;</a></span>operator&lt;=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::iTime::operator&lt;= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for less than or equal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>The <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object to be compared to "this"</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+</div>
+</div>
+<a id="a5700c6f90b064ede2fff76d97baad984"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5700c6f90b064ede2fff76d97baad984">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::iTime::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a73e2346eabd553c5b4e4d10efcda3ff8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73e2346eabd553c5b4e4d10efcda3ff8">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::iTime::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4be80e246dc3ad40cb234d3913f21b8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4be80e246dc3ad40cb234d3913f21b8a">&#9670;&nbsp;</a></span>operator=() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::iTime::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Changes the value of the <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>A time string formatted in standard UTC or similar format. Example:"2000/12/31 23:59:01.6789" or "2000-12-31T23:59:01.6789" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af2c80ce1701caf306ffc45652c0cd9fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2c80ce1701caf306ffc45652c0cd9fe">&#9670;&nbsp;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::iTime::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for equality. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>The <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object to be compared to "this"</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+</div>
+</div>
+<a id="a5ca6fc008906afa53a9a0c530b4f01e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ca6fc008906afa53a9a0c530b4f01e5">&#9670;&nbsp;</a></span>operator&gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::iTime::operator&gt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for greater than. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>The <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object to be compared to "this"</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+</div>
+</div>
+<a id="a0844d5fabae0a98f86ddc19f440cd7e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0844d5fabae0a98f86ddc19f440cd7e7">&#9670;&nbsp;</a></span>operator&gt;=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::iTime::operator&gt;= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare two <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> objects for greater than or equal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>The <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a> object to be compared to "this"</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+</div>
+</div>
+<a id="a2f317f67f6e68cee981dbf64a6c38b7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f317f67f6e68cee981dbf64a6c38b7e">&#9670;&nbsp;</a></span>Second()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::iTime::Second </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the second portion of the time as a double. </p>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#ae56ed251df5ac88b2a1bf48bb7bc1cf7">Isis::IString::ToDouble()</a>.</p>
+
+</div>
+</div>
+<a id="a5c5c55c6e3bba06359199144ba9f6706"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c5c55c6e3bba06359199144ba9f6706">&#9670;&nbsp;</a></span>SecondString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::iTime::SecondString </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em> = <code>8</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the second portion of the time as a string. </p>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+</div>
+</div>
+<a id="a71f7d363891c96ef35e089ae3b877d55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71f7d363891c96ef35e089ae3b877d55">&#9670;&nbsp;</a></span>setEt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::iTime::setEt </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>et</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>.</p>
+
+</div>
+</div>
+<a id="a437abf70dc8fda474df4466dbbfd7686"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a437abf70dc8fda474df4466dbbfd7686">&#9670;&nbsp;</a></span>setUtc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::iTime::setUtc </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>utcString</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mariner10_camera.html#a95bd2fc9a70874bd764329b0e5df5a73">Isis::Mariner10Camera::Mariner10Camera()</a>, <a class="el" href="class_isis_1_1_mex_hrsc_src_camera.html#a9af85539cb0e18ac9d840bc902b10559">Isis::MexHrscSrcCamera::MexHrscSrcCamera()</a>, and <a class="el" href="class_isis_1_1_voyager_camera.html#afe52641e45e4a3845a056d32bbf5740a">Isis::VoyagerCamera::VoyagerCamera()</a>.</p>
+
+</div>
+</div>
+<a id="ab015714074c94547cd84a4862a19dfee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab015714074c94547cd84a4862a19dfee">&#9670;&nbsp;</a></span>UTC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::iTime::UTC </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em> = <code>8</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the internally stored time, formatted as a UTC time. </p>
+<dl class="section return"><dt>Returns</dt><dd>string The internalized time, in UTC format </dd></dl>
+
+</div>
+</div>
+<a id="ae5ad0d24f46e1aae3bad010199a24926"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5ad0d24f46e1aae3bad010199a24926">&#9670;&nbsp;</a></span>Year()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::iTime::Year </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the year portion of the time as an int. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">Isis::IString::ToInteger()</a>.</p>
+
+</div>
+</div>
+<a id="aa932d46ea65ba5c871ed998dd959c63f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa932d46ea65ba5c871ed998dd959c63f">&#9670;&nbsp;</a></span>YearString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::iTime::YearString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the year portion of the time as a string. </p>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a78545bfd1b450108da0a71d1b4648e04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78545bfd1b450108da0a71d1b4648e04">&#9670;&nbsp;</a></span>operator+</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1i_time.html">iTime</a> operator+ </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>secondsToAdd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td>
+          <td class="paramname"><em>time</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1e30ae11057b7eca463644d82b234769"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e30ae11057b7eca463644d82b234769">&#9670;&nbsp;</a></span>operator-</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1i_time.html">iTime</a> operator- </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>secondsToSubtract</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td>
+          <td class="paramname"><em>time</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/iTime/<a class="el" href="i_time_8h_source.html">iTime.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/iTime/<a class="el" href="i_time_8cpp.html">iTime.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1i_time.html">iTime</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

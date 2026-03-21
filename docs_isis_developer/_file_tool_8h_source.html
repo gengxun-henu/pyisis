@@ -1,0 +1,382 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/FileTool/FileTool.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_file_tool_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">FileTool.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_file_tool_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef FileTool_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define FileTool_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_tool_8h.html">Tool.h</a>&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;QDir&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;QPointer&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;QStringList&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_action.html">QAction</a>;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  <span class="keyword">class </span>Brick;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  <span class="keyword">class </span>Buffer;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <span class="keyword">class </span>Cube;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <span class="keyword">class </span>CubeAttributeOutput;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="keyword">class </span>MdiCubeViewport;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keyword">class </span>SaveAsDialog;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="class_isis_1_1_file_tool.html">   59</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_file_tool.html">FileTool</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_tool.html">Tool</a> {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      <a class="code" href="class_isis_1_1_file_tool.html#a18aaf0a06f81d6afd3b73b89d656f6cb">FileTool</a>(<a class="code" href="class_q_widget.html">QWidget</a> *parent);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#aa48dfc5c88de8914f03eb08b2fcc7c46">addTo</a>(<a class="code" href="class_q_menu.html">QMenu</a> *menu);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#aa48dfc5c88de8914f03eb08b2fcc7c46">addTo</a>(<a class="code" href="class_isis_1_1_workspace.html">Workspace</a> *ws);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a61606711e4a3278e9e1d61951f61fb62">addToPermanent</a>(<a class="code" href="class_q_tool_bar.html">QToolBar</a> *perm);</div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="class_isis_1_1_file_tool.html#a65be67babc859f0c2e5181af4e825d09">   68</a></span>&#160;      QPointer&lt;QAction&gt; <a class="code" href="class_isis_1_1_file_tool.html#a65be67babc859f0c2e5181af4e825d09">openAction</a>() {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">return</span> p_open;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      };</div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="class_isis_1_1_file_tool.html#a9ec04dc0698b8be5314a06897d5c555e">   72</a></span>&#160;      QPointer&lt;QAction&gt; <a class="code" href="class_isis_1_1_file_tool.html#a9ec04dc0698b8be5314a06897d5c555e">saveAction</a>() {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">return</span> p_saveAs;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      };</div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="class_isis_1_1_file_tool.html#ac78fb96e46b762747a19911eab154a14">   75</a></span>&#160;      QStringList <a class="code" href="class_isis_1_1_file_tool.html#ac78fb96e46b762747a19911eab154a14">p_filterList</a>; </div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="class_isis_1_1_file_tool.html#a4c24111d71b4a96af5e67200c616842d">   76</a></span>&#160;      QDir <a class="code" href="class_isis_1_1_file_tool.html#a4c24111d71b4a96af5e67200c616842d">p_dir</a>;               </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="class_isis_1_1_file_tool.html#ab19617b08d093bf0c67736bd11f80f25">   77</a></span>&#160;      QStringList <a class="code" href="class_isis_1_1_file_tool.html#ab19617b08d093bf0c67736bd11f80f25">p_fileList</a>;   </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="class_isis_1_1_file_tool.html#adc03317a134ba3db812e270ab9a91d06">   81</a></span>&#160;      QString <a class="code" href="class_isis_1_1_file_tool.html#adc03317a134ba3db812e270ab9a91d06">menuName</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">return</span> <span class="stringliteral">&quot;&amp;File&quot;</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;      }</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    signals:</div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="class_isis_1_1_file_tool.html#a6b52ba1c545ebeea18dbbe5ae95fb0fd">   86</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a6b52ba1c545ebeea18dbbe5ae95fb0fd">fileSelected</a>(QString); </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="class_isis_1_1_file_tool.html#aa71bd3a61a9d38e37b38063a040178c1">   92</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#aa71bd3a61a9d38e37b38063a040178c1">saveChanges</a>(<a class="code" href="class_isis_1_1_cube_viewport.html">CubeViewport</a> *vp);</div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="class_isis_1_1_file_tool.html#a89695389302035fa90a3dda94f0cefeb">   98</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a89695389302035fa90a3dda94f0cefeb">discardChanges</a>(<a class="code" href="class_isis_1_1_cube_viewport.html">CubeViewport</a> *vp);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a12062db34c73ce481cb6c1e2237db391">open</a>();</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#aeebf476c5741415a5475d86ff81f65ac">browse</a>();</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a27d9c03a09ebed14b8a1fbe045473e86">print</a>();</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a0455a56ddca25368f9f940d2de9cec36">save</a>();</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a0c5e0236033cd49a854aa6df953a504e">saveAs</a>();</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#ab107694c86f37e6a7364e80679a539de">saveInfo</a>(); </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a194a407ff1a0da116cd5a624a0d3a2ec">exportView</a>();</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a15f059cd413d0320ec767f25480a7be3">exportToList</a>();</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_file_tool.html#a1728439edfaf3f8ac45cda402667b956">closeAll</a>();</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a95d7a8451f9a48f5eb4b00ff3dc1dcba">exit</a>();</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a509c11334c58c02d1e94cb19eb9747b7">enableSave</a>(<span class="keywordtype">bool</span> enable);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#aa23d2f9817c0d946c29f9c2b8ce12400">discard</a>();</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#aafed746b020aab28378f7c25482f9c8f">saveAsCubeByOption</a>(QString); </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_file_tool.html#a265343f54c47f8d2fd83c6466eac42df">updateTool</a>();</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">void</span> copy(<a class="code" href="class_isis_1_1_buffer.html">Buffer</a> &amp;in, <a class="code" href="class_isis_1_1_buffer.html">Buffer</a> &amp;out);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;      QPointer&lt;QAction&gt; p_open;   </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;      QPointer&lt;QAction&gt; p_browse; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      QPointer&lt;QAction&gt; p_print;  </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      QPointer&lt;QAction&gt; p_save;   </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      QPointer&lt;QAction&gt; p_saveAs; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      QPointer&lt;QAction&gt; p_saveInfo;     </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;      QPointer&lt;QAction&gt; p_exportView;   </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;      QPointer&lt;QAction&gt; p_exportToList; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;      QPointer&lt;QAction&gt; p_closeAll;     </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      QPointer&lt;QAction&gt; p_exit;         </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;      QPointer&lt;QWidget&gt; p_parent;       </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      QString p_lastDir;     </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;      QPointer&lt;Workspace&gt; p_workSpace;          </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      QPointer&lt;MdiCubeViewport&gt; p_lastViewport; </div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      QPointer&lt;SaveAsDialog&gt; p_saveAsDialog;    </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;      <span class="keywordtype">void</span> saveAsFullImage(<a class="code" href="class_isis_1_1_cube.html">Cube</a> *icube, <a class="code" href="class_isis_1_1_cube.html">Cube</a> *ocube);</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      <span class="keywordtype">void</span> copyCubeDetails(<span class="keyword">const</span> QString &amp; psFileName, <a class="code" href="class_isis_1_1_cube.html">Cube</a> *icube,</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;           <a class="code" href="class_isis_1_1_cube.html">Cube</a> *ocube, <span class="keywordtype">int</span> piNumSamples, <span class="keywordtype">int</span> piNumLines, <span class="keywordtype">int</span> piNumBands);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      <span class="keywordtype">void</span> saveAs_AsIs(<a class="code" href="class_isis_1_1_cube.html">Cube</a> *icube, <span class="keyword">const</span> QString &amp; psOutFile);</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;      <span class="keywordtype">void</span> saveAs_FullResolution(<a class="code" href="class_isis_1_1_cube.html">Cube</a> *pInCube, <a class="code" href="class_isis_1_1_cube.html">Cube</a> *pOutCube,</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                                 <span class="keywordtype">int</span> pNumSamples, <span class="keywordtype">int</span> pNumLines);</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;      <span class="keywordtype">void</span> saveAsEnlargedCube(<a class="code" href="class_isis_1_1_cube.html">Cube</a> *icube, <span class="keyword">const</span> QString &amp; psOutFile);</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;      <span class="keywordtype">void</span> saveAsReducedCube (<a class="code" href="class_isis_1_1_cube.html">Cube</a> *icube, <span class="keyword">const</span> QString &amp; psOutFile);</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;  };</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;};</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_tool_8h_html"><div class="ttname"><a href="_tool_8h.html">Tool.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_buffer_html"><div class="ttname"><a href="class_isis_1_1_buffer.html">Isis::Buffer</a></div><div class="ttdoc">Buffer for reading and writing cube data.</div><div class="ttdef"><b>Definition:</b> Buffer.h:53</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_html"><div class="ttname"><a href="class_isis_1_1_cube.html">Isis::Cube</a></div><div class="ttdoc">IO Handler for Isis Cubes.</div><div class="ttdef"><b>Definition:</b> Cube.h:168</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_viewport_html"><div class="ttname"><a href="class_isis_1_1_cube_viewport.html">Isis::CubeViewport</a></div><div class="ttdoc">Widget to display Isis cubes for qt apps.</div><div class="ttdef"><b>Definition:</b> CubeViewport.h:122</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html"><div class="ttname"><a href="class_isis_1_1_file_tool.html">Isis::FileTool</a></div><div class="ttdef"><b>Definition:</b> FileTool.h:59</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a0455a56ddca25368f9f940d2de9cec36"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a0455a56ddca25368f9f940d2de9cec36">Isis::FileTool::save</a></div><div class="ttdeci">virtual void save()</div><div class="ttdoc">This method saves any changes made to the current cube, these changes are finalized!...</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:258</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a0c5e0236033cd49a854aa6df953a504e"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a0c5e0236033cd49a854aa6df953a504e">Isis::FileTool::saveAs</a></div><div class="ttdeci">virtual void saveAs()</div><div class="ttdoc">SaveAs Action - Displays the FileDialog with the filterlist (*.cub) to select the output cube.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:284</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a12062db34c73ce481cb6c1e2237db391"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a12062db34c73ce481cb6c1e2237db391">Isis::FileTool::open</a></div><div class="ttdeci">virtual void open()</div><div class="ttdoc">This method allows the user to navigate and open a cube with a file dialog.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:215</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a15f059cd413d0320ec767f25480a7be3"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a15f059cd413d0320ec767f25480a7be3">Isis::FileTool::exportToList</a></div><div class="ttdeci">virtual void exportToList()</div><div class="ttdoc">FileTool::exportToList.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:853</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a1728439edfaf3f8ac45cda402667b956"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a1728439edfaf3f8ac45cda402667b956">Isis::FileTool::closeAll</a></div><div class="ttdeci">virtual bool closeAll()</div><div class="ttdoc">Try to close all open cubes and save/discard if necessary.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:945</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a18aaf0a06f81d6afd3b73b89d656f6cb"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a18aaf0a06f81d6afd3b73b89d656f6cb">Isis::FileTool::FileTool</a></div><div class="ttdeci">FileTool(QWidget *parent)</div><div class="ttdoc">Constructs a FileTool object.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:46</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a194a407ff1a0da116cd5a624a0d3a2ec"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a194a407ff1a0da116cd5a624a0d3a2ec">Isis::FileTool::exportView</a></div><div class="ttdeci">virtual void exportView()</div><div class="ttdoc">This method allows the user to export the current view as an image file.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:801</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a265343f54c47f8d2fd83c6466eac42df"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a265343f54c47f8d2fd83c6466eac42df">Isis::FileTool::updateTool</a></div><div class="ttdeci">void updateTool()</div><div class="ttdoc">Updates the tool.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:993</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a27d9c03a09ebed14b8a1fbe045473e86"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a27d9c03a09ebed14b8a1fbe045473e86">Isis::FileTool::print</a></div><div class="ttdeci">void print()</div><div class="ttdoc">This method allows the user to print the current viewport.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:908</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a4c24111d71b4a96af5e67200c616842d"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a4c24111d71b4a96af5e67200c616842d">Isis::FileTool::p_dir</a></div><div class="ttdeci">QDir p_dir</div><div class="ttdoc">Directory.</div><div class="ttdef"><b>Definition:</b> FileTool.h:76</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a509c11334c58c02d1e94cb19eb9747b7"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a509c11334c58c02d1e94cb19eb9747b7">Isis::FileTool::enableSave</a></div><div class="ttdeci">void enableSave(bool enable)</div><div class="ttdoc">This slot enables or disables save and save as.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:985</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a61606711e4a3278e9e1d61951f61fb62"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a61606711e4a3278e9e1d61951f61fb62">Isis::FileTool::addToPermanent</a></div><div class="ttdeci">void addToPermanent(QToolBar *perm)</div><div class="ttdoc">Adds the file tool's actions to the permanent toolbar.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:203</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a65be67babc859f0c2e5181af4e825d09"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a65be67babc859f0c2e5181af4e825d09">Isis::FileTool::openAction</a></div><div class="ttdeci">QPointer&lt; QAction &gt; openAction()</div><div class="ttdef"><b>Definition:</b> FileTool.h:68</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a6b52ba1c545ebeea18dbbe5ae95fb0fd"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a6b52ba1c545ebeea18dbbe5ae95fb0fd">Isis::FileTool::fileSelected</a></div><div class="ttdeci">void fileSelected(QString)</div><div class="ttdoc">This signal is called when a file is selected.</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a89695389302035fa90a3dda94f0cefeb"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a89695389302035fa90a3dda94f0cefeb">Isis::FileTool::discardChanges</a></div><div class="ttdeci">void discardChanges(CubeViewport *vp)</div><div class="ttdoc">This signal is called when changes should be discarded.</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a95d7a8451f9a48f5eb4b00ff3dc1dcba"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a95d7a8451f9a48f5eb4b00ff3dc1dcba">Isis::FileTool::exit</a></div><div class="ttdeci">virtual void exit()</div><div class="ttdoc">Exit the program, this slot called when the exit is chosen from the File menu.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:973</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_a9ec04dc0698b8be5314a06897d5c555e"><div class="ttname"><a href="class_isis_1_1_file_tool.html#a9ec04dc0698b8be5314a06897d5c555e">Isis::FileTool::saveAction</a></div><div class="ttdeci">QPointer&lt; QAction &gt; saveAction()</div><div class="ttdef"><b>Definition:</b> FileTool.h:72</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_aa23d2f9817c0d946c29f9c2b8ce12400"><div class="ttname"><a href="class_isis_1_1_file_tool.html#aa23d2f9817c0d946c29f9c2b8ce12400">Isis::FileTool::discard</a></div><div class="ttdeci">void discard()</div><div class="ttdoc">This slot emits a signal to discard all changes to the current viewport.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:792</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_aa48dfc5c88de8914f03eb08b2fcc7c46"><div class="ttname"><a href="class_isis_1_1_file_tool.html#aa48dfc5c88de8914f03eb08b2fcc7c46">Isis::FileTool::addTo</a></div><div class="ttdeci">void addTo(QMenu *menu)</div><div class="ttdoc">Adds the file tool's actions to the menu.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:169</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_aa71bd3a61a9d38e37b38063a040178c1"><div class="ttname"><a href="class_isis_1_1_file_tool.html#aa71bd3a61a9d38e37b38063a040178c1">Isis::FileTool::saveChanges</a></div><div class="ttdeci">void saveChanges(CubeViewport *vp)</div><div class="ttdoc">This signal is called when changes should be saved.</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_aafed746b020aab28378f7c25482f9c8f"><div class="ttname"><a href="class_isis_1_1_file_tool.html#aafed746b020aab28378f7c25482f9c8f">Isis::FileTool::saveAsCubeByOption</a></div><div class="ttdeci">void saveAsCubeByOption(QString)</div><div class="ttdoc">Save as Isis Cube (FullImage, AsIs, FullRes)</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:317</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_ab107694c86f37e6a7364e80679a539de"><div class="ttname"><a href="class_isis_1_1_file_tool.html#ab107694c86f37e6a7364e80679a539de">Isis::FileTool::saveInfo</a></div><div class="ttdeci">virtual void saveInfo()</div><div class="ttdoc">Saves the whatsthis info of the cubeviewport.</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:748</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_ab19617b08d093bf0c67736bd11f80f25"><div class="ttname"><a href="class_isis_1_1_file_tool.html#ab19617b08d093bf0c67736bd11f80f25">Isis::FileTool::p_fileList</a></div><div class="ttdeci">QStringList p_fileList</div><div class="ttdoc">File list.</div><div class="ttdef"><b>Definition:</b> FileTool.h:77</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_ac78fb96e46b762747a19911eab154a14"><div class="ttname"><a href="class_isis_1_1_file_tool.html#ac78fb96e46b762747a19911eab154a14">Isis::FileTool::p_filterList</a></div><div class="ttdeci">QStringList p_filterList</div><div class="ttdoc">Filter List.</div><div class="ttdef"><b>Definition:</b> FileTool.h:74</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_adc03317a134ba3db812e270ab9a91d06"><div class="ttname"><a href="class_isis_1_1_file_tool.html#adc03317a134ba3db812e270ab9a91d06">Isis::FileTool::menuName</a></div><div class="ttdeci">QString menuName() const</div><div class="ttdef"><b>Definition:</b> FileTool.h:81</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_tool_html_aeebf476c5741415a5475d86ff81f65ac"><div class="ttname"><a href="class_isis_1_1_file_tool.html#aeebf476c5741415a5475d86ff81f65ac">Isis::FileTool::browse</a></div><div class="ttdeci">virtual void browse()</div><div class="ttdoc">This method allows the user to navigate and browse cubes with a file dialog .</div><div class="ttdef"><b>Definition:</b> FileTool.cpp:236</div></div>
+<div class="ttc" id="aclass_isis_1_1_tool_html"><div class="ttname"><a href="class_isis_1_1_tool.html">Isis::Tool</a></div><div class="ttdoc">Base class for the Qisis tools.</div><div class="ttdef"><b>Definition:</b> Tool.h:67</div></div>
+<div class="ttc" id="aclass_isis_1_1_workspace_html"><div class="ttname"><a href="class_isis_1_1_workspace.html">Isis::Workspace</a></div><div class="ttdef"><b>Definition:</b> Workspace.h:78</div></div>
+<div class="ttc" id="aclass_q_action_html"><div class="ttname"><a href="class_q_action.html">QAction</a></div></div>
+<div class="ttc" id="aclass_q_menu_html"><div class="ttname"><a href="class_q_menu.html">QMenu</a></div></div>
+<div class="ttc" id="aclass_q_tool_bar_html"><div class="ttname"><a href="class_q_tool_bar.html">QToolBar</a></div></div>
+<div class="ttc" id="aclass_q_widget_html"><div class="ttname"><a href="class_q_widget.html">QWidget</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_4541043e52903f3cdf592ada97fe75e7.html">FileTool</a></li><li class="navelem"><a class="el" href="_file_tool_8h.html">FileTool.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

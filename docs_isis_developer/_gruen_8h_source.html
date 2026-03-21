@@ -1,0 +1,518 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Gruen/Gruen.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_gruen_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">Gruen.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_gruen_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef Gruen_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define Gruen_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_auto_reg_8h.html">AutoReg.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;tnt/tnt_array2d.h&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;tnt/tnt_array1d.h&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_affine_8h.html">Affine.h</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_db_profile_8h.html">DbProfile.h</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_gruen_types_8h.html">GruenTypes.h</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_collector_map_8h.html">CollectorMap.h</a>&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_statistics_8h.html">Statistics.h</a>&quot;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_8h.html">Pvl.h</a>&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_group_8h.html">PvlGroup.h</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keyword">class </span>Chip;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="class_isis_1_1_gruen.html">   74</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_gruen.html">Gruen</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_auto_reg.html">AutoReg</a> {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      <a class="code" href="class_isis_1_1_gruen.html#a1ac18e65531432c3c45b221c85b30ecf">Gruen</a>();</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <a class="code" href="class_isis_1_1_gruen.html#a1ac18e65531432c3c45b221c85b30ecf">Gruen</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="class_isis_1_1_gruen.html#ad6a7525d9bc2d657fc923e546c175680">   82</a></span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_gruen.html#ad6a7525d9bc2d657fc923e546c175680">~Gruen</a>() { }</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="class_isis_1_1_gruen.html#ac2340ac2124f966a92db46397dcc4e4f">   85</a></span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_gruen.html#ac2340ac2124f966a92db46397dcc4e4f">CallCount</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (m_callCount); }</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_gruen.html#a0d679cdb45ea8ec2950b4e1184ee4d54">WriteSubsearchChips</a>(<span class="keyword">const</span> QString &amp;pattern = <span class="stringliteral">&quot;SubChip&quot;</span>);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      <a class="code" href="struct_isis_1_1_affine_tolerance.html">AffineTolerance</a> <a class="code" href="class_isis_1_1_gruen.html#aea3bbad7b0bc8a7a2447c911d69d854d">getAffineTolerance</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="class_isis_1_1_gruen.html#a767dae62b7f63ab4d8aa2f2d382a47e8">   92</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_gruen.html#a767dae62b7f63ab4d8aa2f2d382a47e8">getSpiceConstraint</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (m_spiceTol); }</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="class_isis_1_1_gruen.html#a099da49b8aa8eb71bf4df6384ad0285e">   95</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_gruen.html#a099da49b8aa8eb71bf4df6384ad0285e">getAffineConstraint</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (m_affineTol); }</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_gruen.html#a71313f13643096cfad323e8e6e552fc9">setAffineRadio</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_affine_radio.html">AffineRadio</a> &amp;affrad);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_gruen.html#a71313f13643096cfad323e8e6e552fc9">setAffineRadio</a>();</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="class_isis_1_1_gruen.html#a5667f78c857a406048b16e0b15437fdb">  101</a></span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_affine_radio.html">AffineRadio</a> &amp;<a class="code" href="class_isis_1_1_gruen.html#a5667f78c857a406048b16e0b15437fdb">getDefaultAffineRadio</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (m_defAffine);}</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="class_isis_1_1_gruen.html#a1003ca5544e6d6ac0a701cba88d835ad">  104</a></span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_affine_radio.html">AffineRadio</a> &amp;<a class="code" href="class_isis_1_1_gruen.html#a1003ca5544e6d6ac0a701cba88d835ad">getAffineRadio</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (m_affine);  }</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno"><a class="line" href="class_isis_1_1_gruen.html#af83a5d4f189d9a42ccc195701fe8d2f1">  120</a></span>&#160;      <a class="code" href="class_isis_1_1_match_point.html">MatchPoint</a> <a class="code" href="class_isis_1_1_gruen.html#af83a5d4f189d9a42ccc195701fe8d2f1">getLastMatch</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (m_point);   }</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="class_isis_1_1_gruen.html#a429d48fdeacb0485553d5268fa031a7c">  124</a></span>&#160;      <span class="keyword">virtual</span> QString <a class="code" href="class_isis_1_1_gruen.html#a429d48fdeacb0485553d5268fa031a7c">AlgorithmName</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordflow">return</span> (<span class="stringliteral">&quot;Gruen&quot;</span>);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_gruen.html#ab07f20aaa26a2453c1a3bb5b37651cf1">algorithm</a>(<a class="code" href="class_isis_1_1_chip.html">Chip</a> &amp;pattern, <a class="code" href="class_isis_1_1_chip.html">Chip</a> &amp;subsearch, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_radiometric.html">Radiometric</a> &amp;radio,</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                    <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> &amp;ptsUsed, <span class="keywordtype">double</span> &amp;resid, <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;atai,</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                    <a class="code" href="class_isis_1_1_affine_radio.html">AffineRadio</a> &amp;affrad);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      <a class="code" href="struct_isis_1_1_analysis.html">Analysis</a> <a class="code" href="class_isis_1_1_gruen.html#a487ad0506854678e2043f4ea15c745ff">errorAnalysis</a>(<span class="keyword">const</span> <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> &amp;npts, <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;resid,</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                             <span class="keyword">const</span> <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;atai);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      <span class="comment">//  These methods are for AutoReg non-adaptive requirements</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_gruen.html#a41f9e0dcda95c92b7277b8658a4afa8d">MatchAlgorithm</a>(<a class="code" href="class_isis_1_1_chip.html">Chip</a> &amp;pattern, <a class="code" href="class_isis_1_1_chip.html">Chip</a> &amp;subsearch);</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_gruen.html#a73bd07f3f8cf6c1d52959d1f3f1ff9c8">CompareFits</a>(<span class="keywordtype">double</span> fit1, <span class="keywordtype">double</span> fit2);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno"><a class="line" href="class_isis_1_1_gruen.html#a500cea4c74bcbaf960f3399dccccd6a7">  140</a></span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_gruen.html#a500cea4c74bcbaf960f3399dccccd6a7">IdealFit</a>()<span class="keyword"> const </span>{  <span class="keywordflow">return</span> (0.0); }</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      <span class="comment">// AutoReg adaptive method</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b">AutoReg::RegisterStatus</a> <a class="code" href="class_isis_1_1_gruen.html#aabf2ef54a56647103b94fad617c2e516">Registration</a>(<a class="code" href="class_isis_1_1_chip.html">Chip</a> &amp;sChip,</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;          <a class="code" href="class_isis_1_1_chip.html">Chip</a> &amp;pChip,</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;          <a class="code" href="class_isis_1_1_chip.html">Chip</a> &amp;fChip,</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;          <span class="keywordtype">int</span> startSamp,</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;          <span class="keywordtype">int</span> startLine,</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;          <span class="keywordtype">int</span> endSamp,</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;          <span class="keywordtype">int</span> endLine,</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;          <span class="keywordtype">int</span> bestSamp,</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;          <span class="keywordtype">int</span> bestLine);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> <a class="code" href="class_isis_1_1_gruen.html#ad07350143ca4e2020475f64823df1c03">AlgorithmStatistics</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      <span class="keyword">enum</span> ErrorTypes {  NotEnoughPoints = 1, CholeskyFailed = 2,</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                         EigenSolutionFailed = 3, AffineNotInvertable = 4,</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                         MaxIterationsExceeded = 5, RadShiftExceeded = 6,</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                         RadGainExceeded = 7, MaxEigenExceeded = 8,</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                         AffineDistExceeded = 9</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                       };</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;      <span class="keyword">struct </span>ErrorCounter {</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        ErrorCounter() : m_gerrno(0), m_keyname(<span class="stringliteral">&quot;Unknown&quot;</span>), m_count(0) { }</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        ErrorCounter(<span class="keywordtype">int</span> gerrno, <span class="keyword">const</span> QString &amp;keyname) : m_gerrno(gerrno),</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;          m_keyname(keyname), m_count(0) { }</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">int</span>  Errno()<span class="keyword"> const </span>{  <span class="keywordflow">return</span> (m_gerrno); }</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keyword">inline</span> <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> Count()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (m_count); }</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> BumpIt() { m_count++; }</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        PvlKeyword LogIt()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (PvlKeyword(m_keyname, <a class="code" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">toString</a>(m_count))); }</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keywordtype">int</span>         m_gerrno;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        QString m_keyname;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>      m_count;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;      };</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;      <span class="keyword">typedef</span> CollectorMap&lt;int, ErrorCounter&gt; ErrorList;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;      <span class="comment">// Iteration loop variables</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>       m_callCount;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;      QString  m_filePattern;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;      ErrorList    m_errors;            <span class="comment">// Error logger</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>       m_unclassified;      <span class="comment">// Unclassified errors</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;      <span class="comment">// Tolerance and count parameters</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;      <span class="keywordtype">int</span>          m_maxIters;          <span class="comment">// Maximum iterations</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;      <span class="keywordtype">int</span>          m_nIters;            <span class="comment">// Number iterations</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>       m_totalIterations;   <span class="comment">// Running total iteration count</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;      DbProfile    m_prof;              <span class="comment">//  Parameter profile</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;      <span class="keywordtype">double</span>       m_transTol;          <span class="comment">//  Affine translation tolerance</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;      <span class="keywordtype">double</span>       m_scaleTol;          <span class="comment">//  Affine scale tolerance</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;      <span class="keywordtype">double</span>       m_shearTol;          <span class="comment">//  Affine shear tolerance</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;      <span class="keywordtype">double</span>       m_spiceTol;          <span class="comment">// SPICE tolerance</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;      <span class="keywordtype">double</span>       m_affineTol;         <span class="comment">// Affine Tolerance</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;      <span class="keywordtype">double</span>       m_shiftTol;          <span class="comment">// Radiometric shift tolerance</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;      <span class="keywordtype">double</span>       m_rgainMinTol;       <span class="comment">// Radiometric Gain minimum</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;      <span class="keywordtype">double</span>       m_rgainMaxTol;       <span class="comment">// Radiometric Gain maximum</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;      <span class="keywordtype">double</span>       m_defGain;           <span class="comment">// Default Radiometric gain</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;      <span class="keywordtype">double</span>       m_defShift;          <span class="comment">// Default Radiometric shift</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;      <span class="comment">// These are for recomputing SMTK points</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;      AffineRadio  m_defAffine;         <span class="comment">// Default affine/radiometric settings</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;      AffineRadio  m_affine;            <span class="comment">// Incoming affine setting</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;      MatchPoint   m_point;             <span class="comment">// Last resuting registration result</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;      <span class="comment">//  Statistics gathered during processing</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;      Statistics   m_eigenStat;</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;      Statistics   m_iterStat;</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;      Statistics   m_shiftStat;</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;      Statistics   m_gainStat;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;      <span class="comment">//  Static init of default PVL parameters</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;      <span class="keyword">static</span> Pvl &amp;getDefaultParameters();</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;      QString ConfKey(<span class="keyword">const</span> DbProfile &amp;conf, <span class="keyword">const</span> QString &amp;keyname,</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                <span class="keyword">const</span> QString &amp;defval, <span class="keywordtype">int</span> index = 0)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <span class="keywordflow">if</span>(!conf.exists(keyname)) {</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;          <span class="keywordflow">return</span> (defval);</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        }</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordflow">if</span>(conf.count(keyname) &lt; index) {</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;          <span class="keywordflow">return</span> (defval);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        }</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        QString iValue(conf.value(keyname, index));</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        IString tmp(iValue);</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        QString value = tmp.ToQt();  <span class="comment">// This makes it work with a string?</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        <span class="keywordflow">return</span> (value);</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;      };</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160; </div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;      <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;      T ConfKey(<span class="keyword">const</span> DbProfile &amp;conf, <span class="keyword">const</span> QString &amp;keyname,</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;                <span class="keyword">const</span> T &amp;defval, <span class="keywordtype">int</span> index = 0)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">if</span>(!conf.exists(keyname)) {</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;          <span class="keywordflow">return</span> (defval);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        }</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keywordflow">if</span>(conf.count(keyname) &lt; index) {</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;          <span class="keywordflow">return</span> (defval);</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        }</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        QString iValue(conf.value(keyname, index));</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        IString tmp(iValue);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        T value = tmp;  <span class="comment">// This makes it work with a string?</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        <span class="keywordflow">return</span> (value);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;      };</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160; </div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;      <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;      PvlKeyword ParameterKey(<span class="keyword">const</span> QString &amp;keyname,</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                              <span class="keyword">const</span> T &amp;value,</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                              <span class="keyword">const</span> QString &amp;unit = <span class="stringliteral">&quot;&quot;</span>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="keywordflow">if</span>(m_prof.exists(keyname)) {</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;          <span class="keywordflow">return</span>(ValidateKey(keyname, value, unit));</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        }</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="keywordflow">return</span> (PvlKeyword(keyname, <span class="stringliteral">&quot;Unbounded&quot;</span>));</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;      };</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;      <span class="keyword">inline</span> PvlKeyword ValidateKey(<span class="keyword">const</span> QString keyname,</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;                                    <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;value,</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;                                    <span class="keyword">const</span> QString &amp;unit = <span class="stringliteral">&quot;&quot;</span>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keywordflow">if</span>(<a class="code" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">IsSpecial</a>(value)) {</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;          <span class="keywordflow">return</span> (PvlKeyword(keyname, <span class="stringliteral">&quot;NULL&quot;</span>));</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        }</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;          <span class="keywordflow">return</span> (PvlKeyword(keyname, <a class="code" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">toString</a>(value), unit));</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        }</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;      }</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160; </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;      ErrorList initErrorList() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;      <span class="keywordtype">int</span> logError(<span class="keywordtype">int</span> gerrno, <span class="keyword">const</span> QString &amp;gerrmsg);</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;      PvlGroup StatsLog() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;      PvlGroup ParameterLog() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160; </div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;      <span class="keywordtype">void</span> init(Pvl &amp;pvl);</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;      <span class="keyword">inline</span> Radiometric getDefaultRadio()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="keywordflow">return</span> (Radiometric(m_defShift, m_defGain));</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;      }</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160; </div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">double</span> DegreesOfFreedom(<span class="keyword">const</span> <span class="keywordtype">int</span> npts)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        <span class="keywordflow">return</span> ((<span class="keywordtype">double</span>) (npts - <a class="code" href="namespace_isis.html#a5d936a01dd07ed2b1b85e85527c7c4b7aad74c8895eb438d576521afaa69a0133">NCONSTR</a>));</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;      }</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160; </div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;      <span class="keywordtype">void</span> resetStats();</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160; </div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;      <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> Identity(<span class="keyword">const</span> <span class="keywordtype">int</span> &amp;ndiag = 3) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;      <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> Choldc(<span class="keyword">const</span> <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;a, <a class="code" href="namespace_isis.html#a69c3e9c8145bde8ab5517cf290d1fcfc">GVector</a> &amp;p) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;      <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> Cholsl(<span class="keyword">const</span> <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;a, <span class="keyword">const</span> <a class="code" href="namespace_isis.html#a69c3e9c8145bde8ab5517cf290d1fcfc">GVector</a> &amp;p,</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;                     <span class="keyword">const</span> <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;b, <span class="keyword">const</span> <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;x) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;      <span class="keywordtype">int</span> Jacobi(<span class="keyword">const</span> <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;a, <a class="code" href="namespace_isis.html#a69c3e9c8145bde8ab5517cf290d1fcfc">GVector</a> &amp;evals, <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;evecs,</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;                  <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;MaxIters = 50) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;      <span class="keywordtype">void</span> EigenSort(<a class="code" href="namespace_isis.html#a69c3e9c8145bde8ab5517cf290d1fcfc">GVector</a> &amp;evals, <a class="code" href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">GMatrix</a> &amp;evecs) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> MinValidPoints(<a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> totalPoints) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;      <span class="keywordtype">bool</span> ValidPoints(<a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> totalPoints, <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> nPoints) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;      <span class="keywordtype">int</span> CheckConstraints(MatchPoint &amp;point);</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;      Coordinate getChipUpdate(Chip &amp;sChip, MatchPoint &amp;point) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;      <a class="code" href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b">AutoReg::RegisterStatus</a> Status(<span class="keyword">const</span> MatchPoint &amp;result);</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;  };</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160; </div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;}  <span class="comment">// namespace Isis</span></div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_affine_8h_html"><div class="ttname"><a href="_affine_8h.html">Affine.h</a></div></div>
+<div class="ttc" id="a_auto_reg_8h_html"><div class="ttname"><a href="_auto_reg_8h.html">AutoReg.h</a></div></div>
+<div class="ttc" id="a_collector_map_8h_html"><div class="ttname"><a href="_collector_map_8h.html">CollectorMap.h</a></div></div>
+<div class="ttc" id="a_db_profile_8h_html"><div class="ttname"><a href="_db_profile_8h.html">DbProfile.h</a></div></div>
+<div class="ttc" id="a_gruen_types_8h_html"><div class="ttname"><a href="_gruen_types_8h.html">GruenTypes.h</a></div></div>
+<div class="ttc" id="a_pvl_8h_html"><div class="ttname"><a href="_pvl_8h.html">Pvl.h</a></div></div>
+<div class="ttc" id="a_pvl_group_8h_html"><div class="ttname"><a href="_pvl_group_8h.html">PvlGroup.h</a></div></div>
+<div class="ttc" id="a_statistics_8h_html"><div class="ttname"><a href="_statistics_8h.html">Statistics.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_affine_radio_html"><div class="ttname"><a href="class_isis_1_1_affine_radio.html">Isis::AffineRadio</a></div><div class="ttdoc">Container for affine and radiometric parameters.</div><div class="ttdef"><b>Definition:</b> GruenTypes.h:242</div></div>
+<div class="ttc" id="aclass_isis_1_1_auto_reg_html"><div class="ttname"><a href="class_isis_1_1_auto_reg.html">Isis::AutoReg</a></div><div class="ttdoc">Auto Registration class.</div><div class="ttdef"><b>Definition:</b> AutoReg.h:167</div></div>
+<div class="ttc" id="aclass_isis_1_1_auto_reg_html_a0be98f36bab6a5870fb7b5588b3e108b"><div class="ttname"><a href="class_isis_1_1_auto_reg.html#a0be98f36bab6a5870fb7b5588b3e108b">Isis::AutoReg::RegisterStatus</a></div><div class="ttdeci">RegisterStatus</div><div class="ttdoc">Enumeration of the Register() method's return status.</div><div class="ttdef"><b>Definition:</b> AutoReg.h:179</div></div>
+<div class="ttc" id="aclass_isis_1_1_chip_html"><div class="ttname"><a href="class_isis_1_1_chip.html">Isis::Chip</a></div><div class="ttdoc">A small chip of data used for pattern matching.</div><div class="ttdef"><b>Definition:</b> Chip.h:86</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html"><div class="ttname"><a href="class_isis_1_1_gruen.html">Isis::Gruen</a></div><div class="ttdoc">Gruen pattern matching algorithm.</div><div class="ttdef"><b>Definition:</b> Gruen.h:74</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a099da49b8aa8eb71bf4df6384ad0285e"><div class="ttname"><a href="class_isis_1_1_gruen.html#a099da49b8aa8eb71bf4df6384ad0285e">Isis::Gruen::getAffineConstraint</a></div><div class="ttdeci">double getAffineConstraint() const</div><div class="ttdoc">Returns the Affine tolerance constraint as read from config file.</div><div class="ttdef"><b>Definition:</b> Gruen.h:95</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a0d679cdb45ea8ec2950b4e1184ee4d54"><div class="ttname"><a href="class_isis_1_1_gruen.html#a0d679cdb45ea8ec2950b4e1184ee4d54">Isis::Gruen::WriteSubsearchChips</a></div><div class="ttdeci">void WriteSubsearchChips(const QString &amp;pattern=&quot;SubChip&quot;)</div><div class="ttdoc">Set up for writing subsearch for a a given registration call.</div><div class="ttdef"><b>Definition:</b> Gruen.cpp:92</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a1003ca5544e6d6ac0a701cba88d835ad"><div class="ttname"><a href="class_isis_1_1_gruen.html#a1003ca5544e6d6ac0a701cba88d835ad">Isis::Gruen::getAffineRadio</a></div><div class="ttdeci">const AffineRadio &amp; getAffineRadio() const</div><div class="ttdoc">Return current state of Affine/Radio state</div><div class="ttdef"><b>Definition:</b> Gruen.h:104</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a1ac18e65531432c3c45b221c85b30ecf"><div class="ttname"><a href="class_isis_1_1_gruen.html#a1ac18e65531432c3c45b221c85b30ecf">Isis::Gruen::Gruen</a></div><div class="ttdeci">Gruen()</div><div class="ttdoc">Default constructor.</div><div class="ttdef"><b>Definition:</b> Gruen.cpp:32</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a41f9e0dcda95c92b7277b8658a4afa8d"><div class="ttname"><a href="class_isis_1_1_gruen.html#a41f9e0dcda95c92b7277b8658a4afa8d">Isis::Gruen::MatchAlgorithm</a></div><div class="ttdeci">virtual double MatchAlgorithm(Chip &amp;pattern, Chip &amp;subsearch)</div><div class="ttdoc">Minimization of data set using Gruen algorithm.</div><div class="ttdef"><b>Definition:</b> Gruen.cpp:608</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a429d48fdeacb0485553d5268fa031a7c"><div class="ttname"><a href="class_isis_1_1_gruen.html#a429d48fdeacb0485553d5268fa031a7c">Isis::Gruen::AlgorithmName</a></div><div class="ttdeci">virtual QString AlgorithmName() const</div><div class="ttdoc">Returns the default name of the algorithm as Gruen.</div><div class="ttdef"><b>Definition:</b> Gruen.h:124</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a487ad0506854678e2043f4ea15c745ff"><div class="ttname"><a href="class_isis_1_1_gruen.html#a487ad0506854678e2043f4ea15c745ff">Isis::Gruen::errorAnalysis</a></div><div class="ttdeci">Analysis errorAnalysis(const BigInt &amp;npts, const double &amp;resid, const GMatrix &amp;atai)</div><div class="ttdoc">Compute the error analysis of convergent Gruen matrix.</div><div class="ttdef"><b>Definition:</b> Gruen.cpp:289</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a500cea4c74bcbaf960f3399dccccd6a7"><div class="ttname"><a href="class_isis_1_1_gruen.html#a500cea4c74bcbaf960f3399dccccd6a7">Isis::Gruen::IdealFit</a></div><div class="ttdeci">virtual double IdealFit() const</div><div class="ttdoc">Returns the ideal fit for a perfect Gruen result.</div><div class="ttdef"><b>Definition:</b> Gruen.h:140</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a5667f78c857a406048b16e0b15437fdb"><div class="ttname"><a href="class_isis_1_1_gruen.html#a5667f78c857a406048b16e0b15437fdb">Isis::Gruen::getDefaultAffineRadio</a></div><div class="ttdeci">const AffineRadio &amp; getDefaultAffineRadio() const</div><div class="ttdoc">Returns default settings for Affine/Radiometric parameters.</div><div class="ttdef"><b>Definition:</b> Gruen.h:101</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a71313f13643096cfad323e8e6e552fc9"><div class="ttname"><a href="class_isis_1_1_gruen.html#a71313f13643096cfad323e8e6e552fc9">Isis::Gruen::setAffineRadio</a></div><div class="ttdeci">void setAffineRadio()</div><div class="ttdoc">Set affine parameters to defaults.</div><div class="ttdef"><b>Definition:</b> Gruen.cpp:127</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a73bd07f3f8cf6c1d52959d1f3f1ff9c8"><div class="ttname"><a href="class_isis_1_1_gruen.html#a73bd07f3f8cf6c1d52959d1f3f1ff9c8">Isis::Gruen::CompareFits</a></div><div class="ttdeci">virtual bool CompareFits(double fit1, double fit2)</div><div class="ttdoc">This virtual method must return if the 1st fit is equal to or better than the second fit.</div><div class="ttdef"><b>Definition:</b> Gruen.cpp:636</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_a767dae62b7f63ab4d8aa2f2d382a47e8"><div class="ttname"><a href="class_isis_1_1_gruen.html#a767dae62b7f63ab4d8aa2f2d382a47e8">Isis::Gruen::getSpiceConstraint</a></div><div class="ttdeci">double getSpiceConstraint() const</div><div class="ttdoc">Returns the SPICE tolerance constraint as read from config file.</div><div class="ttdef"><b>Definition:</b> Gruen.h:92</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_aabf2ef54a56647103b94fad617c2e516"><div class="ttname"><a href="class_isis_1_1_gruen.html#aabf2ef54a56647103b94fad617c2e516">Isis::Gruen::Registration</a></div><div class="ttdeci">virtual AutoReg::RegisterStatus Registration(Chip &amp;sChip, Chip &amp;pChip, Chip &amp;fChip, int startSamp, int startLine, int endSamp, int endLine, int bestSamp, int bestLine)</div><div class="ttdoc">Applies the adaptive Gruen algorithm to pattern and search chips.</div><div class="ttdef"><b>Definition:</b> Gruen.cpp:680</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_ab07f20aaa26a2453c1a3bb5b37651cf1"><div class="ttname"><a href="class_isis_1_1_gruen.html#ab07f20aaa26a2453c1a3bb5b37651cf1">Isis::Gruen::algorithm</a></div><div class="ttdeci">int algorithm(Chip &amp;pattern, Chip &amp;subsearch, const Radiometric &amp;radio, BigInt &amp;ptsUsed, double &amp;resid, GMatrix &amp;atai, AffineRadio &amp;affrad)</div><div class="ttdoc">Real workhorse of the computational Gruen algorithm.</div><div class="ttdef"><b>Definition:</b> Gruen.cpp:156</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_ac2340ac2124f966a92db46397dcc4e4f"><div class="ttname"><a href="class_isis_1_1_gruen.html#ac2340ac2124f966a92db46397dcc4e4f">Isis::Gruen::CallCount</a></div><div class="ttdeci">BigInt CallCount() const</div><div class="ttdoc">Returns the current call count.</div><div class="ttdef"><b>Definition:</b> Gruen.h:85</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_ad07350143ca4e2020475f64823df1c03"><div class="ttname"><a href="class_isis_1_1_gruen.html#ad07350143ca4e2020475f64823df1c03">Isis::Gruen::AlgorithmStatistics</a></div><div class="ttdeci">virtual Pvl AlgorithmStatistics(Pvl &amp;pvl)</div><div class="ttdoc">Create Gruen error and processing statistics Pvl output.</div><div class="ttdef"><b>Definition:</b> Gruen.cpp:824</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_ad6a7525d9bc2d657fc923e546c175680"><div class="ttname"><a href="class_isis_1_1_gruen.html#ad6a7525d9bc2d657fc923e546c175680">Isis::Gruen::~Gruen</a></div><div class="ttdeci">virtual ~Gruen()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> Gruen.h:82</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_aea3bbad7b0bc8a7a2447c911d69d854d"><div class="ttname"><a href="class_isis_1_1_gruen.html#aea3bbad7b0bc8a7a2447c911d69d854d">Isis::Gruen::getAffineTolerance</a></div><div class="ttdeci">AffineTolerance getAffineTolerance() const</div><div class="ttdoc">Return set of tolerances for affine convergence.</div><div class="ttdef"><b>Definition:</b> Gruen.cpp:1066</div></div>
+<div class="ttc" id="aclass_isis_1_1_gruen_html_af83a5d4f189d9a42ccc195701fe8d2f1"><div class="ttname"><a href="class_isis_1_1_gruen.html#af83a5d4f189d9a42ccc195701fe8d2f1">Isis::Gruen::getLastMatch</a></div><div class="ttdeci">MatchPoint getLastMatch() const</div><div class="ttdoc">Returns the register state of the last successful Gruen match.</div><div class="ttdef"><b>Definition:</b> Gruen.h:120</div></div>
+<div class="ttc" id="aclass_isis_1_1_match_point_html"><div class="ttname"><a href="class_isis_1_1_match_point.html">Isis::MatchPoint</a></div><div class="ttdoc">Structure containing comprehensive registration info/results.</div><div class="ttdef"><b>Definition:</b> GruenTypes.h:433</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_html"><div class="ttname"><a href="class_isis_1_1_pvl.html">Isis::Pvl</a></div><div class="ttdoc">Container for cube-like labels.</div><div class="ttdef"><b>Definition:</b> Pvl.h:119</div></div>
+<div class="ttc" id="aclass_isis_1_1_radiometric_html"><div class="ttname"><a href="class_isis_1_1_radiometric.html">Isis::Radiometric</a></div><div class="ttdoc">Store for radiometric gain and shift parameters.</div><div class="ttdef"><b>Definition:</b> GruenTypes.h:206</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a0f2ba9939e73885ee6dcfca6a76815b2"><div class="ttname"><a href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString</a></div><div class="ttdeci">QString toString(bool boolToConvert)</div><div class="ttdoc">Global function to convert a boolean to a string.</div><div class="ttdef"><b>Definition:</b> IString.cpp:211</div></div>
+<div class="ttc" id="anamespace_isis_html_a53eeb601c082b6dfb1890c8288c6800b"><div class="ttname"><a href="namespace_isis.html#a53eeb601c082b6dfb1890c8288c6800b">Isis::GMatrix</a></div><div class="ttdeci">Affine::AMatrix GMatrix</div><div class="ttdef"><b>Definition:</b> GruenTypes.h:29</div></div>
+<div class="ttc" id="anamespace_isis_html_a5d936a01dd07ed2b1b85e85527c7c4b7aad74c8895eb438d576521afaa69a0133"><div class="ttname"><a href="namespace_isis.html#a5d936a01dd07ed2b1b85e85527c7c4b7aad74c8895eb438d576521afaa69a0133">Isis::NCONSTR</a></div><div class="ttdeci">@ NCONSTR</div><div class="ttdef"><b>Definition:</b> GruenTypes.h:33</div></div>
+<div class="ttc" id="anamespace_isis_html_a69c3e9c8145bde8ab5517cf290d1fcfc"><div class="ttname"><a href="namespace_isis.html#a69c3e9c8145bde8ab5517cf290d1fcfc">Isis::GVector</a></div><div class="ttdeci">TNT::Array1D&lt; double &gt; GVector</div><div class="ttdef"><b>Definition:</b> GruenTypes.h:30</div></div>
+<div class="ttc" id="anamespace_isis_html_a840d3fb673563756fc704318d9528188"><div class="ttname"><a href="namespace_isis.html#a840d3fb673563756fc704318d9528188">Isis::BigInt</a></div><div class="ttdeci">long long int BigInt</div><div class="ttdoc">Big int.</div><div class="ttdef"><b>Definition:</b> Constants.h:49</div></div>
+<div class="ttc" id="anamespace_isis_html_aaeffdb92fb5baf0f0ec1cef66a90c2a7"><div class="ttname"><a href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial</a></div><div class="ttdeci">bool IsSpecial(const double d)</div><div class="ttdoc">Returns if the input pixel is special.</div><div class="ttdef"><b>Definition:</b> SpecialPixel.h:197</div></div>
+<div class="ttc" id="astruct_isis_1_1_affine_tolerance_html"><div class="ttname"><a href="struct_isis_1_1_affine_tolerance.html">Isis::AffineTolerance</a></div><div class="ttdoc">Container for Affine limits parameters.</div><div class="ttdef"><b>Definition:</b> GruenTypes.h:319</div></div>
+<div class="ttc" id="astruct_isis_1_1_analysis_html"><div class="ttname"><a href="struct_isis_1_1_analysis.html">Isis::Analysis</a></div><div class="ttdoc">Error analysis of Gruen match point solution.</div><div class="ttdef"><b>Definition:</b> GruenTypes.h:383</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_e922369970bbda6d673bf2502e13e42b.html">Gruen</a></li><li class="navelem"><a class="el" href="_gruen_8h.html">Gruen.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

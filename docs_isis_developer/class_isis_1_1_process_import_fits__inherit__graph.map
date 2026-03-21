@@ -1,0 +1,5 @@
+<map id="Isis::ProcessImportFits" name="Isis::ProcessImportFits">
+<area shape="rect" id="node1" title="Import a FITS file." alt="" coords="5,744,194,921"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_process_import.html" title="Byte swapper." alt="" coords="32,455,167,696"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_process.html" title="Base class for all cube processing derivatives." alt="" coords="10,5,189,407"/>
+</map>

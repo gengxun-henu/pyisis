@@ -1,0 +1,320 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/PushFrameCameraCcdLayout/PushFrameCameraCcdLayout.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_push_frame_camera_ccd_layout_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">PushFrameCameraCcdLayout.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_push_frame_camera_ccd_layout_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PushFrameCameraCcdLayout_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define PushFrameCameraCcdLayout_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_kernels_8h.html">Kernels.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="class_isis_1_1_push_frame_camera_ccd_layout.html">   28</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_push_frame_camera_ccd_layout.html">PushFrameCameraCcdLayout</a> {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html">   44</a></span>&#160;      <span class="keyword">struct </span><a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html">FrameletInfo</a> {</div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aa3b623ae6b3ca70de9b94adb3acc6c08">   45</a></span>&#160;        <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aa3b623ae6b3ca70de9b94adb3acc6c08">FrameletInfo</a>() : <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#afd3173b59d0d004a69f1971d3341ac32">m_frameId</a>(-1), <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a81bd7c3d959bab42e7924958fe87db32">m_filterName</a>(),</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                         <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#abfafea7a570b8470c93e27f6a4136b20">m_startSample</a>(0), <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a63d802e30fd641602af5e2dc3216fa0a">m_startLine</a>(0),</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                         <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aa30ea5ec57be2f11401f8fd60c78f8a6">m_samples</a>(0), <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a0a79829d82759f21ee53bf96f21d80c0">m_lines</a>(0) { }</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aac805407e4e96f3b9255fcb4262cfeb4">   48</a></span>&#160;        <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aac805407e4e96f3b9255fcb4262cfeb4">FrameletInfo</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> frameid) : <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#afd3173b59d0d004a69f1971d3341ac32">m_frameId</a>(frameid), <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a81bd7c3d959bab42e7924958fe87db32">m_filterName</a>(),</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                                          <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#abfafea7a570b8470c93e27f6a4136b20">m_startSample</a>(0), <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a63d802e30fd641602af5e2dc3216fa0a">m_startLine</a>(0),</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                                          <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aa30ea5ec57be2f11401f8fd60c78f8a6">m_samples</a>(0), <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a0a79829d82759f21ee53bf96f21d80c0">m_lines</a>(0) { }</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#ad1a8b9a401fc7bb6af6a3b36545cf212">   51</a></span>&#160;        <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#ad1a8b9a401fc7bb6af6a3b36545cf212">FrameletInfo</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> frameid, QString filterName, <span class="keywordtype">int</span> startSample, </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                     <span class="keywordtype">int</span> startLine, <span class="keywordtype">int</span> samples, <span class="keywordtype">int</span> lines) : </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                     <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#afd3173b59d0d004a69f1971d3341ac32">m_frameId</a>(frameid), <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a81bd7c3d959bab42e7924958fe87db32">m_filterName</a>(filterName), <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#abfafea7a570b8470c93e27f6a4136b20">m_startSample</a>(startSample), </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                     <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a63d802e30fd641602af5e2dc3216fa0a">m_startLine</a>(startLine), <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aa30ea5ec57be2f11401f8fd60c78f8a6">m_samples</a>(samples), <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a0a79829d82759f21ee53bf96f21d80c0">m_lines</a>(lines) { }</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#afd3173b59d0d004a69f1971d3341ac32">   55</a></span>&#160;        <span class="keywordtype">int</span>     <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#afd3173b59d0d004a69f1971d3341ac32">m_frameId</a>; </div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a81bd7c3d959bab42e7924958fe87db32">   56</a></span>&#160;        QString <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a81bd7c3d959bab42e7924958fe87db32">m_filterName</a>; </div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#abfafea7a570b8470c93e27f6a4136b20">   57</a></span>&#160;        <span class="keywordtype">int</span>     <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#abfafea7a570b8470c93e27f6a4136b20">m_startSample</a>; </div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a63d802e30fd641602af5e2dc3216fa0a">   58</a></span>&#160;        <span class="keywordtype">int</span>     <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a63d802e30fd641602af5e2dc3216fa0a">m_startLine</a>; </div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aa30ea5ec57be2f11401f8fd60c78f8a6">   59</a></span>&#160;        <span class="keywordtype">int</span>     <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aa30ea5ec57be2f11401f8fd60c78f8a6">m_samples</a>; </div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a0a79829d82759f21ee53bf96f21d80c0">   60</a></span>&#160;        <span class="keywordtype">int</span>     <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a0a79829d82759f21ee53bf96f21d80c0">m_lines</a>; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      };</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <a class="code" href="class_isis_1_1_push_frame_camera_ccd_layout.html#a32b1faacf412c3193cb7a5213c97e775">PushFrameCameraCcdLayout</a>( );</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      <a class="code" href="class_isis_1_1_push_frame_camera_ccd_layout.html#a32b1faacf412c3193cb7a5213c97e775">PushFrameCameraCcdLayout</a>( <span class="keyword">const</span> <span class="keywordtype">int</span> ccdId );</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_push_frame_camera_ccd_layout.html#a0ffdbffbe2199a8ef454d0b15f705065">~PushFrameCameraCcdLayout</a>();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_push_frame_camera_ccd_layout.html#afa59662381ae07a05baa083b479bac56">addKernel</a>(<span class="keyword">const</span> QString &amp;kernel);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_push_frame_camera_ccd_layout.html#acd474762aa6dee5fc9d71aa823b7a85c">ccdSamples</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_push_frame_camera_ccd_layout.html#ad8e52ca9d62453ee1baf50288ef00feb">ccdLines</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <a class="code" href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html">FrameletInfo</a> <a class="code" href="class_isis_1_1_push_frame_camera_ccd_layout.html#a051e54be98d86b3f2dcfed689fddaf82">getFrameInfo</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> &amp;frameId, </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                                <span class="keyword">const</span> QString &amp;name = <span class="stringliteral">&quot;&quot;</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <span class="keywordtype">int</span>      m_ccdId;     </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <a class="code" href="class_isis_1_1_kernels.html">Kernels</a>  m_kernels;   </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;      <span class="keywordtype">int</span>      getSpiceInt(<span class="keyword">const</span> QString &amp;var, <span class="keyword">const</span> <span class="keywordtype">int</span> index = 0) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;      <span class="keywordtype">double</span>   getSpiceDouble(<span class="keyword">const</span> QString &amp;var, <span class="keyword">const</span> <span class="keywordtype">int</span> index = 0) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      QString  getSpiceString(<span class="keyword">const</span> QString &amp;var, <span class="keyword">const</span> <span class="keywordtype">int</span> index = 0) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  };</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;};</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_kernels_8h_html"><div class="ttname"><a href="_kernels_8h.html">Kernels.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_kernels_html"><div class="ttname"><a href="class_isis_1_1_kernels.html">Isis::Kernels</a></div><div class="ttdoc">Determine SPICE kernels defined in an ISIS file.</div><div class="ttdef"><b>Definition:</b> Kernels.h:94</div></div>
+<div class="ttc" id="aclass_isis_1_1_push_frame_camera_ccd_layout_html"><div class="ttname"><a href="class_isis_1_1_push_frame_camera_ccd_layout.html">Isis::PushFrameCameraCcdLayout</a></div><div class="ttdoc">Provide image coordinates that map to the push frame detector.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.h:28</div></div>
+<div class="ttc" id="aclass_isis_1_1_push_frame_camera_ccd_layout_html_a051e54be98d86b3f2dcfed689fddaf82"><div class="ttname"><a href="class_isis_1_1_push_frame_camera_ccd_layout.html#a051e54be98d86b3f2dcfed689fddaf82">Isis::PushFrameCameraCcdLayout::getFrameInfo</a></div><div class="ttdeci">FrameletInfo getFrameInfo(const int &amp;frameId, const QString &amp;name=&quot;&quot;) const</div><div class="ttdoc">Get the layout information for a framelet.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.cpp:100</div></div>
+<div class="ttc" id="aclass_isis_1_1_push_frame_camera_ccd_layout_html_a0ffdbffbe2199a8ef454d0b15f705065"><div class="ttname"><a href="class_isis_1_1_push_frame_camera_ccd_layout.html#a0ffdbffbe2199a8ef454d0b15f705065">Isis::PushFrameCameraCcdLayout::~PushFrameCameraCcdLayout</a></div><div class="ttdeci">virtual ~PushFrameCameraCcdLayout()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.cpp:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_push_frame_camera_ccd_layout_html_a32b1faacf412c3193cb7a5213c97e775"><div class="ttname"><a href="class_isis_1_1_push_frame_camera_ccd_layout.html#a32b1faacf412c3193cb7a5213c97e775">Isis::PushFrameCameraCcdLayout::PushFrameCameraCcdLayout</a></div><div class="ttdeci">PushFrameCameraCcdLayout()</div><div class="ttdoc">Push frame full CCD layout class.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.cpp:24</div></div>
+<div class="ttc" id="aclass_isis_1_1_push_frame_camera_ccd_layout_html_acd474762aa6dee5fc9d71aa823b7a85c"><div class="ttname"><a href="class_isis_1_1_push_frame_camera_ccd_layout.html#acd474762aa6dee5fc9d71aa823b7a85c">Isis::PushFrameCameraCcdLayout::ccdSamples</a></div><div class="ttdeci">int ccdSamples() const</div><div class="ttdoc">Return the number of samples in the CCD.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.cpp:73</div></div>
+<div class="ttc" id="aclass_isis_1_1_push_frame_camera_ccd_layout_html_ad8e52ca9d62453ee1baf50288ef00feb"><div class="ttname"><a href="class_isis_1_1_push_frame_camera_ccd_layout.html#ad8e52ca9d62453ee1baf50288ef00feb">Isis::PushFrameCameraCcdLayout::ccdLines</a></div><div class="ttdeci">int ccdLines() const</div><div class="ttdoc">Return the number of lines in the CCD.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.cpp:85</div></div>
+<div class="ttc" id="aclass_isis_1_1_push_frame_camera_ccd_layout_html_afa59662381ae07a05baa083b479bac56"><div class="ttname"><a href="class_isis_1_1_push_frame_camera_ccd_layout.html#afa59662381ae07a05baa083b479bac56">Isis::PushFrameCameraCcdLayout::addKernel</a></div><div class="ttdeci">bool addKernel(const QString &amp;kernel)</div><div class="ttdoc">Add a NAIF kernel to the set of kernels that values will be pulled from.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.cpp:56</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="astruct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info_html"><div class="ttname"><a href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html">Isis::PushFrameCameraCcdLayout::FrameletInfo</a></div><div class="ttdoc">Container for the layout of a specific framelet on the detector.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.h:44</div></div>
+<div class="ttc" id="astruct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info_html_a0a79829d82759f21ee53bf96f21d80c0"><div class="ttname"><a href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a0a79829d82759f21ee53bf96f21d80c0">Isis::PushFrameCameraCcdLayout::FrameletInfo::m_lines</a></div><div class="ttdeci">int m_lines</div><div class="ttdoc">The number of lines in the framelet.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.h:60</div></div>
+<div class="ttc" id="astruct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info_html_a63d802e30fd641602af5e2dc3216fa0a"><div class="ttname"><a href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a63d802e30fd641602af5e2dc3216fa0a">Isis::PushFrameCameraCcdLayout::FrameletInfo::m_startLine</a></div><div class="ttdeci">int m_startLine</div><div class="ttdoc">The first line of the framelet on the detector.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.h:58</div></div>
+<div class="ttc" id="astruct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info_html_a81bd7c3d959bab42e7924958fe87db32"><div class="ttname"><a href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#a81bd7c3d959bab42e7924958fe87db32">Isis::PushFrameCameraCcdLayout::FrameletInfo::m_filterName</a></div><div class="ttdeci">QString m_filterName</div><div class="ttdoc">The name of the framelet.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.h:56</div></div>
+<div class="ttc" id="astruct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info_html_aa30ea5ec57be2f11401f8fd60c78f8a6"><div class="ttname"><a href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aa30ea5ec57be2f11401f8fd60c78f8a6">Isis::PushFrameCameraCcdLayout::FrameletInfo::m_samples</a></div><div class="ttdeci">int m_samples</div><div class="ttdoc">The number of samples in the framelet.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.h:59</div></div>
+<div class="ttc" id="astruct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info_html_aa3b623ae6b3ca70de9b94adb3acc6c08"><div class="ttname"><a href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aa3b623ae6b3ca70de9b94adb3acc6c08">Isis::PushFrameCameraCcdLayout::FrameletInfo::FrameletInfo</a></div><div class="ttdeci">FrameletInfo()</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.h:45</div></div>
+<div class="ttc" id="astruct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info_html_aac805407e4e96f3b9255fcb4262cfeb4"><div class="ttname"><a href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#aac805407e4e96f3b9255fcb4262cfeb4">Isis::PushFrameCameraCcdLayout::FrameletInfo::FrameletInfo</a></div><div class="ttdeci">FrameletInfo(const int frameid)</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.h:48</div></div>
+<div class="ttc" id="astruct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info_html_abfafea7a570b8470c93e27f6a4136b20"><div class="ttname"><a href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#abfafea7a570b8470c93e27f6a4136b20">Isis::PushFrameCameraCcdLayout::FrameletInfo::m_startSample</a></div><div class="ttdeci">int m_startSample</div><div class="ttdoc">The first sample of the framelet on the detector.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.h:57</div></div>
+<div class="ttc" id="astruct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info_html_ad1a8b9a401fc7bb6af6a3b36545cf212"><div class="ttname"><a href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#ad1a8b9a401fc7bb6af6a3b36545cf212">Isis::PushFrameCameraCcdLayout::FrameletInfo::FrameletInfo</a></div><div class="ttdeci">FrameletInfo(const int frameid, QString filterName, int startSample, int startLine, int samples, int lines)</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.h:51</div></div>
+<div class="ttc" id="astruct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info_html_afd3173b59d0d004a69f1971d3341ac32"><div class="ttname"><a href="struct_isis_1_1_push_frame_camera_ccd_layout_1_1_framelet_info.html#afd3173b59d0d004a69f1971d3341ac32">Isis::PushFrameCameraCcdLayout::FrameletInfo::m_frameId</a></div><div class="ttdeci">int m_frameId</div><div class="ttdoc">The NAIF ID of the framelet.</div><div class="ttdef"><b>Definition:</b> PushFrameCameraCcdLayout.h:55</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_9b29ccd3ba13cceee4d480fbc57005d0.html">PushFrameCameraCcdLayout</a></li><li class="navelem"><a class="el" href="_push_frame_camera_ccd_layout_8h.html">PushFrameCameraCcdLayout.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

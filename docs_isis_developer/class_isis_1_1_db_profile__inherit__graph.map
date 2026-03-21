@@ -1,0 +1,4 @@
+<map id="Isis::DbProfile" name="Isis::DbProfile">
+<area shape="rect" id="node1" title="A DbProfile is a container for access parameters to a database." alt="" coords="40,5,144,279"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_db_access.html" title="DbAccess manages programatic access to a database through profiles." alt="" coords="5,327,179,584"/>
+</map>

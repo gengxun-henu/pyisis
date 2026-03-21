@@ -1,0 +1,1124 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ShapeDisplayProperties Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_shape_display_properties.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_shape_display_properties-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ShapeDisplayProperties Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This is the GUI communication mechanism for shape objects.  
+ <a href="class_isis_1_1_shape_display_properties.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_shape_display_properties_8h_source.html">ShapeDisplayProperties.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ShapeDisplayProperties:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_shape_display_properties__inherit__graph.png" border="0" usemap="#a_isis_1_1_shape_display_properties_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_shape_display_properties_inherit__map" id="a_isis_1_1_shape_display_properties_inherit__map">
+<area shape="rect" title="This is the GUI communication mechanism for shape objects." alt="" coords="5,440,196,665"/>
+<area shape="rect" href="class_isis_1_1_display_properties.html" title=" " alt="" coords="24,135,177,392"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="66,5,135,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ShapeDisplayProperties:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_shape_display_properties__coll__graph.png" border="0" usemap="#a_isis_1_1_shape_display_properties_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_shape_display_properties_coll__map" id="a_isis_1_1_shape_display_properties_coll__map">
+<area shape="rect" title="This is the GUI communication mechanism for shape objects." alt="" coords="5,440,196,665"/>
+<area shape="rect" href="class_isis_1_1_display_properties.html" title=" " alt="" coords="24,135,177,392"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="66,5,135,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a4e98692b9f900e6e5606250f660ac544"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544">Property</a> { <a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544a1f76fcdcdb7f985f4f7b9f6ae09f3551">None</a> = 0
+, <a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544a803aee9bfecd56287625d04fcc618cb5">Color</a> = 1
+, <a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544a96cf0a3274fa8c86e5fe92ed41187e14">Selected</a> = 2
+, <a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544ab44e9ac97a3a0af7a1541484f514f871">ShowLabel</a> = 16
+ }</td></tr>
+<tr class="memdesc:a4e98692b9f900e6e5606250f660ac544"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a list of properties and actions that are possible.  <a href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544">More...</a><br /></td></tr>
+<tr class="separator:a4e98692b9f900e6e5606250f660ac544"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a6134b77b403117ca3b56a045f1a83f55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#a6134b77b403117ca3b56a045f1a83f55">setColor</a> (QColor newColor)</td></tr>
+<tr class="memdesc:a6134b77b403117ca3b56a045f1a83f55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the color associated with this shape.  <a href="class_isis_1_1_shape_display_properties.html#a6134b77b403117ca3b56a045f1a83f55">More...</a><br /></td></tr>
+<tr class="separator:a6134b77b403117ca3b56a045f1a83f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80f2d646a0787c917c2116d8c49e8ebb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#a80f2d646a0787c917c2116d8c49e8ebb">setShowLabel</a> (bool)</td></tr>
+<tr class="memdesc:a80f2d646a0787c917c2116d8c49e8ebb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the visibility of the display name associated with this shape.  <a href="class_isis_1_1_shape_display_properties.html#a80f2d646a0787c917c2116d8c49e8ebb">More...</a><br /></td></tr>
+<tr class="separator:a80f2d646a0787c917c2116d8c49e8ebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5798f493cb675a071fffaa0dc1bea9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#ae5798f493cb675a071fffaa0dc1bea9a">setSelected</a> (bool)</td></tr>
+<tr class="memdesc:ae5798f493cb675a071fffaa0dc1bea9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the selected state associated with this shape.  <a href="class_isis_1_1_shape_display_properties.html#ae5798f493cb675a071fffaa0dc1bea9a">More...</a><br /></td></tr>
+<tr class="separator:ae5798f493cb675a071fffaa0dc1bea9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:ad82e9d2026a02ca9ffb9abe1aab98b1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#ad82e9d2026a02ca9ffb9abe1aab98b1e">propertyChanged</a> (<a class="el" href="class_isis_1_1_shape_display_properties.html">ShapeDisplayProperties</a> *)</td></tr>
+<tr class="separator:ad82e9d2026a02ca9ffb9abe1aab98b1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a684e537af8f1d19ffb081c4222a0d7c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#a684e537af8f1d19ffb081c4222a0d7c2">supportAdded</a> (<a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544">Property</a>)</td></tr>
+<tr class="separator:a684e537af8f1d19ffb081c4222a0d7c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27a26fbc49af6e7100fdc9d7e79911a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_display_properties.html#a27a26fbc49af6e7100fdc9d7e79911a5">propertyChanged</a> (<a class="el" href="class_isis_1_1_display_properties.html">DisplayProperties</a> *)</td></tr>
+<tr class="separator:a27a26fbc49af6e7100fdc9d7e79911a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dda1c48240a17e42366a3583d26447e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_display_properties.html#a5dda1c48240a17e42366a3583d26447e">supportAdded</a> (int)</td></tr>
+<tr class="separator:a5dda1c48240a17e42366a3583d26447e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ae9b169632b80f6b8083576d4f09b0ec9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#ae9b169632b80f6b8083576d4f09b0ec9">ShapeDisplayProperties</a> (QString <a class="el" href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">displayName</a>, <a class="el" href="class_q_object.html">QObject</a> *parent=NULL)</td></tr>
+<tr class="memdesc:ae9b169632b80f6b8083576d4f09b0ec9"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_shape_display_properties.html" title="This is the GUI communication mechanism for shape objects.">ShapeDisplayProperties</a> constructor.  <a href="class_isis_1_1_shape_display_properties.html#ae9b169632b80f6b8083576d4f09b0ec9">More...</a><br /></td></tr>
+<tr class="separator:ae9b169632b80f6b8083576d4f09b0ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3859d5a37fd72b6911a85c853d013afe"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#a3859d5a37fd72b6911a85c853d013afe">~ShapeDisplayProperties</a> ()</td></tr>
+<tr class="memdesc:a3859d5a37fd72b6911a85c853d013afe"><td class="mdescLeft">&#160;</td><td class="mdescRight">The destructor.  <a href="class_isis_1_1_shape_display_properties.html#a3859d5a37fd72b6911a85c853d013afe">More...</a><br /></td></tr>
+<tr class="separator:a3859d5a37fd72b6911a85c853d013afe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add801281607626baaf7d0b88d8dc14d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#add801281607626baaf7d0b88d8dc14d8">addSupport</a> (<a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544">Property</a> prop)</td></tr>
+<tr class="memdesc:add801281607626baaf7d0b88d8dc14d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this with every property you support, otherwise they will not communicate properly between widgets.  <a href="class_isis_1_1_shape_display_properties.html#add801281607626baaf7d0b88d8dc14d8">More...</a><br /></td></tr>
+<tr class="separator:add801281607626baaf7d0b88d8dc14d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a157a2d9c30784a6d14f9d80b6bd8e9a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#a157a2d9c30784a6d14f9d80b6bd8e9a0">supports</a> (<a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544">Property</a> prop)</td></tr>
+<tr class="memdesc:a157a2d9c30784a6d14f9d80b6bd8e9a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Support for this may come later.  <a href="class_isis_1_1_shape_display_properties.html#a157a2d9c30784a6d14f9d80b6bd8e9a0">More...</a><br /></td></tr>
+<tr class="separator:a157a2d9c30784a6d14f9d80b6bd8e9a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7910a5164c3d3497bca2b2933a8dcca1"><td class="memItemLeft" align="right" valign="top">QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#a7910a5164c3d3497bca2b2933a8dcca1">getValue</a> (<a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544">Property</a> prop) const</td></tr>
+<tr class="memdesc:a7910a5164c3d3497bca2b2933a8dcca1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a property's associated data.  <a href="class_isis_1_1_shape_display_properties.html#a7910a5164c3d3497bca2b2933a8dcca1">More...</a><br /></td></tr>
+<tr class="separator:a7910a5164c3d3497bca2b2933a8dcca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89f4b3f621e89d1ae357e2ea7d027768"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#a89f4b3f621e89d1ae357e2ea7d027768">save</a> (QXmlStreamWriter &amp;stream, const <a class="el" href="class_isis_1_1_project.html">Project</a> *project, <a class="el" href="class_isis_1_1_file_name.html">FileName</a> newProjectRoot) const</td></tr>
+<tr class="memdesc:a89f4b3f621e89d1ae357e2ea7d027768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves this object to an XML file.  <a href="class_isis_1_1_shape_display_properties.html#a89f4b3f621e89d1ae357e2ea7d027768">More...</a><br /></td></tr>
+<tr class="separator:a89f4b3f621e89d1ae357e2ea7d027768"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d2cf4d3ffdb053ba20370746d8be23c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_display_properties.html#a9d2cf4d3ffdb053ba20370746d8be23c">fromPvl</a> (const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;pvl)</td></tr>
+<tr class="separator:a9d2cf4d3ffdb053ba20370746d8be23c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaab25a92093cffe98110a15ac9d6594e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_display_properties.html#aaab25a92093cffe98110a15ac9d6594e">toPvl</a> () const</td></tr>
+<tr class="memdesc:aaab25a92093cffe98110a15ac9d6594e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert to <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> for project files.  <a href="class_isis_1_1_display_properties.html#aaab25a92093cffe98110a15ac9d6594e">More...</a><br /></td></tr>
+<tr class="separator:aaab25a92093cffe98110a15ac9d6594e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af95c300a633935408fa541962c8804db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_display_properties.html#af95c300a633935408fa541962c8804db">addSupport</a> (int property)</td></tr>
+<tr class="memdesc:af95c300a633935408fa541962c8804db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this with every property you support, otherwise they will not communicate properly between widgets.  <a href="class_isis_1_1_display_properties.html#af95c300a633935408fa541962c8804db">More...</a><br /></td></tr>
+<tr class="separator:af95c300a633935408fa541962c8804db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca5be380b20c567e20c0ac73be06d904"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_display_properties.html#aca5be380b20c567e20c0ac73be06d904">supports</a> (int property)</td></tr>
+<tr class="memdesc:aca5be380b20c567e20c0ac73be06d904"><td class="mdescLeft">&#160;</td><td class="mdescRight">Support may come later, please make sure you are connected to the supportAdded signal.  <a href="class_isis_1_1_display_properties.html#aca5be380b20c567e20c0ac73be06d904">More...</a><br /></td></tr>
+<tr class="separator:aca5be380b20c567e20c0ac73be06d904"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d97af1b302bf03ba93f922c684822f2"><td class="memItemLeft" align="right" valign="top">QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_display_properties.html#a0d97af1b302bf03ba93f922c684822f2">getValue</a> (int property) const</td></tr>
+<tr class="memdesc:a0d97af1b302bf03ba93f922c684822f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a property's associated data.  <a href="class_isis_1_1_display_properties.html#a0d97af1b302bf03ba93f922c684822f2">More...</a><br /></td></tr>
+<tr class="separator:a0d97af1b302bf03ba93f922c684822f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51aab4ae8ce067cfd928b110f35088fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_display_properties.html#a51aab4ae8ce067cfd928b110f35088fe">setDisplayName</a> (QString <a class="el" href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">displayName</a>)</td></tr>
+<tr class="memdesc:a51aab4ae8ce067cfd928b110f35088fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets display name.  <a href="class_isis_1_1_display_properties.html#a51aab4ae8ce067cfd928b110f35088fe">More...</a><br /></td></tr>
+<tr class="separator:a51aab4ae8ce067cfd928b110f35088fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a142d239a553918e48f67df7f3bf7b62e"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">displayName</a> () const</td></tr>
+<tr class="memdesc:a142d239a553918e48f67df7f3bf7b62e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the display name.  <a href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">More...</a><br /></td></tr>
+<tr class="separator:a142d239a553918e48f67df7f3bf7b62e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a274e9396e1fb75b392e0bc7f612af9b0"><td class="memItemLeft" align="right" valign="top">static QColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_display_properties.html#a274e9396e1fb75b392e0bc7f612af9b0">randomColor</a> ()</td></tr>
+<tr class="memdesc:a274e9396e1fb75b392e0bc7f612af9b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and returns a random color for the initial color of the footprint polygon.  <a href="class_isis_1_1_shape_display_properties.html#a274e9396e1fb75b392e0bc7f612af9b0">More...</a><br /></td></tr>
+<tr class="separator:a274e9396e1fb75b392e0bc7f612af9b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a63570347dce85d92ff756b7a8d6a6af1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_display_properties.html#a63570347dce85d92ff756b7a8d6a6af1">setValue</a> (int prop, QVariant value)</td></tr>
+<tr class="memdesc:a63570347dce85d92ff756b7a8d6a6af1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the generic mutator for properties.  <a href="class_isis_1_1_display_properties.html#a63570347dce85d92ff756b7a8d6a6af1">More...</a><br /></td></tr>
+<tr class="separator:a63570347dce85d92ff756b7a8d6a6af1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This is the GUI communication mechanism for shape objects. </p>
+<p>This class is the connector between various GUI interfaces for shape objects. We use this to communicate shared properties that various widgets need to know/should react to in a generic way.</p>
+<p>This is how this class is supposed to "connect" widgets:</p>
+<p>widgetA widgetB widgetC | | | ---&mdash;<a class="el" href="class_isis_1_1_display_properties.html">DisplayProperties</a> ----&mdash;</p>
+<p>When a user selects a shape in widgetA, widgetB and widgetC now have a chance to also select the same shape. This applies to all shared properties. Some of the properties are actions - such as ?????. This also allows a widget with no ??? (such as a list) to have an option to ???? (if any of the widgets support it*) and have that option work. There is no state associated with ????? - it's an action connected to a signal.</p>
+<p>The proper way to detect a shape going away is to connect to the destroyed signal (from the parent <a class="el" href="class_q_object.html">QObject</a>). Once that is emitted you cannot call any methods on this object.</p>
+<dl class="section author"><dt>Author</dt><dd>2016-07-25 Tracie Sucharski </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a4e98692b9f900e6e5606250f660ac544"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e98692b9f900e6e5606250f660ac544">&#9670;&nbsp;</a></span>Property</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544">Isis::ShapeDisplayProperties::Property</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is a list of properties and actions that are possible. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4e98692b9f900e6e5606250f660ac544a1f76fcdcdb7f985f4f7b9f6ae09f3551"></a>None&#160;</td><td class="fielddoc"><p>Null display property for bit-flag purposes. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4e98692b9f900e6e5606250f660ac544a803aee9bfecd56287625d04fcc618cb5"></a>Color&#160;</td><td class="fielddoc"><p>The color of the control net, default randomized (QColor) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4e98692b9f900e6e5606250f660ac544a96cf0a3274fa8c86e5fe92ed41187e14"></a>Selected&#160;</td><td class="fielddoc"><p>The selection state of this control net (bool) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4e98692b9f900e6e5606250f660ac544ab44e9ac97a3a0af7a1541484f514f871"></a>ShowLabel&#160;</td><td class="fielddoc"><p>True if the control net should show its display name (bool) </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae9b169632b80f6b8083576d4f09b0ec9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9b169632b80f6b8083576d4f09b0ec9">&#9670;&nbsp;</a></span>ShapeDisplayProperties()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ShapeDisplayProperties::ShapeDisplayProperties </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>displayName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_shape_display_properties.html" title="This is the GUI communication mechanism for shape objects.">ShapeDisplayProperties</a> constructor. </p>
+<p>This sets default values and constructs the object *. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displayName</td><td>The filename (fully expanded) of the object. </td></tr>
+    <tr><td class="paramname">parent</td><td>Qt parent object (this is destroyed when parent is destroyed) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544a1f76fcdcdb7f985f4f7b9f6ae09f3551">None</a>, <a class="el" href="class_isis_1_1_shape_display_properties.html#a274e9396e1fb75b392e0bc7f612af9b0">randomColor()</a>, <a class="el" href="class_isis_1_1_shape_display_properties.html#ae5798f493cb675a071fffaa0dc1bea9a">setSelected()</a>, and <a class="el" href="class_isis_1_1_shape_display_properties.html#a80f2d646a0787c917c2116d8c49e8ebb">setShowLabel()</a>.</p>
+
+</div>
+</div>
+<a id="a3859d5a37fd72b6911a85c853d013afe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3859d5a37fd72b6911a85c853d013afe">&#9670;&nbsp;</a></span>~ShapeDisplayProperties()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ShapeDisplayProperties::~ShapeDisplayProperties </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af95c300a633935408fa541962c8804db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af95c300a633935408fa541962c8804db">&#9670;&nbsp;</a></span>addSupport() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::DisplayProperties::addSupport </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Call this with every property you support, otherwise they will not communicate properly between widgets. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>The property you are adding support for </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_display_properties.html#a5dda1c48240a17e42366a3583d26447e">Isis::DisplayProperties::supportAdded()</a>, and <a class="el" href="class_isis_1_1_display_properties.html#aca5be380b20c567e20c0ac73be06d904">Isis::DisplayProperties::supports()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ace94c742084e9c6181a236b32b335a65">Isis::ImageTreeWidgetItem::ImageTreeWidgetItem()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_item.html#acbe063a0ca2a6f00d647268ec47d0106">Isis::MosaicSceneItem::MosaicSceneItem()</a>.</p>
+
+</div>
+</div>
+<a id="add801281607626baaf7d0b88d8dc14d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add801281607626baaf7d0b88d8dc14d8">&#9670;&nbsp;</a></span>addSupport() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeDisplayProperties::addSupport </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544">Property</a>&#160;</td>
+          <td class="paramname"><em>prop</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Call this with every property you support, otherwise they will not communicate properly between widgets. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>The property you are adding support for </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_display_properties.html#a684e537af8f1d19ffb081c4222a0d7c2">supportAdded()</a>, and <a class="el" href="class_isis_1_1_shape_display_properties.html#a157a2d9c30784a6d14f9d80b6bd8e9a0">supports()</a>.</p>
+
+</div>
+</div>
+<a id="a142d239a553918e48f67df7f3bf7b62e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a142d239a553918e48f67df7f3bf7b62e">&#9670;&nbsp;</a></span>displayName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::DisplayProperties::displayName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the display name. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_directory.html#af434d6bd6bc850f5b83d09ced8bcb474">Isis::Directory::addCnetEditorView()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#ac9bc13f7e9544599251f1cc7d7690cfc">Isis::MosaicSceneItem::contextMenuEvent()</a>, <a class="el" href="class_isis_1_1_display_properties.html#abe4cd5994c2d0cb174532fad253c511b">Isis::DisplayProperties::DisplayProperties()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ace94c742084e9c6181a236b32b335a65">Isis::ImageTreeWidgetItem::ImageTreeWidgetItem()</a>, <a class="el" href="class_isis_1_1_image.html#aebcaa5829bd0dbd1858ea12d457bf664">Isis::Image::initFootprint()</a>, <a class="el" href="class_isis_1_1_shape.html#aa7fc8703bdbaa4374cb4e4684a91fd09">Isis::Shape::initFootprint()</a>, <a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#af5a3ac707fde03b6ee780858d16e97d4">Isis::JigsawSetupDialog::JigsawSetupDialog()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#acbe063a0ca2a6f00d647268ec47d0106">Isis::MosaicSceneItem::MosaicSceneItem()</a>, <a class="el" href="class_isis_1_1_gui_camera.html#aa55a030e90a194cbcd76f64e8b16cce4">Isis::GuiCamera::operator==()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#acd267b233c3e2cc1ea42d38521ebf6c3">Isis::MosaicSceneItem::reproject()</a>, <a class="el" href="class_isis_1_1_control_display_properties.html#a3a6d4de3d5a4a7a3a187d72d2a77ed00">Isis::ControlDisplayProperties::save()</a>, <a class="el" href="class_isis_1_1_display_properties.html#a24fc304d8e7b89eb4b9894a5db4b638b">Isis::DisplayProperties::save()</a>, <a class="el" href="class_isis_1_1_gui_camera_display_properties.html#ac868ae61518a825ae03ac0b8d22c9859">Isis::GuiCameraDisplayProperties::save()</a>, <a class="el" href="class_isis_1_1_shape_display_properties.html#a89f4b3f621e89d1ae357e2ea7d027768">save()</a>, <a class="el" href="class_isis_1_1_target_body_display_properties.html#a1ee3ff5a70bd0c9bdae16b8c557dfb5d">Isis::TargetBodyDisplayProperties::save()</a>, <a class="el" href="class_isis_1_1_sensor_info_widget.html#a2ae9032be8336c82027588865ae1abd9">Isis::SensorInfoWidget::SensorInfoWidget()</a>, <a class="el" href="class_isis_1_1_display_properties.html#a51aab4ae8ce067cfd928b110f35088fe">Isis::DisplayProperties::setDisplayName()</a>, <a class="el" href="class_isis_1_1_export_control_net_work_order.html#a2b70459d7ee22ff703790893af34d6f5">Isis::ExportControlNetWorkOrder::setupExecution()</a>, <a class="el" href="class_isis_1_1_target_info_widget.html#af48b499e0101eeb75c3241c102c42c76">Isis::TargetInfoWidget::TargetInfoWidget()</a>, and <a class="el" href="class_isis_1_1_display_properties.html#aaab25a92093cffe98110a15ac9d6594e">Isis::DisplayProperties::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a9d2cf4d3ffdb053ba20370746d8be23c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d2cf4d3ffdb053ba20370746d8be23c">&#9670;&nbsp;</a></span>fromPvl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::DisplayProperties::fromPvl </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_display_properties.html#a51aab4ae8ce067cfd928b110f35088fe">Isis::DisplayProperties::setDisplayName()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image.html#aea495282ddefd86047969590b8a3a50f">Isis::Image::fromPvl()</a>, and <a class="el" href="class_isis_1_1_shape.html#aac1e228c7fcd8e725618f5aac9fa5b6e">Isis::Shape::fromPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a0d97af1b302bf03ba93f922c684822f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d97af1b302bf03ba93f922c684822f2">&#9670;&nbsp;</a></span>getValue() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariant Isis::DisplayProperties::getValue </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a property's associated data. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>The property </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a7f34b3e6420dadfcbcce95c45acf23ad">Isis::MosaicSceneItem::color()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a5fad22b90b592ba1babe82dfc682cb78">Isis::MosaicSceneItem::cubeDisplayChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#ae518d96d55b88b8edaefbc11e9c7cc29">Isis::MosaicSceneItem::paint()</a>, <a class="el" href="class_isis_1_1_image_list_action_work_order.html#ad7fdaa8e87e208e9b738cf2965b07b74">Isis::ImageListActionWorkOrder::qualifyString()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#acd267b233c3e2cc1ea42d38521ebf6c3">Isis::MosaicSceneItem::reproject()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#a95cc0f9ff84b0887ee53b479333a079a">Isis::ImageTreeWidgetItem::update()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a9c58b93974fa36214b454a4be3d5b53e">Isis::MosaicSceneItem::updateSelection()</a>.</p>
+
+</div>
+</div>
+<a id="a7910a5164c3d3497bca2b2933a8dcca1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7910a5164c3d3497bca2b2933a8dcca1">&#9670;&nbsp;</a></span>getValue() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariant Isis::ShapeDisplayProperties::getValue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544">Property</a>&#160;</td>
+          <td class="paramname"><em>prop</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get a property's associated data. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prop</td><td>The property </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QVariant</b> The data associated with the property. </dd></dl>
+
+</div>
+</div>
+<a id="a27a26fbc49af6e7100fdc9d7e79911a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27a26fbc49af6e7100fdc9d7e79911a5">&#9670;&nbsp;</a></span>propertyChanged <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::DisplayProperties::propertyChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_display_properties.html">DisplayProperties</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_display_properties.html#a63570347dce85d92ff756b7a8d6a6af1">Isis::DisplayProperties::setValue()</a>.</p>
+
+</div>
+</div>
+<a id="ad82e9d2026a02ca9ffb9abe1aab98b1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad82e9d2026a02ca9ffb9abe1aab98b1e">&#9670;&nbsp;</a></span>propertyChanged <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeDisplayProperties::propertyChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape_display_properties.html">ShapeDisplayProperties</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a274e9396e1fb75b392e0bc7f612af9b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a274e9396e1fb75b392e0bc7f612af9b0">&#9670;&nbsp;</a></span>randomColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QColor Isis::ShapeDisplayProperties::randomColor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates and returns a random color for the initial color of the footprint polygon. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>QColor</b> The color for the initial footprint polygon. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape_display_properties.html#ae9b169632b80f6b8083576d4f09b0ec9">ShapeDisplayProperties()</a>.</p>
+
+</div>
+</div>
+<a id="a89f4b3f621e89d1ae357e2ea7d027768"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89f4b3f621e89d1ae357e2ea7d027768">&#9670;&nbsp;</a></span>save()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeDisplayProperties::save </td>
+          <td>(</td>
+          <td class="paramtype">QXmlStreamWriter &amp;&#160;</td>
+          <td class="paramname"><em>stream</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td>
+          <td class="paramname"><em>newProjectRoot</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Saves this object to an XML file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>The XML stream writer write to. </td></tr>
+    <tr><td class="paramname">project</td><td>The project this object is attached to (not used). </td></tr>
+    <tr><td class="paramname">newProjectRoot</td><td><a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a> of the project? (not used). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">Isis::DisplayProperties::displayName()</a>, and <a class="el" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">Isis::ReadWrite</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape.html#a69682744743694a571524d071f85654e">Isis::Shape::save()</a>.</p>
+
+</div>
+</div>
+<a id="a6134b77b403117ca3b56a045f1a83f55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6134b77b403117ca3b56a045f1a83f55">&#9670;&nbsp;</a></span>setColor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeDisplayProperties::setColor </td>
+          <td>(</td>
+          <td class="paramtype">QColor&#160;</td>
+          <td class="paramname"><em>newColor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Change the color associated with this shape. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newColor</td><td>The new color associated with this shape. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a51aab4ae8ce067cfd928b110f35088fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51aab4ae8ce067cfd928b110f35088fe">&#9670;&nbsp;</a></span>setDisplayName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::DisplayProperties::setDisplayName </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>displayName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets display name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displayName</td><td>Display name of the object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">Isis::DisplayProperties::displayName()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_display_properties.html#a9d2cf4d3ffdb053ba20370746d8be23c">Isis::DisplayProperties::fromPvl()</a>.</p>
+
+</div>
+</div>
+<a id="ae5798f493cb675a071fffaa0dc1bea9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5798f493cb675a071fffaa0dc1bea9a">&#9670;&nbsp;</a></span>setSelected</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeDisplayProperties::setSelected </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>newValue</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Change the selected state associated with this shape. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">The</td><td>new state associated with this shape. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544a96cf0a3274fa8c86e5fe92ed41187e14">Selected</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape_display_properties.html#ae9b169632b80f6b8083576d4f09b0ec9">ShapeDisplayProperties()</a>.</p>
+
+</div>
+</div>
+<a id="a80f2d646a0787c917c2116d8c49e8ebb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80f2d646a0787c917c2116d8c49e8ebb">&#9670;&nbsp;</a></span>setShowLabel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeDisplayProperties::setShowLabel </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>newValue</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Change the visibility of the display name associated with this shape. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newValue</td><td>The visibiliy of the display name for this shape. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544ab44e9ac97a3a0af7a1541484f514f871">ShowLabel</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape_display_properties.html#ae9b169632b80f6b8083576d4f09b0ec9">ShapeDisplayProperties()</a>.</p>
+
+</div>
+</div>
+<a id="a63570347dce85d92ff756b7a8d6a6af1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63570347dce85d92ff756b7a8d6a6af1">&#9670;&nbsp;</a></span>setValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::DisplayProperties::setValue </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVariant&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is the generic mutator for properties. </p>
+<p>Given a value, this will change it and emit propertyChanged if its different and supported. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_display_properties.html#a27a26fbc49af6e7100fdc9d7e79911a5">Isis::DisplayProperties::propertyChanged()</a>, and <a class="el" href="class_isis_1_1_display_properties.html#aca5be380b20c567e20c0ac73be06d904">Isis::DisplayProperties::supports()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_display_properties.html#ab47d045a4b64807dfd12b5db07d41850">Isis::ImageDisplayProperties::ImageDisplayProperties()</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a29023e7e388752795c6b05c62b9f29be">Isis::ImageDisplayProperties::setColor()</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#aeb13f12ae5cdb653a3bf831983ad4698">Isis::ImageDisplayProperties::setSelected()</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a1a654c86e6505cd72bc54073f6d249bb">Isis::ImageDisplayProperties::setShowDNs()</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a1576edd8363f36c3452fbea1ae40cd8b">Isis::ImageDisplayProperties::setShowFill()</a>, <a class="el" href="class_isis_1_1_image_display_properties.html#a1566c3be4c4bb5c3228fb3986bf56fc1">Isis::ImageDisplayProperties::setShowLabel()</a>, and <a class="el" href="class_isis_1_1_image_display_properties.html#aa88a628fef2563fa21baf4dce976a068">Isis::ImageDisplayProperties::setShowOutline()</a>.</p>
+
+</div>
+</div>
+<a id="a5dda1c48240a17e42366a3583d26447e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dda1c48240a17e42366a3583d26447e">&#9670;&nbsp;</a></span>supportAdded <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::DisplayProperties::supportAdded </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_display_properties.html#af95c300a633935408fa541962c8804db">Isis::DisplayProperties::addSupport()</a>.</p>
+
+</div>
+</div>
+<a id="a684e537af8f1d19ffb081c4222a0d7c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a684e537af8f1d19ffb081c4222a0d7c2">&#9670;&nbsp;</a></span>supportAdded <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeDisplayProperties::supportAdded </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544">Property</a>&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape_display_properties.html#add801281607626baaf7d0b88d8dc14d8">addSupport()</a>.</p>
+
+</div>
+</div>
+<a id="aca5be380b20c567e20c0ac73be06d904"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca5be380b20c567e20c0ac73be06d904">&#9670;&nbsp;</a></span>supports() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::DisplayProperties::supports </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Support may come later, please make sure you are connected to the supportAdded signal. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if the property has support, false otherwise </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_display_properties.html#af95c300a633935408fa541962c8804db">Isis::DisplayProperties::addSupport()</a>, <a class="el" href="class_isis_1_1_image_list.html#aae71126dd3bfb2a2836e59685c14ee43">Isis::ImageList::allSupport()</a>, <a class="el" href="class_isis_1_1_display_properties.html#a63570347dce85d92ff756b7a8d6a6af1">Isis::DisplayProperties::setValue()</a>, and <a class="el" href="class_isis_1_1_image_tree_widget_item.html#a95cc0f9ff84b0887ee53b479333a079a">Isis::ImageTreeWidgetItem::update()</a>.</p>
+
+</div>
+</div>
+<a id="a157a2d9c30784a6d14f9d80b6bd8e9a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a157a2d9c30784a6d14f9d80b6bd8e9a0">&#9670;&nbsp;</a></span>supports() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ShapeDisplayProperties::supports </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape_display_properties.html#a4e98692b9f900e6e5606250f660ac544">Property</a>&#160;</td>
+          <td class="paramname"><em>prop</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Support for this may come later. </p>
+<p>Please make sure you are connected to the supportAdded signal. </p><dl class="section return"><dt>Returns</dt><dd><b>bool</b> True if the property has support, false otherwise. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape_display_properties.html#add801281607626baaf7d0b88d8dc14d8">addSupport()</a>.</p>
+
+</div>
+</div>
+<a id="aaab25a92093cffe98110a15ac9d6594e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaab25a92093cffe98110a15ac9d6594e">&#9670;&nbsp;</a></span>toPvl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> Isis::DisplayProperties::toPvl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convert to <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> for project files. </p>
+<p>This stores all of the data associated with all of the properties (but not what is supported). This also stores the cube filename. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">Isis::DisplayProperties::displayName()</a>, and <a class="el" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">Isis::ReadWrite</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image.html#a8af503cceec299a52778ac0417485e18">Isis::Image::toPvl()</a>, and <a class="el" href="class_isis_1_1_shape.html#a239a336d99a1376bbd4f7b316a1e5999">Isis::Shape::toPvl()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ShapeDisplayProperties/<a class="el" href="_shape_display_properties_8h_source.html">ShapeDisplayProperties.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ShapeDisplayProperties/<a class="el" href="_shape_display_properties_8cpp.html">ShapeDisplayProperties.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_shape_display_properties.html">ShapeDisplayProperties</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

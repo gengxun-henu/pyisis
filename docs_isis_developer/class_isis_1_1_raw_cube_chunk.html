@@ -1,0 +1,940 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::RawCubeChunk Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_raw_cube_chunk.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_raw_cube_chunk-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::RawCubeChunk Class Reference<div class="ingroups"><a class="el" href="group___low_level_cube_i_o.html">Low Level Cube I/O</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>A section of raw data on the disk.  
+ <a href="class_isis_1_1_raw_cube_chunk.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_raw_cube_chunk_8h_source.html">RawCubeChunk.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::RawCubeChunk:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_raw_cube_chunk__coll__graph.png" border="0" usemap="#a_isis_1_1_raw_cube_chunk_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_raw_cube_chunk_coll__map" id="a_isis_1_1_raw_cube_chunk_coll__map">
+<area shape="rect" title="A section of raw data on the disk." alt="" coords="5,5,152,247"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a9482444b315a17e9e074efec989fe222"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#a9482444b315a17e9e074efec989fe222">RawCubeChunk</a> (const <a class="el" href="class_isis_1_1_area3_d.html">Area3D</a> &amp;placement, int numBytes)</td></tr>
+<tr class="memdesc:a9482444b315a17e9e074efec989fe222"><td class="mdescLeft">&#160;</td><td class="mdescRight">This constructor creates a new cube chunk based on the provided placement and data size.  <a href="class_isis_1_1_raw_cube_chunk.html#a9482444b315a17e9e074efec989fe222">More...</a><br /></td></tr>
+<tr class="separator:a9482444b315a17e9e074efec989fe222"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad385b090e25f22750489d17f815e5c9d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#ad385b090e25f22750489d17f815e5c9d">RawCubeChunk</a> (int startSample, int startLine, int startBand, int endSample, int endLine, int endBand, int numBytes)</td></tr>
+<tr class="memdesc:ad385b090e25f22750489d17f815e5c9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This constructor creates a new cube chunk based on the provided coordinates and data size.  <a href="class_isis_1_1_raw_cube_chunk.html#ad385b090e25f22750489d17f815e5c9d">More...</a><br /></td></tr>
+<tr class="separator:ad385b090e25f22750489d17f815e5c9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afddfa11f2430b36a50723b3bf6967c5e"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#afddfa11f2430b36a50723b3bf6967c5e">~RawCubeChunk</a> ()</td></tr>
+<tr class="memdesc:afddfa11f2430b36a50723b3bf6967c5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The destructor.  <a href="class_isis_1_1_raw_cube_chunk.html#afddfa11f2430b36a50723b3bf6967c5e">More...</a><br /></td></tr>
+<tr class="separator:afddfa11f2430b36a50723b3bf6967c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae327eec89761fca3f085996b829084a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#ae327eec89761fca3f085996b829084a1">isDirty</a> () const</td></tr>
+<tr class="separator:ae327eec89761fca3f085996b829084a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a155bba5deb3bd599e53f6e3817575cc5"><td class="memItemLeft" align="right" valign="top">QByteArray &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#a155bba5deb3bd599e53f6e3817575cc5">getRawData</a> () const</td></tr>
+<tr class="separator:a155bba5deb3bd599e53f6e3817575cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74b7e5d74aa534c8f34661840d76aec9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#a74b7e5d74aa534c8f34661840d76aec9">setRawData</a> (QByteArray rawData)</td></tr>
+<tr class="memdesc:a74b7e5d74aa534c8f34661840d76aec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the chunk's raw data.  <a href="class_isis_1_1_raw_cube_chunk.html#a74b7e5d74aa534c8f34661840d76aec9">More...</a><br /></td></tr>
+<tr class="separator:a74b7e5d74aa534c8f34661840d76aec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5cc39a7e86dbe62d81a1b100a22bcc2"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#ae5cc39a7e86dbe62d81a1b100a22bcc2">getChar</a> (int offset) const</td></tr>
+<tr class="memdesc:ae5cc39a7e86dbe62d81a1b100a22bcc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is currently not in use due to a faster way of getting data from the buffer (through the internal pointer).  <a href="class_isis_1_1_raw_cube_chunk.html#ae5cc39a7e86dbe62d81a1b100a22bcc2">More...</a><br /></td></tr>
+<tr class="separator:ae5cc39a7e86dbe62d81a1b100a22bcc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b18aa14e8eb90bd130f4ec809b613e8"><td class="memItemLeft" align="right" valign="top">short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#a2b18aa14e8eb90bd130f4ec809b613e8">getShort</a> (int offset) const</td></tr>
+<tr class="separator:a2b18aa14e8eb90bd130f4ec809b613e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac681ee1ca6ff327635f57c332e51ad4a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#ac681ee1ca6ff327635f57c332e51ad4a">getFloat</a> (int offset) const</td></tr>
+<tr class="separator:ac681ee1ca6ff327635f57c332e51ad4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60f263a7ecba5350c97a13d3b1f36dd2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#a60f263a7ecba5350c97a13d3b1f36dd2">getStartSample</a> () const</td></tr>
+<tr class="separator:a60f263a7ecba5350c97a13d3b1f36dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2447a03f878960d9aaa784e12a62427"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#ab2447a03f878960d9aaa784e12a62427">getStartLine</a> () const</td></tr>
+<tr class="separator:ab2447a03f878960d9aaa784e12a62427"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a778c674e5269d8b4c8ac1b79f79165e3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#a778c674e5269d8b4c8ac1b79f79165e3">getStartBand</a> () const</td></tr>
+<tr class="separator:a778c674e5269d8b4c8ac1b79f79165e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19dcbfa992a94bce017dfa66c243a713"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#a19dcbfa992a94bce017dfa66c243a713">sampleCount</a> () const</td></tr>
+<tr class="separator:a19dcbfa992a94bce017dfa66c243a713"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7b6d04620c42db091b3168571fbc67e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#af7b6d04620c42db091b3168571fbc67e">lineCount</a> () const</td></tr>
+<tr class="separator:af7b6d04620c42db091b3168571fbc67e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ab1408a964750927dc4947a056c716a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#a6ab1408a964750927dc4947a056c716a">bandCount</a> () const</td></tr>
+<tr class="separator:a6ab1408a964750927dc4947a056c716a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e0400a8121c7b099c822542c76eaa61"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#a2e0400a8121c7b099c822542c76eaa61">getByteCount</a> () const</td></tr>
+<tr class="separator:a2e0400a8121c7b099c822542c76eaa61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c135802ba79bbe2078aa800edf9ef53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#a5c135802ba79bbe2078aa800edf9ef53">setData</a> (unsigned char value, int offset)</td></tr>
+<tr class="memdesc:a5c135802ba79bbe2078aa800edf9ef53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the char at the given offset in the raw data buffer of this chunk.  <a href="class_isis_1_1_raw_cube_chunk.html#a5c135802ba79bbe2078aa800edf9ef53">More...</a><br /></td></tr>
+<tr class="separator:a5c135802ba79bbe2078aa800edf9ef53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae2ede3d35c2cdc9caa6e5fe58bf037d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#aae2ede3d35c2cdc9caa6e5fe58bf037d">setData</a> (short value, int offset)</td></tr>
+<tr class="memdesc:aae2ede3d35c2cdc9caa6e5fe58bf037d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the short at the given offset in the raw data buffer of this chunk.  <a href="class_isis_1_1_raw_cube_chunk.html#aae2ede3d35c2cdc9caa6e5fe58bf037d">More...</a><br /></td></tr>
+<tr class="separator:aae2ede3d35c2cdc9caa6e5fe58bf037d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af89b7fb7a567013e9c6dfe7ff9aae9e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#af89b7fb7a567013e9c6dfe7ff9aae9e5">setData</a> (const float &amp;value, const int &amp;offset)</td></tr>
+<tr class="memdesc:af89b7fb7a567013e9c6dfe7ff9aae9e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the float at the given offset in the raw data buffer of this chunk.  <a href="class_isis_1_1_raw_cube_chunk.html#af89b7fb7a567013e9c6dfe7ff9aae9e5">More...</a><br /></td></tr>
+<tr class="separator:af89b7fb7a567013e9c6dfe7ff9aae9e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60fdf23f6e3b13c62cf1b8f567c8c7e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_raw_cube_chunk.html#a60fdf23f6e3b13c62cf1b8f567c8c7e1">setDirty</a> (bool dirty)</td></tr>
+<tr class="memdesc:a60fdf23f6e3b13c62cf1b8f567c8c7e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the chunk's dirty flag, indicating whether or not the chunk's data matches the data that is on disk.  <a href="class_isis_1_1_raw_cube_chunk.html#a60fdf23f6e3b13c62cf1b8f567c8c7e1">More...</a><br /></td></tr>
+<tr class="separator:a60fdf23f6e3b13c62cf1b8f567c8c7e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A section of raw data on the disk. </p>
+<p>This encapsulates a chunk's data. The data stored in this class is literally what is stored on disk - an unswapped byte array. These should only be used by <a class="el" href="class_isis_1_1_cube_io_handler.html" title="Handles converting buffers to and from disk.">CubeIoHandler</a> and it's children to manage what is in memory versus what is on disk.</p>
+<dl class="section author"><dt>Author</dt><dd>2011-06-15 Steven Lambright and Jai Rideout </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a9482444b315a17e9e074efec989fe222"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9482444b315a17e9e074efec989fe222">&#9670;&nbsp;</a></span>RawCubeChunk() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::RawCubeChunk::RawCubeChunk </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_area3_d.html">Area3D</a> &amp;&#160;</td>
+          <td class="paramname"><em>placement</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numBytes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This constructor creates a new cube chunk based on the provided placement and data size. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">placement</td><td>the 3D "cube" that this chunk will cover (inclusive) </td></tr>
+    <tr><td class="paramname">numBytes</td><td>the number of raw data bytes in the chunk </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_area3_d.html#a87220de735460d7237229f7f6c3d4af9">Isis::Area3D::getDepth()</a>, <a class="el" href="class_isis_1_1_area3_d.html#ab8bd1c397fa690c07be0eb5d953c1ef3">Isis::Area3D::getHeight()</a>, <a class="el" href="class_isis_1_1_area3_d.html#ae1f4f57326ed82a1b6ba6e334a84d8b7">Isis::Area3D::getStartX()</a>, <a class="el" href="class_isis_1_1_area3_d.html#a027f186b7d9061fa7b723244823ef28b">Isis::Area3D::getStartY()</a>, <a class="el" href="class_isis_1_1_area3_d.html#aa00026df3eade6fe83cf53fd57eecfad">Isis::Area3D::getStartZ()</a>, <a class="el" href="class_isis_1_1_area3_d.html#a50ec21c1774c377b3b6a6ad804527636">Isis::Area3D::getWidth()</a>, <a class="el" href="class_isis_1_1_displacement.html#a086fb3f9696a9ae1c0247618238c2577">Isis::Displacement::pixels()</a>, <a class="el" href="class_isis_1_1_distance.html#ae3b76053f539e27c5fe63d1b83bbbafe">Isis::Distance::pixels()</a>, and <a class="el" href="_viewport_buffer_8cpp.html#a6ea10f4260b54a61665ead26cb995ba3">round</a>.</p>
+
+</div>
+</div>
+<a id="ad385b090e25f22750489d17f815e5c9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad385b090e25f22750489d17f815e5c9d">&#9670;&nbsp;</a></span>RawCubeChunk() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::RawCubeChunk::RawCubeChunk </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>startSample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>startLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>startBand</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>endSample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>endLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>endBand</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numBytes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This constructor creates a new cube chunk based on the provided coordinates and data size. </p>
+<p>This constructor is provided in addition to the previous one for performance gain.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">startSample</td><td>the starting sample of the chunk (inclusive) </td></tr>
+    <tr><td class="paramname">startLine</td><td>the starting line of the chunk (inclusive) </td></tr>
+    <tr><td class="paramname">startBand</td><td>the starting band of the chunk (inclusive) </td></tr>
+    <tr><td class="paramname">endSample</td><td>the ending sample of the chunk (inclusive) </td></tr>
+    <tr><td class="paramname">endLine</td><td>the ending line of the chunk (inclusive) </td></tr>
+    <tr><td class="paramname">endBand</td><td>the ending band of the chunk (inclusive) </td></tr>
+    <tr><td class="paramname">numBytes</td><td>the number of raw data bytes in the chunk </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afddfa11f2430b36a50723b3bf6967c5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afddfa11f2430b36a50723b3bf6967c5e">&#9670;&nbsp;</a></span>~RawCubeChunk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::RawCubeChunk::~RawCubeChunk </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6ab1408a964750927dc4947a056c716a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ab1408a964750927dc4947a056c716a">&#9670;&nbsp;</a></span>bandCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::RawCubeChunk::bandCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>the number of bands in the cube chunk. </dd></dl>
+
+</div>
+</div>
+<a id="a2e0400a8121c7b099c822542c76eaa61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e0400a8121c7b099c822542c76eaa61">&#9670;&nbsp;</a></span>getByteCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::RawCubeChunk::getByteCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>the size (in bytes) of the raw data buffer. If the raw data buffer is null, -1 is returned. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_bsq_handler.html#a4a3ee18c95e05810f5e9f75a7e05de12">Isis::CubeBsqHandler::readRaw()</a>, <a class="el" href="class_isis_1_1_cube_tile_handler.html#a5d6ca1e5db3dc0b06c35dd7497b19421">Isis::CubeTileHandler::readRaw()</a>, <a class="el" href="class_isis_1_1_cube_bsq_handler.html#a754d35e4a6d4dc740533612dc6168a61">Isis::CubeBsqHandler::writeRaw()</a>, and <a class="el" href="class_isis_1_1_cube_tile_handler.html#a5c852b22207c346909a4b27c58668b2a">Isis::CubeTileHandler::writeRaw()</a>.</p>
+
+</div>
+</div>
+<a id="ae5cc39a7e86dbe62d81a1b100a22bcc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5cc39a7e86dbe62d81a1b100a22bcc2">&#9670;&nbsp;</a></span>getChar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char Isis::RawCubeChunk::getChar </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method is currently not in use due to a faster way of getting data from the buffer (through the internal pointer). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offset</td><td>the offset into the raw data buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the char at the position indicated by the given offset. </dd></dl>
+
+</div>
+</div>
+<a id="ac681ee1ca6ff327635f57c332e51ad4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac681ee1ca6ff327635f57c332e51ad4a">&#9670;&nbsp;</a></span>getFloat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Isis::RawCubeChunk::getFloat </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>the float at the position indicated by the given offset. The value returned is not byte swapped. This method is currently not in use due to a faster way of getting data from the buffer (through the internal pointer).</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offset</td><td>the offset into the raw data buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a155bba5deb3bd599e53f6e3817575cc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a155bba5deb3bd599e53f6e3817575cc5">&#9670;&nbsp;</a></span>getRawData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QByteArray&amp; Isis::RawCubeChunk::getRawData </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>a reference to the raw data in this cube chunk. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_bsq_handler.html#a754d35e4a6d4dc740533612dc6168a61">Isis::CubeBsqHandler::writeRaw()</a>, and <a class="el" href="class_isis_1_1_cube_tile_handler.html#a5c852b22207c346909a4b27c58668b2a">Isis::CubeTileHandler::writeRaw()</a>.</p>
+
+</div>
+</div>
+<a id="a2b18aa14e8eb90bd130f4ec809b613e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b18aa14e8eb90bd130f4ec809b613e8">&#9670;&nbsp;</a></span>getShort()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">short Isis::RawCubeChunk::getShort </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>the short at the position indicated by the given offset. The value returned is not byte swapped. This method is currently not in use due to a faster way of getting data from the buffer (through the internal pointer).</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offset</td><td>the offset into the raw data buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a778c674e5269d8b4c8ac1b79f79165e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a778c674e5269d8b4c8ac1b79f79165e3">&#9670;&nbsp;</a></span>getStartBand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::RawCubeChunk::getStartBand </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>the first (inclusive) band of the cube chunk. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_io_handler.html#afb980b4e2b77181a57b738fdae5d8b75">Isis::CubeIoHandler::getChunkIndex()</a>.</p>
+
+</div>
+</div>
+<a id="ab2447a03f878960d9aaa784e12a62427"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2447a03f878960d9aaa784e12a62427">&#9670;&nbsp;</a></span>getStartLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::RawCubeChunk::getStartLine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>the first (inclusive) line of the cube chunk. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_io_handler.html#afb980b4e2b77181a57b738fdae5d8b75">Isis::CubeIoHandler::getChunkIndex()</a>, and <a class="el" href="class_isis_1_1_boxcar_caching_algorithm.html#a239ce1d78149d9f5022441972729be70">Isis::BoxcarCachingAlgorithm::recommendChunksToFree()</a>.</p>
+
+</div>
+</div>
+<a id="a60f263a7ecba5350c97a13d3b1f36dd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60f263a7ecba5350c97a13d3b1f36dd2">&#9670;&nbsp;</a></span>getStartSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::RawCubeChunk::getStartSample </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>the first (inclusive) sample of the cube chunk. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_io_handler.html#afb980b4e2b77181a57b738fdae5d8b75">Isis::CubeIoHandler::getChunkIndex()</a>.</p>
+
+</div>
+</div>
+<a id="ae327eec89761fca3f085996b829084a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae327eec89761fca3f085996b829084a1">&#9670;&nbsp;</a></span>isDirty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::RawCubeChunk::isDirty </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>true if the data in this chunk does not match what is on disk. </dd></dl>
+
+</div>
+</div>
+<a id="af7b6d04620c42db091b3168571fbc67e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7b6d04620c42db091b3168571fbc67e">&#9670;&nbsp;</a></span>lineCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::RawCubeChunk::lineCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>the number of lines in the cube chunk. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_boxcar_caching_algorithm.html#a239ce1d78149d9f5022441972729be70">Isis::BoxcarCachingAlgorithm::recommendChunksToFree()</a>.</p>
+
+</div>
+</div>
+<a id="a19dcbfa992a94bce017dfa66c243a713"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19dcbfa992a94bce017dfa66c243a713">&#9670;&nbsp;</a></span>sampleCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::RawCubeChunk::sampleCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>the number of samples in the cube chunk. </dd></dl>
+
+</div>
+</div>
+<a id="af89b7fb7a567013e9c6dfe7ff9aae9e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af89b7fb7a567013e9c6dfe7ff9aae9e5">&#9670;&nbsp;</a></span>setData() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::RawCubeChunk::setData </td>
+          <td>(</td>
+          <td class="paramtype">const float &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the float at the given offset in the raw data buffer of this chunk. </p>
+<p>The chunk's dirty flag is set to true.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>the new float value </td></tr>
+    <tr><td class="paramname">offset</td><td>the position to place the new value at </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aae2ede3d35c2cdc9caa6e5fe58bf037d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae2ede3d35c2cdc9caa6e5fe58bf037d">&#9670;&nbsp;</a></span>setData() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::RawCubeChunk::setData </td>
+          <td>(</td>
+          <td class="paramtype">short&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the short at the given offset in the raw data buffer of this chunk. </p>
+<p>The chunk's dirty flag is set to true.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>the new short value </td></tr>
+    <tr><td class="paramname">offset</td><td>the position to place the new value at </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5c135802ba79bbe2078aa800edf9ef53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c135802ba79bbe2078aa800edf9ef53">&#9670;&nbsp;</a></span>setData() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::RawCubeChunk::setData </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the char at the given offset in the raw data buffer of this chunk. </p>
+<p>The chunk's dirty flag is set to true.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>the new char value </td></tr>
+    <tr><td class="paramname">offset</td><td>the position to place the new value at </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a60fdf23f6e3b13c62cf1b8f567c8c7e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60fdf23f6e3b13c62cf1b8f567c8c7e1">&#9670;&nbsp;</a></span>setDirty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::RawCubeChunk::setDirty </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>dirty</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the chunk's dirty flag, indicating whether or not the chunk's data matches the data that is on disk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dirty</td><td>bool indicating whether the chunk is dirty or not </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a74b7e5d74aa534c8f34661840d76aec9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74b7e5d74aa534c8f34661840d76aec9">&#9670;&nbsp;</a></span>setRawData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::RawCubeChunk::setRawData </td>
+          <td>(</td>
+          <td class="paramtype">QByteArray&#160;</td>
+          <td class="paramname"><em>rawData</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the chunk's raw data. </p>
+<p>This size of the new raw data must match that of the chunk's current raw data buffer.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rawData</td><td>the raw data </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_bsq_handler.html#a4a3ee18c95e05810f5e9f75a7e05de12">Isis::CubeBsqHandler::readRaw()</a>, and <a class="el" href="class_isis_1_1_cube_tile_handler.html#a5d6ca1e5db3dc0b06c35dd7497b19421">Isis::CubeTileHandler::readRaw()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Cube/<a class="el" href="_raw_cube_chunk_8h_source.html">RawCubeChunk.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Cube/<a class="el" href="_raw_cube_chunk_8cpp.html">RawCubeChunk.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_raw_cube_chunk.html">RawCubeChunk</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

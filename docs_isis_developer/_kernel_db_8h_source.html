@@ -1,0 +1,342 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/system/objs/KernelDb/KernelDb.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_kernel_db_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">KernelDb.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_kernel_db_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef KernelDb_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define KernelDb_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;queue&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;QList&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;QStringList&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="i_time_8h.html">iTime.h</a>&quot;</span><span class="comment">//???</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_kernel_8h.html">Kernel.h</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_8h.html">Pvl.h</a>&quot;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">class  </span>KernelDbFixture_TestKernelsSmithOffset_Test;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keyword">class </span>FileName;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">class </span>iTime;</div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="class_isis_1_1_kernel_db.html">  102</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_kernel_db.html">KernelDb</a> {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      <span class="comment">// constructor</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      <a class="code" href="class_isis_1_1_kernel_db.html#afa58e0fbe001e81e3904c753b7119cd6">KernelDb</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> allowedKernelTypes);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <a class="code" href="class_isis_1_1_kernel_db.html#afa58e0fbe001e81e3904c753b7119cd6">KernelDb</a>(<span class="keyword">const</span> QString &amp;dbName, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> allowedKernelTypes);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <a class="code" href="class_isis_1_1_kernel_db.html#afa58e0fbe001e81e3904c753b7119cd6">KernelDb</a>(std::istream &amp;dbStream, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> allowedKernelTypes);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      <span class="comment">// destructor</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      <a class="code" href="class_isis_1_1_kernel_db.html#a3b675f4c733a9bdffdbb4f8e17a27c6d">~KernelDb</a>();</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      <span class="comment">// Members for getting kernels</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;      <a class="code" href="class_isis_1_1_kernel.html">Kernel</a> <a class="code" href="class_isis_1_1_kernel_db.html#ae4ff535e7b62d78ba4d8d4bbdf6d9c75">leapSecond</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      <a class="code" href="class_isis_1_1_kernel.html">Kernel</a> <a class="code" href="class_isis_1_1_kernel_db.html#a285aa3ccb01b5b0a48903d5f11ac45df">targetAttitudeShape</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      <a class="code" href="class_isis_1_1_kernel.html">Kernel</a> <a class="code" href="class_isis_1_1_kernel_db.html#a7612929fbbb0d6baf7b4ab9b4b9dceac">targetPosition</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; std::priority_queue&lt;Kernel&gt;</a> &gt; <a class="code" href="class_isis_1_1_kernel_db.html#ac7e173146c223daa4e257139b46e2c8f">spacecraftPointing</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;      <a class="code" href="class_isis_1_1_kernel.html">Kernel</a> <a class="code" href="class_isis_1_1_kernel_db.html#a21e0a13b5b51af6fba0b118189d379ab">spacecraftClock</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;      <a class="code" href="class_isis_1_1_kernel.html">Kernel</a> <a class="code" href="class_isis_1_1_kernel_db.html#ab4b230d73ebe336eaf0bc5f163a773e1">spacecraftPosition</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      <a class="code" href="class_isis_1_1_kernel.html">Kernel</a> <a class="code" href="class_isis_1_1_kernel_db.html#a37af40c67967daf7cb6c167c6cf42c72">instrument</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;      <a class="code" href="class_isis_1_1_kernel.html">Kernel</a> <a class="code" href="class_isis_1_1_kernel_db.html#ac294d6d8248bc2fdc50e7b5589a29f64">frame</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;      <a class="code" href="class_isis_1_1_kernel.html">Kernel</a> <a class="code" href="class_isis_1_1_kernel_db.html#a10dbfb44c98aa5ec78f92e8d9ae41297">instrumentAddendum</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      <a class="code" href="class_isis_1_1_kernel.html">Kernel</a> <a class="code" href="class_isis_1_1_kernel_db.html#ad42f893e1131e0272f62432e7661390a">dem</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      <a class="code" href="class_isis_1_1_kernel.html">Kernel</a> <a class="code" href="class_isis_1_1_kernel_db.html#a7e6f4808a75011e1c98fdc6425707b4b">findLast</a>(<span class="keyword">const</span> QString &amp;entry, <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; std::priority_queue&lt;Kernel&gt;</a> &gt; <a class="code" href="class_isis_1_1_kernel_db.html#a9df4ef24a81acf509ef892c4e2508d37">findAll</a>(<span class="keyword">const</span> QString &amp;entry,</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                                                   <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_kernel_db.html#a492e32876ee0d5f6d27d1f5aa0392ec2">loadSystemDb</a>(<span class="keyword">const</span> QString &amp;mission, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;FileName&gt;</a> <a class="code" href="class_isis_1_1_kernel_db.html#aca93f8241cca7777eaa84859bd6cc416">kernelDbFiles</a>();</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_kernel_db.html#a560fb1e2f2a0ce4d09757c111ba1f5b7">matches</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab, <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;kernelDbGrp,</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                          <a class="code" href="class_isis_1_1i_time.html">iTime</a> timeToMatch, <span class="keywordtype">int</span> cameraVersion);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00135"></a><span class="lineno"><a class="line" href="class_isis_1_1_kernel_db.html#ad03346b099811901002530d9368ae92a">  135</a></span>&#160;      <span class="keyword">friend</span> class ::KernelDbFixture_TestKernelsSmithOffset_Test; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      <span class="keywordtype">void</span> loadKernelDbFiles(<a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;dataDir,</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;                             QString directory,</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                             <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab);</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      <span class="keywordtype">void</span> readKernelDbFiles();</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      QStringList files(<a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;grp);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;      QString m_filename; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;FileName&gt;</a> m_kernelDbFiles; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_allowedKernelTypes; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;      <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> m_kernelData; </div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  };</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;};</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_kernel_8h_html"><div class="ttname"><a href="_kernel_8h.html">Kernel.h</a></div></div>
+<div class="ttc" id="a_pvl_8h_html"><div class="ttname"><a href="_pvl_8h.html">Pvl.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html"><div class="ttname"><a href="class_isis_1_1_kernel_db.html">Isis::KernelDb</a></div><div class="ttdoc">KernelDb class.</div><div class="ttdef"><b>Definition:</b> KernelDb.h:102</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_a10dbfb44c98aa5ec78f92e8d9ae41297"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#a10dbfb44c98aa5ec78f92e8d9ae41297">Isis::KernelDb::instrumentAddendum</a></div><div class="ttdeci">Kernel instrumentAddendum(Pvl &amp;lab)</div><div class="ttdoc">This method finds the highest version of all Instrument Addendum kernels (iak) identified by the data...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:300</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_a21e0a13b5b51af6fba0b118189d379ab"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#a21e0a13b5b51af6fba0b118189d379ab">Isis::KernelDb::spacecraftClock</a></div><div class="ttdeci">Kernel spacecraftClock(Pvl &amp;lab)</div><div class="ttdoc">This method finds the highest version of all Spacecraft Clock kernels (sclk) identified by the databa...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:217</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_a285aa3ccb01b5b0a48903d5f11ac45df"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#a285aa3ccb01b5b0a48903d5f11ac45df">Isis::KernelDb::targetAttitudeShape</a></div><div class="ttdeci">Kernel targetAttitudeShape(Pvl &amp;lab)</div><div class="ttdoc">This method finds the highest version of all Target Attitude Shape kernels (pck) identified by the da...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:155</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_a37af40c67967daf7cb6c167c6cf42c72"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#a37af40c67967daf7cb6c167c6cf42c72">Isis::KernelDb::instrument</a></div><div class="ttdeci">Kernel instrument(Pvl &amp;lab)</div><div class="ttdoc">This method finds the last Instrument kernel found that matches the (ik) criteria in the database and...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:259</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_a3b675f4c733a9bdffdbb4f8e17a27c6d"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#a3b675f4c733a9bdffdbb4f8e17a27c6d">Isis::KernelDb::~KernelDb</a></div><div class="ttdeci">~KernelDb()</div><div class="ttdoc">Destructs KernelDb object.</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:115</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_a492e32876ee0d5f6d27d1f5aa0392ec2"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#a492e32876ee0d5f6d27d1f5aa0392ec2">Isis::KernelDb::loadSystemDb</a></div><div class="ttdeci">void loadSystemDb(const QString &amp;mission, const Pvl &amp;lab)</div><div class="ttdoc">Loads the appropriate kernel database files with the defined BASE and MISSION info for each type of k...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:731</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_a560fb1e2f2a0ce4d09757c111ba1f5b7"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#a560fb1e2f2a0ce4d09757c111ba1f5b7">Isis::KernelDb::matches</a></div><div class="ttdeci">static bool matches(const Pvl &amp;lab, PvlGroup &amp;kernelDbGrp, iTime timeToMatch, int cameraVersion)</div><div class="ttdoc">This static method determines whether the given cube label matches the given criteria.</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:571</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_a7612929fbbb0d6baf7b4ab9b4b9dceac"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#a7612929fbbb0d6baf7b4ab9b4b9dceac">Isis::KernelDb::targetPosition</a></div><div class="ttdeci">Kernel targetPosition(Pvl &amp;lab)</div><div class="ttdoc">This method finds the highest version of all Target Position kernels (tspk) identified by the databas...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:176</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_a7e6f4808a75011e1c98fdc6425707b4b"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#a7e6f4808a75011e1c98fdc6425707b4b">Isis::KernelDb::findLast</a></div><div class="ttdeci">Kernel findLast(const QString &amp;entry, Pvl &amp;lab)</div><div class="ttdoc">Finds the highest priority Kernel object for the given entry based on the allowed Kernel types.</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:338</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_a9df4ef24a81acf509ef892c4e2508d37"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#a9df4ef24a81acf509ef892c4e2508d37">Isis::KernelDb::findAll</a></div><div class="ttdeci">QList&lt; std::priority_queue&lt; Kernel &gt; &gt; findAll(const QString &amp;entry, Pvl &amp;lab)</div><div class="ttdoc">Finds all of the Kernel objects for the given entry value based on the allowed Kernel types.</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:365</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_ab4b230d73ebe336eaf0bc5f163a773e1"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#ab4b230d73ebe336eaf0bc5f163a773e1">Isis::KernelDb::spacecraftPosition</a></div><div class="ttdeci">Kernel spacecraftPosition(Pvl &amp;lab)</div><div class="ttdoc">This method finds the highest version of all Spacecraft Position kernels (spk) identified by the data...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:238</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_ac294d6d8248bc2fdc50e7b5589a29f64"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#ac294d6d8248bc2fdc50e7b5589a29f64">Isis::KernelDb::frame</a></div><div class="ttdeci">Kernel frame(Pvl &amp;lab)</div><div class="ttdoc">This method finds the highest version of all Frame kernels (fk) identified by the database and the al...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:280</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_ac7e173146c223daa4e257139b46e2c8f"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#ac7e173146c223daa4e257139b46e2c8f">Isis::KernelDb::spacecraftPointing</a></div><div class="ttdeci">QList&lt; std::priority_queue&lt; Kernel &gt; &gt; spacecraftPointing(Pvl &amp;lab)</div><div class="ttdoc">This method finds a list of the highest versions of all Spacecraft Pointing kernels (ck) identified b...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:197</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_aca93f8241cca7777eaa84859bd6cc416"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#aca93f8241cca7777eaa84859bd6cc416">Isis::KernelDb::kernelDbFiles</a></div><div class="ttdeci">QList&lt; FileName &gt; kernelDbFiles()</div><div class="ttdoc">Accessor method to retrieve the list of kernel database files that were read in when loadSystemDb() i...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:886</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_ad42f893e1131e0272f62432e7661390a"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#ad42f893e1131e0272f62432e7661390a">Isis::KernelDb::dem</a></div><div class="ttdeci">Kernel dem(Pvl &amp;lab)</div><div class="ttdoc">This method finds the highest version of all Digital Terrain Models (DEMs) found that match the crite...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:321</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_ae4ff535e7b62d78ba4d8d4bbdf6d9c75"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#ae4ff535e7b62d78ba4d8d4bbdf6d9c75">Isis::KernelDb::leapSecond</a></div><div class="ttdeci">Kernel leapSecond(Pvl &amp;lab)</div><div class="ttdoc">This method finds the top priority of all Leap Second kernels (lsk) identified by the database and th...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:134</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_db_html_afa58e0fbe001e81e3904c753b7119cd6"><div class="ttname"><a href="class_isis_1_1_kernel_db.html#afa58e0fbe001e81e3904c753b7119cd6">Isis::KernelDb::KernelDb</a></div><div class="ttdeci">KernelDb(const unsigned int allowedKernelTypes)</div><div class="ttdoc">Constructs a new KernelDb object with a given integer value representing the Kernel::Type enumeration...</div><div class="ttdef"><b>Definition:</b> KernelDb.cpp:48</div></div>
+<div class="ttc" id="aclass_isis_1_1_kernel_html"><div class="ttname"><a href="class_isis_1_1_kernel.html">Isis::Kernel</a></div><div class="ttdoc">This class stores Kernel information, including Type and kernel file names.</div><div class="ttdef"><b>Definition:</b> Kernel.h:36</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_group_html"><div class="ttname"><a href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a></div><div class="ttdoc">Contains multiple PvlContainers.</div><div class="ttdef"><b>Definition:</b> PvlGroup.h:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_html"><div class="ttname"><a href="class_isis_1_1_pvl.html">Isis::Pvl</a></div><div class="ttdoc">Container for cube-like labels.</div><div class="ttdef"><b>Definition:</b> Pvl.h:119</div></div>
+<div class="ttc" id="aclass_isis_1_1i_time_html"><div class="ttname"><a href="class_isis_1_1i_time.html">Isis::iTime</a></div><div class="ttdoc">Parse and return pieces of a time string.</div><div class="ttdef"><b>Definition:</b> iTime.h:65</div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="ai_time_8h_html"><div class="ttname"><a href="i_time_8h.html">iTime.h</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_96cddf8cbe82038800c0cd8bcc5a2750.html">system</a></li><li class="navelem"><a class="el" href="dir_9455e8687dbc1513ac9b7b03f1032bf5.html">objs</a></li><li class="navelem"><a class="el" href="dir_d5ec20dbc39b68a1e6f073bbe878c3d6.html">KernelDb</a></li><li class="navelem"><a class="el" href="_kernel_db_8h.html">KernelDb.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

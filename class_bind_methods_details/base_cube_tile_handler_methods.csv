@@ -1,0 +1,7 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+CubeTileHandler,Low Level Cube I/O,isis/src/base/objs/Cube/CubeTileHandler.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,CubeTileHandler,isis_pybind.CubeTileHandler,N,Python class symbol not found in current binding files
+Construction/Enum,CubeTileHandler(),isis_pybind.CubeTileHandler(),N,Constructor binding not detected in current binding files
+Public API,void updateLabels(Pvl &label),isis_pybind.CubeTileHandler.update_labels,N,Method not found in current binding files

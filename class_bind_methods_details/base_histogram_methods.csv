@@ -1,0 +1,24 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Histogram,Statistics,isis/src/base/objs/Histogram/Histogram.h,isis_pybind_standalone/src/bind_statistics.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Histogram,isis_pybind.ImageHistogram,Y,Python class symbol is exported
+Construction/Enum,Histogram(),isis_pybind.ImageHistogram(),Y,Constructor is explicitly bound
+Mutation/Configuration,void SetBins(const int bins),isis_pybind.ImageHistogram.set_bins,Y,Current Python name
+Public API,void Reset(),isis_pybind.ImageHistogram.reset,Y,Current Python name
+Mutation/Configuration,"virtual void AddData(const double *data, const unsigned int count)",isis_pybind.ImageHistogram.add_data,Y,Current Python name
+Mutation/Configuration,virtual void AddData(const double data),isis_pybind.ImageHistogram.add_data,Y,Current Python name
+Mutation/Configuration,"virtual void RemoveData(const double *data, const unsigned int count)",isis_pybind.ImageHistogram.remove_data,Y,Current Python name
+Public API,double Median() const,isis_pybind.ImageHistogram.median,Y,Current Python name
+Public API,double Mode() const,isis_pybind.ImageHistogram.mode,Y,Current Python name
+Public API,double Percent(const double percent) const,isis_pybind.ImageHistogram.percent,Y,Current Python name
+Public API,double Skew() const,isis_pybind.ImageHistogram.skew,Y,Current Python name
+Public API,BigInt BinCount(const int index) const,isis_pybind.ImageHistogram.bin_count,Y,Current Python name
+Public API,"virtual void BinRange(const int index, double &low, double &high) const",isis_pybind.ImageHistogram.bin_range,Y,Current Python name
+Public API,double BinMiddle(const int index) const,isis_pybind.ImageHistogram.bin_middle,Y,Current Python name
+Public API,double BinSize() const,isis_pybind.ImageHistogram.bin_size,Y,Current Python name
+Public API,int Bins() const,isis_pybind.ImageHistogram.bins,Y,Current Python name
+Public API,BigInt MaxBinCount() const,isis_pybind.ImageHistogram.max_bin_count,Y,Current Python name
+Public API,double BinRangeStart() const { return p_binRangeStart,isis_pybind.ImageHistogram.bin_range_start,Y,Current Python name
+Public API,double BinRangeEnd() const { return p_binRangeEnd,isis_pybind.ImageHistogram.bin_range_end,Y,Current Python name
+Mutation/Configuration,"void SetValidRange(const double minimum = Isis::ValidMinimum, const double maximum = Isis::ValidMaximum)",isis_pybind.ImageHistogram.set_valid_range,Y,Current Python name

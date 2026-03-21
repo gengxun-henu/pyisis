@@ -1,0 +1,10 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+HiLineTimeEqn,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/HiCalUtil.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,HiLineTimeEqn,isis_pybind.HiLineTimeEqn,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,"HiLineTimeEqn() : _bin(1), _ltime(1.0) { }",isis_pybind.HiLineTimeEqn(),N,抽象基类/纯虚接口
+Construction/Enum,"HiLineTimeEqn(int bin, double ltime) : _bin(bin), _ltime(ltime) { }",isis_pybind.HiLineTimeEqn(),N,抽象基类/纯虚接口
+Mutation/Configuration,void setLineTime(double ltime) { _ltime = ltime; },isis_pybind.HiLineTimeEqn.set_line_time,N,抽象基类/纯虚接口
+Mutation/Configuration,void setBin(int bin) { _bin = bin; },isis_pybind.HiLineTimeEqn.set_bin,N,抽象基类/纯虚接口
+Public API,double Time(const double line) const { return (line * (_bin * _ltime * 1.0E-6)),isis_pybind.HiLineTimeEqn.time,N,抽象基类/纯虚接口

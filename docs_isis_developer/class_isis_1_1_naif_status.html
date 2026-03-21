@@ -1,0 +1,315 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::NaifStatus Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_naif_status.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_naif_status-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::NaifStatus Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Class for checking for errors in the NAIF library.  
+ <a href="class_isis_1_1_naif_status.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_naif_status_8h_source.html">NaifStatus.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::NaifStatus:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_naif_status__coll__graph.png" border="0" usemap="#a_isis_1_1_naif_status_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_naif_status_coll__map" id="a_isis_1_1_naif_status_coll__map">
+<area shape="rect" title="Class for checking for errors in the NAIF library." alt="" coords="5,5,120,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:af872fa8bfc3f0012f157cbaef4066d25"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_naif_status.html#af872fa8bfc3f0012f157cbaef4066d25">CheckErrors</a> (bool resetNaif=true)</td></tr>
+<tr class="memdesc:af872fa8bfc3f0012f157cbaef4066d25"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method looks for any naif errors that might have occurred.  <a href="class_isis_1_1_naif_status.html#af872fa8bfc3f0012f157cbaef4066d25">More...</a><br /></td></tr>
+<tr class="separator:af872fa8bfc3f0012f157cbaef4066d25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class for checking for errors in the NAIF library. </p>
+<p>The Naif Status class looks for errors that have occurred in NAIF calls. If an error has occurred, it will be converted to an iException.</p>
+<dl class="section author"><dt>Author</dt><dd>2008-06-13 Steven Lambright </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="af872fa8bfc3f0012f157cbaef4066d25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af872fa8bfc3f0012f157cbaef4066d25">&#9670;&nbsp;</a></span>CheckErrors()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::NaifStatus::CheckErrors </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>resetNaif</em> = <code>true</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method looks for any naif errors that might have occurred. </p>
+<p>It then compares the error to a list of known naif errors and converts the error into an iException.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">resetNaif</td><td>True if the NAIF error status should be reset (naif calls valid) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_pvl_object.html#ac18c485fdccb8e8bf16866e6c6ad2e3d">Isis::PvlObject::addGroup()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#ad23c104f285206b85e42d1faf50eb171">Isis::PvlContainer::addKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_to_pvl_translation_manager.html#aa2082a22d74679abd39a88b663e26e32">Isis::PvlToPvlTranslationManager::Translate()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78">Isis::IException::Unknown</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_rotation.html#a5edb5157c46a1f22c211541e5d1b006b">Isis::SpiceRotation::Angles()</a>, <a class="el" href="class_isis_1_1_apollo_metric_camera.html#a992e6c71d34b6d66c7b3243bcec5891c">Isis::ApolloMetricCamera::ApolloMetricCamera()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a2b9b8b6a2d5670782392b38b0025d5d6">Isis::SpiceRotation::CacheLabel()</a>, <a class="el" href="class_isis_1_1_dem_shape.html#aad16b26b4c2958f42329789f6d83774c">Isis::DemShape::calculateDefaultNormal()</a>, <a class="el" href="class_isis_1_1_ellipsoid_shape.html#a4d5e9caf981a614afb68671b544a836e">Isis::EllipsoidShape::calculateLocalNormal()</a>, <a class="el" href="group___mars_reconnaissance_orbiter.html#gaa2961a0d1b22ff4c863afb9186ff0338">Isis::Chandrayaan1M3Camera::Chandrayaan1M3Camera()</a>, <a class="el" href="class_isis_1_1_light_time_correction_state.html#a6a600a424809de84bbdf45ba9b60c42a">Isis::LightTimeCorrectionState::checkSpkKernelsForAberrationCorrection()</a>, <a class="el" href="class_isis_1_1_clipper_nac_rolling_shutter_camera.html#aa04790bb0966aa885f45b93497768bdb">Isis::ClipperNacRollingShutterCamera::ClipperNacRollingShutterCamera()</a>, <a class="el" href="class_isis_1_1_clipper_push_broom_camera.html#a25a29b46174884c9df0f635f780eb0e1">Isis::ClipperPushBroomCamera::ClipperPushBroomCamera()</a>, <a class="el" href="class_isis_1_1_clipper_wac_fc_camera.html#a3d9ff3ecf2a7580875a23c6a6d8d6dc9">Isis::ClipperWacFcCamera::ClipperWacFcCamera()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#abcd1b35f9300f46cd96728143a8d11b0">Isis::SpiceRotation::ComputeAv()</a>, <a class="el" href="class_isis_1_1_spice_position.html#ae694b9e60611b118c235ed1401d0279a">Isis::SpicePosition::computeStateVector()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a68c682a7a23f7565b6a7ef6e83b7e888">Isis::SpiceRotation::ConstantRotation()</a>, <a class="el" href="class_isis_1_1_crism_camera.html#a140a2397a1035544a59f584df5228ea6">Isis::CrismCamera::CrismCamera()</a>, <a class="el" href="class_isis_1_1_c_t_x_camera.html#a57b1a9eb8d72daab7e1d22000ce818a0">Isis::CTXCamera::CTXCamera()</a>, <a class="el" href="class_isis_1_1_dawn_fc_camera.html#a681968ed3697a89997d9ce3742f56fcc">Isis::DawnFcCamera::DawnFcCamera()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#acfd614c613a72dfbfacaad875bc19b17">Isis::SpiceRotation::DCJdt()</a>, <a class="el" href="class_isis_1_1_bullet_shape_model.html#a41d289fd7cb3cc790e53ff6c80663058">Isis::BulletShapeModel::ellipsoidNormal()</a>, <a class="el" href="class_isis_1_1_embree_shape_model.html#a123f371dfbbf6a294e58c9c741d9ec07">Isis::EmbreeShapeModel::ellipsoidNormal()</a>, <a class="el" href="class_isis_1_1_naif_dsk_shape.html#a484005b3be338525a03e2c76a3e65278">Isis::NaifDskShape::ellipsoidNormal()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a9611436dbd73082be4535d034c0cc7f1">Isis::SpiceRotation::Extrapolate()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#adb0e70083d75097a10d7fee7b428d32d">Isis::SpiceRotation::FrameTrace()</a>, <a class="el" href="class_isis_1_1_hayabusa_amica_camera.html#a04767056208d853ece3b9a1ad5190994">Isis::HayabusaAmicaCamera::HayabusaAmicaCamera()</a>, <a class="el" href="class_isis_1_1_hayabusa_nirs_camera.html#a074fba3928bebaeede27e39667998111">Isis::HayabusaNirsCamera::HayabusaNirsCamera()</a>, <a class="el" href="class_isis_1_1_hires_camera.html#a180c7e99246c852d64b1841e720d8259">Isis::HiresCamera::HiresCamera()</a>, <a class="el" href="class_isis_1_1_hirise_camera.html#a034da3530dce257d36fa71c34ee6605e">Isis::HiriseCamera::HiriseCamera()</a>, <a class="el" href="class_isis_1_1_hrsc_camera.html#a1cf946326322a023facb7584c9fa9a7d">Isis::HrscCamera::HrscCamera()</a>, <a class="el" href="class_isis_1_1_hyb2_onc_camera.html#aecaf7a055b24f62b49f47b9a55dfc0fd">Isis::Hyb2OncCamera::Hyb2OncCamera()</a>, <a class="el" href="class_isis_1_1_ideal_camera.html#ace59957190731b4e77dd4e7c1a6932bd">Isis::IdealCamera::IdealCamera()</a>, <a class="el" href="class_isis_1_1_dem_shape.html#af0f28a933b26685f6d2999af8485ed89">Isis::DemShape::intersectSurface()</a>, <a class="el" href="class_isis_1_1_equatorial_cylindrical_shape.html#afcb5bc67be62232ba83cbf103f3e6824">Isis::EquatorialCylindricalShape::intersectSurface()</a>, <a class="el" href="class_isis_1_1_plane_shape.html#a9d744c8a11f52a33c955f2b9671a22c7">Isis::PlaneShape::intersectSurface()</a>, <a class="el" href="class_isis_1_1_iss_n_a_camera.html#ae1379469ffc23988311c1f281c6a4be4">Isis::IssNACamera::IssNACamera()</a>, <a class="el" href="class_isis_1_1_iss_w_a_camera.html#a40939367de14f4ceab92e63cbac5483f">Isis::IssWACamera::IssWACamera()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a7b4aa8d429499e63f08b43d7700b423c">Isis::SpiceRotation::J2000Vector()</a>, <a class="el" href="class_isis_1_1_juno_camera.html#a96ed76797e1ab321f76904fcdf0ab3be">Isis::JunoCamera::JunoCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_mi_camera.html#aff13b02798fc8d4ada958ec542d8c832">Isis::KaguyaMiCamera::KaguyaMiCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_tc_camera.html#aa3a277ae3b92dd76f39e3afcb2259ad0">Isis::KaguyaTcCamera::KaguyaTcCamera()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#ab104d659a645303a317dbf180c7540cc">Isis::SpiceRotation::loadPCFromSpice()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a09de97179a063e9278c88fb5ddcc68b2">Isis::SpiceRotation::loadPCFromTable()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a5b38cfeae1f39de4dd852a3fd48e0445">Isis::SpiceRotation::LoadTimeCache()</a>, <a class="el" href="class_isis_1_1_lo_high_camera.html#a5d1c553aa0747b7e8278fe7c04710368">Isis::LoHighCamera::LoHighCamera()</a>, <a class="el" href="class_isis_1_1_lo_medium_camera.html#a867c099f83e4b758eedc59e08208c573">Isis::LoMediumCamera::LoMediumCamera()</a>, <a class="el" href="class_isis_1_1_lro_narrow_angle_camera.html#a7e310784f7229b84c9e5cdaa8a7487dd">Isis::LroNarrowAngleCamera::LroNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera.html#acce0f513400fbbb2adcb751f7a320d79">Isis::LroWideAngleCamera::LroWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_lwir_camera.html#a3de974cfebf81e9d0e8418af30ca0dae">Isis::LwirCamera::LwirCamera()</a>, <a class="el" href="class_isis_1_1_marci_camera.html#ab1c614622a0615f3e54eaad3e99e818e">Isis::MarciCamera::MarciCamera()</a>, <a class="el" href="class_isis_1_1_mariner10_camera.html#a95bd2fc9a70874bd764329b0e5df5a73">Isis::Mariner10Camera::Mariner10Camera()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a2fa56dcc988b3a34634b492e7bdb261a">Isis::SpiceRotation::Matrix()</a>, <a class="el" href="class_isis_1_1_mdis_camera.html#a331991f68a867ffff37b127416143d44">Isis::MdisCamera::MdisCamera()</a>, <a class="el" href="class_isis_1_1_mex_hrsc_src_camera.html#a9af85539cb0e18ac9d840bc902b10559">Isis::MexHrscSrcCamera::MexHrscSrcCamera()</a>, <a class="el" href="class_isis_1_1_moc_narrow_angle_camera.html#afd8e7c069fbe9162dfae5f5cc0389124">Isis::MocNarrowAngleCamera::MocNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_moc_wide_angle_camera.html#a03c12a9dfe9b300937e1944311955351">Isis::MocWideAngleCamera::MocWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_msi_camera.html#a26cd32f4b430371dac263ae065a336ea">Isis::MsiCamera::MsiCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a1f6437c5488c941495cea26ae543ffb5">Isis::NewHorizonsLeisaCamera::NewHorizonsLeisaCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_lorri_camera.html#a7c9ad07352411bdec6111ffb87088528">Isis::NewHorizonsLorriCamera::NewHorizonsLorriCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_frame_camera.html#aa48c3e21156c83a7d54963f0240b501a">Isis::NewHorizonsMvicFrameCamera::NewHorizonsMvicFrameCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_tdi_camera.html#acd1c6614f017d336ba407044aa76526f">Isis::NewHorizonsMvicTdiCamera::NewHorizonsMvicTdiCamera()</a>, <a class="el" href="class_isis_1_1_nir_camera.html#ab4115fe38276b4964d91c60b20765efe">Isis::NirCamera::NirCamera()</a>, <a class="el" href="class_isis_1_1_oblique_cylindrical.html#a369bec872e0cd8e0887d70a30b0784e8">Isis::ObliqueCylindrical::ObliqueCylindrical()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_camera.html#a04a1d8ee6e5f7a0b894bea4c632c723a">Isis::OsirisRexOcamsCamera::OsirisRexOcamsCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_tagcams_camera.html#abfe161a325a14b8ee463f4bf36f2e8fd">Isis::OsirisRexTagcamsCamera::OsirisRexTagcamsCamera()</a>, <a class="el" href="class_isis_1_1_naif_dsk_plate_model.html#a6b07a56e75c827935cbd0e0e64d55543">Isis::NaifDskPlateModel::plate()</a>, <a class="el" href="class_isis_1_1_naif_dsk_plate_model.html#ab5023d10facb7c6b8ce5a85d51e8d185">Isis::NaifDskPlateModel::plateIdOfIntercept()</a>, <a class="el" href="class_isis_1_1_naif_dsk_plate_model.html#af7dc55f51e7b698e16ac79e1b0a8e62b">Isis::NaifDskPlateModel::point()</a>, <a class="el" href="class_isis_1_1_embree_target_shape.html#a34e368a80193d32d1f58dbaf9eb930ed">Isis::EmbreeTargetShape::readDSK()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a6d050edb8c86fab0159966ace48add89">Isis::SpiceRotation::ReferenceVector()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3c583b327e4a431920fe98acd13a77e5">Isis::SpicePosition::ReloadCache()</a>, <a class="el" href="class_isis_1_1_rosetta_osiris_camera.html#a07c6aefe99418ce646206f2e97b6ee30">Isis::RosettaOsirisCamera::RosettaOsirisCamera()</a>, <a class="el" href="class_isis_1_1_quaternion.html#aea863fadc10af56c21817d631d68856c">Isis::Quaternion::Set()</a>, <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#abb19d78cc5afae0e2375c37af9e07248">Isis::SpiceRotation::setEphemerisTimeMemcache()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a51ee0d042157d7db208ee55e55df3d8e">Isis::SpiceRotation::setEphemerisTimeNadir()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a046ab0a1808f5f7a45f3599ccbcd1bd2">Isis::SpiceRotation::setEphemerisTimePolyFunction()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a9c39176ef7eda00a296ae01f4a6f5cef">Isis::SpiceRotation::setEphemerisTimePolyFunctionOverSpice()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#aa86e3002c03f938e588bf4c9d10eb016">Isis::SpiceRotation::setEphemerisTimeSpice()</a>, <a class="el" href="class_isis_1_1_camera_sky_map.html#a8ce0e2ef6865485eb30a69eb64961d38">Isis::CameraSkyMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a05fb1d7e38880b055e4f039c69b993d7">Isis::SpiceRotation::SetPolynomial()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a989213b34b09b162ad3d8da857b91424">Isis::SpiceRotation::SpiceRotation()</a>, <a class="el" href="class_isis_1_1_ssi_camera.html#a9dcb28e566215656e1983c90bf316651">Isis::SsiCamera::SsiCamera()</a>, <a class="el" href="class_isis_1_1_tgo_cassis_camera.html#a940ab5649ac6aa069be36821efa52409">Isis::TgoCassisCamera::TgoCassisCamera()</a>, <a class="el" href="class_isis_1_1_themis_ir_camera.html#ad6d3d29693ab5150652d6b7431e6cf94">Isis::ThemisIrCamera::ThemisIrCamera()</a>, <a class="el" href="class_isis_1_1_themis_vis_camera.html#abadb84893241b18757bec392b81d63c4">Isis::ThemisVisCamera::ThemisVisCamera()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#afd0551a2b57f883a43593042b8ce7982">Isis::SpiceRotation::TimeBasedRotation()</a>, <a class="el" href="class_isis_1_1_quaternion.html#a508068eea59dbe22b94d58bb43c79d6a">Isis::Quaternion::ToAngles()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a00d680cc31858a1a6c9cb0f4eafb94ed">Isis::SpiceRotation::toJ2000Partial()</a>, <a class="el" href="class_isis_1_1_spice_rotation.html#a3e4282eace5e6f9b0d411aadc4966df1">Isis::SpiceRotation::ToReferencePartial()</a>, <a class="el" href="class_isis_1_1_uvvis_camera.html#aad2dd78ca84967f7d8817576805ad2ea">Isis::UvvisCamera::UvvisCamera()</a>, <a class="el" href="class_isis_1_1_viking_camera.html#a2a1a860e2ca961eb38e8f08361708875">Isis::VikingCamera::VikingCamera()</a>, <a class="el" href="class_isis_1_1_vims_camera.html#aca1523e3446796467d1c3001bcecd3fa">Isis::VimsCamera::VimsCamera()</a>, <a class="el" href="class_isis_1_1_voyager_camera.html#afe52641e45e4a3845a056d32bbf5740a">Isis::VoyagerCamera::VoyagerCamera()</a>, and <a class="el" href="class_isis_1_1_spice_rotation.html#a4be11f78ff92c0ee8a4b0b18256db17a">Isis::SpiceRotation::WrapAngle()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/NaifStatus/<a class="el" href="_naif_status_8h_source.html">NaifStatus.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/NaifStatus/<a class="el" href="_naif_status_8cpp.html">NaifStatus.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_naif_status.html">NaifStatus</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

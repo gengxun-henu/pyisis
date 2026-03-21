@@ -1,0 +1,8 @@
+<map id="Isis::CameraGroundMap" name="Isis::CameraGroundMap">
+<area shape="rect" id="node1" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="506,5,679,327"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_irregular_body_camera_ground_map.html" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="5,431,212,592"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_line_scan_camera_ground_map.html" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="236,423,453,600"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_push_frame_camera_ground_map.html" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="477,447,708,576"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_radar_ground_map.html" title="Convert between undistorted focal plane coordinate (slant range) and ground coordinates." alt="" coords="732,375,885,648"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_vims_ground_map.html" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="908,431,1056,592"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_isis_1_1_cube_caching_algorithm.html" title="This is the parent of the caching algorithms." alt="" coords="5,84,190,112"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_boxcar_caching_algorithm.html" title="This algorithm is designed for applications that jump around between a couple of spots in the cube wi..." alt="" coords="245,5,439,33"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_filter_caching_algorithm.html" title="This algorithm is designed for applications that use ProcessByQuickFilter or very similar I/O pattern..." alt="" coords="251,57,433,85"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_regional_caching_algorithm.html" title="This algorithm recommends chunks to be freed that are not within the last IO." alt="" coords="240,109,444,137"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_unique_i_o_caching_algorithm.html" title="This algorithm is designed for applications that jump around between a couple of spots in the cube wi..." alt="" coords="238,161,446,189"/>
+</map>

@@ -1,0 +1,412 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/MatrixSceneWidget/MatrixSceneWidget.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_matrix_scene_widget_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">MatrixSceneWidget.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_matrix_scene_widget_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef MatrixSceneWidget_H</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define MatrixSceneWidget_H</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> A&gt; <span class="keyword">class </span><a class="code" href="class_q_list.html">QList</a>;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">class </span>QGraphicsPolygonItem;</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_graphics_rect_item.html">QGraphicsRectItem</a>;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_graphics_scene.html">QGraphicsScene</a>;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">class </span>QGraphicsSceneContextMenuEvent;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_menu.html">QMenu</a>;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_progress_bar.html">QProgressBar</a>;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">class </span>QRubberBand;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">class </span>QStatusBar;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_tool_bar.html">QToolBar</a>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">class </span>QToolButton;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="keyword">class </span>CorrelationMatrix;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <span class="keyword">class </span>Directory;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <span class="keyword">class </span>DisplayProperties;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keyword">class </span>FileName;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keyword">class </span>MatrixDisplayTool;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keyword">class </span>MatrixGraphicsView;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <span class="keyword">class </span>MatrixOptions;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">class </span>ProgressBar;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keyword">class </span>Project;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">class </span>PvlGroup;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">class </span>PvlObject;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">class </span>ToolPad;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html">   49</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_matrix_scene_widget.html">MatrixSceneWidget</a> : <span class="keyword">public</span> <a class="code" href="class_q_widget.html">QWidget</a> {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a008d976d8998d7a34928066abaf555a5">MatrixSceneWidget</a>(QStatusBar *status,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                        <span class="keywordtype">bool</span> showTools,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                        <span class="keywordtype">bool</span> internalizeToolBarsAndProgress,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                        <a class="code" href="class_isis_1_1_directory.html">Directory</a> *<a class="code" href="class_isis_1_1_matrix_scene_widget.html#a20a04efc19d8b45d0cefa869715c1344">directory</a>,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                        <a class="code" href="class_q_widget.html">QWidget</a> *parent = 0);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#abbd9c5a3e947cfd2d7a1467765ae24e6">~MatrixSceneWidget</a>();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      <a class="code" href="class_isis_1_1_matrix_graphics_view.html">MatrixGraphicsView</a> *<a class="code" href="class_isis_1_1_matrix_scene_widget.html#a28fdd8f98df4ca7181afd01d5855d5ca">getView</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      <a class="code" href="class_q_graphics_scene.html">QGraphicsScene</a> *<a class="code" href="class_isis_1_1_matrix_scene_widget.html#a62371ddb7deb9c4e3b9e942a76d8feb1">getScene</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a1ce40d654815ac69d19abfd9717b46e8">contextMenuEvent</a>(QGraphicsSceneContextMenuEvent *event);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a45151d76a0a96c003aefbf6ce6f65ecc">drawGrid</a>(<a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a> corrMatrix);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#aedcaabe7f6d0272d2028d11271a566cb">drawElements</a>(<a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a> corrMatrix);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      <a class="code" href="class_q_progress_bar.html">QProgressBar</a> *<a class="code" href="class_isis_1_1_matrix_scene_widget.html#a6703deae85678e4d57f4c3c076372669">getProgress</a>();</div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#afb13e3343db26005c78a4bbd17457276">   69</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#afb13e3343db26005c78a4bbd17457276">toPvl</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#a9dbccc6e8a624a7d49e2196473dc966d">   70</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a9dbccc6e8a624a7d49e2196473dc966d">fromPvl</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      QRectF <a class="code" href="class_isis_1_1_matrix_scene_widget.html#afbfcd19b84a13d50075211302d890165">elementsBoundingRect</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      <a class="code" href="class_isis_1_1_directory.html">Directory</a> *<a class="code" href="class_isis_1_1_matrix_scene_widget.html#a20a04efc19d8b45d0cefa869715c1344">directory</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;QAction *&gt;</a> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a55fa3a2893b9e653640860b320ca1315">getViewActions</a>();</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;QAction *&gt;</a> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a8b95b71efa1470cf50a6c8022531021c">supportedActions</a>(<a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a> *matrix);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a3908b8ff543f8f15a742373aa1970dfe">redrawItems</a>();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">//       void refit();</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment">//       void repaintItems(bool colorScheme);</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a1bb69fffbfa234ca37e02ccffb84abbc">setUpOptions</a>(<a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a> corrMat);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      <span class="keyword">template</span> &lt;<span class="keyword">typename</span> DataType&gt;</div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#a5cfc7963f3bc7346cbc542607aa41c5f">   90</a></span>&#160;      <a class="code" href="class_q_list.html">QList&lt;QAction *&gt;</a> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a5cfc7963f3bc7346cbc542607aa41c5f">supportedActions</a>(DataType) {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="class_q_list.html">QList&lt;QAction *&gt;</a>();</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      }</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    signals:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="comment">// add roll over?</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      <span class="comment">// Not all these signals are used, descriptions show possible intended use</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#aadf88d69000ca1ea74d0fb9bdc2ca59f">   97</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#aadf88d69000ca1ea74d0fb9bdc2ca59f">mouseEnter</a>(); </div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#a5bfcf4381cb4fa1fcaf9f0c38760966d">   98</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a5bfcf4381cb4fa1fcaf9f0c38760966d">mouseMove</a>(QPointF); </div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#af32a03a68f6451e5da10b38c530da6df">   99</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#af32a03a68f6451e5da10b38c530da6df">mouseLeave</a>(); </div>
+<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#a4cdd25b4d7ecf3c07e858ad586e2efa0">  100</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a4cdd25b4d7ecf3c07e858ad586e2efa0">mouseDoubleClick</a>(QPointF); </div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#a9231aa3df78b2b9a79fc69178fbcb5d6">  101</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a9231aa3df78b2b9a79fc69178fbcb5d6">mouseButtonPress</a>(QPointF, Qt::MouseButton s); </div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#a4b6f9aadfb1c7010f570145f787e95b2">  102</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a4b6f9aadfb1c7010f570145f787e95b2">mouseButtonRelease</a>(QPointF, Qt::MouseButton s); </div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#a9bc7e0da249ff17a8dfdd057dfe7869e">  103</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a9bc7e0da249ff17a8dfdd057dfe7869e">mouseWheel</a>(QPointF, <span class="keywordtype">int</span> delta); </div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#afcfacc337082cf87d37401cb97c685cd">  105</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#afcfacc337082cf87d37401cb97c685cd">rubberBandComplete</a>(QRectF r, Qt::MouseButton s);</div>
+<div class="line"><a name="l00106"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#ada6913b0b340c7ee6426f29026d77379">  106</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#ada6913b0b340c7ee6426f29026d77379">visibleRectChanged</a>(QRectF); </div>
+<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#ada6b659429aec088caf0159ee1f92d78">  107</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#ada6b659429aec088caf0159ee1f92d78">elementsChanged</a>(); </div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#ac1e3dc4237b440f423cc765e43106a12">  108</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#ac1e3dc4237b440f423cc765e43106a12">queueSelectionChanged</a>(); </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="class_isis_1_1_matrix_scene_widget.html#af5d0de5aec44e5a13d25beab45f88bf4">  110</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#af5d0de5aec44e5a13d25beab45f88bf4">elementClicked</a>(QString); </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#a96222c0aa4114ee65e4f353f618ddb73">redrawElements</a>();</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_matrix_scene_widget.html#adfb38d56ab2a7efda8cf00e753069374">eventFilter</a>(<a class="code" href="class_q_object.html">QObject</a> *obj, QEvent *ev);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keyword">private</span> slots:</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">//       void fitInView();</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;      <span class="keywordtype">void</span> sendVisibleRectChanged();</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      <span class="comment">// methods</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;double&gt;</a> getSelectedElements() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;      <span class="comment">// member variables</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;      <a class="code" href="class_isis_1_1_directory.html">Directory</a> *m_directory; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;      <a class="code" href="class_q_graphics_scene.html">QGraphicsScene</a> *m_graphicsScene; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      <a class="code" href="class_isis_1_1_matrix_graphics_view.html">MatrixGraphicsView</a> *m_graphicsView; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      <a class="code" href="class_q_graphics_rect_item.html">QGraphicsRectItem</a> *m_outlineRect; </div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_quickMapAction; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;      <a class="code" href="class_isis_1_1_progress_bar.html">ProgressBar</a> *m_progress; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      <a class="code" href="class_isis_1_1_matrix_options.html">MatrixOptions</a> *m_matrixOptions; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;  };</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;}</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
+<div class="ttc" id="aclass_isis_1_1_correlation_matrix_html"><div class="ttname"><a href="class_isis_1_1_correlation_matrix.html">Isis::CorrelationMatrix</a></div><div class="ttdoc">This is a container for the correlation matrix that comes from a bundle adjust.</div><div class="ttdef"><b>Definition:</b> CorrelationMatrix.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_directory_html"><div class="ttname"><a href="class_isis_1_1_directory.html">Isis::Directory</a></div><div class="ttdef"><b>Definition:</b> Directory.h:271</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_graphics_view_html"><div class="ttname"><a href="class_isis_1_1_matrix_graphics_view.html">Isis::MatrixGraphicsView</a></div><div class="ttdoc">A graphics view that resizes in a more friendly way.</div><div class="ttdef"><b>Definition:</b> MatrixGraphicsView.h:15</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_options_html"><div class="ttname"><a href="class_isis_1_1_matrix_options.html">Isis::MatrixOptions</a></div><div class="ttdoc">This class holds the matrix color and focus information.</div><div class="ttdef"><b>Definition:</b> MatrixOptions.h:28</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html">Isis::MatrixSceneWidget</a></div><div class="ttdoc">This widget encompasses the entire matrixDisplay scene.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.h:49</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a008d976d8998d7a34928066abaf555a5"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a008d976d8998d7a34928066abaf555a5">Isis::MatrixSceneWidget::MatrixSceneWidget</a></div><div class="ttdeci">MatrixSceneWidget(QStatusBar *status, bool showTools, bool internalizeToolBarsAndProgress, Directory *directory, QWidget *parent=0)</div><div class="ttdoc">Constructor, creates a matrix scene widget.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:51</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a1bb69fffbfa234ca37e02ccffb84abbc"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a1bb69fffbfa234ca37e02ccffb84abbc">Isis::MatrixSceneWidget::setUpOptions</a></div><div class="ttdeci">void setUpOptions(CorrelationMatrix corrMat)</div><div class="ttdoc">Change item colors when options are changed.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:642</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a1ce40d654815ac69d19abfd9717b46e8"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a1ce40d654815ac69d19abfd9717b46e8">Isis::MatrixSceneWidget::contextMenuEvent</a></div><div class="ttdeci">bool contextMenuEvent(QGraphicsSceneContextMenuEvent *event)</div><div class="ttdoc">This is called by MatrixGraphicsScene::contextMenuEvent.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:183</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a20a04efc19d8b45d0cefa869715c1344"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a20a04efc19d8b45d0cefa869715c1344">Isis::MatrixSceneWidget::directory</a></div><div class="ttdeci">Directory * directory() const</div><div class="ttdoc">Accessor for the directory.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:268</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a28fdd8f98df4ca7181afd01d5855d5ca"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a28fdd8f98df4ca7181afd01d5855d5ca">Isis::MatrixSceneWidget::getView</a></div><div class="ttdeci">MatrixGraphicsView * getView() const</div><div class="ttdoc">Accessor for the QGraphicsView.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:161</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a3908b8ff543f8f15a742373aa1970dfe"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a3908b8ff543f8f15a742373aa1970dfe">Isis::MatrixSceneWidget::redrawItems</a></div><div class="ttdeci">void redrawItems()</div><div class="ttdoc">Redraws all the items in the view.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:386</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a45151d76a0a96c003aefbf6ce6f65ecc"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a45151d76a0a96c003aefbf6ce6f65ecc">Isis::MatrixSceneWidget::drawGrid</a></div><div class="ttdeci">void drawGrid(CorrelationMatrix corrMatrix)</div><div class="ttdoc">Draw the lines that will show the columns and blocks for each image.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:541</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a4b6f9aadfb1c7010f570145f787e95b2"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a4b6f9aadfb1c7010f570145f787e95b2">Isis::MatrixSceneWidget::mouseButtonRelease</a></div><div class="ttdeci">void mouseButtonRelease(QPointF, Qt::MouseButton s)</div><div class="ttdoc">Emitted when mouse button released.</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a4cdd25b4d7ecf3c07e858ad586e2efa0"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a4cdd25b4d7ecf3c07e858ad586e2efa0">Isis::MatrixSceneWidget::mouseDoubleClick</a></div><div class="ttdeci">void mouseDoubleClick(QPointF)</div><div class="ttdoc">Emitted when handling a mouse double-click.</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a55fa3a2893b9e653640860b320ca1315"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a55fa3a2893b9e653640860b320ca1315">Isis::MatrixSceneWidget::getViewActions</a></div><div class="ttdeci">QList&lt; QAction * &gt; getViewActions()</div><div class="ttdoc">Accessor for the view actions.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:278</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a5bfcf4381cb4fa1fcaf9f0c38760966d"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a5bfcf4381cb4fa1fcaf9f0c38760966d">Isis::MatrixSceneWidget::mouseMove</a></div><div class="ttdeci">void mouseMove(QPointF)</div><div class="ttdoc">Emitted when mouse moves in widget.</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a5cfc7963f3bc7346cbc542607aa41c5f"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a5cfc7963f3bc7346cbc542607aa41c5f">Isis::MatrixSceneWidget::supportedActions</a></div><div class="ttdeci">QList&lt; QAction * &gt; supportedActions(DataType)</div><div class="ttdoc">Return an empty list of actions for unknown data types.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.h:90</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a62371ddb7deb9c4e3b9e942a76d8feb1"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a62371ddb7deb9c4e3b9e942a76d8feb1">Isis::MatrixSceneWidget::getScene</a></div><div class="ttdeci">QGraphicsScene * getScene() const</div><div class="ttdoc">Accessor for the QGraphicsScene.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:171</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a6703deae85678e4d57f4c3c076372669"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a6703deae85678e4d57f4c3c076372669">Isis::MatrixSceneWidget::getProgress</a></div><div class="ttdeci">QProgressBar * getProgress()</div><div class="ttdoc">Accessor for the widget's progress bar.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:243</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a8b95b71efa1470cf50a6c8022531021c"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a8b95b71efa1470cf50a6c8022531021c">Isis::MatrixSceneWidget::supportedActions</a></div><div class="ttdeci">QList&lt; QAction * &gt; supportedActions(CorrelationMatrix *matrix)</div><div class="ttdoc">Get a list of applicable actions for the elements in this scene.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:296</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a9231aa3df78b2b9a79fc69178fbcb5d6"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a9231aa3df78b2b9a79fc69178fbcb5d6">Isis::MatrixSceneWidget::mouseButtonPress</a></div><div class="ttdeci">void mouseButtonPress(QPointF, Qt::MouseButton s)</div><div class="ttdoc">Emitted when mouse is pressed.</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a96222c0aa4114ee65e4f353f618ddb73"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a96222c0aa4114ee65e4f353f618ddb73">Isis::MatrixSceneWidget::redrawElements</a></div><div class="ttdeci">void redrawElements()</div><div class="ttdoc">Redraw matrix when the focus is changed.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:609</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a9bc7e0da249ff17a8dfdd057dfe7869e"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a9bc7e0da249ff17a8dfdd057dfe7869e">Isis::MatrixSceneWidget::mouseWheel</a></div><div class="ttdeci">void mouseWheel(QPointF, int delta)</div><div class="ttdoc">Emitted when mouse wheel is activated Emitted when rubber band selection is complete.</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_a9dbccc6e8a624a7d49e2196473dc966d"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#a9dbccc6e8a624a7d49e2196473dc966d">Isis::MatrixSceneWidget::fromPvl</a></div><div class="ttdeci">void fromPvl(const PvlObject &amp;)</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_aadf88d69000ca1ea74d0fb9bdc2ca59f"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#aadf88d69000ca1ea74d0fb9bdc2ca59f">Isis::MatrixSceneWidget::mouseEnter</a></div><div class="ttdeci">void mouseEnter()</div><div class="ttdoc">Emitted when mouse enters widget focus.</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_abbd9c5a3e947cfd2d7a1467765ae24e6"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#abbd9c5a3e947cfd2d7a1467765ae24e6">Isis::MatrixSceneWidget::~MatrixSceneWidget</a></div><div class="ttdeci">virtual ~MatrixSceneWidget()</div><div class="ttdoc">Default Destructor.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:151</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_ac1e3dc4237b440f423cc765e43106a12"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#ac1e3dc4237b440f423cc765e43106a12">Isis::MatrixSceneWidget::queueSelectionChanged</a></div><div class="ttdeci">void queueSelectionChanged()</div><div class="ttdoc">Emitted when selection is changed.</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_ada6913b0b340c7ee6426f29026d77379"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#ada6913b0b340c7ee6426f29026d77379">Isis::MatrixSceneWidget::visibleRectChanged</a></div><div class="ttdeci">void visibleRectChanged(QRectF)</div><div class="ttdoc">Emitted when the visible rectangle is changed.</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_ada6b659429aec088caf0159ee1f92d78"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#ada6b659429aec088caf0159ee1f92d78">Isis::MatrixSceneWidget::elementsChanged</a></div><div class="ttdeci">void elementsChanged()</div><div class="ttdoc">Emitted when an element of the widget is changed.</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_adfb38d56ab2a7efda8cf00e753069374"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#adfb38d56ab2a7efda8cf00e753069374">Isis::MatrixSceneWidget::eventFilter</a></div><div class="ttdeci">virtual bool eventFilter(QObject *obj, QEvent *ev)</div><div class="ttdoc">Pick the relevant actions given the type of event that occured in the scene.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:351</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_aedcaabe7f6d0272d2028d11271a566cb"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#aedcaabe7f6d0272d2028d11271a566cb">Isis::MatrixSceneWidget::drawElements</a></div><div class="ttdeci">void drawElements(CorrelationMatrix corrMatrix)</div><div class="ttdoc">Draw elements.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:406</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_af32a03a68f6451e5da10b38c530da6df"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#af32a03a68f6451e5da10b38c530da6df">Isis::MatrixSceneWidget::mouseLeave</a></div><div class="ttdeci">void mouseLeave()</div><div class="ttdoc">Emitted when mouse leaves widget focus.</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_af5d0de5aec44e5a13d25beab45f88bf4"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#af5d0de5aec44e5a13d25beab45f88bf4">Isis::MatrixSceneWidget::elementClicked</a></div><div class="ttdeci">void elementClicked(QString)</div><div class="ttdoc">Emitted when an element of the widget is clicked.</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_afb13e3343db26005c78a4bbd17457276"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#afb13e3343db26005c78a4bbd17457276">Isis::MatrixSceneWidget::toPvl</a></div><div class="ttdeci">PvlObject toPvl() const</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_afbfcd19b84a13d50075211302d890165"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#afbfcd19b84a13d50075211302d890165">Isis::MatrixSceneWidget::elementsBoundingRect</a></div><div class="ttdeci">QRectF elementsBoundingRect() const</div><div class="ttdoc">Returns the bounding rectangle for the images.</div><div class="ttdef"><b>Definition:</b> MatrixSceneWidget.cpp:253</div></div>
+<div class="ttc" id="aclass_isis_1_1_matrix_scene_widget_html_afcfacc337082cf87d37401cb97c685cd"><div class="ttname"><a href="class_isis_1_1_matrix_scene_widget.html#afcfacc337082cf87d37401cb97c685cd">Isis::MatrixSceneWidget::rubberBandComplete</a></div><div class="ttdeci">void rubberBandComplete(QRectF r, Qt::MouseButton s)</div></div>
+<div class="ttc" id="aclass_isis_1_1_progress_bar_html"><div class="ttname"><a href="class_isis_1_1_progress_bar.html">Isis::ProgressBar</a></div><div class="ttdef"><b>Definition:</b> ProgressBar.h:15</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html"><div class="ttname"><a href="class_isis_1_1_pvl_object.html">Isis::PvlObject</a></div><div class="ttdoc">Contains Pvl Groups and Pvl Objects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:61</div></div>
+<div class="ttc" id="aclass_q_action_html"><div class="ttname"><a href="class_q_action.html">QAction</a></div></div>
+<div class="ttc" id="aclass_q_graphics_rect_item_html"><div class="ttname"><a href="class_q_graphics_rect_item.html">QGraphicsRectItem</a></div></div>
+<div class="ttc" id="aclass_q_graphics_scene_html"><div class="ttname"><a href="class_q_graphics_scene.html">QGraphicsScene</a></div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="aclass_q_menu_html"><div class="ttname"><a href="class_q_menu.html">QMenu</a></div></div>
+<div class="ttc" id="aclass_q_object_html"><div class="ttname"><a href="class_q_object.html">QObject</a></div></div>
+<div class="ttc" id="aclass_q_progress_bar_html"><div class="ttname"><a href="class_q_progress_bar.html">QProgressBar</a></div></div>
+<div class="ttc" id="aclass_q_tool_bar_html"><div class="ttname"><a href="class_q_tool_bar.html">QToolBar</a></div></div>
+<div class="ttc" id="aclass_q_widget_html"><div class="ttname"><a href="class_q_widget.html">QWidget</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_f4ea5762b903adc900f3551230c7dfc0.html">MatrixSceneWidget</a></li><li class="navelem"><a class="el" href="_matrix_scene_widget_8h.html">MatrixSceneWidget.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

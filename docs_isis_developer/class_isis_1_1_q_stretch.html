@@ -1,0 +1,806 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::QStretch Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_q_stretch.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_q_stretch-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::QStretch Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Abstract class for complex stretch objects.  
+ <a href="class_isis_1_1_q_stretch.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_q_stretch_8h_source.html">QStretch.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::QStretch:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_q_stretch__inherit__graph.png" border="0" usemap="#a_isis_1_1_q_stretch_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_q_stretch_inherit__map" id="a_isis_1_1_q_stretch_inherit__map">
+<area shape="rect" title="Abstract class for complex stretch objects." alt="" coords="5,135,141,408"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="38,5,108,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::QStretch:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_q_stretch__coll__graph.png" border="0" usemap="#a_isis_1_1_q_stretch_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_q_stretch_coll__map" id="a_isis_1_1_q_stretch_coll__map">
+<area shape="rect" title="Abstract class for complex stretch objects." alt="" coords="424,1484,559,1677"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="105,5,174,87"/>
+<area shape="rect" href="class_isis_1_1_tool.html" title="Base class for the Qisis tools." alt="" coords="164,136,339,777"/>
+<area shape="rect" href="class_isis_1_1_stretch.html" title="Pixel value mapper." alt="" coords="376,995,495,1236"/>
+<area shape="rect" title=" " alt="" coords="519,1075,578,1156"/>
+<area shape="rect" title=" " alt="" coords="603,1075,668,1156"/>
+<area shape="rect" title=" " alt="" coords="692,1075,790,1156"/>
+<area shape="rect" href="class_isis_1_1_stretch_tool.html" title="Stretch image edit tool." alt="" coords="161,827,352,1404"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a5d5bd6f1ff3219538d2abe4418b1b924"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#a5d5bd6f1ff3219538d2abe4418b1b924">update</a> ()</td></tr>
+<tr class="memdesc:a5d5bd6f1ff3219538d2abe4418b1b924"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signal to emit when this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a> has been updated.  <a href="class_isis_1_1_q_stretch.html#a5d5bd6f1ff3219538d2abe4418b1b924">More...</a><br /></td></tr>
+<tr class="separator:a5d5bd6f1ff3219538d2abe4418b1b924"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:af7a39b292d19f7036549c8612867fbe2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#af7a39b292d19f7036549c8612867fbe2">QStretch</a> (const <a class="el" href="class_isis_1_1_stretch_tool.html">StretchTool</a> *stretchTool, QString <a class="el" href="class_isis_1_1_q_stretch.html#a0b4d0a3a7bf5d573df7ba070c62de846">name</a>)</td></tr>
+<tr class="memdesc:af7a39b292d19f7036549c8612867fbe2"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a> Constructor.  <a href="class_isis_1_1_q_stretch.html#af7a39b292d19f7036549c8612867fbe2">More...</a><br /></td></tr>
+<tr class="separator:af7a39b292d19f7036549c8612867fbe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa51aceefd11293123f6a2c9c6c10df77"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_q_stretch.html">QStretch</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#aa51aceefd11293123f6a2c9c6c10df77">clone</a> ()=0</td></tr>
+<tr class="memdesc:aa51aceefd11293123f6a2c9c6c10df77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract method to clone a <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a> in order to retain its parameters and stretch pairs.  <a href="class_isis_1_1_q_stretch.html#aa51aceefd11293123f6a2c9c6c10df77">More...</a><br /></td></tr>
+<tr class="separator:aa51aceefd11293123f6a2c9c6c10df77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf39e774e29299db3d6eb727a7c07a82"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#aaf39e774e29299db3d6eb727a7c07a82">connectTable</a> (QTableWidget *widget)</td></tr>
+<tr class="memdesc:aaf39e774e29299db3d6eb727a7c07a82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract method to connect the AdvancedStretchTool's table of stretch pairs in order to modify it if necessary.  <a href="class_isis_1_1_q_stretch.html#aaf39e774e29299db3d6eb727a7c07a82">More...</a><br /></td></tr>
+<tr class="separator:aaf39e774e29299db3d6eb727a7c07a82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb6fc7a232eb0d077f162d8c829481d7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#adb6fc7a232eb0d077f162d8c829481d7">disconnectTable</a> (QTableWidget *widget)</td></tr>
+<tr class="memdesc:adb6fc7a232eb0d077f162d8c829481d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract method to disconnect the AdvancedStretchTool's table of stretch pairs.  <a href="class_isis_1_1_q_stretch.html#adb6fc7a232eb0d077f162d8c829481d7">More...</a><br /></td></tr>
+<tr class="separator:adb6fc7a232eb0d077f162d8c829481d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe9e98ba40c4f0589c61690ac6d451f0"><td class="memItemLeft" align="right" valign="top">virtual QGroupBox *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#afe9e98ba40c4f0589c61690ac6d451f0">getParameters</a> ()=0</td></tr>
+<tr class="memdesc:afe9e98ba40c4f0589c61690ac6d451f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract method to return a QGroupBox of this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a>'s parameters.  <a href="class_isis_1_1_q_stretch.html#afe9e98ba40c4f0589c61690ac6d451f0">More...</a><br /></td></tr>
+<tr class="separator:afe9e98ba40c4f0589c61690ac6d451f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b4d0a3a7bf5d573df7ba070c62de846"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#a0b4d0a3a7bf5d573df7ba070c62de846">name</a> ()</td></tr>
+<tr class="memdesc:a0b4d0a3a7bf5d573df7ba070c62de846"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method returns the name of this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a>.  <a href="class_isis_1_1_q_stretch.html#a0b4d0a3a7bf5d573df7ba070c62de846">More...</a><br /></td></tr>
+<tr class="separator:a0b4d0a3a7bf5d573df7ba070c62de846"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0144b839a2696913f8049e88df67c9bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_stretch.html">Stretch</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#a0144b839a2696913f8049e88df67c9bc">stretch</a> ()</td></tr>
+<tr class="memdesc:a0144b839a2696913f8049e88df67c9bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method returns the stretch.  <a href="class_isis_1_1_q_stretch.html#a0144b839a2696913f8049e88df67c9bc">More...</a><br /></td></tr>
+<tr class="separator:a0144b839a2696913f8049e88df67c9bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75411dd1a82df351ec77d1478a3bc0e5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#a75411dd1a82df351ec77d1478a3bc0e5">setMinMax</a> (double min, double max)</td></tr>
+<tr class="memdesc:a75411dd1a82df351ec77d1478a3bc0e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract method to set the minimum and maximum values that stretch input pairs can be set to.  <a href="class_isis_1_1_q_stretch.html#a75411dd1a82df351ec77d1478a3bc0e5">More...</a><br /></td></tr>
+<tr class="separator:a75411dd1a82df351ec77d1478a3bc0e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:af64261d45fc65ab66f2c014476f9585d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_stretch_tool.html">StretchTool</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#af64261d45fc65ab66f2c014476f9585d">p_stretchTool</a></td></tr>
+<tr class="memdesc:af64261d45fc65ab66f2c014476f9585d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="class_isis_1_1_stretch_tool.html" title="Stretch image edit tool.">StretchTool</a> that created this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a>.  <a href="class_isis_1_1_q_stretch.html#af64261d45fc65ab66f2c014476f9585d">More...</a><br /></td></tr>
+<tr class="separator:af64261d45fc65ab66f2c014476f9585d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7577dbaf7c20622c16161a6ea64344c1"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#a7577dbaf7c20622c16161a6ea64344c1">p_name</a></td></tr>
+<tr class="memdesc:a7577dbaf7c20622c16161a6ea64344c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a>.  <a href="class_isis_1_1_q_stretch.html#a7577dbaf7c20622c16161a6ea64344c1">More...</a><br /></td></tr>
+<tr class="separator:a7577dbaf7c20622c16161a6ea64344c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad50422882d30182942c38c1f2b1a0fee"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#ad50422882d30182942c38c1f2b1a0fee">p_min</a></td></tr>
+<tr class="memdesc:ad50422882d30182942c38c1f2b1a0fee"><td class="mdescLeft">&#160;</td><td class="mdescRight">The minimum value a stretch input pair can be set to.  <a href="class_isis_1_1_q_stretch.html#ad50422882d30182942c38c1f2b1a0fee">More...</a><br /></td></tr>
+<tr class="separator:ad50422882d30182942c38c1f2b1a0fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af22873de7d5b247669154641c3a48c99"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#af22873de7d5b247669154641c3a48c99">p_max</a></td></tr>
+<tr class="memdesc:af22873de7d5b247669154641c3a48c99"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum value a stretch input pair can be set to.  <a href="class_isis_1_1_q_stretch.html#af22873de7d5b247669154641c3a48c99">More...</a><br /></td></tr>
+<tr class="separator:af22873de7d5b247669154641c3a48c99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56baf4eb3697cdf7de33c0ad0e496d5a"><td class="memItemLeft" align="right" valign="top">QGroupBox *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#a56baf4eb3697cdf7de33c0ad0e496d5a">p_parametersBox</a></td></tr>
+<tr class="memdesc:a56baf4eb3697cdf7de33c0ad0e496d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The QGroupBox that holds this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a>'s parameters.  <a href="class_isis_1_1_q_stretch.html#a56baf4eb3697cdf7de33c0ad0e496d5a">More...</a><br /></td></tr>
+<tr class="separator:a56baf4eb3697cdf7de33c0ad0e496d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b61be1fb9729364fc4dbfc668c7037c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_stretch.html">Stretch</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_q_stretch.html#a8b61be1fb9729364fc4dbfc668c7037c">p_stretch</a></td></tr>
+<tr class="memdesc:a8b61be1fb9729364fc4dbfc668c7037c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The stretch that this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a> modifies.  <a href="class_isis_1_1_q_stretch.html#a8b61be1fb9729364fc4dbfc668c7037c">More...</a><br /></td></tr>
+<tr class="separator:a8b61be1fb9729364fc4dbfc668c7037c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Abstract class for complex stretch objects. </p>
+<p>This class serves as the parent class to complex stretch objects that are used by the AdvancedStretchTool. It must define parameters to manipulate its stretch pairs that will be used by the AdvancedStretchTool's 'Advanced' dialog.</p>
+<dl class="section author"><dt>Author</dt><dd>2009-05-01 Noah hilt </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af7a39b292d19f7036549c8612867fbe2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7a39b292d19f7036549c8612867fbe2">&#9670;&nbsp;</a></span>QStretch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::QStretch::QStretch </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_stretch_tool.html">StretchTool</a> *&#160;</td>
+          <td class="paramname"><em>stretchTool</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a> Constructor. </p>
+<p><a class="el" href="class_isis_1_1_stretch_tool.html" title="Stretch image edit tool.">StretchTool</a> can not be null.</p>
+<p>Initializes the stretch and sets its special pixel values to their defaults.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stretchTool</td><td></td></tr>
+    <tr><td class="paramname">name</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_q_stretch.html#a8b61be1fb9729364fc4dbfc668c7037c">p_stretch</a>, <a class="el" href="class_isis_1_1_stretch.html#ab0c37f3e38a767b3e675d182b87e334e">Isis::Stretch::SetHis()</a>, <a class="el" href="class_isis_1_1_stretch.html#a52d51416b75f5c759d448ce61665e497">Isis::Stretch::SetHrs()</a>, <a class="el" href="class_isis_1_1_stretch.html#ab80f5bf9e2970ef26112687345400ae8">Isis::Stretch::SetLis()</a>, <a class="el" href="class_isis_1_1_stretch.html#afd00522d8efec39dca5546396babe839">Isis::Stretch::SetLrs()</a>, <a class="el" href="class_isis_1_1_stretch.html#a234078b4634be9bb2a17ad554663cb5d">Isis::Stretch::SetMaximum()</a>, <a class="el" href="class_isis_1_1_stretch.html#a6827bd46e83311b91d1b14042cb9fe88">Isis::Stretch::SetMinimum()</a>, and <a class="el" href="class_isis_1_1_stretch.html#a23217c73947267e9daf07b71a9dfb7e2">Isis::Stretch::SetNull()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa51aceefd11293123f6a2c9c6c10df77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa51aceefd11293123f6a2c9c6c10df77">&#9670;&nbsp;</a></span>clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="class_isis_1_1_q_stretch.html">QStretch</a>* Isis::QStretch::clone </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Abstract method to clone a <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a> in order to retain its parameters and stretch pairs. </p>
+<p>This method must be overridden.</p>
+<dl class="section return"><dt>Returns</dt><dd>QStretch* </dd></dl>
+
+</div>
+</div>
+<a id="aaf39e774e29299db3d6eb727a7c07a82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf39e774e29299db3d6eb727a7c07a82">&#9670;&nbsp;</a></span>connectTable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::QStretch::connectTable </td>
+          <td>(</td>
+          <td class="paramtype">QTableWidget *&#160;</td>
+          <td class="paramname"><em>widget</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Abstract method to connect the AdvancedStretchTool's table of stretch pairs in order to modify it if necessary. </p>
+<p>The default implementation is to do nothing.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">widget</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adb6fc7a232eb0d077f162d8c829481d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb6fc7a232eb0d077f162d8c829481d7">&#9670;&nbsp;</a></span>disconnectTable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::QStretch::disconnectTable </td>
+          <td>(</td>
+          <td class="paramtype">QTableWidget *&#160;</td>
+          <td class="paramname"><em>widget</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Abstract method to disconnect the AdvancedStretchTool's table of stretch pairs. </p>
+<p>The default implementation is to do nothing.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">widget</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afe9e98ba40c4f0589c61690ac6d451f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe9e98ba40c4f0589c61690ac6d451f0">&#9670;&nbsp;</a></span>getParameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QGroupBox* Isis::QStretch::getParameters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Abstract method to return a QGroupBox of this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a>'s parameters. </p>
+<p>This method must be overridden.</p>
+<dl class="section return"><dt>Returns</dt><dd>QGroupBox* </dd></dl>
+
+</div>
+</div>
+<a id="a0b4d0a3a7bf5d573df7ba070c62de846"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b4d0a3a7bf5d573df7ba070c62de846">&#9670;&nbsp;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::QStretch::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method returns the name of this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_q_stretch.html#a7577dbaf7c20622c16161a6ea64344c1">p_name</a>.</p>
+
+</div>
+</div>
+<a id="a75411dd1a82df351ec77d1478a3bc0e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75411dd1a82df351ec77d1478a3bc0e5">&#9670;&nbsp;</a></span>setMinMax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::QStretch::setMinMax </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>min</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>max</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Abstract method to set the minimum and maximum values that stretch input pairs can be set to. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">min</td><td></td></tr>
+    <tr><td class="paramname">max</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_q_stretch.html#af22873de7d5b247669154641c3a48c99">p_max</a>, and <a class="el" href="class_isis_1_1_q_stretch.html#ad50422882d30182942c38c1f2b1a0fee">p_min</a>.</p>
+
+</div>
+</div>
+<a id="a0144b839a2696913f8049e88df67c9bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0144b839a2696913f8049e88df67c9bc">&#9670;&nbsp;</a></span>stretch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_stretch.html">Stretch</a> Isis::QStretch::stretch </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method returns the stretch. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_stretch.html" title="Pixel value mapper.">Stretch</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_q_stretch.html#a8b61be1fb9729364fc4dbfc668c7037c">p_stretch</a>.</p>
+
+</div>
+</div>
+<a id="a5d5bd6f1ff3219538d2abe4418b1b924"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d5bd6f1ff3219538d2abe4418b1b924">&#9670;&nbsp;</a></span>update</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::QStretch::update </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Signal to emit when this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a> has been updated. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="af22873de7d5b247669154641c3a48c99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af22873de7d5b247669154641c3a48c99">&#9670;&nbsp;</a></span>p_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::QStretch::p_max</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The maximum value a stretch input pair can be set to. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_q_stretch.html#a75411dd1a82df351ec77d1478a3bc0e5">setMinMax()</a>.</p>
+
+</div>
+</div>
+<a id="ad50422882d30182942c38c1f2b1a0fee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad50422882d30182942c38c1f2b1a0fee">&#9670;&nbsp;</a></span>p_min</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::QStretch::p_min</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The minimum value a stretch input pair can be set to. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_q_stretch.html#a75411dd1a82df351ec77d1478a3bc0e5">setMinMax()</a>.</p>
+
+</div>
+</div>
+<a id="a7577dbaf7c20622c16161a6ea64344c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7577dbaf7c20622c16161a6ea64344c1">&#9670;&nbsp;</a></span>p_name</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::QStretch::p_name</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The name of this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a>. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_q_stretch.html#a0b4d0a3a7bf5d573df7ba070c62de846">name()</a>.</p>
+
+</div>
+</div>
+<a id="a56baf4eb3697cdf7de33c0ad0e496d5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56baf4eb3697cdf7de33c0ad0e496d5a">&#9670;&nbsp;</a></span>p_parametersBox</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QGroupBox* Isis::QStretch::p_parametersBox</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The QGroupBox that holds this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a>'s parameters. </p>
+
+</div>
+</div>
+<a id="a8b61be1fb9729364fc4dbfc668c7037c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b61be1fb9729364fc4dbfc668c7037c">&#9670;&nbsp;</a></span>p_stretch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_stretch.html">Stretch</a> Isis::QStretch::p_stretch</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The stretch that this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a> modifies. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_q_stretch.html#af7a39b292d19f7036549c8612867fbe2">QStretch()</a>, and <a class="el" href="class_isis_1_1_q_stretch.html#a0144b839a2696913f8049e88df67c9bc">stretch()</a>.</p>
+
+</div>
+</div>
+<a id="af64261d45fc65ab66f2c014476f9585d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af64261d45fc65ab66f2c014476f9585d">&#9670;&nbsp;</a></span>p_stretchTool</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_stretch_tool.html">StretchTool</a>* Isis::QStretch::p_stretchTool</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The <a class="el" href="class_isis_1_1_stretch_tool.html" title="Stretch image edit tool.">StretchTool</a> that created this <a class="el" href="class_isis_1_1_q_stretch.html" title="Abstract class for complex stretch objects.">QStretch</a>. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/StretchTool/<a class="el" href="_q_stretch_8h_source.html">QStretch.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_q_stretch.html">QStretch</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

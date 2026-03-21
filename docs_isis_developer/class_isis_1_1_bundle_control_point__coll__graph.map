@@ -1,0 +1,8 @@
+<map id="Isis::BundleControlPoint" name="Isis::BundleControlPoint">
+<area shape="rect" id="node1" title="This class holds information about a control point that BundleAdjust needs to run correctly." alt="" coords="16,584,245,825"/>
+<area shape="rect" id="node2" href="$class_q_vector.html" title=" " alt="" coords="5,303,213,384"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_control_point.html" title="A single control point." alt="" coords="237,167,442,520"/>
+<area shape="rect" id="node4" href="$class_q_object.html" title=" " alt="" coords="173,13,242,95"/>
+<area shape="rect" id="node5" href="$class_q_hash.html" title=" " alt="" coords="266,5,413,103"/>
+<area shape="rect" id="node6" title=" " alt="" coords="438,13,476,95"/>
+</map>

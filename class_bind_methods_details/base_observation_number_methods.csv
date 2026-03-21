@@ -1,0 +1,10 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ObservationNumber,Control Networks,isis/src/base/objs/ObservationNumber/ObservationNumber.h,isis_pybind_standalone/src/base/bind_base_support.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ObservationNumber,isis_pybind.ObservationNumber,Y,Python class symbol is exported from `bind_base_support.cpp`
+Construction/Enum,ObservationNumber(),isis_pybind.ObservationNumber(),Y,Default constructor is explicitly bound
+Static/Factory,"static QString Compose(Pvl &label, bool def2filename = false)",isis_pybind.ObservationNumber.compose,Y,Bound in `bind_base_support.cpp`
+Static/Factory,"static QString Compose(Cube &cube, bool def2filename = false)",isis_pybind.ObservationNumber.compose,Y,Bound in `bind_base_support.cpp`
+Static/Factory,"static QString Compose(const QString &filename, bool def2filename = false)",isis_pybind.ObservationNumber.compose,Y,Bound in `bind_base_support.cpp`
+Public API,"std::vector<QString> PossibleSerial(const QString &on, SerialNumberList &list)",isis_pybind.ObservationNumber.possible_serial,Y,Bound in `bind_base_support.cpp`

@@ -1,0 +1,32 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+CameraFocalPlaneMap,"Spice, Instruments, and Cameras",isis/src/base/objs/CameraFocalPlaneMap/CameraFocalPlaneMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,第六批已补基础单测（局部几何 round-trip / 系数访问）
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,CameraFocalPlaneMap,isis_pybind.CameraFocalPlaneMap,Y,Python class symbol is exported; constructor exposure may be limited; 第六批已补基础单测（局部几何 round-trip / 系数访问）
+Construction/Enum,"FocalPlaneXDependencyType enum (Sample, Line)",isis_pybind.CameraFocalPlaneMap.FocalPlaneXDependencyType,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Construction/Enum,CameraFocalPlaneMap(),isis_pybind.CameraFocalPlaneMap(),N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Mutation/Configuration,"virtual bool SetDetector(const double sample, const double line)",isis_pybind.CameraFocalPlaneMap.set_detector,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Mutation/Configuration,"virtual bool SetFocalPlane(const double dx, const double dy)",isis_pybind.CameraFocalPlaneMap.set_focal_plane,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double FocalPlaneX() const,isis_pybind.CameraFocalPlaneMap.focal_plane_x,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double FocalPlaneY() const,isis_pybind.CameraFocalPlaneMap.focal_plane_y,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double DetectorSample() const,isis_pybind.CameraFocalPlaneMap.detector_sample,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double DetectorLine() const,isis_pybind.CameraFocalPlaneMap.detector_line,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double CenteredDetectorSample() const,isis_pybind.CameraFocalPlaneMap.centered_detector_sample,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double CenteredDetectorLine() const,isis_pybind.CameraFocalPlaneMap.centered_detector_line,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Mutation/Configuration,"void SetDetectorOrigin(const double sample, const double line)",isis_pybind.CameraFocalPlaneMap.set_detector_origin,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double DetectorLineOrigin() const,isis_pybind.CameraFocalPlaneMap.detector_line_origin,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double DetectorSampleOrigin() const,isis_pybind.CameraFocalPlaneMap.detector_sample_origin,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Mutation/Configuration,"void SetDetectorOffset(const double sampleOffset, const double lineOffset)",isis_pybind.CameraFocalPlaneMap.set_detector_offset,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double DetectorLineOffset() const,isis_pybind.CameraFocalPlaneMap.detector_line_offset,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double DetectorSampleOffset() const,isis_pybind.CameraFocalPlaneMap.detector_sample_offset,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Mutation/Configuration,void SetTransL(const QVector<double> transL),isis_pybind.CameraFocalPlaneMap.set_trans_l,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Mutation/Configuration,void SetTransS(const QVector<double> transS),isis_pybind.CameraFocalPlaneMap.set_trans_s,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Mutation/Configuration,void SetTransX(const QVector<double> transX),isis_pybind.CameraFocalPlaneMap.set_trans_x,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Mutation/Configuration,void SetTransY(const QVector<double> transY),isis_pybind.CameraFocalPlaneMap.set_trans_y,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,const double *TransL() const,isis_pybind.CameraFocalPlaneMap.trans_l,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,const double *TransS() const,isis_pybind.CameraFocalPlaneMap.trans_s,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,const double *TransX() const,isis_pybind.CameraFocalPlaneMap.trans_x,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,const double *TransY() const,isis_pybind.CameraFocalPlaneMap.trans_y,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,int FocalPlaneXDependency(),isis_pybind.CameraFocalPlaneMap.focal_plane_x_dependency,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double SignMostSigX(),isis_pybind.CameraFocalPlaneMap.sign_most_sig_x,N,第六批已补基础单测（局部几何 round-trip / 系数访问）
+Public API,double SignMostSigY(),isis_pybind.CameraFocalPlaneMap.sign_most_sig_y,N,第六批已补基础单测（局部几何 round-trip / 系数访问）

@@ -1,0 +1,628 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Class Members</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('functions_u.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="contents">
+<div class="textblock">Here is a list of all class members with links to the classes they belong to:</div>
+
+<h3><a id="index_u"></a>- u -</h3><ul>
+<li>Uint32_t()
+: <a class="el" href="class_isis_1_1_endian_swapper.html#a68aa660a2d46ab7f8b43c3ca1255de3f">Isis::EndianSwapper</a>
+</li>
+<li>Unapproved
+: <a class="el" href="class_isis_1_1_feature_nomenclature.html#a8c5b72b482cce70da2acb07646e15d94aadf26a895d023f2f6a03c8c6fc2ed7ae">Isis::FeatureNomenclature</a>
+</li>
+<li>uncert()
+: <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a02e12773405b5f76cc090fb2f1c10583">Isis::NonLinearLSQ</a>
+</li>
+<li>UnderRangePixels()
+: <a class="el" href="class_isis_1_1_statistics.html#a202fa1f0c7c67950242330cf34bf893d">Isis::Statistics</a>
+</li>
+<li>UndistortedFocalPlaneX()
+: <a class="el" href="class_isis_1_1_camera_distortion_map.html#a21d9f745b7cfacf70bcd6c45c59d62a2">Isis::CameraDistortionMap</a>
+</li>
+<li>UndistortedFocalPlaneY()
+: <a class="el" href="class_isis_1_1_camera_distortion_map.html#ae69308fa2c0c5aeeb856dd0df2c3c078">Isis::CameraDistortionMap</a>
+</li>
+<li>UndistortedFocalPlaneZ()
+: <a class="el" href="class_isis_1_1_camera_distortion_map.html#acc2c69274a574140ef0f4c08c00faf09">Isis::CameraDistortionMap</a>
+</li>
+<li>undo()
+: <a class="el" href="class_isis_1_1_work_order.html#a5c81397c2d05e61d556ce48b52ed3e5c">Isis::WorkOrder</a>
+</li>
+<li>undoAction()
+: <a class="el" href="class_isis_1_1_directory.html#ab8cdd35174118e5e60ed5fcb216c12c0">Isis::Directory</a>
+</li>
+<li>undoExecution()
+: <a class="el" href="class_isis_1_1_cnet_editor_view_work_order.html#ad3420fcbb4b50da78097ec9ff0946445">Isis::CnetEditorViewWorkOrder</a>
+, <a class="el" href="class_isis_1_1_image_list_action_work_order.html#ae12d45d772fb459cd9d462d8d891eb74">Isis::ImageListActionWorkOrder</a>
+, <a class="el" href="class_isis_1_1_import_images_work_order.html#a24a3e8a22194f93862c8f97f9974067f">Isis::ImportImagesWorkOrder</a>
+, <a class="el" href="class_isis_1_1_import_map_template_work_order.html#a60e9cbcdcb4315accdef87c223b681fe">Isis::ImportMapTemplateWorkOrder</a>
+, <a class="el" href="class_isis_1_1_import_registration_template_work_order.html#abf883f0a4c88c820a79f744747602869">Isis::ImportRegistrationTemplateWorkOrder</a>
+, <a class="el" href="class_isis_1_1_import_shapes_work_order.html#a7b637a75eb925f55c289f43c1c62f3b8">Isis::ImportShapesWorkOrder</a>
+, <a class="el" href="class_isis_1_1_matrix_view_work_order.html#ae0258f9879b5b9e0fba1514c0ee88631">Isis::MatrixViewWorkOrder</a>
+, <a class="el" href="class_isis_1_1_move_down_one_scene_work_order.html#a437774eaa0c89cd7cb730401584cdd9b">Isis::MoveDownOneSceneWorkOrder</a>
+, <a class="el" href="class_isis_1_1_move_to_bottom_scene_work_order.html#a32c69b120944817fdbe4cc1db22dc4a8">Isis::MoveToBottomSceneWorkOrder</a>
+, <a class="el" href="class_isis_1_1_move_to_top_scene_work_order.html#a6768efe061fc09ef4ba33530236d8ce5">Isis::MoveToTopSceneWorkOrder</a>
+, <a class="el" href="class_isis_1_1_move_up_one_scene_work_order.html#ac9a6ad5e524cb48b8b3ddcde9f93563f">Isis::MoveUpOneSceneWorkOrder</a>
+, <a class="el" href="class_isis_1_1_rename_project_work_order.html#a9a838ae400dcbb82fe0b90ec90819469">Isis::RenameProjectWorkOrder</a>
+, <a class="el" href="class_isis_1_1_sensor_get_info_work_order.html#a76e710cef8857f08427a4ac06f17e29c">Isis::SensorGetInfoWorkOrder</a>
+, <a class="el" href="class_isis_1_1_view_control_net3_d_work_order.html#a27eb06362cbff2bd62bad07fda590ffa">Isis::ViewControlNet3DWorkOrder</a>
+, <a class="el" href="class_isis_1_1_work_order.html#a42e4c3c75a15311f01f0fe0db6da42ef">Isis::WorkOrder</a>
+</li>
+<li>undoStack()
+: <a class="el" href="class_isis_1_1_project.html#a5702e514a07068b33bdc2cdf6678cc9e">Isis::Project</a>
+</li>
+<li>UniformlySampledSpectrum
+: <a class="el" href="class_isis_1_1_process_export_pds4.html#addcf7a3aa16cca79a3e785c3ae46641fa552f1e53ccc39371aaebd63d111be1b4">Isis::ProcessExportPds4</a>
+</li>
+<li>UniqueIOCachingAlgorithm()
+: <a class="el" href="class_isis_1_1_unique_i_o_caching_algorithm.html#a51310a965dd3b5999295794a91568780">Isis::UniqueIOCachingAlgorithm</a>
+</li>
+<li>UniqueKeys
+: <a class="el" href="class_isis_1_1_collector_map.html#a8d0f8e165183e1e47edef6622af5a4f0a8c21d889900820005f8b09abcc524ca1">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;</a>
+</li>
+<li>unit()
+: <a class="el" href="class_isis_1_1_pvl_keyword.html#a43578f7c6e4c2acf41957b827718d856">Isis::PvlKeyword</a>
+</li>
+<li>Units
+: <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4">Isis::Angle</a>
+, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24">Isis::Displacement</a>
+, <a class="el" href="class_isis_1_1_distance.html#accb6199bc155f11ff0f36236c6c1a902">Isis::Distance</a>
+, <a class="el" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">Isis::PlotCurve</a>
+</li>
+<li>unitWrapValue()
+: <a class="el" href="class_isis_1_1_angle.html#a49cffc1d2b8c071ff7dd51440a7b8cb0">Isis::Angle</a>
+</li>
+<li>universalGroundMap()
+: <a class="el" href="class_isis_1_1_cube_viewport.html#a7d3fe981931becb778b004ef8cd2ee36">Isis::CubeViewport</a>
+</li>
+<li>UniversalGroundMap()
+: <a class="el" href="class_isis_1_1_universal_ground_map.html#ac833dc55daa697f268ee13f3f5749646">Isis::UniversalGroundMap</a>
+</li>
+<li>UniversalLatitude()
+: <a class="el" href="class_isis_1_1_sensor.html#a3ebb0970f605513f5392a17e3fd6c465">Isis::Sensor</a>
+, <a class="el" href="class_isis_1_1_t_projection.html#ada27261a5b3a46d568dcffcc9a6f341f">Isis::TProjection</a>
+, <a class="el" href="class_isis_1_1_universal_ground_map.html#a8688c0c57cb0e3c5d509e33dbe2d671c">Isis::UniversalGroundMap</a>
+</li>
+<li>UniversalLongitude()
+: <a class="el" href="class_isis_1_1_sensor.html#ad09da3318eafd758e862828e4b8d6f05">Isis::Sensor</a>
+, <a class="el" href="class_isis_1_1_t_projection.html#a4cc777bcc817995dd343dafcf82eb69f">Isis::TProjection</a>
+, <a class="el" href="class_isis_1_1_universal_ground_map.html#a2b727666facc1b0272442816364f8cc9">Isis::UniversalGroundMap</a>
+</li>
+<li>UniversalRingLongitude()
+: <a class="el" href="class_isis_1_1_ring_plane_projection.html#a176fdb3a3838e5508adbebff3beda9da">Isis::RingPlaneProjection</a>
+</li>
+<li>UniversalRingRadius()
+: <a class="el" href="class_isis_1_1_ring_plane_projection.html#a39b275dbc93529481c75697d343528cb">Isis::RingPlaneProjection</a>
+</li>
+<li>Unknown
+: <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78">Isis::IException</a>
+, <a class="el" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928a65e72c690b6114241f93b1fc46456053">Isis::PlotCurve</a>
+, <a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dca4eede47612b3aaec773d7aac5dddcd1b">Isis::Shape</a>
+</li>
+<li>UNKNOWN
+: <a class="el" href="class_isis_1_1_spice_rotation.html#ae84fa3d307f5b59e593a431eabc97a2eaab1ae0c2b9edfe3151984951310c5adb">Isis::SpiceRotation</a>
+</li>
+<li>UnknownAction
+: <a class="el" href="class_isis_1_1_image_list_action_work_order.html#afc883efef261311bed3527e1c1e1bd8da5f03fa42e4098410e77b4d730a140d1b">Isis::ImageListActionWorkOrder</a>
+</li>
+<li>UnLoad()
+: <a class="el" href="class_isis_1_1_kernels.html#ad74ad96891654fe97d1573f8d3970117">Isis::Kernels</a>
+</li>
+<li>UnManage()
+: <a class="el" href="class_isis_1_1_kernels.html#af814602f4fabc8fb1f470473f8e17366">Isis::Kernels</a>
+</li>
+<li>Unpack()
+: <a class="el" href="class_isis_1_1_table_record.html#a3069f3b227a4b9b32e2fc57116bae6dd">Isis::TableRecord</a>
+</li>
+<li>Unprojected
+: <a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dca65d62b862d084737c4b6640731ae9d32">Isis::Shape</a>
+</li>
+<li>UnsignedShortInt()
+: <a class="el" href="class_isis_1_1_endian_swapper.html#aacc7be985a314ce81ed2aff4dc99220e">Isis::EndianSwapper</a>
+</li>
+<li>UpCase()
+: <a class="el" href="class_isis_1_1_i_string.html#a69f44966f3c629e79aec55ba5b921d75">Isis::IString</a>
+</li>
+<li>update()
+: <a class="el" href="class_isis_1_1_control_health_monitor_widget.html#a8c5e96a62b123661637db6fbf555d9f7">Isis::ControlHealthMonitorWidget</a>
+</li>
+<li>Update()
+: <a class="el" href="class_isis_1_1_gui_parameter.html#a18f18722a8d6c7654bc283dac78d0740">Isis::GuiParameter</a>
+</li>
+<li>update()
+: <a class="el" href="class_isis_1_1_image_tree_widget_item.html#a95cc0f9ff84b0887ee53b479333a079a">Isis::ImageTreeWidgetItem</a>
+, <a class="el" href="class_isis_1_1_plot_window.html#ab4e77a26ff2038943618d9d76c303ca4">Isis::PlotWindow</a>
+, <a class="el" href="class_isis_1_1_q_stretch.html#a5d5bd6f1ff3219538d2abe4418b1b924">Isis::QStretch</a>
+, <a class="el" href="class_isis_1_1_spectral_plot_window.html#af13f1014fecfc74e830be5347e9d8670">Isis::SpectralPlotWindow</a>
+</li>
+<li>Update()
+: <a class="el" href="class_isis_1_1_table.html#acbdd4bda230ce4a36eb251c831a7c744">Isis::Table</a>
+</li>
+<li>updateAdvStretchDialogforAll()
+: <a class="el" href="class_isis_1_1_stretch_tool.html#a10a5eb4013cd5230b286d9c458476daa">Isis::StretchTool</a>
+</li>
+<li>updateBodyRotation()
+: <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a68acf28e9ba5128adb50c708bb5555f6">Isis::IsisBundleObservation</a>
+</li>
+<li>updateChecksumInLabel()
+: <a class="el" href="class_isis_1_1_process_export_pds.html#a44ca6249d75c57c30050896f74276ca7">Isis::ProcessExportPds</a>
+</li>
+<li>updateComboIndex()
+: <a class="el" href="class_isis_1_1_cube_plot_curve_configure_dialog.html#ada9d110a6c7887ef67295feef5148e05">Isis::CubePlotCurveConfigureDialog</a>
+</li>
+<li>updateControlNetEditConnections()
+: <a class="el" href="class_isis_1_1_directory.html#a3fc58fe02d984c2d651984bff053c00f">Isis::Directory</a>
+</li>
+<li>updateCorrelationData()
+: <a class="el" href="class_isis_1_1_matrix_options_dialog.html#a06f0d566e475f560fac2c47b959f59da">Isis::MatrixOptionsDialog</a>
+</li>
+<li>updateCubeLabel()
+: <a class="el" href="class_isis_1_1_bundle_settings.html#a79cb8095abf816e79597129e79a45a4a">Isis::BundleSettings</a>
+</li>
+<li>updateCurvesList()
+: <a class="el" href="class_isis_1_1_cube_plot_curve_configure_dialog.html#a7f739337958337877fcbf957b38e0716">Isis::CubePlotCurveConfigureDialog</a>
+</li>
+<li>UpdatedTemplate()
+: <a class="el" href="class_isis_1_1_auto_reg.html#a1a8aab57a25adf5ae7c1d9b97854e280">Isis::AutoReg</a>
+</li>
+<li>updateEditPoint()
+: <a class="el" href="class_isis_1_1_qnet_nav_tool.html#ac8653eb8099fd57baff2c74647d35018">Isis::QnetNavTool</a>
+</li>
+<li>updateFileName()
+: <a class="el" href="class_isis_1_1_bundle_solution_info.html#abc976dc6448c7febf0017e534d072ab7">Isis::BundleSolutionInfo</a>
+, <a class="el" href="class_isis_1_1_control.html#a94dab56de28120bc414974cd96ada04e">Isis::Control</a>
+, <a class="el" href="class_isis_1_1_image.html#a702f3eeddfb7ca09b36ff735ee0a48f4">Isis::Image</a>
+, <a class="el" href="class_isis_1_1_shape.html#a44d5cbf8f22bf9366f88d26d055db715">Isis::Shape</a>
+, <a class="el" href="class_isis_1_1_template.html#aca2e66b43bc1cc2beb48a8c6653c64ce">Isis::Template</a>
+</li>
+<li>updateFilterProgress()
+: <a class="el" href="class_isis_1_1_table_view_header.html#afdf8b3ee9a5e612e5ea51efa500b24bf">Isis::TableViewHeader</a>
+</li>
+<li>updateFilterProgressRange()
+: <a class="el" href="class_isis_1_1_table_view_header.html#a00860650672360c9c7ddc770122814fd">Isis::TableViewHeader</a>
+</li>
+<li>updateForRGBMode()
+: <a class="el" href="class_isis_1_1_advanced_stretch_dialog.html#a30a05cede6511d1c4e117669341d6f85">Isis::AdvancedStretchDialog</a>
+</li>
+<li>updateGraph()
+: <a class="el" href="class_isis_1_1_stretch_type.html#a0c1e064e99d526a2160e764a24634931">Isis::StretchType</a>
+</li>
+<li>UpdateGroup()
+: <a class="el" href="class_isis_1_1_alpha_cube.html#a05dd7164a525064fef62e3625ac3886a">Isis::AlphaCube</a>
+</li>
+<li>updateHeaderOffset()
+: <a class="el" href="class_isis_1_1_table_view_header.html#a2ce2b65779ee8b61e9c5c6c588e115e9">Isis::TableViewHeader</a>
+</li>
+<li>updateHistogram()
+: <a class="el" href="class_isis_1_1_advanced_stretch_dialog.html#a4393a327b9ce8b5ce0d348bc05ecd529">Isis::AdvancedStretchDialog</a>
+</li>
+<li>updateHistograms()
+: <a class="el" href="class_isis_1_1_advanced_stretch_dialog.html#a08703d89edf6b6a9ec26d69c5640432e">Isis::AdvancedStretchDialog</a>
+, <a class="el" href="class_isis_1_1_stretch_tool.html#a7798715c3c3fe0ec01a0698c096d4d20">Isis::StretchTool</a>
+</li>
+<li>updateHorizontalScrollBar()
+: <a class="el" href="class_isis_1_1_table_view_content.html#a84d50b94201f1b03dbcadb24cb559874">Isis::TableViewContent</a>
+</li>
+<li>updateItem()
+: <a class="el" href="class_isis_1_1_project_item_proxy_model.html#a132517de713b38aa1742f0ffff1c2ce6">Isis::ProjectItemProxyModel</a>
+</li>
+<li>updateIteration()
+: <a class="el" href="class_isis_1_1_jigsaw_run_widget.html#a638964df2cd220a2b5a35f81646fe371">Isis::JigsawRunWidget</a>
+</li>
+<li>UpdateLabel()
+: <a class="el" href="class_isis_1_1_sub_area.html#ad16f422d6ffac7aff5f5c31ebbbda638">Isis::SubArea</a>
+</li>
+<li>updateLabels()
+: <a class="el" href="class_isis_1_1_cube_bsq_handler.html#ad8cc84443f4812c36f4e2d3982d5dd32">Isis::CubeBsqHandler</a>
+, <a class="el" href="class_isis_1_1_cube_io_handler.html#adae8565702ac4c7d97fb9c9162581b4a">Isis::CubeIoHandler</a>
+, <a class="el" href="class_isis_1_1_cube_tile_handler.html#a06ba583a06e49b43ffb07d0a7d7f89ee">Isis::CubeTileHandler</a>
+, <a class="el" href="class_isis_1_1_mosaic_track_tool.html#a05a8673faaef3692613dfbde1a297090">Isis::MosaicTrackTool</a>
+</li>
+<li>updateLeftView()
+: <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#a4c7039d5393307e249d9921b83b8af06">Isis::ControlMeasureEditWidget</a>
+, <a class="el" href="class_isis_1_1_control_point_edit.html#a9770e1d373b451a43b00c4d19680d934">Isis::ControlPointEdit</a>
+</li>
+<li>updateLegendItemWidget()
+: <a class="el" href="class_isis_1_1_cube_plot_curve.html#addb9123a188fd24dd90db07e6c0190e8">Isis::CubePlotCurve</a>
+</li>
+<li>updateList()
+: <a class="el" href="class_isis_1_1_qnet_tool.html#a1968e5d809ea78dab752cb34e72ce985">Isis::QnetTool</a>
+</li>
+<li>UpdateLoadStatus()
+: <a class="el" href="class_isis_1_1_kernels.html#a51b7d940ab05f9d887cf6e3328ffae43">Isis::Kernels</a>
+</li>
+<li>UpdateLogData()
+: <a class="el" href="class_isis_1_1_control_measure.html#ac7537d4d7a2de3495127a96c36438ea8">Isis::ControlMeasure</a>
+</li>
+<li>updateMeasure()
+: <a class="el" href="class_isis_1_1_measure_tool.html#aec753c2520a471aec9b62b0a4ce2cc15">Isis::MeasureTool</a>
+, <a class="el" href="class_isis_1_1_tool.html#abd9885048ea427d9271c183721f8040b">Isis::Tool</a>
+</li>
+<li>updateNet()
+: <a class="el" href="class_isis_1_1_qnet_tool.html#a0a8b78d86c73a17c0a1c2aa4bcf979b1">Isis::QnetTool</a>
+</li>
+<li>UpdateOutputLabel()
+: <a class="el" href="class_isis_1_1_enlarge.html#af1d848cdfeda261c27d1eefd44aec13f">Isis::Enlarge</a>
+, <a class="el" href="class_isis_1_1_reduce.html#a83f06d7b857e08441d58aaf7ff29b33c">Isis::Reduce</a>
+</li>
+<li>updatePoint()
+: <a class="el" href="class_isis_1_1_jigsaw_run_widget.html#a4a3f14257a4ae026d7afd1a53ed36ec6">Isis::JigsawRunWidget</a>
+</li>
+<li>updatePointInfo()
+: <a class="el" href="class_isis_1_1_match_tool.html#af9b3f5ec49236280050b7d8d5ac16987">Isis::MatchTool</a>
+, <a class="el" href="class_isis_1_1_qnet_tool.html#a2363ee4842d571b2a0cba8e00227fad7">Isis::QnetTool</a>
+</li>
+<li>updateProxyCurrent()
+: <a class="el" href="class_isis_1_1_project_item_proxy_model.html#a89794e177dfef6e9abf331cb014ab2e4">Isis::ProjectItemProxyModel</a>
+</li>
+<li>updateProxySelection()
+: <a class="el" href="class_isis_1_1_project_item_proxy_model.html#a213753ca71dfc94edc2cc19095cd5376">Isis::ProjectItemProxyModel</a>
+</li>
+<li>updateRawBuffer()
+: <a class="el" href="class_isis_1_1_image_importer.html#a4dcc76ec03b684d222ff42012626baaf">Isis::ImageImporter</a>
+, <a class="el" href="class_isis_1_1_j_p2_importer.html#a196a0693e0889cb861e8a29d2620edb3">Isis::JP2Importer</a>
+, <a class="el" href="class_isis_1_1_qt_importer.html#a48aab466368d118768fc5c0149c143e6">Isis::QtImporter</a>
+, <a class="el" href="class_isis_1_1_tiff_importer.html#af2cd95ea7d8c7e9d33884a2deb1aeb1c">Isis::TiffImporter</a>
+</li>
+<li>updateRebuildProgress()
+: <a class="el" href="class_isis_1_1_table_view_header.html#a87c1f9217b87f86e29c1941fb6ea818c">Isis::TableViewHeader</a>
+</li>
+<li>updateRebuildProgressRange()
+: <a class="el" href="class_isis_1_1_table_view_header.html#a38d45960a022eeba34c2785bb230e547">Isis::TableViewHeader</a>
+</li>
+<li>updateRecentProjects()
+: <a class="el" href="class_isis_1_1_directory.html#a04ba8980fbee026cb2cc7cbbae5e5930">Isis::Directory</a>
+</li>
+<li>updateResolutionBox()
+: <a class="el" href="class_isis_1_1_mosaic_zoom_tool.html#aedfe308d729a415098adae7d074fe406">Isis::MosaicZoomTool</a>
+</li>
+<li>updateRightView()
+: <a class="el" href="class_isis_1_1_control_measure_edit_widget.html#a657202cc95c1f298ecf968929413bb63">Isis::ControlMeasureEditWidget</a>
+, <a class="el" href="class_isis_1_1_control_point_edit.html#a0ecbbb688d037c934dd6f8792b1d37fe">Isis::ControlPointEdit</a>
+</li>
+<li>updateSelection()
+: <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a9c58b93974fa36214b454a4be3d5b53e">Isis::MosaicSceneItem</a>
+</li>
+<li>updateSize()
+: <a class="el" href="class_isis_1_1_visual_display.html#a14b6bc33275dac4b1a66222e3b2e19fb">Isis::VisualDisplay</a>
+</li>
+<li>updateSort()
+: <a class="el" href="class_isis_1_1_abstract_table_model.html#a1e87a7dfbb8afb32152933bd747b9b76">Isis::AbstractTableModel</a>
+</li>
+<li>updateSortProgress()
+: <a class="el" href="class_isis_1_1_table_view_header.html#a5ba69ee2ed483372c89beb192a0eac5c">Isis::TableViewHeader</a>
+</li>
+<li>updateSortProgressRange()
+: <a class="el" href="class_isis_1_1_table_view_header.html#a679b8e21eaa4b3f89418f5154682168f">Isis::TableViewHeader</a>
+</li>
+<li>updateSourceCurrent()
+: <a class="el" href="class_isis_1_1_project_item_proxy_model.html#a6ef45ffe3768c31230c860e1c8b038ac">Isis::ProjectItemProxyModel</a>
+</li>
+<li>updateSourceSelection()
+: <a class="el" href="class_isis_1_1_project_item_proxy_model.html#ad282315938691b5238c2ff800f25259f">Isis::ProjectItemProxyModel</a>
+</li>
+<li>updateStatus()
+: <a class="el" href="class_isis_1_1_jigsaw_run_widget.html#a771788eb4082d3c81af8a745ee8cf3d9">Isis::JigsawRunWidget</a>
+</li>
+<li>updateStretch()
+: <a class="el" href="class_isis_1_1_advanced_stretch_dialog.html#aa852faffc6fde848373035158ad3218c">Isis::AdvancedStretchDialog</a>
+</li>
+<li>updateTable()
+: <a class="el" href="class_isis_1_1_stretch_type.html#aa0edf6050b3e3131c53931002db75d73">Isis::StretchType</a>
+</li>
+<li>updateTool()
+: <a class="el" href="class_isis_1_1_abstract_plot_tool.html#abc485e45e96f564af7bbb50c3d86c076">Isis::AbstractPlotTool</a>
+, <a class="el" href="class_isis_1_1_band_tool.html#ab24908df4b1c9c8ce21e37aaf79a231e">Isis::BandTool</a>
+, <a class="el" href="class_isis_1_1_blink_tool.html#ab1c1e9c279cf64c560793737f7ff706b">Isis::BlinkTool</a>
+, <a class="el" href="class_isis_1_1_edit_tool.html#ad6e0583d4193bbac862f0ebbe0f65461">Isis::EditTool</a>
+, <a class="el" href="class_isis_1_1_feature_nomenclature_tool.html#a4c560c91c5d4fe92f58dfe05310e9b01">Isis::FeatureNomenclatureTool</a>
+, <a class="el" href="class_isis_1_1_file_tool.html#a265343f54c47f8d2fd83c6466eac42df">Isis::FileTool</a>
+, <a class="el" href="class_isis_1_1_find_tool.html#a5939eb9233cbb807c8c49d840be59386">Isis::FindTool</a>
+, <a class="el" href="class_isis_1_1_histogram_tool.html#a1d19763278a7702056cc9b6cc3a8edf3">Isis::HistogramTool</a>
+, <a class="el" href="class_isis_1_1_lat_lon_grid_tool.html#ab51650a788c9f3f75cedc55f32fd1932">Isis::LatLonGridTool</a>
+, <a class="el" href="class_isis_1_1_measure_tool.html#a60ca231d363c6427a5a2fef1c8f9cea2">Isis::MeasureTool</a>
+, <a class="el" href="class_isis_1_1_mosaic_find_tool.html#aea27cf6a56c2b0dcb77e917626683597">Isis::MosaicFindTool</a>
+, <a class="el" href="class_isis_1_1_mosaic_pan_tool.html#a561f960285901a5754eec83ba6432bea">Isis::MosaicPanTool</a>
+, <a class="el" href="class_isis_1_1_mosaic_select_tool.html#aa759a3f2e888bff321dffaa8e71f9b1a">Isis::MosaicSelectTool</a>
+, <a class="el" href="class_isis_1_1_mosaic_tool.html#a96a0e17cf54ebacabcd2bb11c5f334f5">Isis::MosaicTool</a>
+, <a class="el" href="class_isis_1_1_mosaic_zoom_tool.html#a38f09de21dda63ee6b5ea3a130a69f8e">Isis::MosaicZoomTool</a>
+, <a class="el" href="class_isis_1_1_spatial_plot_tool.html#aa54f175a40ca25fc1b213ef839c6b0dc">Isis::SpatialPlotTool</a>
+, <a class="el" href="class_isis_1_1_special_pixel_tool.html#a1cc7ea1083ecc6cfa161a6809e64b26b">Isis::SpecialPixelTool</a>
+, <a class="el" href="class_isis_1_1_spectral_plot_tool.html#ae20c2b617c7f9df6d64d687b92c76e37">Isis::SpectralPlotTool</a>
+, <a class="el" href="class_isis_1_1_stretch_tool.html#adf83a407b6cee610b951590db26c5d02">Isis::StretchTool</a>
+, <a class="el" href="class_isis_1_1_sun_shadow_tool.html#a3eaf150868caa6c6e7ddbb03a0dbd174">Isis::SunShadowTool</a>
+, <a class="el" href="class_isis_1_1_tool.html#a5f5c4854f322d923e612b0184b39b394">Isis::Tool</a>
+, <a class="el" href="class_isis_1_1_window_tool.html#aacecae35a91fea49bf91a3000beb6311">Isis::WindowTool</a>
+, <a class="el" href="class_isis_1_1_zoom_tool.html#a0c8a9c1380abbf5548d141588d54abe8">Isis::ZoomTool</a>
+</li>
+<li>updateViewActs()
+: <a class="el" href="class_isis_1_1_image_tree_widget.html#a97bf925d27b06302636604745810667b">Isis::ImageTreeWidget</a>
+</li>
+<li>UpturnedEllipsoidTransverseAzimuthal()
+: <a class="el" href="class_isis_1_1_upturned_ellipsoid_transverse_azimuthal.html#af9a09f4ad5feaa6f91c06da39e48e4e1">Isis::UpturnedEllipsoidTransverseAzimuthal</a>
+</li>
+<li>UseBandPlacementCriteria
+: <a class="el" href="class_isis_1_1_process_mosaic.html#a37c8ec231822bbfcab28955d13b6d401abe541cc464c42d41415d165978d7bc8d">Isis::ProcessMosaic</a>
+</li>
+<li>usePckPolynomial()
+: <a class="el" href="class_isis_1_1_spice_rotation.html#afbfdd1c3771728e3a61b089ad1894f99">Isis::SpiceRotation</a>
+</li>
+<li>User
+: <a class="el" href="struct_isis_1_1_control_point_1_1_radius_source.html#a5901130c7400f0ea56d6c80da142efc9a4d116ba5ee15db508ada5252ddb54f73">Isis::ControlPoint::RadiusSource</a>
+, <a class="el" href="struct_isis_1_1_control_point_1_1_surface_point_source.html#a98060aa916952f920737da41963fdfcfafa2fac0683ddc74e2e96eefd4fabf5c1">Isis::ControlPoint::SurfacePointSource</a>
+, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException</a>
+</li>
+<li>userCanAddCurves()
+: <a class="el" href="class_isis_1_1_plot_window.html#ad9a0b5c19eb950e8fb68c4f956d588b0">Isis::PlotWindow</a>
+</li>
+<li>userChangedBox()
+: <a class="el" href="class_isis_1_1_mosaic_area_tool.html#ad590bc9b0888d0688730e0070c5c4bf2">Isis::MosaicAreaTool</a>
+</li>
+<li>UserDnComboValue
+: <a class="el" href="class_isis_1_1_edit_tool.html#a47de1f1fba5be7a2446932dfa47b37f7a549d88627a154918e3538f782feff0fe">Isis::EditTool</a>
+</li>
+<li>userHasTools()
+: <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae3d6759e7abaf2ef4193a6d1c75f69ee">Isis::MosaicSceneWidget</a>
+</li>
+<li>UserInterface()
+: <a class="el" href="class_isis_1_1_user_interface.html#a6f98eaf62c412fed541c479b6207b501">Isis::UserInterface</a>
+</li>
+<li>userMovedTackPoint()
+: <a class="el" href="class_isis_1_1_chip_viewport.html#a5185525967553eeafd523999faeb9914">Isis::ChipViewport</a>
+</li>
+<li>UserName()
+: <a class="el" href="class_isis_1_1_application.html#abaf48663c07ce5b22a2651934353506b">Isis::Application</a>
+</li>
+<li>userName()
+: <a class="el" href="class_isis_1_1_control_net_versioner.html#ad2ec0110e9716bab45e0ccebc7108091">Isis::ControlNetVersioner</a>
+, <a class="el" href="class_isis_1_1_environment.html#a9b4b8e5bb814bc42118c1e58cb0590ba">Isis::Environment</a>
+</li>
+<li>userPreferenceActions()
+: <a class="el" href="class_isis_1_1_project.html#a83d60f9bf78ae3eb58640478f222c849">Isis::Project</a>
+</li>
+<li>userWarning()
+: <a class="el" href="class_isis_1_1_abstract_table_model.html#a642997390c5db6ceaaf5c22a7194f0df">Isis::AbstractTableModel</a>
+</li>
+<li>UTC()
+: <a class="el" href="class_isis_1_1i_time.html#ab015714074c94547cd84a4862a19dfee">Isis::iTime</a>
+</li>
+<li>UvvisCamera()
+: <a class="el" href="class_isis_1_1_uvvis_camera.html#aad2dd78ca84967f7d8817576805ad2ea">Isis::UvvisCamera</a>
+</li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,453 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Strategy/Strategy.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_strategy_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">Strategy.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_strategy_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef Strategy_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define Strategy_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// Qt library</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;QList&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QPair&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QScopedPointer&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QSharedPointer&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// SharedResource and ResourceList typedefs</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_gis_geometry_8h.html">GisGeometry.h</a>&quot;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_resource_8h.html">Resource.h</a>&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_object_8h.html">PvlObject.h</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">class </span>QStringList;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">class </span>GisGeometry;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keyword">class </span>Progress;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="class_isis_1_1_strategy.html">   92</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_strategy.html">Strategy</a> {</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;      <a class="code" href="class_isis_1_1_strategy.html#a3537fc1b77a1fe8027777d527459a82b">Strategy</a>();</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      <a class="code" href="class_isis_1_1_strategy.html#a3537fc1b77a1fe8027777d527459a82b">Strategy</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;definition, <span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;globals);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_strategy.html#a282572be95b6e466f718b1aab38a7bf0">~Strategy</a>();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      QString <a class="code" href="class_isis_1_1_strategy.html#a6c4186aaaf3425dd24034f59112e922f">name</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      QString <a class="code" href="class_isis_1_1_strategy.html#a0cd5dbbbca962ffcfd92db58ac2d5418">type</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      QString <a class="code" href="class_isis_1_1_strategy.html#a8fd7a9a774dc999674967f389edad43d">description</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <span class="comment">// Not intended to be reimplemented but available for direct calls</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_strategy.html#a0d4de9330ce4e506229ea5d6210e4d2c">apply</a>(<a class="code" href="class_q_list.html">ResourceList</a> &amp;resources);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_strategy.html#a0d4de9330ce4e506229ea5d6210e4d2c">apply</a>(<a class="code" href="class_q_shared_pointer.html">SharedResource</a> &amp;resource);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <span class="comment">// Inheriting strategies must reimplement either one or both of these</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_strategy.html#a0d4de9330ce4e506229ea5d6210e4d2c">apply</a>(<a class="code" href="class_q_list.html">ResourceList</a> &amp;resources, <span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;globals);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_strategy.html#a0d4de9330ce4e506229ea5d6210e4d2c">apply</a>(<a class="code" href="class_q_shared_pointer.html">SharedResource</a> &amp;resource, <span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;globals);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_strategy.html#a1499804eaa3d9f00bd0899a4900377e3">totalProcessed</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;   <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="class_isis_1_1_strategy.html#a7360a905c755f58f56a60374445df7b8">  115</a></span>&#160;     <span class="keyword">typedef</span> <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;PvlObject&gt;</a> <a class="code" href="class_isis_1_1_strategy.html#a7360a905c755f58f56a60374445df7b8">SharedPvlObject</a>;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;     <span class="comment">// For default constructions</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;     <a class="code" href="class_isis_1_1_strategy.html#a3537fc1b77a1fe8027777d527459a82b">Strategy</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_strategy.html#a6c4186aaaf3425dd24034f59112e922f">name</a>, <span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_strategy.html#a0cd5dbbbca962ffcfd92db58ac2d5418">type</a>);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;     <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_strategy.html#abb2a73298833c43e5827649f98849c42">setName</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_strategy.html#a6c4186aaaf3425dd24034f59112e922f">name</a>);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;     <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_strategy.html#ae769535f85cf2bf666e9f611d8dc3934">setType</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_strategy.html#a0cd5dbbbca962ffcfd92db58ac2d5418">type</a>);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;     <a class="code" href="class_q_list.html">ResourceList</a> <a class="code" href="class_isis_1_1_strategy.html#a8247cbb8ae62acb564b67a6f40953275">getGlobalDefaults</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;     <a class="code" href="class_q_list.html">ResourceList</a> <a class="code" href="class_isis_1_1_strategy.html#abd8eb331d9a2ec65001f2f17cd073451">getGlobals</a>(<a class="code" href="class_q_shared_pointer.html">SharedResource</a> &amp;myGlobals, </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                             <span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;globals) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;     <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<a class="code" href="class_isis_1_1_strategy.html#a4a16db396f5c772e3a92b8a4d60f5a6d">getDefinition</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;     <a class="code" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> <a class="code" href="class_isis_1_1_strategy.html#a5a9f6d2b90fec57e44c3c25073a3bc62">getDefinitionMap</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;     <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_strategy.html#a39623c343cda00e201ced5f3d7c9be2e">setApplyToDiscarded</a>();</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;     <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_strategy.html#adc6f2e23a24c235561c0db0022805c33">isApplyToDiscarded</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;     <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_strategy.html#ad0aa92a5bb866a68e9a9c52f12351db6">setDoNotApplyToDiscarded</a>();  <span class="comment">// default</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;  </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;     <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_strategy.html#aa8f311cd8a45ea2ccf7bc0f2a389cad1">applyToResources</a>(<a class="code" href="class_q_list.html">ResourceList</a> &amp;resources, <span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;globals);</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_strategy.html#a91f589f76c58733a362a5f17161b17b4">processed</a>();</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;     <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_strategy.html#afa795c6962d9e6c81b4aa0a20feaef27">resetProcessed</a>();</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;  </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;     <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_strategy.html#a257eac8287a1635d968240be673dc341">countActive</a>(<span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;resources) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;     <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_strategy.html#a69cbfeabc5e84cbb021c2afe136d6187">countDiscarded</a>(<span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;resources) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;     <a class="code" href="class_q_list.html">ResourceList</a> <a class="code" href="class_isis_1_1_strategy.html#a8fe97237048e87f0df763ceee430c4ad">assetResourceList</a>(<span class="keyword">const</span> <a class="code" href="class_q_shared_pointer.html">SharedResource</a> &amp;resource, </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;                                       <span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_strategy.html#a6c4186aaaf3425dd24034f59112e922f">name</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;  </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;     QString <a class="code" href="class_isis_1_1_strategy.html#a8ef1ea834bb73fe28057f0087e2e094b">findReplacement</a>(<span class="keyword">const</span> QString &amp;target, <span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;globals,</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                             <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;index = 0, </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                             <span class="keyword">const</span> QString &amp;defValue = <span class="stringliteral">&quot;&quot;</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;     QStringList <a class="code" href="class_isis_1_1_strategy.html#ac2f87a919b02f3e4a6d14bfbb58e4c4d">qualifiers</a>(<span class="keyword">const</span> QString &amp;keyspec, </div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                               <span class="keyword">const</span> QString &amp;delimiter = <span class="stringliteral">&quot;::&quot;</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;     QString <a class="code" href="class_isis_1_1_strategy.html#a1561514d8e53004c2da541c4d60f336f">scanAndReplace</a>(<span class="keyword">const</span> QString &amp;input, <span class="keyword">const</span> QString &amp;target, </div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                            <span class="keyword">const</span> QString &amp;replacement) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;     QString <a class="code" href="class_isis_1_1_strategy.html#ab9c3ba7edfe660f4cafc80b40f477488">translateKeywordArgs</a>(<span class="keyword">const</span> QString &amp;value,</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                                  <span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;globals,</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                                  <span class="keyword">const</span> QString &amp;defValue = <span class="stringliteral">&quot;&quot;</span>) <span class="keyword">const</span>; </div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;     QString <a class="code" href="class_isis_1_1_strategy.html#a255e8f3e18d55bd3510639e0ea6f96d2">processArgs</a>(<span class="keyword">const</span> QString &amp;value, <span class="keyword">const</span> QStringList &amp;argKeys,</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                         <span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;globals,</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                         <span class="keyword">const</span> QString &amp;defValue = <span class="stringliteral">&quot;&quot;</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;     <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_strategy.html#a1bfe7a711aaf104e05b4b104ff18c829">propagateKeys</a>(<a class="code" href="class_q_shared_pointer.html">SharedResource</a> &amp;source, <a class="code" href="class_q_shared_pointer.html">SharedResource</a> &amp;target) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;     <a class="code" href="class_q_shared_pointer.html">SharedResource</a> <a class="code" href="class_isis_1_1_strategy.html#a4f86d12cd064a15bed732ea4a2892cca">composite</a>(<a class="code" href="class_q_shared_pointer.html">SharedResource</a> &amp;resourceA, <a class="code" href="class_q_shared_pointer.html">SharedResource</a> &amp;resourceB,</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <span class="keyword">const</span> <a class="code" href="struct_q_pair.html">QPair&lt;QString, QString&gt;</a> &amp;keySuffix = qMakePair(QString(<span class="stringliteral">&quot;A&quot;</span>),QString(<span class="stringliteral">&quot;B&quot;</span>))) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;     <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_strategy.html#a70e4158380735307e1c5c61202cbd3f8">importGeometry</a>(<a class="code" href="class_q_shared_pointer.html">SharedResource</a> &amp;resource, </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                         <span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;globals) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;  </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;     <a class="code" href="class_q_list.html">ResourceList</a> <a class="code" href="class_isis_1_1_strategy.html#ac02fde9cbe31ab93693acd5a8ba88094">activeList</a>(<a class="code" href="class_q_list.html">ResourceList</a> &amp;resources) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;     <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_strategy.html#acfcb13c198a7c9785c5c1048f70aa08e">activateList</a>(<a class="code" href="class_q_list.html">ResourceList</a> &amp;resources) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;     <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_strategy.html#a58a9ac1279755e967955c5dbe5686674">deactivateList</a>(<a class="code" href="class_q_list.html">ResourceList</a> &amp;resources) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;     <a class="code" href="class_q_list.html">ResourceList</a> <a class="code" href="class_isis_1_1_strategy.html#a9a7c0a785ea863325676db40195af0a5">copyList</a>(<span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;resources) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;     <a class="code" href="class_q_list.html">ResourceList</a> <a class="code" href="class_isis_1_1_strategy.html#ad8d971fcffe5152c2fdb5fdc1015d66c">cloneList</a>(<span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;resources,</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                            <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;withAssets = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;     <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_strategy.html#a5021524550e3d40db6ee6fc85dc477fa">applyToIntersectedGeometry</a>(<a class="code" href="class_q_list.html">ResourceList</a> &amp;resources, <a class="code" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;geom,</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                                    <span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;globals);</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;     <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_strategy.html#ae5492fad97cc5167b1ff3bda3fe8baac">isDebug</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;     <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_strategy.html#ad55b318df7c069c9ab0bbcf5c2240104">doShowProgress</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;     <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_strategy.html#ae79668a04a284a571c0940ef858247e7">initProgress</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> &amp;nsteps = 0, <span class="keyword">const</span> QString &amp;text = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_strategy.html#a0ba3d88f5daab577da9370aef6282ede">queryCallback</a>(<span class="keywordtype">void</span> *item, <span class="keywordtype">void</span> *userdata);</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;     QStringList <a class="code" href="class_isis_1_1_strategy.html#ab6a5cabfbb096aa3e8543205254e4831">getObjectList</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<span class="keywordtype">object</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;     <span class="keyword">template</span> &lt;<span class="keyword">class</span> STRATEGYLIST, <span class="keyword">class</span> STRATEGYFACTORY&gt; </div>
+<div class="line"><a name="l00182"></a><span class="lineno"><a class="line" href="class_isis_1_1_strategy.html#af911f954f0436f81a031404c77c7e78d">  182</a></span>&#160;       STRATEGYLIST <a class="code" href="class_isis_1_1_strategy.html#af911f954f0436f81a031404c77c7e78d">LoadMinerStrategies</a>(<span class="keyword">const</span> QString &amp;minerName, </div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                                        <span class="keyword">const</span> <a class="code" href="class_q_list.html">ResourceList</a> &amp;globals)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;         STRATEGYFACTORY *factory = STRATEGYFACTORY::instance();</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;         STRATEGYLIST miner;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;         QString config = <a class="code" href="class_isis_1_1_strategy.html#ab9c3ba7edfe660f4cafc80b40f477488">translateKeywordArgs</a>(minerName+<span class="stringliteral">&quot;ConfigFile&quot;</span>, globals);</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;         <span class="keywordflow">if</span> ( !config.isEmpty() ) {</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;           miner = factory-&gt;buildRun(config, globals);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;         }</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;         <span class="keywordflow">else</span> <span class="keywordflow">if</span> ( <a class="code" href="class_isis_1_1_strategy.html#a4a16db396f5c772e3a92b8a4d60f5a6d">getDefinition</a>().hasObject(minerName+<span class="stringliteral">&quot;Miner&quot;</span>) ) {</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;           miner = factory-&gt;buildRun(<a class="code" href="class_isis_1_1_strategy.html#a4a16db396f5c772e3a92b8a4d60f5a6d">getDefinition</a>().findObject(minerName+<span class="stringliteral">&quot;Miner&quot;</span>), </div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                                                globals);</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;       }</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;       </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;       <span class="keywordflow">return</span> (miner);</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;     }</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;     <a class="code" href="class_q_list.html">ResourceList</a>   m_globals;    </div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;     <a class="code" href="class_isis_1_1_strategy.html#a7360a905c755f58f56a60374445df7b8">SharedPvlObject</a> m_definition; </div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;      QString      m_name;           </div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;      QString      m_type;           </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_total;          </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;      <span class="keywordtype">bool</span>         m_applyDiscarded; </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;      <span class="keywordtype">bool</span>         m_debug;          </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;      QScopedPointer&lt;Progress&gt; m_progress; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;  </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;  };</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;  </div>
+<div class="line"><a name="l00234"></a><span class="lineno"><a class="line" href="namespace_isis.html#a027a56f82be95bea6c004d927790c3bf">  234</a></span>&#160;  <span class="keyword">typedef</span> <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;Strategy&gt;</a> <a class="code" href="namespace_isis.html#a027a56f82be95bea6c004d927790c3bf">SharedStrategy</a>;</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;  </div>
+<div class="line"><a name="l00237"></a><span class="lineno"><a class="line" href="namespace_isis.html#a851c1a561762cf3e680842549cd98d98">  237</a></span>&#160;  <span class="keyword">typedef</span> <a class="code" href="class_q_list.html">QList&lt;SharedStrategy&gt;</a> <a class="code" href="namespace_isis.html#a851c1a561762cf3e680842549cd98d98">StrategyList</a>;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;} <span class="comment">// Namespace Isis</span></div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
+<div class="line"><a name="l00241"></a><span class="lineno"><a class="line" href="_strategy_8h.html#ae1f7eb21613ae642364aeebf5a0668ec">  241</a></span>&#160;<a class="code" href="_strategy_8h.html#ae1f7eb21613ae642364aeebf5a0668ec">Q_DECLARE_METATYPE</a>(<a class="code" href="class_q_shared_pointer.html">Isis::SharedStrategy</a>);</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
+<div class="ttc" id="a_gis_geometry_8h_html"><div class="ttname"><a href="_gis_geometry_8h.html">GisGeometry.h</a></div></div>
+<div class="ttc" id="a_pvl_object_8h_html"><div class="ttname"><a href="_pvl_object_8h.html">PvlObject.h</a></div></div>
+<div class="ttc" id="a_resource_8h_html"><div class="ttname"><a href="_resource_8h.html">Resource.h</a></div></div>
+<div class="ttc" id="a_strategy_8h_html_ae1f7eb21613ae642364aeebf5a0668ec"><div class="ttname"><a href="_strategy_8h.html#ae1f7eb21613ae642364aeebf5a0668ec">Q_DECLARE_METATYPE</a></div><div class="ttdeci">Q_DECLARE_METATYPE(Isis::SharedStrategy)</div></div>
+<div class="ttc" id="aclass_isis_1_1_gis_geometry_html"><div class="ttname"><a href="class_isis_1_1_gis_geometry.html">Isis::GisGeometry</a></div><div class="ttdoc">Encapsulation class provides support for GEOS-C API.</div><div class="ttdef"><b>Definition:</b> GisGeometry.h:55</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html">Isis::PvlFlatMap</a></div><div class="ttdoc">Provides a flat map of PvlKeywords.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.h:218</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html"><div class="ttname"><a href="class_isis_1_1_pvl_object.html">Isis::PvlObject</a></div><div class="ttdoc">Contains Pvl Groups and Pvl Objects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html"><div class="ttname"><a href="class_isis_1_1_strategy.html">Isis::Strategy</a></div><div class="ttdoc">Strategy - Supports algorithm development.</div><div class="ttdef"><b>Definition:</b> Strategy.h:92</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a0ba3d88f5daab577da9370aef6282ede"><div class="ttname"><a href="class_isis_1_1_strategy.html#a0ba3d88f5daab577da9370aef6282ede">Isis::Strategy::queryCallback</a></div><div class="ttdeci">static void queryCallback(void *item, void *userdata)</div><div class="ttdoc">Important GEOS query callback for class and overlap geometry.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:1119</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a0cd5dbbbca962ffcfd92db58ac2d5418"><div class="ttname"><a href="class_isis_1_1_strategy.html#a0cd5dbbbca962ffcfd92db58ac2d5418">Isis::Strategy::type</a></div><div class="ttdeci">QString type() const</div><div class="ttdoc">Accessor method to get the type of strategy.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:111</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a0d4de9330ce4e506229ea5d6210e4d2c"><div class="ttname"><a href="class_isis_1_1_strategy.html#a0d4de9330ce4e506229ea5d6210e4d2c">Isis::Strategy::apply</a></div><div class="ttdeci">int apply(ResourceList &amp;resources)</div><div class="ttdoc">Apply algorithm to resource list.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:225</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a1499804eaa3d9f00bd0899a4900377e3"><div class="ttname"><a href="class_isis_1_1_strategy.html#a1499804eaa3d9f00bd0899a4900377e3">Isis::Strategy::totalProcessed</a></div><div class="ttdeci">unsigned int totalProcessed() const</div><div class="ttdoc">Accessor for the total number of resources processed.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:294</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a1561514d8e53004c2da541c4d60f336f"><div class="ttname"><a href="class_isis_1_1_strategy.html#a1561514d8e53004c2da541c4d60f336f">Isis::Strategy::scanAndReplace</a></div><div class="ttdeci">QString scanAndReplace(const QString &amp;input, const QString &amp;target, const QString &amp;replacement) const</div><div class="ttdoc">Performs a case insensitive scan of the input string for a substring matching the target string and r...</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:496</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a1bfe7a711aaf104e05b4b104ff18c829"><div class="ttname"><a href="class_isis_1_1_strategy.html#a1bfe7a711aaf104e05b4b104ff18c829">Isis::Strategy::propagateKeys</a></div><div class="ttdeci">void propagateKeys(SharedResource &amp;source, SharedResource &amp;target) const</div><div class="ttdoc">Adds the PVL definition keywords from the source to the target.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:593</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a255e8f3e18d55bd3510639e0ea6f96d2"><div class="ttname"><a href="class_isis_1_1_strategy.html#a255e8f3e18d55bd3510639e0ea6f96d2">Isis::Strategy::processArgs</a></div><div class="ttdeci">QString processArgs(const QString &amp;value, const QStringList &amp;argKeys, const ResourceList &amp;globals, const QString &amp;defValue=&quot;&quot;) const</div><div class="ttdoc">Processes the given string value using the given argument list, resource and default resource.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:570</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a257eac8287a1635d968240be673dc341"><div class="ttname"><a href="class_isis_1_1_strategy.html#a257eac8287a1635d968240be673dc341">Isis::Strategy::countActive</a></div><div class="ttdeci">int countActive(const ResourceList &amp;resources) const</div><div class="ttdoc">Counts the number of active (i.e.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:392</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a282572be95b6e466f718b1aab38a7bf0"><div class="ttname"><a href="class_isis_1_1_strategy.html#a282572be95b6e466f718b1aab38a7bf0">Isis::Strategy::~Strategy</a></div><div class="ttdeci">virtual ~Strategy()</div><div class="ttdoc">Destroys the Strategy object.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:92</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a3537fc1b77a1fe8027777d527459a82b"><div class="ttname"><a href="class_isis_1_1_strategy.html#a3537fc1b77a1fe8027777d527459a82b">Isis::Strategy::Strategy</a></div><div class="ttdeci">Strategy()</div><div class="ttdoc">Constructs default Strategy object of name &quot;Strategy&quot; and type &quot;Counter&quot;.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:33</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a39623c343cda00e201ced5f3d7c9be2e"><div class="ttname"><a href="class_isis_1_1_strategy.html#a39623c343cda00e201ced5f3d7c9be2e">Isis::Strategy::setApplyToDiscarded</a></div><div class="ttdeci">void setApplyToDiscarded()</div><div class="ttdoc">Sets Resource as discarded.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:303</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a4a16db396f5c772e3a92b8a4d60f5a6d"><div class="ttname"><a href="class_isis_1_1_strategy.html#a4a16db396f5c772e3a92b8a4d60f5a6d">Isis::Strategy::getDefinition</a></div><div class="ttdeci">const PvlObject &amp; getDefinition() const</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:173</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a4f86d12cd064a15bed732ea4a2892cca"><div class="ttname"><a href="class_isis_1_1_strategy.html#a4f86d12cd064a15bed732ea4a2892cca">Isis::Strategy::composite</a></div><div class="ttdeci">SharedResource composite(SharedResource &amp;resourceA, SharedResource &amp;resourceB, const QPair&lt; QString, QString &gt; &amp;keySuffix=qMakePair(QString(&quot;A&quot;), QString(&quot;B&quot;))) const</div><div class="ttdoc">Create a composite Resource from a pair by merging keywords.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:633</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a5021524550e3d40db6ee6fc85dc477fa"><div class="ttname"><a href="class_isis_1_1_strategy.html#a5021524550e3d40db6ee6fc85dc477fa">Isis::Strategy::applyToIntersectedGeometry</a></div><div class="ttdeci">int applyToIntersectedGeometry(ResourceList &amp;resources, GisGeometry &amp;geom, const ResourceList &amp;globals)</div><div class="ttdoc">Identify and apply Strategy to Resources that intersect a geometry.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:999</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a58a9ac1279755e967955c5dbe5686674"><div class="ttname"><a href="class_isis_1_1_strategy.html#a58a9ac1279755e967955c5dbe5686674">Isis::Strategy::deactivateList</a></div><div class="ttdeci">void deactivateList(ResourceList &amp;resources) const</div><div class="ttdoc">Deactivate all resources contained in the resource list.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:897</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a5a9f6d2b90fec57e44c3c25073a3bc62"><div class="ttname"><a href="class_isis_1_1_strategy.html#a5a9f6d2b90fec57e44c3c25073a3bc62">Isis::Strategy::getDefinitionMap</a></div><div class="ttdeci">PvlFlatMap getDefinitionMap() const</div><div class="ttdoc">Returns the keyword definitions found in the Strategy object.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:185</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a69cbfeabc5e84cbb021c2afe136d6187"><div class="ttname"><a href="class_isis_1_1_strategy.html#a69cbfeabc5e84cbb021c2afe136d6187">Isis::Strategy::countDiscarded</a></div><div class="ttdeci">int countDiscarded(const ResourceList &amp;resources) const</div><div class="ttdoc">Counts the number of non-active (i.e.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:406</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a6c4186aaaf3425dd24034f59112e922f"><div class="ttname"><a href="class_isis_1_1_strategy.html#a6c4186aaaf3425dd24034f59112e922f">Isis::Strategy::name</a></div><div class="ttdeci">QString name() const</div><div class="ttdoc">Accessor method to get the name of the strategy.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:101</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a70e4158380735307e1c5c61202cbd3f8"><div class="ttname"><a href="class_isis_1_1_strategy.html#a70e4158380735307e1c5c61202cbd3f8">Isis::Strategy::importGeometry</a></div><div class="ttdeci">bool importGeometry(SharedResource &amp;resource, const ResourceList &amp;globals) const</div><div class="ttdoc">Imports a geometry from the given resource.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:704</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a7360a905c755f58f56a60374445df7b8"><div class="ttname"><a href="class_isis_1_1_strategy.html#a7360a905c755f58f56a60374445df7b8">Isis::Strategy::SharedPvlObject</a></div><div class="ttdeci">QSharedPointer&lt; PvlObject &gt; SharedPvlObject</div><div class="ttdoc">Definition for a SharedPvlObject, a shared pointer to a PvlObject.</div><div class="ttdef"><b>Definition:</b> Strategy.h:115</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a8247cbb8ae62acb564b67a6f40953275"><div class="ttname"><a href="class_isis_1_1_strategy.html#a8247cbb8ae62acb564b67a6f40953275">Isis::Strategy::getGlobalDefaults</a></div><div class="ttdeci">ResourceList getGlobalDefaults() const</div><div class="ttdoc">Accessor method to get the global defaults.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:144</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a8ef1ea834bb73fe28057f0087e2e094b"><div class="ttname"><a href="class_isis_1_1_strategy.html#a8ef1ea834bb73fe28057f0087e2e094b">Isis::Strategy::findReplacement</a></div><div class="ttdeci">QString findReplacement(const QString &amp;target, const ResourceList &amp;globals, const int &amp;index=0, const QString &amp;defValue=&quot;&quot;) const</div><div class="ttdoc">Find keyword replacement value in globals list.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:450</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a8fd7a9a774dc999674967f389edad43d"><div class="ttname"><a href="class_isis_1_1_strategy.html#a8fd7a9a774dc999674967f389edad43d">Isis::Strategy::description</a></div><div class="ttdeci">QString description() const</div><div class="ttdoc">Return description for the strategy.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:201</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a8fe97237048e87f0df763ceee430c4ad"><div class="ttname"><a href="class_isis_1_1_strategy.html#a8fe97237048e87f0df763ceee430c4ad">Isis::Strategy::assetResourceList</a></div><div class="ttdeci">ResourceList assetResourceList(const SharedResource &amp;resource, const QString &amp;name) const</div><div class="ttdoc">Searches the given resource for an asset with the given name and converts it to a ResourceList,...</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:424</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a91f589f76c58733a362a5f17161b17b4"><div class="ttname"><a href="class_isis_1_1_strategy.html#a91f589f76c58733a362a5f17161b17b4">Isis::Strategy::processed</a></div><div class="ttdeci">unsigned int processed()</div><div class="ttdoc">Increments the total number of resources processed and returns the incremented value.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:364</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_a9a7c0a785ea863325676db40195af0a5"><div class="ttname"><a href="class_isis_1_1_strategy.html#a9a7c0a785ea863325676db40195af0a5">Isis::Strategy::copyList</a></div><div class="ttdeci">ResourceList copyList(const ResourceList &amp;resources) const</div><div class="ttdoc">Make a copy of the resource list that is independently managed.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:924</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_aa8f311cd8a45ea2ccf7bc0f2a389cad1"><div class="ttname"><a href="class_isis_1_1_strategy.html#aa8f311cd8a45ea2ccf7bc0f2a389cad1">Isis::Strategy::applyToResources</a></div><div class="ttdeci">int applyToResources(ResourceList &amp;resources, const ResourceList &amp;globals)</div><div class="ttdoc">Applies the strategy algorithms to the resources in the given list.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:337</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_ab6a5cabfbb096aa3e8543205254e4831"><div class="ttname"><a href="class_isis_1_1_strategy.html#ab6a5cabfbb096aa3e8543205254e4831">Isis::Strategy::getObjectList</a></div><div class="ttdeci">QStringList getObjectList(const PvlObject &amp;object) const</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:1202</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_ab9c3ba7edfe660f4cafc80b40f477488"><div class="ttname"><a href="class_isis_1_1_strategy.html#ab9c3ba7edfe660f4cafc80b40f477488">Isis::Strategy::translateKeywordArgs</a></div><div class="ttdeci">QString translateKeywordArgs(const QString &amp;value, const ResourceList &amp;globals, const QString &amp;defValue=&quot;&quot;) const</div><div class="ttdoc">Translates the arguments of the PVL keyword in the PVL definition object.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:522</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_abb2a73298833c43e5827649f98849c42"><div class="ttname"><a href="class_isis_1_1_strategy.html#abb2a73298833c43e5827649f98849c42">Isis::Strategy::setName</a></div><div class="ttdeci">void setName(const QString &amp;name)</div><div class="ttdoc">Allow derived strategies to reset name (mostly for default constructors)</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:121</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_abd8eb331d9a2ec65001f2f17cd073451"><div class="ttname"><a href="class_isis_1_1_strategy.html#abd8eb331d9a2ec65001f2f17cd073451">Isis::Strategy::getGlobals</a></div><div class="ttdeci">ResourceList getGlobals(SharedResource &amp;myGlobals, const ResourceList &amp;globals) const</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:158</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_ac02fde9cbe31ab93693acd5a8ba88094"><div class="ttname"><a href="class_isis_1_1_strategy.html#ac02fde9cbe31ab93693acd5a8ba88094">Isis::Strategy::activeList</a></div><div class="ttdeci">ResourceList activeList(ResourceList &amp;resources) const</div><div class="ttdoc">Get list of all active Resources only - no discarded Resources.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:870</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_ac2f87a919b02f3e4a6d14bfbb58e4c4d"><div class="ttname"><a href="class_isis_1_1_strategy.html#ac2f87a919b02f3e4a6d14bfbb58e4c4d">Isis::Strategy::qualifiers</a></div><div class="ttdeci">QStringList qualifiers(const QString &amp;keyspec, const QString &amp;delimiter=&quot;::&quot;) const</div><div class="ttdoc">Splits the given keyspec string into a list using the given delimiter string.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:477</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_acfcb13c198a7c9785c5c1048f70aa08e"><div class="ttname"><a href="class_isis_1_1_strategy.html#acfcb13c198a7c9785c5c1048f70aa08e">Isis::Strategy::activateList</a></div><div class="ttdeci">void activateList(ResourceList &amp;resources) const</div><div class="ttdoc">Activate all resources contained in the resource list.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:885</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_ad0aa92a5bb866a68e9a9c52f12351db6"><div class="ttname"><a href="class_isis_1_1_strategy.html#ad0aa92a5bb866a68e9a9c52f12351db6">Isis::Strategy::setDoNotApplyToDiscarded</a></div><div class="ttdeci">void setDoNotApplyToDiscarded()</div><div class="ttdoc">Disables the general application of Strategy algorithm for all Resources regardless of state.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:324</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_ad55b318df7c069c9ab0bbcf5c2240104"><div class="ttname"><a href="class_isis_1_1_strategy.html#ad55b318df7c069c9ab0bbcf5c2240104">Isis::Strategy::doShowProgress</a></div><div class="ttdeci">bool doShowProgress() const</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:1142</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_ad8d971fcffe5152c2fdb5fdc1015d66c"><div class="ttname"><a href="class_isis_1_1_strategy.html#ad8d971fcffe5152c2fdb5fdc1015d66c">Isis::Strategy::cloneList</a></div><div class="ttdeci">ResourceList cloneList(const ResourceList &amp;resources, const bool &amp;withAssets=false) const</div><div class="ttdoc">Create a clone of a Resource list.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:952</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_adc6f2e23a24c235561c0db0022805c33"><div class="ttname"><a href="class_isis_1_1_strategy.html#adc6f2e23a24c235561c0db0022805c33">Isis::Strategy::isApplyToDiscarded</a></div><div class="ttdeci">bool isApplyToDiscarded() const</div><div class="ttdoc">Accessor for the apply discarded variable.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:315</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_ae5492fad97cc5167b1ff3bda3fe8baac"><div class="ttname"><a href="class_isis_1_1_strategy.html#ae5492fad97cc5167b1ff3bda3fe8baac">Isis::Strategy::isDebug</a></div><div class="ttdeci">bool isDebug() const</div><div class="ttdoc">An accessor method so that inherited classes can determine whether to print debug messages for this o...</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:1133</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_ae769535f85cf2bf666e9f611d8dc3934"><div class="ttname"><a href="class_isis_1_1_strategy.html#ae769535f85cf2bf666e9f611d8dc3934">Isis::Strategy::setType</a></div><div class="ttdeci">void setType(const QString &amp;type)</div><div class="ttdoc">Allow derived strategies to reset type (mostly for default constructors)</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:133</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_ae79668a04a284a571c0940ef858247e7"><div class="ttname"><a href="class_isis_1_1_strategy.html#ae79668a04a284a571c0940ef858247e7">Isis::Strategy::initProgress</a></div><div class="ttdeci">bool initProgress(const int &amp;nsteps=0, const QString &amp;text=&quot;&quot;)</div><div class="ttdoc">Initializes strategy progress monitor if requested by user.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:1171</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_af911f954f0436f81a031404c77c7e78d"><div class="ttname"><a href="class_isis_1_1_strategy.html#af911f954f0436f81a031404c77c7e78d">Isis::Strategy::LoadMinerStrategies</a></div><div class="ttdeci">STRATEGYLIST LoadMinerStrategies(const QString &amp;minerName, const ResourceList &amp;globals) const</div><div class="ttdef"><b>Definition:</b> Strategy.h:182</div></div>
+<div class="ttc" id="aclass_isis_1_1_strategy_html_afa795c6962d9e6c81b4aa0a20feaef27"><div class="ttname"><a href="class_isis_1_1_strategy.html#afa795c6962d9e6c81b4aa0a20feaef27">Isis::Strategy::resetProcessed</a></div><div class="ttdeci">void resetProcessed()</div><div class="ttdoc">Resets the total number of processed resources to zero.</div><div class="ttdef"><b>Definition:</b> Strategy.cpp:377</div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList&lt; SharedResource &gt;</a></div></div>
+<div class="ttc" id="aclass_q_shared_pointer_html"><div class="ttname"><a href="class_q_shared_pointer.html">QSharedPointer</a></div><div class="ttdef"><b>Definition:</b> JigsawWorkOrder.h:28</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a027a56f82be95bea6c004d927790c3bf"><div class="ttname"><a href="namespace_isis.html#a027a56f82be95bea6c004d927790c3bf">Isis::SharedStrategy</a></div><div class="ttdeci">QSharedPointer&lt; Strategy &gt; SharedStrategy</div><div class="ttdoc">Definition for a SharedStrategy, a shared pointer to a Strategy.</div><div class="ttdef"><b>Definition:</b> Strategy.h:234</div></div>
+<div class="ttc" id="anamespace_isis_html_a851c1a561762cf3e680842549cd98d98"><div class="ttname"><a href="namespace_isis.html#a851c1a561762cf3e680842549cd98d98">Isis::StrategyList</a></div><div class="ttdeci">QList&lt; SharedStrategy &gt; StrategyList</div><div class="ttdoc">Definition for a StrategyList, a list of SharedStrategy types.</div><div class="ttdef"><b>Definition:</b> Strategy.h:237</div></div>
+<div class="ttc" id="astruct_q_pair_html"><div class="ttname"><a href="struct_q_pair.html">QPair</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> CubeIoHandler.h:23</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_f3c862203552c450a82266f4620311e8.html">Strategy</a></li><li class="navelem"><a class="el" href="_strategy_8h.html">Strategy.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

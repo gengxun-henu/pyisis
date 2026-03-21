@@ -1,0 +1,6 @@
+<map id="Isis::RTCOcclusionRay" name="Isis::RTCOcclusionRay">
+<area shape="rect" id="node1" title="Struct for capturing occluded plates when using embree::rtcintersectscene." alt="" coords="58,151,219,264"/>
+<area shape="rect" id="node2" href="$class_r_t_c_ray_hit.html" title=" " alt="" coords="5,5,96,87"/>
+<area shape="rect" id="node3" title=" " alt="" coords="119,5,158,87"/>
+<area shape="rect" id="node4" title=" " alt="" coords="183,5,257,87"/>
+</map>

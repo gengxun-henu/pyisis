@@ -1,0 +1,19 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ProcessBySpectra,High Level Cube I/O,isis/src/base/objs/ProcessBySpectra/ProcessBySpectra.h,isis_pybind_standalone/src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口；流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ProcessBySpectra,isis_pybind.ProcessBySpectra,Y,Python class symbol is exported; 抽象基类/纯虚接口；流程/回调接口较多
+Construction/Enum,ProcessBySpectra(const int type = PerPixel): ProcessByBrick() { SetType(type),isis_pybind.ProcessBySpectra(),Y,Constructor is explicitly bound
+Mutation/Configuration,"Isis::Cube *SetInputCube(const QString &parameter, const int requirements = 0)",isis_pybind.ProcessBySpectra.set_input_cube,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,"Isis::Cube *SetInputCube(const QString &file, Isis::CubeAttributeInput &att, const int requirements = 0)",isis_pybind.ProcessBySpectra.set_input_cube,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,void SetType(const int type),isis_pybind.ProcessBySpectra.set_type,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,int Type() { return p_spectraType,isis_pybind.ProcessBySpectra.type,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"template <typename Functor> void ProcessCubeInPlace(const Functor & funct, bool threaded = true) { VerifyCubes(InPlace)",isis_pybind.ProcessBySpectra.process_cube_in_place,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,SetBricks(InPlace),isis_pybind.ProcessBySpectra.set_bricks,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"ProcessByBrick::ProcessCubeInPlace(funct, threaded)",isis_pybind.ProcessBySpectra.process_cube_in_place,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"template <typename Functor> void ProcessCube(const Functor & funct, bool threaded = true) { VerifyCubes(InputOutput)",isis_pybind.ProcessBySpectra.process_cube,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,SetBricks(InputOutput),isis_pybind.ProcessBySpectra.set_bricks,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"ProcessByBrick::ProcessCube(funct, threaded)",isis_pybind.ProcessBySpectra.process_cube,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"template <typename Functor> void ProcessCubes(const Functor & funct, bool threaded = true) { VerifyCubes(InputOutputList)",isis_pybind.ProcessBySpectra.process_cubes,N,抽象基类/纯虚接口；流程/回调接口较多
+Mutation/Configuration,SetBricks(InputOutputList),isis_pybind.ProcessBySpectra.set_bricks,N,抽象基类/纯虚接口；流程/回调接口较多
+Public API,"ProcessByBrick::ProcessCubes(funct, threaded)",isis_pybind.ProcessBySpectra.process_cubes,N,抽象基类/纯虚接口；流程/回调接口较多

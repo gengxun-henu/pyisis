@@ -1,0 +1,5 @@
+<map id="Isis::MeasureJigsawRejectedFilter" name="Isis::MeasureJigsawRejectedFilter">
+<area shape="rect" id="node1" title="Allows filtering by a control measure&#39;s jigsaw rejected status." alt="" coords="5,648,227,873"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_abstract_filter.html" title="Base class for control net filters." alt="" coords="9,135,223,600"/>
+<area shape="rect" id="node3" href="$class_q_widget.html" title=" " alt="" coords="80,5,152,87"/>
+</map>

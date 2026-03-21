@@ -1,0 +1,18 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+StatCumProbDistDynCalc,Statistics,isis/src/base/objs/StatCumProbDistDynCalc/StatCumProbDistDynCalc.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,StatCumProbDistDynCalc,isis_pybind.StatCumProbDistDynCalc,N,Python class symbol not found in current binding files; Qt 类型/信号槽较多
+Construction/Enum,StatCumProbDistDynCalc(),isis_pybind.StatCumProbDistDynCalc(),N,Qt 类型/信号槽较多
+Read/Write IO,void readStatistics(QXmlStreamReader *xmlReader),isis_pybind.StatCumProbDistDynCalc.read_statistics,N,Qt 类型/信号槽较多
+Public API,void initialize(),isis_pybind.StatCumProbDistDynCalc.initialize,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setQuantiles(unsigned int nodes),isis_pybind.StatCumProbDistDynCalc.set_quantiles,N,Qt 类型/信号槽较多
+Query,void validate(),isis_pybind.StatCumProbDistDynCalc.validate,N,Qt 类型/信号槽较多
+Mutation/Configuration,void addObs(double obs),isis_pybind.StatCumProbDistDynCalc.add_obs,N,Qt 类型/信号槽较多
+Public API,double cumProb(double value),isis_pybind.StatCumProbDistDynCalc.cum_prob,N,Qt 类型/信号槽较多
+Public API,double value(double cumProb),isis_pybind.StatCumProbDistDynCalc.value,N,Qt 类型/信号槽较多
+Public API,double max(),isis_pybind.StatCumProbDistDynCalc.max,N,Qt 类型/信号槽较多
+Public API,double min(),isis_pybind.StatCumProbDistDynCalc.min,N,Qt 类型/信号槽较多
+Read/Write IO,"void save(QXmlStreamWriter &stream, const Project *project) const",isis_pybind.StatCumProbDistDynCalc.save,N,Qt 类型/信号槽较多
+Read/Write IO,QDataStream &write(QDataStream &stream) const,isis_pybind.StatCumProbDistDynCalc.write,N,Qt 类型/信号槽较多
+Read/Write IO,QDataStream &read(QDataStream &stream),isis_pybind.StatCumProbDistDynCalc.read,N,Qt 类型/信号槽较多

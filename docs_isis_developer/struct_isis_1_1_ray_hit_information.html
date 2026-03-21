@@ -1,0 +1,413 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::RayHitInformation Struct Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('struct_isis_1_1_ray_hit_information.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="struct_isis_1_1_ray_hit_information-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::RayHitInformation Struct Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Container that holds the body fixed intersection point and unit surface normal for a hit.  
+ <a href="struct_isis_1_1_ray_hit_information.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_embree_target_shape_8h_source.html">EmbreeTargetShape.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::RayHitInformation:</div>
+<div class="dyncontent">
+<div class="center"><img src="struct_isis_1_1_ray_hit_information__coll__graph.png" border="0" usemap="#a_isis_1_1_ray_hit_information_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_ray_hit_information_coll__map" id="a_isis_1_1_ray_hit_information_coll__map">
+<area shape="rect" title="Container that holds the body fixed intersection point and unit surface normal for a hit." alt="" coords="48,167,205,264"/>
+<area shape="rect" title=" " alt="" coords="5,5,125,87"/>
+<area shape="rect" title=" " alt="" coords="170,5,208,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a433f29ec861eae1a7923d9dcfd4ee242"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_isis_1_1_ray_hit_information.html#a433f29ec861eae1a7923d9dcfd4ee242">RayHitInformation</a> ()</td></tr>
+<tr class="memdesc:a433f29ec861eae1a7923d9dcfd4ee242"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor for <a class="el" href="struct_isis_1_1_ray_hit_information.html" title="Container that holds the body fixed intersection point and unit surface normal for a hit.">RayHitInformation</a>.  <a href="struct_isis_1_1_ray_hit_information.html#a433f29ec861eae1a7923d9dcfd4ee242">More...</a><br /></td></tr>
+<tr class="separator:a433f29ec861eae1a7923d9dcfd4ee242"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf8b5885dbe7fb6242164fee362d0e8a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_isis_1_1_ray_hit_information.html#aaf8b5885dbe7fb6242164fee362d0e8a">RayHitInformation</a> (<a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;location, <a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;normal, int <a class="el" href="struct_isis_1_1_ray_hit_information.html#a1a836d1d0431c3f8725653c35b410663">primID</a>)</td></tr>
+<tr class="memdesc:aaf8b5885dbe7fb6242164fee362d0e8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="struct_isis_1_1_ray_hit_information.html" title="Container that holds the body fixed intersection point and unit surface normal for a hit.">RayHitInformation</a> given an intersection and unit surface normal.  <a href="struct_isis_1_1_ray_hit_information.html#aaf8b5885dbe7fb6242164fee362d0e8a">More...</a><br /></td></tr>
+<tr class="separator:aaf8b5885dbe7fb6242164fee362d0e8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a25a0c6f360356d2b1b8869fd835b8049"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_isis_1_1_ray_hit_information.html#a25a0c6f360356d2b1b8869fd835b8049">intersection</a></td></tr>
+<tr class="memdesc:a25a0c6f360356d2b1b8869fd835b8049"><td class="mdescLeft">&#160;</td><td class="mdescRight">The (x, y, z) intersection location.  <a href="struct_isis_1_1_ray_hit_information.html#a25a0c6f360356d2b1b8869fd835b8049">More...</a><br /></td></tr>
+<tr class="separator:a25a0c6f360356d2b1b8869fd835b8049"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37bc614a7882f3bd395e96be857ff48d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_isis_1_1_ray_hit_information.html#a37bc614a7882f3bd395e96be857ff48d">surfaceNormal</a></td></tr>
+<tr class="memdesc:a37bc614a7882f3bd395e96be857ff48d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The unit surface normal vector at the intersection.  <a href="struct_isis_1_1_ray_hit_information.html#a37bc614a7882f3bd395e96be857ff48d">More...</a><br /></td></tr>
+<tr class="separator:a37bc614a7882f3bd395e96be857ff48d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a836d1d0431c3f8725653c35b410663"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_isis_1_1_ray_hit_information.html#a1a836d1d0431c3f8725653c35b410663">primID</a></td></tr>
+<tr class="memdesc:a1a836d1d0431c3f8725653c35b410663"><td class="mdescLeft">&#160;</td><td class="mdescRight">The primitive <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> of the hit.  <a href="struct_isis_1_1_ray_hit_information.html#a1a836d1d0431c3f8725653c35b410663">More...</a><br /></td></tr>
+<tr class="separator:a1a836d1d0431c3f8725653c35b410663"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Container that holds the body fixed intersection point and unit surface normal for a hit. </p>
+<dl class="section author"><dt>Author</dt><dd>2017-05-11 Jesse Mapel </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a433f29ec861eae1a7923d9dcfd4ee242"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a433f29ec861eae1a7923d9dcfd4ee242">&#9670;&nbsp;</a></span>RayHitInformation() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::RayHitInformation::RayHitInformation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default constructor for <a class="el" href="struct_isis_1_1_ray_hit_information.html" title="Container that holds the body fixed intersection point and unit surface normal for a hit.">RayHitInformation</a>. </p>
+
+<p class="reference">References <a class="el" href="struct_isis_1_1_ray_hit_information.html#a25a0c6f360356d2b1b8869fd835b8049">intersection</a>, <a class="el" href="struct_isis_1_1_ray_hit_information.html#a1a836d1d0431c3f8725653c35b410663">primID</a>, <a class="el" href="struct_isis_1_1_ray_hit_information.html#a37bc614a7882f3bd395e96be857ff48d">surfaceNormal</a>, and <a class="el" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">Isis::LinearAlgebra::vector()</a>.</p>
+
+</div>
+</div>
+<a id="aaf8b5885dbe7fb6242164fee362d0e8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf8b5885dbe7fb6242164fee362d0e8a">&#9670;&nbsp;</a></span>RayHitInformation() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::RayHitInformation::RayHitInformation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>location</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>normal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>prim</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor for <a class="el" href="struct_isis_1_1_ray_hit_information.html" title="Container that holds the body fixed intersection point and unit surface normal for a hit.">RayHitInformation</a> given an intersection and unit surface normal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">location</td><td>The body-fixed (x, y, z) location of the intersection in kilometers. </td></tr>
+    <tr><td class="paramname">normal</td><td>The unit surface normal vector in body-fixed (x, y, z). </td></tr>
+    <tr><td class="paramname">primID</td><td>The primitive <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a25a0c6f360356d2b1b8869fd835b8049"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25a0c6f360356d2b1b8869fd835b8049">&#9670;&nbsp;</a></span>intersection</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> Isis::RayHitInformation::intersection</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The (x, y, z) intersection location. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_embree_shape_model.html#a13309f4ce6890d133b7c27abc81827f5">Isis::EmbreeShapeModel::isVisibleFrom()</a>, <a class="el" href="class_isis_1_1_embree_shape_model.html#a580493819a271c18d9acd0cef5bdf2ae">Isis::EmbreeShapeModel::localRadius()</a>, and <a class="el" href="struct_isis_1_1_ray_hit_information.html#a433f29ec861eae1a7923d9dcfd4ee242">RayHitInformation()</a>.</p>
+
+</div>
+</div>
+<a id="a1a836d1d0431c3f8725653c35b410663"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a836d1d0431c3f8725653c35b410663">&#9670;&nbsp;</a></span>primID</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::RayHitInformation::primID</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The primitive <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> of the hit. </p>
+
+<p class="reference">Referenced by <a class="el" href="struct_isis_1_1_ray_hit_information.html#a433f29ec861eae1a7923d9dcfd4ee242">RayHitInformation()</a>.</p>
+
+</div>
+</div>
+<a id="a37bc614a7882f3bd395e96be857ff48d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37bc614a7882f3bd395e96be857ff48d">&#9670;&nbsp;</a></span>surfaceNormal</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> Isis::RayHitInformation::surfaceNormal</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The unit surface normal vector at the intersection. </p>
+
+<p class="reference">Referenced by <a class="el" href="struct_isis_1_1_ray_hit_information.html#a433f29ec861eae1a7923d9dcfd4ee242">RayHitInformation()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/EmbreeTargetShape/<a class="el" href="_embree_target_shape_8h_source.html">EmbreeTargetShape.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/EmbreeTargetShape/<a class="el" href="_embree_target_shape_8cpp.html">EmbreeTargetShape.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="struct_isis_1_1_ray_hit_information.html">RayHitInformation</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,761 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::BulletTargetShape Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_bullet_target_shape.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_bullet_target_shape-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::BulletTargetShape Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Bullet <a class="el" href="class_isis_1_1_target.html" title="This class is used to create and store valid Isis targets.">Target</a> <a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> for planetary bodies.  
+ <a href="class_isis_1_1_bullet_target_shape.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_bullet_target_shape_8h_source.html">BulletTargetShape.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::BulletTargetShape:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bullet_target_shape__inherit__graph.png" border="0" usemap="#a_isis_1_1_bullet_target_shape_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_bullet_target_shape_inherit__map" id="a_isis_1_1_bullet_target_shape_inherit__map">
+<area shape="rect" title="Bullet Target Shape for planetary bodies." alt="" coords="5,5,173,279"/>
+<area shape="rect" href="class_isis_1_1_bullet_dsk_shape.html" title="Bullet Target Shape for NAIF type 2 DSK models." alt="" coords="17,327,161,504"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::BulletTargetShape:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bullet_target_shape__coll__graph.png" border="0" usemap="#a_isis_1_1_bullet_target_shape_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_bullet_target_shape_coll__map" id="a_isis_1_1_bullet_target_shape_coll__map">
+<area shape="rect" title="Bullet Target Shape for planetary bodies." alt="" coords="5,5,173,279"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ae11616f2d9e9aa20398af2804e3baad5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#ae11616f2d9e9aa20398af2804e3baad5">BulletTargetShape</a> ()</td></tr>
+<tr class="memdesc:ae11616f2d9e9aa20398af2804e3baad5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default empty constructor.  <a href="class_isis_1_1_bullet_target_shape.html#ae11616f2d9e9aa20398af2804e3baad5">More...</a><br /></td></tr>
+<tr class="separator:ae11616f2d9e9aa20398af2804e3baad5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae51451abe4f56fc6537ff270616ec382"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#ae51451abe4f56fc6537ff270616ec382">BulletTargetShape</a> (btCollisionObject *btbody, const QString &amp;<a class="el" href="class_isis_1_1_bullet_target_shape.html#ab9ab4daabf981677c37c6401bbe7c3cc">name</a>=&quot;&quot;)</td></tr>
+<tr class="memdesc:ae51451abe4f56fc6537ff270616ec382"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_bullet_target_shape.html" title="Bullet Target Shape for planetary bodies.">BulletTargetShape</a> for a given a Bullet object.  <a href="class_isis_1_1_bullet_target_shape.html#ae51451abe4f56fc6537ff270616ec382">More...</a><br /></td></tr>
+<tr class="separator:ae51451abe4f56fc6537ff270616ec382"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af820117296f9fec966eed4710b9c8554"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#af820117296f9fec966eed4710b9c8554">~BulletTargetShape</a> ()</td></tr>
+<tr class="memdesc:af820117296f9fec966eed4710b9c8554"><td class="mdescLeft">&#160;</td><td class="mdescRight">Desctructor.  <a href="class_isis_1_1_bullet_target_shape.html#af820117296f9fec966eed4710b9c8554">More...</a><br /></td></tr>
+<tr class="separator:af820117296f9fec966eed4710b9c8554"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9ab4daabf981677c37c6401bbe7c3cc"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#ab9ab4daabf981677c37c6401bbe7c3cc">name</a> () const</td></tr>
+<tr class="memdesc:ab9ab4daabf981677c37c6401bbe7c3cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return name of the target shape.  <a href="class_isis_1_1_bullet_target_shape.html#ab9ab4daabf981677c37c6401bbe7c3cc">More...</a><br /></td></tr>
+<tr class="separator:ab9ab4daabf981677c37c6401bbe7c3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2b75476482080bda50b6b02f37dded8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#ab2b75476482080bda50b6b02f37dded8">writeBullet</a> (const QString &amp;btName) const</td></tr>
+<tr class="memdesc:ab2b75476482080bda50b6b02f37dded8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a serialized version of the target shape to a Bullet file.  <a href="class_isis_1_1_bullet_target_shape.html#ab2b75476482080bda50b6b02f37dded8">More...</a><br /></td></tr>
+<tr class="separator:ab2b75476482080bda50b6b02f37dded8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80a9ef776f7cbce4b81d7bf737a6287c"><td class="memItemLeft" align="right" valign="top">btCollisionObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#a80a9ef776f7cbce4b81d7bf737a6287c">body</a> () const</td></tr>
+<tr class="memdesc:a80a9ef776f7cbce4b81d7bf737a6287c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a pointer to the Bullet target object/shape.  <a href="class_isis_1_1_bullet_target_shape.html#a80a9ef776f7cbce4b81d7bf737a6287c">More...</a><br /></td></tr>
+<tr class="separator:a80a9ef776f7cbce4b81d7bf737a6287c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae62c0dd68e9a9088f1cba2473a984615"><td class="memItemLeft" align="right" valign="top">btScalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#ae62c0dd68e9a9088f1cba2473a984615">maximumDistance</a> () const</td></tr>
+<tr class="separator:ae62c0dd68e9a9088f1cba2473a984615"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ab5360165c4e8088802872f6ca983692b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#ab5360165c4e8088802872f6ca983692b">load</a> (const QString &amp;dem, const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> *conf=0)</td></tr>
+<tr class="memdesc:ab5360165c4e8088802872f6ca983692b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a DEM file into the target shape.  <a href="class_isis_1_1_bullet_target_shape.html#ab5360165c4e8088802872f6ca983692b">More...</a><br /></td></tr>
+<tr class="separator:ab5360165c4e8088802872f6ca983692b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9680c25d86155eebf5e9dc50725840bc"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#a9680c25d86155eebf5e9dc50725840bc">loadPC</a> (const QString &amp;dem, const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> *conf=0)</td></tr>
+<tr class="memdesc:a9680c25d86155eebf5e9dc50725840bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a point cloud type DEM in Bullet.  <a href="class_isis_1_1_bullet_target_shape.html#a9680c25d86155eebf5e9dc50725840bc">More...</a><br /></td></tr>
+<tr class="separator:a9680c25d86155eebf5e9dc50725840bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a405482adcb90274c11b986a755f7f70f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#a405482adcb90274c11b986a755f7f70f">loadDSK</a> (const QString &amp;dem, const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> *conf=0)</td></tr>
+<tr class="memdesc:a405482adcb90274c11b986a755f7f70f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a DSK in Bullet.  <a href="class_isis_1_1_bullet_target_shape.html#a405482adcb90274c11b986a755f7f70f">More...</a><br /></td></tr>
+<tr class="separator:a405482adcb90274c11b986a755f7f70f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00da91f31d0ebbfd3e67a53604aba4b6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#a00da91f31d0ebbfd3e67a53604aba4b6">loadCube</a> (const QString &amp;dem, const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> *conf=0)</td></tr>
+<tr class="memdesc:a00da91f31d0ebbfd3e67a53604aba4b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load an ISIS cube type DEM in Bullet.  <a href="class_isis_1_1_bullet_target_shape.html#a00da91f31d0ebbfd3e67a53604aba4b6">More...</a><br /></td></tr>
+<tr class="separator:a00da91f31d0ebbfd3e67a53604aba4b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a03b036449543f084530fe8127433b37b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#a03b036449543f084530fe8127433b37b">setTargetBody</a> (btCollisionObject *<a class="el" href="class_isis_1_1_bullet_target_shape.html#a80a9ef776f7cbce4b81d7bf737a6287c">body</a>)</td></tr>
+<tr class="memdesc:a03b036449543f084530fe8127433b37b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Bullet shape object to this object instance <br  />
+  <a href="class_isis_1_1_bullet_target_shape.html#a03b036449543f084530fe8127433b37b">More...</a><br /></td></tr>
+<tr class="separator:a03b036449543f084530fe8127433b37b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4c9cc5cf28dd58843e07e660fc15f3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_target_shape.html#ac4c9cc5cf28dd58843e07e660fc15f3f">setMaximumDistance</a> ()</td></tr>
+<tr class="memdesc:ac4c9cc5cf28dd58843e07e660fc15f3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate and save the maximum distance across the body.  <a href="class_isis_1_1_bullet_target_shape.html#ac4c9cc5cf28dd58843e07e660fc15f3f">More...</a><br /></td></tr>
+<tr class="separator:ac4c9cc5cf28dd58843e07e660fc15f3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Bullet <a class="el" href="class_isis_1_1_target.html" title="This class is used to create and store valid Isis targets.">Target</a> <a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> for planetary bodies. </p>
+<p>This class contains the in memory representation of a body for use with the Bullet library. For each type of file that can be used to create a bullet target body, this class should be extended to manage that type of file.</p>
+<dl class="section author"><dt>Author</dt><dd>2017-03-17 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae11616f2d9e9aa20398af2804e3baad5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae11616f2d9e9aa20398af2804e3baad5">&#9670;&nbsp;</a></span>BulletTargetShape() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BulletTargetShape::BulletTargetShape </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default empty constructor. </p>
+<p>The filename defaults to an empty string and the maximum distance defaults to 0. </p>
+
+</div>
+</div>
+<a id="ae51451abe4f56fc6537ff270616ec382"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae51451abe4f56fc6537ff270616ec382">&#9670;&nbsp;</a></span>BulletTargetShape() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BulletTargetShape::BulletTargetShape </td>
+          <td>(</td>
+          <td class="paramtype">btCollisionObject *&#160;</td>
+          <td class="paramname"><em>btbody</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_bullet_target_shape.html" title="Bullet Target Shape for planetary bodies.">BulletTargetShape</a> for a given a Bullet object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">btbody</td><td>The Bullet collision object to contain. </td></tr>
+    <tr><td class="paramname">name</td><td>The name of the object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_target_shape.html#ac4c9cc5cf28dd58843e07e660fc15f3f">setMaximumDistance()</a>.</p>
+
+</div>
+</div>
+<a id="af820117296f9fec966eed4710b9c8554"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af820117296f9fec966eed4710b9c8554">&#9670;&nbsp;</a></span>~BulletTargetShape()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BulletTargetShape::~BulletTargetShape </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Desctructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a80a9ef776f7cbce4b81d7bf737a6287c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80a9ef776f7cbce4b81d7bf737a6287c">&#9670;&nbsp;</a></span>body()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btCollisionObject * Isis::BulletTargetShape::body </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return a pointer to the Bullet target object/shape. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>btCollisionObject</b> A target to the Bullet collision object. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_world_manager.html#a15d8498611cfa47e2607e2b9b9282317">Isis::BulletWorldManager::addTarget()</a>, and <a class="el" href="class_isis_1_1_bullet_target_shape.html#a03b036449543f084530fe8127433b37b">setTargetBody()</a>.</p>
+
+</div>
+</div>
+<a id="ab5360165c4e8088802872f6ca983692b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5360165c4e8088802872f6ca983692b">&#9670;&nbsp;</a></span>load()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> * Isis::BulletTargetShape::load </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>dem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> *&#160;</td>
+          <td class="paramname"><em>conf</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Load a DEM file into the target shape. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dem</td><td>The DEM file to load. </td></tr>
+    <tr><td class="paramname">conf</td><td>PVL config for the DEM load. Currently unused.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_bullet_target_shape.html" title="Bullet Target Shape for planetary bodies.">BulletTargetShape</a></b> A target shape containing the DEM </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_name.html#ac1133bf6e26f1e6ff79831e9bca21467">Isis::FileName::extension()</a>, <a class="el" href="class_isis_1_1_bullet_target_shape.html#a00da91f31d0ebbfd3e67a53604aba4b6">loadCube()</a>, <a class="el" href="class_isis_1_1_bullet_target_shape.html#a405482adcb90274c11b986a755f7f70f">loadDSK()</a>, and <a class="el" href="class_isis_1_1_bullet_target_shape.html#a9680c25d86155eebf5e9dc50725840bc">loadPC()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_shape_model.html#a0f1efad6bf2cc1542519535b23eaa36e">Isis::BulletShapeModel::BulletShapeModel()</a>.</p>
+
+</div>
+</div>
+<a id="a00da91f31d0ebbfd3e67a53604aba4b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00da91f31d0ebbfd3e67a53604aba4b6">&#9670;&nbsp;</a></span>loadCube()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> * Isis::BulletTargetShape::loadCube </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>dem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> *&#160;</td>
+          <td class="paramname"><em>conf</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Load an ISIS cube type DEM in Bullet. </p>
+<dl class="section note"><dt>Note</dt><dd>Currently not implemented</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dem</td><td>The DEM file to load. </td></tr>
+    <tr><td class="paramname">conf</td><td>PVL config for the DEM load. Currently unused.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_bullet_target_shape.html" title="Bullet Target Shape for planetary bodies.">BulletTargetShape</a></b> A target shape containing the DEM </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_target_shape.html#ab5360165c4e8088802872f6ca983692b">load()</a>.</p>
+
+</div>
+</div>
+<a id="a405482adcb90274c11b986a755f7f70f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a405482adcb90274c11b986a755f7f70f">&#9670;&nbsp;</a></span>loadDSK()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> * Isis::BulletTargetShape::loadDSK </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>dem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> *&#160;</td>
+          <td class="paramname"><em>conf</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Load a DSK in Bullet. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dem</td><td>The DEM file to load. </td></tr>
+    <tr><td class="paramname">conf</td><td>PVL config for the DEM load. Currently unused.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_bullet_target_shape.html" title="Bullet Target Shape for planetary bodies.">BulletTargetShape</a></b> A target shape containing the DEM </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_target_shape.html#ab5360165c4e8088802872f6ca983692b">load()</a>.</p>
+
+</div>
+</div>
+<a id="a9680c25d86155eebf5e9dc50725840bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9680c25d86155eebf5e9dc50725840bc">&#9670;&nbsp;</a></span>loadPC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> * Isis::BulletTargetShape::loadPC </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>dem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl.html">Pvl</a> *&#160;</td>
+          <td class="paramname"><em>conf</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Load a point cloud type DEM in Bullet. </p>
+<dl class="section note"><dt>Note</dt><dd>Currently not implemented</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dem</td><td>The DEM file to load. </td></tr>
+    <tr><td class="paramname">conf</td><td>PVL config for the DEM load. Currently unused.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_bullet_target_shape.html" title="Bullet Target Shape for planetary bodies.">BulletTargetShape</a></b> A target shape containing the DEM </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_target_shape.html#ab5360165c4e8088802872f6ca983692b">load()</a>.</p>
+
+</div>
+</div>
+<a id="ae62c0dd68e9a9088f1cba2473a984615"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae62c0dd68e9a9088f1cba2473a984615">&#9670;&nbsp;</a></span>maximumDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">btScalar Isis::BulletTargetShape::maximumDistance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab9ab4daabf981677c37c6401bbe7c3cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9ab4daabf981677c37c6401bbe7c3cc">&#9670;&nbsp;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BulletTargetShape::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return name of the target shape. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The target name </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_shape_model.html#a878661fefbedeff441d0d29a010138b9">Isis::BulletShapeModel::BulletShapeModel()</a>, and <a class="el" href="class_isis_1_1_bullet_world_manager.html#ad9e3fab9173c93396d761ff3250d9663">Isis::BulletWorldManager::getTarget()</a>.</p>
+
+</div>
+</div>
+<a id="ac4c9cc5cf28dd58843e07e660fc15f3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4c9cc5cf28dd58843e07e660fc15f3f">&#9670;&nbsp;</a></span>setMaximumDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BulletTargetShape::setMaximumDistance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculate and save the maximum distance across the body. </p>
+<p>This is calculated as the distance from the x, y, z minimum to x, y, z maximum. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bullet_dsk_shape.html#a229eb35b33bb4eff70829ecd784c328a">Isis::BulletDskShape::BulletDskShape()</a>, <a class="el" href="class_isis_1_1_bullet_target_shape.html#ae51451abe4f56fc6537ff270616ec382">BulletTargetShape()</a>, and <a class="el" href="class_isis_1_1_bullet_target_shape.html#a03b036449543f084530fe8127433b37b">setTargetBody()</a>.</p>
+
+</div>
+</div>
+<a id="a03b036449543f084530fe8127433b37b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03b036449543f084530fe8127433b37b">&#9670;&nbsp;</a></span>setTargetBody()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BulletTargetShape::setTargetBody </td>
+          <td>(</td>
+          <td class="paramtype">btCollisionObject *&#160;</td>
+          <td class="paramname"><em>body</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the Bullet shape object to this object instance <br  />
+ </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_target_shape.html#a80a9ef776f7cbce4b81d7bf737a6287c">body()</a>, and <a class="el" href="class_isis_1_1_bullet_target_shape.html#ac4c9cc5cf28dd58843e07e660fc15f3f">setMaximumDistance()</a>.</p>
+
+</div>
+</div>
+<a id="ab2b75476482080bda50b6b02f37dded8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2b75476482080bda50b6b02f37dded8">&#9670;&nbsp;</a></span>writeBullet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BulletTargetShape::writeBullet </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>btName</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write a serialized version of the target shape to a Bullet file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">btName</td><td>The name of the file to write the target shape to.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Currently not implemented </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/BulletTargetShape/<a class="el" href="_bullet_target_shape_8h_source.html">BulletTargetShape.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/BulletTargetShape/<a class="el" href="_bullet_target_shape_8cpp.html">BulletTargetShape.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

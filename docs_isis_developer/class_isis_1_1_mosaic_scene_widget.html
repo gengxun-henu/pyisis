@@ -1,0 +1,2470 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::MosaicSceneWidget Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_mosaic_scene_widget.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_mosaic_scene_widget-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::MosaicSceneWidget Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This widget encompasses the entire mosaic scene.  
+ <a href="class_isis_1_1_mosaic_scene_widget.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_mosaic_scene_widget_8h_source.html">MosaicSceneWidget.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::MosaicSceneWidget:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_mosaic_scene_widget__inherit__graph.png" border="0" usemap="#a_isis_1_1_mosaic_scene_widget_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_mosaic_scene_widget_inherit__map" id="a_isis_1_1_mosaic_scene_widget_inherit__map">
+<area shape="rect" title="This widget encompasses the entire mosaic scene." alt="" coords="5,135,176,568"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="54,5,127,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::MosaicSceneWidget:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_mosaic_scene_widget__coll__graph.png" border="0" usemap="#a_isis_1_1_mosaic_scene_widget_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_mosaic_scene_widget_coll__map" id="a_isis_1_1_mosaic_scene_widget_coll__map">
+<area shape="rect" title="This widget encompasses the entire mosaic scene." alt="" coords="5,135,176,568"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="54,5,127,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a0ff0c990aed6a5852b703b7efd499362"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0ff0c990aed6a5852b703b7efd499362">addImages</a> (<a class="el" href="class_isis_1_1_image_list.html">ImageList</a>)</td></tr>
+<tr class="separator:a0ff0c990aed6a5852b703b7efd499362"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94f24eac4bdccea4b47dd4befdeee5c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a94f24eac4bdccea4b47dd4befdeee5c8">removeImages</a> (<a class="el" href="class_isis_1_1_image_list.html">ImageList</a>)</td></tr>
+<tr class="separator:a94f24eac4bdccea4b47dd4befdeee5c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5802314f82ea240a499031f50625b57e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a5802314f82ea240a499031f50625b57e">refit</a> ()</td></tr>
+<tr class="memdesc:a5802314f82ea240a499031f50625b57e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method refits t:he items in the graphics view.  <a href="class_isis_1_1_mosaic_scene_widget.html#a5802314f82ea240a499031f50625b57e">More...</a><br /></td></tr>
+<tr class="separator:a5802314f82ea240a499031f50625b57e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a490f415ed25b162fe732cde3d39a2021"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a490f415ed25b162fe732cde3d39a2021">setCubesSelectable</a> (bool)</td></tr>
+<tr class="separator:a490f415ed25b162fe732cde3d39a2021"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae02ba7bd439f8e153aaf861dac061c43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae02ba7bd439f8e153aaf861dac061c43">setProjection</a> (<a class="el" href="class_isis_1_1_projection.html">Projection</a> *)</td></tr>
+<tr class="memdesc:ae02ba7bd439f8e153aaf861dac061c43"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method takes ownership of proj.  <a href="class_isis_1_1_mosaic_scene_widget.html#ae02ba7bd439f8e153aaf861dac061c43">More...</a><br /></td></tr>
+<tr class="separator:ae02ba7bd439f8e153aaf861dac061c43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2232780ad3a6709e170676848ecef72"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae2232780ad3a6709e170676848ecef72">setOutlineRect</a> (QRectF)</td></tr>
+<tr class="separator:ae2232780ad3a6709e170676848ecef72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:add513eb7db007785bde92b545a77ebee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#add513eb7db007785bde92b545a77ebee">mouseEnter</a> ()</td></tr>
+<tr class="separator:add513eb7db007785bde92b545a77ebee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adac885559cc177e2d5ce601c29df47a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adac885559cc177e2d5ce601c29df47a4">mouseMove</a> (QPointF)</td></tr>
+<tr class="separator:adac885559cc177e2d5ce601c29df47a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee7e753e4d2d4970159b64c11b395ec8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#aee7e753e4d2d4970159b64c11b395ec8">mouseLeave</a> ()</td></tr>
+<tr class="separator:aee7e753e4d2d4970159b64c11b395ec8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e86fc618a548eb259d3601fc2cbd64f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a3e86fc618a548eb259d3601fc2cbd64f">mouseDoubleClick</a> (QPointF)</td></tr>
+<tr class="separator:a3e86fc618a548eb259d3601fc2cbd64f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c74b7f416bd3afe449c9f066a685641"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a7c74b7f416bd3afe449c9f066a685641">mouseButtonPress</a> (QPointF, Qt::MouseButton s)</td></tr>
+<tr class="separator:a7c74b7f416bd3afe449c9f066a685641"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa33f189452bc7f2084cf0e063adb70c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#aa33f189452bc7f2084cf0e063adb70c6">mouseButtonRelease</a> (QPointF, Qt::MouseButton s)</td></tr>
+<tr class="separator:aa33f189452bc7f2084cf0e063adb70c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1407f0dc7f7d12c7f9c1c8dc6dff50b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1407f0dc7f7d12c7f9c1c8dc6dff50b8">mouseWheel</a> (QPointF, int delta)</td></tr>
+<tr class="separator:a1407f0dc7f7d12c7f9c1c8dc6dff50b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a506bfefb3f9e770049aa5ff38fcb2199"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a506bfefb3f9e770049aa5ff38fcb2199">projectionChanged</a> (<a class="el" href="class_isis_1_1_projection.html">Projection</a> *)</td></tr>
+<tr class="separator:a506bfefb3f9e770049aa5ff38fcb2199"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30f04ba2d23eb830617231f340241f8b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a30f04ba2d23eb830617231f340241f8b">rubberBandComplete</a> (QRectF r, Qt::MouseButton s)</td></tr>
+<tr class="separator:a30f04ba2d23eb830617231f340241f8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d876d9f8cdd354f72b94898b0d50869"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a2d876d9f8cdd354f72b94898b0d50869">visibleRectChanged</a> (QRectF)</td></tr>
+<tr class="separator:a2d876d9f8cdd354f72b94898b0d50869"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad57a4fad13da688efc5e4030f8bdb995"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ad57a4fad13da688efc5e4030f8bdb995">cubesChanged</a> ()</td></tr>
+<tr class="separator:ad57a4fad13da688efc5e4030f8bdb995"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b4edad91cbd8c0ca520dc48875672a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a5b4edad91cbd8c0ca520dc48875672a5">queueSelectionChanged</a> ()</td></tr>
+<tr class="separator:a5b4edad91cbd8c0ca520dc48875672a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e409631a09b0194ee938e1fd2f1cc34"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1e409631a09b0194ee938e1fd2f1cc34">modifyControlPoint</a> (<a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *controlPoint)</td></tr>
+<tr class="separator:a1e409631a09b0194ee938e1fd2f1cc34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a738a48a0955279bad9182362862afffd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a738a48a0955279bad9182362862afffd">deleteControlPoint</a> (<a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *controlPoint)</td></tr>
+<tr class="separator:a738a48a0955279bad9182362862afffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9b25dd649c12e3b415fea3aa6897bff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae9b25dd649c12e3b415fea3aa6897bff">createControlPoint</a> (double latitude, double longitude)</td></tr>
+<tr class="separator:ae9b25dd649c12e3b415fea3aa6897bff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a876015290cdd309bad2ba2f18c44e984"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a876015290cdd309bad2ba2f18c44e984">controlPointSelected</a> (<a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *)</td></tr>
+<tr class="separator:a876015290cdd309bad2ba2f18c44e984"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a49e9738c718f58c3ed79b150ca2361"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0a49e9738c718f58c3ed79b150ca2361">cnetModified</a> ()</td></tr>
+<tr class="separator:a0a49e9738c718f58c3ed79b150ca2361"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33482d5b4bfc62ca07ad96bc02b97402"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a33482d5b4bfc62ca07ad96bc02b97402">controlPointChanged</a> (QString pointId)</td></tr>
+<tr class="separator:a33482d5b4bfc62ca07ad96bc02b97402"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a216471dc988cd7a0ee7ffb28f5af7ee3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a216471dc988cd7a0ee7ffb28f5af7ee3">controlPointDeleted</a> ()</td></tr>
+<tr class="separator:a216471dc988cd7a0ee7ffb28f5af7ee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31e81ead7426feefa7b9b5468bbf9733"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a31e81ead7426feefa7b9b5468bbf9733">mosCubeClosed</a> (<a class="el" href="class_isis_1_1_image.html">Image</a> *)</td></tr>
+<tr class="separator:a31e81ead7426feefa7b9b5468bbf9733"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a6707a080d09d3026c35223ead956632e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget</a> (QStatusBar *status, bool showTools, bool internalizeToolBarsAndProgress, <a class="el" href="class_isis_1_1_directory.html">Directory</a> *<a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a051ac779b76abb3f04487fc502955029">directory</a>, <a class="el" href="class_q_widget.html">QWidget</a> *parent=0)</td></tr>
+<tr class="memdesc:a6707a080d09d3026c35223ead956632e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a scene widget.  <a href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">More...</a><br /></td></tr>
+<tr class="separator:a6707a080d09d3026c35223ead956632e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd53f193937bef5946ce1d6469d9b59c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#acd53f193937bef5946ce1d6469d9b59c">~MosaicSceneWidget</a> ()</td></tr>
+<tr class="separator:acd53f193937bef5946ce1d6469d9b59c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b4cedb1d3a1730f0cff86acaa56e10a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_mosaic_graphics_view.html">MosaicGraphicsView</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1b4cedb1d3a1730f0cff86acaa56e10a">getView</a> () const</td></tr>
+<tr class="separator:a1b4cedb1d3a1730f0cff86acaa56e10a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b4d5da6f300487cae7156dcb7106d2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_graphics_scene.html">QGraphicsScene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a4b4d5da6f300487cae7156dcb7106d2d">getScene</a> () const</td></tr>
+<tr class="separator:a4b4d5da6f300487cae7156dcb7106d2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75e2df7fda8f778e37b6863d45de62c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_projection.html">Projection</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a75e2df7fda8f778e37b6863d45de62c8">getProjection</a> () const</td></tr>
+<tr class="separator:a75e2df7fda8f778e37b6863d45de62c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88a30d786934f86d3387e1318bcb8c91"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a88a30d786934f86d3387e1318bcb8c91">allMosaicSceneItems</a> ()</td></tr>
+<tr class="separator:a88a30d786934f86d3387e1318bcb8c91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6015c55b9a1c8a7f20f2ba2d6f42b5f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6015c55b9a1c8a7f20f2ba2d6f42b5f9">addTo</a> (<a class="el" href="class_q_menu.html">QMenu</a> *menu)</td></tr>
+<tr class="separator:a6015c55b9a1c8a7f20f2ba2d6f42b5f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19fcf2d3f37e064c4a08b776107f75cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a19fcf2d3f37e064c4a08b776107f75cb">addTo</a> (<a class="el" href="class_isis_1_1_tool_pad.html">ToolPad</a> *toolPad)</td></tr>
+<tr class="separator:a19fcf2d3f37e064c4a08b776107f75cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50615081352a1492ab59701bcdf0f465"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a50615081352a1492ab59701bcdf0f465">addToPermanent</a> (<a class="el" href="class_q_tool_bar.html">QToolBar</a> *toolBar)</td></tr>
+<tr class="separator:a50615081352a1492ab59701bcdf0f465"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56cafac461bc0f648d27c2bfce317336"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a56cafac461bc0f648d27c2bfce317336">addTo</a> (<a class="el" href="class_q_tool_bar.html">QToolBar</a> *toolBar)</td></tr>
+<tr class="separator:a56cafac461bc0f648d27c2bfce317336"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1549856176b4e4346be5d2b5ae3d8987"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1549856176b4e4346be5d2b5ae3d8987">contextMenuEvent</a> (QGraphicsSceneContextMenuEvent *event)</td></tr>
+<tr class="memdesc:a1549856176b4e4346be5d2b5ae3d8987"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is called by <a class="el" href="class_isis_1_1_mosaic_graphics_scene.html#a253dedbb165d1b51829cab1b6dd85137">MosaicGraphicsScene::contextMenuEvent</a>.  <a href="class_isis_1_1_mosaic_scene_widget.html#a1549856176b4e4346be5d2b5ae3d8987">More...</a><br /></td></tr>
+<tr class="separator:a1549856176b4e4346be5d2b5ae3d8987"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2d03740247310f30990123ff75ff609"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#af2d03740247310f30990123ff75ff609">cubeToMosaic</a> (<a class="el" href="class_isis_1_1_image.html">Image</a> *)</td></tr>
+<tr class="separator:af2d03740247310f30990123ff75ff609"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a956899f2cb84ef8bc7c5215a2d24e350"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a956899f2cb84ef8bc7c5215a2d24e350">cubesSelectable</a> () const</td></tr>
+<tr class="separator:a956899f2cb84ef8bc7c5215a2d24e350"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66f4ff35ef001a91d22d14a84c51256d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a66f4ff35ef001a91d22d14a84c51256d">enableRubberBand</a> (bool)</td></tr>
+<tr class="separator:a66f4ff35ef001a91d22d14a84c51256d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ad95b01ac32790a37f31f524e3f8665"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0ad95b01ac32790a37f31f524e3f8665">blockSelectionChange</a> (bool)</td></tr>
+<tr class="separator:a0ad95b01ac32790a37f31f524e3f8665"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3d6759e7abaf2ef4193a6d1c75f69ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae3d6759e7abaf2ef4193a6d1c75f69ee">userHasTools</a> () const</td></tr>
+<tr class="separator:ae3d6759e7abaf2ef4193a6d1c75f69ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a301754f48171978cd35d119564f44849"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_progress_bar.html">QProgressBar</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a301754f48171978cd35d119564f44849">getProgress</a> ()</td></tr>
+<tr class="separator:a301754f48171978cd35d119564f44849"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c57aeab5dc0595c28fcf2374e90bdc1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a8c57aeab5dc0595c28fcf2374e90bdc1">toPvl</a> () const</td></tr>
+<tr class="separator:a8c57aeab5dc0595c28fcf2374e90bdc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa13e1353c66e095e6852b53ad2becdff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#aa13e1353c66e095e6852b53ad2becdff">fromPvl</a> (const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;)</td></tr>
+<tr class="memdesc:aa13e1353c66e095e6852b53ad2becdff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this method after loading any cubes when loading a project.  <a href="class_isis_1_1_mosaic_scene_widget.html#aa13e1353c66e095e6852b53ad2becdff">More...</a><br /></td></tr>
+<tr class="separator:aa13e1353c66e095e6852b53ad2becdff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae346bfa82252910ca00b1d335e03c974"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae346bfa82252910ca00b1d335e03c974">save</a> (QXmlStreamWriter &amp;stream, <a class="el" href="class_isis_1_1_project.html">Project</a> *project, <a class="el" href="class_isis_1_1_file_name.html">FileName</a> newProjectRoot) const</td></tr>
+<tr class="separator:ae346bfa82252910ca00b1d335e03c974"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81d4e2e9d30981ee0adb4fabc9d1f197"><td class="memItemLeft" align="right" valign="top">QRectF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a81d4e2e9d30981ee0adb4fabc9d1f197">cubesBoundingRect</a> () const</td></tr>
+<tr class="separator:a81d4e2e9d30981ee0adb4fabc9d1f197"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6da9755cae605f1041b0942912626ee5"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6da9755cae605f1041b0942912626ee5">cubeFileNames</a> ()</td></tr>
+<tr class="separator:a6da9755cae605f1041b0942912626ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a051ac779b76abb3f04487fc502955029"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_directory.html">Directory</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a051ac779b76abb3f04487fc502955029">directory</a> () const</td></tr>
+<tr class="separator:a051ac779b76abb3f04487fc502955029"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2385fc90ab3a7caa7ce772e8392d3d60"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a2385fc90ab3a7caa7ce772e8392d3d60">images</a> ()</td></tr>
+<tr class="separator:a2385fc90ab3a7caa7ce772e8392d3d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75d1193441a457891155f22c40b2a566"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a75d1193441a457891155f22c40b2a566">selectedImages</a> ()</td></tr>
+<tr class="memdesc:a75d1193441a457891155f22c40b2a566"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all the cubes selected in the scene.  <a href="class_isis_1_1_mosaic_scene_widget.html#a75d1193441a457891155f22c40b2a566">More...</a><br /></td></tr>
+<tr class="separator:a75d1193441a457891155f22c40b2a566"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92c3837e2ce730a9766043c6f3ddcfde"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a92c3837e2ce730a9766043c6f3ddcfde">getExportActions</a> ()</td></tr>
+<tr class="separator:a92c3837e2ce730a9766043c6f3ddcfde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb7a239605acfb76aad1da280d18a354"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#afb7a239605acfb76aad1da280d18a354">getViewActions</a> ()</td></tr>
+<tr class="separator:afb7a239605acfb76aad1da280d18a354"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ecb62bb6309ef13d88b998501bb2999"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0ecb62bb6309ef13d88b998501bb2999">supportedActions</a> (<a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *)</td></tr>
+<tr class="memdesc:a0ecb62bb6309ef13d88b998501bb2999"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of actions this scene can perform given "images".  <a href="class_isis_1_1_mosaic_scene_widget.html#a0ecb62bb6309ef13d88b998501bb2999">More...</a><br /></td></tr>
+<tr class="separator:a0ecb62bb6309ef13d88b998501bb2999"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0257af3ff6b50414364a00fbd6f0026"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae0257af3ff6b50414364a00fbd6f0026">moveDownOne</a> (<a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *)</td></tr>
+<tr class="separator:ae0257af3ff6b50414364a00fbd6f0026"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af33f453a70535434bf05c4c8feb8c2a5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#af33f453a70535434bf05c4c8feb8c2a5">moveDownOne</a> (<a class="el" href="class_isis_1_1_image.html">Image</a> *)</td></tr>
+<tr class="separator:af33f453a70535434bf05c4c8feb8c2a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02ec0d225473b3030041dad9d2984139"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a02ec0d225473b3030041dad9d2984139">moveDownOne</a> (<a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *)</td></tr>
+<tr class="separator:a02ec0d225473b3030041dad9d2984139"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a327a1e18cb4fba27afabf6dde49061a5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a327a1e18cb4fba27afabf6dde49061a5">moveToBottom</a> (<a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *)</td></tr>
+<tr class="memdesc:a327a1e18cb4fba27afabf6dde49061a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This doesn't compress the Z values - the original Z values of this scene item is guaranteed to be empty after this operation.  <a href="class_isis_1_1_mosaic_scene_widget.html#a327a1e18cb4fba27afabf6dde49061a5">More...</a><br /></td></tr>
+<tr class="separator:a327a1e18cb4fba27afabf6dde49061a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc9e97acdb05e8ddbcd120ac50805fd0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#abc9e97acdb05e8ddbcd120ac50805fd0">moveToBottom</a> (<a class="el" href="class_isis_1_1_image.html">Image</a> *)</td></tr>
+<tr class="memdesc:abc9e97acdb05e8ddbcd120ac50805fd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">This doesn't compress the Z values - the original Z value of this image is guaranteed to be empty after this operation.  <a href="class_isis_1_1_mosaic_scene_widget.html#abc9e97acdb05e8ddbcd120ac50805fd0">More...</a><br /></td></tr>
+<tr class="separator:abc9e97acdb05e8ddbcd120ac50805fd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75cb883f4311440d121c5c580d1590f2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a75cb883f4311440d121c5c580d1590f2">moveToBottom</a> (<a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *)</td></tr>
+<tr class="memdesc:a75cb883f4311440d121c5c580d1590f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This doesn't compress the Z values - the original Z values of these images are guaranteed to be empty after this operation.  <a href="class_isis_1_1_mosaic_scene_widget.html#a75cb883f4311440d121c5c580d1590f2">More...</a><br /></td></tr>
+<tr class="separator:a75cb883f4311440d121c5c580d1590f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9027a7cbf2c08c2f1c94a5e5cc8f2f7b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a9027a7cbf2c08c2f1c94a5e5cc8f2f7b">moveUpOne</a> (<a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *)</td></tr>
+<tr class="separator:a9027a7cbf2c08c2f1c94a5e5cc8f2f7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73a5ac606a5195bb51c15c900237c65e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a73a5ac606a5195bb51c15c900237c65e">moveUpOne</a> (<a class="el" href="class_isis_1_1_image.html">Image</a> *)</td></tr>
+<tr class="separator:a73a5ac606a5195bb51c15c900237c65e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab21e400cf1c2f020b4ca6bf09dd8a4e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ab21e400cf1c2f020b4ca6bf09dd8a4e0">moveUpOne</a> (<a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *)</td></tr>
+<tr class="separator:ab21e400cf1c2f020b4ca6bf09dd8a4e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0c6935fef32f71dcebb26d640aa6ada"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ab0c6935fef32f71dcebb26d640aa6ada">moveToTop</a> (<a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *)</td></tr>
+<tr class="memdesc:ab0c6935fef32f71dcebb26d640aa6ada"><td class="mdescLeft">&#160;</td><td class="mdescRight">This doesn't compress the Z values - the original Z values of this scene item is guaranteed to be empty after this operation.  <a href="class_isis_1_1_mosaic_scene_widget.html#ab0c6935fef32f71dcebb26d640aa6ada">More...</a><br /></td></tr>
+<tr class="separator:ab0c6935fef32f71dcebb26d640aa6ada"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace6a0cab4aac91e6598439c747606e83"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ace6a0cab4aac91e6598439c747606e83">moveToTop</a> (<a class="el" href="class_isis_1_1_image.html">Image</a> *)</td></tr>
+<tr class="memdesc:ace6a0cab4aac91e6598439c747606e83"><td class="mdescLeft">&#160;</td><td class="mdescRight">This doesn't compress the Z values - the original Z value of this image is guaranteed to be empty after this operation.  <a href="class_isis_1_1_mosaic_scene_widget.html#ace6a0cab4aac91e6598439c747606e83">More...</a><br /></td></tr>
+<tr class="separator:ace6a0cab4aac91e6598439c747606e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf42dd29526565a513c3a06205b4bc1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#aaf42dd29526565a513c3a06205b4bc1c">moveToTop</a> (<a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *)</td></tr>
+<tr class="memdesc:aaf42dd29526565a513c3a06205b4bc1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">This doesn't compress the Z values - the original Z values of these images are guaranteed to be empty after this operation.  <a href="class_isis_1_1_mosaic_scene_widget.html#aaf42dd29526565a513c3a06205b4bc1c">More...</a><br /></td></tr>
+<tr class="separator:aaf42dd29526565a513c3a06205b4bc1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada0c0a17d9b6219704481f451e1fd255"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ada0c0a17d9b6219704481f451e1fd255">moveZ</a> (<a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *sceneItem, double newZ, bool newZValueMightExist=true)</td></tr>
+<tr class="memdesc:ada0c0a17d9b6219704481f451e1fd255"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method moves the given scene item to the given Z value.  <a href="class_isis_1_1_mosaic_scene_widget.html#ada0c0a17d9b6219704481f451e1fd255">More...</a><br /></td></tr>
+<tr class="separator:ada0c0a17d9b6219704481f451e1fd255"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfcd13bdccf7d8534a6a76401a0cbb35"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#acfcd13bdccf7d8534a6a76401a0cbb35">moveZ</a> (<a class="el" href="class_isis_1_1_image.html">Image</a> *image, double newZ, bool newZValueMightExist=true)</td></tr>
+<tr class="separator:acfcd13bdccf7d8534a6a76401a0cbb35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a304be7dbf5b18f1cfaae4297844ec34e"><td class="memTemplParams" colspan="2">template&lt;typename DataType &gt; </td></tr>
+<tr class="memitem:a304be7dbf5b18f1cfaae4297844ec34e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a304be7dbf5b18f1cfaae4297844ec34e">supportedActions</a> (DataType)</td></tr>
+<tr class="memdesc:a304be7dbf5b18f1cfaae4297844ec34e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an empty list of actions for unknown data types.  <a href="class_isis_1_1_mosaic_scene_widget.html#a304be7dbf5b18f1cfaae4297844ec34e">More...</a><br /></td></tr>
+<tr class="separator:a304be7dbf5b18f1cfaae4297844ec34e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcca9da6c586e7f05d6aad852cf90ef3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#abcca9da6c586e7f05d6aad852cf90ef3">isControlNetToolActive</a> ()</td></tr>
+<tr class="separator:abcca9da6c586e7f05d6aad852cf90ef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ab803d0e0a84a264a9f4e36e38f4933e2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ab803d0e0a84a264a9f4e36e38f4933e2">getControlNetHelp</a> (<a class="el" href="class_q_widget.html">QWidget</a> *cnetToolContainer=NULL)</td></tr>
+<tr class="separator:ab803d0e0a84a264a9f4e36e38f4933e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1bbe08facce4988a6fb7e053fc4e020"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ad1bbe08facce4988a6fb7e053fc4e020">getGridHelp</a> (<a class="el" href="class_q_widget.html">QWidget</a> *gridToolContainer=NULL)</td></tr>
+<tr class="separator:ad1bbe08facce4988a6fb7e053fc4e020"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24d593ef3b6bd43a6e6fc085e0a2490e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a24d593ef3b6bd43a6e6fc085e0a2490e">getLongHelp</a> (<a class="el" href="class_q_widget.html">QWidget</a> *mosaicSceneContainer=NULL)</td></tr>
+<tr class="separator:a24d593ef3b6bd43a6e6fc085e0a2490e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a005c0a4e6b5a5504d2c54574230ca54b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a005c0a4e6b5a5504d2c54574230ca54b">getMapHelp</a> (<a class="el" href="class_q_widget.html">QWidget</a> *mapContainer=NULL)</td></tr>
+<tr class="separator:a005c0a4e6b5a5504d2c54574230ca54b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea09d8105a5b6d8b0e783d053effd834"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#aea09d8105a5b6d8b0e783d053effd834">getPreviewHelp</a> (<a class="el" href="class_q_widget.html">QWidget</a> *worldViewContainer=NULL)</td></tr>
+<tr class="separator:aea09d8105a5b6d8b0e783d053effd834"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:adaaa67f2891fc0fb409c1edbf1a8d92d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter</a> (<a class="el" href="class_q_object.html">QObject</a> *obj, QEvent *ev)</td></tr>
+<tr class="separator:adaaa67f2891fc0fb409c1edbf1a8d92d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This widget encompasses the entire mosaic scene. </p>
+<p>This widget is a self-contained 2D footprint view using Qt's graphics scene/view framework.</p>
+<dl class="section author"><dt>Author</dt><dd>????-??-?? Stacy Alley </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a6707a080d09d3026c35223ead956632e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6707a080d09d3026c35223ead956632e">&#9670;&nbsp;</a></span>MosaicSceneWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::MosaicSceneWidget::MosaicSceneWidget </td>
+          <td>(</td>
+          <td class="paramtype">QStatusBar *&#160;</td>
+          <td class="paramname"><em>status</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>showTools</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>internalizeToolBarsAndProgress</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_directory.html">Directory</a> *&#160;</td>
+          <td class="paramname"><em>directory</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a scene widget. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6015c55b9a1c8a7f20f2ba2d6f42b5f9">addTo()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a50615081352a1492ab59701bcdf0f465">addToPermanent()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0a49e9738c718f58c3ed79b150ca2361">cnetModified()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae9b25dd649c12e3b415fea3aa6897bff">createControlPoint()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a738a48a0955279bad9182362862afffd">deleteControlPoint()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a051ac779b76abb3f04487fc502955029">directory()</a>, <a class="el" href="class_isis_1_1_mosaic_graphics_view.html#ae9ff08293cde656a68468c78a2942520">Isis::MosaicGraphicsView::enableResizeZooming()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a4b4d5da6f300487cae7156dcb7106d2d">getScene()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1b4cedb1d3a1730f0cff86acaa56e10a">getView()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1e409631a09b0194ee938e1fd2f1cc34">modifyControlPoint()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a5b4edad91cbd8c0ca520dc48875672a5">queueSelectionChanged()</a>.</p>
+
+</div>
+</div>
+<a id="acd53f193937bef5946ce1d6469d9b59c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd53f193937bef5946ce1d6469d9b59c">&#9670;&nbsp;</a></span>~MosaicSceneWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::MosaicSceneWidget::~MosaicSceneWidget </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0ff0c990aed6a5852b703b7efd499362"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ff0c990aed6a5852b703b7efd499362">&#9670;&nbsp;</a></span>addImages</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::addImages </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a>&#160;</td>
+          <td class="paramname"><em>images</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ad57a4fad13da688efc5e4030f8bdb995">cubesChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1b4cedb1d3a1730f0cff86acaa56e10a">getView()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a2385fc90ab3a7caa7ce772e8392d3d60">images()</a>, <a class="el" href="class_isis_1_1_i_exception.html#aa2a167d03a041630226670e927d45c30">Isis::IException::print()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a5802314f82ea240a499031f50625b57e">refit()</a>, <a class="el" href="class_isis_1_1_progress_bar.html#acad6843e26bd9aff2c6fb6914eec9735">Isis::ProgressBar::setText()</a>, and <a class="el" href="namespace_isis.html#a161dca47e06f74a883a05686d318e817">Isis::toInt()</a>.</p>
+
+</div>
+</div>
+<a id="a6015c55b9a1c8a7f20f2ba2d6f42b5f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6015c55b9a1c8a7f20f2ba2d6f42b5f9">&#9670;&nbsp;</a></span>addTo() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::addTo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_menu.html">QMenu</a> *&#160;</td>
+          <td class="paramname"><em>menu</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_tool.html#a30848da312be90aeb7cc144b7354dd3d">Isis::MosaicTool::addTo()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_footprint2_d_view.html#a7d268a4473a693b99f6a7946991ee7bd">Isis::Footprint2DView::Footprint2DView()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a56cafac461bc0f648d27c2bfce317336"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56cafac461bc0f648d27c2bfce317336">&#9670;&nbsp;</a></span>addTo() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::addTo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_tool_bar.html">QToolBar</a> *&#160;</td>
+          <td class="paramname"><em>toolBar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_tool.html#a30848da312be90aeb7cc144b7354dd3d">Isis::MosaicTool::addTo()</a>.</p>
+
+</div>
+</div>
+<a id="a19fcf2d3f37e064c4a08b776107f75cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19fcf2d3f37e064c4a08b776107f75cb">&#9670;&nbsp;</a></span>addTo() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::addTo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_tool_pad.html">ToolPad</a> *&#160;</td>
+          <td class="paramname"><em>toolPad</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_tool.html#a30848da312be90aeb7cc144b7354dd3d">Isis::MosaicTool::addTo()</a>.</p>
+
+</div>
+</div>
+<a id="a50615081352a1492ab59701bcdf0f465"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50615081352a1492ab59701bcdf0f465">&#9670;&nbsp;</a></span>addToPermanent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::addToPermanent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_tool_bar.html">QToolBar</a> *&#160;</td>
+          <td class="paramname"><em>toolBar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_container.html#aec162efdd61490e50dc5211e7f97469b">Isis::PvlContainer::findKeyword()</a>, and <a class="el" href="class_isis_1_1_projection.html#ac909e5f4a7a7aa2afc8b2c745feb1940">Isis::Projection::Mapping()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_footprint2_d_view.html#a7d268a4473a693b99f6a7946991ee7bd">Isis::Footprint2DView::Footprint2DView()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a88a30d786934f86d3387e1318bcb8c91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88a30d786934f86d3387e1318bcb8c91">&#9670;&nbsp;</a></span>allMosaicSceneItems()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt;<a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *&gt; Isis::MosaicSceneWidget::allMosaicSceneItems </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0ad95b01ac32790a37f31f524e3f8665"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ad95b01ac32790a37f31f524e3f8665">&#9670;&nbsp;</a></span>blockSelectionChange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::MosaicSceneWidget::blockSelectionChange </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>block</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a5fad22b90b592ba1babe82dfc682cb78">Isis::MosaicSceneItem::cubeDisplayChanged()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a9c58b93974fa36214b454a4be3d5b53e">Isis::MosaicSceneItem::updateSelection()</a>.</p>
+
+</div>
+</div>
+<a id="a0a49e9738c718f58c3ed79b150ca2361"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a49e9738c718f58c3ed79b150ca2361">&#9670;&nbsp;</a></span>cnetModified</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::cnetModified </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a1549856176b4e4346be5d2b5ae3d8987"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1549856176b4e4346be5d2b5ae3d8987">&#9670;&nbsp;</a></span>contextMenuEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::MosaicSceneWidget::contextMenuEvent </td>
+          <td>(</td>
+          <td class="paramtype">QGraphicsSceneContextMenuEvent *&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is called by <a class="el" href="class_isis_1_1_mosaic_graphics_scene.html#a253dedbb165d1b51829cab1b6dd85137">MosaicGraphicsScene::contextMenuEvent</a>. </p>
+<p>Return false if not handled, true if handled. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_list.html#ab913c0ca194d7cb1a1dc5d8b92a8d75c">Isis::ImageList::append()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a4b4d5da6f300487cae7156dcb7106d2d">getScene()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a511d37ee3ae5b18067e23a30586d3af1">Isis::MosaicSceneItem::image()</a>, <a class="el" href="class_isis_1_1_directory.html#abd5c7c576dbf41aeb552b65c64b513bc">Isis::Directory::project()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a75d1193441a457891155f22c40b2a566">selectedImages()</a>, <a class="el" href="class_isis_1_1_directory.html#ab738bef61cdc59126822456a64bf398f">Isis::Directory::supportedActions()</a>, and <a class="el" href="class_isis_1_1_image_list.html#aca99eadab544616d6be5b58d20915730">Isis::ImageList::supportedActions()</a>.</p>
+
+</div>
+</div>
+<a id="a33482d5b4bfc62ca07ad96bc02b97402"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33482d5b4bfc62ca07ad96bc02b97402">&#9670;&nbsp;</a></span>controlPointChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::controlPointChanged </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>pointId</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a216471dc988cd7a0ee7ffb28f5af7ee3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a216471dc988cd7a0ee7ffb28f5af7ee3">&#9670;&nbsp;</a></span>controlPointDeleted</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::controlPointDeleted </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a876015290cdd309bad2ba2f18c44e984"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a876015290cdd309bad2ba2f18c44e984">&#9670;&nbsp;</a></span>controlPointSelected</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::controlPointSelected </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae9b25dd649c12e3b415fea3aa6897bff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9b25dd649c12e3b415fea3aa6897bff">&#9670;&nbsp;</a></span>createControlPoint</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::createControlPoint </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>latitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>longitude</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a6da9755cae605f1041b0942912626ee5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6da9755cae605f1041b0942912626ee5">&#9670;&nbsp;</a></span>cubeFileNames()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::MosaicSceneWidget::cubeFileNames </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image.html#ad9a2f83ed5b7aa2f3f9855a7ac81d107">Isis::Image::fileName()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a511d37ee3ae5b18067e23a30586d3af1">Isis::MosaicSceneItem::image()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_net_graphics_item.html#a3da88674cdd0582819841388949c96ee">Isis::ControlNetGraphicsItem::buildChildren()</a>.</p>
+
+</div>
+</div>
+<a id="a81d4e2e9d30981ee0adb4fabc9d1f197"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81d4e2e9d30981ee0adb4fabc9d1f197">&#9670;&nbsp;</a></span>cubesBoundingRect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QRectF Isis::MosaicSceneWidget::cubesBoundingRect </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a1c8bae5bf547d66dac571a0545506252">Isis::MosaicSceneItem::boundingRect()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#ad143ab369ad4ddde8ee7386a0a41b537">Isis::MosaicGridTool::autoGrid()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#afc7b7c3d75148ed783580bcfa956ecb4">Isis::MosaicGridTool::getToolBarWidget()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a3a94689450ebd8d4bc1926398b7bc7b6">Isis::MosaicGridTool::MosaicGridTool()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a5802314f82ea240a499031f50625b57e">refit()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#aae1c7683fa1ee0762e1dbbbb4edc8050">Isis::MosaicGridTool::setLatExtents()</a>, and <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a171bfb1c016674662a6a605185997efa">Isis::MosaicGridTool::setLonExtents()</a>.</p>
+
+</div>
+</div>
+<a id="ad57a4fad13da688efc5e4030f8bdb995"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad57a4fad13da688efc5e4030f8bdb995">&#9670;&nbsp;</a></span>cubesChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::cubesChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0ff0c990aed6a5852b703b7efd499362">addImages()</a>.</p>
+
+</div>
+</div>
+<a id="a956899f2cb84ef8bc7c5215a2d24e350"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a956899f2cb84ef8bc7c5215a2d24e350">&#9670;&nbsp;</a></span>cubesSelectable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::MosaicSceneWidget::cubesSelectable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af2d03740247310f30990123ff75ff609"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2d03740247310f30990123ff75ff609">&#9670;&nbsp;</a></span>cubeToMosaic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> * Isis::MosaicSceneWidget::cubeToMosaic </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image.html">Image</a> *&#160;</td>
+          <td class="paramname"><em>image</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_image.html#ac5ea75c23d016a4873a81d4e492807dc">Isis::Image::displayProperties()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#af33f453a70535434bf05c4c8feb8c2a5">moveDownOne()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#abc9e97acdb05e8ddbcd120ac50805fd0">moveToBottom()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ace6a0cab4aac91e6598439c747606e83">moveToTop()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a73a5ac606a5195bb51c15c900237c65e">moveUpOne()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#acfcd13bdccf7d8534a6a76401a0cbb35">moveZ()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a94f24eac4bdccea4b47dd4befdeee5c8">removeImages()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0ecb62bb6309ef13d88b998501bb2999">supportedActions()</a>.</p>
+
+</div>
+</div>
+<a id="a738a48a0955279bad9182362862afffd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a738a48a0955279bad9182362862afffd">&#9670;&nbsp;</a></span>deleteControlPoint</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::deleteControlPoint </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *&#160;</td>
+          <td class="paramname"><em>controlPoint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a051ac779b76abb3f04487fc502955029"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a051ac779b76abb3f04487fc502955029">&#9670;&nbsp;</a></span>directory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_directory.html">Directory</a> * Isis::MosaicSceneWidget::directory </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_item.html#ac9bc13f7e9544599251f1cc7d7690cfc">Isis::MosaicSceneItem::contextMenuEvent()</a>, <a class="el" href="class_isis_1_1_mosaic_control_net_tool.html#a9f7df1342b3790027aee62ea61159678">Isis::MosaicControlNetTool::loadNetwork()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget()</a>, and <a class="el" href="class_isis_1_1_control_point_graphics_item.html#a80ff3291333420c19b6d238736c481c8">Isis::ControlPointGraphicsItem::paint()</a>.</p>
+
+</div>
+</div>
+<a id="a66f4ff35ef001a91d22d14a84c51256d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66f4ff35ef001a91d22d14a84c51256d">&#9670;&nbsp;</a></span>enableRubberBand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::enableRubberBand </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_zoom_tool.html#a38f09de21dda63ee6b5ea3a130a69f8e">Isis::MosaicZoomTool::updateTool()</a>.</p>
+
+</div>
+</div>
+<a id="adaaa67f2891fc0fb409c1edbf1a8d92d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaaa67f2891fc0fb409c1edbf1a8d92d">&#9670;&nbsp;</a></span>eventFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::MosaicSceneWidget::eventFilter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QEvent *&#160;</td>
+          <td class="paramname"><em>ev</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a4b4d5da6f300487cae7156dcb7106d2d">getScene()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1b4cedb1d3a1730f0cff86acaa56e10a">getView()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a7c74b7f416bd3afe449c9f066a685641">mouseButtonPress()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#aa33f189452bc7f2084cf0e063adb70c6">mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a3e86fc618a548eb259d3601fc2cbd64f">mouseDoubleClick()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#add513eb7db007785bde92b545a77ebee">mouseEnter()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#aee7e753e4d2d4970159b64c11b395ec8">mouseLeave()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adac885559cc177e2d5ce601c29df47a4">mouseMove()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1407f0dc7f7d12c7f9c1c8dc6dff50b8">mouseWheel()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a30f04ba2d23eb830617231f340241f8b">rubberBandComplete()</a>.</p>
+
+</div>
+</div>
+<a id="aa13e1353c66e095e6852b53ad2becdff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa13e1353c66e095e6852b53ad2becdff">&#9670;&nbsp;</a></span>fromPvl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::fromPvl </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;&#160;</td>
+          <td class="paramname"><em>project</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Call this method after loading any cubes when loading a project. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">project</td><td>The project <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">Isis::PvlObject::findGroup()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a4c09ebe5d216cb7711fccfe3f7ffac37">Isis::PvlObject::findObject()</a>, <a class="el" href="class_isis_1_1_mosaic_tool.html#adc6a35dfa84935894fd63aca686aefd3">Isis::MosaicTool::fromPvl()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a3ca8017f3ad5fb9eb082c08e8c77aa39">Isis::PvlObject::hasObject()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a911cac3dac4b78c792488400c6d16775">Isis::PvlContainer::keywords()</a>, <a class="el" href="class_isis_1_1_mosaic_tool.html#a28770f49d15b19710329d8f92d94cce2">Isis::MosaicTool::projectPvlObjectName()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae02ba7bd439f8e153aaf861dac061c43">setProjection()</a>, and <a class="el" href="namespace_isis.html#ad7233a0dfd589ede203db382294b286c">Isis::toDouble()</a>.</p>
+
+</div>
+</div>
+<a id="ab803d0e0a84a264a9f4e36e38f4933e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab803d0e0a84a264a9f4e36e38f4933e2">&#9670;&nbsp;</a></span>getControlNetHelp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::MosaicSceneWidget::getControlNetHelp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>cnetToolContainer</em> = <code>NULL</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_tool.html#a30848da312be90aeb7cc144b7354dd3d">Isis::MosaicTool::addTo()</a>.</p>
+
+</div>
+</div>
+<a id="a92c3837e2ce730a9766043c6f3ddcfde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92c3837e2ce730a9766043c6f3ddcfde">&#9670;&nbsp;</a></span>getExportActions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt; Isis::MosaicSceneWidget::getExportActions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad1bbe08facce4988a6fb7e053fc4e020"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1bbe08facce4988a6fb7e053fc4e020">&#9670;&nbsp;</a></span>getGridHelp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::MosaicSceneWidget::getGridHelp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>gridToolContainer</em> = <code>NULL</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_tool.html#a30848da312be90aeb7cc144b7354dd3d">Isis::MosaicTool::addTo()</a>.</p>
+
+</div>
+</div>
+<a id="a24d593ef3b6bd43a6e6fc085e0a2490e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24d593ef3b6bd43a6e6fc085e0a2490e">&#9670;&nbsp;</a></span>getLongHelp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::MosaicSceneWidget::getLongHelp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>mosaicSceneContainer</em> = <code>NULL</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a005c0a4e6b5a5504d2c54574230ca54b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a005c0a4e6b5a5504d2c54574230ca54b">&#9670;&nbsp;</a></span>getMapHelp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::MosaicSceneWidget::getMapHelp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>mapContainer</em> = <code>NULL</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aea09d8105a5b6d8b0e783d053effd834"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea09d8105a5b6d8b0e783d053effd834">&#9670;&nbsp;</a></span>getPreviewHelp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::MosaicSceneWidget::getPreviewHelp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>worldViewContainer</em> = <code>NULL</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a301754f48171978cd35d119564f44849"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a301754f48171978cd35d119564f44849">&#9670;&nbsp;</a></span>getProgress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_progress_bar.html">QProgressBar</a> * Isis::MosaicSceneWidget::getProgress </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_net_graphics_item.html#a3da88674cdd0582819841388949c96ee">Isis::ControlNetGraphicsItem::buildChildren()</a>.</p>
+
+</div>
+</div>
+<a id="a75e2df7fda8f778e37b6863d45de62c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75e2df7fda8f778e37b6863d45de62c8">&#9670;&nbsp;</a></span>getProjection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_projection.html">Projection</a>* Isis::MosaicSceneWidget::getProjection </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a1ebb3a2b09953cacc9d88750a4607835">Isis::MosaicGridToolConfigDialog::applySettings()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#ad143ab369ad4ddde8ee7386a0a41b537">Isis::MosaicGridTool::autoGrid()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#af8a01788d8353638710969d88f59a761">Isis::MosaicGridTool::domainMaxLon()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#ae01b5b73812453140437a01608a2db4b">Isis::MosaicGridTool::domainMinLon()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a638ba9f4a5cb95a0f6ca185b5fc5a495">Isis::MosaicGridTool::fromPvl()</a>, <a class="el" href="class_isis_1_1_mosaic_find_tool.html#ac2d935fa40c74359ddb9b37567110c81">Isis::MosaicFindTool::getUserGroundPoint()</a>, <a class="el" href="class_isis_1_1_grid_graphics_item.html#a4f8eb8dac5c313f1a5b5f99a43ad4ee1">Isis::GridGraphicsItem::GridGraphicsItem()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#ad5c1bd625e2dbdd769146d023c2f2304">Isis::MosaicGridTool::latType()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#aed727e90e3e25ce652d776250b4fde5a">Isis::MosaicGridTool::lonDomain()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#acbe063a0ca2a6f00d647268ec47d0106">Isis::MosaicSceneItem::MosaicSceneItem()</a>, <a class="el" href="class_isis_1_1_mosaic_control_net_tool.html#af93e358a029aa13f969038601290a989">Isis::MosaicControlNetTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_mosaic_area_tool.html#a8ad4ee2a90e8893a391a2ce64f4b396f">Isis::MosaicAreaTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_mosaic_find_tool.html#a4d23505a43541c75044e80e2f574b6cc">Isis::MosaicFindTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a81d516ad07627e1673622a00a9f6f444">Isis::MosaicGridTool::onProjectionChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad27b4fb69924b943881347acd083acf3">Isis::MosaicGridToolConfigDialog::readSettings()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#acd267b233c3e2cc1ea42d38521ebf6c3">Isis::MosaicSceneItem::reproject()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#aae1c7683fa1ee0762e1dbbbb4edc8050">Isis::MosaicGridTool::setLatExtents()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a171bfb1c016674662a6a605185997efa">Isis::MosaicGridTool::setLonExtents()</a>, <a class="el" href="class_isis_1_1_mosaic_track_tool.html#a05a8673faaef3692613dfbde1a297090">Isis::MosaicTrackTool::updateLabels()</a>, and <a class="el" href="class_isis_1_1_mosaic_area_tool.html#ad590bc9b0888d0688730e0070c5c4bf2">Isis::MosaicAreaTool::userChangedBox()</a>.</p>
+
+</div>
+</div>
+<a id="a4b4d5da6f300487cae7156dcb7106d2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b4d5da6f300487cae7156dcb7106d2d">&#9670;&nbsp;</a></span>getScene()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_graphics_scene.html">QGraphicsScene</a>* Isis::MosaicSceneWidget::getScene </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_area_tool.html#a052bab737a4cb53852007935c56c8bbc">Isis::MosaicAreaTool::clearBox()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a819acc688d19d2895a0abc8744470a82">Isis::MosaicGridTool::clearGrid()</a>, <a class="el" href="class_isis_1_1_mosaic_find_tool.html#ab9abbda2acc6fc00a7d53f9198a9aae9">Isis::MosaicFindTool::clearPoint()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1549856176b4e4346be5d2b5ae3d8987">contextMenuEvent()</a>, <a class="el" href="class_isis_1_1_control_net_graphics_item.html#a203a5304ce2e567cf0e63ab5b38e75ef">Isis::ControlNetGraphicsItem::ControlNetGraphicsItem()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#aacf9ef69c8404ea7bb17c1db57fc74ba">Isis::MosaicGridTool::drawGrid()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter()</a>, <a class="el" href="class_isis_1_1_footprint2_d_view.html#a7d268a4473a693b99f6a7946991ee7bd">Isis::Footprint2DView::Footprint2DView()</a>, <a class="el" href="class_isis_1_1_mosaic_find_tool.html#ac2d935fa40c74359ddb9b37567110c81">Isis::MosaicFindTool::getUserGroundPoint()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget()</a>, <a class="el" href="class_isis_1_1_mosaic_control_net_tool.html#af93e358a029aa13f969038601290a989">Isis::MosaicControlNetTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_mosaic_find_tool.html#a4d23505a43541c75044e80e2f574b6cc">Isis::MosaicFindTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a75d1193441a457891155f22c40b2a566">selectedImages()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae2232780ad3a6709e170676848ecef72">setOutlineRect()</a>, and <a class="el" href="class_isis_1_1_mosaic_area_tool.html#ad590bc9b0888d0688730e0070c5c4bf2">Isis::MosaicAreaTool::userChangedBox()</a>.</p>
+
+</div>
+</div>
+<a id="a1b4cedb1d3a1730f0cff86acaa56e10a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b4cedb1d3a1730f0cff86acaa56e10a">&#9670;&nbsp;</a></span>getView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_mosaic_graphics_view.html">MosaicGraphicsView</a>* Isis::MosaicSceneWidget::getView </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0ff0c990aed6a5852b703b7efd499362">addImages()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter()</a>, <a class="el" href="class_isis_1_1_control_net_graphics_item.html#a22e0945153cc4d61168c779390c87134">Isis::ControlNetGraphicsItem::findClosestControlPoint()</a>, <a class="el" href="class_isis_1_1_footprint2_d_view.html#a7d268a4473a693b99f6a7946991ee7bd">Isis::Footprint2DView::Footprint2DView()</a>, <a class="el" href="class_isis_1_1_mosaic_find_tool.html#ac2d935fa40c74359ddb9b37567110c81">Isis::MosaicFindTool::getUserGroundPoint()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget()</a>, <a class="el" href="class_isis_1_1_mosaic_control_net_tool.html#af93e358a029aa13f969038601290a989">Isis::MosaicControlNetTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_mosaic_area_tool.html#a8ad4ee2a90e8893a391a2ce64f4b396f">Isis::MosaicAreaTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_mosaic_find_tool.html#a4d23505a43541c75044e80e2f574b6cc">Isis::MosaicFindTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_mosaic_zoom_tool.html#a56456562f56173c22439386a3ef18671">Isis::MosaicZoomTool::mouseWheel()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a1a9c6bc09c1d8c7fe745edb880f2a9b6">Isis::MosaicGridTool::onCubesChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a5802314f82ea240a499031f50625b57e">refit()</a>, <a class="el" href="class_isis_1_1_mosaic_zoom_tool.html#a59f00de31fdc0df987c9adda06e7a6a4">Isis::MosaicZoomTool::rubberBandComplete()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae346bfa82252910ca00b1d335e03c974">save()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae2232780ad3a6709e170676848ecef72">setOutlineRect()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a8c57aeab5dc0595c28fcf2374e90bdc1">toPvl()</a>, <a class="el" href="class_isis_1_1_mosaic_zoom_tool.html#aedfe308d729a415098adae7d074fe406">Isis::MosaicZoomTool::updateResolutionBox()</a>, <a class="el" href="class_isis_1_1_mosaic_pan_tool.html#a561f960285901a5754eec83ba6432bea">Isis::MosaicPanTool::updateTool()</a>, <a class="el" href="class_isis_1_1_mosaic_select_tool.html#aa759a3f2e888bff321dffaa8e71f9b1a">Isis::MosaicSelectTool::updateTool()</a>, <a class="el" href="class_isis_1_1_mosaic_zoom_tool.html#a38f09de21dda63ee6b5ea3a130a69f8e">Isis::MosaicZoomTool::updateTool()</a>, and <a class="el" href="class_isis_1_1_mosaic_area_tool.html#ad590bc9b0888d0688730e0070c5c4bf2">Isis::MosaicAreaTool::userChangedBox()</a>.</p>
+
+</div>
+</div>
+<a id="afb7a239605acfb76aad1da280d18a354"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb7a239605acfb76aad1da280d18a354">&#9670;&nbsp;</a></span>getViewActions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt; Isis::MosaicSceneWidget::getViewActions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_tool.html#a59d053d8bb78150f0c45f0fd342a4018">Isis::MosaicTool::getViewActions()</a>.</p>
+
+</div>
+</div>
+<a id="a2385fc90ab3a7caa7ce772e8392d3d60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2385fc90ab3a7caa7ce772e8392d3d60">&#9670;&nbsp;</a></span>images()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a> Isis::MosaicSceneWidget::images </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_list.html#ab913c0ca194d7cb1a1dc5d8b92a8d75c">Isis::ImageList::append()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a511d37ee3ae5b18067e23a30586d3af1">Isis::MosaicSceneItem::image()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0ff0c990aed6a5852b703b7efd499362">addImages()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a02ec0d225473b3030041dad9d2984139">moveDownOne()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a75cb883f4311440d121c5c580d1590f2">moveToBottom()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#aaf42dd29526565a513c3a06205b4bc1c">moveToTop()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ab21e400cf1c2f020b4ca6bf09dd8a4e0">moveUpOne()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a94f24eac4bdccea4b47dd4befdeee5c8">removeImages()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0ecb62bb6309ef13d88b998501bb2999">supportedActions()</a>.</p>
+
+</div>
+</div>
+<a id="abcca9da6c586e7f05d6aad852cf90ef3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcca9da6c586e7f05d6aad852cf90ef3">&#9670;&nbsp;</a></span>isControlNetToolActive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::MosaicSceneWidget::isControlNetToolActive </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_tool.html#abce19f5d48d70153b193aa6510931936">Isis::MosaicTool::isActive()</a>.</p>
+
+</div>
+</div>
+<a id="a1e409631a09b0194ee938e1fd2f1cc34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e409631a09b0194ee938e1fd2f1cc34">&#9670;&nbsp;</a></span>modifyControlPoint</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::modifyControlPoint </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_point.html">ControlPoint</a> *&#160;</td>
+          <td class="paramname"><em>controlPoint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a31e81ead7426feefa7b9b5468bbf9733"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31e81ead7426feefa7b9b5468bbf9733">&#9670;&nbsp;</a></span>mosCubeClosed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::mosCubeClosed </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image.html">Image</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7c74b7f416bd3afe449c9f066a685641"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c74b7f416bd3afe449c9f066a685641">&#9670;&nbsp;</a></span>mouseButtonPress</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::mouseButtonPress </td>
+          <td>(</td>
+          <td class="paramtype">QPointF&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::MouseButton&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="aa33f189452bc7f2084cf0e063adb70c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa33f189452bc7f2084cf0e063adb70c6">&#9670;&nbsp;</a></span>mouseButtonRelease</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::mouseButtonRelease </td>
+          <td>(</td>
+          <td class="paramtype">QPointF&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::MouseButton&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="a3e86fc618a548eb259d3601fc2cbd64f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e86fc618a548eb259d3601fc2cbd64f">&#9670;&nbsp;</a></span>mouseDoubleClick</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::mouseDoubleClick </td>
+          <td>(</td>
+          <td class="paramtype">QPointF&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="add513eb7db007785bde92b545a77ebee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add513eb7db007785bde92b545a77ebee">&#9670;&nbsp;</a></span>mouseEnter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::mouseEnter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="aee7e753e4d2d4970159b64c11b395ec8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee7e753e4d2d4970159b64c11b395ec8">&#9670;&nbsp;</a></span>mouseLeave</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::mouseLeave </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="adac885559cc177e2d5ce601c29df47a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adac885559cc177e2d5ce601c29df47a4">&#9670;&nbsp;</a></span>mouseMove</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::mouseMove </td>
+          <td>(</td>
+          <td class="paramtype">QPointF&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="a1407f0dc7f7d12c7f9c1c8dc6dff50b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1407f0dc7f7d12c7f9c1c8dc6dff50b8">&#9670;&nbsp;</a></span>mouseWheel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::mouseWheel </td>
+          <td>(</td>
+          <td class="paramtype">QPointF&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>delta</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="af33f453a70535434bf05c4c8feb8c2a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af33f453a70535434bf05c4c8feb8c2a5">&#9670;&nbsp;</a></span>moveDownOne() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MosaicSceneWidget::moveDownOne </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image.html">Image</a> *&#160;</td>
+          <td class="paramname"><em>image</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#af2d03740247310f30990123ff75ff609">cubeToMosaic()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae0257af3ff6b50414364a00fbd6f0026">moveDownOne()</a>.</p>
+
+</div>
+</div>
+<a id="a02ec0d225473b3030041dad9d2984139"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02ec0d225473b3030041dad9d2984139">&#9670;&nbsp;</a></span>moveDownOne() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; double &gt; Isis::MosaicSceneWidget::moveDownOne </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *&#160;</td>
+          <td class="paramname"><em>images</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a2385fc90ab3a7caa7ce772e8392d3d60">images()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae0257af3ff6b50414364a00fbd6f0026">moveDownOne()</a>.</p>
+
+</div>
+</div>
+<a id="ae0257af3ff6b50414364a00fbd6f0026"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0257af3ff6b50414364a00fbd6f0026">&#9670;&nbsp;</a></span>moveDownOne() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MosaicSceneWidget::moveDownOne </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ada0c0a17d9b6219704481f451e1fd255">moveZ()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#af33f453a70535434bf05c4c8feb8c2a5">moveDownOne()</a>.</p>
+
+</div>
+</div>
+<a id="abc9e97acdb05e8ddbcd120ac50805fd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc9e97acdb05e8ddbcd120ac50805fd0">&#9670;&nbsp;</a></span>moveToBottom() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MosaicSceneWidget::moveToBottom </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image.html">Image</a> *&#160;</td>
+          <td class="paramname"><em>image</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This doesn't compress the Z values - the original Z value of this image is guaranteed to be empty after this operation. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#af2d03740247310f30990123ff75ff609">cubeToMosaic()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a327a1e18cb4fba27afabf6dde49061a5">moveToBottom()</a>.</p>
+
+</div>
+</div>
+<a id="a75cb883f4311440d121c5c580d1590f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75cb883f4311440d121c5c580d1590f2">&#9670;&nbsp;</a></span>moveToBottom() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; double &gt; Isis::MosaicSceneWidget::moveToBottom </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *&#160;</td>
+          <td class="paramname"><em>images</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This doesn't compress the Z values - the original Z values of these images are guaranteed to be empty after this operation. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a2385fc90ab3a7caa7ce772e8392d3d60">images()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a327a1e18cb4fba27afabf6dde49061a5">moveToBottom()</a>.</p>
+
+</div>
+</div>
+<a id="a327a1e18cb4fba27afabf6dde49061a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a327a1e18cb4fba27afabf6dde49061a5">&#9670;&nbsp;</a></span>moveToBottom() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MosaicSceneWidget::moveToBottom </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This doesn't compress the Z values - the original Z values of this scene item is guaranteed to be empty after this operation. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#abc9e97acdb05e8ddbcd120ac50805fd0">moveToBottom()</a>.</p>
+
+</div>
+</div>
+<a id="ace6a0cab4aac91e6598439c747606e83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace6a0cab4aac91e6598439c747606e83">&#9670;&nbsp;</a></span>moveToTop() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MosaicSceneWidget::moveToTop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image.html">Image</a> *&#160;</td>
+          <td class="paramname"><em>image</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This doesn't compress the Z values - the original Z value of this image is guaranteed to be empty after this operation. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#af2d03740247310f30990123ff75ff609">cubeToMosaic()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ab0c6935fef32f71dcebb26d640aa6ada">moveToTop()</a>.</p>
+
+</div>
+</div>
+<a id="aaf42dd29526565a513c3a06205b4bc1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf42dd29526565a513c3a06205b4bc1c">&#9670;&nbsp;</a></span>moveToTop() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; double &gt; Isis::MosaicSceneWidget::moveToTop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *&#160;</td>
+          <td class="paramname"><em>images</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This doesn't compress the Z values - the original Z values of these images are guaranteed to be empty after this operation. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a2385fc90ab3a7caa7ce772e8392d3d60">images()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ab0c6935fef32f71dcebb26d640aa6ada">moveToTop()</a>.</p>
+
+</div>
+</div>
+<a id="ab0c6935fef32f71dcebb26d640aa6ada"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0c6935fef32f71dcebb26d640aa6ada">&#9670;&nbsp;</a></span>moveToTop() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MosaicSceneWidget::moveToTop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This doesn't compress the Z values - the original Z values of this scene item is guaranteed to be empty after this operation. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ace6a0cab4aac91e6598439c747606e83">moveToTop()</a>.</p>
+
+</div>
+</div>
+<a id="a73a5ac606a5195bb51c15c900237c65e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73a5ac606a5195bb51c15c900237c65e">&#9670;&nbsp;</a></span>moveUpOne() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MosaicSceneWidget::moveUpOne </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image.html">Image</a> *&#160;</td>
+          <td class="paramname"><em>image</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#af2d03740247310f30990123ff75ff609">cubeToMosaic()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a9027a7cbf2c08c2f1c94a5e5cc8f2f7b">moveUpOne()</a>.</p>
+
+</div>
+</div>
+<a id="ab21e400cf1c2f020b4ca6bf09dd8a4e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab21e400cf1c2f020b4ca6bf09dd8a4e0">&#9670;&nbsp;</a></span>moveUpOne() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; double &gt; Isis::MosaicSceneWidget::moveUpOne </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *&#160;</td>
+          <td class="paramname"><em>images</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a2385fc90ab3a7caa7ce772e8392d3d60">images()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a9027a7cbf2c08c2f1c94a5e5cc8f2f7b">moveUpOne()</a>.</p>
+
+</div>
+</div>
+<a id="a9027a7cbf2c08c2f1c94a5e5cc8f2f7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9027a7cbf2c08c2f1c94a5e5cc8f2f7b">&#9670;&nbsp;</a></span>moveUpOne() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MosaicSceneWidget::moveUpOne </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ada0c0a17d9b6219704481f451e1fd255">moveZ()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a73a5ac606a5195bb51c15c900237c65e">moveUpOne()</a>.</p>
+
+</div>
+</div>
+<a id="acfcd13bdccf7d8534a6a76401a0cbb35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfcd13bdccf7d8534a6a76401a0cbb35">&#9670;&nbsp;</a></span>moveZ() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MosaicSceneWidget::moveZ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image.html">Image</a> *&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>newZ</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>newZValueMightExist</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#af2d03740247310f30990123ff75ff609">cubeToMosaic()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ada0c0a17d9b6219704481f451e1fd255">moveZ()</a>.</p>
+
+</div>
+</div>
+<a id="ada0c0a17d9b6219704481f451e1fd255"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada0c0a17d9b6219704481f451e1fd255">&#9670;&nbsp;</a></span>moveZ() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MosaicSceneWidget::moveZ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *&#160;</td>
+          <td class="paramname"><em>sceneItem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>newZ</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>newZValueMightExist</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method moves the given scene item to the given Z value. </p>
+<p>By default, this does not create gaps in the Z-values and makes the necessary room/adjustments for the new item to go to it's spot. If the last operation was moveToTop or moveToBottom, because those methods don't compress/adjust the surrounding Z values, we can avoid any and all adjustments here (significant performance boost) by using newZValueMightExist=false.</p>
+<p>N = # items in the scene The time complexity of this method is N if newZValueMightExist. The time complexity of this method is constant if !newZValueMightExist.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sceneItem</td><td>The item in this scene to change the Z value </td></tr>
+    <tr><td class="paramname">newZ</td><td>The new Z value for the item </td></tr>
+    <tr><td class="paramname">newZValueMightExist</td><td>True if an item in the scene might occupy the new Z value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae0257af3ff6b50414364a00fbd6f0026">moveDownOne()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a9027a7cbf2c08c2f1c94a5e5cc8f2f7b">moveUpOne()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#acfcd13bdccf7d8534a6a76401a0cbb35">moveZ()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_work_order.html#a7c084ee2c863e63a8255d560eaadba1b">Isis::MosaicSceneWorkOrder::restoreZPositions()</a>.</p>
+
+</div>
+</div>
+<a id="a506bfefb3f9e770049aa5ff38fcb2199"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a506bfefb3f9e770049aa5ff38fcb2199">&#9670;&nbsp;</a></span>projectionChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::projectionChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_projection.html">Projection</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae02ba7bd439f8e153aaf861dac061c43">setProjection()</a>.</p>
+
+</div>
+</div>
+<a id="a5b4edad91cbd8c0ca520dc48875672a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b4edad91cbd8c0ca520dc48875672a5">&#9670;&nbsp;</a></span>queueSelectionChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::queueSelectionChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a5802314f82ea240a499031f50625b57e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5802314f82ea240a499031f50625b57e">&#9670;&nbsp;</a></span>refit</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::refit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method refits t:he items in the graphics view. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a81d4e2e9d30981ee0adb4fabc9d1f197">cubesBoundingRect()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1b4cedb1d3a1730f0cff86acaa56e10a">getView()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0ff0c990aed6a5852b703b7efd499362">addImages()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#ae2232780ad3a6709e170676848ecef72">setOutlineRect()</a>, and <a class="el" href="class_isis_1_1_mosaic_zoom_tool.html#a8444fbbd8f7458613840f6d2070edc1b">Isis::MosaicZoomTool::zoomFit()</a>.</p>
+
+</div>
+</div>
+<a id="a94f24eac4bdccea4b47dd4befdeee5c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94f24eac4bdccea4b47dd4befdeee5c8">&#9670;&nbsp;</a></span>removeImages</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::removeImages </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a>&#160;</td>
+          <td class="paramname"><em>images</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#af2d03740247310f30990123ff75ff609">cubeToMosaic()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a2385fc90ab3a7caa7ce772e8392d3d60">images()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#aa2a167d03a041630226670e927d45c30">Isis::IException::print()</a>.</p>
+
+</div>
+</div>
+<a id="a30f04ba2d23eb830617231f340241f8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30f04ba2d23eb830617231f340241f8b">&#9670;&nbsp;</a></span>rubberBandComplete</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::rubberBandComplete </td>
+          <td>(</td>
+          <td class="paramtype">QRectF&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Qt::MouseButton&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="ae346bfa82252910ca00b1d335e03c974"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae346bfa82252910ca00b1d335e03c974">&#9670;&nbsp;</a></span>save()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::save </td>
+          <td>(</td>
+          <td class="paramtype">QXmlStreamWriter &amp;&#160;</td>
+          <td class="paramname"><em>stream</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td>
+          <td class="paramname"><em>newProjectRoot</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1b4cedb1d3a1730f0cff86acaa56e10a">getView()</a>, <a class="el" href="class_isis_1_1_image.html#ae8fe89b139cb680ed7ef745fecf839f3">Isis::Image::id()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a511d37ee3ae5b18067e23a30586d3af1">Isis::MosaicSceneItem::image()</a>, <a class="el" href="class_isis_1_1_projection.html#ac909e5f4a7a7aa2afc8b2c745feb1940">Isis::Projection::Mapping()</a>, <a class="el" href="class_isis_1_1_mosaic_tool.html#a28770f49d15b19710329d8f92d94cce2">Isis::MosaicTool::projectPvlObjectName()</a>, <a class="el" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">Isis::ReadWrite</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a9b0d1b9c7fc50999367b7116e460b008">Isis::PvlContainer::setName()</a>, <a class="el" href="class_isis_1_1_mosaic_tool.html#ad09bb321b37ed7cf7d357c4c40225d2a">Isis::MosaicTool::toPvl()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_footprint2_d_view.html#a60e8952ea4db511dad409760bc8ed17c">Isis::Footprint2DView::save()</a>.</p>
+
+</div>
+</div>
+<a id="a75d1193441a457891155f22c40b2a566"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75d1193441a457891155f22c40b2a566">&#9670;&nbsp;</a></span>selectedImages()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a> Isis::MosaicSceneWidget::selectedImages </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a list of all the cubes selected in the scene. </p>
+<dl class="section return"><dt>Returns</dt><dd>QList&lt;Cube *&gt; </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_list.html#ab913c0ca194d7cb1a1dc5d8b92a8d75c">Isis::ImageList::append()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a4b4d5da6f300487cae7156dcb7106d2d">getScene()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a511d37ee3ae5b18067e23a30586d3af1">Isis::MosaicSceneItem::image()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1549856176b4e4346be5d2b5ae3d8987">contextMenuEvent()</a>.</p>
+
+</div>
+</div>
+<a id="a490f415ed25b162fe732cde3d39a2021"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a490f415ed25b162fe732cde3d39a2021">&#9670;&nbsp;</a></span>setCubesSelectable</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::setCubesSelectable </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>selectable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a60512c76bc77792af9618c694e242960">Isis::MosaicSceneItem::scenePropertiesChanged()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_pan_tool.html#a561f960285901a5754eec83ba6432bea">Isis::MosaicPanTool::updateTool()</a>, and <a class="el" href="class_isis_1_1_mosaic_zoom_tool.html#a38f09de21dda63ee6b5ea3a130a69f8e">Isis::MosaicZoomTool::updateTool()</a>.</p>
+
+</div>
+</div>
+<a id="ae2232780ad3a6709e170676848ecef72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2232780ad3a6709e170676848ecef72">&#9670;&nbsp;</a></span>setOutlineRect</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::setOutlineRect </td>
+          <td>(</td>
+          <td class="paramtype">QRectF&#160;</td>
+          <td class="paramname"><em>outline</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a4b4d5da6f300487cae7156dcb7106d2d">getScene()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1b4cedb1d3a1730f0cff86acaa56e10a">getView()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a5802314f82ea240a499031f50625b57e">refit()</a>.</p>
+
+</div>
+</div>
+<a id="ae02ba7bd439f8e153aaf861dac061c43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae02ba7bd439f8e153aaf861dac061c43">&#9670;&nbsp;</a></span>setProjection</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::setProjection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_projection.html">Projection</a> *&#160;</td>
+          <td class="paramname"><em>proj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method takes ownership of proj. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_container.html#aec162efdd61490e50dc5211e7f97469b">Isis::PvlContainer::findKeyword()</a>, <a class="el" href="class_isis_1_1_projection.html#ac909e5f4a7a7aa2afc8b2c745feb1940">Isis::Projection::Mapping()</a>, and <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a506bfefb3f9e770049aa5ff38fcb2199">projectionChanged()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#aa13e1353c66e095e6852b53ad2becdff">fromPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a304be7dbf5b18f1cfaae4297844ec34e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a304be7dbf5b18f1cfaae4297844ec34e">&#9670;&nbsp;</a></span>supportedActions() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename DataType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt;<a class="el" href="class_q_action.html">QAction</a> *&gt; Isis::MosaicSceneWidget::supportedActions </td>
+          <td>(</td>
+          <td class="paramtype">DataType&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return an empty list of actions for unknown data types. </p>
+
+</div>
+</div>
+<a id="a0ecb62bb6309ef13d88b998501bb2999"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ecb62bb6309ef13d88b998501bb2999">&#9670;&nbsp;</a></span>supportedActions() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt; Isis::MosaicSceneWidget::supportedActions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *&#160;</td>
+          <td class="paramname"><em>images</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get a list of actions this scene can perform given "images". </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#af2d03740247310f30990123ff75ff609">cubeToMosaic()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a2385fc90ab3a7caa7ce772e8392d3d60">images()</a>, <a class="el" href="class_isis_1_1_directory.html#abd5c7c576dbf41aeb552b65c64b513bc">Isis::Directory::project()</a>, and <a class="el" href="class_isis_1_1_work_order.html#a25beb9fe596084a46e70f192d86d68d7">Isis::WorkOrder::setData()</a>.</p>
+
+</div>
+</div>
+<a id="a8c57aeab5dc0595c28fcf2374e90bdc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c57aeab5dc0595c28fcf2374e90bdc1">&#9670;&nbsp;</a></span>toPvl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> Isis::MosaicSceneWidget::toPvl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a1b4cedb1d3a1730f0cff86acaa56e10a">getView()</a>, <a class="el" href="class_isis_1_1_image.html#ae8fe89b139cb680ed7ef745fecf839f3">Isis::Image::id()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a511d37ee3ae5b18067e23a30586d3af1">Isis::MosaicSceneItem::image()</a>, <a class="el" href="class_isis_1_1_projection.html#ac909e5f4a7a7aa2afc8b2c745feb1940">Isis::Projection::Mapping()</a>, <a class="el" href="class_isis_1_1_mosaic_tool.html#a28770f49d15b19710329d8f92d94cce2">Isis::MosaicTool::projectPvlObjectName()</a>, <a class="el" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">Isis::ReadWrite</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a9b0d1b9c7fc50999367b7116e460b008">Isis::PvlContainer::setName()</a>, <a class="el" href="class_isis_1_1_mosaic_tool.html#ad09bb321b37ed7cf7d357c4c40225d2a">Isis::MosaicTool::toPvl()</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>.</p>
+
+</div>
+</div>
+<a id="ae3d6759e7abaf2ef4193a6d1c75f69ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3d6759e7abaf2ef4193a6d1c75f69ee">&#9670;&nbsp;</a></span>userHasTools()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::MosaicSceneWidget::userHasTools </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_scene_item.html#acbe063a0ca2a6f00d647268ec47d0106">Isis::MosaicSceneItem::MosaicSceneItem()</a>.</p>
+
+</div>
+</div>
+<a id="a2d876d9f8cdd354f72b94898b0d50869"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d876d9f8cdd354f72b94898b0d50869">&#9670;&nbsp;</a></span>visibleRectChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicSceneWidget::visibleRectChanged </td>
+          <td>(</td>
+          <td class="paramtype">QRectF&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/MosaicSceneWidget/<a class="el" href="_mosaic_scene_widget_8h_source.html">MosaicSceneWidget.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/MosaicSceneWidget/<a class="el" href="_mosaic_scene_widget_8cpp.html">MosaicSceneWidget.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_mosaic_scene_widget.html">MosaicSceneWidget</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

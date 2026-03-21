@@ -1,0 +1,8 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ProcessByQuickFilter,High Level Cube I/O,isis/src/base/objs/ProcessByQuickFilter/ProcessByQuickFilter.h,isis_pybind_standalone/src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ProcessByQuickFilter,isis_pybind.ProcessByQuickFilter,Y,Python class symbol is exported; 流程/回调接口较多
+Construction/Enum,ProcessByQuickFilter(),isis_pybind.ProcessByQuickFilter(),Y,Constructor is explicitly bound
+Public API,"void ProcessCube(void funct(Isis::Buffer &in, Isis::Buffer &out, Isis::QuickFilter &filter)) { StartProcess(funct)",isis_pybind.ProcessByQuickFilter.process_cube,N,流程/回调接口较多
+Mutation/Configuration,"void SetFilterParameters(int samples, int lines, double low = -DBL_MAX, double high = DBL_MAX, int minimum = 0)",isis_pybind.ProcessByQuickFilter.set_filter_parameters,Y,Current Python name

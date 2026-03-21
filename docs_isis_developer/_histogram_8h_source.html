@@ -1,0 +1,350 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Histogram/Histogram.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_histogram_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">Histogram.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_histogram_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef Histogram_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define Histogram_h</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_cube_8h.html">Cube.h</a>&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_constants_8h.html">Constants.h</a>&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_i_exception_8h.html">IException.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_progress_8h.html">Progress.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_special_pixel_8h.html">SpecialPixel.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_statistics_8h.html">Statistics.h</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="keyword">class </span>ControlNet;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keyword">class </span>ControlMeasure;</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="class_isis_1_1_histogram.html">   74</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_histogram.html">Histogram</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_statistics.html">Statistics</a> {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="class_isis_1_1_histogram.html#a92a50c78becc5f1b227d48a7a53c5f71">   76</a></span>&#160;      <a class="code" href="class_isis_1_1_histogram.html#a92a50c78becc5f1b227d48a7a53c5f71">Histogram</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <a class="code" href="class_isis_1_1_histogram.html#a92a50c78becc5f1b227d48a7a53c5f71">Histogram</a>(<span class="keywordtype">double</span> minimum, <span class="keywordtype">double</span> maximum,</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                <span class="keywordtype">int</span> bins = 1024);</div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="class_isis_1_1_histogram.html#ad16a18f16684487d680deb63fd537e1d">   79</a></span>&#160;      <a class="code" href="class_isis_1_1_histogram.html#ad16a18f16684487d680deb63fd537e1d">Histogram</a>(<a class="code" href="class_isis_1_1_cube.html">Cube</a> &amp;cube, <span class="keywordtype">int</span> statsBand, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress = NULL,</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                <span class="keywordtype">double</span> startSample = 1.0, <span class="keywordtype">double</span> startLine = 1.0,</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                <span class="keywordtype">double</span> endSample = <a class="code" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Null</a>, <span class="keywordtype">double</span> endLine = <a class="code" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Null</a>, <span class="keywordtype">int</span> bins = 0,</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                <span class="keywordtype">bool</span> addCubeData = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      <span class="comment">//constuctors that use ControlNetworks to build histograms of ControlMeasure data</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <a class="code" href="class_isis_1_1_histogram.html#a92a50c78becc5f1b227d48a7a53c5f71">Histogram</a>(<a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> &amp;net, <span class="keywordtype">double</span>(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a>::*statFunc)() <span class="keyword">const</span>, <span class="keywordtype">int</span> bins);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      <a class="code" href="class_isis_1_1_histogram.html#a92a50c78becc5f1b227d48a7a53c5f71">Histogram</a>(<a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> &amp;net, <span class="keywordtype">double</span>(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a>::*statFunc)() <span class="keyword">const</span>, <span class="keywordtype">double</span> binWidth);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <a class="code" href="class_isis_1_1_histogram.html#ab214a529cffa692d5fb9b31413e04da2">~Histogram</a>();</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_histogram.html#a11f1ab34136f73ea750af1e8b1bdce54">SetBins</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> bins);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_histogram.html#aba63525ef6e98ee2ae1df892a7891e4a">Reset</a>();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_histogram.html#ab7a88bc2aac59be1d6f5ed3d130bac78">AddData</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> *data, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> count);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_histogram.html#ab7a88bc2aac59be1d6f5ed3d130bac78">AddData</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> data);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_histogram.html#a7dc82f1c7144f9e16944d58bf8b9b75e">RemoveData</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> *data, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> count);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_histogram.html#a70c266da17c15e543e57b60af0abc0cd">Median</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_histogram.html#a96bec1fec5b12125156ead512aea4101">Mode</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_histogram.html#a895416c80bc1df9520d0449025c4080a">Percent</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> percent) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_histogram.html#ac8329c0f53d5f2ebfe83e52e7d5f9a2b">Skew</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_histogram.html#a28cbcda6d3ff339aede5a2d37736f316">BinCount</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_histogram.html#afb7c01039ecff16d4692e6a994a9dc10">BinRange</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> index, <span class="keywordtype">double</span> &amp;low, <span class="keywordtype">double</span> &amp;high) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_histogram.html#a583af7cfa15f8f80448c5b9573f58e90">BinMiddle</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_histogram.html#a1f3c04356f20d37b3d335c2b56c1f943">BinSize</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_histogram.html#a7a9f2983968ebe1cbb59e4044c654ecb">Bins</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_histogram.html#aa4c0656d72699e613d4f2a6fd8038a6c">MaxBinCount</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="class_isis_1_1_histogram.html#a54c814716fc10a4a0457869dd50e1d5d">  109</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_histogram.html#a54c814716fc10a4a0457869dd50e1d5d">BinRangeStart</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordflow">return</span> p_binRangeStart;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      }</div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="class_isis_1_1_histogram.html#aad8c7d5546f52e30075341e19ab91800">  112</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_histogram.html#aad8c7d5546f52e30075341e19ab91800">BinRangeEnd</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordflow">return</span> p_binRangeEnd;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;      }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      <span class="comment">//void SetBinRange(double binStart, double binEnd);</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_histogram.html#a6beea7bb7a1a862603b778904b5ff553">SetValidRange</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> minimum = <a class="code" href="namespace_isis.html#a8adedea0235fd6d17b552822149f6c4b">Isis::ValidMinimum</a>,</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                                       <span class="keyword">const</span> <span class="keywordtype">double</span> maximum = <a class="code" href="namespace_isis.html#a1f2cfeb70c3c8098bac256b6d608b13a">Isis::ValidMaximum</a>);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="class_isis_1_1_histogram.html#a32af55cebace9e1d7782ca2deea476ef">  121</a></span>&#160;      std::vector&lt;BigInt&gt; <a class="code" href="class_isis_1_1_histogram.html#a32af55cebace9e1d7782ca2deea476ef">p_bins</a>;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      <span class="keywordtype">double</span> p_binRangeStart, p_binRangeEnd;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      <span class="keywordtype">void</span> addMeasureDataFromNet(<a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> &amp;net, <span class="keywordtype">double</span>(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a>::*statFunc)() <span class="keyword">const</span>);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      <span class="keywordtype">void</span> rangesFromNet(<a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> &amp;net, <span class="keywordtype">double</span>(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a>::*statFunc)() <span class="keyword">const</span>);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  };</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;};</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_constants_8h_html"><div class="ttname"><a href="_constants_8h.html">Constants.h</a></div></div>
+<div class="ttc" id="a_cube_8h_html"><div class="ttname"><a href="_cube_8h.html">Cube.h</a></div></div>
+<div class="ttc" id="a_i_exception_8h_html"><div class="ttname"><a href="_i_exception_8h.html">IException.h</a></div></div>
+<div class="ttc" id="a_progress_8h_html"><div class="ttname"><a href="_progress_8h.html">Progress.h</a></div></div>
+<div class="ttc" id="a_special_pixel_8h_html"><div class="ttname"><a href="_special_pixel_8h.html">SpecialPixel.h</a></div></div>
+<div class="ttc" id="a_statistics_8h_html"><div class="ttname"><a href="_statistics_8h.html">Statistics.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_control_measure_html"><div class="ttname"><a href="class_isis_1_1_control_measure.html">Isis::ControlMeasure</a></div><div class="ttdoc">a control measurement</div><div class="ttdef"><b>Definition:</b> ControlMeasure.h:175</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html"><div class="ttname"><a href="class_isis_1_1_control_net.html">Isis::ControlNet</a></div><div class="ttdoc">a control network</div><div class="ttdef"><b>Definition:</b> ControlNet.h:258</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_html"><div class="ttname"><a href="class_isis_1_1_cube.html">Isis::Cube</a></div><div class="ttdoc">IO Handler for Isis Cubes.</div><div class="ttdef"><b>Definition:</b> Cube.h:168</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html"><div class="ttname"><a href="class_isis_1_1_histogram.html">Isis::Histogram</a></div><div class="ttdoc">Container of a cube histogram.</div><div class="ttdef"><b>Definition:</b> Histogram.h:74</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a11f1ab34136f73ea750af1e8b1bdce54"><div class="ttname"><a href="class_isis_1_1_histogram.html#a11f1ab34136f73ea750af1e8b1bdce54">Isis::Histogram::SetBins</a></div><div class="ttdeci">void SetBins(const int bins)</div><div class="ttdoc">Change the number of bins in the histogram and reset counters.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:219</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a1f3c04356f20d37b3d335c2b56c1f943"><div class="ttname"><a href="class_isis_1_1_histogram.html#a1f3c04356f20d37b3d335c2b56c1f943">Isis::Histogram::BinSize</a></div><div class="ttdeci">double BinSize() const</div><div class="ttdoc">Returns the size of an individual bin.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:470</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a28cbcda6d3ff339aede5a2d37736f316"><div class="ttname"><a href="class_isis_1_1_histogram.html#a28cbcda6d3ff339aede5a2d37736f316">Isis::Histogram::BinCount</a></div><div class="ttdeci">BigInt BinCount(const int index) const</div><div class="ttdoc">Returns the count at a bin position in the histogram.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:403</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a32af55cebace9e1d7782ca2deea476ef"><div class="ttname"><a href="class_isis_1_1_histogram.html#a32af55cebace9e1d7782ca2deea476ef">Isis::Histogram::p_bins</a></div><div class="ttdeci">std::vector&lt; BigInt &gt; p_bins</div><div class="ttdoc">The array of counts.</div><div class="ttdef"><b>Definition:</b> Histogram.h:121</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a54c814716fc10a4a0457869dd50e1d5d"><div class="ttname"><a href="class_isis_1_1_histogram.html#a54c814716fc10a4a0457869dd50e1d5d">Isis::Histogram::BinRangeStart</a></div><div class="ttdeci">double BinRangeStart() const</div><div class="ttdef"><b>Definition:</b> Histogram.h:109</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a583af7cfa15f8f80448c5b9573f58e90"><div class="ttname"><a href="class_isis_1_1_histogram.html#a583af7cfa15f8f80448c5b9573f58e90">Isis::Histogram::BinMiddle</a></div><div class="ttdeci">double BinMiddle(const int index) const</div><div class="ttdoc">Returns the value represented by a bin.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:449</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a6beea7bb7a1a862603b778904b5ff553"><div class="ttname"><a href="class_isis_1_1_histogram.html#a6beea7bb7a1a862603b778904b5ff553">Isis::Histogram::SetValidRange</a></div><div class="ttdeci">void SetValidRange(const double minimum=Isis::ValidMinimum, const double maximum=Isis::ValidMaximum)</div><div class="ttdoc">Changes the range of the bins.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:192</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a70c266da17c15e543e57b60af0abc0cd"><div class="ttname"><a href="class_isis_1_1_histogram.html#a70c266da17c15e543e57b60af0abc0cd">Isis::Histogram::Median</a></div><div class="ttdeci">double Median() const</div><div class="ttdoc">Returns the median.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:319</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a7a9f2983968ebe1cbb59e4044c654ecb"><div class="ttname"><a href="class_isis_1_1_histogram.html#a7a9f2983968ebe1cbb59e4044c654ecb">Isis::Histogram::Bins</a></div><div class="ttdeci">int Bins() const</div><div class="ttdoc">Returns the number of bins in the histogram.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:483</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a7dc82f1c7144f9e16944d58bf8b9b75e"><div class="ttname"><a href="class_isis_1_1_histogram.html#a7dc82f1c7144f9e16944d58bf8b9b75e">Isis::Histogram::RemoveData</a></div><div class="ttdeci">virtual void RemoveData(const double *data, const unsigned int count)</div><div class="ttdoc">Remove an array of doubles from the histogram counters.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:291</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a895416c80bc1df9520d0449025c4080a"><div class="ttname"><a href="class_isis_1_1_histogram.html#a895416c80bc1df9520d0449025c4080a">Isis::Histogram::Percent</a></div><div class="ttdeci">double Percent(const double percent) const</div><div class="ttdoc">Computes and returns the value at X percent of the histogram.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:351</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a92a50c78becc5f1b227d48a7a53c5f71"><div class="ttname"><a href="class_isis_1_1_histogram.html#a92a50c78becc5f1b227d48a7a53c5f71">Isis::Histogram::Histogram</a></div><div class="ttdeci">Histogram()=default</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_a96bec1fec5b12125156ead512aea4101"><div class="ttname"><a href="class_isis_1_1_histogram.html#a96bec1fec5b12125156ead512aea4101">Isis::Histogram::Mode</a></div><div class="ttdeci">double Mode() const</div><div class="ttdoc">Returns the mode.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:328</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_aa4c0656d72699e613d4f2a6fd8038a6c"><div class="ttname"><a href="class_isis_1_1_histogram.html#aa4c0656d72699e613d4f2a6fd8038a6c">Isis::Histogram::MaxBinCount</a></div><div class="ttdeci">BigInt MaxBinCount() const</div><div class="ttdoc">Returns the highest bin count.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:493</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_aad8c7d5546f52e30075341e19ab91800"><div class="ttname"><a href="class_isis_1_1_histogram.html#aad8c7d5546f52e30075341e19ab91800">Isis::Histogram::BinRangeEnd</a></div><div class="ttdeci">double BinRangeEnd() const</div><div class="ttdef"><b>Definition:</b> Histogram.h:112</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_ab214a529cffa692d5fb9b31413e04da2"><div class="ttname"><a href="class_isis_1_1_histogram.html#ab214a529cffa692d5fb9b31413e04da2">Isis::Histogram::~Histogram</a></div><div class="ttdeci">~Histogram()</div><div class="ttdoc">Destructs a histogram object.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:175</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_ab7a88bc2aac59be1d6f5ed3d130bac78"><div class="ttname"><a href="class_isis_1_1_histogram.html#ab7a88bc2aac59be1d6f5ed3d130bac78">Isis::Histogram::AddData</a></div><div class="ttdeci">virtual void AddData(const double *data, const unsigned int count)</div><div class="ttdoc">Add an array of doubles to the histogram counters.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:232</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_aba63525ef6e98ee2ae1df892a7891e4a"><div class="ttname"><a href="class_isis_1_1_histogram.html#aba63525ef6e98ee2ae1df892a7891e4a">Isis::Histogram::Reset</a></div><div class="ttdeci">void Reset()</div><div class="ttdoc">Resets histogram counters to zero.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:210</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_ac8329c0f53d5f2ebfe83e52e7d5f9a2b"><div class="ttname"><a href="class_isis_1_1_histogram.html#ac8329c0f53d5f2ebfe83e52e7d5f9a2b">Isis::Histogram::Skew</a></div><div class="ttdeci">double Skew() const</div><div class="ttdoc">Computes and returns the skew.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:384</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_ad16a18f16684487d680deb63fd537e1d"><div class="ttname"><a href="class_isis_1_1_histogram.html#ad16a18f16684487d680deb63fd537e1d">Isis::Histogram::Histogram</a></div><div class="ttdeci">Histogram(Cube &amp;cube, int statsBand, Progress *progress=NULL, double startSample=1.0, double startLine=1.0, double endSample=Null, double endLine=Null, int bins=0, bool addCubeData=false)</div></div>
+<div class="ttc" id="aclass_isis_1_1_histogram_html_afb7c01039ecff16d4692e6a994a9dc10"><div class="ttname"><a href="class_isis_1_1_histogram.html#afb7c01039ecff16d4692e6a994a9dc10">Isis::Histogram::BinRange</a></div><div class="ttdeci">virtual void BinRange(const int index, double &amp;low, double &amp;high) const</div><div class="ttdoc">Returns the left edge and right edge values of a bin.</div><div class="ttdef"><b>Definition:</b> Histogram.cpp:427</div></div>
+<div class="ttc" id="aclass_isis_1_1_progress_html"><div class="ttname"><a href="class_isis_1_1_progress.html">Isis::Progress</a></div><div class="ttdoc">Program progress reporter.</div><div class="ttdef"><b>Definition:</b> Progress.h:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html"><div class="ttname"><a href="class_isis_1_1_statistics.html">Isis::Statistics</a></div><div class="ttdoc">This class is used to accumulate statistics on double arrays.</div><div class="ttdef"><b>Definition:</b> Statistics.h:93</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a1f2cfeb70c3c8098bac256b6d608b13a"><div class="ttname"><a href="namespace_isis.html#a1f2cfeb70c3c8098bac256b6d608b13a">Isis::ValidMaximum</a></div><div class="ttdeci">const double ValidMaximum</div><div class="ttdoc">The maximum valid double value for Isis pixels.</div><div class="ttdef"><b>Definition:</b> SpecialPixel.h:122</div></div>
+<div class="ttc" id="anamespace_isis_html_a7fe89f1c37029f41eb5eec5f635629d2"><div class="ttname"><a href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a></div><div class="ttdeci">const double Null</div><div class="ttdoc">Value for an Isis Null pixel.</div><div class="ttdef"><b>Definition:</b> SpecialPixel.h:95</div></div>
+<div class="ttc" id="anamespace_isis_html_a840d3fb673563756fc704318d9528188"><div class="ttname"><a href="namespace_isis.html#a840d3fb673563756fc704318d9528188">Isis::BigInt</a></div><div class="ttdeci">long long int BigInt</div><div class="ttdoc">Big int.</div><div class="ttdef"><b>Definition:</b> Constants.h:49</div></div>
+<div class="ttc" id="anamespace_isis_html_a8adedea0235fd6d17b552822149f6c4b"><div class="ttname"><a href="namespace_isis.html#a8adedea0235fd6d17b552822149f6c4b">Isis::ValidMinimum</a></div><div class="ttdeci">const double ValidMinimum</div><div class="ttdoc">The minimum valid double value for Isis pixels.</div><div class="ttdef"><b>Definition:</b> SpecialPixel.h:87</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_f801aff00ff75005e7b289e12538275d.html">Histogram</a></li><li class="navelem"><a class="el" href="_histogram_8h.html">Histogram.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

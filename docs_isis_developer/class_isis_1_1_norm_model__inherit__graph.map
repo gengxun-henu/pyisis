@@ -1,0 +1,12 @@
+<map id="Isis::NormModel" name="Isis::NormModel">
+<area shape="rect" id="node1" title=" " alt="" coords="752,5,914,263"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_albedo.html" title="Albedo normalization." alt="" coords="5,343,168,472"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_albedo_atm.html" title="Albedo normalization with atmosphere." alt="" coords="192,343,354,472"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_mixed.html" title="Mixed albedo/topo normalization without atmosphere." alt="" coords="379,343,541,472"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_moon_albedo.html" title="Albedo dependent phase function normalization for the Moon." alt="" coords="565,343,728,472"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_no_normalization.html" title="NoNormalization &#45; perform simple correction without normalization (a*dn +b)" alt="" coords="752,343,914,472"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_shade.html" title=" " alt="" coords="939,311,1101,504"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_shade_atm.html" title=" " alt="" coords="1125,343,1288,472"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_topo.html" title="Topographic derivative of an arbitrary photometric function." alt="" coords="1312,343,1474,472"/>
+<area shape="rect" id="node10" href="$class_isis_1_1_topo_atm.html" title="As in the case without an atmosphere, processing proceeds in three steps, a pass 1 PHOTOM followed by..." alt="" coords="1499,343,1661,472"/>
+</map>

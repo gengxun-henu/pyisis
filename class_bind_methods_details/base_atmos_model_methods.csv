@@ -1,0 +1,46 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+AtmosModel,Radiometric And Photometric Correction,isis/src/base/objs/AtmosModel/AtmosModel.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,AtmosModel,isis_pybind.AtmosModel,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,AtmosModel(),isis_pybind.AtmosModel(),N,抽象基类/纯虚接口
+Static/Factory,static double G11Prime(double tau),isis_pybind.AtmosModel.g11_prime,N,抽象基类/纯虚接口
+Static/Factory,static double Ei(double x),isis_pybind.AtmosModel.ei,N,抽象基类/纯虚接口
+Static/Factory,"static double En(unsigned int n, double x)",isis_pybind.AtmosModel.en,N,抽象基类/纯虚接口
+Public API,"void CalcAtmEffect(double pha, double inc, double ema, double *pstd, double *trans, double *trans0, double *sbar, double *transs)",isis_pybind.AtmosModel.calc_atm_effect,N,抽象基类/纯虚接口
+Mutation/Configuration,virtual void SetStandardConditions(bool standard),isis_pybind.AtmosModel.set_standard_conditions,N,抽象基类/纯虚接口
+Public API,void GenerateAhTable(),isis_pybind.AtmosModel.generate_ah_table,N,抽象基类/纯虚接口
+Public API,void GenerateHahgTables(),isis_pybind.AtmosModel.generate_hahg_tables,N,抽象基类/纯虚接口
+Public API,void GenerateHahgTablesShadow(),isis_pybind.AtmosModel.generate_hahg_tables_shadow,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosAtmSwitch(const int atmswitch),isis_pybind.AtmosModel.set_atmos_atm_switch,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosBha(const double bha),isis_pybind.AtmosModel.set_atmos_bha,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosHga(const double hga),isis_pybind.AtmosModel.set_atmos_hga,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosInc(const double inc),isis_pybind.AtmosModel.set_atmos_inc,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosNulneg(const string nulneg),isis_pybind.AtmosModel.set_atmos_nulneg,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosPhi(const double phi),isis_pybind.AtmosModel.set_atmos_phi,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosTau(const double tau),isis_pybind.AtmosModel.set_atmos_tau,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosTauref(const double tauref),isis_pybind.AtmosModel.set_atmos_tauref,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosWha(const double wha),isis_pybind.AtmosModel.set_atmos_wha,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosHnorm(const double hnorm),isis_pybind.AtmosModel.set_atmos_hnorm,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosIord(const string offset),isis_pybind.AtmosModel.set_atmos_iord,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAtmosEstTau(const string esttau),isis_pybind.AtmosModel.set_atmos_est_tau,N,抽象基类/纯虚接口
+Public API,string AlgorithmName() const { return p_atmosAlgorithmName,isis_pybind.AtmosModel.algorithm_name,N,抽象基类/纯虚接口
+Public API,bool AtmosAdditiveOffset() const { return p_atmosAddOffset,isis_pybind.AtmosModel.atmos_additive_offset,N,抽象基类/纯虚接口
+Public API,double AtmosHnorm() const { return p_atmosHnorm,isis_pybind.AtmosModel.atmos_hnorm,N,抽象基类/纯虚接口
+Public API,double AtmosBha() const { return p_atmosBha,isis_pybind.AtmosModel.atmos_bha,N,抽象基类/纯虚接口
+Public API,double AtmosTau() const { return p_atmosTau,isis_pybind.AtmosModel.atmos_tau,N,抽象基类/纯虚接口
+Public API,double AtmosWha() const { return p_atmosWha,isis_pybind.AtmosModel.atmos_wha,N,抽象基类/纯虚接口
+Public API,double AtmosHga() const { return p_atmosHga,isis_pybind.AtmosModel.atmos_hga,N,抽象基类/纯虚接口
+Public API,double AtmosTauref() const { return p_atmosTauref,isis_pybind.AtmosModel.atmos_tauref,N,抽象基类/纯虚接口
+Public API,bool AtmosNulneg() const { return p_atmosNulneg,isis_pybind.AtmosModel.atmos_nulneg,N,抽象基类/纯虚接口
+Public API,double AtmosAb() const { return p_atmosAb,isis_pybind.AtmosModel.atmos_ab,N,抽象基类/纯虚接口
+Public API,double AtmosHahgsb() const { return p_atmosHahgsb,isis_pybind.AtmosModel.atmos_hahgsb,N,抽象基类/纯虚接口
+Public API,int AtmosNinc() const { return p_atmosNinc,isis_pybind.AtmosModel.atmos_ninc,N,抽象基类/纯虚接口
+Public API,double AtmosMunot() const { return p_atmosMunot,isis_pybind.AtmosModel.atmos_munot,N,抽象基类/纯虚接口
+Public API,vector <double> AtmosIncTable() { return p_atmosIncTable,isis_pybind.AtmosModel.atmos_inc_table,N,抽象基类/纯虚接口
+Public API,vector <double> AtmosAhTable() { return p_atmosAhTable,isis_pybind.AtmosModel.atmos_ah_table,N,抽象基类/纯虚接口
+Public API,vector <double> AtmosHahgtTable() { return p_atmosHahgtTable,isis_pybind.AtmosModel.atmos_hahgt_table,N,抽象基类/纯虚接口
+Public API,vector <double> AtmosHahgt0Table() { return p_atmosHahgt0Table,isis_pybind.AtmosModel.atmos_hahgt0_table,N,抽象基类/纯虚接口
+Public API,NumericalApproximation AtmosAhSpline() { return p_atmosAhSpline,isis_pybind.AtmosModel.atmos_ah_spline,N,抽象基类/纯虚接口
+Public API,NumericalApproximation AtmosHahgtSpline() { return p_atmosHahgtSpline,isis_pybind.AtmosModel.atmos_hahgt_spline,N,抽象基类/纯虚接口
+Public API,NumericalApproximation AtmosHahgt0Spline() { return p_atmosHahgt0Spline,isis_pybind.AtmosModel.atmos_hahgt0_spline,N,抽象基类/纯虚接口

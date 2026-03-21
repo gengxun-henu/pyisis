@@ -1,0 +1,7 @@
+<map id="Isis::AbstractTreeModel" name="Isis::AbstractTreeModel">
+<area shape="rect" id="node1" title="Base class for tree models." alt="" coords="195,135,407,472"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_image_image_tree_model.html" title="Tree model for images and images." alt="" coords="5,520,189,633"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_image_point_tree_model.html" title="Tree model for images and control points." alt="" coords="212,520,390,633"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_point_measure_tree_model.html" title="Tree model for control points and control measures." alt="" coords="413,520,605,633"/>
+<area shape="rect" id="node2" href="$class_q_object.html" title=" " alt="" coords="266,5,336,87"/>
+</map>

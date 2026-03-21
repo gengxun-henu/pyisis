@@ -1,0 +1,5 @@
+<map id="Isis::ControlHealthMonitorView" name="Isis::ControlHealthMonitorView">
+<area shape="rect" id="node1" title="View for the Control Net Health Monitor." alt="" coords="5,504,208,681"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_abstract_project_item_view.html" title="AbstractProjectItemView is a base class for views of a ProjectItemModel in Qt&#39;s model&#45;view framework." alt="" coords="9,135,204,456"/>
+<area shape="rect" id="node3" href="$class_q_main_window.html" title=" " alt="" coords="53,5,160,87"/>
+</map>

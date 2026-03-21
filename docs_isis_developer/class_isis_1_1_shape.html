@@ -1,0 +1,1225 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Shape Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_shape.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_shape-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Shape Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This represents a shape in a project-based GUI interface.  
+ <a href="class_isis_1_1_shape.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_shape_8h_source.html">Shape.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::Shape:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_shape__inherit__graph.png" border="0" usemap="#a_isis_1_1_shape_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_shape_inherit__map" id="a_isis_1_1_shape_inherit__map">
+<area shape="rect" title="This represents a shape in a project&#45;based GUI interface." alt="" coords="5,135,161,392"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="48,5,118,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::Shape:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_shape__coll__graph.png" border="0" usemap="#a_isis_1_1_shape_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_shape_coll__map" id="a_isis_1_1_shape_coll__map">
+<area shape="rect" title="This represents a shape in a project&#45;based GUI interface." alt="" coords="5,135,161,392"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="48,5,118,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:abc5648f631fbc1e8aed0d5f8695056dc"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dc">ShapeType</a> { <a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dca9470fc304bed46c58e399404490ed8bd">Dem</a>
+, <a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dcab66a8edf5b1325603efa1244e215f9e3">Basemap</a>
+, <a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dca65d62b862d084737c4b6640731ae9d32">Unprojected</a>
+, <a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dca4eede47612b3aaec773d7aac5dddcd1b">Unknown</a>
+ }</td></tr>
+<tr class="separator:abc5648f631fbc1e8aed0d5f8695056dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a44d5cbf8f22bf9366f88d26d055db715"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a44d5cbf8f22bf9366f88d26d055db715">updateFileName</a> (<a class="el" href="class_isis_1_1_project.html">Project</a> *)</td></tr>
+<tr class="memdesc:a44d5cbf8f22bf9366f88d26d055db715"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the on-disk file name for this cube to be where the shape ought to be in the given project.  <a href="class_isis_1_1_shape.html#a44d5cbf8f22bf9366f88d26d055db715">More...</a><br /></td></tr>
+<tr class="separator:a44d5cbf8f22bf9366f88d26d055db715"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a0aa9c3e6b081ffbba7af13ddbecd618c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a0aa9c3e6b081ffbba7af13ddbecd618c">Shape</a> (QString shapeFileName, <a class="el" href="class_q_object.html">QObject</a> *parent=0)</td></tr>
+<tr class="memdesc:a0aa9c3e6b081ffbba7af13ddbecd618c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an <a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> from a cube file on disk.  <a href="class_isis_1_1_shape.html#a0aa9c3e6b081ffbba7af13ddbecd618c">More...</a><br /></td></tr>
+<tr class="separator:a0aa9c3e6b081ffbba7af13ddbecd618c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98eee1b992df0699a67367d8e0c9039a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a98eee1b992df0699a67367d8e0c9039a">Shape</a> (<a class="el" href="class_isis_1_1_cube.html">Cube</a> *shapeCube, <a class="el" href="class_q_object.html">QObject</a> *parent=0)</td></tr>
+<tr class="memdesc:a98eee1b992df0699a67367d8e0c9039a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an shape from a cube file on disk.  <a href="class_isis_1_1_shape.html#a98eee1b992df0699a67367d8e0c9039a">More...</a><br /></td></tr>
+<tr class="separator:a98eee1b992df0699a67367d8e0c9039a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0045024eea0abab893d23ce080dc06e8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a0045024eea0abab893d23ce080dc06e8">~Shape</a> ()</td></tr>
+<tr class="memdesc:a0045024eea0abab893d23ce080dc06e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clean up this shape.  <a href="class_isis_1_1_shape.html#a0045024eea0abab893d23ce080dc06e8">More...</a><br /></td></tr>
+<tr class="separator:a0045024eea0abab893d23ce080dc06e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac1e228c7fcd8e725618f5aac9fa5b6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#aac1e228c7fcd8e725618f5aac9fa5b6e">fromPvl</a> (const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;pvl)</td></tr>
+<tr class="memdesc:aac1e228c7fcd8e725618f5aac9fa5b6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the shape settings from a <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a>.  <a href="class_isis_1_1_shape.html#aac1e228c7fcd8e725618f5aac9fa5b6e">More...</a><br /></td></tr>
+<tr class="separator:aac1e228c7fcd8e725618f5aac9fa5b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a239a336d99a1376bbd4f7b316a1e5999"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a239a336d99a1376bbd4f7b316a1e5999">toPvl</a> () const</td></tr>
+<tr class="memdesc:a239a336d99a1376bbd4f7b316a1e5999"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert this <a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> to PVL.  <a href="class_isis_1_1_shape.html#a239a336d99a1376bbd4f7b316a1e5999">More...</a><br /></td></tr>
+<tr class="separator:a239a336d99a1376bbd4f7b316a1e5999"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26136962fecd8e9a9a44251ee48b2700"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a26136962fecd8e9a9a44251ee48b2700">isFootprintable</a> () const</td></tr>
+<tr class="memdesc:a26136962fecd8e9a9a44251ee48b2700"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test to see if it's possible to create a footprint from this shape.  <a href="class_isis_1_1_shape.html#a26136962fecd8e9a9a44251ee48b2700">More...</a><br /></td></tr>
+<tr class="separator:a26136962fecd8e9a9a44251ee48b2700"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88803961da5a5b63530165fca54ea20c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a88803961da5a5b63530165fca54ea20c">cube</a> ()</td></tr>
+<tr class="memdesc:a88803961da5a5b63530165fca54ea20c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> * associated with this display property.  <a href="class_isis_1_1_shape.html#a88803961da5a5b63530165fca54ea20c">More...</a><br /></td></tr>
+<tr class="separator:a88803961da5a5b63530165fca54ea20c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c1834828a5ff3206b2a8a20c21bf580"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a1c1834828a5ff3206b2a8a20c21bf580">closeCube</a> ()</td></tr>
+<tr class="memdesc:a1c1834828a5ff3206b2a8a20c21bf580"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up the <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> *.  <a href="class_isis_1_1_shape.html#a1c1834828a5ff3206b2a8a20c21bf580">More...</a><br /></td></tr>
+<tr class="separator:a1c1834828a5ff3206b2a8a20c21bf580"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9dc407a2c4410fdc9dd53efd158dee1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_isis_1_1_control_point_1_1_surface_point_source.html#a98060aa916952f920737da41963fdfcf">ControlPoint::SurfacePointSource::Source</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#ae9dc407a2c4410fdc9dd53efd158dee1">surfacePointSource</a> ()</td></tr>
+<tr class="separator:ae9dc407a2c4410fdc9dd53efd158dee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa501802dc774fc21369f254fd7210b67"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_isis_1_1_control_point_1_1_radius_source.html#a5901130c7400f0ea56d6c80da142efc9">ControlPoint::RadiusSource::Source</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#aa501802dc774fc21369f254fd7210b67">radiusSource</a> ()</td></tr>
+<tr class="separator:aa501802dc774fc21369f254fd7210b67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60caa995d1a8a7124c1af592d58f81cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_shape_display_properties.html">ShapeDisplayProperties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a60caa995d1a8a7124c1af592d58f81cc">displayProperties</a> ()</td></tr>
+<tr class="memdesc:a60caa995d1a8a7124c1af592d58f81cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the display (GUI) properties (information) associated with this shape.  <a href="class_isis_1_1_shape.html#a60caa995d1a8a7124c1af592d58f81cc">More...</a><br /></td></tr>
+<tr class="separator:a60caa995d1a8a7124c1af592d58f81cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab209c56ae99f14aa055a8de2d6dd466e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dc">ShapeType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#ab209c56ae99f14aa055a8de2d6dd466e">shapeType</a> ()</td></tr>
+<tr class="separator:ab209c56ae99f14aa055a8de2d6dd466e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3f24f480aa1b76374ac49ba01ad15c5"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_shape_display_properties.html">ShapeDisplayProperties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#af3f24f480aa1b76374ac49ba01ad15c5">displayProperties</a> () const</td></tr>
+<tr class="memdesc:af3f24f480aa1b76374ac49ba01ad15c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a non-mutable (const) the display (GUI) properties (information) associated with this shape.  <a href="class_isis_1_1_shape.html#af3f24f480aa1b76374ac49ba01ad15c5">More...</a><br /></td></tr>
+<tr class="separator:af3f24f480aa1b76374ac49ba01ad15c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d286c660765fb58c1a6108415b20a7e"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a7d286c660765fb58c1a6108415b20a7e">fileName</a> () const</td></tr>
+<tr class="memdesc:a7d286c660765fb58c1a6108415b20a7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the file name of the cube that this shape represents.  <a href="class_isis_1_1_shape.html#a7d286c660765fb58c1a6108415b20a7e">More...</a><br /></td></tr>
+<tr class="separator:a7d286c660765fb58c1a6108415b20a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e19f68f2dfdd28056b982f2f5fcc9ea"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a4e19f68f2dfdd28056b982f2f5fcc9ea">serialNumber</a> ()</td></tr>
+<tr class="memdesc:a4e19f68f2dfdd28056b982f2f5fcc9ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the serial number.  <a href="class_isis_1_1_shape.html#a4e19f68f2dfdd28056b982f2f5fcc9ea">More...</a><br /></td></tr>
+<tr class="separator:a4e19f68f2dfdd28056b982f2f5fcc9ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af13473b40b6da0401ab1586eb0195e42"><td class="memItemLeft" align="right" valign="top">geos::geom::MultiPolygon *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#af13473b40b6da0401ab1586eb0195e42">footprint</a> ()</td></tr>
+<tr class="memdesc:af13473b40b6da0401ab1586eb0195e42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the footprint of this shape (if available).  <a href="class_isis_1_1_shape.html#af13473b40b6da0401ab1586eb0195e42">More...</a><br /></td></tr>
+<tr class="separator:af13473b40b6da0401ab1586eb0195e42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2ec005832d976684ed01b80c49d5435"><td class="memItemLeft" align="right" valign="top">const geos::geom::MultiPolygon *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#af2ec005832d976684ed01b80c49d5435">footprint</a> () const</td></tr>
+<tr class="memdesc:af2ec005832d976684ed01b80c49d5435"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the non-mutable (const) footprint of this shape (if available).  <a href="class_isis_1_1_shape.html#af2ec005832d976684ed01b80c49d5435">More...</a><br /></td></tr>
+<tr class="separator:af2ec005832d976684ed01b80c49d5435"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add989d26cfa364367e49ead3b9a9c57e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#add989d26cfa364367e49ead3b9a9c57e">setId</a> (QString <a class="el" href="class_isis_1_1_shape.html#a67dc5fd83d34fcf39b57af8234377035">id</a>)</td></tr>
+<tr class="memdesc:add989d26cfa364367e49ead3b9a9c57e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override the automatically generated <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> with the given <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a>.  <a href="class_isis_1_1_shape.html#add989d26cfa364367e49ead3b9a9c57e">More...</a><br /></td></tr>
+<tr class="separator:add989d26cfa364367e49ead3b9a9c57e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7fc8703bdbaa4374cb4e4684a91fd09"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#aa7fc8703bdbaa4374cb4e4684a91fd09">initFootprint</a> (QMutex *cameraMutex)</td></tr>
+<tr class="memdesc:aa7fc8703bdbaa4374cb4e4684a91fd09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate a footprint for this shape.  <a href="class_isis_1_1_shape.html#aa7fc8703bdbaa4374cb4e4684a91fd09">More...</a><br /></td></tr>
+<tr class="separator:aa7fc8703bdbaa4374cb4e4684a91fd09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c236dd359a8ad90c10b8f72d8ab769e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a7c236dd359a8ad90c10b8f72d8ab769e">aspectRatio</a> () const</td></tr>
+<tr class="memdesc:a7c236dd359a8ad90c10b8f72d8ab769e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the aspect ratio of this shape, as calculated and attached by camstats.  <a href="class_isis_1_1_shape.html#a7c236dd359a8ad90c10b8f72d8ab769e">More...</a><br /></td></tr>
+<tr class="separator:a7c236dd359a8ad90c10b8f72d8ab769e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67dc5fd83d34fcf39b57af8234377035"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a67dc5fd83d34fcf39b57af8234377035">id</a> () const</td></tr>
+<tr class="memdesc:a67dc5fd83d34fcf39b57af8234377035"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a unique, identifying string associated with this shape.  <a href="class_isis_1_1_shape.html#a67dc5fd83d34fcf39b57af8234377035">More...</a><br /></td></tr>
+<tr class="separator:a67dc5fd83d34fcf39b57af8234377035"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a452d84fb79ceba89550fe155011485c3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a452d84fb79ceba89550fe155011485c3">resolution</a> () const</td></tr>
+<tr class="memdesc:a452d84fb79ceba89550fe155011485c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the resolution of this shape, as calculated and attached by camstats.  <a href="class_isis_1_1_shape.html#a452d84fb79ceba89550fe155011485c3">More...</a><br /></td></tr>
+<tr class="separator:a452d84fb79ceba89550fe155011485c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66654979698bdc1a97a6ea2fea1b5158"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a66654979698bdc1a97a6ea2fea1b5158">emissionAngle</a> () const</td></tr>
+<tr class="memdesc:a66654979698bdc1a97a6ea2fea1b5158"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the emission angle of this shape, as calculated and attached by camstats.  <a href="class_isis_1_1_shape.html#a66654979698bdc1a97a6ea2fea1b5158">More...</a><br /></td></tr>
+<tr class="separator:a66654979698bdc1a97a6ea2fea1b5158"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90b55eecd5f5ed9f6ac1024d71e12ca2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a90b55eecd5f5ed9f6ac1024d71e12ca2">incidenceAngle</a> () const</td></tr>
+<tr class="memdesc:a90b55eecd5f5ed9f6ac1024d71e12ca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the incidence angle of this shape, as calculated and attached by camstats.  <a href="class_isis_1_1_shape.html#a90b55eecd5f5ed9f6ac1024d71e12ca2">More...</a><br /></td></tr>
+<tr class="separator:a90b55eecd5f5ed9f6ac1024d71e12ca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61e4d34a3d223ebb471ace161e26786c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a61e4d34a3d223ebb471ace161e26786c">lineResolution</a> () const</td></tr>
+<tr class="memdesc:a61e4d34a3d223ebb471ace161e26786c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the line resolution of this shape, as calculated and attached by camstats.  <a href="class_isis_1_1_shape.html#a61e4d34a3d223ebb471ace161e26786c">More...</a><br /></td></tr>
+<tr class="separator:a61e4d34a3d223ebb471ace161e26786c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ea37e656e92184136ca583d877667e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a2ea37e656e92184136ca583d877667e2">localRadius</a> () const</td></tr>
+<tr class="memdesc:a2ea37e656e92184136ca583d877667e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the local radius of this shape, as calculated and attached by camstats.  <a href="class_isis_1_1_shape.html#a2ea37e656e92184136ca583d877667e2">More...</a><br /></td></tr>
+<tr class="separator:a2ea37e656e92184136ca583d877667e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae514dafd3ac3d447b9595c9b45b595dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#ae514dafd3ac3d447b9595c9b45b595dd">northAzimuth</a> () const</td></tr>
+<tr class="memdesc:ae514dafd3ac3d447b9595c9b45b595dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the north azimuth of this shape, as calculated and attached by camstats.  <a href="class_isis_1_1_shape.html#ae514dafd3ac3d447b9595c9b45b595dd">More...</a><br /></td></tr>
+<tr class="separator:ae514dafd3ac3d447b9595c9b45b595dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32f421c6769f178ba832a673814e66d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a32f421c6769f178ba832a673814e66d5">phaseAngle</a> () const</td></tr>
+<tr class="memdesc:a32f421c6769f178ba832a673814e66d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the phase angle of this shape, as calculated and attached by camstats.  <a href="class_isis_1_1_shape.html#a32f421c6769f178ba832a673814e66d5">More...</a><br /></td></tr>
+<tr class="separator:a32f421c6769f178ba832a673814e66d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5abcd3f1ac0af8be49f3ac40f69bbdc2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a5abcd3f1ac0af8be49f3ac40f69bbdc2">sampleResolution</a> () const</td></tr>
+<tr class="memdesc:a5abcd3f1ac0af8be49f3ac40f69bbdc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the sample resolution of this shape, as calculated and attached by camstats.  <a href="class_isis_1_1_shape.html#a5abcd3f1ac0af8be49f3ac40f69bbdc2">More...</a><br /></td></tr>
+<tr class="separator:a5abcd3f1ac0af8be49f3ac40f69bbdc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a936a2cc4f197e17379d3e47e9a028819"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a936a2cc4f197e17379d3e47e9a028819">copyToNewProjectRoot</a> (const <a class="el" href="class_isis_1_1_project.html">Project</a> *project, <a class="el" href="class_isis_1_1_file_name.html">FileName</a> newProjectRoot)</td></tr>
+<tr class="memdesc:a936a2cc4f197e17379d3e47e9a028819"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy the cub/ecub files associated with this shape into the new project.  <a href="class_isis_1_1_shape.html#a936a2cc4f197e17379d3e47e9a028819">More...</a><br /></td></tr>
+<tr class="separator:a936a2cc4f197e17379d3e47e9a028819"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6660cf18a2f3838d6a45f86e8fd7f93d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a6660cf18a2f3838d6a45f86e8fd7f93d">deleteFromDisk</a> ()</td></tr>
+<tr class="memdesc:a6660cf18a2f3838d6a45f86e8fd7f93d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete the shape data from disk.  <a href="class_isis_1_1_shape.html#a6660cf18a2f3838d6a45f86e8fd7f93d">More...</a><br /></td></tr>
+<tr class="separator:a6660cf18a2f3838d6a45f86e8fd7f93d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69682744743694a571524d071f85654e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape.html#a69682744743694a571524d071f85654e">save</a> (QXmlStreamWriter &amp;stream, const <a class="el" href="class_isis_1_1_project.html">Project</a> *project, <a class="el" href="class_isis_1_1_file_name.html">FileName</a> newProjectRoot) const</td></tr>
+<tr class="memdesc:a69682744743694a571524d071f85654e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output format:  <a href="class_isis_1_1_shape.html#a69682744743694a571524d071f85654e">More...</a><br /></td></tr>
+<tr class="separator:a69682744743694a571524d071f85654e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This represents a shape in a project-based GUI interface. </p>
+<p>The actual cube doesn't have to be open. This encapsulates ideas about an shape such as it's footprint, it's cube, how it should be viewed, where it is on disk, etc. This class is designed to be semi-light weight - we should be able to have tens of thousands of these in memory without any issues (provided the <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> files aren't open - see <a class="el" href="class_isis_1_1_shape.html#a1c1834828a5ff3206b2a8a20c21bf580" title="Cleans up the Cube *.">closeCube()</a>).</p>
+<dl class="section author"><dt>Author</dt><dd>2016-07-25 Tracie Sucharski </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="abc5648f631fbc1e8aed0d5f8695056dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc5648f631fbc1e8aed0d5f8695056dc">&#9670;&nbsp;</a></span>ShapeType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dc">Isis::Shape::ShapeType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="abc5648f631fbc1e8aed0d5f8695056dca9470fc304bed46c58e399404490ed8bd"></a>Dem&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abc5648f631fbc1e8aed0d5f8695056dcab66a8edf5b1325603efa1244e215f9e3"></a>Basemap&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abc5648f631fbc1e8aed0d5f8695056dca65d62b862d084737c4b6640731ae9d32"></a>Unprojected&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abc5648f631fbc1e8aed0d5f8695056dca4eede47612b3aaec773d7aac5dddcd1b"></a>Unknown&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a0aa9c3e6b081ffbba7af13ddbecd618c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0aa9c3e6b081ffbba7af13ddbecd618c">&#9670;&nbsp;</a></span>Shape() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Shape::Shape </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>imageFileName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create an <a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> from a cube file on disk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ShapeFileName</td><td>The name of a cube on disk - /work/users/.../blah.cub </td></tr>
+    <tr><td class="paramname">parent</td><td>The Qt-relationship parent </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape.html#a88803961da5a5b63530165fca54ea20c">cube()</a>.</p>
+
+</div>
+</div>
+<a id="a98eee1b992df0699a67367d8e0c9039a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98eee1b992df0699a67367d8e0c9039a">&#9670;&nbsp;</a></span>Shape() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Shape::Shape </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td>
+          <td class="paramname"><em>shapeCube</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create an shape from a cube file on disk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">shapeFileName</td><td>The name of a cube on disk - /work/users/.../blah.cub </td></tr>
+    <tr><td class="paramname">parent</td><td>The Qt-relationship parent </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube.html#ac880a03b1f5464fb972f12e33be517a9">Isis::Cube::fileName()</a>.</p>
+
+</div>
+</div>
+<a id="a0045024eea0abab893d23ce080dc06e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0045024eea0abab893d23ce080dc06e8">&#9670;&nbsp;</a></span>~Shape()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Shape::~Shape </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clean up this shape. </p>
+<p>If you haven't saved this shape, all of its settings will be lost. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7c236dd359a8ad90c10b8f72d8ab769e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c236dd359a8ad90c10b8f72d8ab769e">&#9670;&nbsp;</a></span>aspectRatio()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Shape::aspectRatio </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the aspect ratio of this shape, as calculated and attached by camstats. </p>
+<dl class="section return"><dt>Returns</dt><dd>The aspect ratio if available, otherwise Null </dd></dl>
+
+</div>
+</div>
+<a id="a1c1834828a5ff3206b2a8a20c21bf580"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c1834828a5ff3206b2a8a20c21bf580">&#9670;&nbsp;</a></span>closeCube()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Shape::closeCube </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cleans up the <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> *. </p>
+<p>You want to call this once you're sure you are done with the <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> because the OS will limit how many of these we have open. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape.html#a6660cf18a2f3838d6a45f86e8fd7f93d">deleteFromDisk()</a>, and <a class="el" href="class_isis_1_1_shape.html#a44d5cbf8f22bf9366f88d26d055db715">updateFileName()</a>.</p>
+
+</div>
+</div>
+<a id="a936a2cc4f197e17379d3e47e9a028819"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a936a2cc4f197e17379d3e47e9a028819">&#9670;&nbsp;</a></span>copyToNewProjectRoot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Shape::copyToNewProjectRoot </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td>
+          <td class="paramname"><em>newProjectRoot</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy the cub/ecub files associated with this shape into the new project. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cube.html#a7d94d0fb5f926984d080204bc1a0860a">Isis::Cube::copy()</a>, <a class="el" href="class_isis_1_1_cube.html#a586be66fbc7f8fad9752ce19757fd4c1">Isis::Cube::externalCubeFileName()</a>, <a class="el" href="class_isis_1_1_file_name.html#a5ac7c4ccd0692dc427e117a5c9a2df79">Isis::FileName::name()</a>, <a class="el" href="class_isis_1_1_file_name.html#a07a8f3a1d799fe6f2cde72526b252b55">Isis::FileName::path()</a>, <a class="el" href="class_isis_1_1_project.html#aba1b984ed2a68ecbf03f612f68e6072c">Isis::Project::projectRoot()</a>, <a class="el" href="class_isis_1_1_file_name.html#a52ac466eff7486c63babfe12c5c7d24b">Isis::FileName::setExtension()</a>, <a class="el" href="class_isis_1_1_project.html#ae1703779f3e567f5440d0674ba6f1298">Isis::Project::shapeDataRoot()</a>, <a class="el" href="class_isis_1_1_cube.html#aa4a2da22e7d2cf9bd46355b017e691fd">Isis::Cube::storesDnData()</a>, and <a class="el" href="class_isis_1_1_file_name.html#af6f2a42721cf85813008d027e9b98609">Isis::FileName::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a88803961da5a5b63530165fca54ea20c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88803961da5a5b63530165fca54ea20c">&#9670;&nbsp;</a></span>cube()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cube.html">Cube</a> * Isis::Shape::cube </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> * associated with this display property. </p>
+<p>This will allocate the <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> * if one is not already present. </p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a69adf9d128fe460983f7690ce70222a7">Isis::ControlPointEditWidget::createControlPoint()</a>, <a class="el" href="class_isis_1_1_shape.html#a6660cf18a2f3838d6a45f86e8fd7f93d">deleteFromDisk()</a>, and <a class="el" href="class_isis_1_1_shape.html#a0aa9c3e6b081ffbba7af13ddbecd618c">Shape()</a>.</p>
+
+</div>
+</div>
+<a id="a6660cf18a2f3838d6a45f86e8fd7f93d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6660cf18a2f3838d6a45f86e8fd7f93d">&#9670;&nbsp;</a></span>deleteFromDisk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Shape::deleteFromDisk </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Delete the shape data from disk. </p>
+<p>The <a class="el" href="class_isis_1_1_shape.html#a88803961da5a5b63530165fca54ea20c" title="Get the Cube * associated with this display property.">cube()</a> will no longer be accessible until you call <a class="el" href="class_isis_1_1_shape.html#a44d5cbf8f22bf9366f88d26d055db715" title="Change the on-disk file name for this cube to be where the shape ought to be in the given project.">updateFileName()</a>. </p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_shape.html#a1c1834828a5ff3206b2a8a20c21bf580">closeCube()</a>, <a class="el" href="class_isis_1_1_shape.html#a88803961da5a5b63530165fca54ea20c">cube()</a>, <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>, <a class="el" href="class_isis_1_1_cube.html#a586be66fbc7f8fad9752ce19757fd4c1">Isis::Cube::externalCubeFileName()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>, <a class="el" href="class_isis_1_1_file_name.html#a07a8f3a1d799fe6f2cde72526b252b55">Isis::FileName::path()</a>, and <a class="el" href="class_isis_1_1_file_name.html#a52ac466eff7486c63babfe12c5c7d24b">Isis::FileName::setExtension()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape_list.html#a1aa6ac76a5e2ea08866ff4544ccdeee2">Isis::ShapeList::deleteFromDisk()</a>.</p>
+
+</div>
+</div>
+<a id="a60caa995d1a8a7124c1af592d58f81cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60caa995d1a8a7124c1af592d58f81cc">&#9670;&nbsp;</a></span>displayProperties() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_shape_display_properties.html">ShapeDisplayProperties</a> * Isis::Shape::displayProperties </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the display (GUI) properties (information) associated with this shape. </p>
+<dl class="section return"><dt>Returns</dt><dd>An <a class="el" href="class_isis_1_1_shape_display_properties.html" title="This is the GUI communication mechanism for shape objects.">ShapeDisplayProperties</a> that describes how to view this shape. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape.html#aac1e228c7fcd8e725618f5aac9fa5b6e">fromPvl()</a>, <a class="el" href="class_isis_1_1_shape.html#aa7fc8703bdbaa4374cb4e4684a91fd09">initFootprint()</a>, and <a class="el" href="class_isis_1_1_shape.html#a239a336d99a1376bbd4f7b316a1e5999">toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="af3f24f480aa1b76374ac49ba01ad15c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3f24f480aa1b76374ac49ba01ad15c5">&#9670;&nbsp;</a></span>displayProperties() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_shape_display_properties.html">ShapeDisplayProperties</a> * Isis::Shape::displayProperties </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get a non-mutable (const) the display (GUI) properties (information) associated with this shape. </p>
+<dl class="section return"><dt>Returns</dt><dd>A non-mutable <a class="el" href="class_isis_1_1_shape_display_properties.html" title="This is the GUI communication mechanism for shape objects.">ShapeDisplayProperties</a> that describes how to view this shape. </dd></dl>
+
+</div>
+</div>
+<a id="a66654979698bdc1a97a6ea2fea1b5158"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66654979698bdc1a97a6ea2fea1b5158">&#9670;&nbsp;</a></span>emissionAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_angle.html">Angle</a> Isis::Shape::emissionAngle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the emission angle of this shape, as calculated and attached by camstats. </p>
+<p>This is the shape-wide average.</p>
+<dl class="section return"><dt>Returns</dt><dd>The emission angle if available, otherwise an invalid angle </dd></dl>
+
+</div>
+</div>
+<a id="a7d286c660765fb58c1a6108415b20a7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d286c660765fb58c1a6108415b20a7e">&#9670;&nbsp;</a></span>fileName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Shape::fileName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the file name of the cube that this shape represents. </p>
+<dl class="section return"><dt>Returns</dt><dd>A string containing the path to the cube data associated with this shape. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a69adf9d128fe460983f7690ce70222a7">Isis::ControlPointEditWidget::createControlPoint()</a>, and <a class="el" href="class_isis_1_1_project_item.html#a2f0c90fe9ccff514e5755688f7c81bb0">Isis::ProjectItem::setShape()</a>.</p>
+
+</div>
+</div>
+<a id="af13473b40b6da0401ab1586eb0195e42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af13473b40b6da0401ab1586eb0195e42">&#9670;&nbsp;</a></span>footprint() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geos::geom::MultiPolygon * Isis::Shape::footprint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the footprint of this shape (if available). </p>
+<dl class="section return"><dt>Returns</dt><dd>A lat/lon footprint of this shape, or NULL if unavailable. </dd></dl>
+
+</div>
+</div>
+<a id="af2ec005832d976684ed01b80c49d5435"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2ec005832d976684ed01b80c49d5435">&#9670;&nbsp;</a></span>footprint() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const geos::geom::MultiPolygon * Isis::Shape::footprint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the non-mutable (const) footprint of this shape (if available). </p>
+<dl class="section return"><dt>Returns</dt><dd>A non-mutable (const) lat/lon footprint of this shape, or NULL if unavailable. </dd></dl>
+
+</div>
+</div>
+<a id="aac1e228c7fcd8e725618f5aac9fa5b6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac1e228c7fcd8e725618f5aac9fa5b6e">&#9670;&nbsp;</a></span>fromPvl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Shape::fromPvl </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read the shape settings from a <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a>. </p>
+<pre>
+  Object = <a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a>
+    <a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a> = ...
+    <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> = ...
+  EndObject
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td>The <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> that contains shape information. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_shape.html#a60caa995d1a8a7124c1af592d58f81cc">displayProperties()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a4c09ebe5d216cb7711fccfe3f7ffac37">Isis::PvlObject::findObject()</a>, <a class="el" href="class_isis_1_1_display_properties.html#a9d2cf4d3ffdb053ba20370746d8be23c">Isis::DisplayProperties::fromPvl()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a0708f5601d4a7f750c53e5a40a064498">Isis::PvlObject::hasKeyword()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78">Isis::IException::Unknown</a>.</p>
+
+</div>
+</div>
+<a id="a67dc5fd83d34fcf39b57af8234377035"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67dc5fd83d34fcf39b57af8234377035">&#9670;&nbsp;</a></span>id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Shape::id </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get a unique, identifying string associated with this shape. </p>
+<dl class="section return"><dt>Returns</dt><dd>A unique <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> for this shape </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube_dn_view.html#a5fefa524fd8fa9eb6abf2b6a7d543cab">Isis::CubeDnView::save()</a>.</p>
+
+</div>
+</div>
+<a id="a90b55eecd5f5ed9f6ac1024d71e12ca2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90b55eecd5f5ed9f6ac1024d71e12ca2">&#9670;&nbsp;</a></span>incidenceAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_angle.html">Angle</a> Isis::Shape::incidenceAngle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the incidence angle of this shape, as calculated and attached by camstats. </p>
+<p>This is the shape-wide average.</p>
+<dl class="section return"><dt>Returns</dt><dd>The incidence angle if available, otherwise an invalid angle </dd></dl>
+
+</div>
+</div>
+<a id="aa7fc8703bdbaa4374cb4e4684a91fd09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7fc8703bdbaa4374cb4e4684a91fd09">&#9670;&nbsp;</a></span>initFootprint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Shape::initFootprint </td>
+          <td>(</td>
+          <td class="paramtype">QMutex *&#160;</td>
+          <td class="paramname"><em>cameraMutex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate a footprint for this shape. </p>
+<p>If the footprint is already stored inside the cube, that will be used instead. If no footprint can be found, this throws an exception. </p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">Isis::DisplayProperties::displayName()</a>, <a class="el" href="class_isis_1_1_shape.html#a60caa995d1a8a7124c1af592d58f81cc">displayProperties()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>.</p>
+
+</div>
+</div>
+<a id="a26136962fecd8e9a9a44251ee48b2700"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26136962fecd8e9a9a44251ee48b2700">&#9670;&nbsp;</a></span>isFootprintable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Shape::isFootprintable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Test to see if it's possible to create a footprint from this shape. </p>
+<p>This may not give an accurate answer if the cube isn't open. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_object.html#a0708f5601d4a7f750c53e5a40a064498">Isis::PvlObject::hasKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a8c4e8a9900c439e1e2da96b91a571f3b">Isis::PvlContainer::isNamed()</a>, <a class="el" href="class_isis_1_1_cube.html#aed7cb063ce8a14d742b468eec69c21b7">Isis::Cube::label()</a>, <a class="el" href="class_isis_1_1_blob.html#a7dcf578350a69ef8c43fe9b79355d8e1">Isis::Blob::Name()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a7fa8ba89de242fe5390df9290f58e078">Isis::PvlObject::object()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a65ee598aba830797a9cea5f8d5499413">Isis::PvlObject::objects()</a>, <a class="el" href="class_isis_1_1_image_polygon.html#ad00955abb89313529c09c620c710c947">Isis::ImagePolygon::toBlob()</a>, and <a class="el" href="class_isis_1_1_blob.html#a3191e38379830e0308bfbbf5d1ca1953">Isis::Blob::Type()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_footprint2_d_view_work_order.html#a168b7267e2ac7284b1453e8b0ad66aa7">Isis::Footprint2DViewWorkOrder::isExecutable()</a>.</p>
+
+</div>
+</div>
+<a id="a61e4d34a3d223ebb471ace161e26786c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61e4d34a3d223ebb471ace161e26786c">&#9670;&nbsp;</a></span>lineResolution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Shape::lineResolution </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the line resolution of this shape, as calculated and attached by camstats. </p>
+<p>This is the shape-wide average.</p>
+<dl class="section return"><dt>Returns</dt><dd>The line resolution if available, otherwise Null </dd></dl>
+
+</div>
+</div>
+<a id="a2ea37e656e92184136ca583d877667e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ea37e656e92184136ca583d877667e2">&#9670;&nbsp;</a></span>localRadius()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_distance.html">Distance</a> Isis::Shape::localRadius </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the local radius of this shape, as calculated and attached by camstats. </p>
+<p>This is the shape-wide average.</p>
+<dl class="section return"><dt>Returns</dt><dd>The local radius if available, otherwise an invalid <a class="el" href="class_isis_1_1_distance.html" title="Distance measurement, usually in meters.">Distance</a> </dd></dl>
+
+</div>
+</div>
+<a id="ae514dafd3ac3d447b9595c9b45b595dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae514dafd3ac3d447b9595c9b45b595dd">&#9670;&nbsp;</a></span>northAzimuth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_angle.html">Angle</a> Isis::Shape::northAzimuth </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the north azimuth of this shape, as calculated and attached by camstats. </p>
+<p>This is the shape-wide average.</p>
+<dl class="section return"><dt>Returns</dt><dd>The north azimuth if available, otherwise an invalid angle </dd></dl>
+
+</div>
+</div>
+<a id="a32f421c6769f178ba832a673814e66d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32f421c6769f178ba832a673814e66d5">&#9670;&nbsp;</a></span>phaseAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_angle.html">Angle</a> Isis::Shape::phaseAngle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the phase angle of this shape, as calculated and attached by camstats. </p>
+<p>This is the shape-wide average.</p>
+<dl class="section return"><dt>Returns</dt><dd>The phase angle if available, otherwise an invalid angle </dd></dl>
+
+</div>
+</div>
+<a id="aa501802dc774fc21369f254fd7210b67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa501802dc774fc21369f254fd7210b67">&#9670;&nbsp;</a></span>radiusSource()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_isis_1_1_control_point_1_1_radius_source.html#a5901130c7400f0ea56d6c80da142efc9">ControlPoint::RadiusSource::Source</a> Isis::Shape::radiusSource </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a69adf9d128fe460983f7690ce70222a7">Isis::ControlPointEditWidget::createControlPoint()</a>.</p>
+
+</div>
+</div>
+<a id="a452d84fb79ceba89550fe155011485c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a452d84fb79ceba89550fe155011485c3">&#9670;&nbsp;</a></span>resolution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Shape::resolution </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the resolution of this shape, as calculated and attached by camstats. </p>
+<p>This is the shape-wide average.</p>
+<dl class="section return"><dt>Returns</dt><dd>The resolution if available, otherwise Null </dd></dl>
+
+</div>
+</div>
+<a id="a5abcd3f1ac0af8be49f3ac40f69bbdc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5abcd3f1ac0af8be49f3ac40f69bbdc2">&#9670;&nbsp;</a></span>sampleResolution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Shape::sampleResolution </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the sample resolution of this shape, as calculated and attached by camstats. </p>
+<p>This is the shape-wide average.</p>
+<dl class="section return"><dt>Returns</dt><dd>The sample resolution if available, otherwise Null </dd></dl>
+
+</div>
+</div>
+<a id="a69682744743694a571524d071f85654e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69682744743694a571524d071f85654e">&#9670;&nbsp;</a></span>save()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Shape::save </td>
+          <td>(</td>
+          <td class="paramtype">QXmlStreamWriter &amp;&#160;</td>
+          <td class="paramname"><em>stream</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td>
+          <td class="paramname"><em>newProjectRoot</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Output format: </p>
+<p>&lt;shape id="..." fileName="..."&gt; ... &lt;/shape&gt;</p>
+<p>(fileName attribute is just the base name) </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dcab66a8edf5b1325603efa1244e215f9e3">Basemap</a>, <a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dca9470fc304bed46c58e399404490ed8bd">Dem</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_angle.html#a11eca91d53d344ec50b4d6ab0aaeae3b">Isis::Angle::isValid()</a>, <a class="el" href="class_isis_1_1_distance.html#a280f103123d557e881cb2ae01658f318">Isis::Distance::isValid()</a>, <a class="el" href="class_isis_1_1_distance.html#ae4eab0580e1b5f23b444d18b071624c2">Isis::Distance::meters()</a>, <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>, <a class="el" href="class_isis_1_1_control_point.html#a09158927722218d61fbb5ef0030886ce">Isis::ControlPoint::RadiusSourceToString()</a>, <a class="el" href="class_isis_1_1_shape_display_properties.html#a89f4b3f621e89d1ae357e2ea7d027768">Isis::ShapeDisplayProperties::save()</a>, <a class="el" href="class_isis_1_1_control_point.html#ad0ec580fb7f74b77723925760fbe79a1">Isis::ControlPoint::SurfacePointSourceToString()</a>, <a class="el" href="class_isis_1_1_i_string.html#a771e32c8a3cbe76ba8ff9916da73effb">Isis::IString::ToQt()</a>, and <a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dca65d62b862d084737c4b6640731ae9d32">Unprojected</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape_list.html#a895674336177c0d744773b997c54c48a">Isis::ShapeList::save()</a>.</p>
+
+</div>
+</div>
+<a id="a4e19f68f2dfdd28056b982f2f5fcc9ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e19f68f2dfdd28056b982f2f5fcc9ea">&#9670;&nbsp;</a></span>serialNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Shape::serialNumber </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the serial number. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_serial_number.html" title="Serial Number composer.">SerialNumber</a> The cube's serial number. </dd></dl>
+
+</div>
+</div>
+<a id="add989d26cfa364367e49ead3b9a9c57e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add989d26cfa364367e49ead3b9a9c57e">&#9670;&nbsp;</a></span>setId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Shape::setId </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Override the automatically generated <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> with the given <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a>. </p>
+
+</div>
+</div>
+<a id="ab209c56ae99f14aa055a8de2d6dd466e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab209c56ae99f14aa055a8de2d6dd466e">&#9670;&nbsp;</a></span>shapeType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_shape.html#abc5648f631fbc1e8aed0d5f8695056dc">Shape::ShapeType</a> Isis::Shape::shapeType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae9dc407a2c4410fdc9dd53efd158dee1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9dc407a2c4410fdc9dd53efd158dee1">&#9670;&nbsp;</a></span>surfacePointSource()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_isis_1_1_control_point_1_1_surface_point_source.html#a98060aa916952f920737da41963fdfcf">ControlPoint::SurfacePointSource::Source</a> Isis::Shape::surfacePointSource </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit_widget.html#a69adf9d128fe460983f7690ce70222a7">Isis::ControlPointEditWidget::createControlPoint()</a>.</p>
+
+</div>
+</div>
+<a id="a239a336d99a1376bbd4f7b316a1e5999"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a239a336d99a1376bbd4f7b316a1e5999">&#9670;&nbsp;</a></span>toPvl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> Isis::Shape::toPvl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert this <a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a> to PVL. </p>
+<p>The output looks like this: </p><pre>
+  Object = <a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a>
+    <a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a> = ...
+    <a class="el" href="class_isis_1_1_i_d.html" title="Creates sequential IDs.">ID</a> = ...
+  EndObject
+</pre><dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> that contains shape information. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape.html#a60caa995d1a8a7124c1af592d58f81cc">displayProperties()</a>, <a class="el" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">Isis::ReadWrite</a>, and <a class="el" href="class_isis_1_1_display_properties.html#aaab25a92093cffe98110a15ac9d6594e">Isis::DisplayProperties::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a44d5cbf8f22bf9366f88d26d055db715"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44d5cbf8f22bf9366f88d26d055db715">&#9670;&nbsp;</a></span>updateFileName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Shape::updateFileName </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Change the on-disk file name for this cube to be where the shape ought to be in the given project. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">project</td><td>The project that this shape is stored in </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape.html#a1c1834828a5ff3206b2a8a20c21bf580">closeCube()</a>, <a class="el" href="class_isis_1_1_file_name.html#a41e955594a44301f3331d01a36f7b75c">Isis::FileName::dir()</a>, <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>, <a class="el" href="class_isis_1_1_file_name.html#a5ac7c4ccd0692dc427e117a5c9a2df79">Isis::FileName::name()</a>, and <a class="el" href="class_isis_1_1_project.html#a5ea6af4b322f3de5091bdead906a8d5c">Isis::Project::shapeDataRoot()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/Shape/<a class="el" href="_shape_8h_source.html">Shape.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/Shape/<a class="el" href="_shape_8cpp.html">Shape.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_shape.html">Shape</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

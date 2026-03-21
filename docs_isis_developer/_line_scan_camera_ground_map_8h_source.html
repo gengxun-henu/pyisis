@@ -1,0 +1,292 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/LineScanCameraGroundMap/LineScanCameraGroundMap.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_line_scan_camera_ground_map_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">LineScanCameraGroundMap.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_line_scan_camera_ground_map_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef LineScanCameraGroundMap_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define LineScanCameraGroundMap_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_camera_ground_map_8h.html">CameraGroundMap.h</a>&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="class_isis_1_1_line_scan_camera_ground_map.html">   49</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html">LineScanCameraGroundMap</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_camera_ground_map.html">CameraGroundMap</a> {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#a2438974beb9347309751d51fe61af476">LineScanCameraGroundMap</a>(<a class="code" href="class_isis_1_1_camera.html">Camera</a> *cam);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#a9737765d6c6867e4a179f496d59ffe1b">~LineScanCameraGroundMap</a>();</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#a2f36ce1e321d4af0ff5780e54abe2ca6">SetGround</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_latitude.html">Latitude</a> &amp;lat, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_longitude.html">Longitude</a> &amp;lon);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#a2f36ce1e321d4af0ff5780e54abe2ca6">SetGround</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> &amp;surfacePoint);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#a2f36ce1e321d4af0ff5780e54abe2ca6">SetGround</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> &amp;surfacePoint, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;approxLine);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19d">   63</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19d">FindFocalPlaneStatus</a> {</div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19dadd9e97208843eeba69adf1ddf04d99df">   64</a></span>&#160;        <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19dadd9e97208843eeba69adf1ddf04d99df">Success</a>,</div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19da1c1cd1fa72bfa8c0c722eac1d538e0ec">   65</a></span>&#160;        <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19da1c1cd1fa72bfa8c0c722eac1d538e0ec">BoundingProblem</a>,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19da27d4286401b5185f5af4641a2fb975b9">Failure</a></div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19da27d4286401b5185f5af4641a2fb975b9">   67</a></span>&#160;      };</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19d">FindFocalPlaneStatus</a> <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#a1f943e11dbd5161b7aec1380ec4ef3ce">FindFocalPlane</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> &amp;approxLine,</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                                          <span class="keyword">const</span> <a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> &amp;surfacePoint);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_line_scan_camera_ground_map.html#a79f63bb057f391c0ccf5563a37100aa8">FindSpacecraftDistance</a>(<span class="keywordtype">int</span> line, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> &amp;surfacePoint);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  };</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;};</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_camera_ground_map_8h_html"><div class="ttname"><a href="_camera_ground_map_8h.html">CameraGroundMap.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html">Isis::CameraGroundMap</a></div><div class="ttdoc">Convert between undistorted focal plane and ground coordinates.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:77</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_html"><div class="ttname"><a href="class_isis_1_1_camera.html">Isis::Camera</a></div><div class="ttdef"><b>Definition:</b> Camera.h:236</div></div>
+<div class="ttc" id="aclass_isis_1_1_latitude_html"><div class="ttname"><a href="class_isis_1_1_latitude.html">Isis::Latitude</a></div><div class="ttdoc">This class is designed to encapsulate the concept of a Latitude.</div><div class="ttdef"><b>Definition:</b> Latitude.h:51</div></div>
+<div class="ttc" id="aclass_isis_1_1_line_scan_camera_ground_map_html"><div class="ttname"><a href="class_isis_1_1_line_scan_camera_ground_map.html">Isis::LineScanCameraGroundMap</a></div><div class="ttdoc">Convert between undistorted focal plane and ground coordinates.</div><div class="ttdef"><b>Definition:</b> LineScanCameraGroundMap.h:49</div></div>
+<div class="ttc" id="aclass_isis_1_1_line_scan_camera_ground_map_html_a1f943e11dbd5161b7aec1380ec4ef3ce"><div class="ttname"><a href="class_isis_1_1_line_scan_camera_ground_map.html#a1f943e11dbd5161b7aec1380ec4ef3ce">Isis::LineScanCameraGroundMap::FindFocalPlane</a></div><div class="ttdeci">FindFocalPlaneStatus FindFocalPlane(const int &amp;approxLine, const SurfacePoint &amp;surfacePoint)</div><div class="ttdef"><b>Definition:</b> LineScanCameraGroundMap.cpp:270</div></div>
+<div class="ttc" id="aclass_isis_1_1_line_scan_camera_ground_map_html_a2438974beb9347309751d51fe61af476"><div class="ttname"><a href="class_isis_1_1_line_scan_camera_ground_map.html#a2438974beb9347309751d51fe61af476">Isis::LineScanCameraGroundMap::LineScanCameraGroundMap</a></div><div class="ttdeci">LineScanCameraGroundMap(Camera *cam)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> LineScanCameraGroundMap.cpp:197</div></div>
+<div class="ttc" id="aclass_isis_1_1_line_scan_camera_ground_map_html_a2f36ce1e321d4af0ff5780e54abe2ca6"><div class="ttname"><a href="class_isis_1_1_line_scan_camera_ground_map.html#a2f36ce1e321d4af0ff5780e54abe2ca6">Isis::LineScanCameraGroundMap::SetGround</a></div><div class="ttdeci">virtual bool SetGround(const Latitude &amp;lat, const Longitude &amp;lon)</div><div class="ttdoc">Compute undistorted focal plane coordinate from ground position.</div><div class="ttdef"><b>Definition:</b> LineScanCameraGroundMap.cpp:212</div></div>
+<div class="ttc" id="aclass_isis_1_1_line_scan_camera_ground_map_html_a79f63bb057f391c0ccf5563a37100aa8"><div class="ttname"><a href="class_isis_1_1_line_scan_camera_ground_map.html#a79f63bb057f391c0ccf5563a37100aa8">Isis::LineScanCameraGroundMap::FindSpacecraftDistance</a></div><div class="ttdeci">double FindSpacecraftDistance(int line, const SurfacePoint &amp;surfacePoint)</div><div class="ttdef"><b>Definition:</b> LineScanCameraGroundMap.cpp:256</div></div>
+<div class="ttc" id="aclass_isis_1_1_line_scan_camera_ground_map_html_a9737765d6c6867e4a179f496d59ffe1b"><div class="ttname"><a href="class_isis_1_1_line_scan_camera_ground_map.html#a9737765d6c6867e4a179f496d59ffe1b">Isis::LineScanCameraGroundMap::~LineScanCameraGroundMap</a></div><div class="ttdeci">virtual ~LineScanCameraGroundMap()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> LineScanCameraGroundMap.cpp:203</div></div>
+<div class="ttc" id="aclass_isis_1_1_line_scan_camera_ground_map_html_ab79dd90d7b2469d14e1f011e4f91a19d"><div class="ttname"><a href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19d">Isis::LineScanCameraGroundMap::FindFocalPlaneStatus</a></div><div class="ttdeci">FindFocalPlaneStatus</div><div class="ttdef"><b>Definition:</b> LineScanCameraGroundMap.h:63</div></div>
+<div class="ttc" id="aclass_isis_1_1_line_scan_camera_ground_map_html_ab79dd90d7b2469d14e1f011e4f91a19da1c1cd1fa72bfa8c0c722eac1d538e0ec"><div class="ttname"><a href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19da1c1cd1fa72bfa8c0c722eac1d538e0ec">Isis::LineScanCameraGroundMap::BoundingProblem</a></div><div class="ttdeci">@ BoundingProblem</div><div class="ttdef"><b>Definition:</b> LineScanCameraGroundMap.h:65</div></div>
+<div class="ttc" id="aclass_isis_1_1_line_scan_camera_ground_map_html_ab79dd90d7b2469d14e1f011e4f91a19da27d4286401b5185f5af4641a2fb975b9"><div class="ttname"><a href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19da27d4286401b5185f5af4641a2fb975b9">Isis::LineScanCameraGroundMap::Failure</a></div><div class="ttdeci">@ Failure</div><div class="ttdef"><b>Definition:</b> LineScanCameraGroundMap.h:66</div></div>
+<div class="ttc" id="aclass_isis_1_1_line_scan_camera_ground_map_html_ab79dd90d7b2469d14e1f011e4f91a19dadd9e97208843eeba69adf1ddf04d99df"><div class="ttname"><a href="class_isis_1_1_line_scan_camera_ground_map.html#ab79dd90d7b2469d14e1f011e4f91a19dadd9e97208843eeba69adf1ddf04d99df">Isis::LineScanCameraGroundMap::Success</a></div><div class="ttdeci">@ Success</div><div class="ttdef"><b>Definition:</b> LineScanCameraGroundMap.h:64</div></div>
+<div class="ttc" id="aclass_isis_1_1_longitude_html"><div class="ttname"><a href="class_isis_1_1_longitude.html">Isis::Longitude</a></div><div class="ttdoc">This class is designed to encapsulate the concept of a Longitude.</div><div class="ttdef"><b>Definition:</b> Longitude.h:40</div></div>
+<div class="ttc" id="aclass_isis_1_1_surface_point_html"><div class="ttname"><a href="class_isis_1_1_surface_point.html">Isis::SurfacePoint</a></div><div class="ttdoc">This class defines a body-fixed surface point.</div><div class="ttdef"><b>Definition:</b> SurfacePoint.h:132</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_efe5362638ce4a14105c3f399370c606.html">LineScanCameraGroundMap</a></li><li class="navelem"><a class="el" href="_line_scan_camera_ground_map_8h.html">LineScanCameraGroundMap.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

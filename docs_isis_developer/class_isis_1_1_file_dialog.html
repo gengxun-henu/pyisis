@@ -1,0 +1,698 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::FileDialog Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_file_dialog.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-slots">Protected Slots</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_file_dialog-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::FileDialog Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Class for browsing cubes.  
+ <a href="class_isis_1_1_file_dialog.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_file_dialog_8h_source.html">FileDialog.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::FileDialog:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_file_dialog__inherit__graph.png" border="0" usemap="#a_isis_1_1_file_dialog_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_file_dialog_inherit__map" id="a_isis_1_1_file_dialog_inherit__map">
+<area shape="rect" title="Class for browsing cubes." alt="" coords="92,135,210,360"/>
+<area shape="rect" href="class_isis_1_1_browse_dialog.html" title="Class for browsing cubes." alt="" coords="5,424,137,537"/>
+<area shape="rect" href="class_isis_1_1_save_as_dialog.html" title="Widget to save(Save As) Isis cubes(used in qview) to display the FileDialog to select the output cube..." alt="" coords="161,408,304,553"/>
+<area shape="rect" href="class_q_file_dialog.html" title=" " alt="" coords="106,5,196,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::FileDialog:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_file_dialog__coll__graph.png" border="0" usemap="#a_isis_1_1_file_dialog_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_file_dialog_coll__map" id="a_isis_1_1_file_dialog_coll__map">
+<area shape="rect" title="Class for browsing cubes." alt="" coords="5,135,123,360"/>
+<area shape="rect" href="class_q_file_dialog.html" title=" " alt="" coords="19,5,109,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a860cf6cf025cf565ecd7997f466e0b13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#a860cf6cf025cf565ecd7997f466e0b13">fileSelected</a> (QString)</td></tr>
+<tr class="separator:a860cf6cf025cf565ecd7997f466e0b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1c460acc6d1326a9bec3deaac116016"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#aa1c460acc6d1326a9bec3deaac116016">filterSelected</a> (QString)</td></tr>
+<tr class="separator:aa1c460acc6d1326a9bec3deaac116016"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a235ed33626ca02631a7a745735c0db0e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#a235ed33626ca02631a7a745735c0db0e">FileDialog</a> (QString title, QStringList &amp;filterList, QDir &amp;directory, <a class="el" href="class_q_widget.html">QWidget</a> *parent=0)</td></tr>
+<tr class="separator:a235ed33626ca02631a7a745735c0db0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add5deb1f14e9ef600ee812bdc961807a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#add5deb1f14e9ef600ee812bdc961807a">closeEvent</a> (QCloseEvent *event)</td></tr>
+<tr class="memdesc:add5deb1f14e9ef600ee812bdc961807a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is overridden so that we can be sure to write the current settings of the Main window.  <a href="class_isis_1_1_file_dialog.html#add5deb1f14e9ef600ee812bdc961807a">More...</a><br /></td></tr>
+<tr class="separator:add5deb1f14e9ef600ee812bdc961807a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad9a6d270260db0433bf1a505221ae39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#aad9a6d270260db0433bf1a505221ae39">readSettings</a> ()</td></tr>
+<tr class="memdesc:aad9a6d270260db0433bf1a505221ae39"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is called from the constructor so that when the Main window is created, it know's it's size and location.  <a href="class_isis_1_1_file_dialog.html#aad9a6d270260db0433bf1a505221ae39">More...</a><br /></td></tr>
+<tr class="separator:aad9a6d270260db0433bf1a505221ae39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a098294eec88ed78fa49a9fb9f42bfba9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#a098294eec88ed78fa49a9fb9f42bfba9">writeSettings</a> ()</td></tr>
+<tr class="memdesc:a098294eec88ed78fa49a9fb9f42bfba9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is called when the File Dialog is closed or hidden to write the size and location settings to a config file in the user's home directory.  <a href="class_isis_1_1_file_dialog.html#a098294eec88ed78fa49a9fb9f42bfba9">More...</a><br /></td></tr>
+<tr class="separator:a098294eec88ed78fa49a9fb9f42bfba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-slots"></a>
+Protected Slots</h2></td></tr>
+<tr class="memitem:ac4e80347a76ad061a393bb637217e610"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#ac4e80347a76ad061a393bb637217e610">sendSignal</a> ()</td></tr>
+<tr class="memdesc:ac4e80347a76ad061a393bb637217e610"><td class="mdescLeft">&#160;</td><td class="mdescRight">This saves the directory that the user selected the file from so it can open to this directory next time.  <a href="class_isis_1_1_file_dialog.html#ac4e80347a76ad061a393bb637217e610">More...</a><br /></td></tr>
+<tr class="separator:ac4e80347a76ad061a393bb637217e610"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13e22a23654344cdde66e4416165ee8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#a13e22a23654344cdde66e4416165ee8d">done</a> ()</td></tr>
+<tr class="memdesc:a13e22a23654344cdde66e4416165ee8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the user presses OK.  <a href="class_isis_1_1_file_dialog.html#a13e22a23654344cdde66e4416165ee8d">More...</a><br /></td></tr>
+<tr class="separator:a13e22a23654344cdde66e4416165ee8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a585d73d17e071230b92355c33ccfbe96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#a585d73d17e071230b92355c33ccfbe96">done</a> (int r)</td></tr>
+<tr class="memdesc:a585d73d17e071230b92355c33ccfbe96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the user presses OK.  <a href="class_isis_1_1_file_dialog.html#a585d73d17e071230b92355c33ccfbe96">More...</a><br /></td></tr>
+<tr class="separator:a585d73d17e071230b92355c33ccfbe96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbb70f8bdbff88fd7642274f4e2e44ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#adbb70f8bdbff88fd7642274f4e2e44ef">cancel</a> ()</td></tr>
+<tr class="memdesc:adbb70f8bdbff88fd7642274f4e2e44ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when user presses cancel.  <a href="class_isis_1_1_file_dialog.html#adbb70f8bdbff88fd7642274f4e2e44ef">More...</a><br /></td></tr>
+<tr class="separator:adbb70f8bdbff88fd7642274f4e2e44ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c1d5bcd16a10c55e72c20e648de785d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#a5c1d5bcd16a10c55e72c20e648de785d">saveFilter</a> ()</td></tr>
+<tr class="memdesc:a5c1d5bcd16a10c55e72c20e648de785d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is where we actually set the user editable filters and remember them.  <a href="class_isis_1_1_file_dialog.html#a5c1d5bcd16a10c55e72c20e648de785d">More...</a><br /></td></tr>
+<tr class="separator:a5c1d5bcd16a10c55e72c20e648de785d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a455da73a1b5c72fdf35ef9a9c44b1cb3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_file_dialog.html#a455da73a1b5c72fdf35ef9a9c44b1cb3">eventFilter</a> (<a class="el" href="class_q_object.html">QObject</a> *o, QEvent *e)</td></tr>
+<tr class="memdesc:a455da73a1b5c72fdf35ef9a9c44b1cb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">This event filter is installed on the parent of this window.  <a href="class_isis_1_1_file_dialog.html#a455da73a1b5c72fdf35ef9a9c44b1cb3">More...</a><br /></td></tr>
+<tr class="separator:a455da73a1b5c72fdf35ef9a9c44b1cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class for browsing cubes. </p>
+<dl class="section author"><dt>Author</dt><dd>????-??-?? Stacy Alley </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a235ed33626ca02631a7a745735c0db0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a235ed33626ca02631a7a745735c0db0e">&#9670;&nbsp;</a></span>FileDialog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::FileDialog::FileDialog </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>title</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QStringList &amp;&#160;</td>
+          <td class="paramname"><em>filterList</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QDir &amp;&#160;</td>
+          <td class="paramname"><em>directory</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_dialog.html#adbb70f8bdbff88fd7642274f4e2e44ef">cancel()</a>, <a class="el" href="class_isis_1_1_file_dialog.html#a13e22a23654344cdde66e4416165ee8d">done()</a>, <a class="el" href="class_isis_1_1_file_dialog.html#aad9a6d270260db0433bf1a505221ae39">readSettings()</a>, <a class="el" href="class_isis_1_1_file_dialog.html#a5c1d5bcd16a10c55e72c20e648de785d">saveFilter()</a>, and <a class="el" href="class_isis_1_1_file_dialog.html#ac4e80347a76ad061a393bb637217e610">sendSignal()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="adbb70f8bdbff88fd7642274f4e2e44ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbb70f8bdbff88fd7642274f4e2e44ef">&#9670;&nbsp;</a></span>cancel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::FileDialog::cancel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called when user presses cancel. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_file_dialog.html#a235ed33626ca02631a7a745735c0db0e">FileDialog()</a>.</p>
+
+</div>
+</div>
+<a id="add5deb1f14e9ef600ee812bdc961807a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add5deb1f14e9ef600ee812bdc961807a">&#9670;&nbsp;</a></span>closeEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::FileDialog::closeEvent </td>
+          <td>(</td>
+          <td class="paramtype">QCloseEvent *&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method is overridden so that we can be sure to write the current settings of the Main window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_dialog.html#a098294eec88ed78fa49a9fb9f42bfba9">writeSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a13e22a23654344cdde66e4416165ee8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13e22a23654344cdde66e4416165ee8d">&#9670;&nbsp;</a></span>done <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::FileDialog::done </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called when the user presses OK. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_dialog.html#ac4e80347a76ad061a393bb637217e610">sendSignal()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_file_dialog.html#a235ed33626ca02631a7a745735c0db0e">FileDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a585d73d17e071230b92355c33ccfbe96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a585d73d17e071230b92355c33ccfbe96">&#9670;&nbsp;</a></span>done <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::FileDialog::done </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>r</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called when the user presses OK. </p>
+
+</div>
+</div>
+<a id="a455da73a1b5c72fdf35ef9a9c44b1cb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a455da73a1b5c72fdf35ef9a9c44b1cb3">&#9670;&nbsp;</a></span>eventFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::FileDialog::eventFilter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>o</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QEvent *&#160;</td>
+          <td class="paramname"><em>e</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This event filter is installed on the parent of this window. </p>
+<p>When the user closes the main window of the application, the <a class="el" href="class_isis_1_1_file_dialog.html" title="Class for browsing cubes.">FileDialog</a> will write their settings even though they did not receive the close event themselves.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">o</td><td></td></tr>
+    <tr><td class="paramname">e</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_dialog.html#a098294eec88ed78fa49a9fb9f42bfba9">writeSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a860cf6cf025cf565ecd7997f466e0b13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a860cf6cf025cf565ecd7997f466e0b13">&#9670;&nbsp;</a></span>fileSelected</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::FileDialog::fileSelected </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_browse_dialog.html#a3c8c3cb5f782b143227c2d62e533a240">Isis::BrowseDialog::displayCube()</a>, and <a class="el" href="class_isis_1_1_file_dialog.html#ac4e80347a76ad061a393bb637217e610">sendSignal()</a>.</p>
+
+</div>
+</div>
+<a id="aa1c460acc6d1326a9bec3deaac116016"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1c460acc6d1326a9bec3deaac116016">&#9670;&nbsp;</a></span>filterSelected</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::FileDialog::filterSelected </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad9a6d270260db0433bf1a505221ae39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad9a6d270260db0433bf1a505221ae39">&#9670;&nbsp;</a></span>readSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::FileDialog::readSettings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method is called from the constructor so that when the Main window is created, it know's it's size and location. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_file_dialog.html#a235ed33626ca02631a7a745735c0db0e">FileDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a5c1d5bcd16a10c55e72c20e648de785d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c1d5bcd16a10c55e72c20e648de785d">&#9670;&nbsp;</a></span>saveFilter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::FileDialog::saveFilter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is where we actually set the user editable filters and remember them. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_file_dialog.html#a235ed33626ca02631a7a745735c0db0e">FileDialog()</a>.</p>
+
+</div>
+</div>
+<a id="ac4e80347a76ad061a393bb637217e610"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4e80347a76ad061a393bb637217e610">&#9670;&nbsp;</a></span>sendSignal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::FileDialog::sendSignal </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This saves the directory that the user selected the file from so it can open to this directory next time. </p>
+<p>Also, emits the signal to open the selected file. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_dialog.html#a860cf6cf025cf565ecd7997f466e0b13">fileSelected()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_file_dialog.html#a13e22a23654344cdde66e4416165ee8d">done()</a>, and <a class="el" href="class_isis_1_1_file_dialog.html#a235ed33626ca02631a7a745735c0db0e">FileDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a098294eec88ed78fa49a9fb9f42bfba9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a098294eec88ed78fa49a9fb9f42bfba9">&#9670;&nbsp;</a></span>writeSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::FileDialog::writeSettings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method is called when the File Dialog is closed or hidden to write the size and location settings to a config file in the user's home directory. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_file_dialog.html#add5deb1f14e9ef600ee812bdc961807a">closeEvent()</a>, and <a class="el" href="class_isis_1_1_file_dialog.html#a455da73a1b5c72fdf35ef9a9c44b1cb3">eventFilter()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/FileDialog/<a class="el" href="_file_dialog_8h_source.html">FileDialog.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/FileDialog/<a class="el" href="_file_dialog_8cpp.html">FileDialog.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_file_dialog.html">FileDialog</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,551 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::WorldMapper Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_world_mapper.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_world_mapper-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::WorldMapper Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group___map_projection.html">Map Projection</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Create a mapping between a projection and other coordinate system.  
+ <a href="class_isis_1_1_world_mapper.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_world_mapper_8h_source.html">WorldMapper.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::WorldMapper:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_world_mapper__inherit__graph.png" border="0" usemap="#a_isis_1_1_world_mapper_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_world_mapper_inherit__map" id="a_isis_1_1_world_mapper_inherit__map">
+<area shape="rect" title="Create a mapping between a projection and other coordinate system." alt="" coords="12,5,138,183"/>
+<area shape="rect" href="class_isis_1_1_p_f_pixel_mapper.html" title=" " alt="" coords="5,231,145,392"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::WorldMapper:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_world_mapper__coll__graph.png" border="0" usemap="#a_isis_1_1_world_mapper_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_world_mapper_coll__map" id="a_isis_1_1_world_mapper_coll__map">
+<area shape="rect" title="Create a mapping between a projection and other coordinate system." alt="" coords="5,5,132,183"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aea385c8cf4dfb9fee41ad4ca794f5849"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_world_mapper.html#aea385c8cf4dfb9fee41ad4ca794f5849">WorldMapper</a> ()</td></tr>
+<tr class="memdesc:aea385c8cf4dfb9fee41ad4ca794f5849"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an empty <a class="el" href="class_isis_1_1_world_mapper.html" title="Create a mapping between a projection and other coordinate system.">WorldMapper</a> object.  <a href="class_isis_1_1_world_mapper.html#aea385c8cf4dfb9fee41ad4ca794f5849">More...</a><br /></td></tr>
+<tr class="separator:aea385c8cf4dfb9fee41ad4ca794f5849"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bdc3d37c4f2f812a1e79b7cc9269767"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_world_mapper.html#a0bdc3d37c4f2f812a1e79b7cc9269767">~WorldMapper</a> ()</td></tr>
+<tr class="memdesc:a0bdc3d37c4f2f812a1e79b7cc9269767"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_isis_1_1_world_mapper.html" title="Create a mapping between a projection and other coordinate system.">WorldMapper</a> object.  <a href="class_isis_1_1_world_mapper.html#a0bdc3d37c4f2f812a1e79b7cc9269767">More...</a><br /></td></tr>
+<tr class="separator:a0bdc3d37c4f2f812a1e79b7cc9269767"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77b3e287bac7d7c75e13541a7c92d180"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_world_mapper.html#a77b3e287bac7d7c75e13541a7c92d180">ProjectionX</a> (const double worldX) const =0</td></tr>
+<tr class="memdesc:a77b3e287bac7d7c75e13541a7c92d180"><td class="mdescLeft">&#160;</td><td class="mdescRight">This pure virtual method will return a projection X coordinate in meters given a world X coordinate.  <a href="class_isis_1_1_world_mapper.html#a77b3e287bac7d7c75e13541a7c92d180">More...</a><br /></td></tr>
+<tr class="separator:a77b3e287bac7d7c75e13541a7c92d180"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3495a2b185483eb9c65a154aa7ae947"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_world_mapper.html#ae3495a2b185483eb9c65a154aa7ae947">ProjectionY</a> (const double worldY) const =0</td></tr>
+<tr class="memdesc:ae3495a2b185483eb9c65a154aa7ae947"><td class="mdescLeft">&#160;</td><td class="mdescRight">This pure virtual method will return a projection Y coordinate in meters given a world Y coordinate.  <a href="class_isis_1_1_world_mapper.html#ae3495a2b185483eb9c65a154aa7ae947">More...</a><br /></td></tr>
+<tr class="separator:ae3495a2b185483eb9c65a154aa7ae947"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ecb81e8168cb291bfb3d47963fdbca2"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_world_mapper.html#a7ecb81e8168cb291bfb3d47963fdbca2">WorldX</a> (const double projectionX) const =0</td></tr>
+<tr class="memdesc:a7ecb81e8168cb291bfb3d47963fdbca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This pure virtual method will return a world X coordinate given a projection Y coordinate in meters.  <a href="class_isis_1_1_world_mapper.html#a7ecb81e8168cb291bfb3d47963fdbca2">More...</a><br /></td></tr>
+<tr class="separator:a7ecb81e8168cb291bfb3d47963fdbca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bd9a52ba00a10fe1e947ff8d37be2e5"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_world_mapper.html#a2bd9a52ba00a10fe1e947ff8d37be2e5">WorldY</a> (const double projectionY) const =0</td></tr>
+<tr class="memdesc:a2bd9a52ba00a10fe1e947ff8d37be2e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This pure virtual method will return a world Y coordinate given a projection Y coordinate in meters.  <a href="class_isis_1_1_world_mapper.html#a2bd9a52ba00a10fe1e947ff8d37be2e5">More...</a><br /></td></tr>
+<tr class="separator:a2bd9a52ba00a10fe1e947ff8d37be2e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a834f5340625594f62854199c1d5a0239"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_world_mapper.html#a834f5340625594f62854199c1d5a0239">Resolution</a> () const</td></tr>
+<tr class="memdesc:a834f5340625594f62854199c1d5a0239"><td class="mdescLeft">&#160;</td><td class="mdescRight">This virtual method will the resolution of the world system relative to one unit in the projection system.  <a href="class_isis_1_1_world_mapper.html#a834f5340625594f62854199c1d5a0239">More...</a><br /></td></tr>
+<tr class="separator:a834f5340625594f62854199c1d5a0239"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Create a mapping between a projection and other coordinate system. </p>
+<p>This class can be used to create a mapping between a projection coordinate system and a different coordinate system. Simple examples of this would be a mapping between projection x/y's to cube line/samples or a mapping between projection x/y's and paper x/y's in inches. The class is pure virtual and therefore should never be directly instantiated. Remember the basic premise is to use this class to create a new class which converts coordinates from one system to another (inches to meters and back, meters to pixels and back, etc).</p>
+<p>If you would like to see <a class="el" href="class_isis_1_1_world_mapper.html" title="Create a mapping between a projection and other coordinate system.">WorldMapper</a> being used in implementation, see the <a class="el" href="class_isis_1_1_projection_factory.html" title="Initialize a map projection.">ProjectionFactory</a> class</p>
+<dl class="section author"><dt>Author</dt><dd>2003-01-28 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aea385c8cf4dfb9fee41ad4ca794f5849"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea385c8cf4dfb9fee41ad4ca794f5849">&#9670;&nbsp;</a></span>WorldMapper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::WorldMapper::WorldMapper </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs an empty <a class="el" href="class_isis_1_1_world_mapper.html" title="Create a mapping between a projection and other coordinate system.">WorldMapper</a> object. </p>
+
+</div>
+</div>
+<a id="a0bdc3d37c4f2f812a1e79b7cc9269767"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bdc3d37c4f2f812a1e79b7cc9269767">&#9670;&nbsp;</a></span>~WorldMapper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::WorldMapper::~WorldMapper </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destroys the <a class="el" href="class_isis_1_1_world_mapper.html" title="Create a mapping between a projection and other coordinate system.">WorldMapper</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a77b3e287bac7d7c75e13541a7c92d180"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77b3e287bac7d7c75e13541a7c92d180">&#9670;&nbsp;</a></span>ProjectionX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double Isis::WorldMapper::ProjectionX </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>worldX</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This pure virtual method will return a projection X coordinate in meters given a world X coordinate. </p>
+<p>For example, the worldX value could be an X in millimeters on a piece of paper. The value returned would be an X in map projection coordinates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">worldX</td><td>An X value in world coordinates.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+<p>Implemented in <a class="el" href="class_isis_1_1_p_f_pixel_mapper.html#a6c00ba0cd83ae2bcab9b8af21bba6b02">Isis::PFPixelMapper</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_projection.html#a293a2c433ebb72c53725631d5e27b879">Isis::Projection::SetWorld()</a>, and <a class="el" href="class_isis_1_1_projection.html#ac7dd44810997da99a7b1f92f442c92be">Isis::Projection::ToProjectionX()</a>.</p>
+
+</div>
+</div>
+<a id="ae3495a2b185483eb9c65a154aa7ae947"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3495a2b185483eb9c65a154aa7ae947">&#9670;&nbsp;</a></span>ProjectionY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double Isis::WorldMapper::ProjectionY </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>worldY</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This pure virtual method will return a projection Y coordinate in meters given a world Y coordinate. </p>
+<p>For example, the worldY value could be an Y in millimeters on a piece of paper. The value returned would be an Y in map projection coordinates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">worldY</td><td>A Y value in world coordinates.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+<p>Implemented in <a class="el" href="class_isis_1_1_p_f_pixel_mapper.html#abd4cb684dee6ad62c96e7435f4d53c7e">Isis::PFPixelMapper</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_projection.html#a293a2c433ebb72c53725631d5e27b879">Isis::Projection::SetWorld()</a>, and <a class="el" href="class_isis_1_1_projection.html#a7d6270f4d9a46e527588fd58d76f637e">Isis::Projection::ToProjectionY()</a>.</p>
+
+</div>
+</div>
+<a id="a834f5340625594f62854199c1d5a0239"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a834f5340625594f62854199c1d5a0239">&#9670;&nbsp;</a></span>Resolution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double Isis::WorldMapper::Resolution </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This virtual method will the resolution of the world system relative to one unit in the projection system. </p>
+<p>For example, one meter in the projection system could be .001 inches on a piece of paper. Unless this method is overridden it will return 1</p>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_p_f_pixel_mapper.html#a11459d39e688ce254cc50b4156f337ef">Isis::PFPixelMapper</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_projection.html#a1090b35e16633f7c4dbd0323b9d3da9f">Isis::Projection::Resolution()</a>, <a class="el" href="class_isis_1_1_ring_plane_projection.html#ac7903e5c106d74c4be5ada5d72bbf6ce">Isis::RingPlaneProjection::Scale()</a>, and <a class="el" href="class_isis_1_1_t_projection.html#af015a223a5e0e94719442c1eb5319ff5">Isis::TProjection::Scale()</a>.</p>
+
+</div>
+</div>
+<a id="a7ecb81e8168cb291bfb3d47963fdbca2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ecb81e8168cb291bfb3d47963fdbca2">&#9670;&nbsp;</a></span>WorldX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double Isis::WorldMapper::WorldX </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>projectionX</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This pure virtual method will return a world X coordinate given a projection Y coordinate in meters. </p>
+<p>For example, the worldY value could be an Y in millimeters on a piece of paper.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">projectionX</td><td>A X value in projection coordinates.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+<p>Implemented in <a class="el" href="class_isis_1_1_p_f_pixel_mapper.html#ae745543bb1a3e1aec5b3289edfc9d797">Isis::PFPixelMapper</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_projection.html#a35fd9b10b1b68cfb856b13b39ab1cbb4">Isis::Projection::ToWorldX()</a>, and <a class="el" href="class_isis_1_1_projection.html#a732f0ad6f3866524bba029c49297a2d9">Isis::Projection::WorldX()</a>.</p>
+
+</div>
+</div>
+<a id="a2bd9a52ba00a10fe1e947ff8d37be2e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bd9a52ba00a10fe1e947ff8d37be2e5">&#9670;&nbsp;</a></span>WorldY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double Isis::WorldMapper::WorldY </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>projectionY</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This pure virtual method will return a world Y coordinate given a projection Y coordinate in meters. </p>
+<p>For example, the worldY value could be an Y in millimeters on a piece of paper.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">projectionY</td><td>A Y value in projection coordinates.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+<p>Implemented in <a class="el" href="class_isis_1_1_p_f_pixel_mapper.html#a24f426aa5ebd503ec2672e145bd9ce79">Isis::PFPixelMapper</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_projection.html#a052041bbe43786c41ced8a29db993511">Isis::Projection::ToWorldY()</a>, and <a class="el" href="class_isis_1_1_projection.html#a63e1bd32824e8d8d478b70deb717b4e7">Isis::Projection::WorldY()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/WorldMapper/<a class="el" href="_world_mapper_8h_source.html">WorldMapper.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_world_mapper.html">WorldMapper</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

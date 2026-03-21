@@ -1,0 +1,42 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Chip,Pattern Matching,isis/src/base/objs/Chip/Chip.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Chip,isis_pybind.Chip,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,Chip(),isis_pybind.Chip(),N,抽象基类/纯虚接口
+Mutation/Configuration,"void SetSize(const int samples, const int lines)",isis_pybind.Chip.set_size,N,抽象基类/纯虚接口
+Query,"bool IsInsideChip(double sample, double line)",isis_pybind.Chip.is_inside_chip,N,抽象基类/纯虚接口
+Public API,inline int Samples() const { return m_chipSamples,isis_pybind.Chip.samples,N,抽象基类/纯虚接口
+Public API,inline int Lines() const { return m_chipLines,isis_pybind.Chip.lines,N,抽象基类/纯虚接口
+Public API,inline QString FileName() const { return m_filename,isis_pybind.Chip.file_name,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetAllValues(const double &d),isis_pybind.Chip.set_all_values,N,抽象基类/纯虚接口
+Mutation/Configuration,"void SetValue(int sample, int line, const double &value) { m_buf[line-1][sample-1] = value",isis_pybind.Chip.set_value,N,抽象基类/纯虚接口
+Public API,"inline double GetValue(int sample, int line) { return m_buf[line-1][sample-1]",isis_pybind.Chip.get_value,N,抽象基类/纯虚接口
+Public API,"inline double GetValue(int sample, int line) const { return m_buf[line-1][sample-1]",isis_pybind.Chip.get_value,N,抽象基类/纯虚接口
+Public API,"void TackCube(const double cubeSample, const double cubeLine)",isis_pybind.Chip.tack_cube,N,抽象基类/纯虚接口
+Public API,inline int TackSample() const { return m_tackSample,isis_pybind.Chip.tack_sample,N,抽象基类/纯虚接口
+Public API,inline int TackLine() const { return m_tackLine,isis_pybind.Chip.tack_line,N,抽象基类/纯虚接口
+Read/Write IO,"void Load(Cube &cube, const double rotation = 0.0, const double scale = 1.0, const int band = 1)",isis_pybind.Chip.load,N,抽象基类/纯虚接口
+Read/Write IO,"void Load(Cube &cube, Chip &match, Cube &matchChipCube, const double scale = 1.0, const int band = 1)",isis_pybind.Chip.load,N,抽象基类/纯虚接口
+Read/Write IO,"void Load(Cube &cube, const Affine &affine, const bool &keepPoly = true, const int band = 1)",isis_pybind.Chip.load,N,抽象基类/纯虚接口
+Mutation/Configuration,"void SetChipPosition(const double sample, const double line)",isis_pybind.Chip.set_chip_position,N,抽象基类/纯虚接口
+Public API,inline double CubeSample() const { return m_cubeSample,isis_pybind.Chip.cube_sample,N,抽象基类/纯虚接口
+Public API,inline double CubeLine() const { return m_cubeLine,isis_pybind.Chip.cube_line,N,抽象基类/纯虚接口
+Mutation/Configuration,"void SetCubePosition(const double sample, const double line)",isis_pybind.Chip.set_cube_position,N,抽象基类/纯虚接口
+Public API,double ChipSample() const { return m_chipSample,isis_pybind.Chip.chip_sample,N,抽象基类/纯虚接口
+Public API,double ChipLine() const { return m_chipLine,isis_pybind.Chip.chip_line,N,抽象基类/纯虚接口
+Mutation/Configuration,"void SetValidRange(const double minimum = Isis::ValidMinimum, const double maximum = Isis::ValidMaximum)",isis_pybind.Chip.set_valid_range,N,抽象基类/纯虚接口
+Query,"inline bool IsValid(int sample, int line) { double value = GetValue(sample, line)",isis_pybind.Chip.is_valid,N,抽象基类/纯虚接口
+Query,bool IsValid(double percentage),isis_pybind.Chip.is_valid,N,抽象基类/纯虚接口
+Public API,"Chip Extract(int samples, int lines, int samp, int line)",isis_pybind.Chip.extract,N,抽象基类/纯虚接口
+Public API,"void Extract(int samp, int line, Chip &output)",isis_pybind.Chip.extract,N,抽象基类/纯虚接口
+Public API,Isis::Statistics *Statistics(),isis_pybind.Chip.statistics,N,抽象基类/纯虚接口
+Public API,"void Extract(Chip &output, Affine &affine)",isis_pybind.Chip.extract,N,抽象基类/纯虚接口
+Read/Write IO,void Write(const QString &filename),isis_pybind.Chip.write,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetClipPolygon(const geos::geom::MultiPolygon &clipPolygon),isis_pybind.Chip.set_clip_polygon,N,抽象基类/纯虚接口
+Public API,const Affine &GetTransform() const { return (m_affine),isis_pybind.Chip.get_transform,N,抽象基类/纯虚接口
+Mutation/Configuration,"void SetTransform(const Affine &affine, const bool &keepPoly = true) { m_affine = affine",isis_pybind.Chip.set_transform,N,抽象基类/纯虚接口
+Public API,if (!keepPoly) { delete m_clipPolygon,isis_pybind.Chip.if,N,抽象基类/纯虚接口
+Public API,Interpolator::interpType GetReadInterpolator() { return m_readInterpolator,isis_pybind.Chip.get_read_interpolator,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetReadInterpolator(const Interpolator::interpType type) { if (type == Interpolator::NearestNeighborType || type == Interpolator::BiLinearType || type == Interpolator::CubicConvolutionType) { m_readInterpolator = type,isis_pybind.Chip.set_read_interpolator,N,抽象基类/纯虚接口
+Public API,"throw IException(IException::Programmer, msg, _FILEINFO_)",isis_pybind.Chip.i_exception,N,抽象基类/纯虚接口

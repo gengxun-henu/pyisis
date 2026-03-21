@@ -1,0 +1,1499 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::JP2Exporter Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_j_p2_exporter.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_j_p2_exporter-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::JP2Exporter Class Reference<div class="ingroups"><a class="el" href="group___high_level_cube_i_o.html">High Level Cube I/O</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Exports cubes into JPEG 2000 images.  
+ <a href="class_isis_1_1_j_p2_exporter.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_j_p2_exporter_8h_source.html">JP2Exporter.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::JP2Exporter:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_j_p2_exporter__inherit__graph.png" border="0" usemap="#a_isis_1_1_j_p2_exporter_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_j_p2_exporter_inherit__map" id="a_isis_1_1_j_p2_exporter_inherit__map">
+<area shape="rect" title="Exports cubes into JPEG 2000 images." alt="" coords="21,840,155,1017"/>
+<area shape="rect" href="class_isis_1_1_stream_exporter.html" title="Exports cubes into a standard format in incremental pieces." alt="" coords="17,535,159,792"/>
+<area shape="rect" href="class_isis_1_1_image_exporter.html" title="Export Isis cubes into standard formats." alt="" coords="5,5,171,487"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::JP2Exporter:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_j_p2_exporter__coll__graph.png" border="0" usemap="#a_isis_1_1_j_p2_exporter_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_j_p2_exporter_coll__map" id="a_isis_1_1_j_p2_exporter_coll__map">
+<area shape="rect" title="Exports cubes into JPEG 2000 images." alt="" coords="21,840,155,1017"/>
+<area shape="rect" href="class_isis_1_1_stream_exporter.html" title="Exports cubes into a standard format in incremental pieces." alt="" coords="17,535,159,792"/>
+<area shape="rect" href="class_isis_1_1_image_exporter.html" title="Export Isis cubes into standard formats." alt="" coords="5,5,171,487"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ac35e1f7ace86599dafcbac06b1b09453"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_j_p2_exporter.html#ac35e1f7ace86599dafcbac06b1b09453">JP2Exporter</a> ()</td></tr>
+<tr class="memdesc:ac35e1f7ace86599dafcbac06b1b09453"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct the JPEG 2000 exporter.  <a href="class_isis_1_1_j_p2_exporter.html#ac35e1f7ace86599dafcbac06b1b09453">More...</a><br /></td></tr>
+<tr class="separator:ac35e1f7ace86599dafcbac06b1b09453"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81b27e73eb669fceff142a601634778c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_j_p2_exporter.html#a81b27e73eb669fceff142a601634778c">~JP2Exporter</a> ()</td></tr>
+<tr class="memdesc:a81b27e73eb669fceff142a601634778c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destruct the exporter.  <a href="class_isis_1_1_j_p2_exporter.html#a81b27e73eb669fceff142a601634778c">More...</a><br /></td></tr>
+<tr class="separator:a81b27e73eb669fceff142a601634778c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f61804d226fe3b0bd489fe84d665e23"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_j_p2_exporter.html#a7f61804d226fe3b0bd489fe84d665e23">write</a> (<a class="el" href="class_isis_1_1_file_name.html">FileName</a> outputName, int quality=100, QString compression=&quot;none&quot;, UserInterface *ui=nullptr)</td></tr>
+<tr class="memdesc:a7f61804d226fe3b0bd489fe84d665e23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the encoder, open the output file for writing, then let the base <a class="el" href="class_isis_1_1_image_exporter.html" title="Export Isis cubes into standard formats.">ImageExporter</a> handle the generic black-box writing routine.  <a href="class_isis_1_1_j_p2_exporter.html#a7f61804d226fe3b0bd489fe84d665e23">More...</a><br /></td></tr>
+<tr class="separator:a7f61804d226fe3b0bd489fe84d665e23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1536e3fc95500c08ff05f884e717eac6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stream_exporter.html#a1536e3fc95500c08ff05f884e717eac6">setGrayscale</a> (<a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;desc)</td></tr>
+<tr class="memdesc:a1536e3fc95500c08ff05f884e717eac6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic initialization with the export description.  <a href="class_isis_1_1_stream_exporter.html#a1536e3fc95500c08ff05f884e717eac6">More...</a><br /></td></tr>
+<tr class="separator:a1536e3fc95500c08ff05f884e717eac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1ef51f485dd974615e1e8ddadab2439"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stream_exporter.html#ab1ef51f485dd974615e1e8ddadab2439">setRgb</a> (<a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;desc)</td></tr>
+<tr class="memdesc:ab1ef51f485dd974615e1e8ddadab2439"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic initialization with the export description.  <a href="class_isis_1_1_stream_exporter.html#ab1ef51f485dd974615e1e8ddadab2439">More...</a><br /></td></tr>
+<tr class="separator:ab1ef51f485dd974615e1e8ddadab2439"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8838d6cc4e0fb7ac980ccc22f47efb1d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stream_exporter.html#a8838d6cc4e0fb7ac980ccc22f47efb1d">setRgba</a> (<a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;desc)</td></tr>
+<tr class="memdesc:a8838d6cc4e0fb7ac980ccc22f47efb1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic initialization with the export description.  <a href="class_isis_1_1_stream_exporter.html#a8838d6cc4e0fb7ac980ccc22f47efb1d">More...</a><br /></td></tr>
+<tr class="separator:a8838d6cc4e0fb7ac980ccc22f47efb1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa18df73f55b343d2264f9c7d0eebbb3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#aa18df73f55b343d2264f9c7d0eebbb3a">operator()</a> (vector&lt; <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> * &gt; &amp;in) const</td></tr>
+<tr class="memdesc:aa18df73f55b343d2264f9c7d0eebbb3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The method for writing a line of input image data (with potentially several bands representing color channels) to the output image.  <a href="class_isis_1_1_image_exporter.html#aa18df73f55b343d2264f9c7d0eebbb3a">More...</a><br /></td></tr>
+<tr class="separator:aa18df73f55b343d2264f9c7d0eebbb3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a783393c6511bc01c3ff12a8d5dcf576a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#a783393c6511bc01c3ff12a8d5dcf576a">samples</a> () const</td></tr>
+<tr class="memdesc:a783393c6511bc01c3ff12a8d5dcf576a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of samples (columns) in the output image.  <a href="class_isis_1_1_image_exporter.html#a783393c6511bc01c3ff12a8d5dcf576a">More...</a><br /></td></tr>
+<tr class="separator:a783393c6511bc01c3ff12a8d5dcf576a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0243df0a80c917e97d3c3cc677cb3cb3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#a0243df0a80c917e97d3c3cc677cb3cb3">lines</a> () const</td></tr>
+<tr class="memdesc:a0243df0a80c917e97d3c3cc677cb3cb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of lines (rows) in the output image.  <a href="class_isis_1_1_image_exporter.html#a0243df0a80c917e97d3c3cc677cb3cb3">More...</a><br /></td></tr>
+<tr class="separator:a0243df0a80c917e97d3c3cc677cb3cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06578801083a0091b3f8e09f941516c1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#a06578801083a0091b3f8e09f941516c1">bands</a> () const</td></tr>
+<tr class="memdesc:a06578801083a0091b3f8e09f941516c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of bands (channels) in the output image.  <a href="class_isis_1_1_image_exporter.html#a06578801083a0091b3f8e09f941516c1">More...</a><br /></td></tr>
+<tr class="separator:a06578801083a0091b3f8e09f941516c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a11c59f7472b287995ff6750c7b3d92"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#a3a11c59f7472b287995ff6750c7b3d92">inputMinimum</a> (int channel) const</td></tr>
+<tr class="memdesc:a3a11c59f7472b287995ff6750c7b3d92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the input minimum for the given channel.  <a href="class_isis_1_1_image_exporter.html#a3a11c59f7472b287995ff6750c7b3d92">More...</a><br /></td></tr>
+<tr class="separator:a3a11c59f7472b287995ff6750c7b3d92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8953661d0ebabb551f7bf3767ed46ac"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#af8953661d0ebabb551f7bf3767ed46ac">inputMaximum</a> (int channel) const</td></tr>
+<tr class="memdesc:af8953661d0ebabb551f7bf3767ed46ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the input maximum for the given channel.  <a href="class_isis_1_1_image_exporter.html#af8953661d0ebabb551f7bf3767ed46ac">More...</a><br /></td></tr>
+<tr class="separator:af8953661d0ebabb551f7bf3767ed46ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fa0923e73500e33d41645df7f615982"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#a9fa0923e73500e33d41645df7f615982">setOutputPixelRange</a> (double outputPixelMinimum, double outputPixelMaximum)</td></tr>
+<tr class="memdesc:a9fa0923e73500e33d41645df7f615982"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the DN floor and ceiling for the exported image.  <a href="class_isis_1_1_image_exporter.html#a9fa0923e73500e33d41645df7f615982">More...</a><br /></td></tr>
+<tr class="separator:a9fa0923e73500e33d41645df7f615982"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a1b67a38cdc74df70463e7bb70b196d9e"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_j_p2_exporter.html#a1b67a38cdc74df70463e7bb70b196d9e">canWriteFormat</a> (QString format)</td></tr>
+<tr class="memdesc:a1b67a38cdc74df70463e7bb70b196d9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the format is "jp2".  <a href="class_isis_1_1_j_p2_exporter.html#a1b67a38cdc74df70463e7bb70b196d9e">More...</a><br /></td></tr>
+<tr class="separator:a1b67a38cdc74df70463e7bb70b196d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77ae4330dffd735c555e12ea6c880335"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_image_exporter.html">ImageExporter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#a77ae4330dffd735c555e12ea6c880335">fromFormat</a> (QString format)</td></tr>
+<tr class="memdesc:a77ae4330dffd735c555e12ea6c880335"><td class="mdescLeft">&#160;</td><td class="mdescRight">A static (factory) method for constructing an <a class="el" href="class_isis_1_1_image_exporter.html" title="Export Isis cubes into standard formats.">ImageExporter</a> instance from an output format.  <a href="class_isis_1_1_image_exporter.html#a77ae4330dffd735c555e12ea6c880335">More...</a><br /></td></tr>
+<tr class="separator:a77ae4330dffd735c555e12ea6c880335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:a464ecaeebbcb475ffe7b187dba7ea259"><td class="memItemLeft" align="right" valign="top">typedef void(ImageExporter::*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#a464ecaeebbcb475ffe7b187dba7ea259">WriteChannels</a>) (vector&lt; <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> * &gt; &amp;in) const</td></tr>
+<tr class="memdesc:a464ecaeebbcb475ffe7b187dba7ea259"><td class="mdescLeft">&#160;</td><td class="mdescRight">Friendly alias for a method used to write a particular color channel.  <a href="class_isis_1_1_image_exporter.html#a464ecaeebbcb475ffe7b187dba7ea259">More...</a><br /></td></tr>
+<tr class="separator:a464ecaeebbcb475ffe7b187dba7ea259"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:acc6cba5dae0fd546f7f2d829305b6281"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_j_p2_exporter.html#acc6cba5dae0fd546f7f2d829305b6281">createBuffer</a> ()</td></tr>
+<tr class="memdesc:acc6cba5dae0fd546f7f2d829305b6281"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the buffer to store a chunk of streamed line data with one or more bands.  <a href="class_isis_1_1_j_p2_exporter.html#acc6cba5dae0fd546f7f2d829305b6281">More...</a><br /></td></tr>
+<tr class="separator:acc6cba5dae0fd546f7f2d829305b6281"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a870016cb7093f379374b423b9a25020b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_j_p2_exporter.html#a870016cb7093f379374b423b9a25020b">setBuffer</a> (int s, int b, int dn) const</td></tr>
+<tr class="memdesc:a870016cb7093f379374b423b9a25020b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the DN value at the given sample and band of the line buffer.  <a href="class_isis_1_1_j_p2_exporter.html#a870016cb7093f379374b423b9a25020b">More...</a><br /></td></tr>
+<tr class="separator:a870016cb7093f379374b423b9a25020b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a206007e002d167daee095d68b72d1a23"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_j_p2_exporter.html#a206007e002d167daee095d68b72d1a23">writeLine</a> (int l) const</td></tr>
+<tr class="memdesc:a206007e002d167daee095d68b72d1a23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a line of buffered data to the output image on disk.  <a href="class_isis_1_1_j_p2_exporter.html#a206007e002d167daee095d68b72d1a23">More...</a><br /></td></tr>
+<tr class="separator:a206007e002d167daee095d68b72d1a23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b4805184ee5d8bb8b515ff4b0b01b0a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stream_exporter.html#a9b4805184ee5d8bb8b515ff4b0b01b0a">initialize</a> (<a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;desc)</td></tr>
+<tr class="memdesc:a9b4805184ee5d8bb8b515ff4b0b01b0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic initialization with the export description.  <a href="class_isis_1_1_stream_exporter.html#a9b4805184ee5d8bb8b515ff4b0b01b0a">More...</a><br /></td></tr>
+<tr class="separator:a9b4805184ee5d8bb8b515ff4b0b01b0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4dc2fcb0622d278c99399675b75d922"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stream_exporter.html#ac4dc2fcb0622d278c99399675b75d922">writeGrayscale</a> (vector&lt; <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> * &gt; &amp;in) const</td></tr>
+<tr class="memdesc:ac4dc2fcb0622d278c99399675b75d922"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a line of grayscale data to the output image.  <a href="class_isis_1_1_stream_exporter.html#ac4dc2fcb0622d278c99399675b75d922">More...</a><br /></td></tr>
+<tr class="separator:ac4dc2fcb0622d278c99399675b75d922"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a936c43499aef26f7f3ab3e7709068766"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stream_exporter.html#a936c43499aef26f7f3ab3e7709068766">writeRgb</a> (vector&lt; <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> * &gt; &amp;in) const</td></tr>
+<tr class="memdesc:a936c43499aef26f7f3ab3e7709068766"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a line of RGB data to the output image.  <a href="class_isis_1_1_stream_exporter.html#a936c43499aef26f7f3ab3e7709068766">More...</a><br /></td></tr>
+<tr class="separator:a936c43499aef26f7f3ab3e7709068766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0be48478bf56393417e63c7d03db625f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_stream_exporter.html#a0be48478bf56393417e63c7d03db625f">writeRgba</a> (vector&lt; <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> * &gt; &amp;in) const</td></tr>
+<tr class="memdesc:a0be48478bf56393417e63c7d03db625f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a line of RGBA data to the output image.  <a href="class_isis_1_1_stream_exporter.html#a0be48478bf56393417e63c7d03db625f">More...</a><br /></td></tr>
+<tr class="separator:a0be48478bf56393417e63c7d03db625f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1a54464b8660b480166c2b4bcbf8ed1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#ab1a54464b8660b480166c2b4bcbf8ed1">setExtension</a> (QString <a class="el" href="class_isis_1_1_image_exporter.html#a036c75457f2721cd468d4979844440c6">extension</a>)</td></tr>
+<tr class="memdesc:ab1a54464b8660b480166c2b4bcbf8ed1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the extension for the output image and generates the extension for the world file from it.  <a href="class_isis_1_1_image_exporter.html#ab1a54464b8660b480166c2b4bcbf8ed1">More...</a><br /></td></tr>
+<tr class="separator:ab1a54464b8660b480166c2b4bcbf8ed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabb9058684dfde383d14e11fc9effd3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#aabb9058684dfde383d14e11fc9effd3b">setExportDescription</a> (<a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;desc)</td></tr>
+<tr class="memdesc:aabb9058684dfde383d14e11fc9effd3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the description for the output image.  <a href="class_isis_1_1_image_exporter.html#aabb9058684dfde383d14e11fc9effd3b">More...</a><br /></td></tr>
+<tr class="separator:aabb9058684dfde383d14e11fc9effd3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36e1da11983d732dcf79be4d676c9093"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#a36e1da11983d732dcf79be4d676c9093">initializeProcess</a> ()</td></tr>
+<tr class="memdesc:a36e1da11983d732dcf79be4d676c9093"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up the export process with the parameters described within the given description.  <a href="class_isis_1_1_image_exporter.html#a36e1da11983d732dcf79be4d676c9093">More...</a><br /></td></tr>
+<tr class="separator:a36e1da11983d732dcf79be4d676c9093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a036c75457f2721cd468d4979844440c6"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#a036c75457f2721cd468d4979844440c6">extension</a> () const</td></tr>
+<tr class="memdesc:a036c75457f2721cd468d4979844440c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the extension for the output image.  <a href="class_isis_1_1_image_exporter.html#a036c75457f2721cd468d4979844440c6">More...</a><br /></td></tr>
+<tr class="separator:a036c75457f2721cd468d4979844440c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cbc5d2503f43c44f9c13ad3c6b87db5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#a2cbc5d2503f43c44f9c13ad3c6b87db5">exportDescription</a> () const</td></tr>
+<tr class="memdesc:a2cbc5d2503f43c44f9c13ad3c6b87db5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the description for the output image.  <a href="class_isis_1_1_image_exporter.html#a2cbc5d2503f43c44f9c13ad3c6b87db5">More...</a><br /></td></tr>
+<tr class="separator:a2cbc5d2503f43c44f9c13ad3c6b87db5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd03c77dc9630c73d592b8fddf69006c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_process_export.html">ProcessExport</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#abd03c77dc9630c73d592b8fddf69006c">process</a> () const</td></tr>
+<tr class="memdesc:abd03c77dc9630c73d592b8fddf69006c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the process object, useful for subclasses to access and manipulate the process.  <a href="class_isis_1_1_image_exporter.html#abd03c77dc9630c73d592b8fddf69006c">More...</a><br /></td></tr>
+<tr class="separator:abd03c77dc9630c73d592b8fddf69006c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a866c99113818087a126ecb569bfc00b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">PixelType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#a866c99113818087a126ecb569bfc00b1">pixelType</a> () const</td></tr>
+<tr class="memdesc:a866c99113818087a126ecb569bfc00b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the pixel type.  <a href="class_isis_1_1_image_exporter.html#a866c99113818087a126ecb569bfc00b1">More...</a><br /></td></tr>
+<tr class="separator:a866c99113818087a126ecb569bfc00b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd5caeb47a79249e47e41e0a8c31d1d5"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_exporter.html#acd5caeb47a79249e47e41e0a8c31d1d5">outputPixelValue</a> (double dn) const</td></tr>
+<tr class="memdesc:acd5caeb47a79249e47e41e0a8c31d1d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the output clamped integer pixel value from the input double-precision DN.  <a href="class_isis_1_1_image_exporter.html#acd5caeb47a79249e47e41e0a8c31d1d5">More...</a><br /></td></tr>
+<tr class="separator:acd5caeb47a79249e47e41e0a8c31d1d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Exports cubes into JPEG 2000 images. </p>
+<p>A streamed exporter for JPEG 2000 images. Can write an arbitrarily large set of single-band <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> cubes to an arbitrarily large JPEG 2000 image with the given pixel type.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-04-03 Travis Addair </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a464ecaeebbcb475ffe7b187dba7ea259"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a464ecaeebbcb475ffe7b187dba7ea259">&#9670;&nbsp;</a></span>WriteChannels</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(ImageExporter::* Isis::ImageExporter::WriteChannels) (vector&lt; <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> * &gt; &amp;in) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Friendly alias for a method used to write a particular color channel. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ac35e1f7ace86599dafcbac06b1b09453"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac35e1f7ace86599dafcbac06b1b09453">&#9670;&nbsp;</a></span>JP2Exporter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::JP2Exporter::JP2Exporter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct the JPEG 2000 exporter. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_exporter.html#ab1a54464b8660b480166c2b4bcbf8ed1">Isis::ImageExporter::setExtension()</a>.</p>
+
+</div>
+</div>
+<a id="a81b27e73eb669fceff142a601634778c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81b27e73eb669fceff142a601634778c">&#9670;&nbsp;</a></span>~JP2Exporter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::JP2Exporter::~JP2Exporter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destruct the exporter. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a06578801083a0091b3f8e09f941516c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06578801083a0091b3f8e09f941516c1">&#9670;&nbsp;</a></span>bands()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ImageExporter::bands </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of bands (channels) in the output image. </p>
+<dl class="section return"><dt>Returns</dt><dd>The depth of the output </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_qt_exporter.html#a7ab2ce292eb85ebd92fbd2c5eb78bf6d">Isis::QtExporter::checkDataSize()</a>, <a class="el" href="class_isis_1_1_j_p2_exporter.html#acc6cba5dae0fd546f7f2d829305b6281">createBuffer()</a>, <a class="el" href="class_isis_1_1_tiff_exporter.html#ae4dd1089865d9eccac884c5a612b7654">Isis::TiffExporter::createBuffer()</a>, <a class="el" href="class_isis_1_1_tiff_exporter.html#a255b5845e3bbb6e3823c7bb6459eb704">Isis::TiffExporter::setBuffer()</a>, <a class="el" href="class_isis_1_1_j_p2_exporter.html#a7f61804d226fe3b0bd489fe84d665e23">write()</a>, and <a class="el" href="class_isis_1_1_tiff_exporter.html#a2bc9c41c7ab1222c20a58b688d59c9fa">Isis::TiffExporter::write()</a>.</p>
+
+</div>
+</div>
+<a id="a1b67a38cdc74df70463e7bb70b196d9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b67a38cdc74df70463e7bb70b196d9e">&#9670;&nbsp;</a></span>canWriteFormat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::JP2Exporter::canWriteFormat </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>format</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the format is "jp2". </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">format</td><td>Lowercase format abbreviation</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if "jp2", false otherwise </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_exporter.html#a77ae4330dffd735c555e12ea6c880335">Isis::ImageExporter::fromFormat()</a>.</p>
+
+</div>
+</div>
+<a id="acc6cba5dae0fd546f7f2d829305b6281"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc6cba5dae0fd546f7f2d829305b6281">&#9670;&nbsp;</a></span>createBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::JP2Exporter::createBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates the buffer to store a chunk of streamed line data with one or more bands. </p>
+
+<p>Implements <a class="el" href="class_isis_1_1_stream_exporter.html#afccd9f027ac00fe2efe45ce854f1dad9">Isis::StreamExporter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_exporter.html#a06578801083a0091b3f8e09f941516c1">Isis::ImageExporter::bands()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#a866c99113818087a126ecb569bfc00b1">Isis::ImageExporter::pixelType()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#a783393c6511bc01c3ff12a8d5dcf576a">Isis::ImageExporter::samples()</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa93be2b341f0d7ce702e5617ee508cb69">Isis::UnsignedByte</a>.</p>
+
+</div>
+</div>
+<a id="a2cbc5d2503f43c44f9c13ad3c6b87db5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cbc5d2503f43c44f9c13ad3c6b87db5">&#9670;&nbsp;</a></span>exportDescription()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp; Isis::ImageExporter::exportDescription </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the description for the output image. </p>
+<dl class="section return"><dt>Returns</dt><dd>The export description </dd></dl>
+
+</div>
+</div>
+<a id="a036c75457f2721cd468d4979844440c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a036c75457f2721cd468d4979844440c6">&#9670;&nbsp;</a></span>extension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ImageExporter::extension </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the extension for the output image. </p>
+<dl class="section return"><dt>Returns</dt><dd>The extension for the output image </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_j_p2_exporter.html#a7f61804d226fe3b0bd489fe84d665e23">write()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a460d28c180743b865b31c2ae895414b1">Isis::QtExporter::write()</a>, and <a class="el" href="class_isis_1_1_tiff_exporter.html#a2bc9c41c7ab1222c20a58b688d59c9fa">Isis::TiffExporter::write()</a>.</p>
+
+</div>
+</div>
+<a id="a77ae4330dffd735c555e12ea6c880335"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77ae4330dffd735c555e12ea6c880335">&#9670;&nbsp;</a></span>fromFormat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_image_exporter.html">ImageExporter</a> * Isis::ImageExporter::fromFormat </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>format</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A static (factory) method for constructing an <a class="el" href="class_isis_1_1_image_exporter.html" title="Export Isis cubes into standard formats.">ImageExporter</a> instance from an output format. </p>
+<p>The specific subclass of the returned instance is determined from the desired output image format provided. Each subclass has knowledge of whether or not it can write a particular format. Because the ability to export an image format is not mutually exclusive amongst exporters, the order of condieration here matters. For example, using a TIFF exporter takes precedence over a Qt exporter for TIFF images, because the former can process cubes greater than 2GB while the latter cannot. It is the caller's responsibility to delete the exporter instance when they are finished with it.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">format</td><td>The format for the output image to be created</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the instantiated exporter owned by the caller </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_j_p2_exporter.html#a1b67a38cdc74df70463e7bb70b196d9e">canWriteFormat()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a95bfec815a928dfef44989752ece3ec8">Isis::QtExporter::canWriteFormat()</a>, <a class="el" href="class_isis_1_1_tiff_exporter.html#a0d412af92225870709cf24a7ec8c963f">Isis::TiffExporter::canWriteFormat()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+</div>
+</div>
+<a id="a9b4805184ee5d8bb8b515ff4b0b01b0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b4805184ee5d8bb8b515ff4b0b01b0a">&#9670;&nbsp;</a></span>initialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::StreamExporter::initialize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Generic initialization with the export description. </p>
+<p>Set the input, set the pixel type, and create the buffer.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">desc</td><td>Export description containing necessary channel information </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_image_exporter.html#aadc0bf2b7b993f075ca2ab824f9a521e">Isis::ImageExporter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_stream_exporter.html#afccd9f027ac00fe2efe45ce854f1dad9">Isis::StreamExporter::createBuffer()</a>, and <a class="el" href="class_isis_1_1_image_exporter.html#aadc0bf2b7b993f075ca2ab824f9a521e">Isis::ImageExporter::initialize()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_stream_exporter.html#a1536e3fc95500c08ff05f884e717eac6">Isis::StreamExporter::setGrayscale()</a>, <a class="el" href="class_isis_1_1_stream_exporter.html#ab1ef51f485dd974615e1e8ddadab2439">Isis::StreamExporter::setRgb()</a>, and <a class="el" href="class_isis_1_1_stream_exporter.html#a8838d6cc4e0fb7ac980ccc22f47efb1d">Isis::StreamExporter::setRgba()</a>.</p>
+
+</div>
+</div>
+<a id="a36e1da11983d732dcf79be4d676c9093"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36e1da11983d732dcf79be4d676c9093">&#9670;&nbsp;</a></span>initializeProcess()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cube.html">Cube</a> * Isis::ImageExporter::initializeProcess </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets up the export process with the parameters described within the given description. </p>
+<p>This method determines determines whether to write the data as grayscale, RGB, or RGBA. It then opens a cube for retrieving the input data and establishing the dimensions of the output image. Next, the <a class="el" href="class_isis_1_1_process_export.html" title="Process class for exporting cubes.">ProcessExport</a> format is set to BIL and the <a class="el" href="class_isis_1_1_process_export.html" title="Process class for exporting cubes.">ProcessExport</a> output pixel type, output valid data range, and output null are set based on the given export description. Last, the absolute output pixel range is set based on the given description (this is the smallest and largest allowed pixel values in the output, including "special" pixel values).</p>
+<dl class="section return"><dt>Returns</dt><dd>A cube pointer to the first channel created, owned by the process </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_process_export.html#ac089cd62dd420eb0370d039d086598e1a981a04dc1720b85076be596d9abaec39">Isis::ProcessExport::BIL</a>, <a class="el" href="class_isis_1_1_cube.html#a35280cce6e0301a9bbde9c2dac9a2dcd">Isis::Cube::lineCount()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_cube.html#a6336fc0d356682258017972eeaf49c12">Isis::Cube::sampleCount()</a>, <a class="el" href="class_isis_1_1_process_export.html#acd87ba732fb9de6cb2ecea647375b57e">Isis::ProcessExport::setFormat()</a>, <a class="el" href="class_isis_1_1_process_export.html#a717124dfce463f3252e054ff63e07273">Isis::ProcessExport::SetOutputNull()</a>, <a class="el" href="class_isis_1_1_process_export.html#af382d2581bee2732d8f169b5240b05e4">Isis::ProcessExport::SetOutputRange()</a>, <a class="el" href="class_isis_1_1_process_export.html#aa05b4dff4eb1bbbc8394ef5e5ae2d3d1">Isis::ProcessExport::SetOutputType()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#a930330ee1c08f986836e2914997b9d26">Isis::ImageExporter::writeGrayscale()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#af0761eef13f918763d619c0f6e12b4fc">Isis::ImageExporter::writeRgb()</a>, and <a class="el" href="class_isis_1_1_image_exporter.html#ae50a95afce48c0b1d0e670402fdee1d8">Isis::ImageExporter::writeRgba()</a>.</p>
+
+</div>
+</div>
+<a id="af8953661d0ebabb551f7bf3767ed46ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8953661d0ebabb551f7bf3767ed46ac">&#9670;&nbsp;</a></span>inputMaximum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ImageExporter::inputMaximum </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>channel</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the input maximum for the given channel. </p>
+<p>Any value of max in the input cube will be mapped to the output max of the output channel.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">channel</td><td>Index of the channel within the process</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The maximum DN in the input mapped to the maximum of the output </dd></dl>
+
+</div>
+</div>
+<a id="a3a11c59f7472b287995ff6750c7b3d92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a11c59f7472b287995ff6750c7b3d92">&#9670;&nbsp;</a></span>inputMinimum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ImageExporter::inputMinimum </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>channel</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the input minimum for the given channel. </p>
+<p>Any value of min in the input cube will be mapped to the output min of the output channel.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">channel</td><td>Index of the channel within the process</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The minimum DN in the input mapped to the minimum of the output </dd></dl>
+
+</div>
+</div>
+<a id="a0243df0a80c917e97d3c3cc677cb3cb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0243df0a80c917e97d3c3cc677cb3cb3">&#9670;&nbsp;</a></span>lines()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ImageExporter::lines </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of lines (rows) in the output image. </p>
+<dl class="section return"><dt>Returns</dt><dd>The height of the output </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_qt_exporter.html#a7ab2ce292eb85ebd92fbd2c5eb78bf6d">Isis::QtExporter::checkDataSize()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a06bcbef33f573ff21f93fe277ce073d9">Isis::QtExporter::setGrayscale()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a0d5af139a6bda5dad01597c3588f51d9">Isis::QtExporter::setRgb()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#ae4e5a2321096063cd74681ddfb99875c">Isis::QtExporter::setRgba()</a>, <a class="el" href="class_isis_1_1_j_p2_exporter.html#a7f61804d226fe3b0bd489fe84d665e23">write()</a>, and <a class="el" href="class_isis_1_1_tiff_exporter.html#a2bc9c41c7ab1222c20a58b688d59c9fa">Isis::TiffExporter::write()</a>.</p>
+
+</div>
+</div>
+<a id="aa18df73f55b343d2264f9c7d0eebbb3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa18df73f55b343d2264f9c7d0eebbb3a">&#9670;&nbsp;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageExporter::operator() </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>in</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The method for writing a line of input image data (with potentially several bands representing color channels) to the output image. </p>
+<p>It is called for each line of data in the input images (provides a vector containing the same line from each single-band input image). Enables the exporter to be used as a functor in a custom <a class="el" href="class_isis_1_1_process_export.html" title="Process class for exporting cubes.">ProcessExport</a> routine, bypassing the black-box <a class="el" href="class_isis_1_1_j_p2_exporter.html#a7f61804d226fe3b0bd489fe84d665e23" title="Initialize the encoder, open the output file for writing, then let the base ImageExporter handle the ...">write()</a> method entirely.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td>Vector containing a line of input data from each input channel </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="acd5caeb47a79249e47e41e0a8c31d1d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd5caeb47a79249e47e41e0a8c31d1d5">&#9670;&nbsp;</a></span>outputPixelValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ImageExporter::outputPixelValue </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>dn</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the output clamped integer pixel value from the input double-precision DN. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dn</td><td>The input DN</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pixel value for the output </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_qt_exporter.html#a75f4257465c087d3a601c4738a51ecd4">Isis::QtExporter::writeGrayscale()</a>, <a class="el" href="class_isis_1_1_stream_exporter.html#ac4dc2fcb0622d278c99399675b75d922">Isis::StreamExporter::writeGrayscale()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#ad82740ffa60bc9f90b175e964f3f2533">Isis::QtExporter::writeRgb()</a>, <a class="el" href="class_isis_1_1_stream_exporter.html#a936c43499aef26f7f3ab3e7709068766">Isis::StreamExporter::writeRgb()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a4f954a450783f0c7b010fc70e4f7c51f">Isis::QtExporter::writeRgba()</a>, and <a class="el" href="class_isis_1_1_stream_exporter.html#a0be48478bf56393417e63c7d03db625f">Isis::StreamExporter::writeRgba()</a>.</p>
+
+</div>
+</div>
+<a id="a866c99113818087a126ecb569bfc00b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a866c99113818087a126ecb569bfc00b1">&#9670;&nbsp;</a></span>pixelType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">PixelType</a> Isis::ImageExporter::pixelType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the pixel type. </p>
+<p>Defaults to None if not set by the user.</p>
+<dl class="section return"><dt>Returns</dt><dd>The pixel type: {None, UnsignedByte, SignedWord, UnsignedWord} </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa765485b7074fbfe10aeff5fea59128d7">Isis::None</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_j_p2_exporter.html#acc6cba5dae0fd546f7f2d829305b6281">createBuffer()</a>, <a class="el" href="class_isis_1_1_tiff_exporter.html#ae4dd1089865d9eccac884c5a612b7654">Isis::TiffExporter::createBuffer()</a>, <a class="el" href="class_isis_1_1_j_p2_exporter.html#a870016cb7093f379374b423b9a25020b">setBuffer()</a>, <a class="el" href="class_isis_1_1_tiff_exporter.html#a255b5845e3bbb6e3823c7bb6459eb704">Isis::TiffExporter::setBuffer()</a>, <a class="el" href="class_isis_1_1_j_p2_exporter.html#a7f61804d226fe3b0bd489fe84d665e23">write()</a>, <a class="el" href="class_isis_1_1_tiff_exporter.html#a2bc9c41c7ab1222c20a58b688d59c9fa">Isis::TiffExporter::write()</a>, and <a class="el" href="class_isis_1_1_j_p2_exporter.html#a206007e002d167daee095d68b72d1a23">writeLine()</a>.</p>
+
+</div>
+</div>
+<a id="abd03c77dc9630c73d592b8fddf69006c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd03c77dc9630c73d592b8fddf69006c">&#9670;&nbsp;</a></span>process()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_process_export.html">ProcessExport</a> &amp; Isis::ImageExporter::process </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a reference to the process object, useful for subclasses to access and manipulate the process. </p>
+<dl class="section return"><dt>Returns</dt><dd>A reference to the process object </dd></dl>
+
+</div>
+</div>
+<a id="a783393c6511bc01c3ff12a8d5dcf576a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a783393c6511bc01c3ff12a8d5dcf576a">&#9670;&nbsp;</a></span>samples()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ImageExporter::samples </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of samples (columns) in the output image. </p>
+<dl class="section return"><dt>Returns</dt><dd>The width of the output </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_qt_exporter.html#a7ab2ce292eb85ebd92fbd2c5eb78bf6d">Isis::QtExporter::checkDataSize()</a>, <a class="el" href="class_isis_1_1_j_p2_exporter.html#acc6cba5dae0fd546f7f2d829305b6281">createBuffer()</a>, <a class="el" href="class_isis_1_1_tiff_exporter.html#ae4dd1089865d9eccac884c5a612b7654">Isis::TiffExporter::createBuffer()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a06bcbef33f573ff21f93fe277ce073d9">Isis::QtExporter::setGrayscale()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a0d5af139a6bda5dad01597c3588f51d9">Isis::QtExporter::setRgb()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#ae4e5a2321096063cd74681ddfb99875c">Isis::QtExporter::setRgba()</a>, <a class="el" href="class_isis_1_1_j_p2_exporter.html#a7f61804d226fe3b0bd489fe84d665e23">write()</a>, and <a class="el" href="class_isis_1_1_tiff_exporter.html#a2bc9c41c7ab1222c20a58b688d59c9fa">Isis::TiffExporter::write()</a>.</p>
+
+</div>
+</div>
+<a id="a870016cb7093f379374b423b9a25020b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a870016cb7093f379374b423b9a25020b">&#9670;&nbsp;</a></span>setBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::JP2Exporter::setBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dn</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the DN value at the given sample and band of the line buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>The sample index into the buffer </td></tr>
+    <tr><td class="paramname">b</td><td>The band index into the buffer </td></tr>
+    <tr><td class="paramname">dn</td><td>The value to set at the given index </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_stream_exporter.html#a9678aef84e5c134c8336304f0e7ee2eb">Isis::StreamExporter</a>.</p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_image_exporter.html#a866c99113818087a126ecb569bfc00b1">Isis::ImageExporter::pixelType()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa20c5985c19cf057341fea1d4bc2c62a6">Isis::SignedWord</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa93be2b341f0d7ce702e5617ee508cb69">Isis::UnsignedByte</a>, and <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa9a1991e15705d6438e893b672ef470c3">Isis::UnsignedWord</a>.</p>
+
+</div>
+</div>
+<a id="aabb9058684dfde383d14e11fc9effd3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabb9058684dfde383d14e11fc9effd3b">&#9670;&nbsp;</a></span>setExportDescription()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageExporter::setExportDescription </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the description for the output image. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">desc</td><td>The export description </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab1a54464b8660b480166c2b4bcbf8ed1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1a54464b8660b480166c2b4bcbf8ed1">&#9670;&nbsp;</a></span>setExtension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageExporter::setExtension </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>extension</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the extension for the output image and generates the extension for the world file from it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">extension</td><td>The extension for the output image </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_j_p2_exporter.html#ac35e1f7ace86599dafcbac06b1b09453">JP2Exporter()</a>, <a class="el" href="class_isis_1_1_qt_exporter.html#a5be16fcbe07fd30259b61d775a0348ff">Isis::QtExporter::QtExporter()</a>, and <a class="el" href="class_isis_1_1_tiff_exporter.html#a4c43fd0fc7ab87604357721eaaf97732">Isis::TiffExporter::TiffExporter()</a>.</p>
+
+</div>
+</div>
+<a id="a1536e3fc95500c08ff05f884e717eac6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1536e3fc95500c08ff05f884e717eac6">&#9670;&nbsp;</a></span>setGrayscale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::StreamExporter::setGrayscale </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Generic initialization with the export description. </p>
+<p>Stream exporters do not do anything special to export a grayscale image beyond setting up the appropriate number of color channels.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">desc</td><td>Export description containing necessary channel information </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_image_exporter.html#aafa23b40b0a4c0bb0713e8349435c1bc">Isis::ImageExporter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_stream_exporter.html#a9b4805184ee5d8bb8b515ff4b0b01b0a">Isis::StreamExporter::initialize()</a>.</p>
+
+</div>
+</div>
+<a id="a9fa0923e73500e33d41645df7f615982"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fa0923e73500e33d41645df7f615982">&#9670;&nbsp;</a></span>setOutputPixelRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageExporter::setOutputPixelRange </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>outputPixelMinimum</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>outputPixelMaximum</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the DN floor and ceiling for the exported image. </p>
+<p>All DNs less than the min will be set to the min in the exported image. Similarly, all DNs greater than the max will be set to the max in the exported image.</p>
+<p>Note: These values may be "special". For example, if Null pixels are exported to 0.0 and the minimum valid pixels are exported to 2.0, then 0.0 should be passed in for the value of the <b>min</b> parameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">min</td><td>The absolute minimum output DN value. </td></tr>
+    <tr><td class="paramname">max</td><td>The absolute maximum output DN value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab1ef51f485dd974615e1e8ddadab2439"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1ef51f485dd974615e1e8ddadab2439">&#9670;&nbsp;</a></span>setRgb()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::StreamExporter::setRgb </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Generic initialization with the export description. </p>
+<p>Stream exporters do not do anything special to export an RGB image beyond setting up the appropriate number of color channels.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">desc</td><td>Export description containing necessary channel information </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_image_exporter.html#aca4b52763583f2d71d57ab07810e713b">Isis::ImageExporter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_stream_exporter.html#a9b4805184ee5d8bb8b515ff4b0b01b0a">Isis::StreamExporter::initialize()</a>.</p>
+
+</div>
+</div>
+<a id="a8838d6cc4e0fb7ac980ccc22f47efb1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8838d6cc4e0fb7ac980ccc22f47efb1d">&#9670;&nbsp;</a></span>setRgba()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::StreamExporter::setRgba </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Generic initialization with the export description. </p>
+<p>Stream exporters do not do anything special to export an RGBA image beyond setting up the appropriate number of color channels.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">desc</td><td>Export description containing necessary channel information </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_image_exporter.html#a874903fa0b5a077801281e762502177d">Isis::ImageExporter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_stream_exporter.html#a9b4805184ee5d8bb8b515ff4b0b01b0a">Isis::StreamExporter::initialize()</a>.</p>
+
+</div>
+</div>
+<a id="a7f61804d226fe3b0bd489fe84d665e23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f61804d226fe3b0bd489fe84d665e23">&#9670;&nbsp;</a></span>write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::JP2Exporter::write </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td>
+          <td class="paramname"><em>outputName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>quality</em> = <code>100</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>compression</em> = <code>&quot;none&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_user_interface.html">UserInterface</a> *&#160;</td>
+          <td class="paramname"><em>ui</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize the encoder, open the output file for writing, then let the base <a class="el" href="class_isis_1_1_image_exporter.html" title="Export Isis cubes into standard formats.">ImageExporter</a> handle the generic black-box writing routine. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">outputName</td><td>The filename of the output cube </td></tr>
+    <tr><td class="paramname">quality</td><td>The quality of the output, not used for JPEG 2000 </td></tr>
+    <tr><td class="paramname">compression</td><td>The compression algorithm used. Not used for JPEG 2000 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_image_exporter.html#a267efba64df19385ca91c4570451c118">Isis::ImageExporter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_name.html#aec120eb7b9e8d7dba0c01298cb0b52b4">Isis::FileName::addExtension()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#a06578801083a0091b3f8e09f941516c1">Isis::ImageExporter::bands()</a>, <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#a036c75457f2721cd468d4979844440c6">Isis::ImageExporter::extension()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#a0243df0a80c917e97d3c3cc677cb3cb3">Isis::ImageExporter::lines()</a>, <a class="el" href="class_isis_1_1_j_p2_encoder.html#a434262456c2dda8820a24a7254da6685">Isis::JP2Encoder::OpenFile()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#a866c99113818087a126ecb569bfc00b1">Isis::ImageExporter::pixelType()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#a783393c6511bc01c3ff12a8d5dcf576a">Isis::ImageExporter::samples()</a>, and <a class="el" href="class_isis_1_1_image_exporter.html#a267efba64df19385ca91c4570451c118">Isis::ImageExporter::write()</a>.</p>
+
+</div>
+</div>
+<a id="ac4dc2fcb0622d278c99399675b75d922"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4dc2fcb0622d278c99399675b75d922">&#9670;&nbsp;</a></span>writeGrayscale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::StreamExporter::writeGrayscale </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>in</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write a line of grayscale data to the output image. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td>Vector containing a single grayscale input line </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_image_exporter.html#a930330ee1c08f986836e2914997b9d26">Isis::ImageExporter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a153bf0870143ceaaf72c2d801981a5fc">Isis::Buffer::Line()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#acd5caeb47a79249e47e41e0a8c31d1d5">Isis::ImageExporter::outputPixelValue()</a>, <a class="el" href="class_isis_1_1_buffer.html#abe9df445edbcdfd33514f7c620c54674">Isis::Buffer::SampleDimension()</a>, <a class="el" href="class_isis_1_1_stream_exporter.html#a9678aef84e5c134c8336304f0e7ee2eb">Isis::StreamExporter::setBuffer()</a>, and <a class="el" href="class_isis_1_1_stream_exporter.html#a097b1216e428a37c7d17da63a4d0fa64">Isis::StreamExporter::writeLine()</a>.</p>
+
+</div>
+</div>
+<a id="a206007e002d167daee095d68b72d1a23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a206007e002d167daee095d68b72d1a23">&#9670;&nbsp;</a></span>writeLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::JP2Exporter::writeLine </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>l</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Writes a line of buffered data to the output image on disk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">l</td><td>The line of the output image, unused for JPEG 2000 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_stream_exporter.html#a097b1216e428a37c7d17da63a4d0fa64">Isis::StreamExporter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_exporter.html#a866c99113818087a126ecb569bfc00b1">Isis::ImageExporter::pixelType()</a>, <a class="el" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530fa93be2b341f0d7ce702e5617ee508cb69">Isis::UnsignedByte</a>, and <a class="el" href="class_isis_1_1_j_p2_encoder.html#a96f61f67f4e957ecb45ef28e722f9a61">Isis::JP2Encoder::Write()</a>.</p>
+
+</div>
+</div>
+<a id="a936c43499aef26f7f3ab3e7709068766"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a936c43499aef26f7f3ab3e7709068766">&#9670;&nbsp;</a></span>writeRgb()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::StreamExporter::writeRgb </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>in</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write a line of RGB data to the output image. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td>Vector containing three input lines (red, green, blue) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_image_exporter.html#af0761eef13f918763d619c0f6e12b4fc">Isis::ImageExporter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a153bf0870143ceaaf72c2d801981a5fc">Isis::Buffer::Line()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#acd5caeb47a79249e47e41e0a8c31d1d5">Isis::ImageExporter::outputPixelValue()</a>, <a class="el" href="class_isis_1_1_buffer.html#abe9df445edbcdfd33514f7c620c54674">Isis::Buffer::SampleDimension()</a>, <a class="el" href="class_isis_1_1_stream_exporter.html#a9678aef84e5c134c8336304f0e7ee2eb">Isis::StreamExporter::setBuffer()</a>, and <a class="el" href="class_isis_1_1_stream_exporter.html#a097b1216e428a37c7d17da63a4d0fa64">Isis::StreamExporter::writeLine()</a>.</p>
+
+</div>
+</div>
+<a id="a0be48478bf56393417e63c7d03db625f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0be48478bf56393417e63c7d03db625f">&#9670;&nbsp;</a></span>writeRgba()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::StreamExporter::writeRgba </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>in</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write a line of RGBA data to the output image. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td>Vector containing four input lines (red, green, blue, alpha) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_image_exporter.html#ae50a95afce48c0b1d0e670402fdee1d8">Isis::ImageExporter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_buffer.html#a153bf0870143ceaaf72c2d801981a5fc">Isis::Buffer::Line()</a>, <a class="el" href="class_isis_1_1_image_exporter.html#acd5caeb47a79249e47e41e0a8c31d1d5">Isis::ImageExporter::outputPixelValue()</a>, <a class="el" href="class_isis_1_1_buffer.html#abe9df445edbcdfd33514f7c620c54674">Isis::Buffer::SampleDimension()</a>, <a class="el" href="class_isis_1_1_stream_exporter.html#a9678aef84e5c134c8336304f0e7ee2eb">Isis::StreamExporter::setBuffer()</a>, and <a class="el" href="class_isis_1_1_stream_exporter.html#a097b1216e428a37c7d17da63a4d0fa64">Isis::StreamExporter::writeLine()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/JP2Exporter/<a class="el" href="_j_p2_exporter_8h_source.html">JP2Exporter.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/JP2Exporter/<a class="el" href="_j_p2_exporter_8cpp.html">JP2Exporter.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_j_p2_exporter.html">JP2Exporter</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

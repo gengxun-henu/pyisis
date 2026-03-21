@@ -1,0 +1,15 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+HiHistory,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/HiCalTypes.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,HiHistory,isis_pybind.HiHistory,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Public API,return (o),isis_pybind.HiHistory.return,N,抽象基类/纯虚接口
+Construction/Enum,HiHistory(),isis_pybind.HiHistory(),N,抽象基类/纯虚接口
+Construction/Enum,HiHistory(const HiHistory &h) : _events(h._events) { },isis_pybind.HiHistory(),N,抽象基类/纯虚接口
+Query,inline int size() const { return (_events.size()); },isis_pybind.HiHistory.size,N,抽象基类/纯虚接口
+Mutation/Configuration,void add(const QString &event) { _events.push_back(event); },isis_pybind.HiHistory.add,N,抽象基类/纯虚接口
+Public API,QString get(unsigned int index = 0) const { if (index < _events.size()) { return (_events[index]),isis_pybind.HiHistory.get,N,抽象基类/纯虚接口
+Mutation/Configuration,void clear() { _events.clear(); },isis_pybind.HiHistory.clear,N,抽象基类/纯虚接口
+Public API,"PvlKeyword makekey(const QString &name = ""History"") const { PvlKeyword key(name)",isis_pybind.HiHistory.makekey,N,抽象基类/纯虚接口
+Public API,for (unsigned int i = 0 ; i < _events.size() ; i++) { key.addValue(_events[i]),isis_pybind.HiHistory.for,N,抽象基类/纯虚接口
+Public API,return (key),isis_pybind.HiHistory.return,N,抽象基类/纯虚接口

@@ -1,0 +1,2565 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::SpacecraftPosition Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_spacecraft_position.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_spacecraft_position-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::SpacecraftPosition Class Reference<div class="ingroups"><a class="el" href="group___spice_instruments_and_cameras.html">Spice, Instruments, and Cameras</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Provides swap observer/target and improved light time correction.  
+ <a href="class_isis_1_1_spacecraft_position.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_spacecraft_position_8h_source.html">SpacecraftPosition.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::SpacecraftPosition:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_spacecraft_position__inherit__graph.png" border="0" usemap="#a_isis_1_1_spacecraft_position_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_spacecraft_position_inherit__map" id="a_isis_1_1_spacecraft_position_inherit__map">
+<area shape="rect" title="Provides swap observer/target and improved light time correction." alt="" coords="30,503,216,696"/>
+<area shape="rect" href="class_isis_1_1_spice_position.html" title="Obtain SPICE position information for a body." alt="" coords="5,5,241,455"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::SpacecraftPosition:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_spacecraft_position__coll__graph.png" border="0" usemap="#a_isis_1_1_spacecraft_position_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_spacecraft_position_coll__map" id="a_isis_1_1_spacecraft_position_coll__map">
+<area shape="rect" title="Provides swap observer/target and improved light time correction." alt="" coords="30,503,216,696"/>
+<area shape="rect" href="class_isis_1_1_spice_position.html" title="Obtain SPICE position information for a body." alt="" coords="5,5,241,455"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a3e47d75d3c236a4056609077d6758ba3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3">Source</a> { <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a7fe47789f1dcfd6cf50155f54ff689ea">Spice</a>
+, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a30f7edb2c8d747bffb66cacc25ba6e4d">Memcache</a>
+, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a27a657bc1062488377b0447727b67cfa">HermiteCache</a>
+, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a2bf63bc3a9bbd4ff1b094802a7d4d0da">PolyFunction</a>
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a986fa3d9bec627d7c84a248773989b7c">PolyFunctionOverHermiteConstant</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a3e47d75d3c236a4056609077d6758ba3"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum indicates the status of the object.  <a href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3">More...</a><br /></td></tr>
+<tr class="separator:a3e47d75d3c236a4056609077d6758ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7476c820f19e5af62cbab682bfb852ec"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852ec">PartialType</a> { <a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852eca4b7d158db0a3eae1ecf51edcb59f2fef">WRT_X</a>
+, <a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852ecaa59171b6fbd3a6b23e7b72f1f4ebf517">WRT_Y</a>
+, <a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852eca3008fed75c342b080f73160a12f032e4">WRT_Z</a>
+ }</td></tr>
+<tr class="separator:a7476c820f19e5af62cbab682bfb852ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78b0d5f56ac7660deda60c852b2473d3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a78b0d5f56ac7660deda60c852b2473d3">OverrideType</a> { <a class="el" href="class_isis_1_1_spice_position.html#a78b0d5f56ac7660deda60c852b2473d3a4e0329ee146f8379fcb9553f9fdc0052">NoOverrides</a>
+, <a class="el" href="class_isis_1_1_spice_position.html#a78b0d5f56ac7660deda60c852b2473d3aa307a83ad67b945c0edaa0a7049e9733">ScaleOnly</a>
+, <a class="el" href="class_isis_1_1_spice_position.html#a78b0d5f56ac7660deda60c852b2473d3a2c944e17a6764b384dc12cbc1f8b3ee3">BaseAndScale</a>
+ }</td></tr>
+<tr class="separator:a78b0d5f56ac7660deda60c852b2473d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a7dd3b91ea6f132427f751dc3e72da9a5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spacecraft_position.html#a7dd3b91ea6f132427f751dc3e72da9a5">SpacecraftPosition</a> (int targetCode, int observerCode, const <a class="el" href="class_isis_1_1_light_time_correction_state.html">LightTimeCorrectionState</a> &amp;ltState=<a class="el" href="class_isis_1_1_light_time_correction_state.html">LightTimeCorrectionState</a>(), const <a class="el" href="class_isis_1_1_distance.html">Distance</a> &amp;radius=<a class="el" href="class_isis_1_1_distance.html">Distance</a>(0.0, <a class="el" href="class_isis_1_1_distance.html#accb6199bc155f11ff0f36236c6c1a902ab89a588cde6b6f8840cee8991ffc9278">Distance::Meters</a>))</td></tr>
+<tr class="memdesc:a7dd3b91ea6f132427f751dc3e72da9a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor for swapping observer/target parameters  <a href="class_isis_1_1_spacecraft_position.html#a7dd3b91ea6f132427f751dc3e72da9a5">More...</a><br /></td></tr>
+<tr class="separator:a7dd3b91ea6f132427f751dc3e72da9a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86442bddcf117ef92a053803868df160"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spacecraft_position.html#a86442bddcf117ef92a053803868df160">~SpacecraftPosition</a> ()</td></tr>
+<tr class="separator:a86442bddcf117ef92a053803868df160"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b93a857088846b9d0dd2127458e65f0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spacecraft_position.html#a3b93a857088846b9d0dd2127458e65f0">getRadiusLightTime</a> () const</td></tr>
+<tr class="memdesc:a3b93a857088846b9d0dd2127458e65f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time it takes for light to travel the radius of the target.  <a href="class_isis_1_1_spacecraft_position.html#a3b93a857088846b9d0dd2127458e65f0">More...</a><br /></td></tr>
+<tr class="separator:a3b93a857088846b9d0dd2127458e65f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a217eb041613358b75c2abf282096c0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spacecraft_position.html#a1a217eb041613358b75c2abf282096c0">SetAberrationCorrection</a> (const QString &amp;correction)</td></tr>
+<tr class="memdesc:a1a217eb041613358b75c2abf282096c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set aberration correction value for determining positions.  <a href="class_isis_1_1_spacecraft_position.html#a1a217eb041613358b75c2abf282096c0">More...</a><br /></td></tr>
+<tr class="separator:a1a217eb041613358b75c2abf282096c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7165f063f37b30b20f6ba8289aef818"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spacecraft_position.html#af7165f063f37b30b20f6ba8289aef818">GetAberrationCorrection</a> () const</td></tr>
+<tr class="memdesc:af7165f063f37b30b20f6ba8289aef818"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the stellr aberration correction applied.  <a href="class_isis_1_1_spacecraft_position.html#af7165f063f37b30b20f6ba8289aef818">More...</a><br /></td></tr>
+<tr class="separator:af7165f063f37b30b20f6ba8289aef818"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a495ce80ff86232b51e1a37cd399902a8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spacecraft_position.html#a495ce80ff86232b51e1a37cd399902a8">SetEphemerisTimeSpice</a> ()</td></tr>
+<tr class="memdesc:a495ce80ff86232b51e1a37cd399902a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine accurate position of target w.r.t.  <a href="class_isis_1_1_spacecraft_position.html#a495ce80ff86232b51e1a37cd399902a8">More...</a><br /></td></tr>
+<tr class="separator:a495ce80ff86232b51e1a37cd399902a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18163c589d4664ea4a525ed726d8b2de"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_light_time_correction_state.html">LightTimeCorrectionState</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spacecraft_position.html#a18163c589d4664ea4a525ed726d8b2de">getLightTimeState</a> () const</td></tr>
+<tr class="memdesc:a18163c589d4664ea4a525ed726d8b2de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the state of light time correction parameters.  <a href="class_isis_1_1_spacecraft_position.html#a18163c589d4664ea4a525ed726d8b2de">More...</a><br /></td></tr>
+<tr class="separator:a18163c589d4664ea4a525ed726d8b2de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa478d74e082380b71b5a132a3f559936"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#aa478d74e082380b71b5a132a3f559936">SetTimeBias</a> (double timeBias)</td></tr>
+<tr class="memdesc:aa478d74e082380b71b5a132a3f559936"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a time bias when invoking SetEphemerisTime method.  <a href="class_isis_1_1_spice_position.html#aa478d74e082380b71b5a132a3f559936">More...</a><br /></td></tr>
+<tr class="separator:aa478d74e082380b71b5a132a3f559936"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2686ee5bbd8a894b656356a4a4d20337"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a2686ee5bbd8a894b656356a4a4d20337">GetTimeBias</a> () const</td></tr>
+<tr class="memdesc:a2686ee5bbd8a894b656356a4a4d20337"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the time bias added to ET.  <a href="class_isis_1_1_spice_position.html#a2686ee5bbd8a894b656356a4a4d20337">More...</a><br /></td></tr>
+<tr class="separator:a2686ee5bbd8a894b656356a4a4d20337"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6cbfc3b1419dc91c11a326049499944"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#ac6cbfc3b1419dc91c11a326049499944">GetLightTime</a> () const</td></tr>
+<tr class="memdesc:ac6cbfc3b1419dc91c11a326049499944"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the light time coorection value.  <a href="class_isis_1_1_spice_position.html#ac6cbfc3b1419dc91c11a326049499944">More...</a><br /></td></tr>
+<tr class="separator:ac6cbfc3b1419dc91c11a326049499944"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad1b0ae8249dfb860871bbb5c76797e9"><td class="memItemLeft" align="right" valign="top">virtual const std::vector&lt; double &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">SetEphemerisTime</a> (double et)</td></tr>
+<tr class="memdesc:aad1b0ae8249dfb860871bbb5c76797e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return J2000 coordinate at given time.  <a href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">More...</a><br /></td></tr>
+<tr class="separator:aad1b0ae8249dfb860871bbb5c76797e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99c903d5332165150ef09aad2b515463"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a99c903d5332165150ef09aad2b515463">EphemerisTime</a> () const</td></tr>
+<tr class="memdesc:a99c903d5332165150ef09aad2b515463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current ephemeris time.  <a href="class_isis_1_1_spice_position.html#a99c903d5332165150ef09aad2b515463">More...</a><br /></td></tr>
+<tr class="separator:a99c903d5332165150ef09aad2b515463"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91d4b38ce032262e46b97a53a40ad9a2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a91d4b38ce032262e46b97a53a40ad9a2">scaledTime</a> () const</td></tr>
+<tr class="memdesc:a91d4b38ce032262e46b97a53a40ad9a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the scaled time.  <a href="class_isis_1_1_spice_position.html#a91d4b38ce032262e46b97a53a40ad9a2">More...</a><br /></td></tr>
+<tr class="separator:a91d4b38ce032262e46b97a53a40ad9a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8eb5a84b81e22b1d4d821a013fa9ca66"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; double &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a8eb5a84b81e22b1d4d821a013fa9ca66">GetCenterCoordinate</a> ()</td></tr>
+<tr class="memdesc:a8eb5a84b81e22b1d4d821a013fa9ca66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute and return the coordinate at the center time.  <a href="class_isis_1_1_spice_position.html#a8eb5a84b81e22b1d4d821a013fa9ca66">More...</a><br /></td></tr>
+<tr class="separator:a8eb5a84b81e22b1d4d821a013fa9ca66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb1f34a0fffb811437a36fc17a1cfb31"><td class="memItemLeft" align="right" valign="top">virtual const std::vector&lt; double &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#aeb1f34a0fffb811437a36fc17a1cfb31">Coordinate</a> ()</td></tr>
+<tr class="memdesc:aeb1f34a0fffb811437a36fc17a1cfb31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current J2000 position.  <a href="class_isis_1_1_spice_position.html#aeb1f34a0fffb811437a36fc17a1cfb31">More...</a><br /></td></tr>
+<tr class="separator:aeb1f34a0fffb811437a36fc17a1cfb31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37cc482bf7e5115803f02ed972d480ca"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; double &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a37cc482bf7e5115803f02ed972d480ca">Velocity</a> ()</td></tr>
+<tr class="memdesc:a37cc482bf7e5115803f02ed972d480ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current J2000 velocity.  <a href="class_isis_1_1_spice_position.html#a37cc482bf7e5115803f02ed972d480ca">More...</a><br /></td></tr>
+<tr class="separator:a37cc482bf7e5115803f02ed972d480ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a120a650f4034b5f4e8f197a1fe1ea334"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a120a650f4034b5f4e8f197a1fe1ea334">HasVelocity</a> ()</td></tr>
+<tr class="memdesc:a120a650f4034b5f4e8f197a1fe1ea334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the flag indicating whether the velocity exists.  <a href="class_isis_1_1_spice_position.html#a120a650f4034b5f4e8f197a1fe1ea334">More...</a><br /></td></tr>
+<tr class="separator:a120a650f4034b5f4e8f197a1fe1ea334"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cca38f53d2f7803b0cc5de7b88901b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a4cca38f53d2f7803b0cc5de7b88901b5">LoadCache</a> (double startTime, double endTime, int size)</td></tr>
+<tr class="memdesc:a4cca38f53d2f7803b0cc5de7b88901b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache J2000 position over a time range.  <a href="class_isis_1_1_spice_position.html#a4cca38f53d2f7803b0cc5de7b88901b5">More...</a><br /></td></tr>
+<tr class="separator:a4cca38f53d2f7803b0cc5de7b88901b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa707fd1949a039927e95d50ce77de3d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#aa707fd1949a039927e95d50ce77de3d0">LoadCache</a> (double time)</td></tr>
+<tr class="memdesc:aa707fd1949a039927e95d50ce77de3d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache J2000 position for a time.  <a href="class_isis_1_1_spice_position.html#aa707fd1949a039927e95d50ce77de3d0">More...</a><br /></td></tr>
+<tr class="separator:aa707fd1949a039927e95d50ce77de3d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdd790eb593d7809e768e59466a32aee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#acdd790eb593d7809e768e59466a32aee">LoadCache</a> (<a class="el" href="class_isis_1_1_table.html">Table</a> &amp;table)</td></tr>
+<tr class="memdesc:acdd790eb593d7809e768e59466a32aee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache J2000 positions using a table file.  <a href="class_isis_1_1_spice_position.html#acdd790eb593d7809e768e59466a32aee">More...</a><br /></td></tr>
+<tr class="separator:acdd790eb593d7809e768e59466a32aee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7ed37c55755b1ca35ae8043b08e7dfb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#af7ed37c55755b1ca35ae8043b08e7dfb">LoadCache</a> (<a class="el" href="_xml_to_json_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">nlohmann::json</a> &amp;isd)</td></tr>
+<tr class="memdesc:af7ed37c55755b1ca35ae8043b08e7dfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the cached data from an ALE ISD.  <a href="class_isis_1_1_spice_position.html#af7ed37c55755b1ca35ae8043b08e7dfb">More...</a><br /></td></tr>
+<tr class="separator:af7ed37c55755b1ca35ae8043b08e7dfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10e3ef4c69ff4f222408f8358bda64fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table.html">Table</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a10e3ef4c69ff4f222408f8358bda64fe">LineCache</a> (const QString &amp;tableName)</td></tr>
+<tr class="memdesc:a10e3ef4c69ff4f222408f8358bda64fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a table with J2000 to reference positions.  <a href="class_isis_1_1_spice_position.html#a10e3ef4c69ff4f222408f8358bda64fe">More...</a><br /></td></tr>
+<tr class="separator:a10e3ef4c69ff4f222408f8358bda64fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f15191e6968ac24981d7ce38325d446"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table.html">Table</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a5f15191e6968ac24981d7ce38325d446">LoadHermiteCache</a> (const QString &amp;tableName)</td></tr>
+<tr class="memdesc:a5f15191e6968ac24981d7ce38325d446"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache J2000 position over existing cached time range using polynomials stored as Hermite cubic spline knots.  <a href="class_isis_1_1_spice_position.html#a5f15191e6968ac24981d7ce38325d446">More...</a><br /></td></tr>
+<tr class="separator:a5f15191e6968ac24981d7ce38325d446"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c583b327e4a431920fe98acd13a77e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a3c583b327e4a431920fe98acd13a77e5">ReloadCache</a> ()</td></tr>
+<tr class="memdesc:a3c583b327e4a431920fe98acd13a77e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache J2000 positions over existing cached time range using polynomials.  <a href="class_isis_1_1_spice_position.html#a3c583b327e4a431920fe98acd13a77e5">More...</a><br /></td></tr>
+<tr class="separator:a3c583b327e4a431920fe98acd13a77e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1ba3bc2c77fe1bf9b154eaa8e2da8a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#ad1ba3bc2c77fe1bf9b154eaa8e2da8a3">ReloadCache</a> (<a class="el" href="class_isis_1_1_table.html">Table</a> &amp;table)</td></tr>
+<tr class="memdesc:ad1ba3bc2c77fe1bf9b154eaa8e2da8a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache J2000 position over existing cached time range using table.  <a href="class_isis_1_1_spice_position.html#ad1ba3bc2c77fe1bf9b154eaa8e2da8a3">More...</a><br /></td></tr>
+<tr class="separator:ad1ba3bc2c77fe1bf9b154eaa8e2da8a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb0304807f4ee060f4531b9a2bf6a37b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table.html">Table</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#afb0304807f4ee060f4531b9a2bf6a37b">Cache</a> (const QString &amp;tableName)</td></tr>
+<tr class="memdesc:afb0304807f4ee060f4531b9a2bf6a37b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a table with J2000 positions.  <a href="class_isis_1_1_spice_position.html#afb0304807f4ee060f4531b9a2bf6a37b">More...</a><br /></td></tr>
+<tr class="separator:afb0304807f4ee060f4531b9a2bf6a37b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a624fb40cf9f322c6075bcd893f3cafe7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a624fb40cf9f322c6075bcd893f3cafe7">IsCached</a> () const</td></tr>
+<tr class="memdesc:a624fb40cf9f322c6075bcd893f3cafe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is this position cached.  <a href="class_isis_1_1_spice_position.html#a624fb40cf9f322c6075bcd893f3cafe7">More...</a><br /></td></tr>
+<tr class="separator:a624fb40cf9f322c6075bcd893f3cafe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03b034c719d7724fe8f5925b812c962e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a03b034c719d7724fe8f5925b812c962e">cacheSize</a> () const</td></tr>
+<tr class="memdesc:a03b034c719d7724fe8f5925b812c962e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the size of the current cached positions.  <a href="class_isis_1_1_spice_position.html#a03b034c719d7724fe8f5925b812c962e">More...</a><br /></td></tr>
+<tr class="separator:a03b034c719d7724fe8f5925b812c962e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e20b92da43bade716cab5af0acbd759"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a5e20b92da43bade716cab5af0acbd759">SetPolynomial</a> (const <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3">Source</a> type=<a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a2bf63bc3a9bbd4ff1b094802a7d4d0da">PolyFunction</a>)</td></tr>
+<tr class="memdesc:a5e20b92da43bade716cab5af0acbd759"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the coefficients of a polynomial fit to each of the components (X, Y, Z) of the position vector for the time period covered by the cache, component = c0 + c1*t + c2*t**2 + ...  <a href="class_isis_1_1_spice_position.html#a5e20b92da43bade716cab5af0acbd759">More...</a><br /></td></tr>
+<tr class="separator:a5e20b92da43bade716cab5af0acbd759"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef400d876e8cadf138952c50f1ff6df0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#aef400d876e8cadf138952c50f1ff6df0">SetPolynomial</a> (const std::vector&lt; double &gt; &amp;XC, const std::vector&lt; double &gt; &amp;YC, const std::vector&lt; double &gt; &amp;ZC, const <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3">Source</a> type=<a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a2bf63bc3a9bbd4ff1b094802a7d4d0da">PolyFunction</a>)</td></tr>
+<tr class="memdesc:aef400d876e8cadf138952c50f1ff6df0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the coefficients of a polynomial (parabola) fit to each of the three coordinates of the position vector for the time period covered by the cache, coord = c0 + c1*t + c2*t**2 + ...  <a href="class_isis_1_1_spice_position.html#aef400d876e8cadf138952c50f1ff6df0">More...</a><br /></td></tr>
+<tr class="separator:aef400d876e8cadf138952c50f1ff6df0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36575010387c0b7ee54594195189be3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a36575010387c0b7ee54594195189be3a">GetPolynomial</a> (std::vector&lt; double &gt; &amp;XC, std::vector&lt; double &gt; &amp;YC, std::vector&lt; double &gt; &amp;ZC)</td></tr>
+<tr class="memdesc:a36575010387c0b7ee54594195189be3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the coefficients of a polynomial fit to each of the three coordinates of the position for the time period covered by the cache, angle = c0 + c1*t + c2*t**2 + ...  <a href="class_isis_1_1_spice_position.html#a36575010387c0b7ee54594195189be3a">More...</a><br /></td></tr>
+<tr class="separator:a36575010387c0b7ee54594195189be3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8338164215e8d009c8ea1b9f41c3d45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#af8338164215e8d009c8ea1b9f41c3d45">SetPolynomialDegree</a> (int degree)</td></tr>
+<tr class="memdesc:af8338164215e8d009c8ea1b9f41c3d45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the polynomial degree.  <a href="class_isis_1_1_spice_position.html#af8338164215e8d009c8ea1b9f41c3d45">More...</a><br /></td></tr>
+<tr class="separator:af8338164215e8d009c8ea1b9f41c3d45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6102c7d40bc9c1da9977dba82961b97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3">Source</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#ac6102c7d40bc9c1da9977dba82961b97">GetSource</a> ()</td></tr>
+<tr class="memdesc:ac6102c7d40bc9c1da9977dba82961b97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the source of the position.  <a href="class_isis_1_1_spice_position.html#ac6102c7d40bc9c1da9977dba82961b97">More...</a><br /></td></tr>
+<tr class="separator:ac6102c7d40bc9c1da9977dba82961b97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e1c52b48309bc5ae978e65bb08c2ea3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a0e1c52b48309bc5ae978e65bb08c2ea3">ComputeBaseTime</a> ()</td></tr>
+<tr class="memdesc:a0e1c52b48309bc5ae978e65bb08c2ea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the base time using cached times.  <a href="class_isis_1_1_spice_position.html#a0e1c52b48309bc5ae978e65bb08c2ea3">More...</a><br /></td></tr>
+<tr class="separator:a0e1c52b48309bc5ae978e65bb08c2ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bd42ebe343af610ea14b6911ce98ee8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a3bd42ebe343af610ea14b6911ce98ee8">GetBaseTime</a> ()</td></tr>
+<tr class="memdesc:a3bd42ebe343af610ea14b6911ce98ee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the base time for the position.  <a href="class_isis_1_1_spice_position.html#a3bd42ebe343af610ea14b6911ce98ee8">More...</a><br /></td></tr>
+<tr class="separator:a3bd42ebe343af610ea14b6911ce98ee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30f2d25054ca91aeb8b2c69560d90ec4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a30f2d25054ca91aeb8b2c69560d90ec4">SetOverrideBaseTime</a> (double baseTime, double timeScale)</td></tr>
+<tr class="memdesc:a30f2d25054ca91aeb8b2c69560d90ec4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set an override base time to be used with observations on scanners to allow all images in an observation to use the same base time and polynomials for the positions.  <a href="class_isis_1_1_spice_position.html#a30f2d25054ca91aeb8b2c69560d90ec4">More...</a><br /></td></tr>
+<tr class="separator:a30f2d25054ca91aeb8b2c69560d90ec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0642e1c94d2401623f1d5315cc59564d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a0642e1c94d2401623f1d5315cc59564d">GetTimeScale</a> ()</td></tr>
+<tr class="memdesc:a0642e1c94d2401623f1d5315cc59564d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the time scale for the position.  <a href="class_isis_1_1_spice_position.html#a0642e1c94d2401623f1d5315cc59564d">More...</a><br /></td></tr>
+<tr class="separator:a0642e1c94d2401623f1d5315cc59564d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06d05569763c68fe6e6f51869e618da3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a06d05569763c68fe6e6f51869e618da3">DPolynomial</a> (const int coeffIndex)</td></tr>
+<tr class="memdesc:a06d05569763c68fe6e6f51869e618da3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the derivative of the fit polynomial (parabola) defined by the given coefficients with respect to the coefficient at the given index, at the current time.  <a href="class_isis_1_1_spice_position.html#a06d05569763c68fe6e6f51869e618da3">More...</a><br /></td></tr>
+<tr class="separator:a06d05569763c68fe6e6f51869e618da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96595f244460a28688a31212ae158175"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a96595f244460a28688a31212ae158175">CoordinatePartial</a> (<a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852ec">SpicePosition::PartialType</a> partialVar, int coeffIndex)</td></tr>
+<tr class="memdesc:a96595f244460a28688a31212ae158175"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the coefficients of a polynomial fit to each of the three coordinates of the position vector for the time period covered by the cache,.  <a href="class_isis_1_1_spice_position.html#a96595f244460a28688a31212ae158175">More...</a><br /></td></tr>
+<tr class="separator:a96595f244460a28688a31212ae158175"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af887f438e6c0041f8a56fb633e933f5e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#af887f438e6c0041f8a56fb633e933f5e">VelocityPartial</a> (<a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852ec">SpicePosition::PartialType</a> partialVar, int coeffIndex)</td></tr>
+<tr class="memdesc:af887f438e6c0041f8a56fb633e933f5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the derivative of the velocity with respect to the specified variable.  <a href="class_isis_1_1_spice_position.html#af887f438e6c0041f8a56fb633e933f5e">More...</a><br /></td></tr>
+<tr class="separator:af887f438e6c0041f8a56fb633e933f5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a423a37bc741e530c943e3fe40ca558"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a0a423a37bc741e530c943e3fe40ca558">Memcache2HermiteCache</a> (double tolerance)</td></tr>
+<tr class="memdesc:a0a423a37bc741e530c943e3fe40ca558"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method reduces the cache for position, time and velocity to the minimum number of values needed to interpolate the J2000 coordinates using a Hermite spline, given a tolerance of deviation from the NAIF values.  <a href="class_isis_1_1_spice_position.html#a0a423a37bc741e530c943e3fe40ca558">More...</a><br /></td></tr>
+<tr class="separator:a0a423a37bc741e530c943e3fe40ca558"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65369aa8b41ace8b6ae99e979984a2ac"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a65369aa8b41ace8b6ae99e979984a2ac">Extrapolate</a> (double timeEt)</td></tr>
+<tr class="memdesc:a65369aa8b41ace8b6ae99e979984a2ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extrapolate position for a given time assuming a constant velocity.  <a href="class_isis_1_1_spice_position.html#a65369aa8b41ace8b6ae99e979984a2ac">More...</a><br /></td></tr>
+<tr class="separator:a65369aa8b41ace8b6ae99e979984a2ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac867c1dc5c76d6599fd52b157663af38"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#ac867c1dc5c76d6599fd52b157663af38">HermiteCoordinate</a> ()</td></tr>
+<tr class="memdesc:ac867c1dc5c76d6599fd52b157663af38"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method returns the Hermite coordinate for the current time for PolyFunctionOverHermiteConstant functions.  <a href="class_isis_1_1_spice_position.html#ac867c1dc5c76d6599fd52b157663af38">More...</a><br /></td></tr>
+<tr class="separator:ac867c1dc5c76d6599fd52b157663af38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:aa29b1381cbe02191648acb65cd7e1e2a"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spacecraft_position.html#aa29b1381cbe02191648acb65cd7e1e2a">getDistanceLightTime</a> (const <a class="el" href="class_isis_1_1_distance.html">Distance</a> &amp;distance)</td></tr>
+<tr class="memdesc:aa29b1381cbe02191648acb65cd7e1e2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time it takes for light to travel a given distance.  <a href="class_isis_1_1_spacecraft_position.html#aa29b1381cbe02191648acb65cd7e1e2a">More...</a><br /></td></tr>
+<tr class="separator:aa29b1381cbe02191648acb65cd7e1e2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a53f72bdeb761fcc2c7f0f5fe2c63391d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a53f72bdeb761fcc2c7f0f5fe2c63391d">SetEphemerisTimeMemcache</a> ()</td></tr>
+<tr class="memdesc:a53f72bdeb761fcc2c7f0f5fe2c63391d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a protected method that is called by <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> when Source type is Memcache.  <a href="class_isis_1_1_spice_position.html#a53f72bdeb761fcc2c7f0f5fe2c63391d">More...</a><br /></td></tr>
+<tr class="separator:a53f72bdeb761fcc2c7f0f5fe2c63391d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97476aca573a452fc731a1647856cce4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a97476aca573a452fc731a1647856cce4">SetEphemerisTimeHermiteCache</a> ()</td></tr>
+<tr class="memdesc:a97476aca573a452fc731a1647856cce4"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a protected method that is called by <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> when Source type is HermiteCache.  <a href="class_isis_1_1_spice_position.html#a97476aca573a452fc731a1647856cce4">More...</a><br /></td></tr>
+<tr class="separator:a97476aca573a452fc731a1647856cce4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaaa17bb22560a0041b180cdb117147de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#aaaa17bb22560a0041b180cdb117147de">SetEphemerisTimePolyFunction</a> ()</td></tr>
+<tr class="memdesc:aaaa17bb22560a0041b180cdb117147de"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a protected method that is called by <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> when Source type is PolyFunction.  <a href="class_isis_1_1_spice_position.html#aaaa17bb22560a0041b180cdb117147de">More...</a><br /></td></tr>
+<tr class="separator:aaaa17bb22560a0041b180cdb117147de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbc37af652612805800be7adb2205585"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#abbc37af652612805800be7adb2205585">SetEphemerisTimePolyFunctionOverHermiteConstant</a> ()</td></tr>
+<tr class="memdesc:abbc37af652612805800be7adb2205585"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a protected method that is called by <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> when Source type is PolyFunctionOverHermiteConstant.  <a href="class_isis_1_1_spice_position.html#abbc37af652612805800be7adb2205585">More...</a><br /></td></tr>
+<tr class="separator:abbc37af652612805800be7adb2205585"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacd255cf1e42c3b67748bc4cc5836dd7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#aacd255cf1e42c3b67748bc4cc5836dd7">getObserverCode</a> () const</td></tr>
+<tr class="memdesc:aacd255cf1e42c3b67748bc4cc5836dd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns observer code.  <a href="class_isis_1_1_spice_position.html#aacd255cf1e42c3b67748bc4cc5836dd7">More...</a><br /></td></tr>
+<tr class="separator:aacd255cf1e42c3b67748bc4cc5836dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fdd01930e393a6a677bc0c3df61703c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a7fdd01930e393a6a677bc0c3df61703c">getTargetCode</a> () const</td></tr>
+<tr class="memdesc:a7fdd01930e393a6a677bc0c3df61703c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns target code.  <a href="class_isis_1_1_spice_position.html#a7fdd01930e393a6a677bc0c3df61703c">More...</a><br /></td></tr>
+<tr class="separator:a7fdd01930e393a6a677bc0c3df61703c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9540057a094084e523707bfe287f4aff"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a9540057a094084e523707bfe287f4aff">getAdjustedEphemerisTime</a> () const</td></tr>
+<tr class="memdesc:a9540057a094084e523707bfe287f4aff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns adjusted ephemeris time.  <a href="class_isis_1_1_spice_position.html#a9540057a094084e523707bfe287f4aff">More...</a><br /></td></tr>
+<tr class="separator:a9540057a094084e523707bfe287f4aff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae694b9e60611b118c235ed1401d0279a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#ae694b9e60611b118c235ed1401d0279a">computeStateVector</a> (double et, int target, int observer, const QString &amp;refFrame, const QString &amp;abcorr, double state[6], bool &amp;hasVelocity, double &amp;lightTime) const</td></tr>
+<tr class="memdesc:ae694b9e60611b118c235ed1401d0279a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the state vector of the target w.r.t observer.  <a href="class_isis_1_1_spice_position.html#ae694b9e60611b118c235ed1401d0279a">More...</a><br /></td></tr>
+<tr class="separator:ae694b9e60611b118c235ed1401d0279a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a679111a220ab5bb9f522e2ab7d7d77b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a679111a220ab5bb9f522e2ab7d7d77b0">setStateVector</a> (const double state[6], const bool &amp;hasVelocity)</td></tr>
+<tr class="memdesc:a679111a220ab5bb9f522e2ab7d7d77b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the state of target relative to observer.  <a href="class_isis_1_1_spice_position.html#a679111a220ab5bb9f522e2ab7d7d77b0">More...</a><br /></td></tr>
+<tr class="separator:a679111a220ab5bb9f522e2ab7d7d77b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a371e5f9e44be26dd3d53dc2fa3531302"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice_position.html#a371e5f9e44be26dd3d53dc2fa3531302">setLightTime</a> (const double &amp;lightTime)</td></tr>
+<tr class="memdesc:a371e5f9e44be26dd3d53dc2fa3531302"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inheritors can set the light time if indicated.  <a href="class_isis_1_1_spice_position.html#a371e5f9e44be26dd3d53dc2fa3531302">More...</a><br /></td></tr>
+<tr class="separator:a371e5f9e44be26dd3d53dc2fa3531302"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Provides swap observer/target and improved light time correction. </p>
+<p>The process by which ISIS has determined the position of the spacecraft w.r.t a target body is by utilizing the NAIF spkez_c/spkezp_c routines. Recently it has been determined that the parameters for observer (or spacecraft) and target (typically a planet) has been swapped. This results in a slightly different location of the s/c. This class provides programmers with a way to swap these parameters at runtime by providing a different instantiation option.</p>
+<p>This implementation was chosen to mostly hide this option as it the full impact of this chage is still being evaluated for all supported instruments in ISIS.</p>
+<p>This implementation provides the ability to swap observer/target parameters selectively as deemed appropriate by API developers. See the <a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a> class for how this class is being utilized.</p>
+<p>In addition, this class provides the ability to correct for stellar aberration and light time to the target body surface (via a reimplementation of SetEphemerisSpiceTime()). This mostly fixes the problem of accurate light time correction. What remains is applying this fix on a per pixel basis. It is most accurate at the subspacecraft lat/lon point on the target body surface. <br  />
+</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a> </dd>
+<dd>
+<a class="el" href="class_isis_1_1_light_time_correction_state.html" title="Provides interface to user configurable Light Time correction feature.">LightTimeCorrectionState</a> </dd>
+<dd>
+<a class="el" href="class_isis_1_1_spice_position.html" title="Obtain SPICE position information for a body.">SpicePosition</a></dd></dl>
+<dl class="section author"><dt>Author</dt><dd>2012-10-11 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a78b0d5f56ac7660deda60c852b2473d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78b0d5f56ac7660deda60c852b2473d3">&#9670;&nbsp;</a></span>OverrideType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_spice_position.html#a78b0d5f56ac7660deda60c852b2473d3">Isis::SpicePosition::OverrideType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a78b0d5f56ac7660deda60c852b2473d3a4e0329ee146f8379fcb9553f9fdc0052"></a>NoOverrides&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a78b0d5f56ac7660deda60c852b2473d3aa307a83ad67b945c0edaa0a7049e9733"></a>ScaleOnly&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a78b0d5f56ac7660deda60c852b2473d3a2c944e17a6764b384dc12cbc1f8b3ee3"></a>BaseAndScale&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a7476c820f19e5af62cbab682bfb852ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7476c820f19e5af62cbab682bfb852ec">&#9670;&nbsp;</a></span>PartialType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852ec">Isis::SpicePosition::PartialType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7476c820f19e5af62cbab682bfb852eca4b7d158db0a3eae1ecf51edcb59f2fef"></a>WRT_X&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7476c820f19e5af62cbab682bfb852ecaa59171b6fbd3a6b23e7b72f1f4ebf517"></a>WRT_Y&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7476c820f19e5af62cbab682bfb852eca3008fed75c342b080f73160a12f032e4"></a>WRT_Z&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a3e47d75d3c236a4056609077d6758ba3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e47d75d3c236a4056609077d6758ba3">&#9670;&nbsp;</a></span>Source</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3">Isis::SpicePosition::Source</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This enum indicates the status of the object. </p>
+<p>The class expects functions to be after MemCache in the list. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a3e47d75d3c236a4056609077d6758ba3a7fe47789f1dcfd6cf50155f54ff689ea"></a>Spice&#160;</td><td class="fielddoc"><p>Object is reading directly from the kernels. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a3e47d75d3c236a4056609077d6758ba3a30f7edb2c8d747bffb66cacc25ba6e4d"></a>Memcache&#160;</td><td class="fielddoc"><p>Object is reading from cached table. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a3e47d75d3c236a4056609077d6758ba3a27a657bc1062488377b0447727b67cfa"></a>HermiteCache&#160;</td><td class="fielddoc"><p>Object is reading from splined table. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a3e47d75d3c236a4056609077d6758ba3a2bf63bc3a9bbd4ff1b094802a7d4d0da"></a>PolyFunction&#160;</td><td class="fielddoc"><p>Object is calculated from nth degree polynomial. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a3e47d75d3c236a4056609077d6758ba3a986fa3d9bec627d7c84a248773989b7c"></a>PolyFunctionOverHermiteConstant&#160;</td><td class="fielddoc"><p>Object is reading from splined. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a7dd3b91ea6f132427f751dc3e72da9a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dd3b91ea6f132427f751dc3e72da9a5">&#9670;&nbsp;</a></span>SpacecraftPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SpacecraftPosition::SpacecraftPosition </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>targetCode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>observerCode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_light_time_correction_state.html">LightTimeCorrectionState</a> &amp;&#160;</td>
+          <td class="paramname"><em>ltState</em> = <code><a class="el" href="class_isis_1_1_light_time_correction_state.html">LightTimeCorrectionState</a>()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_distance.html">Distance</a> &amp;&#160;</td>
+          <td class="paramname"><em>radius</em> = <code><a class="el" href="class_isis_1_1_distance.html">Distance</a>(0.0,&#160;<a class="el" href="class_isis_1_1_distance.html#accb6199bc155f11ff0f36236c6c1a902ab89a588cde6b6f8840cee8991ffc9278">Distance::Meters</a>)</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>constructor for swapping observer/target parameters </p>
+<p>This constructor utlizes a protected constructor in the <a class="el" href="class_isis_1_1_spice_position.html" title="Obtain SPICE position information for a body.">SpicePosition</a> class specially designed to handle this option. Passing false into this constructor results in preexisting behavior. True will swap observer/target when determining the s/c position.</p>
+<p>It is critical that the targetCode and observerCode be of the same exact order as they are in preexisting code. This is consistent with the current <a class="el" href="class_isis_1_1_spice_position.html" title="Obtain SPICE position information for a body.">SpicePosition</a> constructor with an additional boolean parameter that indicates to treat the targetCode as the observer and the observerCode as the target.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-11 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">targetCode</td><td>NAIF code for target </td></tr>
+    <tr><td class="paramname">observerCode</td><td>NAIF code for observer </td></tr>
+    <tr><td class="paramname">swapObserverTarget</td><td>Boolean to specify swap </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a86442bddcf117ef92a053803868df160"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86442bddcf117ef92a053803868df160">&#9670;&nbsp;</a></span>~SpacecraftPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::SpacecraftPosition::~SpacecraftPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="afb0304807f4ee060f4531b9a2bf6a37b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb0304807f4ee060f4531b9a2bf6a37b">&#9670;&nbsp;</a></span>Cache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table.html">Table</a> Isis::SpicePosition::Cache </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>tableName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return a table with J2000 positions. </p>
+<p>Return a table containg the cached coordinates with the given name. The table will have four or seven columns, J2000 x,y,z (optionally vx,vy,vx) and the ephemeris time.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tableName</td><td>Name of the table to create and return </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_table_field.html#a9880361eaafe81fcad05f3c94c058717aec51189ae36d3153680302822a39406a">Isis::TableField::Double</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>, <a class="el" href="class_isis_1_1_spice_position.html#a10e3ef4c69ff4f222408f8358bda64fe">Isis::SpicePosition::LineCache()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a0a423a37bc741e530c943e3fe40ca558">Isis::SpicePosition::Memcache2HermiteCache()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a2bf63bc3a9bbd4ff1b094802a7d4d0da">Isis::SpicePosition::PolyFunction</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a986fa3d9bec627d7c84a248773989b7c">Isis::SpicePosition::PolyFunctionOverHermiteConstant</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#a10e3ef4c69ff4f222408f8358bda64fe">Isis::SpicePosition::LineCache()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a5f15191e6968ac24981d7ce38325d446">Isis::SpicePosition::LoadHermiteCache()</a>.</p>
+
+</div>
+</div>
+<a id="a03b034c719d7724fe8f5925b812c962e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03b034c719d7724fe8f5925b812c962e">&#9670;&nbsp;</a></span>cacheSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SpicePosition::cacheSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the size of the current cached positions. </p>
+
+</div>
+</div>
+<a id="a0e1c52b48309bc5ae978e65bb08c2ea3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e1c52b48309bc5ae978e65bb08c2ea3">&#9670;&nbsp;</a></span>ComputeBaseTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::ComputeBaseTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute the base time using cached times. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spice_position.html#a78b0d5f56ac7660deda60c852b2473d3a4e0329ee146f8379fcb9553f9fdc0052">Isis::SpicePosition::NoOverrides</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a78b0d5f56ac7660deda60c852b2473d3aa307a83ad67b945c0edaa0a7049e9733">Isis::SpicePosition::ScaleOnly</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#a5e20b92da43bade716cab5af0acbd759">Isis::SpicePosition::SetPolynomial()</a>.</p>
+
+</div>
+</div>
+<a id="ae694b9e60611b118c235ed1401d0279a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae694b9e60611b118c235ed1401d0279a">&#9670;&nbsp;</a></span>computeStateVector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::computeStateVector </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>et</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>observer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>refFrame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>abcorr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>state</em>[6], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &amp;&#160;</td>
+          <td class="paramname"><em>hasVelocity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>lightTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the state vector of the target w.r.t observer. </p>
+<p>This method computes the state vector of the target that is relative of the observer. It first attempts to retrieve with velocity vectors. If that fails, it makes an additional attempt to get the state w/o velocity vectors. The final result is indicated by the hasVelocity parameter.</p>
+<p>The parameters to this routine are the same as the NAIF spkez_c/spkezp_c routines. See <a href="http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkez_c.html">http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkez_c.html</a> for complete description.</p>
+<p>Note that this routine does not actually affect the internals of this object (hence the constness of the method). It is up to the caller to apply the results and potentially handle swapping of observer/target and light time correction. See <a class="el" href="class_isis_1_1_spacecraft_position.html" title="Provides swap observer/target and improved light time correction.">SpacecraftPosition</a> for additional details on this application of the results.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-29 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">et</td><td>Time to compute state vector for </td></tr>
+    <tr><td class="paramname">target</td><td>NAIF target code </td></tr>
+    <tr><td class="paramname">observer</td><td>NAIF observer code </td></tr>
+    <tr><td class="paramname">refFrame</td><td>Reference frame to express coordinates in (e.g., J2000) </td></tr>
+    <tr><td class="paramname">abcorr</td><td>Stellar aberration correction option </td></tr>
+    <tr><td class="paramname">state</td><td>Returns the 6-element state vector in target body fixed coordinates </td></tr>
+    <tr><td class="paramname">hasVelocity</td><td>Returns knowledge of whether the velocity vector is valid </td></tr>
+    <tr><td class="paramname">lightTime</td><td>Returns the light time correct resulting from the request if applicable </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_naif_status.html#af872fa8bfc3f0012f157cbaef4066d25">Isis::NaifStatus::CheckErrors()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spacecraft_position.html#a495ce80ff86232b51e1a37cd399902a8">SetEphemerisTimeSpice()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a329377be2fe0449807160a81ae53dd35">Isis::SpicePosition::SetEphemerisTimeSpice()</a>.</p>
+
+</div>
+</div>
+<a id="aeb1f34a0fffb811437a36fc17a1cfb31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb1f34a0fffb811437a36fc17a1cfb31">&#9670;&nbsp;</a></span>Coordinate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const std::vector&lt;double&gt;&amp; Isis::SpicePosition::Coordinate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the current J2000 position. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#a8eb5a84b81e22b1d4d821a013fa9ca66">Isis::SpicePosition::GetCenterCoordinate()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a028a1282829eaf7e436964666f0f9f37">Isis::RadarGroundMap::GetXY()</a>, <a class="el" href="class_isis_1_1_mini_r_f.html#abfbbad9e21bfe48dade11108298f9a80">Isis::MiniRF::MiniRF()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a33b95960691f7858717a48e9c6f97d55">Isis::RadarGroundMap::SetFocalPlane()</a>, and <a class="el" href="class_isis_1_1_radar_ground_map.html#a50f20e842f09ad9370d200b598e9f8bd">Isis::RadarGroundMap::SetGround()</a>.</p>
+
+</div>
+</div>
+<a id="a96595f244460a28688a31212ae158175"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96595f244460a28688a31212ae158175">&#9670;&nbsp;</a></span>CoordinatePartial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Isis::SpicePosition::CoordinatePartial </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852ec">SpicePosition::PartialType</a>&#160;</td>
+          <td class="paramname"><em>partialVar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>coeffIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the coefficients of a polynomial fit to each of the three coordinates of the position vector for the time period covered by the cache,. </p>
+<p>coordinate = c0 + c1*t + c2*t**2 + ... cn*t**n, where t = (time - p_basetime) / p_timeScale.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">partialVar</td><td>Designated variable of the partial derivative </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Derivative of j2000 vector calculated with polynomial with respect to partialVar </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spice_position.html#a06d05569763c68fe6e6f51869e618da3">Isis::SpicePosition::DPolynomial()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_ground_map.html#a65a8dad994ccfc2152886cfb673d7f66">Isis::CameraGroundMap::GetdXYdPosition()</a>, and <a class="el" href="class_isis_1_1_radar_ground_map.html#a35422f54f9b7760ce06aebed41ab6e30">Isis::RadarGroundMap::GetdXYdPosition()</a>.</p>
+
+</div>
+</div>
+<a id="a06d05569763c68fe6e6f51869e618da3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06d05569763c68fe6e6f51869e618da3">&#9670;&nbsp;</a></span>DPolynomial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::SpicePosition::DPolynomial </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>coeffIndex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Evaluate the derivative of the fit polynomial (parabola) defined by the given coefficients with respect to the coefficient at the given index, at the current time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coeffIndex</td><td>Index of coefficient to differentiate with respect to </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The derivative evaluated at the current time </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#a96595f244460a28688a31212ae158175">Isis::SpicePosition::CoordinatePartial()</a>.</p>
+
+</div>
+</div>
+<a id="a99c903d5332165150ef09aad2b515463"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99c903d5332165150ef09aad2b515463">&#9670;&nbsp;</a></span>EphemerisTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double Isis::SpicePosition::EphemerisTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the current ephemeris time. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#a9540057a094084e523707bfe287f4aff">Isis::SpicePosition::getAdjustedEphemerisTime()</a>, and <a class="el" href="class_isis_1_1_isis_illuminator.html#a3baad6364265ec0f9b9dd521afd511ad">Isis::IsisIlluminator::position()</a>.</p>
+
+</div>
+</div>
+<a id="a65369aa8b41ace8b6ae99e979984a2ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65369aa8b41ace8b6ae99e979984a2ac">&#9670;&nbsp;</a></span>Extrapolate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Isis::SpicePosition::Extrapolate </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>timeEt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Extrapolate position for a given time assuming a constant velocity. </p>
+<p>The position and velocity at the current time will be used to extrapolate position at the input time. If velocity does not exist, the value at the current time will be output. The caller must make sure to call SetEphemerisTime to set the time to the time to be used for the extrapolation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">timeEt</td><td>The time of the position to be extrapolated </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">An</td><td>extrapolated position at the input time </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af7165f063f37b30b20f6ba8289aef818"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7165f063f37b30b20f6ba8289aef818">&#9670;&nbsp;</a></span>GetAberrationCorrection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::SpacecraftPosition::GetAberrationCorrection </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the stellr aberration correction applied. </p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-29 Kris Becker </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_spice_position.html#aff059ab125e5e3db69cfe0ce5a4ef53c">Isis::SpicePosition</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_light_time_correction_state.html#a8620c31f6338942b4a6330da4fe24e0b">Isis::LightTimeCorrectionState::getAberrationCorrection()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spacecraft_position.html#a495ce80ff86232b51e1a37cd399902a8">SetEphemerisTimeSpice()</a>.</p>
+
+</div>
+</div>
+<a id="a9540057a094084e523707bfe287f4aff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9540057a094084e523707bfe287f4aff">&#9670;&nbsp;</a></span>getAdjustedEphemerisTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::SpicePosition::getAdjustedEphemerisTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns adjusted ephemeris time. </p>
+<p>This method returns the actual ephemeris time adjusted by a specifed time bias. The bias typically comes explicitly from the camera model but could be adjusted by the environment they are utlized in.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-29 Kris Becker</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>double Adjusted ephemeris time with time bias applied </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spice_position.html#a99c903d5332165150ef09aad2b515463">Isis::SpicePosition::EphemerisTime()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a2686ee5bbd8a894b656356a4a4d20337">Isis::SpicePosition::GetTimeBias()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spacecraft_position.html#a495ce80ff86232b51e1a37cd399902a8">SetEphemerisTimeSpice()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a329377be2fe0449807160a81ae53dd35">Isis::SpicePosition::SetEphemerisTimeSpice()</a>.</p>
+
+</div>
+</div>
+<a id="a3bd42ebe343af610ea14b6911ce98ee8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bd42ebe343af610ea14b6911ce98ee8">&#9670;&nbsp;</a></span>GetBaseTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::SpicePosition::GetBaseTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the base time for the position. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a9d3a8ed552464957a2c60c9f8ac7e437">Isis::IsisBundleObservation::initializeExteriorOrientation()</a>.</p>
+
+</div>
+</div>
+<a id="a8eb5a84b81e22b1d4d821a013fa9ca66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8eb5a84b81e22b1d4d821a013fa9ca66">&#9670;&nbsp;</a></span>GetCenterCoordinate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; double &gt; &amp; Isis::SpicePosition::GetCenterCoordinate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute and return the coordinate at the center time. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spice_position.html#aeb1f34a0fffb811437a36fc17a1cfb31">Isis::SpicePosition::Coordinate()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a6ad4f708c7da8be627b7bb1c56b69eca">Isis::IsisBundleObservation::bundleOutputFetchData()</a>.</p>
+
+</div>
+</div>
+<a id="aa29b1381cbe02191648acb65cd7e1e2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa29b1381cbe02191648acb65cd7e1e2a">&#9670;&nbsp;</a></span>getDistanceLightTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::SpacecraftPosition::getDistanceLightTime </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_distance.html">Distance</a> &amp;&#160;</td>
+          <td class="paramname"><em>distance</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the time it takes for light to travel a given distance. </p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-23 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">radius</td><td><a class="el" href="class_isis_1_1_distance.html" title="Distance measurement, usually in meters.">Distance</a> to compute light time travel for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double Time in seconds it takes light to travel given distance </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_distance.html#a758c909952d591390686a315120ed4b7">Isis::Distance::kilometers()</a>.</p>
+
+</div>
+</div>
+<a id="ac6cbfc3b1419dc91c11a326049499944"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6cbfc3b1419dc91c11a326049499944">&#9670;&nbsp;</a></span>GetLightTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::SpicePosition::GetLightTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the light time coorection value. </p>
+<p>This method returns the light time correction of the last call to SetEphemerisTimeSpice. This is the actual time after adjustments that has resulting int the adjustment of the target body. The observer position should be unchanged.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-29 Kris Becker</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>double Returns the light time determined from the last call to SetEphemerisTime[<a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a>]. </dd></dl>
+
+</div>
+</div>
+<a id="a18163c589d4664ea4a525ed726d8b2de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18163c589d4664ea4a525ed726d8b2de">&#9670;&nbsp;</a></span>getLightTimeState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_light_time_correction_state.html">LightTimeCorrectionState</a> &amp; Isis::SpacecraftPosition::getLightTimeState </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the state of light time correction parameters. </p>
+<dl class="section author"><dt>Author</dt><dd>Kris Becker - 10/23/2012</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_light_time_correction_state.html" title="Provides interface to user configurable Light Time correction feature.">LightTimeCorrectionState</a> Light time state </dd></dl>
+
+</div>
+</div>
+<a id="aacd255cf1e42c3b67748bc4cc5836dd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacd255cf1e42c3b67748bc4cc5836dd7">&#9670;&nbsp;</a></span>getObserverCode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SpicePosition::getObserverCode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns observer code. </p>
+<p>This methods returns the proper observer code as specified in constructor. Code has been subjected to swapping if requested.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-29 Kris Becker</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>int NAIF code of observer </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spacecraft_position.html#a495ce80ff86232b51e1a37cd399902a8">SetEphemerisTimeSpice()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a329377be2fe0449807160a81ae53dd35">Isis::SpicePosition::SetEphemerisTimeSpice()</a>.</p>
+
+</div>
+</div>
+<a id="a36575010387c0b7ee54594195189be3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36575010387c0b7ee54594195189be3a">&#9670;&nbsp;</a></span>GetPolynomial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::GetPolynomial </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>XC</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>YC</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ZC</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the coefficients of a polynomial fit to each of the three coordinates of the position for the time period covered by the cache, angle = c0 + c1*t + c2*t**2 + ... </p>
+<ul>
+<li>cn*t**n, where t = (time - p_basetime) / p_timeScale.</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">XC</td><td>Coefficients of fit to first coordinate of position </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">YC</td><td>Coefficients of fit to second coordinate of position </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ZC</td><td>Coefficients of fit to third coordinate of position </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#aa2fc5ac4e381b9dda382474c8c86e1ac">Isis::IsisBundleObservation::applyParameterCorrections()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a6ad4f708c7da8be627b7bb1c56b69eca">Isis::IsisBundleObservation::bundleOutputFetchData()</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a9d3a8ed552464957a2c60c9f8ac7e437">Isis::IsisBundleObservation::initializeExteriorOrientation()</a>.</p>
+
+</div>
+</div>
+<a id="a3b93a857088846b9d0dd2127458e65f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b93a857088846b9d0dd2127458e65f0">&#9670;&nbsp;</a></span>getRadiusLightTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::SpacecraftPosition::getRadiusLightTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the time it takes for light to travel the radius of the target. </p>
+<p>This method returns the time in seconds it takes to travel the distance of the radius of the target body. This is a function of the <a class="el" href="class_isis_1_1_distance.html" title="Distance measurement, usually in meters.">Distance</a> parameter provided at the time this object was constructed.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-23 Kris Becker</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>double Time in seconds it takes light to travel the distance of the radius provided/set in the object </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_distance.html#a758c909952d591390686a315120ed4b7">Isis::Distance::kilometers()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spacecraft_position.html#a495ce80ff86232b51e1a37cd399902a8">SetEphemerisTimeSpice()</a>.</p>
+
+</div>
+</div>
+<a id="ac6102c7d40bc9c1da9977dba82961b97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6102c7d40bc9c1da9977dba82961b97">&#9670;&nbsp;</a></span>GetSource()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3">Source</a> Isis::SpicePosition::GetSource </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the source of the position. </p>
+
+</div>
+</div>
+<a id="a7fdd01930e393a6a677bc0c3df61703c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fdd01930e393a6a677bc0c3df61703c">&#9670;&nbsp;</a></span>getTargetCode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SpicePosition::getTargetCode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns target code. </p>
+<p>This methods returns the proper target code as specified in constructor. Code has been subjected to swapping if requested.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-29 Kris Becker</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>int NAIF code for target body </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spacecraft_position.html#a495ce80ff86232b51e1a37cd399902a8">SetEphemerisTimeSpice()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a329377be2fe0449807160a81ae53dd35">Isis::SpicePosition::SetEphemerisTimeSpice()</a>.</p>
+
+</div>
+</div>
+<a id="a2686ee5bbd8a894b656356a4a4d20337"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2686ee5bbd8a894b656356a4a4d20337">&#9670;&nbsp;</a></span>GetTimeBias()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::SpicePosition::GetTimeBias </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the value of the time bias added to ET. </p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-29 Kris Becker</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>double Returns time bias for current object </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#a9540057a094084e523707bfe287f4aff">Isis::SpicePosition::getAdjustedEphemerisTime()</a>.</p>
+
+</div>
+</div>
+<a id="a0642e1c94d2401623f1d5315cc59564d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0642e1c94d2401623f1d5315cc59564d">&#9670;&nbsp;</a></span>GetTimeScale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::SpicePosition::GetTimeScale </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the time scale for the position. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a9d3a8ed552464957a2c60c9f8ac7e437">Isis::IsisBundleObservation::initializeExteriorOrientation()</a>.</p>
+
+</div>
+</div>
+<a id="a120a650f4034b5f4e8f197a1fe1ea334"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a120a650f4034b5f4e8f197a1fe1ea334">&#9670;&nbsp;</a></span>HasVelocity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::SpicePosition::HasVelocity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the flag indicating whether the velocity exists. </p>
+
+</div>
+</div>
+<a id="ac867c1dc5c76d6599fd52b157663af38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac867c1dc5c76d6599fd52b157663af38">&#9670;&nbsp;</a></span>HermiteCoordinate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Isis::SpicePosition::HermiteCoordinate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method returns the Hermite coordinate for the current time for PolyFunctionOverHermiteConstant functions. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a986fa3d9bec627d7c84a248773989b7c">Isis::SpicePosition::PolyFunctionOverHermiteConstant</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a97476aca573a452fc731a1647856cce4">Isis::SpicePosition::SetEphemerisTimeHermiteCache()</a>.</p>
+
+</div>
+</div>
+<a id="a624fb40cf9f322c6075bcd893f3cafe7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a624fb40cf9f322c6075bcd893f3cafe7">&#9670;&nbsp;</a></span>IsCached()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::SpicePosition::IsCached </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Is this position cached. </p>
+
+</div>
+</div>
+<a id="a10e3ef4c69ff4f222408f8358bda64fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10e3ef4c69ff4f222408f8358bda64fe">&#9670;&nbsp;</a></span>LineCache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table.html">Table</a> Isis::SpicePosition::LineCache </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>tableName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return a table with J2000 to reference positions. </p>
+<p>Return a table containing the cached positions with the given name. The table will have seven columns, positionX, positionY, positionZ, angular velocity X, angular velocity Y, angular velocity Z, and time of J2000 position.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tableName</td><td>Name of the table to create and return </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_spice_position.html#afb0304807f4ee060f4531b9a2bf6a37b">Isis::SpicePosition::Cache()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a27a657bc1062488377b0447727b67cfa">Isis::SpicePosition::HermiteCache</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a30f7edb2c8d747bffb66cacc25ba6e4d">Isis::SpicePosition::Memcache</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a3c583b327e4a431920fe98acd13a77e5">Isis::SpicePosition::ReloadCache()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#afb0304807f4ee060f4531b9a2bf6a37b">Isis::SpicePosition::Cache()</a>.</p>
+
+</div>
+</div>
+<a id="a4cca38f53d2f7803b0cc5de7b88901b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cca38f53d2f7803b0cc5de7b88901b5">&#9670;&nbsp;</a></span>LoadCache() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::LoadCache </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>startTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>endTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cache J2000 position over a time range. </p>
+<p>This method will load an internal cache with coordinates over a time range. This prevents the NAIF kernels from being read over-and-over again and slowing a application down due to I/O performance. Once the cache has been loaded then the kernels can be unloaded from the NAIF system.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">startTime</td><td>Starting ephemeris time in seconds for the cache </td></tr>
+    <tr><td class="paramname">endTime</td><td>Ending ephemeris time in seconds for the cache </td></tr>
+    <tr><td class="paramname">size</td><td>Number of coordinates/positions to keep in the cache </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a27a657bc1062488377b0447727b67cfa">Isis::SpicePosition::HermiteCache</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a30f7edb2c8d747bffb66cacc25ba6e4d">Isis::SpicePosition::Memcache</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#aa707fd1949a039927e95d50ce77de3d0">Isis::SpicePosition::LoadCache()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#ad1ba3bc2c77fe1bf9b154eaa8e2da8a3">Isis::SpicePosition::ReloadCache()</a>.</p>
+
+</div>
+</div>
+<a id="aa707fd1949a039927e95d50ce77de3d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa707fd1949a039927e95d50ce77de3d0">&#9670;&nbsp;</a></span>LoadCache() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::LoadCache </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cache J2000 position for a time. </p>
+<p>This method will load an internal cache with coordinates for a single time (e.g. useful for framing cameras). This prevents the NAIF kernels from being read over-and-over again and slowing a application down due to I/O performance. Once the cache has been loaded then the kernels can be unloaded from the NAIF system. This calls the LoadCache(stime,etime,size) method using the time as both the starting and ending time with a size of 1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>single ephemeris time in seconds to cache </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spice_position.html#a4cca38f53d2f7803b0cc5de7b88901b5">Isis::SpicePosition::LoadCache()</a>.</p>
+
+</div>
+</div>
+<a id="af7ed37c55755b1ca35ae8043b08e7dfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7ed37c55755b1ca35ae8043b08e7dfb">&#9670;&nbsp;</a></span>LoadCache() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::LoadCache </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_xml_to_json_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">nlohmann::json</a> &amp;&#160;</td>
+          <td class="paramname"><em>isd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Load the cached data from an ALE ISD. </p>
+<p>The <a class="el" href="class_isis_1_1_spice_position.html" title="Obtain SPICE position information for a body.">SpicePosition</a> object must be set to a SPICE source before loading the cache.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">isdPos</td><td>The ALE ISD as a JSON object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a30f7edb2c8d747bffb66cacc25ba6e4d">Isis::SpicePosition::Memcache</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>.</p>
+
+</div>
+</div>
+<a id="acdd790eb593d7809e768e59466a32aee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdd790eb593d7809e768e59466a32aee">&#9670;&nbsp;</a></span>LoadCache() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::LoadCache </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table.html">Table</a> &amp;&#160;</td>
+          <td class="paramname"><em>table</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cache J2000 positions using a table file. </p>
+<p>This method will load an internal cache with coordinates from an ISIS table file. The table must have 4 columns, or 7 (if velocity) is included, and at least one row. The 4 columns contain the following information, body position x,y,z in J2000 and the ephemeris time of that position. If there are multiple rows it is assumed you can interpolate position at times in between the rows.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table</td><td>An ISIS table blob containing valid J2000 coordinate/time values </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_table_record.html#a6d0de552713a2e7aa2a93ca46820b3fb">Isis::TableRecord::Fields()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#aa21ef6cd840c16156a54578412e34442">Isis::PvlObject::findKeyword()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a0708f5601d4a7f750c53e5a40a064498">Isis::PvlObject::hasKeyword()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a27a657bc1062488377b0447727b67cfa">Isis::SpicePosition::HermiteCache</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>, <a class="el" href="class_isis_1_1_table.html#a40fac2ab1b0d2a2767a4d14d9c2f9887">Isis::Table::Label()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a30f7edb2c8d747bffb66cacc25ba6e4d">Isis::SpicePosition::Memcache</a>, <a class="el" href="class_isis_1_1_table.html#a83f6fd96db086e6d6db72f641b125490">Isis::Table::Name()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a2bf63bc3a9bbd4ff1b094802a7d4d0da">Isis::SpicePosition::PolyFunction</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_table.html#a2bfda17f6fd66be1a877820a1c8e8079">Isis::Table::Records()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a78b0d5f56ac7660deda60c852b2473d3aa307a83ad67b945c0edaa0a7049e9733">Isis::SpicePosition::ScaleOnly</a>, <a class="el" href="class_isis_1_1_spice_position.html#a30f2d25054ca91aeb8b2c69560d90ec4">Isis::SpicePosition::SetOverrideBaseTime()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a5e20b92da43bade716cab5af0acbd759">Isis::SpicePosition::SetPolynomial()</a>, <a class="el" href="class_isis_1_1_spice_position.html#af8338164215e8d009c8ea1b9f41c3d45">Isis::SpicePosition::SetPolynomialDegree()</a>, and <a class="el" href="namespace_isis.html#ad7233a0dfd589ede203db382294b286c">Isis::toDouble()</a>.</p>
+
+</div>
+</div>
+<a id="a5f15191e6968ac24981d7ce38325d446"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f15191e6968ac24981d7ce38325d446">&#9670;&nbsp;</a></span>LoadHermiteCache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table.html">Table</a> Isis::SpicePosition::LoadHermiteCache </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>tableName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cache J2000 position over existing cached time range using polynomials stored as Hermite cubic spline knots. </p>
+<p>This method will reload an internal cache with positions formed from a cubic Hermite spline over a time range. The method assumes a polynomial function has been fit to the coordinates of the positions and calculates the spline from the polynomial function. </p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_spice_position.html#afb0304807f4ee060f4531b9a2bf6a37b">Isis::SpicePosition::Cache()</a>, <a class="el" href="class_isis_1_1_basis_function.html#a88a87e2fee6295031c9fa5148d40f00d">Isis::BasisFunction::Coefficient()</a>, <a class="el" href="class_isis_1_1_basis_function.html#a31cbd7d66fa631beed7cae8454b052ec">Isis::BasisFunction::Evaluate()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a27a657bc1062488377b0447727b67cfa">Isis::SpicePosition::HermiteCache</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a2bf63bc3a9bbd4ff1b094802a7d4d0da">Isis::SpicePosition::PolyFunction</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_basis_function.html#aa963fbe62d5e2020beab8c487a3a1a16">Isis::BasisFunction::SetCoefficients()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>.</p>
+
+</div>
+</div>
+<a id="a0a423a37bc741e530c943e3fe40ca558"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a423a37bc741e530c943e3fe40ca558">&#9670;&nbsp;</a></span>Memcache2HermiteCache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::Memcache2HermiteCache </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method reduces the cache for position, time and velocity to the minimum number of values needed to interpolate the J2000 coordinates using a Hermite spline, given a tolerance of deviation from the NAIF values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tolerance</td><td>Maximum error allowed between NAIF kernel coordinate values and values interpolated by the Hermite spline. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a27a657bc1062488377b0447727b67cfa">Isis::SpicePosition::HermiteCache</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a30f7edb2c8d747bffb66cacc25ba6e4d">Isis::SpicePosition::Memcache</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#afb0304807f4ee060f4531b9a2bf6a37b">Isis::SpicePosition::Cache()</a>.</p>
+
+</div>
+</div>
+<a id="a3c583b327e4a431920fe98acd13a77e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c583b327e4a431920fe98acd13a77e5">&#9670;&nbsp;</a></span>ReloadCache() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::ReloadCache </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cache J2000 positions over existing cached time range using polynomials. </p>
+<p>This method will reload an internal cache with positions calculated from functions fit to the coordinates of the position over a time range. </p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_naif_status.html#af872fa8bfc3f0012f157cbaef4066d25">Isis::NaifStatus::CheckErrors()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a27a657bc1062488377b0447727b67cfa">Isis::SpicePosition::HermiteCache</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a30f7edb2c8d747bffb66cacc25ba6e4d">Isis::SpicePosition::Memcache</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#a10e3ef4c69ff4f222408f8358bda64fe">Isis::SpicePosition::LineCache()</a>.</p>
+
+</div>
+</div>
+<a id="ad1ba3bc2c77fe1bf9b154eaa8e2da8a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1ba3bc2c77fe1bf9b154eaa8e2da8a3">&#9670;&nbsp;</a></span>ReloadCache() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::ReloadCache </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_table.html">Table</a> &amp;&#160;</td>
+          <td class="paramname"><em>table</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cache J2000 position over existing cached time range using table. </p>
+<p>This method will reload an internal cache with positions formed from coordinates in a table</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table</td><td>An ISIS table blob containing valid J2000 coordinate/time values. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spice_position.html#a4cca38f53d2f7803b0cc5de7b88901b5">Isis::SpicePosition::LoadCache()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a7fe47789f1dcfd6cf50155f54ff689ea">Isis::SpicePosition::Spice</a>.</p>
+
+</div>
+</div>
+<a id="a91d4b38ce032262e46b97a53a40ad9a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91d4b38ce032262e46b97a53a40ad9a2">&#9670;&nbsp;</a></span>scaledTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::SpicePosition::scaledTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the scaled time. </p>
+<dl class="section return"><dt>Returns</dt><dd>Scaled time. </dd></dl>
+
+</div>
+</div>
+<a id="a1a217eb041613358b75c2abf282096c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a217eb041613358b75c2abf282096c0">&#9670;&nbsp;</a></span>SetAberrationCorrection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpacecraftPosition::SetAberrationCorrection </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>correction</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set aberration correction value for determining positions. </p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-29 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">correction</td><td>Type of stellar aberration correction to apply </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_spice_position.html#aee227aa114fcded74b3b87d9335d912a">Isis::SpicePosition</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_light_time_correction_state.html#a8bc4945b7b9feddcf1f358f66befd600">Isis::LightTimeCorrectionState::setAberrationCorrection()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#aee227aa114fcded74b3b87d9335d912a">Isis::SpicePosition::SetAberrationCorrection()</a>.</p>
+
+</div>
+</div>
+<a id="aad1b0ae8249dfb860871bbb5c76797e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad1b0ae8249dfb860871bbb5c76797e9">&#9670;&nbsp;</a></span>SetEphemerisTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; double &gt; &amp; Isis::SpicePosition::SetEphemerisTime </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>et</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return J2000 coordinate at given time. </p>
+<p>This method returns the J2000 coordinates (x,y,z) of the body at a given et in seconds. The coordinates are obtained from either a valid NAIF spk kernel, or alternatively from an internal cache loaded from an ISIS <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object. In the first case, the SPK kernel must contain positions for the body code specified in the constructor at the given time and it must be loaded using the SpiceKernel class.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">et</td><td>ephemeris time in seconds </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_naif_status.html#af872fa8bfc3f0012f157cbaef4066d25">Isis::NaifStatus::CheckErrors()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a27a657bc1062488377b0447727b67cfa">Isis::SpicePosition::HermiteCache</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a30f7edb2c8d747bffb66cacc25ba6e4d">Isis::SpicePosition::Memcache</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a2bf63bc3a9bbd4ff1b094802a7d4d0da">Isis::SpicePosition::PolyFunction</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a986fa3d9bec627d7c84a248773989b7c">Isis::SpicePosition::PolyFunctionOverHermiteConstant</a>, <a class="el" href="class_isis_1_1_spice_position.html#a97476aca573a452fc731a1647856cce4">Isis::SpicePosition::SetEphemerisTimeHermiteCache()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a53f72bdeb761fcc2c7f0f5fe2c63391d">Isis::SpicePosition::SetEphemerisTimeMemcache()</a>, <a class="el" href="class_isis_1_1_spice_position.html#aaaa17bb22560a0041b180cdb117147de">Isis::SpicePosition::SetEphemerisTimePolyFunction()</a>, <a class="el" href="class_isis_1_1_spice_position.html#abbc37af652612805800be7adb2205585">Isis::SpicePosition::SetEphemerisTimePolyFunctionOverHermiteConstant()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a329377be2fe0449807160a81ae53dd35">Isis::SpicePosition::SetEphemerisTimeSpice()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#a8eb5a84b81e22b1d4d821a013fa9ca66">Isis::SpicePosition::GetCenterCoordinate()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a4cca38f53d2f7803b0cc5de7b88901b5">Isis::SpicePosition::LoadCache()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a5f15191e6968ac24981d7ce38325d446">Isis::SpicePosition::LoadHermiteCache()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3c583b327e4a431920fe98acd13a77e5">Isis::SpicePosition::ReloadCache()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a5e20b92da43bade716cab5af0acbd759">Isis::SpicePosition::SetPolynomial()</a>.</p>
+
+</div>
+</div>
+<a id="a97476aca573a452fc731a1647856cce4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97476aca573a452fc731a1647856cce4">&#9670;&nbsp;</a></span>SetEphemerisTimeHermiteCache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::SetEphemerisTimeHermiteCache </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is a protected method that is called by <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> when Source type is HermiteCache. </p>
+<p>It calculates J2000 coordinates (x,y,z) of the body that correspond to a given et in seconds. These coordinates are obtained by using a Hermite spline to interpolate values from an internal reduced cache loaded from an ISIS <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#ac867c1dc5c76d6599fd52b157663af38">Isis::SpicePosition::HermiteCoordinate()</a>, <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#abbc37af652612805800be7adb2205585">Isis::SpicePosition::SetEphemerisTimePolyFunctionOverHermiteConstant()</a>.</p>
+
+</div>
+</div>
+<a id="a53f72bdeb761fcc2c7f0f5fe2c63391d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53f72bdeb761fcc2c7f0f5fe2c63391d">&#9670;&nbsp;</a></span>SetEphemerisTimeMemcache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::SetEphemerisTimeMemcache </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is a protected method that is called by <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> when Source type is Memcache. </p>
+<p>It calculates J2000 coordinates (x,y,z) of the body that correspond to a given et in seconds. These coordinates are obtained from an internal cache loaded from an ISIS <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>.</p>
+
+</div>
+</div>
+<a id="aaaa17bb22560a0041b180cdb117147de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaaa17bb22560a0041b180cdb117147de">&#9670;&nbsp;</a></span>SetEphemerisTimePolyFunction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::SetEphemerisTimePolyFunction </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is a protected method that is called by <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> when Source type is PolyFunction. </p>
+<p>It calculates J2000 coordinates (x,y,z) of the body that correspond to a given et in seconds. These coordinates are obtained by using an nth degree polynomial function fit to each coordinate of the position vector. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_basis_function.html#a31cbd7d66fa631beed7cae8454b052ec">Isis::BasisFunction::Evaluate()</a>, <a class="el" href="class_isis_1_1_basis_function.html#aa963fbe62d5e2020beab8c487a3a1a16">Isis::BasisFunction::SetCoefficients()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852eca4b7d158db0a3eae1ecf51edcb59f2fef">Isis::SpicePosition::WRT_X</a>, <a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852ecaa59171b6fbd3a6b23e7b72f1f4ebf517">Isis::SpicePosition::WRT_Y</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852eca3008fed75c342b080f73160a12f032e4">Isis::SpicePosition::WRT_Z</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#abbc37af652612805800be7adb2205585">Isis::SpicePosition::SetEphemerisTimePolyFunctionOverHermiteConstant()</a>.</p>
+
+</div>
+</div>
+<a id="abbc37af652612805800be7adb2205585"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbc37af652612805800be7adb2205585">&#9670;&nbsp;</a></span>SetEphemerisTimePolyFunctionOverHermiteConstant()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::SetEphemerisTimePolyFunctionOverHermiteConstant </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is a protected method that is called by <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> when Source type is PolyFunctionOverHermiteConstant. </p>
+<p>It calculates J2000 coordinates (x,y,z) of the body that correspond to a given et in seconds. These coordinates are obtained by adding a constant cubic Hermite spline added to an nth degree polynomial function fit to each coordinate of the position vector. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9" title="Return J2000 coordinate at given time.">SetEphemerisTime()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spice_position.html#a97476aca573a452fc731a1647856cce4">Isis::SpicePosition::SetEphemerisTimeHermiteCache()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#aaaa17bb22560a0041b180cdb117147de">Isis::SpicePosition::SetEphemerisTimePolyFunction()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>.</p>
+
+</div>
+</div>
+<a id="a495ce80ff86232b51e1a37cd399902a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a495ce80ff86232b51e1a37cd399902a8">&#9670;&nbsp;</a></span>SetEphemerisTimeSpice()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpacecraftPosition::SetEphemerisTimeSpice </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determine accurate position of target w.r.t. </p>
+<p>observer</p>
+<p>This method computes the position of the target w.r.t. the observer with additional specialized light time position of target and to a more accurate correction to the surface.</p>
+<p>NAIF routines are used to compute state vectors that have optional light time correction applied. However, this uses the center of the body as the reference <br  />
+</p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-29 Kris Becker </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_spice_position.html#a329377be2fe0449807160a81ae53dd35">Isis::SpicePosition</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spice_position.html#ae694b9e60611b118c235ed1401d0279a">Isis::SpicePosition::computeStateVector()</a>, <a class="el" href="class_isis_1_1_spacecraft_position.html#af7165f063f37b30b20f6ba8289aef818">GetAberrationCorrection()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a9540057a094084e523707bfe287f4aff">Isis::SpicePosition::getAdjustedEphemerisTime()</a>, <a class="el" href="class_isis_1_1_spice_position.html#aacd255cf1e42c3b67748bc4cc5836dd7">Isis::SpicePosition::getObserverCode()</a>, <a class="el" href="class_isis_1_1_spacecraft_position.html#a3b93a857088846b9d0dd2127458e65f0">getRadiusLightTime()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a7fdd01930e393a6a677bc0c3df61703c">Isis::SpicePosition::getTargetCode()</a>, <a class="el" href="class_isis_1_1_light_time_correction_state.html#a9bd3bd6b115ba49bdf019886811d660d">Isis::LightTimeCorrectionState::isLightTimeCorrected()</a>, <a class="el" href="class_isis_1_1_light_time_correction_state.html#a732ede4af0f37f35a92924260776e2cd">Isis::LightTimeCorrectionState::isLightTimeToSurfaceCorrected()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a329377be2fe0449807160a81ae53dd35">Isis::SpicePosition::SetEphemerisTimeSpice()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a371e5f9e44be26dd3d53dc2fa3531302">Isis::SpicePosition::setLightTime()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a679111a220ab5bb9f522e2ab7d7d77b0">Isis::SpicePosition::setStateVector()</a>.</p>
+
+</div>
+</div>
+<a id="a371e5f9e44be26dd3d53dc2fa3531302"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a371e5f9e44be26dd3d53dc2fa3531302">&#9670;&nbsp;</a></span>setLightTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::setLightTime </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>lightTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Inheritors can set the light time if indicated. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spacecraft_position.html#a495ce80ff86232b51e1a37cd399902a8">SetEphemerisTimeSpice()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a329377be2fe0449807160a81ae53dd35">Isis::SpicePosition::SetEphemerisTimeSpice()</a>.</p>
+
+</div>
+</div>
+<a id="a30f2d25054ca91aeb8b2c69560d90ec4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30f2d25054ca91aeb8b2c69560d90ec4">&#9670;&nbsp;</a></span>SetOverrideBaseTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::SetOverrideBaseTime </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>baseTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>timeScale</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set an override base time to be used with observations on scanners to allow all images in an observation to use the same base time and polynomials for the positions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">baseTime</td><td>The baseTime to use and override the computed base time </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spice_position.html#a78b0d5f56ac7660deda60c852b2473d3a2c944e17a6764b384dc12cbc1f8b3ee3">Isis::SpicePosition::BaseAndScale</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a9d3a8ed552464957a2c60c9f8ac7e437">Isis::IsisBundleObservation::initializeExteriorOrientation()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#acdd790eb593d7809e768e59466a32aee">Isis::SpicePosition::LoadCache()</a>.</p>
+
+</div>
+</div>
+<a id="a5e20b92da43bade716cab5af0acbd759"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e20b92da43bade716cab5af0acbd759">&#9670;&nbsp;</a></span>SetPolynomial() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::SetPolynomial </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3">Source</a>&#160;</td>
+          <td class="paramname"><em>type</em> = <code><a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a2bf63bc3a9bbd4ff1b094802a7d4d0da">PolyFunction</a></code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the coefficients of a polynomial fit to each of the components (X, Y, Z) of the position vector for the time period covered by the cache, component = c0 + c1*t + c2*t**2 + ... </p>
+<ul>
+<li>cn*t**n, where t = (time - p_baseTime) / p_timeScale. </li>
+</ul>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_least_squares.html#adebcd2ef3d6a18bcf59224560a796d86">Isis::LeastSquares::AddKnown()</a>, <a class="el" href="class_isis_1_1_basis_function.html#a88a87e2fee6295031c9fa5148d40f00d">Isis::BasisFunction::Coefficient()</a>, <a class="el" href="class_isis_1_1_basis_function.html#a389b6f55687f45342932412eb5f2fbae">Isis::BasisFunction::Coefficients()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a0e1c52b48309bc5ae978e65bb08c2ea3">Isis::SpicePosition::ComputeBaseTime()</a>, <a class="el" href="class_isis_1_1_line_equation.html#acad4bdddfa26aa45c08d429758d3dc4a">Isis::LineEquation::Intercept()</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a2bf63bc3a9bbd4ff1b094802a7d4d0da">Isis::SpicePosition::PolyFunction</a>, <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a986fa3d9bec627d7c84a248773989b7c">Isis::SpicePosition::PolyFunctionOverHermiteConstant</a>, <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>, <a class="el" href="class_isis_1_1_line_equation.html#a0e057cdfb000547a2fb24fa0f05eb08d">Isis::LineEquation::Slope()</a>, and <a class="el" href="class_isis_1_1_least_squares.html#aa6d220932140932c25b7799ba67a0bc8">Isis::LeastSquares::Solve()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#aa2fc5ac4e381b9dda382474c8c86e1ac">Isis::IsisBundleObservation::applyParameterCorrections()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a9d3a8ed552464957a2c60c9f8ac7e437">Isis::IsisBundleObservation::initializeExteriorOrientation()</a>, <a class="el" href="class_isis_1_1_spice_position.html#acdd790eb593d7809e768e59466a32aee">Isis::SpicePosition::LoadCache()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#af8338164215e8d009c8ea1b9f41c3d45">Isis::SpicePosition::SetPolynomialDegree()</a>.</p>
+
+</div>
+</div>
+<a id="aef400d876e8cadf138952c50f1ff6df0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef400d876e8cadf138952c50f1ff6df0">&#9670;&nbsp;</a></span>SetPolynomial() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::SetPolynomial </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>XC</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>YC</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ZC</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3">Source</a>&#160;</td>
+          <td class="paramname"><em>type</em> = <code><a class="el" href="class_isis_1_1_spice_position.html#a3e47d75d3c236a4056609077d6758ba3a2bf63bc3a9bbd4ff1b094802a7d4d0da">PolyFunction</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the coefficients of a polynomial (parabola) fit to each of the three coordinates of the position vector for the time period covered by the cache, coord = c0 + c1*t + c2*t**2 + ... </p>
+<ul>
+<li>cn*t**n, where t = (time - p_baseTime) / p_timeScale.</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">XC</td><td>Coefficients of fit to X coordinate </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">YC</td><td>Coefficients of fit to Y coordinate </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ZC</td><td>Coefficients of fit to Z coordinate </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spice_position.html#a0e1c52b48309bc5ae978e65bb08c2ea3">Isis::SpicePosition::ComputeBaseTime()</a>, <a class="el" href="class_isis_1_1_basis_function.html#aa963fbe62d5e2020beab8c487a3a1a16">Isis::BasisFunction::SetCoefficients()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#aad1b0ae8249dfb860871bbb5c76797e9">Isis::SpicePosition::SetEphemerisTime()</a>.</p>
+
+</div>
+</div>
+<a id="af8338164215e8d009c8ea1b9f41c3d45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8338164215e8d009c8ea1b9f41c3d45">&#9670;&nbsp;</a></span>SetPolynomialDegree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::SetPolynomialDegree </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>degree</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the polynomial degree. </p>
+<p>Set the degree of the polynomials to be fit to the three position coordinates for the time period covered by the cache, coordinate = c0 + c1*t + c2*t**2 + ...</p>
+<ul>
+<li>cn*t**n, where t = (time - p_baseTime) / p_timeScale, and n = p_degree.</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">degree</td><td>Degree of the polynomial to be fit </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spice_position.html#a5e20b92da43bade716cab5af0acbd759">Isis::SpicePosition::SetPolynomial()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a9d3a8ed552464957a2c60c9f8ac7e437">Isis::IsisBundleObservation::initializeExteriorOrientation()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#acdd790eb593d7809e768e59466a32aee">Isis::SpicePosition::LoadCache()</a>.</p>
+
+</div>
+</div>
+<a id="a679111a220ab5bb9f522e2ab7d7d77b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a679111a220ab5bb9f522e2ab7d7d77b0">&#9670;&nbsp;</a></span>setStateVector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::setStateVector </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>state</em>[6], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool &amp;&#160;</td>
+          <td class="paramname"><em>hasVelocity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the state of target relative to observer. </p>
+<p>This method sets the state of the target (vector) relative to the observer. Note that is the only place where the swap of observer/target adjustment to the state vector is handled. All contributors to this computation <em>must</em> compute the state vector representing the position and velocity of the target relative to the observer where the first three components of state[] are the x-, y- and z-component cartesian coordinates of the target's position; the last three are the corresponding velocity vector.</p>
+<p>This routine maintains the directional integrity of the state vector should the observer/target be swapped. See the documentation for the spkez_c at <a href="http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkez_c.html">http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkez_c.html</a>.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-10-29 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>State vector. First three components of this 6 element array is the body fixed coordinates of the vector from the target to the observer. The last three components are the velocity state. </td></tr>
+    <tr><td class="paramname">hasVelocity</td><td>If true, then the velocity components of the state vector are valid, otherwise they should be ignored. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spacecraft_position.html#a495ce80ff86232b51e1a37cd399902a8">SetEphemerisTimeSpice()</a>, and <a class="el" href="class_isis_1_1_spice_position.html#a329377be2fe0449807160a81ae53dd35">Isis::SpicePosition::SetEphemerisTimeSpice()</a>.</p>
+
+</div>
+</div>
+<a id="aa478d74e082380b71b5a132a3f559936"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa478d74e082380b71b5a132a3f559936">&#9670;&nbsp;</a></span>SetTimeBias()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SpicePosition::SetTimeBias </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>timeBias</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Apply a time bias when invoking SetEphemerisTime method. </p>
+<p>The bias is used only when reading from NAIF kernels. It is added to the ephermeris time passed into SetEphemerisTime and then the body position is read from the NAIF kernels and returned. When the cache is loaded from a table the bias is ignored as it is assumed to have already been applied. If this method is never called the default bias is 0.0 seconds.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timeBias</td><td>time bias in seconds </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a37cc482bf7e5115803f02ed972d480ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37cc482bf7e5115803f02ed972d480ca">&#9670;&nbsp;</a></span>Velocity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; double &gt; &amp; Isis::SpicePosition::Velocity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the current J2000 velocity. </p>
+<p>Return the velocity vector if available.</p>
+<dl class="section return"><dt>Returns</dt><dd>The velocity vector evaluated at the current time </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_radar_ground_map.html#a028a1282829eaf7e436964666f0f9f37">Isis::RadarGroundMap::GetXY()</a>, <a class="el" href="class_isis_1_1_mini_r_f.html#abfbbad9e21bfe48dade11108298f9a80">Isis::MiniRF::MiniRF()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a33b95960691f7858717a48e9c6f97d55">Isis::RadarGroundMap::SetFocalPlane()</a>, and <a class="el" href="class_isis_1_1_radar_ground_map.html#a50f20e842f09ad9370d200b598e9f8bd">Isis::RadarGroundMap::SetGround()</a>.</p>
+
+</div>
+</div>
+<a id="af887f438e6c0041f8a56fb633e933f5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af887f438e6c0041f8a56fb633e933f5e">&#9670;&nbsp;</a></span>VelocityPartial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Isis::SpicePosition::VelocityPartial </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852ec">SpicePosition::PartialType</a>&#160;</td>
+          <td class="paramname"><em>partialVar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>coeffIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute the derivative of the velocity with respect to the specified variable. </p>
+<p>The velocity is the derivative of the coordinate with respect to time.</p>
+<p>coordinate = C0 + C1*t + C2*t**2 + ... +Cn*t**n , where t = (time - p_basetime) / p_timeScale. velocity = (1/p_timeScale) * (C1 + 2*C2*t + ... + n*Cn*t**(n-1)) partial(velocity) with respect to C0 = 0. partial(velocity) with respect to C1 = 1/p_timeScale. partial(velocity) with respect to C2 = 2*t/p_timeScale partial(velocity) with respect to CN = n*t**(n-1)/p_timeScale</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">partialVar</td><td>Designated variable of the partial derivative </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Derivative of j2000 velocity vector calculated with respect to partialVar </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_radar_ground_map.html#a35422f54f9b7760ce06aebed41ab6e30">Isis::RadarGroundMap::GetdXYdPosition()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Spice/<a class="el" href="_spacecraft_position_8h_source.html">SpacecraftPosition.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Spice/<a class="el" href="_spacecraft_position_8cpp.html">SpacecraftPosition.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_spacecraft_position.html">SpacecraftPosition</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

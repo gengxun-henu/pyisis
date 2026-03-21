@@ -1,0 +1,16 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ControlMeasureLogData,Control Networks,isis/src/control/objs/ControlMeasureLogData/ControlMeasureLogData.h,isis_pybind_standalone/src/control/bind_control_core.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ControlMeasureLogData,isis_pybind.ControlMeasureLogData,Y,Python class symbol is exported; Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Construction/Enum,"NumericLogDataType enum (InvalidNumericLogDataType, Obsolete_Eccentricity, GoodnessOfFit, MinimumPixelZScore, MaximumPixelZScore, PixelShift, WholePixelCorrelation, SubPixelCorrelation, Obsolete_AverageResidual)",isis_pybind.ControlMeasureLogData.NumericLogDataType,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Construction/Enum,ControlMeasureLogData(),isis_pybind.ControlMeasureLogData(),Y,Constructor is explicitly bound
+Mutation/Configuration,void SetNumericalValue(double value),isis_pybind.ControlMeasureLogData.set_numerical_value,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,void SetDataType(NumericLogDataType newDataType),isis_pybind.ControlMeasureLogData.set_data_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetNumericalValue() const,isis_pybind.ControlMeasureLogData.get_numerical_value,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,NumericLogDataType GetDataType() const,isis_pybind.ControlMeasureLogData.get_data_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QVariant GetValue() const,isis_pybind.ControlMeasureLogData.get_value,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Query,bool IsValid() const,isis_pybind.ControlMeasureLogData.is_valid,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,PvlKeyword ToKeyword() const,isis_pybind.ControlMeasureLogData.to_keyword,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,NumericLogDataType NameToDataType(QString name) const,isis_pybind.ControlMeasureLogData.name_to_data_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QString DataTypeToName(NumericLogDataType type) const,isis_pybind.ControlMeasureLogData.data_type_to_name,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义

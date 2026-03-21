@@ -1,0 +1,1687 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::PointMeasureTreeModel Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_point_measure_tree_model.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_point_measure_tree_model-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::PointMeasureTreeModel Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Tree model for control points and control measures.  
+ <a href="class_isis_1_1_point_measure_tree_model.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_point_measure_tree_model_8h_source.html">PointMeasureTreeModel.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::PointMeasureTreeModel:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_point_measure_tree_model__inherit__graph.png" border="0" usemap="#a_isis_1_1_point_measure_tree_model_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_point_measure_tree_model_inherit__map" id="a_isis_1_1_point_measure_tree_model_inherit__map">
+<area shape="rect" title="Tree model for control points and control measures." alt="" coords="15,520,207,633"/>
+<area shape="rect" href="class_isis_1_1_abstract_tree_model.html" title="Base class for tree models." alt="" coords="5,135,217,472"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="76,5,146,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::PointMeasureTreeModel:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_point_measure_tree_model__coll__graph.png" border="0" usemap="#a_isis_1_1_point_measure_tree_model_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_point_measure_tree_model_coll__map" id="a_isis_1_1_point_measure_tree_model_coll__map">
+<area shape="rect" title="Tree model for control points and control measures." alt="" coords="22,585,213,699"/>
+<area shape="rect" href="class_isis_1_1_abstract_tree_model.html" title="Base class for tree models." alt="" coords="12,199,223,536"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="5,29,75,111"/>
+<area shape="rect" href="class_isis_1_1_root_item.html" title="The root of a tree." alt="" coords="99,5,291,135"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a89f93c3408cf5e35a4e0a85df5556279"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279">InterestingItems</a> { <a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a51d7be5c06894f0ae79e284004fc964a">PointItems</a> = 1
+, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a073c9dd5bea82a7a10533fe0ce70edf7">MeasureItems</a> = 2
+, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a384e87cc3fb223983bb4b2fb94a54ed9">ImageItems</a> = 4
+, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">AllItems</a> = PointItems | MeasureItems | ImageItems
+ }</td></tr>
+<tr class="separator:a89f93c3408cf5e35a4e0a85df5556279"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:ad36cfbd3c97d2b82b11c0ba2d2628898"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#ad36cfbd3c97d2b82b11c0ba2d2628898">applyFilter</a> ()</td></tr>
+<tr class="separator:ad36cfbd3c97d2b82b11c0ba2d2628898"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a3b351409a62f939e1d6f771f6dc502a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a3b351409a62f939e1d6f771f6dc502a6">cancelSort</a> ()</td></tr>
+<tr class="separator:a3b351409a62f939e1d6f771f6dc502a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec082b2e84e9a8ef28d557ebca95336b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#aec082b2e84e9a8ef28d557ebca95336b">modelModified</a> ()</td></tr>
+<tr class="separator:aec082b2e84e9a8ef28d557ebca95336b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26089eeafa1d7f710d179f8ab0dbc1d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a26089eeafa1d7f710d179f8ab0dbc1d6">filterProgressChanged</a> (int)</td></tr>
+<tr class="separator:a26089eeafa1d7f710d179f8ab0dbc1d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c49c89c6d5ee2a22c77d97e3c2c745e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a0c49c89c6d5ee2a22c77d97e3c2c745e">filterProgressRangeChanged</a> (int, int)</td></tr>
+<tr class="separator:a0c49c89c6d5ee2a22c77d97e3c2c745e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa39318404c7fee1bc3428a3dad03732a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#aa39318404c7fee1bc3428a3dad03732a">rebuildProgressChanged</a> (int)</td></tr>
+<tr class="separator:aa39318404c7fee1bc3428a3dad03732a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac45d7c64ad5e6423aa4ac3e0a9d7224d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#ac45d7c64ad5e6423aa4ac3e0a9d7224d">rebuildProgressRangeChanged</a> (int, int)</td></tr>
+<tr class="separator:ac45d7c64ad5e6423aa4ac3e0a9d7224d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad113d51dcaf9d7f82e320ad507fef133"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#ad113d51dcaf9d7f82e320ad507fef133">treeSelectionChanged</a> (<a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> * &gt;)</td></tr>
+<tr class="separator:ad113d51dcaf9d7f82e320ad507fef133"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5dc5b75ef39b7cf2df7ec75f04dbf08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#ae5dc5b75ef39b7cf2df7ec75f04dbf08">tableSelectionChanged</a> (<a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> * &gt;)</td></tr>
+<tr class="separator:ae5dc5b75ef39b7cf2df7ec75f04dbf08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2da4923d9729f66fb3a03f686060c258"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a2da4923d9729f66fb3a03f686060c258">filterCountsChanged</a> (int visibleTopLevelItemCount, int topLevelItemCount)</td></tr>
+<tr class="memdesc:a2da4923d9729f66fb3a03f686060c258"><td class="mdescLeft">&#160;</td><td class="mdescRight">This signal is emitted after filtering to provide the number of visible top-level items remaining after the filter was applied, as well as the total number of items that were possible.  <a href="class_isis_1_1_abstract_tree_model.html#a2da4923d9729f66fb3a03f686060c258">More...</a><br /></td></tr>
+<tr class="separator:a2da4923d9729f66fb3a03f686060c258"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ae51da4844a778a08d01132b57a83aa88"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_point_measure_tree_model.html#ae51da4844a778a08d01132b57a83aa88">PointMeasureTreeModel</a> (<a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *cNet, <a class="el" href="class_isis_1_1_tree_view.html">TreeView</a> *v, <a class="el" href="class_q_object.html">QObject</a> *parent=0)</td></tr>
+<tr class="separator:ae51da4844a778a08d01132b57a83aa88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f2a92a1f373f52ea55fe32b25d0169c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_point_measure_tree_model.html#a7f2a92a1f373f52ea55fe32b25d0169c">~PointMeasureTreeModel</a> ()</td></tr>
+<tr class="separator:a7f2a92a1f373f52ea55fe32b25d0169c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a352a074c37fff508a5c6aaf557523887"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">rebuildItems</a> ()</td></tr>
+<tr class="separator:a352a074c37fff508a5c6aaf557523887"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1dec7fff19377a2fb54c918313ec511b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a1dec7fff19377a2fb54c918313ec511b">getItems</a> (int, int, InterestingItemsFlag=<a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">AllItems</a>, bool=false)</td></tr>
+<tr class="separator:a1dec7fff19377a2fb54c918313ec511b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a084f51e0b54e37445fd526f44a511c65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a084f51e0b54e37445fd526f44a511c65">getItems</a> (<a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> *, <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> *, InterestingItemsFlag=<a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">AllItems</a>, bool=false)</td></tr>
+<tr class="separator:a084f51e0b54e37445fd526f44a511c65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0686fb39b86a5608eaf2955977ec82aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a0686fb39b86a5608eaf2955977ec82aa">getSelectedItems</a> (InterestingItemsFlag=<a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">AllItems</a>, bool=false)</td></tr>
+<tr class="separator:a0686fb39b86a5608eaf2955977ec82aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a654c44ea3181a55698c0be87e1f0b8e8"><td class="memItemLeft" align="right" valign="top">QMutex *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a654c44ea3181a55698c0be87e1f0b8e8">getMutex</a> () const</td></tr>
+<tr class="separator:a654c44ea3181a55698c0be87e1f0b8e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d5f280707655e4e464db54e6a65d56c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a0d5f280707655e4e464db54e6a65d56c">getItemCount</a> (InterestingItemsFlag) const</td></tr>
+<tr class="separator:a0d5f280707655e4e464db54e6a65d56c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b183f7b689f43eec32c76e1a7a23ed9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a8b183f7b689f43eec32c76e1a7a23ed9">getTopLevelItemCount</a> () const</td></tr>
+<tr class="separator:a8b183f7b689f43eec32c76e1a7a23ed9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abae3eb7c989637d9f918dd1b6374cc92"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#abae3eb7c989637d9f918dd1b6374cc92">getVisibleItemCount</a> (InterestingItemsFlag, bool) const</td></tr>
+<tr class="separator:abae3eb7c989637d9f918dd1b6374cc92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91c74f401ac4c3483bb5f723f57ad195"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a91c74f401ac4c3483bb5f723f57ad195">getVisibleTopLevelItemCount</a> () const</td></tr>
+<tr class="separator:a91c74f401ac4c3483bb5f723f57ad195"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dbccf286c71ddfc0e2073f6757f3cd1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_tree_view.html">TreeView</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a4dbccf286c71ddfc0e2073f6757f3cd1">getView</a> () const</td></tr>
+<tr class="separator:a4dbccf286c71ddfc0e2073f6757f3cd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2521bd0a8155cee1946c5e05e0313e2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a2521bd0a8155cee1946c5e05e0313e2f">setDrivable</a> (bool drivableStatus)</td></tr>
+<tr class="separator:a2521bd0a8155cee1946c5e05e0313e2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2ddfde955c6e87bb745cac26e419920"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#ac2ddfde955c6e87bb745cac26e419920">isDrivable</a> () const</td></tr>
+<tr class="separator:ac2ddfde955c6e87bb745cac26e419920"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91f7d44d1812957c161cd63220aa9aa4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a91f7d44d1812957c161cd63220aa9aa4">isFiltering</a> () const</td></tr>
+<tr class="separator:a91f7d44d1812957c161cd63220aa9aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa205fcf2c3f61116f161da74913dd5d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#aaa205fcf2c3f61116f161da74913dd5d">isRebuilding</a> () const</td></tr>
+<tr class="separator:aaa205fcf2c3f61116f161da74913dd5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f5c3ab0dcf9d34daac7a0fbeb817519"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a0f5c3ab0dcf9d34daac7a0fbeb817519">setRebuilding</a> (bool running)</td></tr>
+<tr class="separator:a0f5c3ab0dcf9d34daac7a0fbeb817519"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fdf428517919afa4e259334d0e03c52"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a3fdf428517919afa4e259334d0e03c52">setFilter</a> (<a class="el" href="class_isis_1_1_filter_widget.html">FilterWidget</a> *newFilter)</td></tr>
+<tr class="separator:a3fdf428517919afa4e259334d0e03c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8eb3ea036e8f07d8b33489e5054d5fe7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a8eb3ea036e8f07d8b33489e5054d5fe7">setGlobalSelection</a> (bool selected, InterestingItemsFlag=<a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">AllItems</a>)</td></tr>
+<tr class="separator:a8eb3ea036e8f07d8b33489e5054d5fe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad99e14c363d1afbd5f38b90e15708c22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#ad99e14c363d1afbd5f38b90e15708c22">stopWorking</a> ()</td></tr>
+<tr class="separator:ad99e14c363d1afbd5f38b90e15708c22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acca6e44c80e302640bac5879ab572df8"><td class="memItemLeft" align="right" valign="top">QSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#acca6e44c80e302640bac5879ab572df8">getVisibleSize</a> (int indentation) const</td></tr>
+<tr class="memdesc:acca6e44c80e302640bac5879ab572df8"><td class="mdescLeft">&#160;</td><td class="mdescRight">indentation is in pixels  <a href="class_isis_1_1_abstract_tree_model.html#acca6e44c80e302640bac5879ab572df8">More...</a><br /></td></tr>
+<tr class="separator:acca6e44c80e302640bac5879ab572df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b8b7fa1877c4cbcb23acab0426ec614"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a2b8b7fa1877c4cbcb23acab0426ec614">indexOfVisibleItem</a> (<a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> const *item, InterestingItemsFlag=<a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">AllItems</a>, bool=false) const</td></tr>
+<tr class="separator:a2b8b7fa1877c4cbcb23acab0426ec614"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1815aeff4c54ed4c452a8dfbd6a27da8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a1815aeff4c54ed4c452a8dfbd6a27da8">setFrozen</a> (bool)</td></tr>
+<tr class="separator:a1815aeff4c54ed4c452a8dfbd6a27da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4455a7dda5779dfa71efdbeedfd2d71"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#ac4455a7dda5779dfa71efdbeedfd2d71">isFrozen</a> () const</td></tr>
+<tr class="separator:ac4455a7dda5779dfa71efdbeedfd2d71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae953386d1aa9f12d91720919c8fe317"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#aae953386d1aa9f12d91720919c8fe317">queueRebuild</a> ()</td></tr>
+<tr class="separator:aae953386d1aa9f12d91720919c8fe317"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a301f5cd775f2d61c7bf8977e62e63e45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a301f5cd775f2d61c7bf8977e62e63e45">clear</a> ()</td></tr>
+<tr class="separator:a301f5cd775f2d61c7bf8977e62e63e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5cfb44928bd9ececa33ed29e5641c6f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#af5cfb44928bd9ececa33ed29e5641c6f">getControlNetwork</a> () const</td></tr>
+<tr class="separator:af5cfb44928bd9ececa33ed29e5641c6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a597e77627b625ce6b6cd662cb57da0e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_filter_widget.html">FilterWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a597e77627b625ce6b6cd662cb57da0e9">getFilterWidget</a> () const</td></tr>
+<tr class="separator:a597e77627b625ce6b6cd662cb57da0e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9888613b55e172e23a8d7d93bb9bc7b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_future_watcher.html">QFutureWatcher</a>&lt; <a class="el" href="class_q_atomic_pointer.html">QAtomicPointer</a>&lt; <a class="el" href="class_isis_1_1_root_item.html">RootItem</a> &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a9888613b55e172e23a8d7d93bb9bc7b4">getRebuildWatcher</a> () const</td></tr>
+<tr class="separator:a9888613b55e172e23a8d7d93bb9bc7b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0aa25772c9c44e60fc242304aa663fd2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_root_item.html">RootItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a0aa25772c9c44e60fc242304aa663fd2">getRootItem</a> () const</td></tr>
+<tr class="separator:a0aa25772c9c44e60fc242304aa663fd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a2f511009d777bc064b9f563ba38a05c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_root_item.html">RootItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">rootItem</a></td></tr>
+<tr class="separator:a2f511009d777bc064b9f563ba38a05c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Tree model for control points and control measures. </p>
+<p>This class represents a model that provides access to control points and control measures in a tree-like fashion. The tree structure is designed such that control points are parent nodes with control measures as children (leaf) nodes.</p>
+<p>This class also provides functionality for the multi-threaded rebuilding of the point-measure tree model structure, which is necessary when certain types of changes are made to the underlying control network.</p>
+<dl class="section author"><dt>Author</dt><dd>????-??-?? Eric Hyer </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a89f93c3408cf5e35a4e0a85df5556279"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89f93c3408cf5e35a4e0a85df5556279">&#9670;&nbsp;</a></span>InterestingItems</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279">Isis::AbstractTreeModel::InterestingItems</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a89f93c3408cf5e35a4e0a85df5556279a51d7be5c06894f0ae79e284004fc964a"></a>PointItems&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a89f93c3408cf5e35a4e0a85df5556279a073c9dd5bea82a7a10533fe0ce70edf7"></a>MeasureItems&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a89f93c3408cf5e35a4e0a85df5556279a384e87cc3fb223983bb4b2fb94a54ed9"></a>ImageItems&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca"></a>AllItems&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae51da4844a778a08d01132b57a83aa88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae51da4844a778a08d01132b57a83aa88">&#9670;&nbsp;</a></span>PointMeasureTreeModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PointMeasureTreeModel::PointMeasureTreeModel </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *&#160;</td>
+          <td class="paramname"><em>cNet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_tree_view.html">TreeView</a> *&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">rebuildItems()</a>.</p>
+
+</div>
+</div>
+<a id="a7f2a92a1f373f52ea55fe32b25d0169c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f2a92a1f373f52ea55fe32b25d0169c">&#9670;&nbsp;</a></span>~PointMeasureTreeModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PointMeasureTreeModel::~PointMeasureTreeModel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad36cfbd3c97d2b82b11c0ba2d2628898"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad36cfbd3c97d2b82b11c0ba2d2628898">&#9670;&nbsp;</a></span>applyFilter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::applyFilter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_tree_model.html#a3b351409a62f939e1d6f771f6dc502a6">Isis::AbstractTreeModel::cancelSort()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2da4923d9729f66fb3a03f686060c258">Isis::AbstractTreeModel::filterCountsChanged()</a>, <a class="el" href="class_isis_1_1_abstract_parent_item.html#a23f5ea78201ffc2469737843e3a82071">Isis::AbstractParentItem::getChildren()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a8b183f7b689f43eec32c76e1a7a23ed9">Isis::AbstractTreeModel::getTopLevelItemCount()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>, and <a class="el" href="class_isis_1_1_root_item.html#a82fbfbc139204dc6ed369039fa0e54e9">Isis::RootItem::setLastVisibleFilteredItem()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_table_model.html#a5513c5291bc826043733aad63ba16e64">Isis::AbstractTableModel::applyFilter()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a3fdf428517919afa4e259334d0e03c52">Isis::AbstractTreeModel::setFilter()</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#a1815aeff4c54ed4c452a8dfbd6a27da8">Isis::AbstractTreeModel::setFrozen()</a>.</p>
+
+</div>
+</div>
+<a id="a3b351409a62f939e1d6f771f6dc502a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b351409a62f939e1d6f771f6dc502a6">&#9670;&nbsp;</a></span>cancelSort</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::cancelSort </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_tree_model.html#ad36cfbd3c97d2b82b11c0ba2d2628898">Isis::AbstractTreeModel::applyFilter()</a>, <a class="el" href="class_isis_1_1_image_image_tree_model.html#a9bf7eb41b1060c3004a31dbddbac9b3e">Isis::ImageImageTreeModel::rebuildItems()</a>, <a class="el" href="class_isis_1_1_image_point_tree_model.html#ab4334a7fcff99aa6b0454cf7746381c4">Isis::ImagePointTreeModel::rebuildItems()</a>, and <a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">rebuildItems()</a>.</p>
+
+</div>
+</div>
+<a id="a301f5cd775f2d61c7bf8977e62e63e45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a301f5cd775f2d61c7bf8977e62e63e45">&#9670;&nbsp;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+</div>
+</div>
+<a id="a2da4923d9729f66fb3a03f686060c258"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2da4923d9729f66fb3a03f686060c258">&#9670;&nbsp;</a></span>filterCountsChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::filterCountsChanged </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>visibleTopLevelItemCount</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>topLevelItemCount</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This signal is emitted after filtering to provide the number of visible top-level items remaining after the filter was applied, as well as the total number of items that were possible. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_tree_model.html#ad36cfbd3c97d2b82b11c0ba2d2628898">Isis::AbstractTreeModel::applyFilter()</a>, <a class="el" href="class_isis_1_1_image_image_tree_model.html#a9bf7eb41b1060c3004a31dbddbac9b3e">Isis::ImageImageTreeModel::rebuildItems()</a>, <a class="el" href="class_isis_1_1_image_point_tree_model.html#ab4334a7fcff99aa6b0454cf7746381c4">Isis::ImagePointTreeModel::rebuildItems()</a>, and <a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">rebuildItems()</a>.</p>
+
+</div>
+</div>
+<a id="a26089eeafa1d7f710d179f8ab0dbc1d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26089eeafa1d7f710d179f8ab0dbc1d6">&#9670;&nbsp;</a></span>filterProgressChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::filterProgressChanged </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_tree_model.html#ae7386639cbd012ef9f6143bc82e1e4b7">Isis::AbstractTreeModel::AbstractTreeModel()</a>.</p>
+
+</div>
+</div>
+<a id="a0c49c89c6d5ee2a22c77d97e3c2c745e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c49c89c6d5ee2a22c77d97e3c2c745e">&#9670;&nbsp;</a></span>filterProgressRangeChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::filterProgressRangeChanged </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_tree_model.html#ae7386639cbd012ef9f6143bc82e1e4b7">Isis::AbstractTreeModel::AbstractTreeModel()</a>.</p>
+
+</div>
+</div>
+<a id="af5cfb44928bd9ececa33ed29e5641c6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5cfb44928bd9ececa33ed29e5641c6f">&#9670;&nbsp;</a></span>getControlNetwork()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> * Isis::AbstractTreeModel::getControlNetwork </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_image_tree_model.html#a9bf7eb41b1060c3004a31dbddbac9b3e">Isis::ImageImageTreeModel::rebuildItems()</a>, <a class="el" href="class_isis_1_1_image_point_tree_model.html#ab4334a7fcff99aa6b0454cf7746381c4">Isis::ImagePointTreeModel::rebuildItems()</a>, and <a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">rebuildItems()</a>.</p>
+
+</div>
+</div>
+<a id="a597e77627b625ce6b6cd662cb57da0e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a597e77627b625ce6b6cd662cb57da0e9">&#9670;&nbsp;</a></span>getFilterWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_filter_widget.html">FilterWidget</a>* Isis::AbstractTreeModel::getFilterWidget </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0d5f280707655e4e464db54e6a65d56c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d5f280707655e4e464db54e6a65d56c">&#9670;&nbsp;</a></span>getItemCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::AbstractTreeModel::getItemCount </td>
+          <td>(</td>
+          <td class="paramtype">InterestingItemsFlag&#160;</td>
+          <td class="paramname"><em>flags</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+</div>
+</div>
+<a id="a084f51e0b54e37445fd526f44a511c65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a084f51e0b54e37445fd526f44a511c65">&#9670;&nbsp;</a></span>getItems() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> * &gt; Isis::AbstractTreeModel::getItems </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> *&#160;</td>
+          <td class="paramname"><em>item1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> *&#160;</td>
+          <td class="paramname"><em>item2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InterestingItemsFlag&#160;</td>
+          <td class="paramname"><em>flags</em> = <code><a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">AllItems</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignoreExpansion</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_abstract_parent_item.html#aa0d0b3caa84f05ccefa09659d725ae3b">Isis::AbstractParentItem::childCount()</a>, <a class="el" href="class_isis_1_1_abstract_parent_item.html#adf3bc944ac863265bedfaab61d9e4e34">Isis::AbstractParentItem::getFirstVisibleChild()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+</div>
+</div>
+<a id="a1dec7fff19377a2fb54c918313ec511b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1dec7fff19377a2fb54c918313ec511b">&#9670;&nbsp;</a></span>getItems() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> * &gt; Isis::AbstractTreeModel::getItems </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>end</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InterestingItemsFlag&#160;</td>
+          <td class="paramname"><em>flags</em> = <code><a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">AllItems</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignoreExpansion</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_parent_item.html#aa0d0b3caa84f05ccefa09659d725ae3b">Isis::AbstractParentItem::childCount()</a>, <a class="el" href="class_isis_1_1_abstract_parent_item.html#adf3bc944ac863265bedfaab61d9e4e34">Isis::AbstractParentItem::getFirstVisibleChild()</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#aad8d31bd992fd8a692b190be33044d6a">Isis::AbstractTreeItem::getLastVisibleChild()</a>, <a class="el" href="class_isis_1_1_root_item.html#ae77bc4eb5915ef110e5919dd55bae404">Isis::RootItem::getLastVisibleFilteredItem()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a91f7d44d1812957c161cd63220aa9aa4">Isis::AbstractTreeModel::isFiltering()</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#a63244cecf5be59d41603c72df48c0b54">Isis::AbstractTreeItem::parent()</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a7956b2a5be7856276ef82355bcc3fb45">Isis::CnetEditorWidget::filteredNetwork()</a>, <a class="el" href="class_isis_1_1_abstract_table_model.html#a9645c3074dd5393f28c5036c4ebffd94">Isis::AbstractTableModel::getSortedItems()</a>, and <a class="el" href="class_isis_1_1_tree_view_content.html#a3c926995081c6b719149af4c31bb0c0f">Isis::TreeViewContent::mousePressEvent()</a>.</p>
+
+</div>
+</div>
+<a id="a654c44ea3181a55698c0be87e1f0b8e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a654c44ea3181a55698c0be87e1f0b8e8">&#9670;&nbsp;</a></span>getMutex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMutex * Isis::AbstractTreeModel::getMutex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9888613b55e172e23a8d7d93bb9bc7b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9888613b55e172e23a8d7d93bb9bc7b4">&#9670;&nbsp;</a></span>getRebuildWatcher()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_future_watcher.html">QFutureWatcher</a>&lt; <a class="el" href="class_q_atomic_pointer.html">QAtomicPointer</a>&lt; <a class="el" href="class_isis_1_1_root_item.html">RootItem</a> &gt; &gt; * Isis::AbstractTreeModel::getRebuildWatcher </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_image_tree_model.html#a9bf7eb41b1060c3004a31dbddbac9b3e">Isis::ImageImageTreeModel::rebuildItems()</a>, <a class="el" href="class_isis_1_1_image_point_tree_model.html#ab4334a7fcff99aa6b0454cf7746381c4">Isis::ImagePointTreeModel::rebuildItems()</a>, and <a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">rebuildItems()</a>.</p>
+
+</div>
+</div>
+<a id="a0aa25772c9c44e60fc242304aa663fd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0aa25772c9c44e60fc242304aa663fd2">&#9670;&nbsp;</a></span>getRootItem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_root_item.html">RootItem</a> * Isis::AbstractTreeModel::getRootItem </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+</div>
+</div>
+<a id="a0686fb39b86a5608eaf2955977ec82aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0686fb39b86a5608eaf2955977ec82aa">&#9670;&nbsp;</a></span>getSelectedItems()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> * &gt; Isis::AbstractTreeModel::getSelectedItems </td>
+          <td>(</td>
+          <td class="paramtype">InterestingItemsFlag&#160;</td>
+          <td class="paramname"><em>flags</em> = <code><a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">AllItems</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignoreExpansion</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_parent_item.html#adf3bc944ac863265bedfaab61d9e4e34">Isis::AbstractParentItem::getFirstVisibleChild()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a91f7d44d1812957c161cd63220aa9aa4">Isis::AbstractTreeModel::isFiltering()</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#a2e6f782467914ee57f4e867a3fb51a01">Isis::AbstractTreeItem::isSelected()</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_measure_table_model.html#ab1a169401693d24d48c40c7f62450ea6">Isis::MeasureTableModel::getSelectedItems()</a>, and <a class="el" href="class_isis_1_1_point_table_model.html#aafdcc16dd66113ec244a67af724305cf">Isis::PointTableModel::getSelectedItems()</a>.</p>
+
+</div>
+</div>
+<a id="a8b183f7b689f43eec32c76e1a7a23ed9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b183f7b689f43eec32c76e1a7a23ed9">&#9670;&nbsp;</a></span>getTopLevelItemCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::AbstractTreeModel::getTopLevelItemCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_parent_item.html#aa0d0b3caa84f05ccefa09659d725ae3b">Isis::AbstractParentItem::childCount()</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_tree_model.html#ad36cfbd3c97d2b82b11c0ba2d2628898">Isis::AbstractTreeModel::applyFilter()</a>, <a class="el" href="class_isis_1_1_image_image_tree_model.html#a9bf7eb41b1060c3004a31dbddbac9b3e">Isis::ImageImageTreeModel::rebuildItems()</a>, <a class="el" href="class_isis_1_1_image_point_tree_model.html#ab4334a7fcff99aa6b0454cf7746381c4">Isis::ImagePointTreeModel::rebuildItems()</a>, and <a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">rebuildItems()</a>.</p>
+
+</div>
+</div>
+<a id="a4dbccf286c71ddfc0e2073f6757f3cd1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4dbccf286c71ddfc0e2073f6757f3cd1">&#9670;&nbsp;</a></span>getView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_tree_view.html">TreeView</a> * Isis::AbstractTreeModel::getView </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abae3eb7c989637d9f918dd1b6374cc92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abae3eb7c989637d9f918dd1b6374cc92">&#9670;&nbsp;</a></span>getVisibleItemCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::AbstractTreeModel::getVisibleItemCount </td>
+          <td>(</td>
+          <td class="paramtype">InterestingItemsFlag&#160;</td>
+          <td class="paramname"><em>flags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignoreExpansion</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_parent_item.html#adf3bc944ac863265bedfaab61d9e4e34">Isis::AbstractParentItem::getFirstVisibleChild()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a91f7d44d1812957c161cd63220aa9aa4">Isis::AbstractTreeModel::isFiltering()</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_measure_table_model.html#ae8c09d478cf605a39cbb053a6b8c0dcd">Isis::MeasureTableModel::getVisibleRowCount()</a>, and <a class="el" href="class_isis_1_1_point_table_model.html#aced2c3a6cdd552bc0798dafefa68d1d8">Isis::PointTableModel::getVisibleRowCount()</a>.</p>
+
+</div>
+</div>
+<a id="acca6e44c80e302640bac5879ab572df8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acca6e44c80e302640bac5879ab572df8">&#9670;&nbsp;</a></span>getVisibleSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSize Isis::AbstractTreeModel::getVisibleSize </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>indentation</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>indentation is in pixels </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">Isis::AbstractTreeModel::AllItems</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#a6d42d11001b0bb5175f98a1e49ff1d3b">Isis::AbstractTreeItem::getDataWidth()</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#a6d1736e4b02a7d7f78d79a216534b436">Isis::AbstractTreeItem::getDepth()</a>, <a class="el" href="class_isis_1_1_abstract_parent_item.html#adf3bc944ac863265bedfaab61d9e4e34">Isis::AbstractParentItem::getFirstVisibleChild()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a91f7d44d1812957c161cd63220aa9aa4">Isis::AbstractTreeModel::isFiltering()</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tree_view_content.html#afeaa2469ca59667af1347a25799167dd">Isis::TreeViewContent::refresh()</a>.</p>
+
+</div>
+</div>
+<a id="a91c74f401ac4c3483bb5f723f57ad195"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91c74f401ac4c3483bb5f723f57ad195">&#9670;&nbsp;</a></span>getVisibleTopLevelItemCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::AbstractTreeModel::getVisibleTopLevelItemCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_parent_item.html#adf3bc944ac863265bedfaab61d9e4e34">Isis::AbstractParentItem::getFirstVisibleChild()</a>, <a class="el" href="class_isis_1_1_abstract_tree_item.html#ac70a5752a4e21c468843b919a7b286e6">Isis::AbstractTreeItem::getNextVisiblePeer()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a91f7d44d1812957c161cd63220aa9aa4">Isis::AbstractTreeModel::isFiltering()</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+</div>
+</div>
+<a id="a2b8b7fa1877c4cbcb23acab0426ec614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b8b7fa1877c4cbcb23acab0426ec614">&#9670;&nbsp;</a></span>indexOfVisibleItem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::AbstractTreeModel::indexOfVisibleItem </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> const *&#160;</td>
+          <td class="paramname"><em>item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InterestingItemsFlag&#160;</td>
+          <td class="paramname"><em>flags</em> = <code><a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">AllItems</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignoreExpansion</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_parent_item.html#adf3bc944ac863265bedfaab61d9e4e34">Isis::AbstractParentItem::getFirstVisibleChild()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a91f7d44d1812957c161cd63220aa9aa4">Isis::AbstractTreeModel::isFiltering()</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_measure_table_model.html#ae79211768be294c40b85f77f23b49724">Isis::MeasureTableModel::indexOfVisibleItem()</a>, and <a class="el" href="class_isis_1_1_point_table_model.html#a03a8527c7c1eadf00adc0ab59afa7f4b">Isis::PointTableModel::indexOfVisibleItem()</a>.</p>
+
+</div>
+</div>
+<a id="ac2ddfde955c6e87bb745cac26e419920"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2ddfde955c6e87bb745cac26e419920">&#9670;&nbsp;</a></span>isDrivable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractTreeModel::isDrivable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a91f7d44d1812957c161cd63220aa9aa4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91f7d44d1812957c161cd63220aa9aa4">&#9670;&nbsp;</a></span>isFiltering()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractTreeModel::isFiltering </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_tree_model.html#a1dec7fff19377a2fb54c918313ec511b">Isis::AbstractTreeModel::getItems()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a0686fb39b86a5608eaf2955977ec82aa">Isis::AbstractTreeModel::getSelectedItems()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#abae3eb7c989637d9f918dd1b6374cc92">Isis::AbstractTreeModel::getVisibleItemCount()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#acca6e44c80e302640bac5879ab572df8">Isis::AbstractTreeModel::getVisibleSize()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a91c74f401ac4c3483bb5f723f57ad195">Isis::AbstractTreeModel::getVisibleTopLevelItemCount()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2b8b7fa1877c4cbcb23acab0426ec614">Isis::AbstractTreeModel::indexOfVisibleItem()</a>, <a class="el" href="class_isis_1_1_abstract_table_model.html#a2de8e39e193b0b83188395b79b658b22">Isis::AbstractTableModel::isFiltering()</a>, <a class="el" href="class_isis_1_1_tree_view_content.html#afeaa2469ca59667af1347a25799167dd">Isis::TreeViewContent::refresh()</a>, and <a class="el" href="class_isis_1_1_abstract_table_model.html#a7b3f20c2517f3f108419d3fbc9f3ae21">Isis::AbstractTableModel::sort()</a>.</p>
+
+</div>
+</div>
+<a id="ac4455a7dda5779dfa71efdbeedfd2d71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4455a7dda5779dfa71efdbeedfd2d71">&#9670;&nbsp;</a></span>isFrozen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractTreeModel::isFrozen </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_image_tree_model.html#a9bf7eb41b1060c3004a31dbddbac9b3e">Isis::ImageImageTreeModel::rebuildItems()</a>, <a class="el" href="class_isis_1_1_image_point_tree_model.html#ab4334a7fcff99aa6b0454cf7746381c4">Isis::ImagePointTreeModel::rebuildItems()</a>, and <a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">rebuildItems()</a>.</p>
+
+</div>
+</div>
+<a id="aaa205fcf2c3f61116f161da74913dd5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa205fcf2c3f61116f161da74913dd5d">&#9670;&nbsp;</a></span>isRebuilding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::AbstractTreeModel::isRebuilding </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_table_model.html#a7b3f20c2517f3f108419d3fbc9f3ae21">Isis::AbstractTableModel::sort()</a>.</p>
+
+</div>
+</div>
+<a id="aec082b2e84e9a8ef28d557ebca95336b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec082b2e84e9a8ef28d557ebca95336b">&#9670;&nbsp;</a></span>modelModified</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::modelModified </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aae953386d1aa9f12d91720919c8fe317"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae953386d1aa9f12d91720919c8fe317">&#9670;&nbsp;</a></span>queueRebuild()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::queueRebuild </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_image_tree_model.html#a9bf7eb41b1060c3004a31dbddbac9b3e">Isis::ImageImageTreeModel::rebuildItems()</a>, <a class="el" href="class_isis_1_1_image_point_tree_model.html#ab4334a7fcff99aa6b0454cf7746381c4">Isis::ImagePointTreeModel::rebuildItems()</a>, and <a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">rebuildItems()</a>.</p>
+
+</div>
+</div>
+<a id="a352a074c37fff508a5c6aaf557523887"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a352a074c37fff508a5c6aaf557523887">&#9670;&nbsp;</a></span>rebuildItems()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PointMeasureTreeModel::rebuildItems </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_isis_1_1_abstract_tree_model.html#aa851d16bc6e428630ee1827eaadc2a87">Isis::AbstractTreeModel</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_tree_model.html#a3b351409a62f939e1d6f771f6dc502a6">Isis::AbstractTreeModel::cancelSort()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2da4923d9729f66fb3a03f686060c258">Isis::AbstractTreeModel::filterCountsChanged()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#af5cfb44928bd9ececa33ed29e5641c6f">Isis::AbstractTreeModel::getControlNetwork()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a9888613b55e172e23a8d7d93bb9bc7b4">Isis::AbstractTreeModel::getRebuildWatcher()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a8b183f7b689f43eec32c76e1a7a23ed9">Isis::AbstractTreeModel::getTopLevelItemCount()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#ac4455a7dda5779dfa71efdbeedfd2d71">Isis::AbstractTreeModel::isFrozen()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#aae953386d1aa9f12d91720919c8fe317">Isis::AbstractTreeModel::queueRebuild()</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#a0f5c3ab0dcf9d34daac7a0fbeb817519">Isis::AbstractTreeModel::setRebuilding()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_point_measure_tree_model.html#ae51da4844a778a08d01132b57a83aa88">PointMeasureTreeModel()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#ad4ba05347c74e97a8fe8525290abbbdf">Isis::CnetEditorWidget::setLatLonRadiusCoordinateDisplay()</a>, and <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a9f4ae29629965da5cabc1048929213cb">Isis::CnetEditorWidget::setXYZCoordinateDisplay()</a>.</p>
+
+</div>
+</div>
+<a id="aa39318404c7fee1bc3428a3dad03732a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa39318404c7fee1bc3428a3dad03732a">&#9670;&nbsp;</a></span>rebuildProgressChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::rebuildProgressChanged </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_tree_model.html#ae7386639cbd012ef9f6143bc82e1e4b7">Isis::AbstractTreeModel::AbstractTreeModel()</a>.</p>
+
+</div>
+</div>
+<a id="ac45d7c64ad5e6423aa4ac3e0a9d7224d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac45d7c64ad5e6423aa4ac3e0a9d7224d">&#9670;&nbsp;</a></span>rebuildProgressRangeChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::rebuildProgressRangeChanged </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_tree_model.html#ae7386639cbd012ef9f6143bc82e1e4b7">Isis::AbstractTreeModel::AbstractTreeModel()</a>.</p>
+
+</div>
+</div>
+<a id="a2521bd0a8155cee1946c5e05e0313e2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2521bd0a8155cee1946c5e05e0313e2f">&#9670;&nbsp;</a></span>setDrivable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::setDrivable </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>drivableStatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3fdf428517919afa4e259334d0e03c52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fdf428517919afa4e259334d0e03c52">&#9670;&nbsp;</a></span>setFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::setFilter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_filter_widget.html">FilterWidget</a> *&#160;</td>
+          <td class="paramname"><em>newFilter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_tree_model.html#ad36cfbd3c97d2b82b11c0ba2d2628898">Isis::AbstractTreeModel::applyFilter()</a>.</p>
+
+</div>
+</div>
+<a id="a1815aeff4c54ed4c452a8dfbd6a27da8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1815aeff4c54ed4c452a8dfbd6a27da8">&#9670;&nbsp;</a></span>setFrozen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::setFrozen </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>newFrozenState</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_tree_model.html#ad36cfbd3c97d2b82b11c0ba2d2628898">Isis::AbstractTreeModel::applyFilter()</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#aa851d16bc6e428630ee1827eaadc2a87">Isis::AbstractTreeModel::rebuildItems()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a81579be2af40806bd175042360fa1e89">Isis::CnetEditorWidget::setTablesFrozen()</a>.</p>
+
+</div>
+</div>
+<a id="a8eb3ea036e8f07d8b33489e5054d5fe7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8eb3ea036e8f07d8b33489e5054d5fe7">&#9670;&nbsp;</a></span>setGlobalSelection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::setGlobalSelection </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>selected</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InterestingItemsFlag&#160;</td>
+          <td class="paramname"><em>flags</em> = <code><a class="el" href="class_isis_1_1_abstract_tree_model.html#a89f93c3408cf5e35a4e0a85df5556279a15e8d9eae96bd60085695d6d6dae96ca">AllItems</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2f511009d777bc064b9f563ba38a05c4">Isis::AbstractTreeModel::rootItem</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tree_view_content.html#aad00f45e1839a05b376ee1ee8a228e2d">Isis::TreeViewContent::keyPressEvent()</a>, <a class="el" href="class_isis_1_1_tree_view_content.html#a3c926995081c6b719149af4c31bb0c0f">Isis::TreeViewContent::mousePressEvent()</a>, <a class="el" href="class_isis_1_1_measure_table_model.html#abe72452920eae08e3b727afe5f78e74d">Isis::MeasureTableModel::setGlobalSelection()</a>, and <a class="el" href="class_isis_1_1_point_table_model.html#a47260a9a1a6fd3db46c9ee0aaf0b853b">Isis::PointTableModel::setGlobalSelection()</a>.</p>
+
+</div>
+</div>
+<a id="a0f5c3ab0dcf9d34daac7a0fbeb817519"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f5c3ab0dcf9d34daac7a0fbeb817519">&#9670;&nbsp;</a></span>setRebuilding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::setRebuilding </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>running</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_image_tree_model.html#a9bf7eb41b1060c3004a31dbddbac9b3e">Isis::ImageImageTreeModel::rebuildItems()</a>, <a class="el" href="class_isis_1_1_image_point_tree_model.html#ab4334a7fcff99aa6b0454cf7746381c4">Isis::ImagePointTreeModel::rebuildItems()</a>, and <a class="el" href="class_isis_1_1_point_measure_tree_model.html#a352a074c37fff508a5c6aaf557523887">rebuildItems()</a>.</p>
+
+</div>
+</div>
+<a id="ad99e14c363d1afbd5f38b90e15708c22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad99e14c363d1afbd5f38b90e15708c22">&#9670;&nbsp;</a></span>stopWorking()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::stopWorking </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae5dc5b75ef39b7cf2df7ec75f04dbf08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5dc5b75ef39b7cf2df7ec75f04dbf08">&#9670;&nbsp;</a></span>tableSelectionChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::tableSelectionChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> * &gt;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad113d51dcaf9d7f82e320ad507fef133"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad113d51dcaf9d7f82e320ad507fef133">&#9670;&nbsp;</a></span>treeSelectionChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::AbstractTreeModel::treeSelectionChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_abstract_tree_item.html">AbstractTreeItem</a> * &gt;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2f511009d777bc064b9f563ba38a05c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f511009d777bc064b9f563ba38a05c4">&#9670;&nbsp;</a></span>rootItem</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_root_item.html">RootItem</a>* Isis::AbstractTreeModel::rootItem</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_tree_model.html#ae7386639cbd012ef9f6143bc82e1e4b7">Isis::AbstractTreeModel::AbstractTreeModel()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#ad36cfbd3c97d2b82b11c0ba2d2628898">Isis::AbstractTreeModel::applyFilter()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a301f5cd775f2d61c7bf8977e62e63e45">Isis::AbstractTreeModel::clear()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a0d5f280707655e4e464db54e6a65d56c">Isis::AbstractTreeModel::getItemCount()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a1dec7fff19377a2fb54c918313ec511b">Isis::AbstractTreeModel::getItems()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a0aa25772c9c44e60fc242304aa663fd2">Isis::AbstractTreeModel::getRootItem()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a0686fb39b86a5608eaf2955977ec82aa">Isis::AbstractTreeModel::getSelectedItems()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a8b183f7b689f43eec32c76e1a7a23ed9">Isis::AbstractTreeModel::getTopLevelItemCount()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#abae3eb7c989637d9f918dd1b6374cc92">Isis::AbstractTreeModel::getVisibleItemCount()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#acca6e44c80e302640bac5879ab572df8">Isis::AbstractTreeModel::getVisibleSize()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a91c74f401ac4c3483bb5f723f57ad195">Isis::AbstractTreeModel::getVisibleTopLevelItemCount()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a2b8b7fa1877c4cbcb23acab0426ec614">Isis::AbstractTreeModel::indexOfVisibleItem()</a>, <a class="el" href="class_isis_1_1_abstract_tree_model.html#a8eb3ea036e8f07d8b33489e5054d5fe7">Isis::AbstractTreeModel::setGlobalSelection()</a>, and <a class="el" href="class_isis_1_1_abstract_tree_model.html#ac7ae7a2af20a8791029c9df0a9a6cce3">Isis::AbstractTreeModel::~AbstractTreeModel()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_point_measure_tree_model_8h_source.html">PointMeasureTreeModel.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_point_measure_tree_model_8cpp.html">PointMeasureTreeModel.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_point_measure_tree_model.html">PointMeasureTreeModel</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

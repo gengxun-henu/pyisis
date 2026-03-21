@@ -1,0 +1,823 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ControlPointEdit Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_control_point_edit.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_control_point_edit-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ControlPointEdit Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Point Editor Widget.  
+ <a href="class_isis_1_1_control_point_edit.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_control_point_edit_8h_source.html">ControlPointEdit.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ControlPointEdit:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_control_point_edit__inherit__graph.png" border="0" usemap="#a_isis_1_1_control_point_edit_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_control_point_edit_inherit__map" id="a_isis_1_1_control_point_edit_inherit__map">
+<area shape="rect" title="Point Editor Widget." alt="" coords="5,135,160,360"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="46,5,119,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ControlPointEdit:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_control_point_edit__coll__graph.png" border="0" usemap="#a_isis_1_1_control_point_edit_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_control_point_edit_coll__map" id="a_isis_1_1_control_point_edit_coll__map">
+<area shape="rect" title="Point Editor Widget." alt="" coords="5,135,160,360"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="46,5,119,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:adb7e74d229af5815183e9f770fa1cd14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#adb7e74d229af5815183e9f770fa1cd14">setLeftMeasure</a> (<a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *leftMeasure, <a class="el" href="class_isis_1_1_cube.html">Cube</a> *leftCube, QString pointId)</td></tr>
+<tr class="memdesc:adb7e74d229af5815183e9f770fa1cd14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the measure displayed in the left <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a>.  <a href="class_isis_1_1_control_point_edit.html#adb7e74d229af5815183e9f770fa1cd14">More...</a><br /></td></tr>
+<tr class="separator:adb7e74d229af5815183e9f770fa1cd14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65ceea173e366f35ccda5918c682951b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#a65ceea173e366f35ccda5918c682951b">setRightMeasure</a> (<a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *rightMeasure, <a class="el" href="class_isis_1_1_cube.html">Cube</a> *rightCube, QString pointId)</td></tr>
+<tr class="memdesc:a65ceea173e366f35ccda5918c682951b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the measure displayed in the right <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a>.  <a href="class_isis_1_1_control_point_edit.html#a65ceea173e366f35ccda5918c682951b">More...</a><br /></td></tr>
+<tr class="separator:a65ceea173e366f35ccda5918c682951b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac33fa4ba5262b6542ea601611336caf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#aac33fa4ba5262b6542ea601611336caf">colorizeSaveButton</a> ()</td></tr>
+<tr class="memdesc:aac33fa4ba5262b6542ea601611336caf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turn "Save Measure" button text to red.  <a href="class_isis_1_1_control_point_edit.html#aac33fa4ba5262b6542ea601611336caf">More...</a><br /></td></tr>
+<tr class="separator:aac33fa4ba5262b6542ea601611336caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1298786f6291b38b9e7edeab80ef4d3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#a1298786f6291b38b9e7edeab80ef4d3b">refreshChips</a> ()</td></tr>
+<tr class="separator:a1298786f6291b38b9e7edeab80ef4d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af11f75f2c70851fbfb9b9d54f7d9a879"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#af11f75f2c70851fbfb9b9d54f7d9a879">saveChips</a> ()</td></tr>
+<tr class="memdesc:af11f75f2c70851fbfb9b9d54f7d9a879"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot to save registration chips to files and fire off qview.  <a href="class_isis_1_1_control_point_edit.html#af11f75f2c70851fbfb9b9d54f7d9a879">More...</a><br /></td></tr>
+<tr class="separator:af11f75f2c70851fbfb9b9d54f7d9a879"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a9770e1d373b451a43b00c4d19680d934"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#a9770e1d373b451a43b00c4d19680d934">updateLeftView</a> (double sample, double line)</td></tr>
+<tr class="separator:a9770e1d373b451a43b00c4d19680d934"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ecbbb688d037c934dd6f8792b1d37fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#a0ecbbb688d037c934dd6f8792b1d37fe">updateRightView</a> (double sample, double line)</td></tr>
+<tr class="separator:a0ecbbb688d037c934dd6f8792b1d37fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b70e95298a107c667855aee6d0c7964"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#a6b70e95298a107c667855aee6d0c7964">measureSaved</a> ()</td></tr>
+<tr class="separator:a6b70e95298a107c667855aee6d0c7964"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c8607cdee0cfbc688551d77c7da7419"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#a1c8607cdee0cfbc688551d77c7da7419">newControlNetwork</a> (<a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *)</td></tr>
+<tr class="separator:a1c8607cdee0cfbc688551d77c7da7419"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a563145e76912737d0c4c644c00c864b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#a563145e76912737d0c4c644c00c864b5">stretchChipViewport</a> (<a class="el" href="class_isis_1_1_stretch.html">Stretch</a> *, <a class="el" href="class_isis_1_1_cube_viewport.html">CubeViewport</a> *)</td></tr>
+<tr class="separator:a563145e76912737d0c4c644c00c864b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ab8f8ac50e9a8e7d748f4c50e68476054"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#ab8f8ac50e9a8e7d748f4c50e68476054">ControlPointEdit</a> (<a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *cnet, <a class="el" href="class_q_widget.html">QWidget</a> *parent=0, bool <a class="el" href="class_isis_1_1_control_point_edit.html#a98100ec7060408f38fac060d10588326">allowLeftMouse</a>=false, bool useGeometry=true)</td></tr>
+<tr class="memdesc:ab8f8ac50e9a8e7d748f4c50e68476054"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_control_point_edit.html" title="Point Editor Widget.">ControlPointEdit</a> widget.  <a href="class_isis_1_1_control_point_edit.html#ab8f8ac50e9a8e7d748f4c50e68476054">More...</a><br /></td></tr>
+<tr class="separator:ab8f8ac50e9a8e7d748f4c50e68476054"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27bec3b8848992f213ed823ba8917019"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#a27bec3b8848992f213ed823ba8917019">~ControlPointEdit</a> ()</td></tr>
+<tr class="separator:a27bec3b8848992f213ed823ba8917019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8aad555b8adca4b6eeeb7d8f13ce820"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#af8aad555b8adca4b6eeeb7d8f13ce820">templateFileName</a> ()</td></tr>
+<tr class="separator:af8aad555b8adca4b6eeeb7d8f13ce820"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22acc904a77d29307f93b0ab03a32380"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#a22acc904a77d29307f93b0ab03a32380">setTemplateFile</a> (QString)</td></tr>
+<tr class="memdesc:a22acc904a77d29307f93b0ab03a32380"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows user to choose a new template file by opening a window from which to select a filename.  <a href="class_isis_1_1_control_point_edit.html#a22acc904a77d29307f93b0ab03a32380">More...</a><br /></td></tr>
+<tr class="separator:a22acc904a77d29307f93b0ab03a32380"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98100ec7060408f38fac060d10588326"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_point_edit.html#a98100ec7060408f38fac060d10588326">allowLeftMouse</a> (bool allowMouse)</td></tr>
+<tr class="memdesc:a98100ec7060408f38fac060d10588326"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the option that allows mouse movements in the left <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a>.  <a href="class_isis_1_1_control_point_edit.html#a98100ec7060408f38fac060d10588326">More...</a><br /></td></tr>
+<tr class="separator:a98100ec7060408f38fac060d10588326"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Point Editor Widget. </p>
+<dl class="section author"><dt>Author</dt><dd>2008-09-09 Tracie Sucharski </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ab8f8ac50e9a8e7d748f4c50e68476054"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8f8ac50e9a8e7d748f4c50e68476054">&#9670;&nbsp;</a></span>ControlPointEdit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlPointEdit::ControlPointEdit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *&#160;</td>
+          <td class="paramname"><em>cnet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>allowLeftMouse</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>useGeometry</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_control_point_edit.html" title="Point Editor Widget.">ControlPointEdit</a> widget. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>Input Parent of widget </td></tr>
+    <tr><td class="paramname">allowLeftMouse</td><td>Input Allow/Disallow mouse events on Left <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Tracie Sucharski </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_point_edit.html#a98100ec7060408f38fac060d10588326">allowLeftMouse()</a>, and <a class="el" href="class_isis_1_1_control_point_edit.html#a1c8607cdee0cfbc688551d77c7da7419">newControlNetwork()</a>.</p>
+
+</div>
+</div>
+<a id="a27bec3b8848992f213ed823ba8917019"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27bec3b8848992f213ed823ba8917019">&#9670;&nbsp;</a></span>~ControlPointEdit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlPointEdit::~ControlPointEdit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a98100ec7060408f38fac060d10588326"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98100ec7060408f38fac060d10588326">&#9670;&nbsp;</a></span>allowLeftMouse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlPointEdit::allowLeftMouse </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>allowMouse</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the option that allows mouse movements in the left <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a>. </p>
+<dl class="section author"><dt>Author</dt><dd>Tracie Sucharski </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit.html#ab8f8ac50e9a8e7d748f4c50e68476054">ControlPointEdit()</a>.</p>
+
+</div>
+</div>
+<a id="aac33fa4ba5262b6542ea601611336caf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac33fa4ba5262b6542ea601611336caf">&#9670;&nbsp;</a></span>colorizeSaveButton</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlPointEdit::colorizeSaveButton </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Turn "Save Measure" button text to red. </p>
+<dl class="section author"><dt>Author</dt><dd>2011-06-14 Tracie Sucharski </dd></dl>
+
+</div>
+</div>
+<a id="a6b70e95298a107c667855aee6d0c7964"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b70e95298a107c667855aee6d0c7964">&#9670;&nbsp;</a></span>measureSaved</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlPointEdit::measureSaved </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1c8607cdee0cfbc688551d77c7da7419"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c8607cdee0cfbc688551d77c7da7419">&#9670;&nbsp;</a></span>newControlNetwork</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlPointEdit::newControlNetwork </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_edit.html#ab8f8ac50e9a8e7d748f4c50e68476054">ControlPointEdit()</a>.</p>
+
+</div>
+</div>
+<a id="a1298786f6291b38b9e7edeab80ef4d3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1298786f6291b38b9e7edeab80ef4d3b">&#9670;&nbsp;</a></span>refreshChips</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlPointEdit::refreshChips </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af11f75f2c70851fbfb9b9d54f7d9a879"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af11f75f2c70851fbfb9b9d54f7d9a879">&#9670;&nbsp;</a></span>saveChips</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlPointEdit::saveChips </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Slot to save registration chips to files and fire off qview. </p>
+<dl class="section author"><dt>Author</dt><dd>2009-03-18 Tracie Sucharski </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_auto_reg.html#a04962560ef5dafcaf5181b1274ba00bb">Isis::AutoReg::FitChip()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a1f53895260756278df7d22931179d0fe">Isis::ControlMeasure::GetLine()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a88505083032a39e2f2a381b3a4469d59">Isis::ControlMeasure::GetSample()</a>, <a class="el" href="class_isis_1_1_auto_reg.html#aebeaec4ca364d03cc8f4875f2f5a737a">Isis::AutoReg::RegistrationPatternChip()</a>, <a class="el" href="class_isis_1_1_auto_reg.html#a99d1076f46aca0a309f94667b7ef66d5">Isis::AutoReg::RegistrationSearchChip()</a>, <a class="el" href="class_isis_1_1_program_launcher.html#a23c62ee0570fb3962b407855067374c3">Isis::ProgramLauncher::RunSystemCommand()</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, and <a class="el" href="class_isis_1_1_chip.html#a17b7136c621bad445ab546fa9564c8d7">Isis::Chip::Write()</a>.</p>
+
+</div>
+</div>
+<a id="adb7e74d229af5815183e9f770fa1cd14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb7e74d229af5815183e9f770fa1cd14">&#9670;&nbsp;</a></span>setLeftMeasure</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlPointEdit::setLeftMeasure </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *&#160;</td>
+          <td class="paramname"><em>leftMeasure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td>
+          <td class="paramname"><em>leftCube</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>pointId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the measure displayed in the left <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">leftMeasure</td><td>Input Measure displayed in left <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a> </td></tr>
+    <tr><td class="paramname">leftCube</td><td>Input <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> of measure displayed in left <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Tracie Sucharski </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_measure.html#a1f53895260756278df7d22931179d0fe">Isis::ControlMeasure::GetLine()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a88505083032a39e2f2a381b3a4469d59">Isis::ControlMeasure::GetSample()</a>, <a class="el" href="class_isis_1_1_chip.html#aaa7241a70f9ea84891a905d62c5eddd4">Isis::Chip::Load()</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#af68928071923e21d1b8ff881a0f341ca">Isis::ChipViewport::setChip()</a>, and <a class="el" href="class_isis_1_1_chip.html#a7304393398a7fc6a9ff07c4217bd3711">Isis::Chip::TackCube()</a>.</p>
+
+</div>
+</div>
+<a id="a65ceea173e366f35ccda5918c682951b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65ceea173e366f35ccda5918c682951b">&#9670;&nbsp;</a></span>setRightMeasure</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlPointEdit::setRightMeasure </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *&#160;</td>
+          <td class="paramname"><em>rightMeasure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> *&#160;</td>
+          <td class="paramname"><em>rightCube</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>pointId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the measure displayed in the right <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rightMeasure</td><td>Input Measure displayed in right <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a> </td></tr>
+    <tr><td class="paramname">rightCube</td><td>Input <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> of measure displayed in right <a class="el" href="class_isis_1_1_chip_viewport.html" title="Viewport for Isis Chips.">ChipViewport</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Tracie Sucharski </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_control_measure.html#a1f53895260756278df7d22931179d0fe">Isis::ControlMeasure::GetLine()</a>, <a class="el" href="class_isis_1_1_control_measure.html#a88505083032a39e2f2a381b3a4469d59">Isis::ControlMeasure::GetSample()</a>, <a class="el" href="class_isis_1_1_chip.html#aaa7241a70f9ea84891a905d62c5eddd4">Isis::Chip::Load()</a>, <a class="el" href="class_isis_1_1_chip_viewport.html#af68928071923e21d1b8ff881a0f341ca">Isis::ChipViewport::setChip()</a>, <a class="el" href="class_isis_1_1_chip.html#a7304393398a7fc6a9ff07c4217bd3711">Isis::Chip::TackCube()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a8f6c061728818595e7493a35c8e60901">Isis::IException::toString()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>.</p>
+
+</div>
+</div>
+<a id="a22acc904a77d29307f93b0ab03a32380"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22acc904a77d29307f93b0ab03a32380">&#9670;&nbsp;</a></span>setTemplateFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlPointEdit::setTemplateFile </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>fn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Allows user to choose a new template file by opening a window from which to select a filename. </p>
+<p>This file is then registered and set as the new template.</p>
+<dl class="section author"><dt>Author</dt><dd>Tracie Sucharski </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_auto_reg_factory.html#a17da90f885bd8fa170b8183c70793b61">Isis::AutoRegFactory::Create()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a8f6c061728818595e7493a35c8e60901">Isis::IException::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a563145e76912737d0c4c644c00c864b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a563145e76912737d0c4c644c00c864b5">&#9670;&nbsp;</a></span>stretchChipViewport</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlPointEdit::stretchChipViewport </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_stretch.html">Stretch</a> *&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube_viewport.html">CubeViewport</a> *&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af8aad555b8adca4b6eeeb7d8f13ce820"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8aad555b8adca4b6eeeb7d8f13ce820">&#9670;&nbsp;</a></span>templateFileName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ControlPointEdit::templateFileName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_match_tool.html#a3fd75e020b368d20c7653743c9f9ace8">Isis::MatchTool::deletePoint()</a>, and <a class="el" href="class_isis_1_1_match_tool.html#a1d4caa7fafda3568083a7dec976b489f">Isis::MatchTool::modifyPoint()</a>.</p>
+
+</div>
+</div>
+<a id="a9770e1d373b451a43b00c4d19680d934"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9770e1d373b451a43b00c4d19680d934">&#9670;&nbsp;</a></span>updateLeftView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlPointEdit::updateLeftView </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>line</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0ecbbb688d037c934dd6f8792b1d37fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ecbbb688d037c934dd6f8792b1d37fe">&#9670;&nbsp;</a></span>updateRightView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlPointEdit::updateRightView </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>line</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ControlPointEdit/<a class="el" href="_control_point_edit_8h_source.html">ControlPointEdit.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ControlPointEdit/<a class="el" href="_control_point_edit_8cpp.html">ControlPointEdit.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_control_point_edit.html">ControlPointEdit</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

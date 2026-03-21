@@ -1,0 +1,76 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ControlMeasure,Control Networks,isis/src/control/objs/ControlMeasure/ControlMeasure.h,isis_pybind_standalone/src/control/bind_control_core.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ControlMeasure,isis_pybind.ControlMeasure,Y,Python class symbol is exported; Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Construction/Enum,"MeasureType enum (Candidate, Manual, RegisteredPixel, RegisteredSubPixel)",isis_pybind.ControlMeasure.MeasureType,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Construction/Enum,"Status enum (Success, MeasureLocked)",isis_pybind.ControlMeasure.Status,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Construction/Enum,ModType enum (IgnoredModified),isis_pybind.ControlMeasure.ModType,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Construction/Enum,"DataField enum (AprioriLine, AprioriSample, ChooserName, CubeSerialNumber, Coordinate, DateTime, Diameter, EditLock, Rejected, FocalPlaneMeasured)",isis_pybind.ControlMeasure.DataField,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Construction/Enum,ControlMeasure(),isis_pybind.ControlMeasure(),Y,Constructor is explicitly bound
+Public API,ControlPoint *Parent() { return parentPoint; },isis_pybind.ControlMeasure.parent,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetAprioriLine(double aprioriLine),isis_pybind.ControlMeasure.set_apriori_line,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetAprioriSample(double aprioriSample),isis_pybind.ControlMeasure.set_apriori_sample,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetCamera(Isis::Camera *camera),isis_pybind.ControlMeasure.set_camera,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetChooserName(),isis_pybind.ControlMeasure.set_chooser_name,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetChooserName(QString name),isis_pybind.ControlMeasure.set_chooser_name,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,"Status SetCoordinate(double sample, double line)",isis_pybind.ControlMeasure.set_coordinate,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,"Status SetCoordinate(double sample, double line, MeasureType type)",isis_pybind.ControlMeasure.set_coordinate,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetCubeSerialNumber(QString newSerialNumber),isis_pybind.ControlMeasure.set_cube_serial_number,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetDateTime(),isis_pybind.ControlMeasure.set_date_time,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetDateTime(QString datetime),isis_pybind.ControlMeasure.set_date_time,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetDiameter(double diameter),isis_pybind.ControlMeasure.set_diameter,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetEditLock(bool editLock),isis_pybind.ControlMeasure.set_edit_lock,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,"Status SetFocalPlaneMeasured(double x, double y)",isis_pybind.ControlMeasure.set_focal_plane_measured,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,"Status SetFocalPlaneComputed(double x, double y)",isis_pybind.ControlMeasure.set_focal_plane_computed,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetIgnored(bool newIgnoredStatus),isis_pybind.ControlMeasure.set_ignored,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetLineSigma(double lineSigma),isis_pybind.ControlMeasure.set_line_sigma,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetRejected(bool rejected),isis_pybind.ControlMeasure.set_rejected,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,"Status SetResidual(double sampResidual, double lineResidual)",isis_pybind.ControlMeasure.set_residual,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetSampleSigma(double sampleSigma),isis_pybind.ControlMeasure.set_sample_sigma,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetType(MeasureType type),isis_pybind.ControlMeasure.set_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,void DeleteLogData(long dataType),isis_pybind.ControlMeasure.delete_log_data,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QVariant GetLogValue(long dataType) const,isis_pybind.ControlMeasure.get_log_value,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Query,bool HasLogData(long dataType) const,isis_pybind.ControlMeasure.has_log_data,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,void SetLogData(ControlMeasureLogData),isis_pybind.ControlMeasure.set_log_data,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,void UpdateLogData(ControlMeasureLogData),isis_pybind.ControlMeasure.update_log_data,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetAprioriLine() const,isis_pybind.ControlMeasure.get_apriori_line,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetAprioriSample() const,isis_pybind.ControlMeasure.get_apriori_sample,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,Isis::Camera *Camera() const,isis_pybind.ControlMeasure.camera,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QString GetChooserName() const,isis_pybind.ControlMeasure.get_chooser_name,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Query,bool HasChooserName() const,isis_pybind.ControlMeasure.has_chooser_name,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QString GetCubeSerialNumber() const,isis_pybind.ControlMeasure.get_cube_serial_number,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QString GetDateTime() const,isis_pybind.ControlMeasure.get_date_time,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Query,bool HasDateTime() const,isis_pybind.ControlMeasure.has_date_time,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetDiameter() const,isis_pybind.ControlMeasure.get_diameter,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,ControlMeasureLogData GetLogData(long dataType) const,isis_pybind.ControlMeasure.get_log_data,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Query,bool IsEditLocked() const,isis_pybind.ControlMeasure.is_edit_locked,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Query,bool IsRejected() const,isis_pybind.ControlMeasure.is_rejected,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetFocalPlaneComputedX() const,isis_pybind.ControlMeasure.get_focal_plane_computed_x,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetFocalPlaneComputedY() const,isis_pybind.ControlMeasure.get_focal_plane_computed_y,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetFocalPlaneMeasuredX() const,isis_pybind.ControlMeasure.get_focal_plane_measured_x,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetFocalPlaneMeasuredY() const,isis_pybind.ControlMeasure.get_focal_plane_measured_y,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetMeasureData(QString) const,isis_pybind.ControlMeasure.get_measure_data,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Query,bool IsIgnored() const,isis_pybind.ControlMeasure.is_ignored,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Query,bool IsMeasured() const,isis_pybind.ControlMeasure.is_measured,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Query,bool IsRegistered() const,isis_pybind.ControlMeasure.is_registered,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Query,bool IsStatisticallyRelevant(DataField field) const,isis_pybind.ControlMeasure.is_statistically_relevant,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetLine() const,isis_pybind.ControlMeasure.get_line,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetLineResidual() const,isis_pybind.ControlMeasure.get_line_residual,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetLineSigma() const,isis_pybind.ControlMeasure.get_line_sigma,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QVector<ControlMeasureLogData> GetLogDataEntries() const,isis_pybind.ControlMeasure.get_log_data_entries,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QVector<ControlMeasureLogData> GetLastRunLogDataEntries() const,isis_pybind.ControlMeasure.get_last_run_log_data_entries,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetResidualMagnitude() const,isis_pybind.ControlMeasure.get_residual_magnitude,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetSample() const,isis_pybind.ControlMeasure.get_sample,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetSampleResidual() const,isis_pybind.ControlMeasure.get_sample_residual,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetSampleSigma() const,isis_pybind.ControlMeasure.get_sample_sigma,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,MeasureType GetType() const,isis_pybind.ControlMeasure.get_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QString GetPointId() const,isis_pybind.ControlMeasure.get_point_id,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetSampleShift() const,isis_pybind.ControlMeasure.get_sample_shift,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetLineShift() const,isis_pybind.ControlMeasure.get_line_shift,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,double GetPixelShift() const,isis_pybind.ControlMeasure.get_pixel_shift,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Static/Factory,static QVector<QString> GetMeasureDataNames(),isis_pybind.ControlMeasure.get_measure_data_names,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QList<QStringList> PrintableClassData() const,isis_pybind.ControlMeasure.printable_class_data,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Static/Factory,static QString MeasureTypeToString(MeasureType type),isis_pybind.ControlMeasure.measure_type_to_string,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Static/Factory,static MeasureType StringToMeasureType(QString str),isis_pybind.ControlMeasure.string_to_measure_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QString GetMeasureTypeString() const,isis_pybind.ControlMeasure.get_measure_type_string,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义

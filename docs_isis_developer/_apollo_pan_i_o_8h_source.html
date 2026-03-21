@@ -1,0 +1,336 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/apollo/objs/ApolloPanoramicCamera/ApolloPanIO.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_apollo_pan_i_o_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">ApolloPanIO.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_apollo_pan_i_o_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef ApolloPanIO_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define ApolloPanIO_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span>                                                                </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; <span class="comment">/* Numbering scheme for the fiducial marks</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">  * (gages on the right)</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">  * :--------------------------------------------------------------------------------------------:0</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">  * :0  2  4 ....                                                                  ... 84  86  88:0</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">  * :                                                                                            :0</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">  * :1  3  5 ....                                                                  ... 85  87  89:0</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">  * ----------------------------------------------------------------------------------------------0</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="class_isis_1_1_apollo_pan_i_o.html">   42</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_apollo_pan_i_o.html">ApolloPanIO</a></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">struct </span>Affine2D {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="keywordtype">int</span> flag;         </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;      <span class="keywordtype">double</span> A2I[6];    </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      <span class="keywordtype">double</span> A2M[6];    </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;      <span class="keywordtype">double</span> rotM[2];</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      <span class="keywordtype">double</span> rotI[2];</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      <span class="keywordtype">double</span> mI;        </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;      <span class="keywordtype">double</span> mM;        </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      <span class="keywordtype">int</span> indeces[2];   </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }Affine2D;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">struct </span>FidObs {</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <span class="keywordtype">int</span> flag;             </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      <span class="keywordtype">double</span> mach[2];       </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <span class="keywordtype">double</span> image[2];      </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <span class="keywordtype">double</span> residuals[2];  </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    }FidObs;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    Affine2D affines[44];</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    FidObs obs[90];  </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">int</span> n;           </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordtype">double</span> maxR;     </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">double</span> meanR;    </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordtype">double</span> stdevR;   </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordtype">void</span> calc_residual_stats();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#a8eea23e35364aca19133b2f77b17eeed">ApolloPanIO</a>();</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#ac89f0724cc62c97bcc9c07551635cc6c">~ApolloPanIO</a>();</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#a086b92aaa0e5d2f79749bde5f1fc811e">initialize</a>();</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#acc074756359769392f8c35a95792cb76">fiducialObservation</a>(<span class="keywordtype">int</span> fiducialNumber, <span class="keywordtype">double</span> machine_x, <span class="keywordtype">double</span> machine_y);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#ad8eb7ab34ad0ff8fa189581003896688">clearFiducialObservation</a>(<span class="keywordtype">int</span> fiducialNumber);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d">computeInteriorOrienation</a>();</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#a2de69f23502c70fab123b645af9613c0">machine2Image</a>(<span class="keywordtype">double</span> *machineX, <span class="keywordtype">double</span> *machineY);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#a2de69f23502c70fab123b645af9613c0">machine2Image</a>(<span class="keywordtype">double</span> machineX, <span class="keywordtype">double</span> machineY, <span class="keywordtype">double</span> *imageX, <span class="keywordtype">double</span> *imageY);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#ac4c4fe7369020159fc0bca91e50dd24f">image2Machine</a>(<span class="keywordtype">double</span> *imageX, <span class="keywordtype">double</span> *imageY);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#ac4c4fe7369020159fc0bca91e50dd24f">image2Machine</a>(<span class="keywordtype">double</span> imageX, <span class="keywordtype">double</span> imageY, <span class="keywordtype">double</span> *machineX, <span class="keywordtype">double</span> *machineY);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#a5eed0fa592f2b72ad601ead152803b9b">stdevResiduals</a>();</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#aabc9ea57f69130b539ce75fc2f87f5f8">meanResiduals</a>();</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_apollo_pan_i_o.html#a50c47f8cf5b196bf7844ab4be88ae6ce">maxResiduals</a>();</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  };</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;} <span class="comment">//end namespace Isis</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html">Isis::ApolloPanIO</a></div><div class="ttdoc">Calculates a series of affine transformations from the measured coordinates of the up to 90 fiducial ...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.h:43</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_a086b92aaa0e5d2f79749bde5f1fc811e"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#a086b92aaa0e5d2f79749bde5f1fc811e">Isis::ApolloPanIO::initialize</a></div><div class="ttdeci">void initialize()</div><div class="ttdoc">Initilizes member variables in preparation for solving for the interior orientation affines.</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_a2de69f23502c70fab123b645af9613c0"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#a2de69f23502c70fab123b645af9613c0">Isis::ApolloPanIO::machine2Image</a></div><div class="ttdeci">int machine2Image(double *machineX, double *machineY)</div><div class="ttdoc">This method does an in place (overwriting input) conversion of a cube coordinate (sample,...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:546</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_a50c47f8cf5b196bf7844ab4be88ae6ce"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#a50c47f8cf5b196bf7844ab4be88ae6ce">Isis::ApolloPanIO::maxResiduals</a></div><div class="ttdeci">double maxResiduals()</div><div class="ttdoc">Accessor for the mean (average) of the residual vector lenghts Call after computeInteriorOrienation()...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:777</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_a5eed0fa592f2b72ad601ead152803b9b"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#a5eed0fa592f2b72ad601ead152803b9b">Isis::ApolloPanIO::stdevResiduals</a></div><div class="ttdeci">double stdevResiduals()</div><div class="ttdoc">Accessor for the standard deviation of the residual vector lenghts Call after computeInteriorOrienati...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:754</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_a8eea23e35364aca19133b2f77b17eeed"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#a8eea23e35364aca19133b2f77b17eeed">Isis::ApolloPanIO::ApolloPanIO</a></div><div class="ttdeci">ApolloPanIO()</div><div class="ttdoc">Constructs an ApolloPanIO object.</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:28</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_aabc9ea57f69130b539ce75fc2f87f5f8"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#aabc9ea57f69130b539ce75fc2f87f5f8">Isis::ApolloPanIO::meanResiduals</a></div><div class="ttdeci">double meanResiduals()</div><div class="ttdoc">Accessor for the mean (average) of the residual vector lenghts Call after computeInteriorOrienation()...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:766</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_ac4c4fe7369020159fc0bca91e50dd24f"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#ac4c4fe7369020159fc0bca91e50dd24f">Isis::ApolloPanIO::image2Machine</a></div><div class="ttdeci">int image2Machine(double *imageX, double *imageY)</div><div class="ttdoc">This method does an in place (overwriting input) conversion of an image coordinate into cube (machine...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:629</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_ac89f0724cc62c97bcc9c07551635cc6c"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#ac89f0724cc62c97bcc9c07551635cc6c">Isis::ApolloPanIO::~ApolloPanIO</a></div><div class="ttdeci">~ApolloPanIO()</div><div class="ttdoc">Destroys the ApolloPanObject.</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:35</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_acc074756359769392f8c35a95792cb76"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#acc074756359769392f8c35a95792cb76">Isis::ApolloPanIO::fiducialObservation</a></div><div class="ttdeci">int fiducialObservation(int fiducialNumber, double machine_x, double machine_y)</div><div class="ttdoc">This method adds a measurement of the center of an apollo panoramic image fiducial mark for considera...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:96</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_ad8eb7ab34ad0ff8fa189581003896688"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#ad8eb7ab34ad0ff8fa189581003896688">Isis::ApolloPanIO::clearFiducialObservation</a></div><div class="ttdeci">int clearFiducialObservation(int fiducialNumber)</div><div class="ttdoc">This method removes a measurement of the center of an apollo panoramic image fiducial mark from consi...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:140</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_afd1b04c23ae6991a225cc1c876014f7d"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d">Isis::ApolloPanIO::computeInteriorOrienation</a></div><div class="ttdeci">int computeInteriorOrienation()</div><div class="ttdoc">This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:160</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_867ecea560f4598ba2b460e8ba8460b7.html">apollo</a></li><li class="navelem"><a class="el" href="dir_38dc4224da0e23af1b1eb202e36c8189.html">objs</a></li><li class="navelem"><a class="el" href="dir_a6ec1a6a8603eac3007d3880e9a186cc.html">ApolloPanoramicCamera</a></li><li class="navelem"><a class="el" href="_apollo_pan_i_o_8h.html">ApolloPanIO.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+<map id="Isis::PvlTranslationTable" name="Isis::PvlTranslationTable">
+<area shape="rect" id="node1" title="Internalizes a translation table." alt="" coords="272,5,437,375"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_label_translation_manager.html" title="Allows applications to translate simple text files." alt="" coords="257,423,452,632"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_pvl_to_pvl_translation_manager.html" title="Allows applications to translate simple text files." alt="" coords="5,720,221,1025"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_pvl_to_xml_translation_manager.html" title="Allows applications to translate simple text files." alt="" coords="245,680,464,1065"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_xml_to_pvl_translation_manager.html" title="Allows applications to translate Xml label files." alt="" coords="489,736,708,1009"/>
+</map>

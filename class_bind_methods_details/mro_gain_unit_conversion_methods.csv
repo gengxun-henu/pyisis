@@ -1,0 +1,7 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+GainUnitConversion,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/GainUnitConversion.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,GainUnitConversion,isis_pybind.GainUnitConversion,N,Python class symbol not found in current binding files
+Construction/Enum,"GainUnitConversion() : Module(""GainUnitConversion""), _units(""DN"") { }",isis_pybind.GainUnitConversion(),N,Constructor binding not detected in current binding files
+Construction/Enum,"GainUnitConversion(HiCalConf &conf, const QString &units, Cube *cube) : Module(""GainUnitConversion""), _units(units) { init(conf, cube)",isis_pybind.GainUnitConversion(),N,Constructor binding not detected in current binding files

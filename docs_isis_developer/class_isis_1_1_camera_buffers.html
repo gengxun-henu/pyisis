@@ -1,0 +1,1080 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::CameraBuffers Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_camera_buffers.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_camera_buffers-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::CameraBuffers Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This class is used to manage buffers for calculating camera related information, such as angles, radii, and resolution.  
+ <a href="class_isis_1_1_camera_buffers.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_cube_calculator_8h_source.html">CubeCalculator.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::CameraBuffers:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_camera_buffers__coll__graph.png" border="0" usemap="#a_isis_1_1_camera_buffers_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_camera_buffers_coll__map" id="a_isis_1_1_camera_buffers_coll__map">
+<area shape="rect" title="This class is used to manage buffers for calculating camera related information, such as angles,..." alt="" coords="5,5,161,247"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a39c9277d7e1e9259fd47081bfa351aeb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a39c9277d7e1e9259fd47081bfa351aeb">CameraBuffers</a> (<a class="el" href="class_isis_1_1_camera.html">Camera</a> *camera)</td></tr>
+<tr class="memdesc:a39c9277d7e1e9259fd47081bfa351aeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_camera_buffers.html" title="This class is used to manage buffers for calculating camera related information, such as angles,...">CameraBuffers</a> object.  <a href="class_isis_1_1_camera_buffers.html#a39c9277d7e1e9259fd47081bfa351aeb">More...</a><br /></td></tr>
+<tr class="separator:a39c9277d7e1e9259fd47081bfa351aeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf79faae0ea26659979348f953bfc335"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#aaf79faae0ea26659979348f953bfc335">~CameraBuffers</a> ()</td></tr>
+<tr class="memdesc:aaf79faae0ea26659979348f953bfc335"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_isis_1_1_camera_buffers.html" title="This class is used to manage buffers for calculating camera related information, such as angles,...">CameraBuffers</a>.  <a href="class_isis_1_1_camera_buffers.html#aaf79faae0ea26659979348f953bfc335">More...</a><br /></td></tr>
+<tr class="separator:aaf79faae0ea26659979348f953bfc335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33c93359129e7afe109405e360284e20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a33c93359129e7afe109405e360284e20">enablePhaBuffer</a> ()</td></tr>
+<tr class="memdesc:a33c93359129e7afe109405e360284e20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the phase angle buffer for use.  <a href="class_isis_1_1_camera_buffers.html#a33c93359129e7afe109405e360284e20">More...</a><br /></td></tr>
+<tr class="separator:a33c93359129e7afe109405e360284e20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cc8824bc4a291bced424b0e6a7c6e69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a7cc8824bc4a291bced424b0e6a7c6e69">enableInaBuffer</a> ()</td></tr>
+<tr class="memdesc:a7cc8824bc4a291bced424b0e6a7c6e69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the incidence angle buffer for use.  <a href="class_isis_1_1_camera_buffers.html#a7cc8824bc4a291bced424b0e6a7c6e69">More...</a><br /></td></tr>
+<tr class="separator:a7cc8824bc4a291bced424b0e6a7c6e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe06a0442ad490ca3bab4ec807cf2761"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#abe06a0442ad490ca3bab4ec807cf2761">enableEmaBuffer</a> ()</td></tr>
+<tr class="memdesc:abe06a0442ad490ca3bab4ec807cf2761"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the emission angle buffer for use.  <a href="class_isis_1_1_camera_buffers.html#abe06a0442ad490ca3bab4ec807cf2761">More...</a><br /></td></tr>
+<tr class="separator:abe06a0442ad490ca3bab4ec807cf2761"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1db05b1520b486ff1a4461fe02592d03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a1db05b1520b486ff1a4461fe02592d03">enableLatBuffer</a> ()</td></tr>
+<tr class="memdesc:a1db05b1520b486ff1a4461fe02592d03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the latitude buffer for use.  <a href="class_isis_1_1_camera_buffers.html#a1db05b1520b486ff1a4461fe02592d03">More...</a><br /></td></tr>
+<tr class="separator:a1db05b1520b486ff1a4461fe02592d03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a195566527034c3e6cd476455a3499132"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a195566527034c3e6cd476455a3499132">enableLonBuffer</a> ()</td></tr>
+<tr class="memdesc:a195566527034c3e6cd476455a3499132"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the longitude buffer for use.  <a href="class_isis_1_1_camera_buffers.html#a195566527034c3e6cd476455a3499132">More...</a><br /></td></tr>
+<tr class="separator:a195566527034c3e6cd476455a3499132"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a258cb5279f95ed2e64898f3bd15b5b98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a258cb5279f95ed2e64898f3bd15b5b98">enableResBuffer</a> ()</td></tr>
+<tr class="memdesc:a258cb5279f95ed2e64898f3bd15b5b98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the resolution buffer for use.  <a href="class_isis_1_1_camera_buffers.html#a258cb5279f95ed2e64898f3bd15b5b98">More...</a><br /></td></tr>
+<tr class="separator:a258cb5279f95ed2e64898f3bd15b5b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3984a2f587815cf4dfa9d07649158b54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a3984a2f587815cf4dfa9d07649158b54">enableRadiusBuffer</a> ()</td></tr>
+<tr class="memdesc:a3984a2f587815cf4dfa9d07649158b54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the radius buffer for use.  <a href="class_isis_1_1_camera_buffers.html#a3984a2f587815cf4dfa9d07649158b54">More...</a><br /></td></tr>
+<tr class="separator:a3984a2f587815cf4dfa9d07649158b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24b947c5ce7c0ae8b10cfbbe2963d9a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a24b947c5ce7c0ae8b10cfbbe2963d9a4">enablePhalBuffer</a> ()</td></tr>
+<tr class="memdesc:a24b947c5ce7c0ae8b10cfbbe2963d9a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the local phase angle buffer for use.  <a href="class_isis_1_1_camera_buffers.html#a24b947c5ce7c0ae8b10cfbbe2963d9a4">More...</a><br /></td></tr>
+<tr class="separator:a24b947c5ce7c0ae8b10cfbbe2963d9a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a6522d07ee3b0875facc6bfebdb3d36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a4a6522d07ee3b0875facc6bfebdb3d36">enableInalBuffer</a> ()</td></tr>
+<tr class="memdesc:a4a6522d07ee3b0875facc6bfebdb3d36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the local incidence angle buffer for use.  <a href="class_isis_1_1_camera_buffers.html#a4a6522d07ee3b0875facc6bfebdb3d36">More...</a><br /></td></tr>
+<tr class="separator:a4a6522d07ee3b0875facc6bfebdb3d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a4023340d2326e30e577491839d7e31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a8a4023340d2326e30e577491839d7e31">enableEmalBuffer</a> ()</td></tr>
+<tr class="memdesc:a8a4023340d2326e30e577491839d7e31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the local emission angle buffer for use.  <a href="class_isis_1_1_camera_buffers.html#a8a4023340d2326e30e577491839d7e31">More...</a><br /></td></tr>
+<tr class="separator:a8a4023340d2326e30e577491839d7e31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af60413b447102bcaee639c2c6a634d58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#af60413b447102bcaee639c2c6a634d58">enablePhacBuffer</a> ()</td></tr>
+<tr class="memdesc:af60413b447102bcaee639c2c6a634d58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the center phase angle buffer for use.  <a href="class_isis_1_1_camera_buffers.html#af60413b447102bcaee639c2c6a634d58">More...</a><br /></td></tr>
+<tr class="separator:af60413b447102bcaee639c2c6a634d58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcf9bfdbbcbda610f75f7c1c25bfa065"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#abcf9bfdbbcbda610f75f7c1c25bfa065">enableInacBuffer</a> ()</td></tr>
+<tr class="memdesc:abcf9bfdbbcbda610f75f7c1c25bfa065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the center incidence angle buffer for use.  <a href="class_isis_1_1_camera_buffers.html#abcf9bfdbbcbda610f75f7c1c25bfa065">More...</a><br /></td></tr>
+<tr class="separator:abcf9bfdbbcbda610f75f7c1c25bfa065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab18f03b807d429c7139e77ba1f5b7129"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#ab18f03b807d429c7139e77ba1f5b7129">enableEmacBuffer</a> ()</td></tr>
+<tr class="memdesc:ab18f03b807d429c7139e77ba1f5b7129"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the center emission angle buffer for use.  <a href="class_isis_1_1_camera_buffers.html#ab18f03b807d429c7139e77ba1f5b7129">More...</a><br /></td></tr>
+<tr class="separator:ab18f03b807d429c7139e77ba1f5b7129"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca1485d14fcf3e626dadde2b3b0a3b8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#aca1485d14fcf3e626dadde2b3b0a3b8a">phaBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:aca1485d14fcf3e626dadde2b3b0a3b8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9208dad141fd81a7783af37e83aacb23"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a9208dad141fd81a7783af37e83aacb23">inaBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:a9208dad141fd81a7783af37e83aacb23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32234f32f6395e337c8dc6b325e058ad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a32234f32f6395e337c8dc6b325e058ad">emaBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:a32234f32f6395e337c8dc6b325e058ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ca42a97f58e1acb56c587c7f6ba0587"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a7ca42a97f58e1acb56c587c7f6ba0587">latBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:a7ca42a97f58e1acb56c587c7f6ba0587"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca82ffaf45252a3a22972d4306d06d68"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#aca82ffaf45252a3a22972d4306d06d68">lonBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:aca82ffaf45252a3a22972d4306d06d68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3cfe7a51a3eb00de01a2b99771d123d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#ac3cfe7a51a3eb00de01a2b99771d123d">resBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:ac3cfe7a51a3eb00de01a2b99771d123d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf45cc29b6ad68872785ac41a7fc89d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#abf45cc29b6ad68872785ac41a7fc89d5">radiusBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:abf45cc29b6ad68872785ac41a7fc89d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3a2cac6ef90b996f20ead927359a4d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#ad3a2cac6ef90b996f20ead927359a4d4">phalBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:ad3a2cac6ef90b996f20ead927359a4d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23497f8a205e59e95884b621bd1d8b0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a23497f8a205e59e95884b621bd1d8b0f">inalBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:a23497f8a205e59e95884b621bd1d8b0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c3b80d48b1538dd1c5e137c284f9c18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a2c3b80d48b1538dd1c5e137c284f9c18">emalBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:a2c3b80d48b1538dd1c5e137c284f9c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c6b8fe7562b6b3899daaa0c99cf7517"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a3c6b8fe7562b6b3899daaa0c99cf7517">phacBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:a3c6b8fe7562b6b3899daaa0c99cf7517"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8aec5f2e05bc14cb66d09514ba91ee80"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a8aec5f2e05bc14cb66d09514ba91ee80">inacBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:a8aec5f2e05bc14cb66d09514ba91ee80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b52bbb43c868e6e773b80bb03655d0c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_camera_buffers.html#a4b52bbb43c868e6e773b80bb03655d0c">emacBuffer</a> (int currentLine, int ns, int currentBand)</td></tr>
+<tr class="separator:a4b52bbb43c868e6e773b80bb03655d0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class is used to manage buffers for calculating camera related information, such as angles, radii, and resolution. </p>
+<p>It uses internal buffers for each of the camera related operators that <a class="el" href="class_isis_1_1_cube_calculator.html" title="Calculator for arrays.">CubeCalculator</a> recognizes as valid tokens. Each of the enableBuffer methods can be used to dynamically allocate buffers for the camera operators that are being pushed onto the <a class="el" href="class_isis_1_1_cube_calculator.html" title="Calculator for arrays.">CubeCalculator</a>. Buffers can be loaded with appropriate camera data using the accessor methods.</p>
+<p>Note that memory is not allocated for buffers that are not enabled.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-02-02 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a39c9277d7e1e9259fd47081bfa351aeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39c9277d7e1e9259fd47081bfa351aeb">&#9670;&nbsp;</a></span>CameraBuffers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CameraBuffers::CameraBuffers </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_camera.html">Camera</a> *&#160;</td>
+          <td class="paramname"><em>camera</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_camera_buffers.html" title="This class is used to manage buffers for calculating camera related information, such as angles,...">CameraBuffers</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">camera</td><td>Pointer to the <a class="el" href="class_isis_1_1_camera.html">Camera</a> the <a class="el" href="class_isis_1_1_camera_buffers.html" title="This class is used to manage buffers for calculating camera related information, such as angles,...">CameraBuffers</a> will use. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaf79faae0ea26659979348f953bfc335"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf79faae0ea26659979348f953bfc335">&#9670;&nbsp;</a></span>~CameraBuffers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CameraBuffers::~CameraBuffers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys the <a class="el" href="class_isis_1_1_camera_buffers.html" title="This class is used to manage buffers for calculating camera related information, such as angles,...">CameraBuffers</a>. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a32234f32f6395e337c8dc6b325e058ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32234f32f6395e337c8dc6b325e058ad">&#9670;&nbsp;</a></span>emaBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::emaBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4b52bbb43c868e6e773b80bb03655d0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b52bbb43c868e6e773b80bb03655d0c">&#9670;&nbsp;</a></span>emacBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::emacBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2c3b80d48b1538dd1c5e137c284f9c18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c3b80d48b1538dd1c5e137c284f9c18">&#9670;&nbsp;</a></span>emalBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::emalBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe06a0442ad490ca3bab4ec807cf2761"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe06a0442ad490ca3bab4ec807cf2761">&#9670;&nbsp;</a></span>enableEmaBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enableEmaBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the emission angle buffer for use. </p>
+
+</div>
+</div>
+<a id="ab18f03b807d429c7139e77ba1f5b7129"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab18f03b807d429c7139e77ba1f5b7129">&#9670;&nbsp;</a></span>enableEmacBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enableEmacBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the center emission angle buffer for use. </p>
+
+</div>
+</div>
+<a id="a8a4023340d2326e30e577491839d7e31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a4023340d2326e30e577491839d7e31">&#9670;&nbsp;</a></span>enableEmalBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enableEmalBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the local emission angle buffer for use. </p>
+
+</div>
+</div>
+<a id="a7cc8824bc4a291bced424b0e6a7c6e69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cc8824bc4a291bced424b0e6a7c6e69">&#9670;&nbsp;</a></span>enableInaBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enableInaBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the incidence angle buffer for use. </p>
+
+</div>
+</div>
+<a id="abcf9bfdbbcbda610f75f7c1c25bfa065"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcf9bfdbbcbda610f75f7c1c25bfa065">&#9670;&nbsp;</a></span>enableInacBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enableInacBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the center incidence angle buffer for use. </p>
+
+</div>
+</div>
+<a id="a4a6522d07ee3b0875facc6bfebdb3d36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a6522d07ee3b0875facc6bfebdb3d36">&#9670;&nbsp;</a></span>enableInalBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enableInalBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the local incidence angle buffer for use. </p>
+
+</div>
+</div>
+<a id="a1db05b1520b486ff1a4461fe02592d03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1db05b1520b486ff1a4461fe02592d03">&#9670;&nbsp;</a></span>enableLatBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enableLatBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the latitude buffer for use. </p>
+
+</div>
+</div>
+<a id="a195566527034c3e6cd476455a3499132"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a195566527034c3e6cd476455a3499132">&#9670;&nbsp;</a></span>enableLonBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enableLonBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the longitude buffer for use. </p>
+
+</div>
+</div>
+<a id="a33c93359129e7afe109405e360284e20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33c93359129e7afe109405e360284e20">&#9670;&nbsp;</a></span>enablePhaBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enablePhaBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the phase angle buffer for use. </p>
+
+</div>
+</div>
+<a id="af60413b447102bcaee639c2c6a634d58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af60413b447102bcaee639c2c6a634d58">&#9670;&nbsp;</a></span>enablePhacBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enablePhacBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the center phase angle buffer for use. </p>
+
+</div>
+</div>
+<a id="a24b947c5ce7c0ae8b10cfbbe2963d9a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24b947c5ce7c0ae8b10cfbbe2963d9a4">&#9670;&nbsp;</a></span>enablePhalBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enablePhalBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the local phase angle buffer for use. </p>
+
+</div>
+</div>
+<a id="a3984a2f587815cf4dfa9d07649158b54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3984a2f587815cf4dfa9d07649158b54">&#9670;&nbsp;</a></span>enableRadiusBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enableRadiusBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the radius buffer for use. </p>
+
+</div>
+</div>
+<a id="a258cb5279f95ed2e64898f3bd15b5b98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a258cb5279f95ed2e64898f3bd15b5b98">&#9670;&nbsp;</a></span>enableResBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CameraBuffers::enableResBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables the resolution buffer for use. </p>
+
+</div>
+</div>
+<a id="a9208dad141fd81a7783af37e83aacb23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9208dad141fd81a7783af37e83aacb23">&#9670;&nbsp;</a></span>inaBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::inaBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8aec5f2e05bc14cb66d09514ba91ee80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8aec5f2e05bc14cb66d09514ba91ee80">&#9670;&nbsp;</a></span>inacBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::inacBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a23497f8a205e59e95884b621bd1d8b0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23497f8a205e59e95884b621bd1d8b0f">&#9670;&nbsp;</a></span>inalBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::inalBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7ca42a97f58e1acb56c587c7f6ba0587"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ca42a97f58e1acb56c587c7f6ba0587">&#9670;&nbsp;</a></span>latBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::latBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aca82ffaf45252a3a22972d4306d06d68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca82ffaf45252a3a22972d4306d06d68">&#9670;&nbsp;</a></span>lonBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::lonBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aca1485d14fcf3e626dadde2b3b0a3b8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca1485d14fcf3e626dadde2b3b0a3b8a">&#9670;&nbsp;</a></span>phaBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::phaBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3c6b8fe7562b6b3899daaa0c99cf7517"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c6b8fe7562b6b3899daaa0c99cf7517">&#9670;&nbsp;</a></span>phacBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::phacBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad3a2cac6ef90b996f20ead927359a4d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3a2cac6ef90b996f20ead927359a4d4">&#9670;&nbsp;</a></span>phalBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::phalBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abf45cc29b6ad68872785ac41a7fc89d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf45cc29b6ad68872785ac41a7fc89d5">&#9670;&nbsp;</a></span>radiusBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::radiusBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac3cfe7a51a3eb00de01a2b99771d123d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3cfe7a51a3eb00de01a2b99771d123d">&#9670;&nbsp;</a></span>resBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_vector.html">QVector</a>&lt; double &gt; * Isis::CameraBuffers::resBuffer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentBand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CubeCalculator/<a class="el" href="_cube_calculator_8h_source.html">CubeCalculator.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CubeCalculator/<a class="el" href="_cube_calculator_8cpp.html">CubeCalculator.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_camera_buffers.html">CameraBuffers</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

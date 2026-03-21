@@ -1,0 +1,22 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+InterestOperator,Control Networks,isis/src/control/objs/InterestOperator/InterestOperator.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,InterestOperator,isis_pybind.InterestOperator,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,InterestOperator(),isis_pybind.InterestOperator(),N,抽象基类/纯虚接口
+Public API,void InitInterestOptions(),isis_pybind.InterestOperator.init_interest_options,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetPatternValidPercent(const double percent),isis_pybind.InterestOperator.set_pattern_valid_percent,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetPatternSampling(const double percent),isis_pybind.InterestOperator.set_pattern_sampling,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetSearchSampling(const double percent),isis_pybind.InterestOperator.set_search_sampling,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetTolerance(double tolerance),isis_pybind.InterestOperator.set_tolerance,N,抽象基类/纯虚接口
+Mutation/Configuration,"void SetPatternReduction(std::vector<int> samples, std::vector<int> lines)",isis_pybind.InterestOperator.set_pattern_reduction,N,抽象基类/纯虚接口
+Public API,"bool Operate(Cube &pCube, UniversalGroundMap &pUnivGrndMap, int piSample, int piLine)",isis_pybind.InterestOperator.operate,N,抽象基类/纯虚接口
+Public API,"void Operate(ControlNet &pNewNet, QString psSerialNumFile, QString psOverlapListFile = """")",isis_pybind.InterestOperator.operate,N,抽象基类/纯虚接口
+Public API,inline double InterestAmount() const { return p_interestAmount,isis_pybind.InterestOperator.interest_amount,N,抽象基类/纯虚接口
+Public API,inline double WorstInterest() const { return p_worstInterest,isis_pybind.InterestOperator.worst_interest,N,抽象基类/纯虚接口
+Public API,inline double CubeSample() const { return p_cubeSample,isis_pybind.InterestOperator.cube_sample,N,抽象基类/纯虚接口
+Public API,inline double CubeLine() const { return p_cubeLine,isis_pybind.InterestOperator.cube_line,N,抽象基类/纯虚接口
+Public API,"virtual bool CompareInterests(double int1, double int2)",isis_pybind.InterestOperator.compare_interests,N,抽象基类/纯虚接口
+Mutation/Configuration,void addGroup(Isis::PvlObject &obj),isis_pybind.InterestOperator.add_group,N,抽象基类/纯虚接口
+Mutation/Configuration,void SetClipPolygon(const geos::geom::MultiPolygon &clipPolygon),isis_pybind.InterestOperator.set_clip_polygon,N,抽象基类/纯虚接口
+Public API,Isis::PvlGroup Operator(),isis_pybind.InterestOperator.operator,N,抽象基类/纯虚接口

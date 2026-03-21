@@ -1,0 +1,21 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+SparseBlockMatrix,Utility,isis/src/base/objs/SparseBlockMatrix/SparseBlockMatrix.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,SparseBlockMatrix,isis_pybind.SparseBlockMatrix,N,Python class symbol not found in current binding files
+Construction/Enum,SparseBlockMatrix(),isis_pybind.SparseBlockMatrix(),N,Constructor binding not detected in current binding files
+Public API,void wipe(),isis_pybind.SparseBlockMatrix.wipe,N,Method not found in current binding files
+Public API,void copy(const SparseBlockMatrix& src),isis_pybind.SparseBlockMatrix.copy,N,Method not found in current binding files
+Mutation/Configuration,bool setNumberOfColumns( int n ),isis_pybind.SparseBlockMatrix.set_number_of_columns,N,Method not found in current binding files
+Public API,void zeroBlocks(),isis_pybind.SparseBlockMatrix.zero_blocks,N,Method not found in current binding files
+Public API,"bool insertMatrixBlock(int nColumnBlock, int nRowBlock, int nRows, int nCols)",isis_pybind.SparseBlockMatrix.insert_matrix_block,N,Method not found in current binding files
+Public API,"LinearAlgebra::Matrix *getBlock(int column, int row)",isis_pybind.SparseBlockMatrix.get_block,N,Method not found in current binding files
+Public API,int numberOfBlocks(),isis_pybind.SparseBlockMatrix.number_of_blocks,N,Method not found in current binding files
+Public API,int numberOfDiagonalBlocks(),isis_pybind.SparseBlockMatrix.number_of_diagonal_blocks,N,Method not found in current binding files
+Public API,int numberOfOffDiagonalBlocks(),isis_pybind.SparseBlockMatrix.number_of_off_diagonal_blocks,N,Method not found in current binding files
+Public API,int numberOfElements(),isis_pybind.SparseBlockMatrix.number_of_elements,N,Method not found in current binding files
+Public API,void print(std::ostream& outstream),isis_pybind.SparseBlockMatrix.print,N,Method not found in current binding files
+Public API,void printClean(std::ostream& outstream),isis_pybind.SparseBlockMatrix.print_clean,N,Method not found in current binding files
+Read/Write IO,"bool write(std::ofstream &fp_out, bool binary=true)",isis_pybind.SparseBlockMatrix.write,N,Method not found in current binding files
+Public API,int getLeadingColumnsForBlock(int nblockColumn),isis_pybind.SparseBlockMatrix.get_leading_columns_for_block,N,Method not found in current binding files
+Public API,int getLeadingRowsForBlock(int nblockRow),isis_pybind.SparseBlockMatrix.get_leading_rows_for_block,N,Method not found in current binding files

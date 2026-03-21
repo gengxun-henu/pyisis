@@ -1,0 +1,375 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/ControlNetVersioner/ControlNetVersioner.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_control_net_versioner_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">ControlNetVersioner.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_control_net_versioner_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef ControlNetVersioner_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define ControlNetVersioner_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QList&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;QSharedPointer&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;QVector&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_control_point_8h.html">ControlPoint.h</a>&quot;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_control_point_v0001_8h.html">ControlPointV0001.h</a>&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_control_point_v0002_8h.html">ControlPointV0002.h</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_control_point_v0003_8h.html">ControlPointV0003.h</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">class </span>QString;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">class </span>FileName;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keyword">class </span>Progress;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">class </span>Pvl;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">class </span>PvlContainer;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">class </span>PvlObject;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <span class="keyword">class </span>ControlPointV0001;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keyword">class </span>ControlPointV0002;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  <span class="keyword">class </span>ControlPointV0003;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00412"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net_versioner.html">  412</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_control_net_versioner.html">ControlNetVersioner</a> {</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160; </div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;      <a class="code" href="class_isis_1_1_control_net_versioner.html">ControlNetVersioner</a>(<a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> *net);</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;      <a class="code" href="class_isis_1_1_control_net_versioner.html">ControlNetVersioner</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_file_name.html">FileName</a> netFile, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;      <a class="code" href="class_isis_1_1_control_net_versioner.html#a809e676f400eed1f946b6bcbfa1cb9a4">~ControlNetVersioner</a>();</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160; </div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net_versioner.html#a1cf0ae582b1f660f262a09297f1e52cf">netId</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net_versioner.html#a4677a7c4e06d715a26e39b630d98fcab">targetName</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net_versioner.html#a3ca6a0bb9fe9193660dc0391d17460ae">creationDate</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net_versioner.html#aeb0ca2333297b107aa391ad3542be174">lastModificationDate</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net_versioner.html#afa2066636370cca26deba46585abf72c">description</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net_versioner.html#ad2ec0110e9716bab45e0ccebc7108091">userName</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160; </div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net_versioner.html#a09ff882200825c3e07ba6edc12552633">numPoints</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;      <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *<a class="code" href="class_isis_1_1_control_net_versioner.html#a79f4a2542da376ca30733cad4b382613">takeFirstPoint</a>();</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net_versioner.html#aec2f3c0e07cbc2f3b756f5cf1c26f0c7">write</a>(<a class="code" href="class_isis_1_1_file_name.html">FileName</a> netFile);</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;      <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> <a class="code" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">toPvl</a>();</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160; </div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;      <span class="comment">// These three methods are private to ensure proper memory management</span></div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;<span class="comment"></span>      <a class="code" href="class_isis_1_1_control_net_versioner.html">ControlNetVersioner</a>();</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;      <a class="code" href="class_isis_1_1_control_net_versioner.html">ControlNetVersioner</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_control_net_versioner.html">ControlNetVersioner</a> &amp;other);</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;      <a class="code" href="class_isis_1_1_control_net_versioner.html">ControlNetVersioner</a> &amp;operator=(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_control_net_versioner.html">ControlNetVersioner</a> &amp;other);</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160; </div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;      <span class="comment">// Private ControlNetHeader structs for versioning</span></div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;<span class="comment"></span>      <span class="keyword">struct </span>ControlNetHeaderV0001 {</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;        QString networkID;</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        QString <a class="code" href="class_isis_1_1_control_net_versioner.html#a4677a7c4e06d715a26e39b630d98fcab">targetName</a>;</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;        QString created;</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;        QString lastModified;</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        QString <a class="code" href="class_isis_1_1_control_net_versioner.html#afa2066636370cca26deba46585abf72c">description</a>;</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;        QString <a class="code" href="class_isis_1_1_control_net_versioner.html#ad2ec0110e9716bab45e0ccebc7108091">userName</a>;</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;      };</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160; </div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;      <span class="keyword">typedef</span> ControlNetHeaderV0001 ControlNetHeaderV0002;</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;      <span class="keyword">typedef</span> ControlNetHeaderV0001 ControlNetHeaderV0003;</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;      <span class="keyword">typedef</span> ControlNetHeaderV0001 ControlNetHeaderV0004;</div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;      <span class="keyword">typedef</span> ControlNetHeaderV0001 ControlNetHeaderV0005;</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160; </div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;      <span class="keyword">typedef</span> <a class="code" href="class_isis_1_1_control_point_v0003.html">ControlPointV0003</a> <a class="code" href="class_isis_1_1_control_point_v0003.html">ControlPointV0004</a>;</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;      <span class="keyword">typedef</span> <a class="code" href="class_isis_1_1_control_point_v0003.html">ControlPointV0003</a> <a class="code" href="class_isis_1_1_control_point_v0003.html">ControlPointV0005</a>;</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160; </div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;      <span class="keywordtype">void</span> read(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_file_name.html">FileName</a> netFile, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160; </div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;      <span class="keywordtype">void</span> readPvl(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;network, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;      <span class="keywordtype">void</span> readPvlV0001(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;network, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;      <span class="keywordtype">void</span> readPvlV0002(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;network, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;      <span class="keywordtype">void</span> readPvlV0003(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;network, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;      <span class="keywordtype">void</span> readPvlV0004(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;network, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;      <span class="keywordtype">void</span> readPvlV0005(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;network, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160; </div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;      <span class="keywordtype">void</span> readProtobuf(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;header, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_file_name.html">FileName</a> netFile, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;      <span class="keywordtype">void</span> readProtobufV0001(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;header, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_file_name.html">FileName</a> netFile, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;      <span class="keywordtype">void</span> readProtobufV0002(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;header, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_file_name.html">FileName</a> netFile, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;      <span class="keywordtype">void</span> readProtobufV0005(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;header, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_file_name.html">FileName</a> netFile, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress=NULL);</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160; </div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;      <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *createPoint(<a class="code" href="class_isis_1_1_control_point_v0001.html">ControlPointV0001</a> &amp;point);</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;      <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *createPoint(<a class="code" href="class_isis_1_1_control_point_v0002.html">ControlPointV0002</a> &amp;point);</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;      <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *createPoint(<a class="code" href="class_isis_1_1_control_point_v0003.html">ControlPointV0003</a> &amp;point);</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160; </div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;      <a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *createMeasure(<span class="keyword">const</span> ControlPointFileEntryV0002_Measure&amp;);</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160; </div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;      <span class="keywordtype">void</span> createHeader(<span class="keyword">const</span> ControlNetHeaderV0001 header);</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160; </div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;      <span class="keywordtype">void</span> writeHeader(std::fstream *output);</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;      <span class="keywordtype">int</span> writeFirstPoint(std::fstream *output);</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160; </div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;      ControlNetHeaderV0005 m_header; </div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;ControlPoint *&gt;</a> m_points; </div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;      <span class="keywordtype">bool</span> m_ownsPoints; </div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;  };</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;}</div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_control_point_8h_html"><div class="ttname"><a href="_control_point_8h.html">ControlPoint.h</a></div></div>
+<div class="ttc" id="a_control_point_v0001_8h_html"><div class="ttname"><a href="_control_point_v0001_8h.html">ControlPointV0001.h</a></div></div>
+<div class="ttc" id="a_control_point_v0002_8h_html"><div class="ttname"><a href="_control_point_v0002_8h.html">ControlPointV0002.h</a></div></div>
+<div class="ttc" id="a_control_point_v0003_8h_html"><div class="ttname"><a href="_control_point_v0003_8h.html">ControlPointV0003.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_control_measure_html"><div class="ttname"><a href="class_isis_1_1_control_measure.html">Isis::ControlMeasure</a></div><div class="ttdoc">a control measurement</div><div class="ttdef"><b>Definition:</b> ControlMeasure.h:175</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html"><div class="ttname"><a href="class_isis_1_1_control_net.html">Isis::ControlNet</a></div><div class="ttdoc">a control network</div><div class="ttdef"><b>Definition:</b> ControlNet.h:258</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html">Isis::ControlNetVersioner</a></div><div class="ttdoc">Handle various control network file format versions.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.h:412</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html_a09ff882200825c3e07ba6edc12552633"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html#a09ff882200825c3e07ba6edc12552633">Isis::ControlNetVersioner::numPoints</a></div><div class="ttdeci">int numPoints() const</div><div class="ttdoc">Returns the number of points that have been read in or are ready to write out.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.cpp:176</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html_a1cf0ae582b1f660f262a09297f1e52cf"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html#a1cf0ae582b1f660f262a09297f1e52cf">Isis::ControlNetVersioner::netId</a></div><div class="ttdeci">QString netId() const</div><div class="ttdoc">Returns the ID for the network.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.cpp:116</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html_a2011c1750631993d86c4c360c47f1e1e"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl</a></div><div class="ttdeci">Pvl toPvl()</div><div class="ttdoc">Generates a Pvl file from the currently stored control points and header.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.cpp:204</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html_a3ca6a0bb9fe9193660dc0391d17460ae"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html#a3ca6a0bb9fe9193660dc0391d17460ae">Isis::ControlNetVersioner::creationDate</a></div><div class="ttdeci">QString creationDate() const</div><div class="ttdoc">Returns the date and time that the network was created.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.cpp:136</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html_a4677a7c4e06d715a26e39b630d98fcab"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html#a4677a7c4e06d715a26e39b630d98fcab">Isis::ControlNetVersioner::targetName</a></div><div class="ttdeci">QString targetName() const</div><div class="ttdoc">Returns the target for the network.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.cpp:126</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html_a79f4a2542da376ca30733cad4b382613"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html#a79f4a2542da376ca30733cad4b382613">Isis::ControlNetVersioner::takeFirstPoint</a></div><div class="ttdeci">ControlPoint * takeFirstPoint()</div><div class="ttdoc">Returns the first point stored in the versioner's internal list.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.cpp:189</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html_a809e676f400eed1f946b6bcbfa1cb9a4"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html#a809e676f400eed1f946b6bcbfa1cb9a4">Isis::ControlNetVersioner::~ControlNetVersioner</a></div><div class="ttdeci">~ControlNetVersioner()</div><div class="ttdoc">Destroy a ControlNetVersioner.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.cpp:100</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html_ad2ec0110e9716bab45e0ccebc7108091"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html#ad2ec0110e9716bab45e0ccebc7108091">Isis::ControlNetVersioner::userName</a></div><div class="ttdeci">QString userName() const</div><div class="ttdoc">Returns the name of the last person or program to modify the network.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.cpp:166</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html_aeb0ca2333297b107aa391ad3542be174"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html#aeb0ca2333297b107aa391ad3542be174">Isis::ControlNetVersioner::lastModificationDate</a></div><div class="ttdeci">QString lastModificationDate() const</div><div class="ttdoc">Returns the date and time of the last modification to the network.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.cpp:146</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html_aec2f3c0e07cbc2f3b756f5cf1c26f0c7"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html#aec2f3c0e07cbc2f3b756f5cf1c26f0c7">Isis::ControlNetVersioner::write</a></div><div class="ttdeci">void write(FileName netFile)</div><div class="ttdoc">This will write a control net file object to disk.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.cpp:1657</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_versioner_html_afa2066636370cca26deba46585abf72c"><div class="ttname"><a href="class_isis_1_1_control_net_versioner.html#afa2066636370cca26deba46585abf72c">Isis::ControlNetVersioner::description</a></div><div class="ttdeci">QString description() const</div><div class="ttdoc">Returns the network's description.</div><div class="ttdef"><b>Definition:</b> ControlNetVersioner.cpp:156</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_html"><div class="ttname"><a href="class_isis_1_1_control_point.html">Isis::ControlPoint</a></div><div class="ttdoc">A single control point.</div><div class="ttdef"><b>Definition:</b> ControlPoint.h:356</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_v0001_html"><div class="ttname"><a href="class_isis_1_1_control_point_v0001.html">Isis::ControlPointV0001</a></div><div class="ttdoc">A container for the information stored in a version 1 ControlPoint.</div><div class="ttdef"><b>Definition:</b> ControlPointV0001.h:62</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_v0002_html"><div class="ttname"><a href="class_isis_1_1_control_point_v0002.html">Isis::ControlPointV0002</a></div><div class="ttdoc">A container for the information stored in a version 2 ControlPoint.</div><div class="ttdef"><b>Definition:</b> ControlPointV0002.h:154</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_v0003_html"><div class="ttname"><a href="class_isis_1_1_control_point_v0003.html">Isis::ControlPointV0003</a></div><div class="ttdoc">A container for the information stored in a version 3 and 4 ControlPoint.</div><div class="ttdef"><b>Definition:</b> ControlPointV0003.h:160</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_name_html"><div class="ttname"><a href="class_isis_1_1_file_name.html">Isis::FileName</a></div><div class="ttdoc">File name manipulation and expansion.</div><div class="ttdef"><b>Definition:</b> FileName.h:100</div></div>
+<div class="ttc" id="aclass_isis_1_1_progress_html"><div class="ttname"><a href="class_isis_1_1_progress.html">Isis::Progress</a></div><div class="ttdoc">Program progress reporter.</div><div class="ttdef"><b>Definition:</b> Progress.h:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_html"><div class="ttname"><a href="class_isis_1_1_pvl.html">Isis::Pvl</a></div><div class="ttdoc">Container for cube-like labels.</div><div class="ttdef"><b>Definition:</b> Pvl.h:119</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html"><div class="ttname"><a href="class_isis_1_1_pvl_object.html">Isis::PvlObject</a></div><div class="ttdoc">Contains Pvl Groups and Pvl Objects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:61</div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_a576af9f1f3bb26b082d16585a91e73c.html">control</a></li><li class="navelem"><a class="el" href="dir_8e87adfb2431123dc47fe3f2bd06feca.html">objs</a></li><li class="navelem"><a class="el" href="dir_ee8d149874884882e09726c3d7a24652.html">ControlNetVersioner</a></li><li class="navelem"><a class="el" href="_control_net_versioner_8h.html">ControlNetVersioner.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

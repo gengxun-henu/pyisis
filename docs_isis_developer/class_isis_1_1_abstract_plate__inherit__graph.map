@@ -1,0 +1,4 @@
+<map id="Isis::AbstractPlate" name="Isis::AbstractPlate">
+<area shape="rect" id="node1" title="Abstract interface to a TIN plate." alt="" coords="9,5,144,295"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_triangular_plate.html" title="Specification for an abstract triangular plate." alt="" coords="5,343,148,600"/>
+</map>

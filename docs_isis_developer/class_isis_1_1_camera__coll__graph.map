@@ -1,0 +1,10 @@
+<map id="Isis::Camera" name="Isis::Camera">
+<area shape="rect" id="node1" title=" " alt="" coords="417,985,636,1323"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_sensor.html" title="Class for computing sensor ground coordinates." alt="" coords="112,592,330,833"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft." alt="" coords="118,167,329,504"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,101,87"/>
+<area shape="rect" id="node5" title=" " alt="" coords="354,295,400,376"/>
+<area shape="rect" id="node6" title=" " alt="" coords="515,672,575,753"/>
+<area shape="rect" id="node7" title=" " alt="" coords="616,672,682,753"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_alpha_cube.html" title="This class is used to rewrite the &quot;alpha&quot; keywords out of the AlphaCube group or Instrument group." alt="" coords="770,568,894,857"/>
+</map>

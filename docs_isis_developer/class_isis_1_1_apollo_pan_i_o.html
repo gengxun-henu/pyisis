@@ -1,0 +1,741 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ApolloPanIO Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_apollo_pan_i_o.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_apollo_pan_i_o-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ApolloPanIO Class Reference<div class="ingroups"><a class="el" href="group___mission.html">Mission Specific Objects</a> &raquo; <a class="el" href="group___apollo.html">Apollo</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Calculates a series of affine transformations from the measured coordinates of the up to 90 fiducial marks on a complete (stiched) apollo panoramic cube.  
+ <a href="class_isis_1_1_apollo_pan_i_o.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_apollo_pan_i_o_8h_source.html">ApolloPanIO.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::ApolloPanIO:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_apollo_pan_i_o__coll__graph.png" border="0" usemap="#a_isis_1_1_apollo_pan_i_o_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_apollo_pan_i_o_coll__map" id="a_isis_1_1_apollo_pan_i_o_coll__map">
+<area shape="rect" title="Calculates a series of affine transformations from the measured coordinates of the up to 90 fiducial ..." alt="" coords="5,5,196,279"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a8eea23e35364aca19133b2f77b17eeed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#a8eea23e35364aca19133b2f77b17eeed">ApolloPanIO</a> ()</td></tr>
+<tr class="memdesc:a8eea23e35364aca19133b2f77b17eeed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an <a class="el" href="class_isis_1_1_apollo_pan_i_o.html" title="Calculates a series of affine transformations from the measured coordinates of the up to 90 fiducial ...">ApolloPanIO</a> object.  <a href="class_isis_1_1_apollo_pan_i_o.html#a8eea23e35364aca19133b2f77b17eeed">More...</a><br /></td></tr>
+<tr class="separator:a8eea23e35364aca19133b2f77b17eeed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac89f0724cc62c97bcc9c07551635cc6c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#ac89f0724cc62c97bcc9c07551635cc6c">~ApolloPanIO</a> ()</td></tr>
+<tr class="memdesc:ac89f0724cc62c97bcc9c07551635cc6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the ApolloPanObject.  <a href="class_isis_1_1_apollo_pan_i_o.html#ac89f0724cc62c97bcc9c07551635cc6c">More...</a><br /></td></tr>
+<tr class="separator:ac89f0724cc62c97bcc9c07551635cc6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a086b92aaa0e5d2f79749bde5f1fc811e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#a086b92aaa0e5d2f79749bde5f1fc811e">initialize</a> ()</td></tr>
+<tr class="memdesc:a086b92aaa0e5d2f79749bde5f1fc811e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initilizes member variables in preparation for solving for the interior orientation affines.  <a href="class_isis_1_1_apollo_pan_i_o.html#a086b92aaa0e5d2f79749bde5f1fc811e">More...</a><br /></td></tr>
+<tr class="separator:a086b92aaa0e5d2f79749bde5f1fc811e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc074756359769392f8c35a95792cb76"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#acc074756359769392f8c35a95792cb76">fiducialObservation</a> (int fiducialNumber, double machine_x, double machine_y)</td></tr>
+<tr class="memdesc:acc074756359769392f8c35a95792cb76"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method adds a measurement of the center of an apollo panoramic image fiducial mark for consideration in calculation of the image interior orienation.  <a href="class_isis_1_1_apollo_pan_i_o.html#acc074756359769392f8c35a95792cb76">More...</a><br /></td></tr>
+<tr class="separator:acc074756359769392f8c35a95792cb76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8eb7ab34ad0ff8fa189581003896688"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#ad8eb7ab34ad0ff8fa189581003896688">clearFiducialObservation</a> (int fiducialNumber)</td></tr>
+<tr class="memdesc:ad8eb7ab34ad0ff8fa189581003896688"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method removes a measurement of the center of an apollo panoramic image fiducial mark from consideration in calculation of the image interior orienation.  <a href="class_isis_1_1_apollo_pan_i_o.html#ad8eb7ab34ad0ff8fa189581003896688">More...</a><br /></td></tr>
+<tr class="separator:ad8eb7ab34ad0ff8fa189581003896688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd1b04c23ae6991a225cc1c876014f7d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d">computeInteriorOrienation</a> ()</td></tr>
+<tr class="memdesc:afd1b04c23ae6991a225cc1c876014f7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method leverages all the fiducial obersatvions to caculate a series of affine transformations for cube (machine) space into image space.  <a href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d">More...</a><br /></td></tr>
+<tr class="separator:afd1b04c23ae6991a225cc1c876014f7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2de69f23502c70fab123b645af9613c0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#a2de69f23502c70fab123b645af9613c0">machine2Image</a> (double *machineX, double *machineY)</td></tr>
+<tr class="memdesc:a2de69f23502c70fab123b645af9613c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method does an in place (overwriting input) conversion of a cube coordinate (sample, line) into image coordinates Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a>  <a href="class_isis_1_1_apollo_pan_i_o.html#a2de69f23502c70fab123b645af9613c0">More...</a><br /></td></tr>
+<tr class="separator:a2de69f23502c70fab123b645af9613c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5f31d9cee82e0d79e4ffd179b10d897"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#aa5f31d9cee82e0d79e4ffd179b10d897">machine2Image</a> (double machineX, double machineY, double *imageX, double *imageY)</td></tr>
+<tr class="memdesc:aa5f31d9cee82e0d79e4ffd179b10d897"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method does a conversion of a cube coordinates (sample, line) into image coordinates Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a>  <a href="class_isis_1_1_apollo_pan_i_o.html#aa5f31d9cee82e0d79e4ffd179b10d897">More...</a><br /></td></tr>
+<tr class="separator:aa5f31d9cee82e0d79e4ffd179b10d897"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4c4fe7369020159fc0bca91e50dd24f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#ac4c4fe7369020159fc0bca91e50dd24f">image2Machine</a> (double *imageX, double *imageY)</td></tr>
+<tr class="memdesc:ac4c4fe7369020159fc0bca91e50dd24f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method does an in place (overwriting input) conversion of an image coordinate into cube (machine) coordinates (sample, line) Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a>  <a href="class_isis_1_1_apollo_pan_i_o.html#ac4c4fe7369020159fc0bca91e50dd24f">More...</a><br /></td></tr>
+<tr class="separator:ac4c4fe7369020159fc0bca91e50dd24f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18d516bc7969d0a168a5d66cd1210dd5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#a18d516bc7969d0a168a5d66cd1210dd5">image2Machine</a> (double imageX, double imageY, double *machineX, double *machineY)</td></tr>
+<tr class="memdesc:a18d516bc7969d0a168a5d66cd1210dd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method does a conversion of an image coordinates to a cube (sample, line) coordinates.  <a href="class_isis_1_1_apollo_pan_i_o.html#a18d516bc7969d0a168a5d66cd1210dd5">More...</a><br /></td></tr>
+<tr class="separator:a18d516bc7969d0a168a5d66cd1210dd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5eed0fa592f2b72ad601ead152803b9b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#a5eed0fa592f2b72ad601ead152803b9b">stdevResiduals</a> ()</td></tr>
+<tr class="memdesc:a5eed0fa592f2b72ad601ead152803b9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor for the standard deviation of the residual vector lenghts Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a> and calc_residual_stats()  <a href="class_isis_1_1_apollo_pan_i_o.html#a5eed0fa592f2b72ad601ead152803b9b">More...</a><br /></td></tr>
+<tr class="separator:a5eed0fa592f2b72ad601ead152803b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabc9ea57f69130b539ce75fc2f87f5f8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#aabc9ea57f69130b539ce75fc2f87f5f8">meanResiduals</a> ()</td></tr>
+<tr class="memdesc:aabc9ea57f69130b539ce75fc2f87f5f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor for the mean (average) of the residual vector lenghts Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a> and calc_residual_stats()  <a href="class_isis_1_1_apollo_pan_i_o.html#aabc9ea57f69130b539ce75fc2f87f5f8">More...</a><br /></td></tr>
+<tr class="separator:aabc9ea57f69130b539ce75fc2f87f5f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50c47f8cf5b196bf7844ab4be88ae6ce"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html#a50c47f8cf5b196bf7844ab4be88ae6ce">maxResiduals</a> ()</td></tr>
+<tr class="memdesc:a50c47f8cf5b196bf7844ab4be88ae6ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor for the mean (average) of the residual vector lenghts Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a> and calc_residual_stats()  <a href="class_isis_1_1_apollo_pan_i_o.html#a50c47f8cf5b196bf7844ab4be88ae6ce">More...</a><br /></td></tr>
+<tr class="separator:a50c47f8cf5b196bf7844ab4be88ae6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Calculates a series of affine transformations from the measured coordinates of the up to 90 fiducial marks on a complete (stiched) apollo panoramic cube. </p>
+<p>Description: The 90 Fiducial marks effectively divide a complete (stitched) apollo panormaic cube into 44 rectangular regions. 42 of these represent the same period of time, T, the center two are 0.5T. This class uses up to 44 2 dimensional affine transformations linked together with first order continuity conditions at the boundaries to enforce consistent line scan durations and correct warping in the film.</p>
+<dl class="section author"><dt>Author</dt><dd>2011-09-19 Orrin Thomas </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a8eea23e35364aca19133b2f77b17eeed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8eea23e35364aca19133b2f77b17eeed">&#9670;&nbsp;</a></span>ApolloPanIO()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ApolloPanIO::ApolloPanIO </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an <a class="el" href="class_isis_1_1_apollo_pan_i_o.html" title="Calculates a series of affine transformations from the measured coordinates of the up to 90 fiducial ...">ApolloPanIO</a> object. </p>
+
+</div>
+</div>
+<a id="ac89f0724cc62c97bcc9c07551635cc6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac89f0724cc62c97bcc9c07551635cc6c">&#9670;&nbsp;</a></span>~ApolloPanIO()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ApolloPanIO::~ApolloPanIO </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys the ApolloPanObject. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad8eb7ab34ad0ff8fa189581003896688"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8eb7ab34ad0ff8fa189581003896688">&#9670;&nbsp;</a></span>clearFiducialObservation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ApolloPanIO::clearFiducialObservation </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fiducialNumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method removes a measurement of the center of an apollo panoramic image fiducial mark from consideration in calculation of the image interior orienation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fiducialNumber</td><td>the index of the fiducial mark [0,89], see <a class="el" href="_apollo_pan_i_o_8h.html">ApolloPanIO.h</a> documnetation for the numbering sequence</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 success </dd>
+<dd>
+-1 failure, fiducial index invalid </dd></dl>
+
+</div>
+</div>
+<a id="afd1b04c23ae6991a225cc1c876014f7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd1b04c23ae6991a225cc1c876014f7d">&#9670;&nbsp;</a></span>computeInteriorOrienation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ApolloPanIO::computeInteriorOrienation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method leverages all the fiducial obersatvions to caculate a series of affine transformations for cube (machine) space into image space. </p>
+<p>The quality of solution can be accessed using the residual stats accessors.</p>
+<dl class="section return"><dt>Returns</dt><dd>1 success </dd>
+<dd>
+-1 failure, insufficient fiducial measurements </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a4c520317b9db83606a327811a7e481d9">Isis::choleski_solve()</a>, and <a class="el" href="namespace_isis.html#a4c1614297cc880e7ba47a08df3f9ffa5">Isis::isymp()</a>.</p>
+
+</div>
+</div>
+<a id="acc074756359769392f8c35a95792cb76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc074756359769392f8c35a95792cb76">&#9670;&nbsp;</a></span>fiducialObservation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ApolloPanIO::fiducialObservation </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fiducialNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>machineX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>machineY</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method adds a measurement of the center of an apollo panoramic image fiducial mark for consideration in calculation of the image interior orienation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fiducialNumber</td><td>the index of the fiducial mark [0,89], see <a class="el" href="_apollo_pan_i_o_8h.html">ApolloPanIO.h</a> documnetation for the numbering sequence</td></tr>
+    <tr><td class="paramname">machineX</td><td>The x coordinate (sample) of the fiducial mark in cube space</td></tr>
+    <tr><td class="paramname">machineY</td><td>The y coordinate (line) of the fiducial mark in cube space</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 success </dd>
+<dd>
+-1 failure, fiducial index invalid, or coordinates too large </dd></dl>
+
+</div>
+</div>
+<a id="ac4c4fe7369020159fc0bca91e50dd24f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4c4fe7369020159fc0bca91e50dd24f">&#9670;&nbsp;</a></span>image2Machine() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ApolloPanIO::image2Machine </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>imageX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>imageY</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method does an in place (overwriting input) conversion of an image coordinate into cube (machine) coordinates (sample, line) Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">imageX</td><td>The x coordinate (sample) of in image space cube space overwriten with the cube (machine) sample coordinate</td></tr>
+    <tr><td class="paramname">imageY</td><td>The y coordinate of in image space overwriten with the cube machine sample coordinate</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 success </dd>
+<dd>
+-1 failure, machine coordinate not within the image </dd></dl>
+
+</div>
+</div>
+<a id="a18d516bc7969d0a168a5d66cd1210dd5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18d516bc7969d0a168a5d66cd1210dd5">&#9670;&nbsp;</a></span>image2Machine() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ApolloPanIO::image2Machine </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>imageX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>imageY</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>machineX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>machineY</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method does a conversion of an image coordinates to a cube (sample, line) coordinates. </p>
+<p>Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">imageX</td><td>Input, the x coordinate (sample) in cube space</td></tr>
+    <tr><td class="paramname">imageY</td><td>INput, the y coordinate (line) in cube space</td></tr>
+    <tr><td class="paramname">machineX</td><td>Output, the x coordinate (sample) in cube space</td></tr>
+    <tr><td class="paramname">machineY</td><td>Output, the y coordinate (line) in cube space</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 success </dd>
+<dd>
+-1 failure, y coordinate to be converted is too small, it is not within the domain of the image machine space </dd>
+<dd>
+-2 failure, y coordinate to be converted is too large, it is not within the domain of the image machine space </dd>
+<dd>
+0 failure, coordinate not within domain of the affines </dd>
+<dd>
+1 successful conversion </dd></dl>
+
+</div>
+</div>
+<a id="a086b92aaa0e5d2f79749bde5f1fc811e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a086b92aaa0e5d2f79749bde5f1fc811e">&#9670;&nbsp;</a></span>initialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ApolloPanIO::initialize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initilizes member variables in preparation for solving for the interior orientation affines. </p>
+
+<p class="reference">References <a class="el" href="_apollo_pan_i_o_8cpp.html#af8dee3f662ec554cb1a5894e367db9ad">FIDL</a>, and <a class="el" href="_apollo_pan_i_o_8cpp.html#a49fe9b5c1903722c25b0c59fd609b95c">FIDS</a>.</p>
+
+</div>
+</div>
+<a id="a2de69f23502c70fab123b645af9613c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2de69f23502c70fab123b645af9613c0">&#9670;&nbsp;</a></span>machine2Image() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ApolloPanIO::machine2Image </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>machineX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>machineY</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method does an in place (overwriting input) conversion of a cube coordinate (sample, line) into image coordinates Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">machineX</td><td>The x coordinate (sample) in cube space overwriten with the image coordinate</td></tr>
+    <tr><td class="paramname">machineY</td><td>The y coordinate (line) in cube space overwriten with the image coordinate</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 success </dd>
+<dd>
+-1 failure, machine coordinate not within the image </dd></dl>
+
+</div>
+</div>
+<a id="aa5f31d9cee82e0d79e4ffd179b10d897"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5f31d9cee82e0d79e4ffd179b10d897">&#9670;&nbsp;</a></span>machine2Image() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ApolloPanIO::machine2Image </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>machineX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>machineY</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>imageX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>imageY</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method does a conversion of a cube coordinates (sample, line) into image coordinates Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">machineX</td><td>Input, the x coordinate (sample) in cube space</td></tr>
+    <tr><td class="paramname">machineY</td><td>Input, the y coordinate (line) in cube space</td></tr>
+    <tr><td class="paramname">imageX</td><td>Output, the x coordinate (sample) in cube space</td></tr>
+    <tr><td class="paramname">imageY</td><td>Output, the y coordinate (line) in cube space</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 success </dd>
+<dd>
+-1 failure, y coordinate to be converted is too small, it is not within the domain of the image machine space </dd>
+<dd>
+-2 failure, y coordinate to be converted is too large, it is not within the domain of the image machine space </dd>
+<dd>
+0 failure, coordinate not within domain of the affines </dd>
+<dd>
+1 successful conversion </dd></dl>
+
+</div>
+</div>
+<a id="a50c47f8cf5b196bf7844ab4be88ae6ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50c47f8cf5b196bf7844ab4be88ae6ce">&#9670;&nbsp;</a></span>maxResiduals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ApolloPanIO::maxResiduals </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Accessor for the mean (average) of the residual vector lenghts Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a> and calc_residual_stats() </p>
+<dl class="section return"><dt>Returns</dt><dd>-1 value not yet calculated </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_apollo_panoramic_detector_map.html#a72192608ee59a3112fec185aae1cd9a0">Isis::ApolloPanoramicDetectorMap::maxResidual()</a>.</p>
+
+</div>
+</div>
+<a id="aabc9ea57f69130b539ce75fc2f87f5f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabc9ea57f69130b539ce75fc2f87f5f8">&#9670;&nbsp;</a></span>meanResiduals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ApolloPanIO::meanResiduals </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Accessor for the mean (average) of the residual vector lenghts Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a> and calc_residual_stats() </p>
+<dl class="section return"><dt>Returns</dt><dd>-1 value not yet calculated </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_apollo_panoramic_detector_map.html#ace07403a87b979d0252c288697d8b62d">Isis::ApolloPanoramicDetectorMap::meanResidual()</a>.</p>
+
+</div>
+</div>
+<a id="a5eed0fa592f2b72ad601ead152803b9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5eed0fa592f2b72ad601ead152803b9b">&#9670;&nbsp;</a></span>stdevResiduals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ApolloPanIO::stdevResiduals </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Accessor for the standard deviation of the residual vector lenghts Call after <a class="el" href="class_isis_1_1_apollo_pan_i_o.html#afd1b04c23ae6991a225cc1c876014f7d" title="This method leverages all the fiducial obersatvions to caculate a series of affine transformations fo...">computeInteriorOrienation()</a> and calc_residual_stats() </p>
+<dl class="section return"><dt>Returns</dt><dd>-1 value not yet calculated </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_apollo_panoramic_detector_map.html#a7332b420b1010213f20a1af109890d18">Isis::ApolloPanoramicDetectorMap::stdevResidual()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/apollo/objs/ApolloPanoramicCamera/<a class="el" href="_apollo_pan_i_o_8h_source.html">ApolloPanIO.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/apollo/objs/ApolloPanoramicCamera/<a class="el" href="_apollo_pan_i_o_8cpp.html">ApolloPanIO.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_apollo_pan_i_o.html">ApolloPanIO</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

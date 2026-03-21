@@ -1,0 +1,9 @@
+<map id="Isis::CameraFocalPlaneMap" name="Isis::CameraFocalPlaneMap">
+<area shape="rect" id="node1" title="Convert between distorted focal plane and detector coordinates." alt="" coords="5,969,192,1291"/>
+<area shape="rect" id="node2" title=" " alt="" coords="70,255,130,336"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="319,568,537,905"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_sensor.html" title="Class for computing sensor ground coordinates." alt="" coords="371,175,589,416"/>
+<area shape="rect" id="node5" title=" " alt="" coords="232,5,277,87"/>
+<area shape="rect" id="node6" title=" " alt="" coords="613,255,678,336"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_alpha_cube.html" title="This class is used to rewrite the &quot;alpha&quot; keywords out of the AlphaCube group or Instrument group." alt="" coords="734,151,858,440"/>
+</map>

@@ -1,0 +1,323 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/BulletShapeModel/IsisBullet.h File Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_isis_bullet_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle">
+<div class="title">IsisBullet.h File Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;btBulletDynamicsCommon.h&gt;</code><br />
+</div>
+<p><a href="_isis_bullet_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespace_isis"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis.html">Isis</a></td></tr>
+<tr class="memdesc:namespace_isis"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is free and unencumbered software released into the public domain. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a3e3222caed9e5435de2f8dd1fa7d1250"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_isis_bullet_8h.html#a3e3222caed9e5435de2f8dd1fa7d1250">BT_USE_DOUBLE_PRECISION</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memdesc:a3e3222caed9e5435de2f8dd1fa7d1250"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is free and unencumbered software released into the public domain.  <a href="_isis_bullet_8h.html#a3e3222caed9e5435de2f8dd1fa7d1250">More...</a><br /></td></tr>
+<tr class="separator:a3e3222caed9e5435de2f8dd1fa7d1250"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34839086db2e7825c76b39f81a76972f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_isis_bullet_8h.html#a34839086db2e7825c76b39f81a76972f">B3_USE_DOUBLE_PRECISION</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:a34839086db2e7825c76b39f81a76972f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a901468548c56bd559efca85e45f623e2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis.html#a901468548c56bd559efca85e45f623e2">Isis::bt_MaxBodyParts</a> ()</td></tr>
+<tr class="memdesc:a901468548c56bd559efca85e45f623e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum number of parts/object.  <a href="namespace_isis.html#a901468548c56bd559efca85e45f623e2">More...</a><br /></td></tr>
+<tr class="separator:a901468548c56bd559efca85e45f623e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b065847b7ad33ddb51a90e40e7f38f3"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis.html#a6b065847b7ad33ddb51a90e40e7f38f3">Isis::bt_MaxTriangles</a> ()</td></tr>
+<tr class="memdesc:a6b065847b7ad33ddb51a90e40e7f38f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum number of triangles/part.  <a href="namespace_isis.html#a6b065847b7ad33ddb51a90e40e7f38f3">More...</a><br /></td></tr>
+<tr class="separator:a6b065847b7ad33ddb51a90e40e7f38f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfa0852902206ff18afbc8120867d531"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis.html#adfa0852902206ff18afbc8120867d531">Isis::b3_MaxBodyParts</a> ()</td></tr>
+<tr class="memdesc:adfa0852902206ff18afbc8120867d531"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum number of parts/object in the Bullet 3 API.  <a href="namespace_isis.html#adfa0852902206ff18afbc8120867d531">More...</a><br /></td></tr>
+<tr class="separator:adfa0852902206ff18afbc8120867d531"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98472e9bee7323688efd3d4646da990f"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_isis.html#a98472e9bee7323688efd3d4646da990f">Isis::b3_MaxTriangles</a> ()</td></tr>
+<tr class="memdesc:a98472e9bee7323688efd3d4646da990f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum number of triangles/part in the Bullet 3 API.  <a href="namespace_isis.html#a98472e9bee7323688efd3d4646da990f">More...</a><br /></td></tr>
+<tr class="separator:a98472e9bee7323688efd3d4646da990f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a34839086db2e7825c76b39f81a76972f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34839086db2e7825c76b39f81a76972f">&#9670;&nbsp;</a></span>B3_USE_DOUBLE_PRECISION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define B3_USE_DOUBLE_PRECISION&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3e3222caed9e5435de2f8dd1fa7d1250"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e3222caed9e5435de2f8dd1fa7d1250">&#9670;&nbsp;</a></span>BT_USE_DOUBLE_PRECISION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BT_USE_DOUBLE_PRECISION&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is free and unencumbered software released into the public domain. </p>
+<p>The authors of ISIS do not claim copyright on the contents of this file. For more details about the LICENSE terms and the AUTHORS, you will find files of those names at the top level of this repository.</p>
+<p>Bullet Physics ISIS-specific include file</p>
+<p>This file <em>must</em> be included before any other Bullet includes because there are some very specific configuration/build settings in the version of Bullet we are using.</p>
+<p>First, ISIS requires Bullet Physics to be built with the BtScalar type set to double precision. The Bullet build settings in the CMAKE system explicitly sets the BtScalar type to double via a command line MACRO definition. This file enforces the proper Bullet environment for use in the ISIS system.</p>
+<p>Second, we made an explicit declaration of the number of bits to be used in the Bullet triangle compression scheme that specifies parts/object and the number of triangles/part. We allow for 16 parts (4 bits) and 134,217,728 triangles/part (28, really 27 due to sign bit). This definition is made in both btQuantizedBvh.h and b3QuantizedBvh.h. The settings is:</p>
+<p>#define MAX_NUM_PARTS_IN_BITS 4</p>
+<p>NOTE: ISIS requires a unique Bullet binary dependancy that may not be compatable in other applications linked using a different configuration of their Bullet system.</p>
+<p>This defines limits of 16 separate sections of a target body where each part can contain up to 134M triangles.</p>
+<p>And, Python support for the Mac platform was broken since we use the MacPorts version 3.5 (at the time we built Bullet). For Apple platforms, incorrect assumptions were made for the include path in examples/pybullet/pybullet.c.</p>
+<p>We also check for compatibility with the Bullet 3 (B3*) environment but do not include the environment. Only the BT* environment is invoked for consistency. Include the B3 includes anywhere after this file to use that API.</p>
+<dl class="section author"><dt>Author</dt><dd>2017-03-16 Kris Becker </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_91dfc37a37d20436d0b2f58e1f8a1a21.html">BulletShapeModel</a></li><li class="navelem"><a class="el" href="_isis_bullet_8h.html">IsisBullet.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

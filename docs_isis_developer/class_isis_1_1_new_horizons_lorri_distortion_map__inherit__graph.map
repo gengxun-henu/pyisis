@@ -1,0 +1,4 @@
+<map id="Isis::NewHorizonsLorriDistortionMap" name="Isis::NewHorizonsLorriDistortionMap">
+<area shape="rect" id="node1" title="New Horizons LORRI Distortion Map." alt="" coords="5,407,241,568"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_camera_distortion_map.html" title="Distort/undistort focal plane coordinates." alt="" coords="19,5,227,359"/>
+</map>

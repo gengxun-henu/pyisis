@@ -1,0 +1,4 @@
+<map id="Isis::RosettaOsirisCameraDistortionMap" name="Isis::RosettaOsirisCameraDistortionMap">
+<area shape="rect" id="node1" title="Distortion map for converting between undistorted focal plane and distorted focal plane coordinates f..." alt="" coords="5,407,229,648"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_camera_distortion_map.html" title="Distort/undistort focal plane coordinates." alt="" coords="13,5,221,359"/>
+</map>

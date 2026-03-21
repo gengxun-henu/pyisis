@@ -1,0 +1,5 @@
+<map id="Isis::VoyagerCamera" name="Isis::VoyagerCamera">
+<area shape="rect" id="node1" title="Voyager Camera Model." alt="" coords="22,568,207,745"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_framing_camera.html" title="Generic class for Framing Cameras." alt="" coords="22,391,207,520"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="5,5,224,343"/>
+</map>

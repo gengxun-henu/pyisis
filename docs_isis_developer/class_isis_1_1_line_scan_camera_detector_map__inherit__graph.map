@@ -1,0 +1,6 @@
+<map id="Isis::LineScanCameraDetectorMap" name="Isis::LineScanCameraDetectorMap">
+<area shape="rect" id="node1" title="Convert between parent image coordinates and detector coordinates." alt="" coords="123,455,349,680"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_moc_wide_angle_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="5,776,219,905"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_variable_line_scan_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="243,728,480,953"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="140,5,332,407"/>
+</map>

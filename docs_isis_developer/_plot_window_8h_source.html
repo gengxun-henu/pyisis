@@ -1,0 +1,532 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/PlotWindow/PlotWindow.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_plot_window_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">PlotWindow.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_plot_window_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PlotWindow_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define PlotWindow_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">// This is needed for the QVariant macro</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QMetaType&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">// This is the parent</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_main_window_8h.html">MainWindow.h</a>&quot;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">// This is for an enum inside of plot curve</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_plot_curve_8h.html">PlotCurve.h</a>&quot;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">class </span><a class="code" href="class_qwt_plot.html">QwtPlot</a>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">class </span>QwtPlotGrid;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">class </span>QwtPlotSpectrogram;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">class </span>QwtPlotZoomer;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">class </span>QwtLegend;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_dock_widget.html">QDockWidget</a>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">class </span>QListWidgetItem;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">class </span>QLineEdit;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_combo_box.html">QComboBox</a>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">class </span>QCheckBox;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> A, <span class="keyword">typename</span> B&gt; <span class="keyword">struct </span><a class="code" href="struct_q_pair.html">QPair</a>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="keyword">class </span>MdiCubeViewport;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  <span class="keyword">class </span>CubePlotCurve;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  <span class="comment">//class CubePlotCurveConfigureDialog;</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  <span class="keyword">class </span>PvlKeyword;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  <span class="keyword">class </span>TableMainWindow;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html">   88</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_plot_window.html">PlotWindow</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_main_window.html">MainWindow</a> {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253">   96</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253">MenuOptions</a> {</div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a45ab984fc7ae3aa4fcb19972e7fe3942">   98</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a45ab984fc7ae3aa4fcb19972e7fe3942">ShowHideMarkersMenuOption</a>  = 1,</div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ad37605aa618edff03b666f1c302a3dce">  103</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ad37605aa618edff03b666f1c302a3dce">ShowHideCurvesMenuOption</a>   = 2,</div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a7cf52e5efd76cdfebb876b1a19fed93a">  108</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a7cf52e5efd76cdfebb876b1a19fed93a">ShowTableMenuOption</a>        = 4,</div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a5ce909e5dc4094ca7797ad8ece3d6a45">  114</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a5ce909e5dc4094ca7797ad8ece3d6a45">SaveMenuOption</a>             = 8,</div>
+<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a32fcb1a04b482b33b919a8956ad4cfd8">  118</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a32fcb1a04b482b33b919a8956ad4cfd8">PrintMenuOption</a>            = 16,</div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ac1ab21e93748c7588436fe035d6ba7c9">  124</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ac1ab21e93748c7588436fe035d6ba7c9">TrackMenuOption</a>            = 32,</div>
+<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253aec300dd5ba9ce0fb23dea1d71f039717">  129</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253aec300dd5ba9ce0fb23dea1d71f039717">BackgroundSwitchMenuOption</a> = 64,</div>
+<div class="line"><a name="l00134"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a60138a5ae48c6aca3172eea427d9715b">  134</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a60138a5ae48c6aca3172eea427d9715b">ShowHideGridMenuOption</a>     = 128,</div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a9ddd9ad86b988c44a5d216fc7de0c497">  139</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a9ddd9ad86b988c44a5d216fc7de0c497">RenameLabelsMenuOption</a>     = 256,</div>
+<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253aed575c08bc67526a9f6946d069b7ba63">  143</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253aed575c08bc67526a9f6946d069b7ba63">SetDisplayRangeMenuOption</a>  = 512,</div>
+<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a449771d1c611f657fac8da807befb725">  147</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a449771d1c611f657fac8da807befb725">ResetScaleMenuOption</a>       = 1024,</div>
+<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a8af57eec7eb79534755dd0f94ceca411">  153</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a8af57eec7eb79534755dd0f94ceca411">ClearPlotMenuOption</a>        = 2048,</div>
+<div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ab1681b3cdc8ae6d3b604e12ee7aa1094">  157</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ab1681b3cdc8ae6d3b604e12ee7aa1094">DefaultHelpMenuOption</a>      = 4096,</div>
+<div class="line"><a name="l00163"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a1b1eb18acbcc28fb5ad40e69a324c944">  163</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a1b1eb18acbcc28fb5ad40e69a324c944">LineFitMenuOption</a>          = 8192,</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a54d4d997f2261ec8b613cf6d432f8d9d">  169</a></span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a54d4d997f2261ec8b613cf6d432f8d9d">ConfigurePlotMenuOption</a>    = 16384,</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a7de984a3379095fb0db75c6e66aef211">AllMenuOptions</a> = <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a45ab984fc7ae3aa4fcb19972e7fe3942">ShowHideMarkersMenuOption</a> | <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ad37605aa618edff03b666f1c302a3dce">ShowHideCurvesMenuOption</a> |</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                         <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a7cf52e5efd76cdfebb876b1a19fed93a">ShowTableMenuOption</a> | <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a5ce909e5dc4094ca7797ad8ece3d6a45">SaveMenuOption</a> |</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                         <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a32fcb1a04b482b33b919a8956ad4cfd8">PrintMenuOption</a> | <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ac1ab21e93748c7588436fe035d6ba7c9">TrackMenuOption</a> |</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                         <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253aec300dd5ba9ce0fb23dea1d71f039717">BackgroundSwitchMenuOption</a> | <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a60138a5ae48c6aca3172eea427d9715b">ShowHideGridMenuOption</a> |</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                         <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a9ddd9ad86b988c44a5d216fc7de0c497">RenameLabelsMenuOption</a> | <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253aed575c08bc67526a9f6946d069b7ba63">SetDisplayRangeMenuOption</a> |</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                         <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a449771d1c611f657fac8da807befb725">ResetScaleMenuOption</a> | <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a8af57eec7eb79534755dd0f94ceca411">ClearPlotMenuOption</a> |</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                         <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ab1681b3cdc8ae6d3b604e12ee7aa1094">DefaultHelpMenuOption</a> | <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a1b1eb18acbcc28fb5ad40e69a324c944">LineFitMenuOption</a> |</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                         <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a54d4d997f2261ec8b613cf6d432f8d9d">ConfigurePlotMenuOption</a></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
+<div class="line"><a name="l00183"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a7de984a3379095fb0db75c6e66aef211">  183</a></span>&#160;      };</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;      <a class="code" href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">PlotWindow</a>(QString title, <a class="code" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a> <a class="code" href="class_isis_1_1_plot_window.html#a9ee1761f68265dae806679991d95e390">xAxisUnits</a>,</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                 <a class="code" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a> <a class="code" href="class_isis_1_1_plot_window.html#ad3480eb0a6e8f20807c5c45e07a41801">yAxisUnits</a>, <a class="code" href="class_q_widget.html">QWidget</a> *parent,</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                 <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253">MenuOptions</a> optionsToProvide = <a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a7de984a3379095fb0db75c6e66aef211">AllMenuOptions</a>);</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;      <a class="code" href="class_isis_1_1_plot_window.html#afb28c461abe0fd49c94aa80ec074de1f">~PlotWindow</a>();</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a242faec0c197bc53e3a92af754cb688c">add</a>(<a class="code" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> *pc);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ad9bb72c47b7783bc0f51aafff774ad61">clearPlotCurves</a>();</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_plot_window.html#abbcf32608418b80b3719e0bbf939e351">canAdd</a>(<a class="code" href="class_isis_1_1_cube_plot_curve.html">CubePlotCurve</a> *curveToTest) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;      QColor <a class="code" href="class_isis_1_1_plot_window.html#a7d351dc1ebbab7b55e74ebcc0f860530">plotBackgroundColor</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;CubePlotCurve *&gt;</a> <a class="code" href="class_isis_1_1_plot_window.html#a0ab7d8d3c7065e1085fd15a3e5c4214a">plotCurves</a>();</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;const CubePlotCurve *&gt;</a> <a class="code" href="class_isis_1_1_plot_window.html#a0ab7d8d3c7065e1085fd15a3e5c4214a">plotCurves</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;QwtPlotSpectrogram *&gt;</a> <a class="code" href="class_isis_1_1_plot_window.html#af3e7e2fe1abf02e5701d7058697bc614">plotSpectrograms</a>();</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;const QwtPlotSpectrogram *&gt;</a> <a class="code" href="class_isis_1_1_plot_window.html#af3e7e2fe1abf02e5701d7058697bc614">plotSpectrograms</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;      QString <a class="code" href="class_isis_1_1_plot_window.html#a4cffc8e55603cb318c9a93ed6d76be99">plotTitle</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_plot_window.html#ad9a0b5c19eb950e8fb68c4f956d588b0">userCanAddCurves</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;      <a class="code" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a> <a class="code" href="class_isis_1_1_plot_window.html#a9ee1761f68265dae806679991d95e390">xAxisUnits</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;      <a class="code" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a> <a class="code" href="class_isis_1_1_plot_window.html#ad3480eb0a6e8f20807c5c45e07a41801">yAxisUnits</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ad2193b2ae278b909ec62e665eff1e784">paint</a>(<a class="code" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *vp, QPainter *painter);</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a90b34418afd9596d7f7815dfbdfacbea">replot</a>();</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a24042f6f580c85519868532394726943">setAxisLabel</a>(<span class="keywordtype">int</span> axisId, QString title);</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a5ee83e7b69458e35da3a59f59e3cee83">setPlotBackground</a>(QColor c);</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#aa127a67725d26d88576e14590d413801">setPlotTitle</a>(QString pt);</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#aabe9ef1090339889e7bea51aea421eb3">setUserCanAddCurves</a>(<span class="keywordtype">bool</span>);</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a6bfd46278c4429a99ead4593bef62ca1">showWindow</a>();</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ab4e77a26ff2038943618d9d76c303ca4">update</a>(<a class="code" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *activeViewport);</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;      <span class="keyword">static</span> QString <a class="code" href="class_isis_1_1_plot_window.html#a6a7a8780e96476963be651bb3ded5ad0">defaultWindowTitle</a>();</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    signals:</div>
+<div class="line"><a name="l00220"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a1f1292ce1cb99f8df7a53f19a91f6e82">  220</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a1f1292ce1cb99f8df7a53f19a91f6e82">closed</a>();</div>
+<div class="line"><a name="l00222"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a3668e0aa24a111bd867c5aa9ed978625">  222</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a3668e0aa24a111bd867c5aa9ed978625">plotChanged</a>();</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00224"></a><span class="lineno"><a class="line" href="class_isis_1_1_plot_window.html#a6180e2cc61fa46413a859c04b0bb1f0d">  224</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a6180e2cc61fa46413a859c04b0bb1f0d">requestFillTable</a>();</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ad407116247e4204328a2aa39fea4854c">clearPlot</a>();</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ab8a44666f23edb8ce000d4e7373f6d72">configurePlotCurves</a>();</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a7359044c465debc7ead9b5b3dd8f97a0">createBestFitLine</a>();</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a5b24be449660be00e502095927b4fb44">printPlot</a>();</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ab3523b7d159239eab9e2a3ca20f9a69a">changePlotLabels</a>();</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ac472cc980b7983df541ac061e03b96f1">savePlot</a>();</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ace0ef2ff3c63efd135fe83b74c43f5f9">setDefaultRange</a>();</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#adf826950c797c3d2c4201214a72d84b2">setLabels</a>();</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ab46b97e88358b87c1d3049b002e04e41">setUserValues</a>();</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a35de4042278437b82b3a70bca0c0a192">showHideAllMarkers</a>();</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a54ba786ce00eed09e41d316aad08b1e1">showHideAllCurves</a>();</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a725fe44507b14f09ad37544b2ff68644">resetScale</a>();</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ab66d63f544a9c3cb52b224e4bcfe974d">showHideGrid</a>();</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ac8e6464f0e7deb141e45bbe600f85f21">showHelp</a>();</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#acb661187b7487bbedff08f54509f57b7">showTable</a>();</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#ae99c66332b13604b2d2c5b6a402a85b6">switchBackground</a>();</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a9985dd86077cd0cc8d03b98f1b6d5891">trackerEnabled</a>();</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#aed6ee3f4a97149e7e3b56d61ffbb7c01">scheduleFillTable</a>();</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#abbe679fce33fb74c4b7f1889e4f1a17d">fillTable</a>();</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a17c4c2e2c5e42a922bc6ab0922f4cfb7">createWidgets</a>(<a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253">MenuOptions</a> optionsToProvide);</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#aeef3198639e34b0983fe516c653f0537">disableAxisAutoScale</a>();</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a29ef1afe5d6463dff97da4fb620a6840">dragEnterEvent</a>(QDragEnterEvent *event);</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#a88b37e0d2ca3956720e277e7c9e93ca7">dropEvent</a>(QDropEvent *event);</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_plot_window.html#aae02a33ef7936759301f28af8d5eb82b">eventFilter</a>(<a class="code" href="class_q_object.html">QObject</a> *o, QEvent *e);</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160; </div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;      <span class="keyword">using</span> QWidget::mousePressEvent;</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#aec4f3e174de8a3d73dce93a801b68add">mousePressEvent</a>(<a class="code" href="class_q_object.html">QObject</a> *<span class="keywordtype">object</span>, QMouseEvent *e);</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;      <a class="code" href="class_qwt_plot.html">QwtPlot</a> *<a class="code" href="class_isis_1_1_plot_window.html#af31a894315675e6d544674ad9f5e55d9">plot</a>();</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_plot_window.html#af4b1656a0612c5a388b00599d6308850">setMenus</a>(<a class="code" href="class_q_list.html">QList&lt;QMenu *&gt;</a> menus, <a class="code" href="class_q_list.html">QList&lt;QAction *&gt;</a> actions);</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;      QwtPlotZoomer *<a class="code" href="class_isis_1_1_plot_window.html#af42d3de47ae735960e58c94f11d1724d">zoomer</a>();</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160; </div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keyword">private</span> slots:</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;      <span class="keywordtype">void</span> autoScaleCheckboxToggled();</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;      <span class="keywordtype">void</span> onClipboardChanged();</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;      <span class="keywordtype">void</span> pasteCurve();</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;      <a class="code" href="struct_q_pair.html">QPair&lt;double, double&gt;</a> findDataRange(<span class="keywordtype">int</span> axisId) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">bool</span> numericStringLessThan(QString left, QString right);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;      <span class="keywordtype">bool</span> userCanAddCurve(<span class="keyword">const</span> QMimeData *curve);</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;      <span class="keywordtype">void</span> updateVisibility(<a class="code" href="class_isis_1_1_plot_curve.html">PlotCurve</a> *curve);</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;      <span class="keywordtype">void</span> setupDefaultMenu(<a class="code" href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253">MenuOptions</a> optionsToProvide);</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160; </div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a>       *m_parent;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;      QwtPlotZoomer *m_zoomer;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;      QwtPlotGrid   *m_grid;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;      QCheckBox     *m_autoScaleCheckBox;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;      QCheckBox     *m_xLogCheckBox;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;      QCheckBox     *m_yLogCheckBox;</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;      QLineEdit     *m_xMinEdit;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;      QLineEdit     *m_xMaxEdit;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;      QLineEdit     *m_yMinEdit;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;      QLineEdit     *m_yMaxEdit;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;      QLineEdit     *m_xAxisText;</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;      QLineEdit     *m_yAxisText;</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;      QLineEdit     *m_plotTitleText;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;      QMenuBar      *m_menubar;</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;      <a class="code" href="class_q_action.html">QAction</a>       *m_pasteAct;</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;      QPointer&lt;QAction&gt; m_action;</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;      QPointer&lt;QAction&gt; m_showHideAllCurves;</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;      QPointer&lt;QAction&gt; m_showHideAllMarkers;</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;      QPointer&lt;QAction&gt; m_showHideGrid;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;      <a class="code" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a> m_xAxisUnits;</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;      <a class="code" href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">PlotCurve::Units</a> m_yAxisUnits;</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160; </div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;      <span class="keywordtype">bool</span> m_allowUserToAddCurves;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;      <span class="keywordtype">bool</span> m_autoscaleAxes;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160; </div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;      <a class="code" href="class_qwt_plot.html">QwtPlot</a> *m_plot;</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;      QwtLegend *m_legend; </div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;      <span class="keywordtype">bool</span> m_plotXLogScale; </div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;      <span class="keywordtype">bool</span> m_plotYLogScale; </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;      <a class="code" href="class_isis_1_1_table_main_window.html">TableMainWindow</a> *m_tableWindow;</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;      <a class="code" href="class_q_tool_bar.html">QToolBar</a> *m_toolBar;</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160; </div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;      <span class="keywordtype">bool</span> m_scheduledFillTable;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;   };</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;};</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
+<div class="line"><a name="l00342"></a><span class="lineno"><a class="line" href="_plot_window_8h.html#acc2c5011674537826dad6da32fce266d">  342</a></span>&#160;<a class="code" href="_plot_window_8h.html#acc2c5011674537826dad6da32fce266d">Q_DECLARE_METATYPE</a>(<a class="code" href="class_isis_1_1_plot_window.html">Isis::PlotWindow</a> *);</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;<span class="comment">// There isn&#39;t a great place to put this currently since it&#39;s not a class we</span></div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="comment">//   can manage the header for.</span></div>
+<div class="line"><a name="l00347"></a><span class="lineno"><a class="line" href="_plot_window_8h.html#af04312f00a3ffec801d20ea1a7a9c48f">  347</a></span>&#160;<span class="comment"></span><a class="code" href="_plot_window_8h.html#af04312f00a3ffec801d20ea1a7a9c48f">Q_DECLARE_OPAQUE_POINTER</a>(QwtPlotSpectrogram *);</div>
+<div class="line"><a name="l00348"></a><span class="lineno"><a class="line" href="_plot_window_8h.html#a9f42489619fb5d11ba24d8232eea94a2">  348</a></span>&#160;<a class="code" href="_plot_window_8h.html#acc2c5011674537826dad6da32fce266d">Q_DECLARE_METATYPE</a>(QwtPlotSpectrogram *);</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_main_window_8h_html"><div class="ttname"><a href="_main_window_8h.html">MainWindow.h</a></div></div>
+<div class="ttc" id="a_plot_curve_8h_html"><div class="ttname"><a href="_plot_curve_8h.html">PlotCurve.h</a></div></div>
+<div class="ttc" id="a_plot_window_8h_html_acc2c5011674537826dad6da32fce266d"><div class="ttname"><a href="_plot_window_8h.html#acc2c5011674537826dad6da32fce266d">Q_DECLARE_METATYPE</a></div><div class="ttdeci">Q_DECLARE_METATYPE(Isis::PlotWindow *)</div><div class="ttdoc">We have plot windows as QVariant data types, so here it's enabled.</div></div>
+<div class="ttc" id="a_plot_window_8h_html_af04312f00a3ffec801d20ea1a7a9c48f"><div class="ttname"><a href="_plot_window_8h.html#af04312f00a3ffec801d20ea1a7a9c48f">Q_DECLARE_OPAQUE_POINTER</a></div><div class="ttdeci">Q_DECLARE_OPAQUE_POINTER(QwtPlotSpectrogram *)</div><div class="ttdoc">We have scatter plot types as QVariant data types, so here it's enabled.</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_plot_curve_html"><div class="ttname"><a href="class_isis_1_1_cube_plot_curve.html">Isis::CubePlotCurve</a></div><div class="ttdoc">This is a plot curve with information relating it to a particular cube or region of a cube.</div><div class="ttdef"><b>Definition:</b> CubePlotCurve.h:53</div></div>
+<div class="ttc" id="aclass_isis_1_1_main_window_html"><div class="ttname"><a href="class_isis_1_1_main_window.html">Isis::MainWindow</a></div><div class="ttdoc">Base class for the Qisis main windows.</div><div class="ttdef"><b>Definition:</b> MainWindow.h:24</div></div>
+<div class="ttc" id="aclass_isis_1_1_mdi_cube_viewport_html"><div class="ttname"><a href="class_isis_1_1_mdi_cube_viewport.html">Isis::MdiCubeViewport</a></div><div class="ttdoc">Cube display widget for certain Isis MDI applications.</div><div class="ttdef"><b>Definition:</b> MdiCubeViewport.h:39</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_curve_html"><div class="ttname"><a href="class_isis_1_1_plot_curve.html">Isis::PlotCurve</a></div><div class="ttdef"><b>Definition:</b> PlotCurve.h:44</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_curve_html_ab89924b131383dc2dccdce99e6d1f928"><div class="ttname"><a href="class_isis_1_1_plot_curve.html#ab89924b131383dc2dccdce99e6d1f928">Isis::PlotCurve::Units</a></div><div class="ttdeci">Units</div><div class="ttdoc">These are all the possible units for the x or y data in a plot curve.</div><div class="ttdef"><b>Definition:</b> PlotCurve.h:54</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html"><div class="ttname"><a href="class_isis_1_1_plot_window.html">Isis::PlotWindow</a></div><div class="ttdef"><b>Definition:</b> PlotWindow.h:88</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a0ab7d8d3c7065e1085fd15a3e5c4214a"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a0ab7d8d3c7065e1085fd15a3e5c4214a">Isis::PlotWindow::plotCurves</a></div><div class="ttdeci">QList&lt; CubePlotCurve * &gt; plotCurves()</div><div class="ttdoc">Get a comprehensive list of the plot curves inside of this plot window, excluding plot curves that ar...</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:328</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a17c4c2e2c5e42a922bc6ab0922f4cfb7"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a17c4c2e2c5e42a922bc6ab0922f4cfb7">Isis::PlotWindow::createWidgets</a></div><div class="ttdeci">void createWidgets(MenuOptions optionsToProvide)</div><div class="ttdoc">This method is called by the constructor to create the plot, legend.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:145</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a1f1292ce1cb99f8df7a53f19a91f6e82"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a1f1292ce1cb99f8df7a53f19a91f6e82">Isis::PlotWindow::closed</a></div><div class="ttdeci">void closed()</div><div class="ttdoc">Emitted when there is a close event on this window that will be accepted.</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a24042f6f580c85519868532394726943"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a24042f6f580c85519868532394726943">Isis::PlotWindow::setAxisLabel</a></div><div class="ttdeci">void setAxisLabel(int axisId, QString title)</div><div class="ttdoc">Sets the plots given axis title to the given string.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:208</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a242faec0c197bc53e3a92af754cb688c"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a242faec0c197bc53e3a92af754cb688c">Isis::PlotWindow::add</a></div><div class="ttdeci">virtual void add(CubePlotCurve *pc)</div><div class="ttdoc">This method adds the curves to the plot.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:436</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a29ef1afe5d6463dff97da4fb620a6840"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a29ef1afe5d6463dff97da4fb620a6840">Isis::PlotWindow::dragEnterEvent</a></div><div class="ttdeci">virtual void dragEnterEvent(QDragEnterEvent *event)</div><div class="ttdoc">When a user drags data into our plot window, we need to indicate whether or not this data is compatib...</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1822</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a35de4042278437b82b3a70bca0c0a192"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a35de4042278437b82b3a70bca0c0a192">Isis::PlotWindow::showHideAllMarkers</a></div><div class="ttdeci">void showHideAllMarkers()</div><div class="ttdoc">Shows/Hides all the markers(symbols)</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:940</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a3668e0aa24a111bd867c5aa9ed978625"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a3668e0aa24a111bd867c5aa9ed978625">Isis::PlotWindow::plotChanged</a></div><div class="ttdeci">void plotChanged()</div><div class="ttdoc">Emitted every time there is a change to the plot window.</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a4cffc8e55603cb318c9a93ed6d76be99"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a4cffc8e55603cb318c9a93ed6d76be99">Isis::PlotWindow::plotTitle</a></div><div class="ttdeci">QString plotTitle() const</div><div class="ttdoc">Returns the plot title.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:241</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a54ba786ce00eed09e41d316aad08b1e1"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a54ba786ce00eed09e41d316aad08b1e1">Isis::PlotWindow::showHideAllCurves</a></div><div class="ttdeci">void showHideAllCurves()</div><div class="ttdoc">This method shows or hides all of the curves in the plotWindow.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:968</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a5b24be449660be00e502095927b4fb44"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a5b24be449660be00e502095927b4fb44">Isis::PlotWindow::printPlot</a></div><div class="ttdeci">void printPlot()</div><div class="ttdoc">Provides printing support of the plot image.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:573</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a5ee83e7b69458e35da3a59f59e3cee83"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a5ee83e7b69458e35da3a59f59e3cee83">Isis::PlotWindow::setPlotBackground</a></div><div class="ttdeci">void setPlotBackground(QColor c)</div><div class="ttdoc">Sets the plot background color to the given color.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:289</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a6180e2cc61fa46413a859c04b0bb1f0d"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a6180e2cc61fa46413a859c04b0bb1f0d">Isis::PlotWindow::requestFillTable</a></div><div class="ttdeci">void requestFillTable()</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253">Isis::PlotWindow::MenuOptions</a></div><div class="ttdeci">MenuOptions</div><div class="ttdoc">There is a menu option for everything in the plot window's menu.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:96</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253a1b1eb18acbcc28fb5ad40e69a324c944"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a1b1eb18acbcc28fb5ad40e69a324c944">Isis::PlotWindow::LineFitMenuOption</a></div><div class="ttdeci">@ LineFitMenuOption</div><div class="ttdoc">This option allows the user to create a best fit line for any of the scatter plot data or cube plot c...</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:163</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253a32fcb1a04b482b33b919a8956ad4cfd8"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a32fcb1a04b482b33b919a8956ad4cfd8">Isis::PlotWindow::PrintMenuOption</a></div><div class="ttdeci">@ PrintMenuOption</div><div class="ttdoc">This option sends the plot to a printer.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:118</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253a449771d1c611f657fac8da807befb725"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a449771d1c611f657fac8da807befb725">Isis::PlotWindow::ResetScaleMenuOption</a></div><div class="ttdeci">@ ResetScaleMenuOption</div><div class="ttdoc">This option provides the user with an alternative zoom out button.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:147</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253a45ab984fc7ae3aa4fcb19972e7fe3942"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a45ab984fc7ae3aa4fcb19972e7fe3942">Isis::PlotWindow::ShowHideMarkersMenuOption</a></div><div class="ttdeci">@ ShowHideMarkersMenuOption</div><div class="ttdoc">This option is titled 'Hide All Symbols' which hides all markers.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:98</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253a54d4d997f2261ec8b613cf6d432f8d9d"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a54d4d997f2261ec8b613cf6d432f8d9d">Isis::PlotWindow::ConfigurePlotMenuOption</a></div><div class="ttdeci">@ ConfigurePlotMenuOption</div><div class="ttdoc">This option allows the user to change the curve name, color, style size, and symbol of the curve.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:169</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253a5ce909e5dc4094ca7797ad8ece3d6a45"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a5ce909e5dc4094ca7797ad8ece3d6a45">Isis::PlotWindow::SaveMenuOption</a></div><div class="ttdeci">@ SaveMenuOption</div><div class="ttdoc">This option exports the plot into a standard image format.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:114</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253a60138a5ae48c6aca3172eea427d9715b"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a60138a5ae48c6aca3172eea427d9715b">Isis::PlotWindow::ShowHideGridMenuOption</a></div><div class="ttdeci">@ ShowHideGridMenuOption</div><div class="ttdoc">This option enables the ability for a user to enable a grid over the plot area.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:134</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253a7cf52e5efd76cdfebb876b1a19fed93a"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a7cf52e5efd76cdfebb876b1a19fed93a">Isis::PlotWindow::ShowTableMenuOption</a></div><div class="ttdeci">@ ShowTableMenuOption</div><div class="ttdoc">This option brings up the table.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:108</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253a7de984a3379095fb0db75c6e66aef211"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a7de984a3379095fb0db75c6e66aef211">Isis::PlotWindow::AllMenuOptions</a></div><div class="ttdeci">@ AllMenuOptions</div><div class="ttdoc">This is all of the available menu options.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:173</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253a8af57eec7eb79534755dd0f94ceca411"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a8af57eec7eb79534755dd0f94ceca411">Isis::PlotWindow::ClearPlotMenuOption</a></div><div class="ttdeci">@ ClearPlotMenuOption</div><div class="ttdoc">This option allows the user to delete all of the data inside the plot.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:153</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253a9ddd9ad86b988c44a5d216fc7de0c497"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253a9ddd9ad86b988c44a5d216fc7de0c497">Isis::PlotWindow::RenameLabelsMenuOption</a></div><div class="ttdeci">@ RenameLabelsMenuOption</div><div class="ttdoc">This option enables the ability for a user to change the x/y axis labels and plot title.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:139</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253ab1681b3cdc8ae6d3b604e12ee7aa1094"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ab1681b3cdc8ae6d3b604e12ee7aa1094">Isis::PlotWindow::DefaultHelpMenuOption</a></div><div class="ttdeci">@ DefaultHelpMenuOption</div><div class="ttdoc">Not implemented.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:157</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253ac1ab21e93748c7588436fe035d6ba7c9"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ac1ab21e93748c7588436fe035d6ba7c9">Isis::PlotWindow::TrackMenuOption</a></div><div class="ttdeci">@ TrackMenuOption</div><div class="ttdoc">This option enables mouse tracking on the plot area (displays next to the mouse which x/y point you a...</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:124</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253ad37605aa618edff03b666f1c302a3dce"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253ad37605aa618edff03b666f1c302a3dce">Isis::PlotWindow::ShowHideCurvesMenuOption</a></div><div class="ttdeci">@ ShowHideCurvesMenuOption</div><div class="ttdoc">This option is titled 'Hide All Curves' which makes all curves invisible.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:103</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253aec300dd5ba9ce0fb23dea1d71f039717"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253aec300dd5ba9ce0fb23dea1d71f039717">Isis::PlotWindow::BackgroundSwitchMenuOption</a></div><div class="ttdeci">@ BackgroundSwitchMenuOption</div><div class="ttdoc">This option enables the ability for a user to change the background color of the plot from black to w...</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:129</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a66fdb299d8e1aff1529174b11a41c253aed575c08bc67526a9f6946d069b7ba63"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a66fdb299d8e1aff1529174b11a41c253aed575c08bc67526a9f6946d069b7ba63">Isis::PlotWindow::SetDisplayRangeMenuOption</a></div><div class="ttdeci">@ SetDisplayRangeMenuOption</div><div class="ttdoc">This option allows the user to set the x/y axis display value ranges.</div><div class="ttdef"><b>Definition:</b> PlotWindow.h:143</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a6a7a8780e96476963be651bb3ded5ad0"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a6a7a8780e96476963be651bb3ded5ad0">Isis::PlotWindow::defaultWindowTitle</a></div><div class="ttdeci">static QString defaultWindowTitle()</div><div class="ttdoc">This is the typical suffix for plot windows, it's here in case we want to update all plot windows to ...</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1809</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a6bfd46278c4429a99ead4593bef62ca1"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a6bfd46278c4429a99ead4593bef62ca1">Isis::PlotWindow::showWindow</a></div><div class="ttdeci">void showWindow()</div><div class="ttdoc">Shows the plot window, and raises it to the front of any overlapping sibling widgets.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:185</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a725fe44507b14f09ad37544b2ff68644"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a725fe44507b14f09ad37544b2ff68644">Isis::PlotWindow::resetScale</a></div><div class="ttdeci">void resetScale()</div><div class="ttdoc">Sets plot scale back to the defaults.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:661</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a7359044c465debc7ead9b5b3dd8f97a0"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a7359044c465debc7ead9b5b3dd8f97a0">Isis::PlotWindow::createBestFitLine</a></div><div class="ttdeci">void createBestFitLine()</div><div class="ttdoc">This method prompts the user to select the best fit line criterea.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:529</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a7d351dc1ebbab7b55e74ebcc0f860530"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a7d351dc1ebbab7b55e74ebcc0f860530">Isis::PlotWindow::plotBackgroundColor</a></div><div class="ttdeci">QColor plotBackgroundColor() const</div><div class="ttdoc">Returns the plot's background color.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:317</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a88b37e0d2ca3956720e277e7c9e93ca7"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a88b37e0d2ca3956720e277e7c9e93ca7">Isis::PlotWindow::dropEvent</a></div><div class="ttdeci">virtual void dropEvent(QDropEvent *event)</div><div class="ttdoc">This is called when a user drops data into our window.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1843</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a90b34418afd9596d7f7815dfbdfacbea"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a90b34418afd9596d7f7815dfbdfacbea">Isis::PlotWindow::replot</a></div><div class="ttdeci">void replot()</div><div class="ttdoc">Reset the scale of the plot, replot it and emit plot changed.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1796</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a9985dd86077cd0cc8d03b98f1b6d5891"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a9985dd86077cd0cc8d03b98f1b6d5891">Isis::PlotWindow::trackerEnabled</a></div><div class="ttdeci">void trackerEnabled()</div><div class="ttdoc">Enables the plot mouse tracker.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:560</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_a9ee1761f68265dae806679991d95e390"><div class="ttname"><a href="class_isis_1_1_plot_window.html#a9ee1761f68265dae806679991d95e390">Isis::PlotWindow::xAxisUnits</a></div><div class="ttdeci">PlotCurve::Units xAxisUnits() const</div><div class="ttdoc">This is the data-type of the curves' x data in this plot window.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:266</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_aa127a67725d26d88576e14590d413801"><div class="ttname"><a href="class_isis_1_1_plot_window.html#aa127a67725d26d88576e14590d413801">Isis::PlotWindow::setPlotTitle</a></div><div class="ttdeci">void setPlotTitle(QString pt)</div><div class="ttdoc">Sets the plot title to the given string.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:219</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_aabe9ef1090339889e7bea51aea421eb3"><div class="ttname"><a href="class_isis_1_1_plot_window.html#aabe9ef1090339889e7bea51aea421eb3">Isis::PlotWindow::setUserCanAddCurves</a></div><div class="ttdeci">void setUserCanAddCurves(bool)</div><div class="ttdoc">Allow or disallow users from manually putting curves into this plot window through either copy-and-pa...</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:231</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_aae02a33ef7936759301f28af8d5eb82b"><div class="ttname"><a href="class_isis_1_1_plot_window.html#aae02a33ef7936759301f28af8d5eb82b">Isis::PlotWindow::eventFilter</a></div><div class="ttdeci">virtual bool eventFilter(QObject *o, QEvent *e)</div><div class="ttdoc">This method filters the events of the objects it is connected to.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1589</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ab3523b7d159239eab9e2a3ca20f9a69a"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ab3523b7d159239eab9e2a3ca20f9a69a">Isis::PlotWindow::changePlotLabels</a></div><div class="ttdeci">void changePlotLabels()</div><div class="ttdoc">This method creates the dialog box which allows the user to relabel the plot window.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:855</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ab46b97e88358b87c1d3049b002e04e41"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ab46b97e88358b87c1d3049b002e04e41">Isis::PlotWindow::setUserValues</a></div><div class="ttdeci">void setUserValues()</div><div class="ttdoc">This method sets the scale for the axis according to the user specified numbers.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:695</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ab4e77a26ff2038943618d9d76c303ca4"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ab4e77a26ff2038943618d9d76c303ca4">Isis::PlotWindow::update</a></div><div class="ttdeci">virtual void update(MdiCubeViewport *activeViewport)</div><div class="ttdoc">This is provided to allow children to react to tool updates.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:197</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ab66d63f544a9c3cb52b224e4bcfe974d"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ab66d63f544a9c3cb52b224e4bcfe974d">Isis::PlotWindow::showHideGrid</a></div><div class="ttdeci">void showHideGrid()</div><div class="ttdoc">This method hides/shows the grid on the plotWindow and changes the text for the action.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:924</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ab8a44666f23edb8ce000d4e7373f6d72"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ab8a44666f23edb8ce000d4e7373f6d72">Isis::PlotWindow::configurePlotCurves</a></div><div class="ttdeci">void configurePlotCurves()</div><div class="ttdoc">This method creates a CubePlotCurveConfigureDialog object.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:508</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_abbcf32608418b80b3719e0bbf939e351"><div class="ttname"><a href="class_isis_1_1_plot_window.html#abbcf32608418b80b3719e0bbf939e351">Isis::PlotWindow::canAdd</a></div><div class="ttdeci">bool canAdd(CubePlotCurve *curveToTest) const</div><div class="ttdoc">This method tests whethere or not a CubePlotCurve can be successfully added to this window.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:305</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_abbe679fce33fb74c4b7f1889e4f1a17d"><div class="ttname"><a href="class_isis_1_1_plot_window.html#abbe679fce33fb74c4b7f1889e4f1a17d">Isis::PlotWindow::fillTable</a></div><div class="ttdeci">void fillTable()</div><div class="ttdoc">Fills in the table with the data from the current curves in the plotWindow immediately.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1412</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ac472cc980b7983df541ac061e03b96f1"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ac472cc980b7983df541ac061e03b96f1">Isis::PlotWindow::savePlot</a></div><div class="ttdeci">void savePlot()</div><div class="ttdoc">This method allows the user to save the plot as a png, jpg, or tif image file.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:606</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ac8e6464f0e7deb141e45bbe600f85f21"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ac8e6464f0e7deb141e45bbe600f85f21">Isis::PlotWindow::showHelp</a></div><div class="ttdeci">void showHelp()</div><div class="ttdoc">This method creates and shows the help dialog box for the plot window.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1000</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_acb661187b7487bbedff08f54509f57b7"><div class="ttname"><a href="class_isis_1_1_plot_window.html#acb661187b7487bbedff08f54509f57b7">Isis::PlotWindow::showTable</a></div><div class="ttdeci">void showTable()</div><div class="ttdoc">This method is called from the showTable action on the tool bar There are some checks done to make su...</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1565</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ace0ef2ff3c63efd135fe83b74c43f5f9"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ace0ef2ff3c63efd135fe83b74c43f5f9">Isis::PlotWindow::setDefaultRange</a></div><div class="ttdeci">void setDefaultRange()</div><div class="ttdoc">Resets the x/y min/max to the defaults.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:744</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ad2193b2ae278b909ec62e665eff1e784"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ad2193b2ae278b909ec62e665eff1e784">Isis::PlotWindow::paint</a></div><div class="ttdeci">virtual void paint(MdiCubeViewport *vp, QPainter *painter)</div><div class="ttdoc">Paint plot curve information onto the viewport.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1786</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ad3480eb0a6e8f20807c5c45e07a41801"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ad3480eb0a6e8f20807c5c45e07a41801">Isis::PlotWindow::yAxisUnits</a></div><div class="ttdeci">PlotCurve::Units yAxisUnits() const</div><div class="ttdoc">This is the data-type of the curves' y data in this plot window.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:278</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ad407116247e4204328a2aa39fea4854c"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ad407116247e4204328a2aa39fea4854c">Isis::PlotWindow::clearPlot</a></div><div class="ttdeci">void clearPlot()</div><div class="ttdoc">This method completely clears the plot of all plot items.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:492</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ad9a0b5c19eb950e8fb68c4f956d588b0"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ad9a0b5c19eb950e8fb68c4f956d588b0">Isis::PlotWindow::userCanAddCurves</a></div><div class="ttdeci">bool userCanAddCurves() const</div><div class="ttdoc">Ask if a user action can add this curve to this window in general.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:254</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ad9bb72c47b7783bc0f51aafff774ad61"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ad9bb72c47b7783bc0f51aafff774ad61">Isis::PlotWindow::clearPlotCurves</a></div><div class="ttdeci">virtual void clearPlotCurves()</div><div class="ttdoc">This method also clears the plot of all plot items, but does not call the table delete stuff This met...</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:540</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_adf826950c797c3d2c4201214a72d84b2"><div class="ttname"><a href="class_isis_1_1_plot_window.html#adf826950c797c3d2c4201214a72d84b2">Isis::PlotWindow::setLabels</a></div><div class="ttdeci">void setLabels()</div><div class="ttdoc">Makes the user specified changes to the plot labels.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:911</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_ae99c66332b13604b2d2c5b6a402a85b6"><div class="ttname"><a href="class_isis_1_1_plot_window.html#ae99c66332b13604b2d2c5b6a402a85b6">Isis::PlotWindow::switchBackground</a></div><div class="ttdeci">void switchBackground()</div><div class="ttdoc">This method toggles the plot background color between black and white.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:636</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_aec4f3e174de8a3d73dce93a801b68add"><div class="ttname"><a href="class_isis_1_1_plot_window.html#aec4f3e174de8a3d73dce93a801b68add">Isis::PlotWindow::mousePressEvent</a></div><div class="ttdeci">void mousePressEvent(QObject *object, QMouseEvent *e)</div><div class="ttdoc">This is a helper method for the eventFilter() method.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1627</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_aed6ee3f4a97149e7e3b56d61ffbb7c01"><div class="ttname"><a href="class_isis_1_1_plot_window.html#aed6ee3f4a97149e7e3b56d61ffbb7c01">Isis::PlotWindow::scheduleFillTable</a></div><div class="ttdeci">void scheduleFillTable()</div><div class="ttdoc">Fills in the table with the data from the current curves in the plotWindow once all current actions/a...</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1400</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_aeef3198639e34b0983fe516c653f0537"><div class="ttname"><a href="class_isis_1_1_plot_window.html#aeef3198639e34b0983fe516c653f0537">Isis::PlotWindow::disableAxisAutoScale</a></div><div class="ttdeci">void disableAxisAutoScale()</div><div class="ttdoc">This turns off scaling the x/y axes automatically.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1663</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_aef104df4b73eb3b7492ec133eb94a09d"><div class="ttname"><a href="class_isis_1_1_plot_window.html#aef104df4b73eb3b7492ec133eb94a09d">Isis::PlotWindow::PlotWindow</a></div><div class="ttdeci">PlotWindow(QString title, PlotCurve::Units xAxisUnits, PlotCurve::Units yAxisUnits, QWidget *parent, MenuOptions optionsToProvide=AllMenuOptions)</div><div class="ttdoc">This constructs a plot window.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:66</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_af31a894315675e6d544674ad9f5e55d9"><div class="ttname"><a href="class_isis_1_1_plot_window.html#af31a894315675e6d544674ad9f5e55d9">Isis::PlotWindow::plot</a></div><div class="ttdeci">QwtPlot * plot()</div><div class="ttdoc">Get the plot encapsulated by this PlotWindow.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1652</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_af3e7e2fe1abf02e5701d7058697bc614"><div class="ttname"><a href="class_isis_1_1_plot_window.html#af3e7e2fe1abf02e5701d7058697bc614">Isis::PlotWindow::plotSpectrograms</a></div><div class="ttdeci">QList&lt; QwtPlotSpectrogram * &gt; plotSpectrograms()</div><div class="ttdoc">Get a comprehensive list of the scatter plots (spectrograms) inside of this plot window.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:381</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_af42d3de47ae735960e58c94f11d1724d"><div class="ttname"><a href="class_isis_1_1_plot_window.html#af42d3de47ae735960e58c94f11d1724d">Isis::PlotWindow::zoomer</a></div><div class="ttdeci">QwtPlotZoomer * zoomer()</div><div class="ttdoc">Get this window's plot's zoomer.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1389</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_af4b1656a0612c5a388b00599d6308850"><div class="ttname"><a href="class_isis_1_1_plot_window.html#af4b1656a0612c5a388b00599d6308850">Isis::PlotWindow::setMenus</a></div><div class="ttdeci">void setMenus(QList&lt; QMenu * &gt; menus, QList&lt; QAction * &gt; actions)</div><div class="ttdoc">Sets up the menus added from a parent object.</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:1359</div></div>
+<div class="ttc" id="aclass_isis_1_1_plot_window_html_afb28c461abe0fd49c94aa80ec074de1f"><div class="ttname"><a href="class_isis_1_1_plot_window.html#afb28c461abe0fd49c94aa80ec074de1f">Isis::PlotWindow::~PlotWindow</a></div><div class="ttdeci">~PlotWindow()</div><div class="ttdef"><b>Definition:</b> PlotWindow.cpp:131</div></div>
+<div class="ttc" id="aclass_isis_1_1_table_main_window_html"><div class="ttname"><a href="class_isis_1_1_table_main_window.html">Isis::TableMainWindow</a></div><div class="ttdoc">a subclass of the qisis mainwindow, tablemainwindow handles all of the table tasks.</div><div class="ttdef"><b>Definition:</b> TableMainWindow.h:57</div></div>
+<div class="ttc" id="aclass_q_action_html"><div class="ttname"><a href="class_q_action.html">QAction</a></div></div>
+<div class="ttc" id="aclass_q_combo_box_html"><div class="ttname"><a href="class_q_combo_box.html">QComboBox</a></div></div>
+<div class="ttc" id="aclass_q_dock_widget_html"><div class="ttname"><a href="class_q_dock_widget.html">QDockWidget</a></div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="aclass_q_object_html"><div class="ttname"><a href="class_q_object.html">QObject</a></div></div>
+<div class="ttc" id="aclass_q_tool_bar_html"><div class="ttname"><a href="class_q_tool_bar.html">QToolBar</a></div></div>
+<div class="ttc" id="aclass_q_widget_html"><div class="ttname"><a href="class_q_widget.html">QWidget</a></div></div>
+<div class="ttc" id="aclass_qwt_plot_html"><div class="ttname"><a href="class_qwt_plot.html">QwtPlot</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="astruct_q_pair_html"><div class="ttname"><a href="struct_q_pair.html">QPair</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> CubeIoHandler.h:23</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_61ad6116e79aff4c0feff525feacc1f9.html">PlotWindow</a></li><li class="navelem"><a class="el" href="_plot_window_8h.html">PlotWindow.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

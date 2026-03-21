@@ -1,0 +1,7 @@
+<map id="Isis::AbstractMultipleChoiceFilter" name="Isis::AbstractMultipleChoiceFilter">
+<area shape="rect" id="node1" title="Base class for combo box type filters." alt="" coords="82,648,296,809"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_measure_type_filter.html" title="Filters by measure type." alt="" coords="5,857,181,1083"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_point_type_filter.html" title="Filters by point type." alt="" coords="204,865,366,1075"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_abstract_filter.html" title="Base class for control net filters." alt="" coords="82,135,296,600"/>
+<area shape="rect" id="node3" href="$class_q_widget.html" title=" " alt="" coords="153,5,225,87"/>
+</map>

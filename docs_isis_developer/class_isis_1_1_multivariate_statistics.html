@@ -1,0 +1,818 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::MultivariateStatistics Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_multivariate_statistics.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_multivariate_statistics-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::MultivariateStatistics Class Reference<div class="ingroups"><a class="el" href="group___statistics.html">Statistics</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Container of multivariate statistics.  
+ <a href="class_isis_1_1_multivariate_statistics.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_multivariate_statistics_8h_source.html">MultivariateStatistics.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::MultivariateStatistics:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_multivariate_statistics__coll__graph.png" border="0" usemap="#a_isis_1_1_multivariate_statistics_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_multivariate_statistics_coll__map" id="a_isis_1_1_multivariate_statistics_coll__map">
+<area shape="rect" title="Container of multivariate statistics." alt="" coords="5,5,178,247"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a7e1ff88a67f35675c90709a9be734cfe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#a7e1ff88a67f35675c90709a9be734cfe">MultivariateStatistics</a> ()</td></tr>
+<tr class="memdesc:a7e1ff88a67f35675c90709a9be734cfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a Multivariate <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> object with accumulators and counters set to zero.  <a href="class_isis_1_1_multivariate_statistics.html#a7e1ff88a67f35675c90709a9be734cfe">More...</a><br /></td></tr>
+<tr class="separator:a7e1ff88a67f35675c90709a9be734cfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04c7f5ba7831b475f2a6b8c3ea5d4a80"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#a04c7f5ba7831b475f2a6b8c3ea5d4a80">MultivariateStatistics</a> (const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;inStats)</td></tr>
+<tr class="memdesc:a04c7f5ba7831b475f2a6b8c3ea5d4a80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a MulitvariateStatistics object from a <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a>.  <a href="class_isis_1_1_multivariate_statistics.html#a04c7f5ba7831b475f2a6b8c3ea5d4a80">More...</a><br /></td></tr>
+<tr class="separator:a04c7f5ba7831b475f2a6b8c3ea5d4a80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6fb5611bf928fffef95fcae89e866f3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#ab6fb5611bf928fffef95fcae89e866f3">~MultivariateStatistics</a> ()</td></tr>
+<tr class="memdesc:ab6fb5611bf928fffef95fcae89e866f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructs a <a class="el" href="class_isis_1_1_multivariate_statistics.html" title="Container of multivariate statistics.">MultivariateStatistics</a> object.  <a href="class_isis_1_1_multivariate_statistics.html#ab6fb5611bf928fffef95fcae89e866f3">More...</a><br /></td></tr>
+<tr class="separator:ab6fb5611bf928fffef95fcae89e866f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae97125eee13e7cdb613f8d7326535a3c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#ae97125eee13e7cdb613f8d7326535a3c">Reset</a> ()</td></tr>
+<tr class="memdesc:ae97125eee13e7cdb613f8d7326535a3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets all accumulators to zero.  <a href="class_isis_1_1_multivariate_statistics.html#ae97125eee13e7cdb613f8d7326535a3c">More...</a><br /></td></tr>
+<tr class="separator:ae97125eee13e7cdb613f8d7326535a3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef8588ca7915d709abf28c29dc33675b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#aef8588ca7915d709abf28c29dc33675b">AddData</a> (const double *x, const double *y, const unsigned int count)</td></tr>
+<tr class="memdesc:aef8588ca7915d709abf28c29dc33675b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add two arrays of doubles to the accumulators and counters.  <a href="class_isis_1_1_multivariate_statistics.html#aef8588ca7915d709abf28c29dc33675b">More...</a><br /></td></tr>
+<tr class="separator:aef8588ca7915d709abf28c29dc33675b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a121b193c598f903f8c0cff1e70170f68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#a121b193c598f903f8c0cff1e70170f68">AddData</a> (double x, double y, unsigned int count=1)</td></tr>
+<tr class="memdesc:a121b193c598f903f8c0cff1e70170f68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an x,y value to the accumulators and counters count times.  <a href="class_isis_1_1_multivariate_statistics.html#a121b193c598f903f8c0cff1e70170f68">More...</a><br /></td></tr>
+<tr class="separator:a121b193c598f903f8c0cff1e70170f68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f5092bd13cb429e92a72fd38b590b04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#a0f5092bd13cb429e92a72fd38b590b04">RemoveData</a> (const double *x, const double *y, const unsigned int count)</td></tr>
+<tr class="memdesc:a0f5092bd13cb429e92a72fd38b590b04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove an array of doubles from the accumulators and counters.  <a href="class_isis_1_1_multivariate_statistics.html#a0f5092bd13cb429e92a72fd38b590b04">More...</a><br /></td></tr>
+<tr class="separator:a0f5092bd13cb429e92a72fd38b590b04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5acd6c4c7256b928a0c150367d81d08"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_statistics.html">Isis::Statistics</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#ac5acd6c4c7256b928a0c150367d81d08">X</a> () const</td></tr>
+<tr class="memdesc:ac5acd6c4c7256b928a0c150367d81d08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a Stats object for all of the X data fed through the AddData method.  <a href="class_isis_1_1_multivariate_statistics.html#ac5acd6c4c7256b928a0c150367d81d08">More...</a><br /></td></tr>
+<tr class="separator:ac5acd6c4c7256b928a0c150367d81d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3396fa285e1b15236bcaf516e6b3aaa7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_statistics.html">Isis::Statistics</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#a3396fa285e1b15236bcaf516e6b3aaa7">Y</a> () const</td></tr>
+<tr class="memdesc:a3396fa285e1b15236bcaf516e6b3aaa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a Stats object for all of the Y data fed through the AddData method.  <a href="class_isis_1_1_multivariate_statistics.html#a3396fa285e1b15236bcaf516e6b3aaa7">More...</a><br /></td></tr>
+<tr class="separator:a3396fa285e1b15236bcaf516e6b3aaa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafc648a8aacb50bb82a78dd6b9a8cf89"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#aafc648a8aacb50bb82a78dd6b9a8cf89">SumXY</a> () const</td></tr>
+<tr class="memdesc:aafc648a8aacb50bb82a78dd6b9a8cf89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the sum of x*y for all data given through the AddData method.  <a href="class_isis_1_1_multivariate_statistics.html#aafc648a8aacb50bb82a78dd6b9a8cf89">More...</a><br /></td></tr>
+<tr class="separator:aafc648a8aacb50bb82a78dd6b9a8cf89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67a01dd1decf53372509c93076751ae5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#a67a01dd1decf53372509c93076751ae5">Covariance</a> () const</td></tr>
+<tr class="memdesc:a67a01dd1decf53372509c93076751ae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes and returns the covariance between the two data sets If there are no valid data (pixels) then NULL8 is returned.  <a href="class_isis_1_1_multivariate_statistics.html#a67a01dd1decf53372509c93076751ae5">More...</a><br /></td></tr>
+<tr class="separator:a67a01dd1decf53372509c93076751ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32ea19f678032ac885c58093e7c3960f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#a32ea19f678032ac885c58093e7c3960f">Correlation</a> () const</td></tr>
+<tr class="memdesc:a32ea19f678032ac885c58093e7c3960f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes and returns the coefficient of correlation (between -1.0 and 1.0) of the two data sets.  <a href="class_isis_1_1_multivariate_statistics.html#a32ea19f678032ac885c58093e7c3960f">More...</a><br /></td></tr>
+<tr class="separator:a32ea19f678032ac885c58093e7c3960f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07ab4b25e73c1ec18239e747c4817a58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#a07ab4b25e73c1ec18239e747c4817a58">LinearRegression</a> (double &amp;a, double &amp;b) const</td></tr>
+<tr class="memdesc:a07ab4b25e73c1ec18239e747c4817a58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fits a line.  <a href="class_isis_1_1_multivariate_statistics.html#a07ab4b25e73c1ec18239e747c4817a58">More...</a><br /></td></tr>
+<tr class="separator:a07ab4b25e73c1ec18239e747c4817a58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5756934e8d96f0b7e399f902b1d2b68"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#ac5756934e8d96f0b7e399f902b1d2b68">ValidPixels</a> () const</td></tr>
+<tr class="memdesc:ac5756934e8d96f0b7e399f902b1d2b68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of valid pixels processed.  <a href="class_isis_1_1_multivariate_statistics.html#ac5756934e8d96f0b7e399f902b1d2b68">More...</a><br /></td></tr>
+<tr class="separator:ac5756934e8d96f0b7e399f902b1d2b68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa765bc833766845bd46ec6ac8a497b09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#aa765bc833766845bd46ec6ac8a497b09">InvalidPixels</a> () const</td></tr>
+<tr class="memdesc:aa765bc833766845bd46ec6ac8a497b09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of invalid pixels encountered.  <a href="class_isis_1_1_multivariate_statistics.html#aa765bc833766845bd46ec6ac8a497b09">More...</a><br /></td></tr>
+<tr class="separator:aa765bc833766845bd46ec6ac8a497b09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a958181ff0ace254bded4a540cd0a35f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#a958181ff0ace254bded4a540cd0a35f0">TotalPixels</a> () const</td></tr>
+<tr class="memdesc:a958181ff0ace254bded4a540cd0a35f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total number of pixels processed.  <a href="class_isis_1_1_multivariate_statistics.html#a958181ff0ace254bded4a540cd0a35f0">More...</a><br /></td></tr>
+<tr class="separator:a958181ff0ace254bded4a540cd0a35f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8642d5bf35cc70682d5cab4fb3912c63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_multivariate_statistics.html#a8642d5bf35cc70682d5cab4fb3912c63">toPvl</a> (QString name=&quot;MultivariateStatistics&quot;) const</td></tr>
+<tr class="memdesc:a8642d5bf35cc70682d5cab4fb3912c63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serializes a multivariate statistics object as a <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a>.  <a href="class_isis_1_1_multivariate_statistics.html#a8642d5bf35cc70682d5cab4fb3912c63">More...</a><br /></td></tr>
+<tr class="separator:a8642d5bf35cc70682d5cab4fb3912c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Container of multivariate statistics. </p>
+<p>This class is used to accumulate multivariate statisics on two double arrays. In particular, it is highly useful for obtaining the covariance, correlation, and linear regression analysis on the the data. It ignores input values which are <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> special pixel values. That is, if either co-aligned double value is a special pixel then both values are not used in any statistical computation.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_histogram.html" title="Container of a cube histogram.">Histogram</a> </dd>
+<dd>
+Stats</dd></dl>
+<dl class="section author"><dt>Author</dt><dd>2004-06-08 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a7e1ff88a67f35675c90709a9be734cfe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e1ff88a67f35675c90709a9be734cfe">&#9670;&nbsp;</a></span>MultivariateStatistics() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::MultivariateStatistics::MultivariateStatistics </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a Multivariate <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> object with accumulators and counters set to zero. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_multivariate_statistics.html#ae97125eee13e7cdb613f8d7326535a3c">Reset()</a>.</p>
+
+</div>
+</div>
+<a id="a04c7f5ba7831b475f2a6b8c3ea5d4a80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04c7f5ba7831b475f2a6b8c3ea5d4a80">&#9670;&nbsp;</a></span>MultivariateStatistics() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::MultivariateStatistics::MultivariateStatistics </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;&#160;</td>
+          <td class="paramname"><em>inStats</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a MulitvariateStatistics object from a <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td><a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> &amp; - Input multivariate statistics. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_multivariate_statistics.html#ae97125eee13e7cdb613f8d7326535a3c">Reset()</a>.</p>
+
+</div>
+</div>
+<a id="ab6fb5611bf928fffef95fcae89e866f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6fb5611bf928fffef95fcae89e866f3">&#9670;&nbsp;</a></span>~MultivariateStatistics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::MultivariateStatistics::~MultivariateStatistics </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructs a <a class="el" href="class_isis_1_1_multivariate_statistics.html" title="Container of multivariate statistics.">MultivariateStatistics</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aef8588ca7915d709abf28c29dc33675b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef8588ca7915d709abf28c29dc33675b">&#9670;&nbsp;</a></span>AddData() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MultivariateStatistics::AddData </td>
+          <td>(</td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned int&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add two arrays of doubles to the accumulators and counters. </p>
+<p>This method can be invoked multiple times, for example, once for each line in a cube, before obtaining statistics.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Array of doubles to add. </td></tr>
+    <tr><td class="paramname">y</td><td>Array of doubles to add. </td></tr>
+    <tr><td class="paramname">count</td><td>Number of doubles to process. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_statistics.html#aa34678b074b1697cc12414d44ff2b9b9">Isis::Statistics::AddData()</a>, and <a class="el" href="namespace_isis.html#a795c7763f5f7c0aa13355e63551f4e70">Isis::IsValidPixel()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_maximum_correlation.html#a8747250c99e03bfcca20733a44c4541b">Isis::MaximumCorrelation::MatchAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a121b193c598f903f8c0cff1e70170f68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a121b193c598f903f8c0cff1e70170f68">&#9670;&nbsp;</a></span>AddData() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MultivariateStatistics::AddData </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>count</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add an x,y value to the accumulators and counters count times. </p>
+<p>This method can be invoked multiple times before obtaining statistics.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>x value to add </td></tr>
+    <tr><td class="paramname">y</td><td>y value to add </td></tr>
+    <tr><td class="paramname">count</td><td>Number of times to add this x,y value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_statistics.html#aa34678b074b1697cc12414d44ff2b9b9">Isis::Statistics::AddData()</a>, and <a class="el" href="namespace_isis.html#a795c7763f5f7c0aa13355e63551f4e70">Isis::IsValidPixel()</a>.</p>
+
+</div>
+</div>
+<a id="a32ea19f678032ac885c58093e7c3960f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32ea19f678032ac885c58093e7c3960f">&#9670;&nbsp;</a></span>Correlation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MultivariateStatistics::Correlation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes and returns the coefficient of correlation (between -1.0 and 1.0) of the two data sets. </p>
+<p>This can be used as a goodness-of-fit measurement. The close the correlation is two -1.0 or 1.0 the more likely the data sets are related (and therefore the regression equation is valid).</p>
+<dl class="section return"><dt>Returns</dt><dd>The coefficient of correlation. (between -1.0 and 1.0) The closer to 0.0 implies there is less correlation between the data sets. Returns NULL8 if correlation couldn't be computed. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_multivariate_statistics.html#a67a01dd1decf53372509c93076751ae5">Covariance()</a>, <a class="el" href="namespace_isis.html#abe0fd58c6b28c550076a1d44c433ae93">Isis::NULL8</a>, and <a class="el" href="class_isis_1_1_statistics.html#ace7e19396e3bcd8c5260c0b3b073ea7e">Isis::Statistics::StandardDeviation()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_maximum_correlation.html#a8747250c99e03bfcca20733a44c4541b">Isis::MaximumCorrelation::MatchAlgorithm()</a>, and <a class="el" href="class_isis_1_1_multivariate_statistics.html#a8642d5bf35cc70682d5cab4fb3912c63">toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a67a01dd1decf53372509c93076751ae5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67a01dd1decf53372509c93076751ae5">&#9670;&nbsp;</a></span>Covariance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MultivariateStatistics::Covariance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes and returns the covariance between the two data sets If there are no valid data (pixels) then NULL8 is returned. </p>
+<dl class="section return"><dt>Returns</dt><dd>Covariance between the two data sets. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_statistics.html#a28f531f8a2800b24b0c659a2fa16da4c">Isis::Statistics::Average()</a>, <a class="el" href="namespace_isis.html#abe0fd58c6b28c550076a1d44c433ae93">Isis::NULL8</a>, and <a class="el" href="class_isis_1_1_statistics.html#a19593de0c393e67130e3ba2a3f2e4a25">Isis::Statistics::Sum()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_multivariate_statistics.html#a32ea19f678032ac885c58093e7c3960f">Correlation()</a>, and <a class="el" href="class_isis_1_1_multivariate_statistics.html#a8642d5bf35cc70682d5cab4fb3912c63">toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="aa765bc833766845bd46ec6ac8a497b09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa765bc833766845bd46ec6ac8a497b09">&#9670;&nbsp;</a></span>InvalidPixels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> Isis::MultivariateStatistics::InvalidPixels </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of invalid pixels encountered. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of invalid (unprocessed) pixels. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_multivariate_statistics.html#a8642d5bf35cc70682d5cab4fb3912c63">toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a07ab4b25e73c1ec18239e747c4817a58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07ab4b25e73c1ec18239e747c4817a58">&#9670;&nbsp;</a></span>LinearRegression()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MultivariateStatistics::LinearRegression </td>
+          <td>(</td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Fits a line. </p>
+<p class="formulaDsp">
+\[ y=A+Bx \]
+</p>
+<p> through the data.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>The additive constant A. </td></tr>
+    <tr><td class="paramname">b</td><td>The additive constant B. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_statistics.html#a19593de0c393e67130e3ba2a3f2e4a25">Isis::Statistics::Sum()</a>, and <a class="el" href="class_isis_1_1_statistics.html#a8eee359d32c8eead260f77df9ab43ca1">Isis::Statistics::SumSquare()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_multivariate_statistics.html#a8642d5bf35cc70682d5cab4fb3912c63">toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a0f5092bd13cb429e92a72fd38b590b04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f5092bd13cb429e92a72fd38b590b04">&#9670;&nbsp;</a></span>RemoveData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MultivariateStatistics::RemoveData </td>
+          <td>(</td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned int&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Remove an array of doubles from the accumulators and counters. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Pointer to an array of doubles to remove. </td></tr>
+    <tr><td class="paramname">y</td><td>Array of doubles to add. </td></tr>
+    <tr><td class="paramname">count</td><td>Number of doubles to process.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>(type)return description </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="namespace_isis.html#a795c7763f5f7c0aa13355e63551f4e70">Isis::IsValidPixel()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_statistics.html#ac2e8c7e86682ab01f01249b2bdd327c8">Isis::Statistics::RemoveData()</a>.</p>
+
+</div>
+</div>
+<a id="ae97125eee13e7cdb613f8d7326535a3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae97125eee13e7cdb613f8d7326535a3c">&#9670;&nbsp;</a></span>Reset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MultivariateStatistics::Reset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resets all accumulators to zero. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_statistics.html#af53edc41f7c11082980fb5fdfebc7496">Isis::Statistics::Reset()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_multivariate_statistics.html#a7e1ff88a67f35675c90709a9be734cfe">MultivariateStatistics()</a>.</p>
+
+</div>
+</div>
+<a id="aafc648a8aacb50bb82a78dd6b9a8cf89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafc648a8aacb50bb82a78dd6b9a8cf89">&#9670;&nbsp;</a></span>SumXY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::MultivariateStatistics::SumXY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the sum of x*y for all data given through the AddData method. </p>
+<dl class="section return"><dt>Returns</dt><dd>The sum of x*y for all data. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_multivariate_statistics.html#a8642d5bf35cc70682d5cab4fb3912c63">toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a8642d5bf35cc70682d5cab4fb3912c63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8642d5bf35cc70682d5cab4fb3912c63">&#9670;&nbsp;</a></span>toPvl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> Isis::MultivariateStatistics::toPvl </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em> = <code>&quot;MultivariateStatistics&quot;</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Serializes a multivariate statistics object as a <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">QString</td><td>(Default value is "MultivariateStatistics") - Name of the <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> The serialized multivariate statistics </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_object.html#ac18c485fdccb8e8bf16866e6c6ad2e3d">Isis::PvlObject::addGroup()</a>, <a class="el" href="class_isis_1_1_multivariate_statistics.html#a32ea19f678032ac885c58093e7c3960f">Correlation()</a>, <a class="el" href="class_isis_1_1_multivariate_statistics.html#a67a01dd1decf53372509c93076751ae5">Covariance()</a>, <a class="el" href="class_isis_1_1_multivariate_statistics.html#aa765bc833766845bd46ec6ac8a497b09">InvalidPixels()</a>, <a class="el" href="class_isis_1_1_multivariate_statistics.html#a07ab4b25e73c1ec18239e747c4817a58">LinearRegression()</a>, <a class="el" href="class_isis_1_1_multivariate_statistics.html#aafc648a8aacb50bb82a78dd6b9a8cf89">SumXY()</a>, <a class="el" href="class_isis_1_1_statistics.html#a9ca3fc42e2087e3fa849acf3a7674901">Isis::Statistics::toPvl()</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, <a class="el" href="class_isis_1_1_multivariate_statistics.html#a958181ff0ace254bded4a540cd0a35f0">TotalPixels()</a>, <a class="el" href="class_isis_1_1_multivariate_statistics.html#ac5756934e8d96f0b7e399f902b1d2b68">ValidPixels()</a>, <a class="el" href="class_isis_1_1_multivariate_statistics.html#ac5acd6c4c7256b928a0c150367d81d08">X()</a>, and <a class="el" href="class_isis_1_1_multivariate_statistics.html#a3396fa285e1b15236bcaf516e6b3aaa7">Y()</a>.</p>
+
+</div>
+</div>
+<a id="a958181ff0ace254bded4a540cd0a35f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a958181ff0ace254bded4a540cd0a35f0">&#9670;&nbsp;</a></span>TotalPixels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> Isis::MultivariateStatistics::TotalPixels </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the total number of pixels processed. </p>
+<dl class="section return"><dt>Returns</dt><dd>The total number of pixel processed (valid and invalid). </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_multivariate_statistics.html#a8642d5bf35cc70682d5cab4fb3912c63">toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="ac5756934e8d96f0b7e399f902b1d2b68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5756934e8d96f0b7e399f902b1d2b68">&#9670;&nbsp;</a></span>ValidPixels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> Isis::MultivariateStatistics::ValidPixels </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of valid pixels processed. </p>
+<p>Only valid pixels are utilized when computing the average, standard deviation, variance, minimum, and maximum.</p>
+<dl class="section return"><dt>Returns</dt><dd>The number of valid pixels processed. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization.html#ad64afb696ce28a56d1a80d76949407b4">Isis::Equalization::calculateOverlapStatistics()</a>, <a class="el" href="class_isis_1_1_equalization.html#a45c5e3ea248782fc04548c7d30d97a14">Isis::Equalization::fromPvl()</a>, <a class="el" href="class_isis_1_1_overlap_statistics.html#abf958be914d8b244da8dc4d8b1134162">Isis::OverlapStatistics::IsValid()</a>, <a class="el" href="class_isis_1_1_maximum_correlation.html#a8747250c99e03bfcca20733a44c4541b">Isis::MaximumCorrelation::MatchAlgorithm()</a>, and <a class="el" href="class_isis_1_1_multivariate_statistics.html#a8642d5bf35cc70682d5cab4fb3912c63">toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="ac5acd6c4c7256b928a0c150367d81d08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5acd6c4c7256b928a0c150367d81d08">&#9670;&nbsp;</a></span>X()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_statistics.html">Isis::Statistics</a> Isis::MultivariateStatistics::X </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a Stats object for all of the X data fed through the AddData method. </p>
+<dl class="section return"><dt>Returns</dt><dd>A Stats object for all X data. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization.html#ad64afb696ce28a56d1a80d76949407b4">Isis::Equalization::calculateOverlapStatistics()</a>, <a class="el" href="class_isis_1_1_equalization.html#a45c5e3ea248782fc04548c7d30d97a14">Isis::Equalization::fromPvl()</a>, and <a class="el" href="class_isis_1_1_multivariate_statistics.html#a8642d5bf35cc70682d5cab4fb3912c63">toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a3396fa285e1b15236bcaf516e6b3aaa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3396fa285e1b15236bcaf516e6b3aaa7">&#9670;&nbsp;</a></span>Y()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_statistics.html">Isis::Statistics</a> Isis::MultivariateStatistics::Y </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a Stats object for all of the Y data fed through the AddData method. </p>
+<dl class="section return"><dt>Returns</dt><dd>A Stats object for all Y data. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization.html#ad64afb696ce28a56d1a80d76949407b4">Isis::Equalization::calculateOverlapStatistics()</a>, <a class="el" href="class_isis_1_1_equalization.html#a45c5e3ea248782fc04548c7d30d97a14">Isis::Equalization::fromPvl()</a>, and <a class="el" href="class_isis_1_1_multivariate_statistics.html#a8642d5bf35cc70682d5cab4fb3912c63">toPvl()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/MultivariateStatistics/<a class="el" href="_multivariate_statistics_8h_source.html">MultivariateStatistics.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/MultivariateStatistics/<a class="el" href="_multivariate_statistics_8cpp.html">MultivariateStatistics.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_multivariate_statistics.html">MultivariateStatistics</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

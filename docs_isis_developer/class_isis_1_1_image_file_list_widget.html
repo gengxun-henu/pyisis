@@ -1,0 +1,795 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ImageFileListWidget Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_image_file_list_widget.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_image_file_list_widget-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ImageFileListWidget Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>A colored, grouped cube list.  
+ <a href="class_isis_1_1_image_file_list_widget.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_image_file_list_widget_8h_source.html">ImageFileListWidget.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ImageFileListWidget:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_image_file_list_widget__inherit__graph.png" border="0" usemap="#a_isis_1_1_image_file_list_widget_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_image_file_list_widget_inherit__map" id="a_isis_1_1_image_file_list_widget_inherit__map">
+<area shape="rect" title="A colored, grouped cube list." alt="" coords="5,135,175,440"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="54,5,126,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ImageFileListWidget:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_image_file_list_widget__coll__graph.png" border="0" usemap="#a_isis_1_1_image_file_list_widget_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_image_file_list_widget_coll__map" id="a_isis_1_1_image_file_list_widget_coll__map">
+<area shape="rect" title="A colored, grouped cube list." alt="" coords="5,135,175,440"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="54,5,126,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a1db8214d992ce2a082cb26299959af4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#a1db8214d992ce2a082cb26299959af4e">addImages</a> (<a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *images)</td></tr>
+<tr class="memdesc:a1db8214d992ce2a082cb26299959af4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method adds the new images to the tree.  <a href="class_isis_1_1_image_file_list_widget.html#a1db8214d992ce2a082cb26299959af4e">More...</a><br /></td></tr>
+<tr class="separator:a1db8214d992ce2a082cb26299959af4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5948ed7e127f5ba6da304cec6658c7a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#a5948ed7e127f5ba6da304cec6658c7a8">removeImages</a> (<a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *images)</td></tr>
+<tr class="memdesc:a5948ed7e127f5ba6da304cec6658c7a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes an imagelist from the FileListWidget.  <a href="class_isis_1_1_image_file_list_widget.html#a5948ed7e127f5ba6da304cec6658c7a8">More...</a><br /></td></tr>
+<tr class="separator:a5948ed7e127f5ba6da304cec6658c7a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20446a6d5966dc0cf47dfbe995facf88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#a20446a6d5966dc0cf47dfbe995facf88">clear</a> ()</td></tr>
+<tr class="separator:a20446a6d5966dc0cf47dfbe995facf88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad161328ae392c3b4892bda3476561146"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#ad161328ae392c3b4892bda3476561146">filterFileList</a> ()</td></tr>
+<tr class="separator:ad161328ae392c3b4892bda3476561146"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aa8f899ec52c7ffd3b5304c2844f98d50"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#aa8f899ec52c7ffd3b5304c2844f98d50">ImageFileListWidget</a> (<a class="el" href="class_isis_1_1_directory.html">Directory</a> *directory=0, <a class="el" href="class_q_widget.html">QWidget</a> *parent=0)</td></tr>
+<tr class="memdesc:aa8f899ec52c7ffd3b5304c2844f98d50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_isis_1_1_image_file_list_widget.html#aa8f899ec52c7ffd3b5304c2844f98d50">More...</a><br /></td></tr>
+<tr class="separator:aa8f899ec52c7ffd3b5304c2844f98d50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10e618ce90da6a475f4387d5827a3771"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#a10e618ce90da6a475f4387d5827a3771">~ImageFileListWidget</a> ()</td></tr>
+<tr class="memdesc:a10e618ce90da6a475f4387d5827a3771"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_image_file_list_widget.html#a10e618ce90da6a475f4387d5827a3771">More...</a><br /></td></tr>
+<tr class="separator:a10e618ce90da6a475f4387d5827a3771"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae037e5324debf1dd1508e0f98f86c0d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_progress_bar.html">QProgressBar</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#ae037e5324debf1dd1508e0f98f86c0d0">getProgress</a> ()</td></tr>
+<tr class="memdesc:ae037e5324debf1dd1508e0f98f86c0d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method returns the progress bar.  <a href="class_isis_1_1_image_file_list_widget.html#ae037e5324debf1dd1508e0f98f86c0d0">More...</a><br /></td></tr>
+<tr class="separator:ae037e5324debf1dd1508e0f98f86c0d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2f856dccc52f9a93369fd69fc6bcd76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#ae2f856dccc52f9a93369fd69fc6bcd76">fromPvl</a> (<a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;pvl)</td></tr>
+<tr class="memdesc:ae2f856dccc52f9a93369fd69fc6bcd76"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method loads the state of this class from the pvl.  <a href="class_isis_1_1_image_file_list_widget.html#ae2f856dccc52f9a93369fd69fc6bcd76">More...</a><br /></td></tr>
+<tr class="separator:ae2f856dccc52f9a93369fd69fc6bcd76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9181aa5404f44bb8617aa013e56311f2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#a9181aa5404f44bb8617aa013e56311f2">toPvl</a> () const</td></tr>
+<tr class="memdesc:a9181aa5404f44bb8617aa013e56311f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method writes the state of this class to a pvl.  <a href="class_isis_1_1_image_file_list_widget.html#a9181aa5404f44bb8617aa013e56311f2">More...</a><br /></td></tr>
+<tr class="separator:a9181aa5404f44bb8617aa013e56311f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6f3e55a74ee766a684f333339831dbc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#af6f3e55a74ee766a684f333339831dbc">save</a> (QXmlStreamWriter &amp;stream, <a class="el" href="class_isis_1_1_project.html">Project</a> *project, <a class="el" href="class_isis_1_1_file_name.html">FileName</a> newProjectRoot) const</td></tr>
+<tr class="memdesc:af6f3e55a74ee766a684f333339831dbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method saves the FootprintColumns in the project and the settings associated with every column.  <a href="class_isis_1_1_image_file_list_widget.html#af6f3e55a74ee766a684f333339831dbc">More...</a><br /></td></tr>
+<tr class="separator:af6f3e55a74ee766a684f333339831dbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20d41b36a4a31702404044554b9f9a90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#a20d41b36a4a31702404044554b9f9a90">actions</a> ()</td></tr>
+<tr class="memdesc:a20d41b36a4a31702404044554b9f9a90"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method calls <a class="el" href="class_isis_1_1_image_tree_widget.html#a70ef1735d584a36ac4e1f70944c325c0">ImageTreeWidget::actions()</a> which sets up a <a class="el" href="class_q_action.html">QAction</a> that sets a default for the file list columns and returns a <a class="el" href="class_q_list.html" title="This is free and unencumbered software released into the public domain.">QList</a> of QPointers that point to the <a class="el" href="class_q_action.html">QAction</a>.  <a href="class_isis_1_1_image_file_list_widget.html#a20d41b36a4a31702404044554b9f9a90">More...</a><br /></td></tr>
+<tr class="separator:a20d41b36a4a31702404044554b9f9a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1e9e083e42f4c57f0a08f2d5d4493d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#aa1e9e083e42f4c57f0a08f2d5d4493d8">getViewActions</a> ()</td></tr>
+<tr class="memdesc:aa1e9e083e42f4c57f0a08f2d5d4493d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method calls <a class="el" href="class_isis_1_1_image_tree_widget.html#a59df069c46925046ad5041d3cfbc9310">ImageTreeWidget::getViewActions()</a> which returns a list of FootprintColumns.  <a href="class_isis_1_1_image_file_list_widget.html#aa1e9e083e42f4c57f0a08f2d5d4493d8">More...</a><br /></td></tr>
+<tr class="separator:aa1e9e083e42f4c57f0a08f2d5d4493d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbb1086ce7edd2183a66e2df29df6106"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#afbb1086ce7edd2183a66e2df29df6106">getExportActions</a> ()</td></tr>
+<tr class="memdesc:afbb1086ce7edd2183a66e2df29df6106"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method creates a new <a class="el" href="class_q_action.html">QAction</a> which is connected and when triggered will save the cube list.  <a href="class_isis_1_1_image_file_list_widget.html#afbb1086ce7edd2183a66e2df29df6106">More...</a><br /></td></tr>
+<tr class="separator:afbb1086ce7edd2183a66e2df29df6106"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a93b60a1d95523f126ea60b81636da758"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#a93b60a1d95523f126ea60b81636da758">getLongHelp</a> (<a class="el" href="class_q_widget.html">QWidget</a> *fileListContainer=NULL)</td></tr>
+<tr class="memdesc:a93b60a1d95523f126ea60b81636da758"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method creates a <a class="el" href="class_q_widget.html">QWidget</a> that displays a long help message explaining the tool.  <a href="class_isis_1_1_image_file_list_widget.html#a93b60a1d95523f126ea60b81636da758">More...</a><br /></td></tr>
+<tr class="separator:a93b60a1d95523f126ea60b81636da758"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a8fc1d9acc541bcccf6e4488087a2d821"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_file_list_widget.html#a8fc1d9acc541bcccf6e4488087a2d821">contextMenuEvent</a> (QContextMenuEvent *event)</td></tr>
+<tr class="memdesc:a8fc1d9acc541bcccf6e4488087a2d821"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method takes an event and gets all of the FootprintColumns, adds them to the menu, then it pops up the menu at the location of event.  <a href="class_isis_1_1_image_file_list_widget.html#a8fc1d9acc541bcccf6e4488087a2d821">More...</a><br /></td></tr>
+<tr class="separator:a8fc1d9acc541bcccf6e4488087a2d821"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A colored, grouped cube list. </p>
+<dl class="section author"><dt>Author</dt><dd>2011-07-29 Steven Lambright </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa8f899ec52c7ffd3b5304c2844f98d50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8f899ec52c7ffd3b5304c2844f98d50">&#9670;&nbsp;</a></span>ImageFileListWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ImageFileListWidget::ImageFileListWidget </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_directory.html">Directory</a> *&#160;</td>
+          <td class="paramname"><em>directory</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<p>This method sets up the <a class="el" href="class_q_widget.html">QWidget</a> to show the <a class="el" href="class_isis_1_1_image_tree_widget.html">ImageTreeWidget</a> that is created using directory.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">directory</td><td>The directory where you want the <a class="el" href="class_isis_1_1_image_tree_widget.html">ImageTreeWidget</a> to be made </td></tr>
+    <tr><td class="paramname">parent</td><td>The <a class="el" href="class_q_widget.html">QWidget</a> parent </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_file_list_widget.html#a20446a6d5966dc0cf47dfbe995facf88">clear()</a>, and <a class="el" href="class_isis_1_1_image_file_list_widget.html#ad161328ae392c3b4892bda3476561146">filterFileList()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_file_list_widget.html#a93b60a1d95523f126ea60b81636da758">getLongHelp()</a>.</p>
+
+</div>
+</div>
+<a id="a10e618ce90da6a475f4387d5827a3771"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10e618ce90da6a475f4387d5827a3771">&#9670;&nbsp;</a></span>~ImageFileListWidget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ImageFileListWidget::~ImageFileListWidget </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a20d41b36a4a31702404044554b9f9a90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20d41b36a4a31702404044554b9f9a90">&#9670;&nbsp;</a></span>actions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt; Isis::ImageFileListWidget::actions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method calls <a class="el" href="class_isis_1_1_image_tree_widget.html#a70ef1735d584a36ac4e1f70944c325c0">ImageTreeWidget::actions()</a> which sets up a <a class="el" href="class_q_action.html">QAction</a> that sets a default for the file list columns and returns a <a class="el" href="class_q_list.html" title="This is free and unencumbered software released into the public domain.">QList</a> of QPointers that point to the <a class="el" href="class_q_action.html">QAction</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_q_list.html">QList&lt;QAction *&gt;</a></b> The <a class="el" href="class_q_list.html" title="This is free and unencumbered software released into the public domain.">QList</a> of QPointers that point to the <a class="el" href="class_q_action.html">QAction</a> set up by <a class="el" href="class_isis_1_1_image_tree_widget.html#a70ef1735d584a36ac4e1f70944c325c0">ImageTreeWidget::actions()</a>. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_tree_widget.html#a70ef1735d584a36ac4e1f70944c325c0">Isis::ImageTreeWidget::actions()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_file_list_widget.html#a8fc1d9acc541bcccf6e4488087a2d821">contextMenuEvent()</a>.</p>
+
+</div>
+</div>
+<a id="a1db8214d992ce2a082cb26299959af4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1db8214d992ce2a082cb26299959af4e">&#9670;&nbsp;</a></span>addImages</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageFileListWidget::addImages </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *&#160;</td>
+          <td class="paramname"><em>images</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method adds the new images to the tree. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">images</td><td><a class="el" href="class_isis_1_1_image_list.html" title="Internalizes a list of images and allows for operations on the entire list.">ImageList</a> containing all of the images that need to be added to the tree. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_tree_widget.html#abc197c59d77e3ec84b4a1c19a54f98f9">Isis::ImageTreeWidget::createGroup()</a>, <a class="el" href="class_isis_1_1_image_tree_widget.html#a565474b9273177bc79bd9ca3b47d93c8">Isis::ImageTreeWidget::createImageListNameItem()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_1_1_image_position.html#af15cb7a5e8d21218cc33c323151c7acf">Isis::ImageTreeWidget::ImagePosition::group()</a>, <a class="el" href="class_isis_1_1_image_tree_widget.html#a62c165c0049bcb911375edbcc1ca2e29">Isis::ImageTreeWidget::groupInList()</a>, <a class="el" href="class_isis_1_1_image_tree_widget.html#a8c0a76d744ce8b4c525a37ba438580eea453b4c114b7bd1975e4543749d7bf325">Isis::ImageTreeWidget::ImageGroupType</a>, <a class="el" href="class_isis_1_1_image_tree_widget.html#a8c0a76d744ce8b4c525a37ba438580eeaaf07d2d3f965f4fc7f93afeb4670da2e">Isis::ImageTreeWidget::ImageListNameType</a>, <a class="el" href="class_isis_1_1_image_tree_widget.html#a1be0b65e1f1b1608ff7d3367070f983f">Isis::ImageTreeWidget::imagesInView()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_1_1_image_position.html#ae85e1029b66cc7204dc0bcb096b7ee5e">Isis::ImageTreeWidget::ImagePosition::index()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_1_1_image_position.html#a7c136ead8e5678b8e16a3a61244c36aa">Isis::ImageTreeWidget::ImagePosition::isValid()</a>, <a class="el" href="class_isis_1_1_image_list.html#adbfe19817125d0a9337e29bca8cdd5d4">Isis::ImageList::name()</a>, <a class="el" href="class_isis_1_1_image_tree_widget.html#ab4c3597a5d6d24bf53f1437e39c0fd33">Isis::ImageTreeWidget::prepCube()</a>, and <a class="el" href="class_isis_1_1_image_tree_widget.html#a8fc1579849f4998b4b9c3e6ba35e9c97">Isis::ImageTreeWidget::refit()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_file_list_view_work_order.html#a1c591881626691922a0170cb8db5e458">Isis::ImageFileListViewWorkOrder::execute()</a>.</p>
+
+</div>
+</div>
+<a id="a20446a6d5966dc0cf47dfbe995facf88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20446a6d5966dc0cf47dfbe995facf88">&#9670;&nbsp;</a></span>clear</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageFileListWidget::clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_file_list_widget.html#aa8f899ec52c7ffd3b5304c2844f98d50">ImageFileListWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a8fc1d9acc541bcccf6e4488087a2d821"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fc1d9acc541bcccf6e4488087a2d821">&#9670;&nbsp;</a></span>contextMenuEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageFileListWidget::contextMenuEvent </td>
+          <td>(</td>
+          <td class="paramtype">QContextMenuEvent *&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method takes an event and gets all of the FootprintColumns, adds them to the menu, then it pops up the menu at the location of event. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>A QContextMenuEvent that is used to find the position of the mouse. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_file_list_widget.html#a20d41b36a4a31702404044554b9f9a90">actions()</a>, and <a class="el" href="class_isis_1_1_image_tree_widget.html#a59df069c46925046ad5041d3cfbc9310">Isis::ImageTreeWidget::getViewActions()</a>.</p>
+
+</div>
+</div>
+<a id="ad161328ae392c3b4892bda3476561146"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad161328ae392c3b4892bda3476561146">&#9670;&nbsp;</a></span>filterFileList</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageFileListWidget::filterFileList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image.html#ad9a2f83ed5b7aa2f3f9855a7ac81d107">Isis::Image::fileName()</a>, and <a class="el" href="class_isis_1_1_image_tree_widget_item.html#aff8314b3b1b5dddf056bf3dc6a4bdfec">Isis::ImageTreeWidgetItem::image()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_file_list_widget.html#aa8f899ec52c7ffd3b5304c2844f98d50">ImageFileListWidget()</a>.</p>
+
+</div>
+</div>
+<a id="ae2f856dccc52f9a93369fd69fc6bcd76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2f856dccc52f9a93369fd69fc6bcd76">&#9670;&nbsp;</a></span>fromPvl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageFileListWidget::fromPvl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method loads the state of this class from the pvl. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td>The pvl that we are reading the state from.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5" title="A type of error that occurred when performing an actual I/O operation.">IException::Io</a></td><td>"Unable to read image file's list widget settings from Pvl" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_image_tree_widget.html#a1930857a716755c27f9c8dc9147755e7">Isis::ImageTreeWidget::addGroup()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a526a35512bd0dffb397505ffb8daaac7">Isis::ImageTreeWidgetItem::BlankColumn</a>, <a class="el" href="class_isis_1_1_i_string.html#a493ac3c8510e8974061a2564710b4067">Isis::IString::Convert()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a069d440d7945140191ce9e20b9f3a4f7">Isis::ImageTreeWidgetItem::FootprintColumn</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a0708f5601d4a7f750c53e5a40a064498">Isis::PvlObject::hasKeyword()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>, <a class="el" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">Isis::PvlContainer::name()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a7fa8ba89de242fe5390df9290f58e078">Isis::PvlObject::object()</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a65ee598aba830797a9cea5f8d5499413">Isis::PvlObject::objects()</a>, <a class="el" href="namespace_isis.html#a8bab411ab0ee487c080582d68d0f596b">Isis::toBool()</a>, <a class="el" href="class_isis_1_1_i_string.html#a771e32c8a3cbe76ba8ff9916da73effb">Isis::IString::ToQt()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#afaa52090cb6182494a35a2ba6b6b4a32">Isis::ImageTreeWidgetItem::treeColumnToString()</a>, and <a class="el" href="class_isis_1_1_image_tree_widget.html#a97bf925d27b06302636604745810667b">Isis::ImageTreeWidget::updateViewActs()</a>.</p>
+
+</div>
+</div>
+<a id="afbb1086ce7edd2183a66e2df29df6106"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbb1086ce7edd2183a66e2df29df6106">&#9670;&nbsp;</a></span>getExportActions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt; Isis::ImageFileListWidget::getExportActions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method creates a new <a class="el" href="class_q_action.html">QAction</a> which is connected and when triggered will save the cube list. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_q_list.html">QList&lt;QAction *&gt;</a></b> The <a class="el" href="class_q_list.html" title="This is free and unencumbered software released into the public domain.">QList</a> of the new <a class="el" href="class_q_action.html">QAction</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a93b60a1d95523f126ea60b81636da758"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93b60a1d95523f126ea60b81636da758">&#9670;&nbsp;</a></span>getLongHelp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_widget.html">QWidget</a> * Isis::ImageFileListWidget::getLongHelp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>fileListContainer</em> = <code>NULL</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method creates a <a class="el" href="class_q_widget.html">QWidget</a> that displays a long help message explaining the tool. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_q_widget.html">QWidget</a></b> Returns the message <a class="el" href="class_q_widget.html">QWidget</a> that was made. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_file_list_widget.html#aa8f899ec52c7ffd3b5304c2844f98d50">ImageFileListWidget()</a>.</p>
+
+</div>
+</div>
+<a id="ae037e5324debf1dd1508e0f98f86c0d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae037e5324debf1dd1508e0f98f86c0d0">&#9670;&nbsp;</a></span>getProgress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_progress_bar.html">QProgressBar</a> * Isis::ImageFileListWidget::getProgress </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method returns the progress bar. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_q_progress_bar.html">QProgressBar</a></b> * Returns the <a class="el" href="class_isis_1_1_progress_bar.html">ProgressBar</a> </dd></dl>
+
+</div>
+</div>
+<a id="aa1e9e083e42f4c57f0a08f2d5d4493d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1e9e083e42f4c57f0a08f2d5d4493d8">&#9670;&nbsp;</a></span>getViewActions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt; Isis::ImageFileListWidget::getViewActions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method calls <a class="el" href="class_isis_1_1_image_tree_widget.html#a59df069c46925046ad5041d3cfbc9310">ImageTreeWidget::getViewActions()</a> which returns a list of FootprintColumns. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_q_list.html">QList&lt;QAction *&gt;</a></b> The <a class="el" href="class_q_list.html" title="This is free and unencumbered software released into the public domain.">QList</a> of FootprintColumns. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_tree_widget.html#a59df069c46925046ad5041d3cfbc9310">Isis::ImageTreeWidget::getViewActions()</a>.</p>
+
+</div>
+</div>
+<a id="a5948ed7e127f5ba6da304cec6658c7a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5948ed7e127f5ba6da304cec6658c7a8">&#9670;&nbsp;</a></span>removeImages</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageFileListWidget::removeImages </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_list.html">ImageList</a> *&#160;</td>
+          <td class="paramname"><em>images</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes an imagelist from the FileListWidget. </p>
+<p>This would normally be handled elsewhere but for IPCE it needs a method to hide images and update the tree.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_image_list.html" title="Internalizes a list of images and allows for operations on the entire list.">ImageList</a></td><td>containing the images to remove from the tree </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_tree_widget_item.html#aff8314b3b1b5dddf056bf3dc6a4bdfec">Isis::ImageTreeWidgetItem::image()</a>.</p>
+
+</div>
+</div>
+<a id="af6f3e55a74ee766a684f333339831dbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6f3e55a74ee766a684f333339831dbc">&#9670;&nbsp;</a></span>save()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageFileListWidget::save </td>
+          <td>(</td>
+          <td class="paramtype">QXmlStreamWriter &amp;&#160;</td>
+          <td class="paramname"><em>stream</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td>
+          <td class="paramname"><em>newProjectRoot</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method saves the FootprintColumns in the project and the settings associated with every column. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>The QXmlStreamWriter that saves the FootprintColumns. </td></tr>
+    <tr><td class="paramname">project</td><td>The current project being saved. </td></tr>
+    <tr><td class="paramname">newProjectRoot</td><td>This is not used. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a526a35512bd0dffb397505ffb8daaac7">Isis::ImageTreeWidgetItem::BlankColumn</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a069d440d7945140191ce9e20b9f3a4f7">Isis::ImageTreeWidgetItem::FootprintColumn</a>, and <a class="el" href="class_isis_1_1_image_tree_widget_item.html#afaa52090cb6182494a35a2ba6b6b4a32">Isis::ImageTreeWidgetItem::treeColumnToString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_directory.html#a5165da568e52edff7ec7b92f67631263">Isis::Directory::save()</a>, and <a class="el" href="class_isis_1_1_footprint2_d_view.html#a60e8952ea4db511dad409760bc8ed17c">Isis::Footprint2DView::save()</a>.</p>
+
+</div>
+</div>
+<a id="a9181aa5404f44bb8617aa013e56311f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9181aa5404f44bb8617aa013e56311f2">&#9670;&nbsp;</a></span>toPvl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> Isis::ImageFileListWidget::toPvl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method writes the state of this class to a pvl. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a></b> The pvl that we are writing too. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a526a35512bd0dffb397505ffb8daaac7">Isis::ImageTreeWidgetItem::BlankColumn</a>, <a class="el" href="class_isis_1_1_i_string.html#a493ac3c8510e8974061a2564710b4067">Isis::IString::Convert()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a069d440d7945140191ce9e20b9f3a4f7">Isis::ImageTreeWidgetItem::FootprintColumn</a>, <a class="el" href="class_isis_1_1_image.html#ae8fe89b139cb680ed7ef745fecf839f3">Isis::Image::id()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#aff8314b3b1b5dddf056bf3dc6a4bdfec">Isis::ImageTreeWidgetItem::image()</a>, <a class="el" href="class_isis_1_1_image_tree_widget_item.html#ab35636e4ccdc34ea227477a9d33362f0a6bfd601433cab4c4ed18400c6ca8e1e1">Isis::ImageTreeWidgetItem::NameColumn</a>, <a class="el" href="class_isis_1_1_i_string.html#a771e32c8a3cbe76ba8ff9916da73effb">Isis::IString::ToQt()</a>, <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>, and <a class="el" href="class_isis_1_1_image_tree_widget_item.html#afaa52090cb6182494a35a2ba6b6b4a32">Isis::ImageTreeWidgetItem::treeColumnToString()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ImageFileListWidget/<a class="el" href="_image_file_list_widget_8h_source.html">ImageFileListWidget.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ImageFileListWidget/<a class="el" href="_image_file_list_widget_8cpp.html">ImageFileListWidget.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_image_file_list_widget.html">ImageFileListWidget</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

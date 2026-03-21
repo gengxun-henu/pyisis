@@ -1,0 +1,39 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ControlNetStatistics,Control Networks,isis/src/control/objs/ControlNetStatistics/ControlNetStatistics.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ControlNetStatistics,isis_pybind.ControlNetStatistics,N,Python class symbol not found in current binding files
+Construction/Enum,"ePointDetails enum (total, ignore, locked, fixed, constrained, freed)",isis_pybind.ControlNetStatistics.ePointDetails,N,Enum exposure not detected in current binding files
+Construction/Enum,"ePointIntStats enum (totalPoints, validPoints, ignoredPoints, fixedPoints, constrainedPoints, freePoints, editLockedPoints, totalMeasures, validMeasures, ignoredMeasures)",isis_pybind.ControlNetStatistics.ePointIntStats,N,Enum exposure not detected in current binding files
+Construction/Enum,"ePointDoubleStats enum (avgResidual, minResidual, maxResidual, minLineResidual, maxLineResidual, minSampleResidual, maxSampleResidual, avgPixelShift, minPixelShift, maxPixelShift)",isis_pybind.ControlNetStatistics.ePointDoubleStats,N,Enum exposure not detected in current binding files
+Construction/Enum,"ImageStats enum (imgSamples, imgLines, imgTotalPoints, imgIgnoredPoints, imgFixedPoints, imgLockedPoints, imgLocked, imgConstrainedPoints, imgFreePoints, imgConvexHullArea)",isis_pybind.ControlNetStatistics.ImageStats,N,Enum exposure not detected in current binding files
+Construction/Enum,ControlNetStatistics(),isis_pybind.ControlNetStatistics(),N,Constructor binding not detected in current binding files
+Public API,void GenerateImageStats(),isis_pybind.ControlNetStatistics.generate_image_stats,N,Method not found in current binding files
+Public API,void PrintImageStats(const QString &psImageFile),isis_pybind.ControlNetStatistics.print_image_stats,N,Method not found in current binding files
+Public API,QVector<double> GetImageStatsBySerialNum(QString psSerialNum) const,isis_pybind.ControlNetStatistics.get_image_stats_by_serial_num,N,Method not found in current binding files
+Public API,void GeneratePointStats(const QString &psPointFile),isis_pybind.ControlNetStatistics.generate_point_stats,N,Method not found in current binding files
+Public API,void GenerateControlNetStats(PvlGroup &pStatsGrp),isis_pybind.ControlNetStatistics.generate_control_net_stats,N,Method not found in current binding files
+Public API,int NumValidPoints() const { return (*mPointIntStats.find(validPoints)),isis_pybind.ControlNetStatistics.num_valid_points,N,Method not found in current binding files
+Public API,int NumFixedPoints() const { return (*mPointIntStats.find(fixedPoints)),isis_pybind.ControlNetStatistics.num_fixed_points,N,Method not found in current binding files
+Public API,int NumConstrainedPoints() const { return (*mPointIntStats.find(constrainedPoints)),isis_pybind.ControlNetStatistics.num_constrained_points,N,Method not found in current binding files
+Public API,int NumFreePoints() const { return (*mPointIntStats.find(freePoints)),isis_pybind.ControlNetStatistics.num_free_points,N,Method not found in current binding files
+Public API,int NumIgnoredPoints() const { return (*mPointIntStats.find(ignoredPoints)),isis_pybind.ControlNetStatistics.num_ignored_points,N,Method not found in current binding files
+Public API,int NumEditLockedPoints() const { return (*mPointIntStats.find(editLockedPoints)),isis_pybind.ControlNetStatistics.num_edit_locked_points,N,Method not found in current binding files
+Public API,int NumMeasures() const { return (*mPointIntStats.find(totalMeasures)),isis_pybind.ControlNetStatistics.num_measures,N,Method not found in current binding files
+Public API,int NumValidMeasures() const { return (*mPointIntStats.find(validMeasures)),isis_pybind.ControlNetStatistics.num_valid_measures,N,Method not found in current binding files
+Public API,int NumIgnoredMeasures() const { return (*mPointIntStats.find(ignoredMeasures)),isis_pybind.ControlNetStatistics.num_ignored_measures,N,Method not found in current binding files
+Public API,int NumEditLockedMeasures() const { return (*mPointIntStats.find(editLockedMeasures)),isis_pybind.ControlNetStatistics.num_edit_locked_measures,N,Method not found in current binding files
+Public API,double GetAverageResidual() const { return (*mPointDoubleStats.find(avgResidual)),isis_pybind.ControlNetStatistics.get_average_residual,N,Method not found in current binding files
+Public API,double GetMinimumResidual() const { return (*mPointDoubleStats.find(minResidual)),isis_pybind.ControlNetStatistics.get_minimum_residual,N,Method not found in current binding files
+Public API,double GetMaximumResidual() const { return (*mPointDoubleStats.find(maxResidual)),isis_pybind.ControlNetStatistics.get_maximum_residual,N,Method not found in current binding files
+Public API,double GetMinLineResidual() const { return (*mPointDoubleStats.find(minLineResidual)),isis_pybind.ControlNetStatistics.get_min_line_residual,N,Method not found in current binding files
+Public API,double GetMinSampleResidual() const { return (*mPointDoubleStats.find(minSampleResidual)),isis_pybind.ControlNetStatistics.get_min_sample_residual,N,Method not found in current binding files
+Public API,double GetMaxLineResidual() const { return (*mPointDoubleStats.find(maxLineResidual)),isis_pybind.ControlNetStatistics.get_max_line_residual,N,Method not found in current binding files
+Public API,double GetMaxSampleResidual() const { return (*mPointDoubleStats.find(maxSampleResidual)),isis_pybind.ControlNetStatistics.get_max_sample_residual,N,Method not found in current binding files
+Public API,double GetMinLineShift() const { return (*mPointDoubleStats.find(minLineShift)),isis_pybind.ControlNetStatistics.get_min_line_shift,N,Method not found in current binding files
+Public API,double GetMaxLineShift() const { return (*mPointDoubleStats.find(maxLineShift)),isis_pybind.ControlNetStatistics.get_max_line_shift,N,Method not found in current binding files
+Public API,double GetMinSampleShift() const { return (*mPointDoubleStats.find(minSampleShift)),isis_pybind.ControlNetStatistics.get_min_sample_shift,N,Method not found in current binding files
+Public API,double GetMaxSampleShift() const { return (*mPointDoubleStats.find(maxSampleShift)),isis_pybind.ControlNetStatistics.get_max_sample_shift,N,Method not found in current binding files
+Public API,double GetMinPixelShift() const { return (*mPointDoubleStats.find(minPixelShift)),isis_pybind.ControlNetStatistics.get_min_pixel_shift,N,Method not found in current binding files
+Public API,double GetMaxPixelShift() const { return (*mPointDoubleStats.find(maxPixelShift)),isis_pybind.ControlNetStatistics.get_max_pixel_shift,N,Method not found in current binding files
+Public API,double GetAvgPixelShift() const { return (*mPointDoubleStats.find(avgPixelShift)),isis_pybind.ControlNetStatistics.get_avg_pixel_shift,N,Method not found in current binding files

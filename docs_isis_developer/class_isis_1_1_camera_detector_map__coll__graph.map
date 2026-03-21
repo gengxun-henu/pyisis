@@ -1,0 +1,9 @@
+<map id="Isis::CameraDetectorMap" name="Isis::CameraDetectorMap">
+<area shape="rect" id="node1" title="Convert between parent image coordinates and detector coordinates." alt="" coords="5,969,186,1211"/>
+<area shape="rect" id="node2" title=" " alt="" coords="67,255,127,336"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="316,568,534,905"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_sensor.html" title="Class for computing sensor ground coordinates." alt="" coords="368,175,586,416"/>
+<area shape="rect" id="node5" title=" " alt="" coords="229,5,274,87"/>
+<area shape="rect" id="node6" title=" " alt="" coords="610,255,675,336"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_alpha_cube.html" title="This class is used to rewrite the &quot;alpha&quot; keywords out of the AlphaCube group or Instrument group." alt="" coords="731,151,855,440"/>
+</map>

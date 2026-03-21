@@ -1,0 +1,5 @@
+<map id="Isis::APrioriLongitudeSigmaFilter" name="Isis::APrioriLongitudeSigmaFilter">
+<area shape="rect" id="node1" title="Allows filtering by a priori surface point longitude sigma." alt="" coords="7,728,218,953"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_abstract_number_filter.html" title="Base class for filters that are number&#45;based." alt="" coords="25,519,200,680"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_abstract_filter.html" title="Base class for control net filters." alt="" coords="5,5,220,471"/>
+</map>

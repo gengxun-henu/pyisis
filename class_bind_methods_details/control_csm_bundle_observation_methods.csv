@@ -1,0 +1,19 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+CsmBundleObservation,Control Networks,isis/src/control/objs/CsmBundleObservation/CsmBundleObservation.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,CsmBundleObservation,isis_pybind.CsmBundleObservation,N,Python class symbol not found in current binding files
+Construction/Enum,CsmBundleObservation(),isis_pybind.CsmBundleObservation(),N,Constructor binding not detected in current binding files
+Public API,void copy(const CsmBundleObservation &src),isis_pybind.CsmBundleObservation.copy,N,Method not found in current binding files
+Mutation/Configuration,virtual bool setSolveSettings(BundleObservationSolveSettings solveSettings),isis_pybind.CsmBundleObservation.set_solve_settings,N,Method not found in current binding files
+Public API,int numberParameters(),isis_pybind.CsmBundleObservation.number_parameters,N,Method not found in current binding files
+Public API,const BundleObservationSolveSettingsQsp solveSettings(),isis_pybind.CsmBundleObservation.solve_settings,N,Method not found in current binding files
+Public API,bool applyParameterCorrections(LinearAlgebra::Vector corrections),isis_pybind.CsmBundleObservation.apply_parameter_corrections,N,Method not found in current binding files
+Public API,"void bundleOutputString(std::ostream &fpOut,bool errorPropagation)",isis_pybind.CsmBundleObservation.bundle_output_string,N,Method not found in current binding files
+Public API,QString bundleOutputCSV(bool errorPropagation),isis_pybind.CsmBundleObservation.bundle_output_csv,N,Method not found in current binding files
+Public API,virtual QStringList parameterList(),isis_pybind.CsmBundleObservation.parameter_list,N,Method not found in current binding files
+Public API,"bool computeTargetPartials(LinearAlgebra::Matrix &coeffTarget, BundleMeasure &measure, BundleSettingsQsp &bundleSettings, BundleTargetBodyQsp &bundleTargetBody)",isis_pybind.CsmBundleObservation.compute_target_partials,N,Method not found in current binding files
+Public API,"bool computeImagePartials(LinearAlgebra::Matrix &coeffImage, BundleMeasure &measure)",isis_pybind.CsmBundleObservation.compute_image_partials,N,Method not found in current binding files
+Public API,"bool computePoint3DPartials(LinearAlgebra::Matrix &coeffPoint3D, BundleMeasure &measure, SurfacePoint::CoordinateType coordType)",isis_pybind.CsmBundleObservation.compute_point3_d_partials,N,Method not found in current binding files
+Public API,"bool computeRHSPartials(LinearAlgebra::Vector &coeffRHS, BundleMeasure &measure)",isis_pybind.CsmBundleObservation.compute_rhs_partials,N,Method not found in current binding files
+Public API,"double computeObservationValue(BundleMeasure &measure, double deltaVal)",isis_pybind.CsmBundleObservation.compute_observation_value,N,Method not found in current binding files

@@ -1,0 +1,27 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+OverlapStatistics,Statistics,isis/src/base/objs/OverlapStatistics/OverlapStatistics.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,OverlapStatistics,isis_pybind.OverlapStatistics,N,Python class symbol not found in current binding files
+Construction/Enum,OverlapStatistics(),isis_pybind.OverlapStatistics(),N,Constructor binding not detected in current binding files
+Query,bool HasOverlap(int band) const { return (p_stats[band-1].ValidPixels() > 0),isis_pybind.OverlapStatistics.has_overlap,N,Method not found in current binding files
+Query,bool HasOverlap() const,isis_pybind.OverlapStatistics.has_overlap,N,Method not found in current binding files
+Public API,Isis::FileName FileNameX() const { return p_xFile,isis_pybind.OverlapStatistics.file_name_x,N,Method not found in current binding files
+Public API,Isis::FileName FileNameY() const { return p_yFile,isis_pybind.OverlapStatistics.file_name_y,N,Method not found in current binding files
+Public API,Isis::MultivariateStatistics GetMStats(int band) const { return p_stats[band-1],isis_pybind.OverlapStatistics.get_m_stats,N,Method not found in current binding files
+Public API,int Lines() const { return p_lineRange,isis_pybind.OverlapStatistics.lines,N,Method not found in current binding files
+Public API,int Samples() const { return p_sampRange,isis_pybind.OverlapStatistics.samples,N,Method not found in current binding files
+Public API,int Bands() const { return p_bands,isis_pybind.OverlapStatistics.bands,N,Method not found in current binding files
+Public API,double SampPercent() const { return p_sampPercent,isis_pybind.OverlapStatistics.samp_percent,N,Method not found in current binding files
+Public API,int StartSampleX() const { return p_minSampX,isis_pybind.OverlapStatistics.start_sample_x,N,Method not found in current binding files
+Public API,int EndSampleX() const { return p_maxSampX,isis_pybind.OverlapStatistics.end_sample_x,N,Method not found in current binding files
+Public API,int StartLineX() const { return p_minLineX,isis_pybind.OverlapStatistics.start_line_x,N,Method not found in current binding files
+Public API,int EndLineX() const { return p_maxLineX,isis_pybind.OverlapStatistics.end_line_x,N,Method not found in current binding files
+Public API,int StartSampleY() const { return p_minSampY,isis_pybind.OverlapStatistics.start_sample_y,N,Method not found in current binding files
+Public API,int EndSampleY() const { return p_maxSampY,isis_pybind.OverlapStatistics.end_sample_y,N,Method not found in current binding files
+Public API,int StartLineY() const { return p_minLineY,isis_pybind.OverlapStatistics.start_line_y,N,Method not found in current binding files
+Public API,int EndLineY() const { return p_maxLineY,isis_pybind.OverlapStatistics.end_line_y,N,Method not found in current binding files
+Mutation/Configuration,void SetMincount(unsigned int mincnt) { p_mincnt = mincnt,isis_pybind.OverlapStatistics.set_mincount,N,Method not found in current binding files
+Public API,int MinCount() const { return p_mincnt,isis_pybind.OverlapStatistics.min_count,N,Method not found in current binding files
+Query,bool IsValid(unsigned int band) const { return GetMStats(band).ValidPixels() > p_mincnt,isis_pybind.OverlapStatistics.is_valid,N,Method not found in current binding files
+Public API,"PvlObject toPvl(QString name = ""OverlapStatistics"") const",isis_pybind.OverlapStatistics.to_pvl,N,Method not found in current binding files

@@ -1,0 +1,7 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+LineScanCameraSkyMap,"Spice, Instruments, and Cameras",isis/src/base/objs/LineScanCameraSkyMap/LineScanCameraSkyMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,第七批已补符号导出；缺少稳定本地 line-scan cube，后续补行为单测
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,LineScanCameraSkyMap,isis_pybind.LineScanCameraSkyMap,Y,Python class symbol is exported; constructor exposure may be limited; 第七批已补符号导出；缺少稳定本地 line-scan cube，后续补行为单测
+Construction/Enum,LineScanCameraSkyMap(Camera *parent) : CameraSkyMap(parent) {},isis_pybind.LineScanCameraSkyMap(),N,第七批已补符号导出；缺少稳定本地 line-scan cube，后续补行为单测
+Mutation/Configuration,"virtual bool SetSky(const double ra, const double dec)",isis_pybind.LineScanCameraSkyMap.set_sky,N,第七批已补符号导出；缺少稳定本地 line-scan cube，后续补行为单测

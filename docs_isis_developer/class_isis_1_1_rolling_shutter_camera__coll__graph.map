@@ -1,0 +1,9 @@
+<map id="Isis::RollingShutterCamera" name="Isis::RollingShutterCamera">
+<area shape="rect" id="node1" title="Generic class for Rolling Shutter Cameras." alt="" coords="327,955,505,1068"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_camera.html" title=" " alt="" coords="307,568,525,905"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_sensor.html" title="Class for computing sensor ground coordinates." alt="" coords="163,175,381,416"/>
+<area shape="rect" id="node4" title=" " alt="" coords="24,5,69,87"/>
+<area shape="rect" id="node5" title=" " alt="" coords="405,255,464,336"/>
+<area shape="rect" id="node6" title=" " alt="" coords="506,255,571,336"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_alpha_cube.html" title="This class is used to rewrite the &quot;alpha&quot; keywords out of the AlphaCube group or Instrument group." alt="" coords="659,151,783,440"/>
+</map>

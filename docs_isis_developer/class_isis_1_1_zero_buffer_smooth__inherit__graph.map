@@ -1,0 +1,4 @@
+<map id="Isis::ZeroBufferSmooth" name="Isis::ZeroBufferSmooth">
+<area shape="rect" id="node1" title="Processes Buffer calibration data (ZeroBufferSmooth Module)" alt="" coords="5,407,162,536"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources." alt="" coords="27,5,140,359"/>
+</map>

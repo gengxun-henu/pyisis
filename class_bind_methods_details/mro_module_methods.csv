@@ -1,0 +1,28 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Module,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/Module.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Module,isis_pybind.Module,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Public API,return (o),isis_pybind.Module.return,N,抽象基类/纯虚接口
+Construction/Enum,"Module() : _name(""Module""), _csvFile(""""), _data(), _history(), _fmtWidth(DefaultWidth), _fmtPrecision(DefaultPrecision) { }",isis_pybind.Module(),N,抽象基类/纯虚接口
+Construction/Enum,"Module(const QString &name) : _name(name), _csvFile(""""), _data(), _history(),_fmtWidth(DefaultWidth), _fmtPrecision(DefaultPrecision) { }",isis_pybind.Module(),N,抽象基类/纯虚接口
+Construction/Enum,"Module(const QString &name, const HiHistory &history) : _name(name), _csvFile(""""), _data(), _history(history), _fmtWidth(DefaultWidth), _fmtPrecision(DefaultPrecision) { }",isis_pybind.Module(),N,抽象基类/纯虚接口
+Construction/Enum,"Module(const QString &name, const Module &c) : _name(name), _csvFile(c._csvFile), _data(c._data), _history(c._history), _fmtWidth(c._fmtWidth),_fmtPrecision(c._fmtPrecision) { }",isis_pybind.Module(),N,抽象基类/纯虚接口
+Construction/Enum,"Module(const Module &c) : _name(c._name), _csvFile(c._csvFile), _data(c._data), _history(c._history), _fmtWidth(c._fmtWidth), _fmtPrecision(c._fmtPrecision) { }",isis_pybind.Module(),N,抽象基类/纯虚接口
+Public API,inline QString name() const { return (_name); },isis_pybind.Module.name,N,抽象基类/纯虚接口
+Public API,inline QString getcsvFile() const { return (_csvFile); },isis_pybind.Module.getcsv_file,N,抽象基类/纯虚接口
+Query,inline int size() const { return (_data.dim()); },isis_pybind.Module.size,N,抽象基类/纯虚接口
+Public API,virtual void Process(const Module &c) { Process(c.ref()),isis_pybind.Module.process,N,抽象基类/纯虚接口
+Public API,virtual void Process(const HiVector &v) { _data = v,isis_pybind.Module.process,N,抽象基类/纯虚接口
+Read/Write IO,"HiVector loadCsv(const QString &csvBase, const HiCalConf &conf, const DbProfile &prof, const int &elements = 0) { LoadCSV csv(csvBase, conf, prof)",isis_pybind.Module.load_csv,N,抽象基类/纯虚接口
+Public API,_csvFile = csv.filename(),isis_pybind.Module.filename,N,抽象基类/纯虚接口
+Public API,"if (elements != 0) csv.validateSize(elements, true)",isis_pybind.Module.if,N,抽象基类/纯虚接口
+Public API,csv.History(_history),isis_pybind.Module.history,N,抽象基类/纯虚接口
+Public API,const HiVector &ref() const { return (_data); },isis_pybind.Module.ref,N,抽象基类/纯虚接口
+Public API,const HiHistory &History() const { return (_history); },isis_pybind.Module.history,N,抽象基类/纯虚接口
+Public API,"virtual void record(PvlGroup &pvl, const QString keyname = ""ModuleHistory"") const { pvl += _history.makekey(keyname)",isis_pybind.Module.record,N,抽象基类/纯虚接口
+Public API,void Dump(const QString &fname) const { FileName dumpc(fname),isis_pybind.Module.dump,N,抽象基类/纯虚接口
+Public API,QString dumpcFile = dumpc.expanded(),isis_pybind.Module.expanded,N,抽象基类/纯虚接口
+Public API,"if (!ofile) { QString mess = ""Unable to open/create module dump file "" + dumpc.expanded()",isis_pybind.Module.if,N,抽象基类/纯虚接口
+Public API,"throw IException(IException::User, mess, _FILEINFO_)",isis_pybind.Module.i_exception,N,抽象基类/纯虚接口
+Read/Write IO,ofile.close(),isis_pybind.Module.close,N,抽象基类/纯虚接口

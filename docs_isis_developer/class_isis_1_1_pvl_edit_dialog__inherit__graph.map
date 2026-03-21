@@ -1,0 +1,4 @@
+<map id="Isis::PvlEditDialog" name="Isis::PvlEditDialog">
+<area shape="rect" id="node1" title="PvlEditDialog creates a QDialog window in which a QTextEdit box displays the contents of a pvl file." alt="" coords="5,135,135,216"/>
+<area shape="rect" id="node2" href="$class_q_dialog.html" title=" " alt="" coords="36,5,104,87"/>
+</map>

@@ -1,0 +1,7 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+BandManager,Low Level Cube I/O,isis/src/base/objs/BandManager/BandManager.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,BandManager,isis_pybind.BandManager,Y,Bound in `isis_pybind_standalone/src/bind_low_level_cube_io.cpp` and re-exported in package `__init__.py`
+Construction/Enum,BandManager(),isis_pybind.BandManager(),Y,Constructor bound in `isis_pybind_standalone/src/bind_low_level_cube_io.cpp`
+Mutation/Configuration,"bool SetBand(const int sample, const int line = 1)",isis_pybind.BandManager.set_band,Y,Bound as `set_band(sample, line=1)` in `isis_pybind_standalone/src/bind_low_level_cube_io.cpp`

@@ -1,0 +1,5 @@
+<map id="Isis::DemShape" name="Isis::DemShape">
+<area shape="rect" id="node1" title="Define shapes and provide utilities for targets stored as ISIS maps." alt="" coords="18,519,198,760"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_equatorial_cylindrical_shape.html" title="Define shapes and provide utilities for shapes stored as ISIS EquatorialCylindrical map." alt="" coords="5,808,211,937"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_shape_model.html" title="Define shapes and provide utilities for Isis targets." alt="" coords="14,5,202,471"/>
+</map>

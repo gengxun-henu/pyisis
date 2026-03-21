@@ -1,0 +1,11 @@
+<map id="Isis::SmtkPoint" name="Isis::SmtkPoint">
+<area shape="rect" id="node1" title="Container for SMTK match points." alt="" coords="173,1131,303,1388"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_match_point.html" title="Structure containing comprehensive registration info/results." alt="" coords="344,841,468,1051"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_affine_radio.html" title="Container for affine and radiometric parameters." alt="" coords="536,399,655,608"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_point_pair.html" title="Define a point set of left, right and geometry at that location." alt="" coords="119,375,253,632"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_coordinate.html" title="Define a generic Y/X container." alt="" coords="70,5,187,295"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_point_geometry.html" title="Container for a point and its geometry." alt="" coords="5,656,143,817"/>
+<area shape="rect" id="node6" title=" " alt="" coords="336,109,375,191"/>
+<area shape="rect" id="node7" href="$struct_isis_1_1_analysis.html" title="Error analysis of Gruen match point solution." alt="" coords="396,431,512,576"/>
+<area shape="rect" id="node8" title=" " alt="" coords="273,905,318,987"/>
+</map>

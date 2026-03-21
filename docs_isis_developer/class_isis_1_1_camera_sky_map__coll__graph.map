@@ -1,0 +1,9 @@
+<map id="Isis::CameraSkyMap" name="Isis::CameraSkyMap">
+<area shape="rect" id="node1" title="Convert between undistorted focal plane and ra/dec coordinates." alt="" coords="5,969,150,1147"/>
+<area shape="rect" id="node2" title=" " alt="" coords="49,255,109,336"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="262,568,480,905"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_sensor.html" title="Class for computing sensor ground coordinates." alt="" coords="350,175,568,416"/>
+<area shape="rect" id="node5" title=" " alt="" coords="211,5,256,87"/>
+<area shape="rect" id="node6" title=" " alt="" coords="592,255,657,336"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_alpha_cube.html" title="This class is used to rewrite the &quot;alpha&quot; keywords out of the AlphaCube group or Instrument group." alt="" coords="713,151,837,440"/>
+</map>

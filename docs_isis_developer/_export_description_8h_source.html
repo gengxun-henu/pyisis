@@ -1,0 +1,346 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/ExportDescription/ExportDescription.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_export_description_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">ExportDescription.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_export_description_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef ExportDescription_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define ExportDescription_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_cube_attribute_8h.html">CubeAttribute.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_file_name_8h.html">FileName.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pixel_type_8h.html">PixelType.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="class_isis_1_1_export_description.html">   43</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_export_description.html">ExportDescription</a> {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="class_isis_1_1_export_description_1_1_channel_description.html">   58</a></span>&#160;      <span class="keyword">class </span><a class="code" href="class_isis_1_1_export_description_1_1_channel_description.html">ChannelDescription</a> {</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;          <a class="code" href="class_isis_1_1_export_description_1_1_channel_description.html#a9cf4e5f7a31f92f56400124679819365">ChannelDescription</a>(<a class="code" href="class_isis_1_1_file_name.html">FileName</a> &amp;<a class="code" href="class_isis_1_1_export_description_1_1_channel_description.html#aafd1f6fe94d4981faed33c151470d85b">filename</a>, <a class="code" href="class_isis_1_1_cube_attribute_input.html">CubeAttributeInput</a> &amp;att);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="class_isis_1_1_export_description_1_1_channel_description.html#ac8e5629e3163faac4d4af286b0134dac">   63</a></span>&#160;          <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_export_description_1_1_channel_description.html#ac8e5629e3163faac4d4af286b0134dac">~ChannelDescription</a>() {};</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;          <a class="code" href="class_isis_1_1_file_name.html">FileName</a> <a class="code" href="class_isis_1_1_export_description_1_1_channel_description.html#aafd1f6fe94d4981faed33c151470d85b">filename</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;          <a class="code" href="class_isis_1_1_cube_attribute_input.html">CubeAttributeInput</a> <a class="code" href="class_isis_1_1_export_description_1_1_channel_description.html#ae246e48aeba06ea59967bb7cc276f1a9">attributes</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;          <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_export_description_1_1_channel_description.html#a27404f634844b1e946e48ef68893548e">setInputRange</a>(<span class="keywordtype">double</span> min, <span class="keywordtype">double</span> max);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;          <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_export_description_1_1_channel_description.html#a0320fde675cc1f30452c1d103ebcbcf4">inputMinimum</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;          <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_export_description_1_1_channel_description.html#a6e533f5c06ad7a41b13e2d7f69d72fe0">inputMaximum</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;          <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_export_description_1_1_channel_description.html#aa2a7bf1e9d7d1fe37f97306dbf75357b">hasCustomRange</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;          <a class="code" href="class_isis_1_1_file_name.html">FileName</a> m_filename;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;          <a class="code" href="class_isis_1_1_cube_attribute_input.html">CubeAttributeInput</a> m_att;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;          <span class="keywordtype">bool</span> m_customRange;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;          <span class="keywordtype">double</span> m_inputMin;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;          <span class="keywordtype">double</span> m_inputMax;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      };</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      <a class="code" href="class_isis_1_1_export_description.html#a05c2b40260521e6c8e000583d9e07ca2">ExportDescription</a>();</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <a class="code" href="class_isis_1_1_export_description.html#a05c2b40260521e6c8e000583d9e07ca2">ExportDescription</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;descriptionToCopy);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_export_description.html#aef51acccb12ac578b83957c32d4a423f">~ExportDescription</a>();</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      <a class="code" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;<a class="code" href="class_isis_1_1_export_description.html#ad898384db165e849791fde280963ec8b">operator=</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_export_description.html">ExportDescription</a> &amp;descriptionToCopy);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_export_description.html#ad03f72680ebe4872eaef1738acd0d934">setPixelType</a>(<a class="code" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">PixelType</a> type);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;      <a class="code" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">PixelType</a> <a class="code" href="class_isis_1_1_export_description.html#ac31b4a74301c2efa273f8b9c04ad1203">pixelType</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_export_description.html#acb39860ac90d3c0af11cd5daa387ee0b">outputPixelNull</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_export_description.html#a5eff3cee89a2983216ebe4981cb27a71">outputPixelValidMin</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_export_description.html#aec02a630d19ee5683ae4a1c304ef3eea">outputPixelValidMax</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_export_description.html#a74b0f926734dbc5406df78f4a0c2611b">outputPixelAbsoluteMin</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_export_description.html#a5917d68f9c6883aa8d2b647acfabb80f">outputPixelAbsoluteMax</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_export_description.html#a31d6fddeb633762d847f25d36a6fd7f3">addChannel</a>(<a class="code" href="class_isis_1_1_file_name.html">FileName</a> filename, <a class="code" href="class_isis_1_1_cube_attribute_input.html">CubeAttributeInput</a> &amp;att);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_export_description.html#a31d6fddeb633762d847f25d36a6fd7f3">addChannel</a>(<a class="code" href="class_isis_1_1_file_name.html">FileName</a> filename, <a class="code" href="class_isis_1_1_cube_attribute_input.html">CubeAttributeInput</a> &amp;att, <span class="keywordtype">double</span> min, <span class="keywordtype">double</span> max);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      <span class="keyword">const</span> ChannelDescription &amp;<a class="code" href="class_isis_1_1_export_description.html#a53e1bb8556294719167ccdbeb29dc6e4">channel</a>(<span class="keywordtype">int</span> i) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_export_description.html#ac606e9f3ade10ce594c03c6096af8548">channelCount</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      <a class="code" href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">PixelType</a> m_type;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      <span class="keywordtype">double</span> m_outputPixelNull;        </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      <span class="keywordtype">double</span> m_outputPixelValidMin;    </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      <span class="keywordtype">double</span> m_outputPixelValidMax;    </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;      <span class="keywordtype">double</span> m_outputPixelAbsoluteMin; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;      <span class="keywordtype">double</span> m_outputPixelAbsoluteMax; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;ChannelDescription *&gt;</a> *m_channels;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  };</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;};</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_cube_attribute_8h_html"><div class="ttname"><a href="_cube_attribute_8h.html">CubeAttribute.h</a></div></div>
+<div class="ttc" id="a_file_name_8h_html"><div class="ttname"><a href="_file_name_8h.html">FileName.h</a></div></div>
+<div class="ttc" id="a_pixel_type_8h_html"><div class="ttname"><a href="_pixel_type_8h.html">PixelType.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_attribute_input_html"><div class="ttname"><a href="class_isis_1_1_cube_attribute_input.html">Isis::CubeAttributeInput</a></div><div class="ttdoc">Manipulate and parse attributes of input cube filenames.</div><div class="ttdef"><b>Definition:</b> CubeAttribute.h:381</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_1_1_channel_description_html"><div class="ttname"><a href="class_isis_1_1_export_description_1_1_channel_description.html">Isis::ExportDescription::ChannelDescription</a></div><div class="ttdoc">Describes how a cube as a single color channel to be exported.</div><div class="ttdef"><b>Definition:</b> ExportDescription.h:58</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_1_1_channel_description_html_a0320fde675cc1f30452c1d103ebcbcf4"><div class="ttname"><a href="class_isis_1_1_export_description_1_1_channel_description.html#a0320fde675cc1f30452c1d103ebcbcf4">Isis::ExportDescription::ChannelDescription::inputMinimum</a></div><div class="ttdeci">double inputMinimum() const</div><div class="ttdoc">Returns the input minimum for this channel.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:323</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_1_1_channel_description_html_a27404f634844b1e946e48ef68893548e"><div class="ttname"><a href="class_isis_1_1_export_description_1_1_channel_description.html#a27404f634844b1e946e48ef68893548e">Isis::ExportDescription::ChannelDescription::setInputRange</a></div><div class="ttdeci">void setInputRange(double min, double max)</div><div class="ttdoc">Sets the input range for this channel.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:309</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_1_1_channel_description_html_a6e533f5c06ad7a41b13e2d7f69d72fe0"><div class="ttname"><a href="class_isis_1_1_export_description_1_1_channel_description.html#a6e533f5c06ad7a41b13e2d7f69d72fe0">Isis::ExportDescription::ChannelDescription::inputMaximum</a></div><div class="ttdeci">double inputMaximum() const</div><div class="ttdoc">Returns the input maximum for this channel.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:334</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_1_1_channel_description_html_a9cf4e5f7a31f92f56400124679819365"><div class="ttname"><a href="class_isis_1_1_export_description_1_1_channel_description.html#a9cf4e5f7a31f92f56400124679819365">Isis::ExportDescription::ChannelDescription::ChannelDescription</a></div><div class="ttdeci">ChannelDescription(FileName &amp;filename, CubeAttributeInput &amp;att)</div><div class="ttdoc">Construct the channel description with the given input name and attributes.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:269</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_1_1_channel_description_html_aa2a7bf1e9d7d1fe37f97306dbf75357b"><div class="ttname"><a href="class_isis_1_1_export_description_1_1_channel_description.html#aa2a7bf1e9d7d1fe37f97306dbf75357b">Isis::ExportDescription::ChannelDescription::hasCustomRange</a></div><div class="ttdeci">bool hasCustomRange() const</div><div class="ttdoc">Returns true if the user of this instance has set a custom input range for this channel.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:345</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_1_1_channel_description_html_aafd1f6fe94d4981faed33c151470d85b"><div class="ttname"><a href="class_isis_1_1_export_description_1_1_channel_description.html#aafd1f6fe94d4981faed33c151470d85b">Isis::ExportDescription::ChannelDescription::filename</a></div><div class="ttdeci">FileName filename() const</div><div class="ttdoc">Returns a copy of the filename associated with this channel.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:286</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_1_1_channel_description_html_ac8e5629e3163faac4d4af286b0134dac"><div class="ttname"><a href="class_isis_1_1_export_description_1_1_channel_description.html#ac8e5629e3163faac4d4af286b0134dac">Isis::ExportDescription::ChannelDescription::~ChannelDescription</a></div><div class="ttdeci">virtual ~ChannelDescription()</div><div class="ttdoc">Destruct the export description.</div><div class="ttdef"><b>Definition:</b> ExportDescription.h:63</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_1_1_channel_description_html_ae246e48aeba06ea59967bb7cc276f1a9"><div class="ttname"><a href="class_isis_1_1_export_description_1_1_channel_description.html#ae246e48aeba06ea59967bb7cc276f1a9">Isis::ExportDescription::ChannelDescription::attributes</a></div><div class="ttdeci">CubeAttributeInput attributes() const</div><div class="ttdoc">Returns a copy of the input attributes associated with this channel.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:296</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html"><div class="ttname"><a href="class_isis_1_1_export_description.html">Isis::ExportDescription</a></div><div class="ttdoc">Describes how a series of cubes should be exported.</div><div class="ttdef"><b>Definition:</b> ExportDescription.h:43</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_a05c2b40260521e6c8e000583d9e07ca2"><div class="ttname"><a href="class_isis_1_1_export_description.html#a05c2b40260521e6c8e000583d9e07ca2">Isis::ExportDescription::ExportDescription</a></div><div class="ttdeci">ExportDescription()</div><div class="ttdoc">Construct the export description.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:22</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_a31d6fddeb633762d847f25d36a6fd7f3"><div class="ttname"><a href="class_isis_1_1_export_description.html#a31d6fddeb633762d847f25d36a6fd7f3">Isis::ExportDescription::addChannel</a></div><div class="ttdeci">int addChannel(FileName filename, CubeAttributeInput &amp;att)</div><div class="ttdoc">Add an export color channel for the given input cube and attributes (typically band number).</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:212</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_a53e1bb8556294719167ccdbeb29dc6e4"><div class="ttname"><a href="class_isis_1_1_export_description.html#a53e1bb8556294719167ccdbeb29dc6e4">Isis::ExportDescription::channel</a></div><div class="ttdeci">const ChannelDescription &amp; channel(int i) const</div><div class="ttdoc">Return the channels description at the given index.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:247</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_a5917d68f9c6883aa8d2b647acfabb80f"><div class="ttname"><a href="class_isis_1_1_export_description.html#a5917d68f9c6883aa8d2b647acfabb80f">Isis::ExportDescription::outputPixelAbsoluteMax</a></div><div class="ttdeci">double outputPixelAbsoluteMax() const</div><div class="ttdoc">Returns the absolute maximum value for output pixels.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:198</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_a5eff3cee89a2983216ebe4981cb27a71"><div class="ttname"><a href="class_isis_1_1_export_description.html#a5eff3cee89a2983216ebe4981cb27a71">Isis::ExportDescription::outputPixelValidMin</a></div><div class="ttdeci">double outputPixelValidMin() const</div><div class="ttdoc">Returns the output pixel value for the valid minimum.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:168</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_a74b0f926734dbc5406df78f4a0c2611b"><div class="ttname"><a href="class_isis_1_1_export_description.html#a74b0f926734dbc5406df78f4a0c2611b">Isis::ExportDescription::outputPixelAbsoluteMin</a></div><div class="ttdeci">double outputPixelAbsoluteMin() const</div><div class="ttdoc">Returns the absolute minimum value for output pixels.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:188</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_ac31b4a74301c2efa273f8b9c04ad1203"><div class="ttname"><a href="class_isis_1_1_export_description.html#ac31b4a74301c2efa273f8b9c04ad1203">Isis::ExportDescription::pixelType</a></div><div class="ttdeci">PixelType pixelType() const</div><div class="ttdoc">Returns the pixel type.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:148</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_ac606e9f3ade10ce594c03c6096af8548"><div class="ttname"><a href="class_isis_1_1_export_description.html#ac606e9f3ade10ce594c03c6096af8548">Isis::ExportDescription::channelCount</a></div><div class="ttdeci">int channelCount() const</div><div class="ttdoc">Count of the number of channels in the description.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:258</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_acb39860ac90d3c0af11cd5daa387ee0b"><div class="ttname"><a href="class_isis_1_1_export_description.html#acb39860ac90d3c0af11cd5daa387ee0b">Isis::ExportDescription::outputPixelNull</a></div><div class="ttdeci">double outputPixelNull() const</div><div class="ttdoc">Returns the output pixel value for Null DNs.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:158</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_ad03f72680ebe4872eaef1738acd0d934"><div class="ttname"><a href="class_isis_1_1_export_description.html#ad03f72680ebe4872eaef1738acd0d934">Isis::ExportDescription::setPixelType</a></div><div class="ttdeci">void setPixelType(PixelType type)</div><div class="ttdoc">Set the pixel type for the output image.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:106</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_ad898384db165e849791fde280963ec8b"><div class="ttname"><a href="class_isis_1_1_export_description.html#ad898384db165e849791fde280963ec8b">Isis::ExportDescription::operator=</a></div><div class="ttdeci">ExportDescription &amp; operator=(const ExportDescription &amp;descriptionToCopy)</div><div class="ttdoc">Assignment operator for the export description.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:66</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_aec02a630d19ee5683ae4a1c304ef3eea"><div class="ttname"><a href="class_isis_1_1_export_description.html#aec02a630d19ee5683ae4a1c304ef3eea">Isis::ExportDescription::outputPixelValidMax</a></div><div class="ttdeci">double outputPixelValidMax() const</div><div class="ttdoc">Returns the output pixel value for the valid maximum.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:178</div></div>
+<div class="ttc" id="aclass_isis_1_1_export_description_html_aef51acccb12ac578b83957c32d4a423f"><div class="ttname"><a href="class_isis_1_1_export_description.html#aef51acccb12ac578b83957c32d4a423f">Isis::ExportDescription::~ExportDescription</a></div><div class="ttdeci">virtual ~ExportDescription()</div><div class="ttdoc">Destruct the export description.</div><div class="ttdef"><b>Definition:</b> ExportDescription.cpp:93</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_name_html"><div class="ttname"><a href="class_isis_1_1_file_name.html">Isis::FileName</a></div><div class="ttdoc">File name manipulation and expansion.</div><div class="ttdef"><b>Definition:</b> FileName.h:100</div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_ae5e7bcf666efa0d13c0d231cffb3530f"><div class="ttname"><a href="namespace_isis.html#ae5e7bcf666efa0d13c0d231cffb3530f">Isis::PixelType</a></div><div class="ttdeci">PixelType</div><div class="ttdoc">Enumerations for Isis Pixel Types.</div><div class="ttdef"><b>Definition:</b> PixelType.h:27</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_3e70c5e27c5c05f3fb06ce19a891f2f4.html">ExportDescription</a></li><li class="navelem"><a class="el" href="_export_description_8h.html">ExportDescription.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

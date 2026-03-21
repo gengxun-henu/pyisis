@@ -1,0 +1,1533 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::TextFile Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_text_file.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_text_file-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::TextFile Class Reference<div class="ingroups"><a class="el" href="group___utility.html">Utility</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Provides access to sequential ASCII stream I/O.  
+ <a href="class_isis_1_1_text_file.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_text_file_8h_source.html">TextFile.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::TextFile:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_text_file__inherit__graph.png" border="0" usemap="#a_isis_1_1_text_file_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_text_file_inherit__map" id="a_isis_1_1_text_file_inherit__map">
+<area shape="rect" title="Provides access to sequential ASCII stream I/O." alt="" coords="7,5,142,327"/>
+<area shape="rect" href="class_isis_1_1_cisscal_file.html" title="Extends TextFile to handle Cassini ISS calibration files." alt="" coords="5,375,144,504"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::TextFile:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_text_file__coll__graph.png" border="0" usemap="#a_isis_1_1_text_file_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_text_file_coll__map" id="a_isis_1_1_text_file_coll__map">
+<area shape="rect" title="Provides access to sequential ASCII stream I/O." alt="" coords="129,183,235,440"/>
+<area shape="rect" title=" " alt="" coords="5,5,71,87"/>
+<area shape="rect" title=" " alt="" coords="149,5,215,87"/>
+<area shape="rect" title=" " alt="" coords="259,5,297,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a24687f65d5261a9c190275d1be01246c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a24687f65d5261a9c190275d1be01246c">TextFile</a> ()</td></tr>
+<tr class="memdesc:a24687f65d5261a9c190275d1be01246c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an empty <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object.  <a href="class_isis_1_1_text_file.html#a24687f65d5261a9c190275d1be01246c">More...</a><br /></td></tr>
+<tr class="separator:a24687f65d5261a9c190275d1be01246c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5ef0adf3783468a70e7dfc3833249ee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#aa5ef0adf3783468a70e7dfc3833249ee">TextFile</a> (const QString &amp;filename, const char *openmode=&quot;input&quot;, const char *extension=&quot;&quot;)</td></tr>
+<tr class="memdesc:aa5ef0adf3783468a70e7dfc3833249ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object and opens the specified file (including path).  <a href="class_isis_1_1_text_file.html#aa5ef0adf3783468a70e7dfc3833249ee">More...</a><br /></td></tr>
+<tr class="separator:aa5ef0adf3783468a70e7dfc3833249ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99452edd8fa3ed8606b8353b046c02fc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a99452edd8fa3ed8606b8353b046c02fc">TextFile</a> (const char *filename, const char *openmode, std::vector&lt; QString &gt; &amp;lines, const int &amp;maxLinesToReadWrite=0, const bool skipComments=true)</td></tr>
+<tr class="memdesc:a99452edd8fa3ed8606b8353b046c02fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object and opens the specified file (including path), reads or writes file, leaves file open for further use of the rest of the methods.  <a href="class_isis_1_1_text_file.html#a99452edd8fa3ed8606b8353b046c02fc">More...</a><br /></td></tr>
+<tr class="separator:a99452edd8fa3ed8606b8353b046c02fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcefd2767512d29d7afd9174d4c7b0df"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#abcefd2767512d29d7afd9174d4c7b0df">TextFile</a> (const QString &amp;filename, const char *openmode, std::vector&lt; QString &gt; &amp;lines, const int &amp;maxLinesToReadWrite=0, const bool skipComments=true)</td></tr>
+<tr class="memdesc:abcefd2767512d29d7afd9174d4c7b0df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object and opens the specified file (including path), reads or writes file, leaves file open for further use of the rest of the methods.  <a href="class_isis_1_1_text_file.html#abcefd2767512d29d7afd9174d4c7b0df">More...</a><br /></td></tr>
+<tr class="separator:abcefd2767512d29d7afd9174d4c7b0df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc469679a5a588b30e58265af52ffc5d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#abc469679a5a588b30e58265af52ffc5d">TextFile</a> (const char *filename, const char *openmode, QString *lines, const int &amp;maxLinesToReadWrite, const bool skipComments=true)</td></tr>
+<tr class="memdesc:abc469679a5a588b30e58265af52ffc5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object and opens the specified file (including path), reads or writes file, leaves file open for further use of the rest of the methods.  <a href="class_isis_1_1_text_file.html#abc469679a5a588b30e58265af52ffc5d">More...</a><br /></td></tr>
+<tr class="separator:abc469679a5a588b30e58265af52ffc5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a949355e7acc092249b325ceb1de3f2b3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a949355e7acc092249b325ceb1de3f2b3">TextFile</a> (const QString &amp;filename, const char *openmode, QString *lines, const int &amp;maxLinesToReadWrite, const bool skipComments=true)</td></tr>
+<tr class="memdesc:a949355e7acc092249b325ceb1de3f2b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object and opens the specified file (including path), reads or writes file, leaves file open for further use of the rest of the methods.  <a href="class_isis_1_1_text_file.html#a949355e7acc092249b325ceb1de3f2b3">More...</a><br /></td></tr>
+<tr class="separator:a949355e7acc092249b325ceb1de3f2b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6d068af9bef2f528e3d3214f252a953"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#ab6d068af9bef2f528e3d3214f252a953">~TextFile</a> ()</td></tr>
+<tr class="memdesc:ab6d068af9bef2f528e3d3214f252a953"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closes file (if still open). Destroys the <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object.  <a href="class_isis_1_1_text_file.html#ab6d068af9bef2f528e3d3214f252a953">More...</a><br /></td></tr>
+<tr class="separator:ab6d068af9bef2f528e3d3214f252a953"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a552757a83a57fd616c32ba41440aa46a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a552757a83a57fd616c32ba41440aa46a">Open</a> (const QString &amp;filename, const char *openmode=&quot;input&quot;, const char *extension=&quot;&quot;)</td></tr>
+<tr class="memdesc:a552757a83a57fd616c32ba41440aa46a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a text file.  <a href="class_isis_1_1_text_file.html#a552757a83a57fd616c32ba41440aa46a">More...</a><br /></td></tr>
+<tr class="separator:a552757a83a57fd616c32ba41440aa46a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf587d6d8ee8d122ad6eaf9d2eed8003"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#abf587d6d8ee8d122ad6eaf9d2eed8003">Open</a> (const char *filename, const char *openmode=&quot;input&quot;, const char *extension=&quot;&quot;)</td></tr>
+<tr class="separator:abf587d6d8ee8d122ad6eaf9d2eed8003"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a815f668f8daa81c90f3b9cf463b8c099"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a815f668f8daa81c90f3b9cf463b8c099">OpenChk</a> (bool bailIfNotOpen=false)</td></tr>
+<tr class="separator:a815f668f8daa81c90f3b9cf463b8c099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2ac3038b976ca1e104f89703019cede"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#ae2ac3038b976ca1e104f89703019cede">Rewind</a> ()</td></tr>
+<tr class="memdesc:ae2ac3038b976ca1e104f89703019cede"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets Read / Write pointer to begining of opened file.  <a href="class_isis_1_1_text_file.html#ae2ac3038b976ca1e104f89703019cede">More...</a><br /></td></tr>
+<tr class="separator:ae2ac3038b976ca1e104f89703019cede"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2194bdd07efde67ec718455121b5fea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#ae2194bdd07efde67ec718455121b5fea">Close</a> ()</td></tr>
+<tr class="memdesc:ae2194bdd07efde67ec718455121b5fea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closes file. Called automatically by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> destructor.  <a href="class_isis_1_1_text_file.html#ae2194bdd07efde67ec718455121b5fea">More...</a><br /></td></tr>
+<tr class="separator:ae2194bdd07efde67ec718455121b5fea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a527bad26234bf9c0f25b81392f14247e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a527bad26234bf9c0f25b81392f14247e">GetFile</a> (std::vector&lt; QString &gt; &amp;lines, const int &amp;maxLinesToRead=0, const bool skipComments=true)</td></tr>
+<tr class="separator:a527bad26234bf9c0f25b81392f14247e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a3f757ba7c8e93e8de67b820658d5ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a1a3f757ba7c8e93e8de67b820658d5ae">GetFile</a> (QString *lines, const int &amp;maxLinesToRead, const bool skipComments=true)</td></tr>
+<tr class="separator:a1a3f757ba7c8e93e8de67b820658d5ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe7445040c9d30c69a844389fa100fa6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#abe7445040c9d30c69a844389fa100fa6">PutFile</a> (std::vector&lt; QString &gt; &amp;lines, const int &amp;maxLinesToWrite=0)</td></tr>
+<tr class="separator:abe7445040c9d30c69a844389fa100fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1437607c62f644255b0dc696f88c6bb1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a1437607c62f644255b0dc696f88c6bb1">PutFile</a> (const QString *lines, const int &amp;maxLinesToWrite)</td></tr>
+<tr class="separator:a1437607c62f644255b0dc696f88c6bb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a107a1a6a1db5d0b76557d8a2cb7b9d1f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a107a1a6a1db5d0b76557d8a2cb7b9d1f">GetLine</a> (QString &amp;line, const bool skipComments=true)</td></tr>
+<tr class="memdesc:a107a1a6a1db5d0b76557d8a2cb7b9d1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets next line from file.  <a href="class_isis_1_1_text_file.html#a107a1a6a1db5d0b76557d8a2cb7b9d1f">More...</a><br /></td></tr>
+<tr class="separator:a107a1a6a1db5d0b76557d8a2cb7b9d1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7a07fed5a704e7d0e60783d522f079e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#ac7a07fed5a704e7d0e60783d522f079e">GetLineNoFilter</a> (QString &amp;line)</td></tr>
+<tr class="memdesc:ac7a07fed5a704e7d0e60783d522f079e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets next NON-COMMENT line from file.  <a href="class_isis_1_1_text_file.html#ac7a07fed5a704e7d0e60783d522f079e">More...</a><br /></td></tr>
+<tr class="separator:ac7a07fed5a704e7d0e60783d522f079e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ac31765b9d8a8584c436ab52352aa61"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a0ac31765b9d8a8584c436ab52352aa61">GetLine</a> (const bool skipComments=true)</td></tr>
+<tr class="memdesc:a0ac31765b9d8a8584c436ab52352aa61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets next line from file.  <a href="class_isis_1_1_text_file.html#a0ac31765b9d8a8584c436ab52352aa61">More...</a><br /></td></tr>
+<tr class="separator:a0ac31765b9d8a8584c436ab52352aa61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3b47bb88c2d1ab746e619fc2fdfcf0d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#ab3b47bb88c2d1ab746e619fc2fdfcf0d">GetLineNoFilter</a> ()</td></tr>
+<tr class="memdesc:ab3b47bb88c2d1ab746e619fc2fdfcf0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets next NON-COMMENT line from file.  <a href="class_isis_1_1_text_file.html#ab3b47bb88c2d1ab746e619fc2fdfcf0d">More...</a><br /></td></tr>
+<tr class="separator:ab3b47bb88c2d1ab746e619fc2fdfcf0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e24cd5caef9d235cca490f70abcfbff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a9e24cd5caef9d235cca490f70abcfbff">PutLine</a> (const QString &amp;line)</td></tr>
+<tr class="memdesc:a9e24cd5caef9d235cca490f70abcfbff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes string to file and appends a 'newline' string.  <a href="class_isis_1_1_text_file.html#a9e24cd5caef9d235cca490f70abcfbff">More...</a><br /></td></tr>
+<tr class="separator:a9e24cd5caef9d235cca490f70abcfbff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd86828700945155fe13b9e73f2e76d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#acd86828700945155fe13b9e73f2e76d7">PutLine</a> (const char *line=&quot;&quot;)</td></tr>
+<tr class="memdesc:acd86828700945155fe13b9e73f2e76d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes char string to file and appends a 'newline' string.  <a href="class_isis_1_1_text_file.html#acd86828700945155fe13b9e73f2e76d7">More...</a><br /></td></tr>
+<tr class="separator:acd86828700945155fe13b9e73f2e76d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af562f49e81ddc40ea34b6aa13ec3ba78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#af562f49e81ddc40ea34b6aa13ec3ba78">PutLineComment</a> (const QString &amp;line)</td></tr>
+<tr class="memdesc:af562f49e81ddc40ea34b6aa13ec3ba78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes string to file, prepends a 'comment' string and appends a 'newline' string.  <a href="class_isis_1_1_text_file.html#af562f49e81ddc40ea34b6aa13ec3ba78">More...</a><br /></td></tr>
+<tr class="separator:af562f49e81ddc40ea34b6aa13ec3ba78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c851fe731ac651ea9b2116dfa65ee32"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a6c851fe731ac651ea9b2116dfa65ee32">PutLineComment</a> (const char *line=&quot;&quot;)</td></tr>
+<tr class="memdesc:a6c851fe731ac651ea9b2116dfa65ee32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes char string to file, prepends a 'comment' string and appends a 'newline' string.  <a href="class_isis_1_1_text_file.html#a6c851fe731ac651ea9b2116dfa65ee32">More...</a><br /></td></tr>
+<tr class="separator:a6c851fe731ac651ea9b2116dfa65ee32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a063e0b26e916fd7ca81a03f9bd47147f"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a063e0b26e916fd7ca81a03f9bd47147f">GetComment</a> ()</td></tr>
+<tr class="separator:a063e0b26e916fd7ca81a03f9bd47147f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8314aaa4e246e5de09049cf1435e88b"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#ae8314aaa4e246e5de09049cf1435e88b">GetNewLine</a> ()</td></tr>
+<tr class="separator:ae8314aaa4e246e5de09049cf1435e88b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a633a2f8f4a4faf6b53f788d1781f5656"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a633a2f8f4a4faf6b53f788d1781f5656">SetComment</a> (const char *commentString=&quot;#&quot;)</td></tr>
+<tr class="memdesc:a633a2f8f4a4faf6b53f788d1781f5656"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the 'comment' string.  <a href="class_isis_1_1_text_file.html#a633a2f8f4a4faf6b53f788d1781f5656">More...</a><br /></td></tr>
+<tr class="separator:a633a2f8f4a4faf6b53f788d1781f5656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc222af6118a5ed9e36911e4daab64ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#afc222af6118a5ed9e36911e4daab64ec">SetNewLine</a> (const char *newLineString=&quot;\n&quot;)</td></tr>
+<tr class="memdesc:afc222af6118a5ed9e36911e4daab64ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the 'newline' string.  <a href="class_isis_1_1_text_file.html#afc222af6118a5ed9e36911e4daab64ec">More...</a><br /></td></tr>
+<tr class="separator:afc222af6118a5ed9e36911e4daab64ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74b73a6084199ac91c0899929b5e75c4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a74b73a6084199ac91c0899929b5e75c4">LineCount</a> (const int &amp;maxLinesToRead=0)</td></tr>
+<tr class="memdesc:a74b73a6084199ac91c0899929b5e75c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts number of lines in file.  <a href="class_isis_1_1_text_file.html#a74b73a6084199ac91c0899929b5e75c4">More...</a><br /></td></tr>
+<tr class="separator:a74b73a6084199ac91c0899929b5e75c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa37c597db168b3bf4121a13afb3e73db"><td class="memItemLeft" align="right" valign="top">std::streamsize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#aa37c597db168b3bf4121a13afb3e73db">Size</a> ()</td></tr>
+<tr class="memdesc:aa37c597db168b3bf4121a13afb3e73db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts number of bytes in file.  <a href="class_isis_1_1_text_file.html#aa37c597db168b3bf4121a13afb3e73db">More...</a><br /></td></tr>
+<tr class="separator:aa37c597db168b3bf4121a13afb3e73db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:af0a1b723f38d96faf3a46d0636473eef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#af0a1b723f38d96faf3a46d0636473eef">p_GetLine</a> (QString &amp;line, bool chkComment)</td></tr>
+<tr class="memdesc:af0a1b723f38d96faf3a46d0636473eef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets next line from file.  <a href="class_isis_1_1_text_file.html#af0a1b723f38d96faf3a46d0636473eef">More...</a><br /></td></tr>
+<tr class="separator:af0a1b723f38d96faf3a46d0636473eef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a7409c6860fa3f7672fe798d5f5f87fcb"><td class="memItemLeft" align="right" valign="top">std::fstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a7409c6860fa3f7672fe798d5f5f87fcb">p_stream</a></td></tr>
+<tr class="memdesc:a7409c6860fa3f7672fe798d5f5f87fcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">File stream handle.  <a href="class_isis_1_1_text_file.html#a7409c6860fa3f7672fe798d5f5f87fcb">More...</a><br /></td></tr>
+<tr class="separator:a7409c6860fa3f7672fe798d5f5f87fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a901e31dec08e8051c092a577890ad8a0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a901e31dec08e8051c092a577890ad8a0">p_openmode</a></td></tr>
+<tr class="memdesc:a901e31dec08e8051c092a577890ad8a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">openmode of file: Input, Output, Overwrite, Append  <a href="class_isis_1_1_text_file.html#a901e31dec08e8051c092a577890ad8a0">More...</a><br /></td></tr>
+<tr class="separator:a901e31dec08e8051c092a577890ad8a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedab5d0adf06da84576302e9c6c2501c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#aedab5d0adf06da84576302e9c6c2501c">p_filename</a></td></tr>
+<tr class="memdesc:aedab5d0adf06da84576302e9c6c2501c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a> of the opened file.  <a href="class_isis_1_1_text_file.html#aedab5d0adf06da84576302e9c6c2501c">More...</a><br /></td></tr>
+<tr class="separator:aedab5d0adf06da84576302e9c6c2501c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ad627624b66843c75b8116c3b098449"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a6ad627624b66843c75b8116c3b098449">p_commentString</a></td></tr>
+<tr class="memdesc:a6ad627624b66843c75b8116c3b098449"><td class="mdescLeft">&#160;</td><td class="mdescRight">'comment' string used by GetLine and PutLineComment  <a href="class_isis_1_1_text_file.html#a6ad627624b66843c75b8116c3b098449">More...</a><br /></td></tr>
+<tr class="separator:a6ad627624b66843c75b8116c3b098449"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dcd8990015231a4037d4fd3f03d1e32"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_text_file.html#a5dcd8990015231a4037d4fd3f03d1e32">p_newLineString</a></td></tr>
+<tr class="memdesc:a5dcd8990015231a4037d4fd3f03d1e32"><td class="mdescLeft">&#160;</td><td class="mdescRight">'newline' string used by PutLine and PutLineComment  <a href="class_isis_1_1_text_file.html#a5dcd8990015231a4037d4fd3f03d1e32">More...</a><br /></td></tr>
+<tr class="separator:a5dcd8990015231a4037d4fd3f03d1e32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Provides access to sequential ASCII stream I/O. </p>
+<p>Provides access to sequential ASCII stream I/O. Checks for errors in opening, reading, and writing ASCII files. Can check for 'comment lines' while reading a text file.</p>
+<dl class="section author"><dt>Author</dt><dd>2003-08-29 Glenn Bennett </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a24687f65d5261a9c190275d1be01246c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24687f65d5261a9c190275d1be01246c">&#9670;&nbsp;</a></span>TextFile() <span class="overload">[1/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TextFile::TextFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an empty <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object. </p>
+
+</div>
+</div>
+<a id="aa5ef0adf3783468a70e7dfc3833249ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5ef0adf3783468a70e7dfc3833249ee">&#9670;&nbsp;</a></span>TextFile() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TextFile::TextFile </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>openmode</em> = <code>&quot;input&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>extension</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object and opens the specified file (including path). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td><a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a> (including path) to be opened by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object.</td></tr>
+    <tr><td class="paramname">openmode</td><td>Open Mode of file opened by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object. InputOpens file for Input: Read Only, Fails if file does not exist OutputOpens file for Output: Read / Write - Creates file, Fails if file exists. OverwriteOpens file for Output: Read / Write - Creates file, Truncates if file exists. AppendOpens file for Append: Read / Write- Creates file, Appends if file exists. Defaults to "input"</td></tr>
+    <tr><td class="paramname">extension</td><td>Extension to be added to filename (added only if not already on filename). Defaults to "" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a99452edd8fa3ed8606b8353b046c02fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99452edd8fa3ed8606b8353b046c02fc">&#9670;&nbsp;</a></span>TextFile() <span class="overload">[3/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TextFile::TextFile </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>openmode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; QString &gt; &amp;&#160;</td>
+          <td class="paramname"><em>lines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>maxLinesToReadWrite</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>skipComments</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object and opens the specified file (including path), reads or writes file, leaves file open for further use of the rest of the methods. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td><a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a> (including path) to be opened by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object.</td></tr>
+    <tr><td class="paramname">openmode</td><td>Open Mode of file opened by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object. InputOpens file for Input: Read Only, Fails if file does not exist OutputOpens file for Output: Read / Write - Creates file, Fails if file exists. OverwriteOpens file for Output: Read / Write - Creates file, Truncates if file exists. AppendOpens file for Append: Read / Write - Creates file, Appends if file exists. Defaults to "input"</td></tr>
+    <tr><td class="paramname">lines</td><td></td></tr>
+    <tr><td class="paramname">maxLinesToReadWrite</td><td>Limits the maximum lines read or written; 0=read entire file or write entire vectorDefaults to 0</td></tr>
+    <tr><td class="paramname">skipComments</td><td>Controls whether comments lines are filtered; true=filter, false=return any line read from fileDefaults to true </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abcefd2767512d29d7afd9174d4c7b0df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcefd2767512d29d7afd9174d4c7b0df">&#9670;&nbsp;</a></span>TextFile() <span class="overload">[4/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TextFile::TextFile </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>openmode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; QString &gt; &amp;&#160;</td>
+          <td class="paramname"><em>lines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>maxLinesToReadWrite</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>skipComments</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object and opens the specified file (including path), reads or writes file, leaves file open for further use of the rest of the methods. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td><a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a> (including path) to be opened by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object.</td></tr>
+    <tr><td class="paramname">openmode</td><td>Open Mode of file opened by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object. InputOpens file for Input: Read Only, Fails if file does not exist OutputOpens file for Output: Read / Write - Creates file, Fails if file exists. OverwriteOpens file for Output: Read / Write - Creates file, Truncates if file exists. AppendOpens file for Append: Read / Write - Creates file, Appends if file exists. Defaults to "input"</td></tr>
+    <tr><td class="paramname">lines</td><td><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> Vector to fill if reading or put to file if writing</td></tr>
+    <tr><td class="paramname">maxLinesToReadWrite</td><td>Limits the maximum lines read or written; 0=read entire file or write entire vectorDefaults to 0</td></tr>
+    <tr><td class="paramname">skipComments</td><td>Controls whether comments lines are filtered; true=filter, false=return any line read from fileDefaults to true </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abc469679a5a588b30e58265af52ffc5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc469679a5a588b30e58265af52ffc5d">&#9670;&nbsp;</a></span>TextFile() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TextFile::TextFile </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>openmode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString *&#160;</td>
+          <td class="paramname"><em>lines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>maxLinesToReadWrite</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>skipComments</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object and opens the specified file (including path), reads or writes file, leaves file open for further use of the rest of the methods. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td><a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a> (including path) to be opened by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object.</td></tr>
+    <tr><td class="paramname">openmode</td><td>Open Mode of file opened by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object. InputOpens file for Input: Read Only, Fails if file does not exist OutputOpens file for Output: Read / Write - Creates file, Fails if file exists. OverwriteOpens file for Output: Read / Write - Creates file, Truncates if file exists. AppendOpens file for Append: Read / Write - Creates file, Appends if file exists. Defaults to "input"</td></tr>
+    <tr><td class="paramname">lines</td><td></td></tr>
+    <tr><td class="paramname">maxLinesToReadWrite</td><td>Limits the maximum lines read or written; 0=read entire file or write entire vectorDefaults to 0</td></tr>
+    <tr><td class="paramname">skipComments</td><td>Controls whether comments lines are filtered; true=filter, false=return any line read from fileDefaults to true </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a949355e7acc092249b325ceb1de3f2b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a949355e7acc092249b325ceb1de3f2b3">&#9670;&nbsp;</a></span>TextFile() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TextFile::TextFile </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>openmode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString *&#160;</td>
+          <td class="paramname"><em>lines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>maxLinesToReadWrite</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>skipComments</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object and opens the specified file (including path), reads or writes file, leaves file open for further use of the rest of the methods. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td><a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a> (including path) to be opened by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object.</td></tr>
+    <tr><td class="paramname">openmode</td><td>Open Mode of file opened by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object. InputOpens file for Input: Read Only, Fails if file does not exist OutputOpens file for Output: Read / Write - Creates file, Fails if file exists. OverwriteOpens file for Output: Read / Write - Creates file, Truncates if file exists. AppendOpens file for Append: Read / Write - Creates file, Appends if file exists. Defaults to "input"</td></tr>
+    <tr><td class="paramname">lines</td><td></td></tr>
+    <tr><td class="paramname">maxLinesToReadWrite</td><td>Limits the maximum lines read or written; 0=read entire file or write entire vectorDefaults to 0</td></tr>
+    <tr><td class="paramname">skipComments</td><td>Controls whether comments lines are filtered; true=filter, false=return any line read from fileDefaults to true </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab6d068af9bef2f528e3d3214f252a953"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6d068af9bef2f528e3d3214f252a953">&#9670;&nbsp;</a></span>~TextFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TextFile::~TextFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Closes file (if still open). Destroys the <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae2194bdd07efde67ec718455121b5fea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2194bdd07efde67ec718455121b5fea">&#9670;&nbsp;</a></span>Close()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::Close </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Closes file. Called automatically by <a class="el" href="class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O.">TextFile</a> destructor. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cisscal_file.html#a7a0d9fd53a5cfb7ef6fbf876b025ec75">Isis::CisscalFile::~CisscalFile()</a>.</p>
+
+</div>
+</div>
+<a id="a063e0b26e916fd7ca81a03f9bd47147f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a063e0b26e916fd7ca81a03f9bd47147f">&#9670;&nbsp;</a></span>GetComment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::TextFile::GetComment </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1a3f757ba7c8e93e8de67b820658d5ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a3f757ba7c8e93e8de67b820658d5ae">&#9670;&nbsp;</a></span>GetFile() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::GetFile </td>
+          <td>(</td>
+          <td class="paramtype">QString *&#160;</td>
+          <td class="paramname"><em>lines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>maxLinesToRead</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>skipComments</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a527bad26234bf9c0f25b81392f14247e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a527bad26234bf9c0f25b81392f14247e">&#9670;&nbsp;</a></span>GetFile() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::GetFile </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; QString &gt; &amp;&#160;</td>
+          <td class="paramname"><em>lines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>maxLinesToRead</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>skipComments</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0ac31765b9d8a8584c436ab52352aa61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ac31765b9d8a8584c436ab52352aa61">&#9670;&nbsp;</a></span>GetLine() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TextFile::GetLine </td>
+          <td>(</td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>skipComments</em> = <code>true</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets next line from file. </p>
+<p>Returns True if read a line, False if End Of File.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">skipComments</td><td>Controls whether comments lines are filtered; true=filter, false=return any line read from fileDefaults to true</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+</div>
+</div>
+<a id="a107a1a6a1db5d0b76557d8a2cb7b9d1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a107a1a6a1db5d0b76557d8a2cb7b9d1f">&#9670;&nbsp;</a></span>GetLine() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TextFile::GetLine </td>
+          <td>(</td>
+          <td class="paramtype">QString &amp;&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>skipComments</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets next line from file. </p>
+<p>Returns True if read a line, False if End Of File.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td>Line read from file, with newline removed.</td></tr>
+    <tr><td class="paramname">skipComments</td><td>Controls whether comments lines are filtered; true=filter, false=return any line read from fileDefaults to true</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_environment.html#a22b2d7e1ee163cb1725e070b7961bb1c">Isis::Environment::isisVersion()</a>, <a class="el" href="class_isis_1_1_mosaic_main_window.html#ad4b909cc26cd0c50189aabe3549d055c">Isis::MosaicMainWindow::MosaicMainWindow()</a>, <a class="el" href="class_isis_1_1_mosaic_main_window.html#a0a9c678bc7e318bafbbca403936ade50">Isis::MosaicMainWindow::openList()</a>, <a class="el" href="class_isis_1_1_import_images_work_order.html#a3d3a750f043fd54d901a6ea5238120a5">Isis::ImportImagesWorkOrder::setupExecution()</a>, and <a class="el" href="class_isis_1_1_import_shapes_work_order.html#a56a09700cf90c42235ff3542037b55f9">Isis::ImportShapesWorkOrder::setupExecution()</a>.</p>
+
+</div>
+</div>
+<a id="ab3b47bb88c2d1ab746e619fc2fdfcf0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3b47bb88c2d1ab746e619fc2fdfcf0d">&#9670;&nbsp;</a></span>GetLineNoFilter() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TextFile::GetLineNoFilter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets next NON-COMMENT line from file. </p>
+<p>Returns True if read a line, False if End Of File. See SetComment method.</p>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+</div>
+</div>
+<a id="ac7a07fed5a704e7d0e60783d522f079e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7a07fed5a704e7d0e60783d522f079e">&#9670;&nbsp;</a></span>GetLineNoFilter() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TextFile::GetLineNoFilter </td>
+          <td>(</td>
+          <td class="paramtype">QString &amp;&#160;</td>
+          <td class="paramname"><em>line</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets next NON-COMMENT line from file. </p>
+<p>Returns True if read a line, False if End Of File. See SetComment method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td>Line read from file, with newline removed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
+</div>
+</div>
+<a id="ae8314aaa4e246e5de09049cf1435e88b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8314aaa4e246e5de09049cf1435e88b">&#9670;&nbsp;</a></span>GetNewLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::TextFile::GetNewLine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a74b73a6084199ac91c0899929b5e75c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74b73a6084199ac91c0899929b5e75c4">&#9670;&nbsp;</a></span>LineCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::TextFile::LineCount </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>maxLinesToRead</em> = <code>0</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Counts number of lines in file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">maxLinesToRead</td><td>Limits lines counted - intended for large files. 0=count all lines. n=count up to and including n lines; if file longer than n lines, returns n+1. Defaults to 0</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>streamsize </dd></dl>
+
+</div>
+</div>
+<a id="abf587d6d8ee8d122ad6eaf9d2eed8003"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf587d6d8ee8d122ad6eaf9d2eed8003">&#9670;&nbsp;</a></span>Open() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::Open </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>openmode</em> = <code>&quot;input&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>extension</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a552757a83a57fd616c32ba41440aa46a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a552757a83a57fd616c32ba41440aa46a">&#9670;&nbsp;</a></span>Open() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::Open </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>openmode</em> = <code>&quot;input&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>extension</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Opens a text file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td><a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a> (including path) to be opened.</td></tr>
+    <tr><td class="paramname">openmode</td><td>Open Mode of file to be opened. There are four options, "input", "output", "overwrite", and "append". "input" opens with in fstream option, "output" opens with in, out, and trunc fstream options and verifies the file does not exist, "overwrite" opens with in, out, and trunc fstream options, and "append" opens with in, out, and ate(at end) fstream options, "append" will open with in and out options if the file does not exist.</td></tr>
+    <tr><td class="paramname">extension</td><td>Extension to be added to filename (added only if not already on filename). Defaults to ""</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">Isis::IException::Programmer</a></td><td></td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5" title="A type of error that occurred when performing an actual I/O operation.">Isis::IException::Io</a></td><td>- output file already exists </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5" title="A type of error that occurred when performing an actual I/O operation.">Isis::IException::Io</a></td><td>- unable to open file </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_file_name.html#aec120eb7b9e8d7dba0c01298cb0b52b4">Isis::FileName::addExtension()</a>, <a class="el" href="class_isis_1_1_i_string.html#a6bc0f2894a15418c9057ed501c6bf63a">Isis::IString::DownCase()</a>, <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>, <a class="el" href="class_isis_1_1_file_name.html#a4aa9747da045728a69b21b7dfa8048a1">Isis::FileName::fileExists()</a>, and <a class="el" href="class_isis_1_1_file_name.html#af6f2a42721cf85813008d027e9b98609">Isis::FileName::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a815f668f8daa81c90f3b9cf463b8c099"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a815f668f8daa81c90f3b9cf463b8c099">&#9670;&nbsp;</a></span>OpenChk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TextFile::OpenChk </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bailIfNotOpen</em> = <code>false</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cisscal_file.html#a3ca44e658fe47c6c8879f4091d5e2e02">Isis::CisscalFile::p_GetLine()</a>.</p>
+
+</div>
+</div>
+<a id="af0a1b723f38d96faf3a46d0636473eef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0a1b723f38d96faf3a46d0636473eef">&#9670;&nbsp;</a></span>p_GetLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TextFile::p_GetLine </td>
+          <td>(</td>
+          <td class="paramtype">QString &amp;&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>chkComment</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets next line from file. </p>
+<p>Returns True if read a line, False if End Of File.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td>Line read from file, with newline removed.</td></tr>
+    <tr><td class="paramname">chkComment</td><td>True=Skip Comment Lines, False=Return All Lines.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5" title="A type of error that occurred when performing an actual I/O operation.">Isis::IException::Io</a></td><td>- error reading text file </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a1437607c62f644255b0dc696f88c6bb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1437607c62f644255b0dc696f88c6bb1">&#9670;&nbsp;</a></span>PutFile() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::PutFile </td>
+          <td>(</td>
+          <td class="paramtype">const QString *&#160;</td>
+          <td class="paramname"><em>lines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>maxLinesToWrite</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe7445040c9d30c69a844389fa100fa6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe7445040c9d30c69a844389fa100fa6">&#9670;&nbsp;</a></span>PutFile() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::PutFile </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; QString &gt; &amp;&#160;</td>
+          <td class="paramname"><em>lines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>maxLinesToWrite</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acd86828700945155fe13b9e73f2e76d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd86828700945155fe13b9e73f2e76d7">&#9670;&nbsp;</a></span>PutLine() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::PutLine </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>line</em> = <code>&quot;&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes char string to file and appends a 'newline' string. </p>
+<p>See SetNewLine method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td>Char string to be written to file.Defaults to ""</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5" title="A type of error that occurred when performing an actual I/O operation.">Isis::IException::Io</a></td><td>- error writing text to file </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">Isis::IException::Programmer</a></td><td>- input is read only text file, cannot write to file </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a9e24cd5caef9d235cca490f70abcfbff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e24cd5caef9d235cca490f70abcfbff">&#9670;&nbsp;</a></span>PutLine() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::PutLine </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>line</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes string to file and appends a 'newline' string. </p>
+<p>See SetNewLine method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> to be written to file. Defaults to "" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6c851fe731ac651ea9b2116dfa65ee32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c851fe731ac651ea9b2116dfa65ee32">&#9670;&nbsp;</a></span>PutLineComment() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::PutLineComment </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>line</em> = <code>&quot;&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes char string to file, prepends a 'comment' string and appends a 'newline' string. </p>
+<p>See SetComment method and SetNewLine method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td>Char string to be written to file.Defaults to "" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af562f49e81ddc40ea34b6aa13ec3ba78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af562f49e81ddc40ea34b6aa13ec3ba78">&#9670;&nbsp;</a></span>PutLineComment() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::PutLineComment </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>line</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes string to file, prepends a 'comment' string and appends a 'newline' string. </p>
+<p>See SetComment method and SetNewLine method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line</td><td><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> to be written to file.Defaults to "" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae2ac3038b976ca1e104f89703019cede"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2ac3038b976ca1e104f89703019cede">&#9670;&nbsp;</a></span>Rewind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::Rewind </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets Read / Write pointer to begining of opened file. </p>
+
+</div>
+</div>
+<a id="a633a2f8f4a4faf6b53f788d1781f5656"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a633a2f8f4a4faf6b53f788d1781f5656">&#9670;&nbsp;</a></span>SetComment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::SetComment </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>commentString</em> = <code>&quot;#&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the 'comment' string. </p>
+<p>Default = '#' See ReadFilter method. Skips lines that begin with this string. See PutLineComment method. Prepends 'comment' string to output line.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">commentString</td><td>The string of characters to be used for 'comment' lines. Defaults to "#" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afc222af6118a5ed9e36911e4daab64ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc222af6118a5ed9e36911e4daab64ec">&#9670;&nbsp;</a></span>SetNewLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TextFile::SetNewLine </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>newLineString</em> = <code>&quot;\n&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the 'newline' string. </p>
+<p>Default = '<br  />
+'. See PutLine and PutLineComment methods. Appends 'newline' string to output line.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newLineString</td><td>The string of characters to be used for 'comment' lines. Defaults to "\n" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa37c597db168b3bf4121a13afb3e73db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa37c597db168b3bf4121a13afb3e73db">&#9670;&nbsp;</a></span>Size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamsize Isis::TextFile::Size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Counts number of bytes in file. </p>
+<dl class="section return"><dt>Returns</dt><dd>streamsize </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a6ad627624b66843c75b8116c3b098449"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ad627624b66843c75b8116c3b098449">&#9670;&nbsp;</a></span>p_commentString</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::TextFile::p_commentString</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>'comment' string used by GetLine and PutLineComment </p>
+
+</div>
+</div>
+<a id="aedab5d0adf06da84576302e9c6c2501c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedab5d0adf06da84576302e9c6c2501c">&#9670;&nbsp;</a></span>p_filename</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::TextFile::p_filename</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_file_name.html" title="File name manipulation and expansion.">FileName</a> of the opened file. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cisscal_file.html#a3ca44e658fe47c6c8879f4091d5e2e02">Isis::CisscalFile::p_GetLine()</a>.</p>
+
+</div>
+</div>
+<a id="a5dcd8990015231a4037d4fd3f03d1e32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dcd8990015231a4037d4fd3f03d1e32">&#9670;&nbsp;</a></span>p_newLineString</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::TextFile::p_newLineString</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>'newline' string used by PutLine and PutLineComment </p>
+
+</div>
+</div>
+<a id="a901e31dec08e8051c092a577890ad8a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a901e31dec08e8051c092a577890ad8a0">&#9670;&nbsp;</a></span>p_openmode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::TextFile::p_openmode</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>openmode of file: Input, Output, Overwrite, Append </p>
+
+</div>
+</div>
+<a id="a7409c6860fa3f7672fe798d5f5f87fcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7409c6860fa3f7672fe798d5f5f87fcb">&#9670;&nbsp;</a></span>p_stream</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::fstream Isis::TextFile::p_stream</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>File stream handle. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cisscal_file.html#a3ca44e658fe47c6c8879f4091d5e2e02">Isis::CisscalFile::p_GetLine()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/TextFile/<a class="el" href="_text_file_8h_source.html">TextFile.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/TextFile/<a class="el" href="_text_file_8cpp.html">TextFile.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_text_file.html">TextFile</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

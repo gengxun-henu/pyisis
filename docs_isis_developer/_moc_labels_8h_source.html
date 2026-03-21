@@ -1,0 +1,392 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/mgs/objs/MocLabels/MocLabels.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_moc_labels_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">MocLabels.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_moc_labels_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef MocLabels_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define MocLabels_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_file_name_8h.html">FileName.h</a>&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <span class="keyword">class </span>Cube;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keyword">class </span>Pvl;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html">   50</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_moc_labels.html">MocLabels</a> {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;      <a class="code" href="class_isis_1_1_moc_labels.html#a671292a9bedc9337c3a8c756983f14fc">MocLabels</a>(<a class="code" href="class_isis_1_1_cube.html">Cube</a> &amp;cube);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      <a class="code" href="class_isis_1_1_moc_labels.html#a671292a9bedc9337c3a8c756983f14fc">MocLabels</a>(<span class="keyword">const</span> QString &amp;file);</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#a42a18b484effbb8db462b21ba4fb54e3">   55</a></span>&#160;      <a class="code" href="class_isis_1_1_moc_labels.html#a42a18b484effbb8db462b21ba4fb54e3">~MocLabels</a>() {};</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#a66e35ba4c21db5c55be44b3958022c3f">   61</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_moc_labels.html#a66e35ba4c21db5c55be44b3958022c3f">NarrowAngle</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">return</span> p_mocNA;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      };</div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#a982c09e2aa776f7c013da8f4dfe8c979">   68</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_moc_labels.html#a982c09e2aa776f7c013da8f4dfe8c979">WideAngle</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">return</span> !p_mocNA;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      };</div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#af90154292d1f5c8974e8e5259ebe3e70">   76</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_moc_labels.html#af90154292d1f5c8974e8e5259ebe3e70">WideAngleRed</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordflow">return</span> p_mocRedWA;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      };</div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#a3ba243c3db7d804914bb0ac0cfbaf425">   84</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_moc_labels.html#a3ba243c3db7d804914bb0ac0cfbaf425">WideAngleBlue</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">return</span> p_mocBlueWA;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      };</div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#a32f7cb266b87475b22c64814c0993676">   92</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_moc_labels.html#a32f7cb266b87475b22c64814c0993676">CrosstrackSumming</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">return</span> p_crosstrackSumming;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      };</div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#ab02e04e83e2dab6c08fcdc6088b95da1">   99</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_moc_labels.html#ab02e04e83e2dab6c08fcdc6088b95da1">DowntrackSumming</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordflow">return</span> p_downtrackSumming;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      };</div>
+<div class="line"><a name="l00106"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#a6a6ea8844a7b5dbc5c11e3ba2c1dea8c">  106</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_moc_labels.html#a6a6ea8844a7b5dbc5c11e3ba2c1dea8c">FirstLineSample</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">return</span> p_startingSample;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      };</div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#a39f5ace31dc2792be0415c44fcfd9d60">  114</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_moc_labels.html#a39f5ace31dc2792be0415c44fcfd9d60">FocalPlaneTemperature</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keywordflow">return</span> p_focalPlaneTemp;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      };</div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#afac59a4fa5b9ff50cfe19d37ffc0fc99">  123</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_moc_labels.html#afac59a4fa5b9ff50cfe19d37ffc0fc99">LineRate</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordflow">return</span> p_trueLineRate;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      };</div>
+<div class="line"><a name="l00131"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#a0b5d3de55ac4dc08bbe13d71b5496d66">  131</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_moc_labels.html#a0b5d3de55ac4dc08bbe13d71b5496d66">ExposureDuration</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordflow">return</span> p_exposureDuration;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;      };</div>
+<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#a8ef06fa6f426b47b3840c6995ef215de">  138</a></span>&#160;      <span class="keyword">inline</span> QString <a class="code" href="class_isis_1_1_moc_labels.html#a8ef06fa6f426b47b3840c6995ef215de">StartTime</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        <span class="keywordflow">return</span> p_startTime;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      };</div>
+<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="class_isis_1_1_moc_labels.html#a7344de9f27270187f299e5f4b2f74039">  145</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_moc_labels.html#a7344de9f27270187f299e5f4b2f74039">Detectors</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordflow">return</span> p_mocNA ? 2048 : 3456;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;      };</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_moc_labels.html#a55e2bb84ac45d376801611a0c1c99829">StartDetector</a>(<span class="keywordtype">int</span> sample) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_moc_labels.html#aca7b214bd63cac953ebfa261285e618f">EndDetector</a>(<span class="keywordtype">int</span> sample) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_moc_labels.html#aa5f4635fab851b36c2ab9d286a9d8789">Sample</a>(<span class="keywordtype">int</span> detector) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_moc_labels.html#a66c3ea180198fd188045f09467f20112">EphemerisTime</a>(<span class="keywordtype">double</span> line) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_moc_labels.html#adfb01b5b970c3a2a19d17ea690e5a8d6">Gain</a>(<span class="keywordtype">int</span> line = 1);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_moc_labels.html#a2759a30da27a11fd93545433c7b6e9ff">Offset</a>(<span class="keywordtype">int</span> line = 1);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;      <span class="keywordtype">void</span> Init(<a class="code" href="class_isis_1_1_cube.html">Cube</a> &amp;cube);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      <span class="keywordtype">void</span> ReadLabels(<a class="code" href="class_isis_1_1_cube.html">Cube</a> &amp;cube);</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;      <span class="keywordtype">void</span> ValidateLabels();</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;      <span class="keywordtype">void</span> Compute();</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;      <span class="keywordtype">int</span> p_crosstrackSumming;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;      <span class="keywordtype">int</span> p_downtrackSumming;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      <span class="keywordtype">int</span> p_startingSample;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;      <span class="keywordtype">int</span> p_orbitNumber;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;      <span class="keywordtype">double</span> p_exposureDuration;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;      <span class="keywordtype">double</span> p_trueLineRate;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;      <span class="keywordtype">double</span> p_focalPlaneTemp;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;      <span class="keywordtype">bool</span> p_mocNA;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;      <span class="keywordtype">bool</span> p_mocRedWA;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;      <span class="keywordtype">bool</span> p_mocBlueWA;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;      QString p_instrumentId;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;      QString p_filter;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;      QString p_clockCount;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;      QString p_gainModeId;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;      <span class="keywordtype">int</span> p_offsetModeId;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;      QString p_startTime;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      QString p_dataQuality;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;      <span class="keywordtype">double</span> p_etStart;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;      <span class="keywordtype">double</span> p_etEnd;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;      <span class="keywordtype">void</span> InitGainMaps();</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;      std::map&lt;QString, double&gt; p_gainMapNA;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;      std::map&lt;QString, double&gt; p_gainMapWA;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;      <span class="keywordtype">double</span> p_gain;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;      <span class="keywordtype">double</span> p_offset;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;      <span class="keywordtype">int</span> p_nl;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;      <span class="keywordtype">int</span> p_ns;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;      <span class="keywordtype">int</span> p_startDetector[3456];</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;      <span class="keywordtype">int</span> p_endDetector[3456];</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;      <span class="keywordtype">double</span> p_sample[3456];</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;      <span class="keywordtype">void</span> InitDetectorMaps();</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;      <span class="keyword">struct </span>WAGO {</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        <span class="keywordtype">double</span> et;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="keywordtype">double</span> gain;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordtype">double</span> offset;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator&lt;(<span class="keyword">const</span> WAGO &amp;w)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;          <span class="keywordflow">return</span> (et &lt; w.et);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        };</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> WAGO &amp;w)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;          <span class="keywordflow">return</span> (et == w.et);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        };</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;      };</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;      std::vector&lt;WAGO&gt; p_wagos;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;      <span class="keywordtype">void</span> InitWago();</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;      FileName p_lsk;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;      FileName p_sclk;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  };</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;};</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_file_name_8h_html"><div class="ttname"><a href="_file_name_8h.html">FileName.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_html"><div class="ttname"><a href="class_isis_1_1_cube.html">Isis::Cube</a></div><div class="ttdoc">IO Handler for Isis Cubes.</div><div class="ttdef"><b>Definition:</b> Cube.h:168</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html"><div class="ttname"><a href="class_isis_1_1_moc_labels.html">Isis::MocLabels</a></div><div class="ttdoc">Read values from MOC labels.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:50</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a0b5d3de55ac4dc08bbe13d71b5496d66"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a0b5d3de55ac4dc08bbe13d71b5496d66">Isis::MocLabels::ExposureDuration</a></div><div class="ttdeci">double ExposureDuration() const</div><div class="ttdoc">Returns the value for LineExposureDuration from the instrument group.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:131</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a2759a30da27a11fd93545433c7b6e9ff"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a2759a30da27a11fd93545433c7b6e9ff">Isis::MocLabels::Offset</a></div><div class="ttdeci">double Offset(int line=1)</div><div class="ttdoc">Returns the offset at the given line.</div><div class="ttdef"><b>Definition:</b> MocLabels.cpp:403</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a32f7cb266b87475b22c64814c0993676"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a32f7cb266b87475b22c64814c0993676">Isis::MocLabels::CrosstrackSumming</a></div><div class="ttdeci">int CrosstrackSumming() const</div><div class="ttdoc">Returns value for CrosstrackSumming from the instrument group.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:92</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a39f5ace31dc2792be0415c44fcfd9d60"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a39f5ace31dc2792be0415c44fcfd9d60">Isis::MocLabels::FocalPlaneTemperature</a></div><div class="ttdeci">double FocalPlaneTemperature() const</div><div class="ttdoc">Returns value for FocalPlaneTemperature from the instrument group.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:114</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a3ba243c3db7d804914bb0ac0cfbaf425"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a3ba243c3db7d804914bb0ac0cfbaf425">Isis::MocLabels::WideAngleBlue</a></div><div class="ttdeci">bool WideAngleBlue() const</div><div class="ttdoc">Indicates whether the camera was blue wide angle.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:84</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a42a18b484effbb8db462b21ba4fb54e3"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a42a18b484effbb8db462b21ba4fb54e3">Isis::MocLabels::~MocLabels</a></div><div class="ttdeci">~MocLabels()</div><div class="ttdoc">Empty destructor.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:55</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a55e2bb84ac45d376801611a0c1c99829"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a55e2bb84ac45d376801611a0c1c99829">Isis::MocLabels::StartDetector</a></div><div class="ttdeci">int StartDetector(int sample) const</div><div class="ttdoc">Converts from sample to starting detector.</div><div class="ttdef"><b>Definition:</b> MocLabels.cpp:292</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a66c3ea180198fd188045f09467f20112"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a66c3ea180198fd188045f09467f20112">Isis::MocLabels::EphemerisTime</a></div><div class="ttdeci">double EphemerisTime(double line) const</div><div class="ttdoc">Returns the ephemeris time at the given line.</div><div class="ttdef"><b>Definition:</b> MocLabels.cpp:375</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a66e35ba4c21db5c55be44b3958022c3f"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a66e35ba4c21db5c55be44b3958022c3f">Isis::MocLabels::NarrowAngle</a></div><div class="ttdeci">bool NarrowAngle() const</div><div class="ttdoc">Indicates whether the camera was narrow angle.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a671292a9bedc9337c3a8c756983f14fc"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a671292a9bedc9337c3a8c756983f14fc">Isis::MocLabels::MocLabels</a></div><div class="ttdeci">MocLabels(Cube &amp;cube)</div><div class="ttdoc">Construct MocLabels object using a Pvl object.</div><div class="ttdef"><b>Definition:</b> MocLabels.cpp:39</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a6a6ea8844a7b5dbc5c11e3ba2c1dea8c"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a6a6ea8844a7b5dbc5c11e3ba2c1dea8c">Isis::MocLabels::FirstLineSample</a></div><div class="ttdeci">int FirstLineSample() const</div><div class="ttdoc">Returns value for FirstLineSample from the instrument group.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:106</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a7344de9f27270187f299e5f4b2f74039"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a7344de9f27270187f299e5f4b2f74039">Isis::MocLabels::Detectors</a></div><div class="ttdeci">int Detectors() const</div><div class="ttdoc">Returns 2048 if narrow angle and 3456 if wide angle.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:145</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a8ef06fa6f426b47b3840c6995ef215de"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a8ef06fa6f426b47b3840c6995ef215de">Isis::MocLabels::StartTime</a></div><div class="ttdeci">QString StartTime() const</div><div class="ttdoc">Returns the value for StartTime from the instrument group.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:138</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_a982c09e2aa776f7c013da8f4dfe8c979"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#a982c09e2aa776f7c013da8f4dfe8c979">Isis::MocLabels::WideAngle</a></div><div class="ttdeci">bool WideAngle() const</div><div class="ttdoc">Indicates whether the camera was wide angle.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:68</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_aa5f4635fab851b36c2ab9d286a9d8789"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#aa5f4635fab851b36c2ab9d286a9d8789">Isis::MocLabels::Sample</a></div><div class="ttdeci">double Sample(int detector) const</div><div class="ttdoc">Converts from detector to sample.</div><div class="ttdef"><b>Definition:</b> MocLabels.cpp:316</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_ab02e04e83e2dab6c08fcdc6088b95da1"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#ab02e04e83e2dab6c08fcdc6088b95da1">Isis::MocLabels::DowntrackSumming</a></div><div class="ttdeci">int DowntrackSumming() const</div><div class="ttdoc">Returns value for DowntrackSumming from the instrument group.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:99</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_aca7b214bd63cac953ebfa261285e618f"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#aca7b214bd63cac953ebfa261285e618f">Isis::MocLabels::EndDetector</a></div><div class="ttdeci">int EndDetector(int sample) const</div><div class="ttdoc">Converts from sample to ending detector.</div><div class="ttdef"><b>Definition:</b> MocLabels.cpp:304</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_adfb01b5b970c3a2a19d17ea690e5a8d6"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#adfb01b5b970c3a2a19d17ea690e5a8d6">Isis::MocLabels::Gain</a></div><div class="ttdeci">double Gain(int line=1)</div><div class="ttdoc">Returns the true gain at a given line.</div><div class="ttdef"><b>Definition:</b> MocLabels.cpp:384</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_af90154292d1f5c8974e8e5259ebe3e70"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#af90154292d1f5c8974e8e5259ebe3e70">Isis::MocLabels::WideAngleRed</a></div><div class="ttdeci">bool WideAngleRed() const</div><div class="ttdoc">Indicates whether the camera was red wide angle.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:76</div></div>
+<div class="ttc" id="aclass_isis_1_1_moc_labels_html_afac59a4fa5b9ff50cfe19d37ffc0fc99"><div class="ttname"><a href="class_isis_1_1_moc_labels.html#afac59a4fa5b9ff50cfe19d37ffc0fc99">Isis::MocLabels::LineRate</a></div><div class="ttdeci">double LineRate() const</div><div class="ttdoc">Returns the value for the true line rate.</div><div class="ttdef"><b>Definition:</b> MocLabels.h:123</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_353eb50fe19f10ab7e82f9c8d9adc19d.html">mgs</a></li><li class="navelem"><a class="el" href="dir_2882562930039b252f3be5257d349185.html">objs</a></li><li class="navelem"><a class="el" href="dir_9302d32210b612eb04f2674f740d6188.html">MocLabels</a></li><li class="navelem"><a class="el" href="_moc_labels_8h.html">MocLabels.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

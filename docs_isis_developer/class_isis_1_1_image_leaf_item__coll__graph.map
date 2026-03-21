@@ -1,0 +1,6 @@
+<map id="Isis::ImageLeafItem" name="Isis::ImageLeafItem">
+<area shape="rect" id="node1" title="Tree item that is a leaf and represents an image." alt="" coords="108,648,245,745"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_abstract_image_item.html" title="Base class for an image item in the tree." alt="" coords="5,359,167,600"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_abstract_tree_item.html" title="Base class for an item in the tree." alt="" coords="100,5,254,311"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_abstract_leaf_item.html" title="Base class for leaf items in the tree." alt="" coords="190,359,345,600"/>
+</map>

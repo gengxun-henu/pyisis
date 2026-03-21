@@ -1,0 +1,527 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::BundleLidarPointVector Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_bundle_lidar_point_vector.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_bundle_lidar_point_vector-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::BundleLidarPointVector Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This class is a container class for BundleLidarControlPoints.  
+ <a href="class_isis_1_1_bundle_lidar_point_vector.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_bundle_lidar_point_vector_8h_source.html">BundleLidarPointVector.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::BundleLidarPointVector:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bundle_lidar_point_vector__inherit__graph.png" border="0" usemap="#a_isis_1_1_bundle_lidar_point_vector_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_bundle_lidar_point_vector_inherit__map" id="a_isis_1_1_bundle_lidar_point_vector_inherit__map">
+<area shape="rect" title="This class is a container class for BundleLidarControlPoints." alt="" coords="5,151,205,360"/>
+<area shape="rect" href="class_q_vector.html" title=" " alt="" coords="9,5,201,103"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::BundleLidarPointVector:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bundle_lidar_point_vector__coll__graph.png" border="0" usemap="#a_isis_1_1_bundle_lidar_point_vector_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_bundle_lidar_point_vector_coll__map" id="a_isis_1_1_bundle_lidar_point_vector_coll__map">
+<area shape="rect" title="This class is a container class for BundleLidarControlPoints." alt="" coords="5,151,205,360"/>
+<area shape="rect" href="class_q_vector.html" title=" " alt="" coords="9,5,201,103"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a5656262d2f992a75e7053de956e19ad3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html#a5656262d2f992a75e7053de956e19ad3">BundleLidarPointVector</a> ()</td></tr>
+<tr class="memdesc:a5656262d2f992a75e7053de956e19ad3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an empty <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html" title="This class is a container class for BundleLidarControlPoints.">BundleLidarPointVector</a>.  <a href="class_isis_1_1_bundle_lidar_point_vector.html#a5656262d2f992a75e7053de956e19ad3">More...</a><br /></td></tr>
+<tr class="separator:a5656262d2f992a75e7053de956e19ad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9065e8c6e43bd161e3367f3d1ca8a6e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html#af9065e8c6e43bd161e3367f3d1ca8a6e">BundleLidarPointVector</a> (const <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html">BundleLidarPointVector</a> &amp;src)</td></tr>
+<tr class="memdesc:af9065e8c6e43bd161e3367f3d1ca8a6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="class_isis_1_1_bundle_lidar_point_vector.html#af9065e8c6e43bd161e3367f3d1ca8a6e">More...</a><br /></td></tr>
+<tr class="separator:af9065e8c6e43bd161e3367f3d1ca8a6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd960feef9bc7d834f0ab55a6a29dc1d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html#abd960feef9bc7d834f0ab55a6a29dc1d">~BundleLidarPointVector</a> ()</td></tr>
+<tr class="memdesc:abd960feef9bc7d834f0ab55a6a29dc1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_bundle_lidar_point_vector.html#abd960feef9bc7d834f0ab55a6a29dc1d">More...</a><br /></td></tr>
+<tr class="separator:abd960feef9bc7d834f0ab55a6a29dc1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18698c8f8913cfb4a4a6318453f14558"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html">BundleLidarPointVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html#a18698c8f8913cfb4a4a6318453f14558">operator=</a> (const <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html">BundleLidarPointVector</a> &amp;src)</td></tr>
+<tr class="memdesc:a18698c8f8913cfb4a4a6318453f14558"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator.  <a href="class_isis_1_1_bundle_lidar_point_vector.html#a18698c8f8913cfb4a4a6318453f14558">More...</a><br /></td></tr>
+<tr class="separator:a18698c8f8913cfb4a4a6318453f14558"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1b1c52ea5b910bfc3b6f745dd3f0595"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html#aa1b1c52ea5b910bfc3b6f745dd3f0595">applyParameterCorrections</a> (<a class="el" href="class_isis_1_1_sparse_block_matrix.html">SparseBlockMatrix</a> &amp;normalsMatrix, <a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;imageSolution, const <a class="el" href="namespace_isis.html#a8ad1a208b8261d34b5ee7ced0bd2d4e9">BundleTargetBodyQsp</a> target)</td></tr>
+<tr class="memdesc:aa1b1c52ea5b910bfc3b6f745dd3f0595"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply point parameter corrections.  <a href="class_isis_1_1_bundle_lidar_point_vector.html#aa1b1c52ea5b910bfc3b6f745dd3f0595">More...</a><br /></td></tr>
+<tr class="separator:aa1b1c52ea5b910bfc3b6f745dd3f0595"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dc6b42744caf17d9095631d0e260e2d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html#a9dc6b42744caf17d9095631d0e260e2d">computeMeasureResiduals</a> ()</td></tr>
+<tr class="memdesc:a9dc6b42744caf17d9095631d0e260e2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute vtpv, the weighted sum of squares of constrained point residuals.  <a href="class_isis_1_1_bundle_lidar_point_vector.html#a9dc6b42744caf17d9095631d0e260e2d">More...</a><br /></td></tr>
+<tr class="separator:a9dc6b42744caf17d9095631d0e260e2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11bc35e19acc3bd40218ac7412f97c83"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html#a11bc35e19acc3bd40218ac7412f97c83">vtpvContribution</a> ()</td></tr>
+<tr class="memdesc:a11bc35e19acc3bd40218ac7412f97c83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute vtpv, the weighted sum of squares of constrained point residuals.  <a href="class_isis_1_1_bundle_lidar_point_vector.html#a11bc35e19acc3bd40218ac7412f97c83">More...</a><br /></td></tr>
+<tr class="separator:a11bc35e19acc3bd40218ac7412f97c83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d6b38c11d6d2668ba6b947f7591734a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html#a1d6b38c11d6d2668ba6b947f7591734a">vtpvMeasureContribution</a> ()</td></tr>
+<tr class="memdesc:a1d6b38c11d6d2668ba6b947f7591734a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute vtpv of image measures (weighted sum of squares of measure residuals).  <a href="class_isis_1_1_bundle_lidar_point_vector.html#a1d6b38c11d6d2668ba6b947f7591734a">More...</a><br /></td></tr>
+<tr class="separator:a1d6b38c11d6d2668ba6b947f7591734a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af09ef65b4866ec28020cf5739f5bc077"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html#af09ef65b4866ec28020cf5739f5bc077">vtpvRangeContribution</a> ()</td></tr>
+<tr class="memdesc:af09ef65b4866ec28020cf5739f5bc077"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute vtpv of lidar range constraints.  <a href="class_isis_1_1_bundle_lidar_point_vector.html#af09ef65b4866ec28020cf5739f5bc077">More...</a><br /></td></tr>
+<tr class="separator:af09ef65b4866ec28020cf5739f5bc077"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class is a container class for BundleLidarControlPoints. </p>
+<p>Contained BundleLidarControlPoints are stored as shared pointers, so are automatically deleted when all shared pointers are deleted.</p>
+<dl class="section author"><dt>Author</dt><dd>2019-03-13 Ken Edmundson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a5656262d2f992a75e7053de956e19ad3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5656262d2f992a75e7053de956e19ad3">&#9670;&nbsp;</a></span>BundleLidarPointVector() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleLidarPointVector::BundleLidarPointVector </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an empty <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html" title="This class is a container class for BundleLidarControlPoints.">BundleLidarPointVector</a>. </p>
+
+</div>
+</div>
+<a id="af9065e8c6e43bd161e3367f3d1ca8a6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9065e8c6e43bd161e3367f3d1ca8a6e">&#9670;&nbsp;</a></span>BundleLidarPointVector() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleLidarPointVector::BundleLidarPointVector </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html">BundleLidarPointVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>A reference to the <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html" title="This class is a container class for BundleLidarControlPoints.">BundleLidarPointVector</a> to copy from. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abd960feef9bc7d834f0ab55a6a29dc1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd960feef9bc7d834f0ab55a6a29dc1d">&#9670;&nbsp;</a></span>~BundleLidarPointVector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleLidarPointVector::~BundleLidarPointVector </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+<p>Contained BundleControlPoints will remain until all shared pointers to them are deleted. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa1b1c52ea5b910bfc3b6f745dd3f0595"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1b1c52ea5b910bfc3b6f745dd3f0595">&#9670;&nbsp;</a></span>applyParameterCorrections()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleLidarPointVector::applyParameterCorrections </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_sparse_block_matrix.html">SparseBlockMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>normalsMatrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>imageSolution</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#a8ad1a208b8261d34b5ee7ced0bd2d4e9">BundleTargetBodyQsp</a>&#160;</td>
+          <td class="paramname"><em>target</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Apply point parameter corrections. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">normalsMatrix</td><td>Normal equations matrix. </td></tr>
+    <tr><td class="paramname">imageSolution</td><td>Current iteration solution vector for image parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9dc6b42744caf17d9095631d0e260e2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dc6b42744caf17d9095631d0e260e2d">&#9670;&nbsp;</a></span>computeMeasureResiduals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleLidarPointVector::computeMeasureResiduals </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute vtpv, the weighted sum of squares of constrained point residuals. </p>
+<dl class="section return"><dt>Returns</dt><dd>double Weighted sum of squares of constrained point residuals. </dd></dl>
+
+</div>
+</div>
+<a id="a18698c8f8913cfb4a4a6318453f14558"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18698c8f8913cfb4a4a6318453f14558">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html">BundleLidarPointVector</a> &amp; Isis::BundleLidarPointVector::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html">BundleLidarPointVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Assignment operator. </p>
+<p>Assigns the state of the source <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html" title="This class is a container class for BundleLidarControlPoints.">BundleLidarPointVector</a> to this <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html" title="This class is a container class for BundleLidarControlPoints.">BundleLidarPointVector</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html" title="This class is a container class for BundleLidarControlPoints.">BundleLidarPointVector</a> to assign from.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html" title="This class is a container class for BundleLidarControlPoints.">BundleLidarPointVector</a>&amp; A reference to this <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html" title="This class is a container class for BundleLidarControlPoints.">BundleLidarPointVector</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a11bc35e19acc3bd40218ac7412f97c83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11bc35e19acc3bd40218ac7412f97c83">&#9670;&nbsp;</a></span>vtpvContribution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BundleLidarPointVector::vtpvContribution </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute vtpv, the weighted sum of squares of constrained point residuals. </p>
+<dl class="section return"><dt>Returns</dt><dd>double Weighted sum of squares of constrained point residuals. </dd></dl>
+
+</div>
+</div>
+<a id="a1d6b38c11d6d2668ba6b947f7591734a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d6b38c11d6d2668ba6b947f7591734a">&#9670;&nbsp;</a></span>vtpvMeasureContribution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BundleLidarPointVector::vtpvMeasureContribution </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute vtpv of image measures (weighted sum of squares of measure residuals). </p>
+<dl class="section return"><dt>Returns</dt><dd>double weighted sum of squares of measure residuals (vtpv). </dd></dl>
+
+</div>
+</div>
+<a id="af09ef65b4866ec28020cf5739f5bc077"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af09ef65b4866ec28020cf5739f5bc077">&#9670;&nbsp;</a></span>vtpvRangeContribution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BundleLidarPointVector::vtpvRangeContribution </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute vtpv of lidar range constraints. </p>
+<dl class="section return"><dt>Returns</dt><dd>double vtpvRange of lidar range constraints. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleUtilities/<a class="el" href="_bundle_lidar_point_vector_8h_source.html">BundleLidarPointVector.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleUtilities/<a class="el" href="_bundle_lidar_point_vector_8cpp.html">BundleLidarPointVector.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html">BundleLidarPointVector</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

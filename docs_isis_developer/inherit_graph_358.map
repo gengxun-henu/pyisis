@@ -1,0 +1,22 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_q_main_window.html" title=" " alt="" coords="5,421,112,449"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_abstract_project_item_view.html" title="AbstractProjectItemView is a base class for views of a ProjectItemModel in Qt&#39;s model&#45;view framework." alt="" coords="160,188,355,216"/>
+<area shape="rect" id="node10" href="$class_isis_1_1_gui.html" title="Gui for Isis Applications." alt="" coords="222,369,293,397"/>
+<area shape="rect" id="node11" href="$class_isis_1_1_main_window.html" title="Base class for the Qisis main windows." alt="" coords="195,421,320,449"/>
+<area shape="rect" id="node19" href="$class_isis_1_1_palette_window.html" title=" " alt="" coords="188,473,327,501"/>
+<area shape="rect" id="node20" href="$class_isis_1_1_view_sub_window.html" title="This class exists to contain detached views from ipce." alt="" coords="183,525,332,553"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_bundle_observation_view.html" title="View for displaying BundleObservation CSV files." alt="" coords="410,5,599,33"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_cnet_editor_view.html" title="Ipce view containing the CnetEditorWidget." alt="" coords="434,57,575,85"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_control_health_monitor_view.html" title="View for the Control Net Health Monitor." alt="" coords="403,109,605,137"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_control_point_edit_view.html" title="View for editing a single ControlPoint." alt="" coords="417,161,591,189"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_cube_dn_view.html" title="View that displays cubes in a QView&#45;like way." alt="" coords="441,213,568,241"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_footprint2_d_view.html" title="View for displaying footprints of images in a QMos like way." alt="" coords="431,265,578,293"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_project_item_tree_view.html" title="A ProjectItemTreeView displays items from a ProjectItemProxyModel in a tree structure." alt="" coords="418,317,590,345"/>
+<area shape="rect" id="node12" href="$class_isis_1_1_mosaic_main_window.html" title=" " alt="" coords="421,369,588,397"/>
+<area shape="rect" id="node13" href="$class_isis_1_1_plot_window.html" title=" " alt="" coords="444,421,564,449"/>
+<area shape="rect" id="node17" href="$class_isis_1_1_table_main_window.html" title="a subclass of the qisis mainwindow, tablemainwindow handles all of the table tasks." alt="" coords="426,473,582,501"/>
+<area shape="rect" id="node18" href="$class_isis_1_1_viewport_main_window.html" title="This was called the Qisis MainWindow." alt="" coords="416,525,592,553"/>
+<area shape="rect" id="node14" href="$class_isis_1_1_histogram_plot_window.html" title=" " alt="" coords="653,369,834,397"/>
+<area shape="rect" id="node15" href="$class_isis_1_1_scatter_plot_window.html" title="Scatter Plot Window." alt="" coords="662,421,825,449"/>
+<area shape="rect" id="node16" href="$class_isis_1_1_spectral_plot_window.html" title=" " alt="" coords="659,473,828,501"/>
+</map>

@@ -1,0 +1,593 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::JigsawSetupDialog Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_jigsaw_setup_dialog.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_jigsaw_setup_dialog-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::JigsawSetupDialog Class Reference<div class="ingroups"><a class="el" href="group___control_networks.html">Control Networks</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_jigsaw_setup_dialog_8h_source.html">JigsawSetupDialog.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::JigsawSetupDialog:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_jigsaw_setup_dialog__inherit__graph.png" border="0" usemap="#a_isis_1_1_jigsaw_setup_dialog_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_jigsaw_setup_dialog_inherit__map" id="a_isis_1_1_jigsaw_setup_dialog_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,135,204,376"/>
+<area shape="rect" href="class_q_dialog.html" title=" " alt="" coords="70,5,139,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::JigsawSetupDialog:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_jigsaw_setup_dialog__coll__graph.png" border="0" usemap="#a_isis_1_1_jigsaw_setup_dialog_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_jigsaw_setup_dialog_coll__map" id="a_isis_1_1_jigsaw_setup_dialog_coll__map">
+<area shape="rect" title=" " alt="" coords="5,135,204,376"/>
+<area shape="rect" href="class_q_dialog.html" title=" " alt="" coords="70,5,139,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a5429d6313e58e66731d2560b6af86ae7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#a5429d6313e58e66731d2560b6af86ae7">slotTextChanged</a> (const QString &amp;text)</td></tr>
+<tr class="separator:a5429d6313e58e66731d2560b6af86ae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fa32fbf07ce6321b13cbb1cc684215b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#a2fa32fbf07ce6321b13cbb1cc684215b">checkIsValid</a> ()</td></tr>
+<tr class="separator:a2fa32fbf07ce6321b13cbb1cc684215b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ad04945c88dbc936f79d575ca8c0c25"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#a5ad04945c88dbc936f79d575ca8c0c25">treeViewSelectionChanged</a> (const QItemSelection &amp;selected, const QItemSelection &amp;deselected)</td></tr>
+<tr class="separator:a5ad04945c88dbc936f79d575ca8c0c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:af5a3ac707fde03b6ee780858d16e97d4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#af5a3ac707fde03b6ee780858d16e97d4">JigsawSetupDialog</a> (<a class="el" href="class_isis_1_1_project.html">Project</a> *project, bool useLastSettings=true, bool readOnly=false, <a class="el" href="class_q_widget.html">QWidget</a> *parent=0)</td></tr>
+<tr class="separator:af5a3ac707fde03b6ee780858d16e97d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53e11d67596cc75df30f6de644e523ac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#a53e11d67596cc75df30f6de644e523ac">~JigsawSetupDialog</a> ()</td></tr>
+<tr class="separator:a53e11d67596cc75df30f6de644e523ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45f8cb69a0c476f543b9fcda857befae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#a45f8cb69a0c476f543b9fcda857befae">selectedControl</a> ()</td></tr>
+<tr class="separator:a45f8cb69a0c476f543b9fcda857befae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22c246485e39df41bae23a1a623bdf9e"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#a22c246485e39df41bae23a1a623bdf9e">selectedControlName</a> ()</td></tr>
+<tr class="separator:a22c246485e39df41bae23a1a623bdf9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa5ed64bd38a2ca4e1fc836e6fe527a4"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#aaa5ed64bd38a2ca4e1fc836e6fe527a4">outputControlName</a> ()</td></tr>
+<tr class="separator:aaa5ed64bd38a2ca4e1fc836e6fe527a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb44cfe4b58d344ca3d2c21ae5dc6e65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#a2a8ce6eaf289ace3131997657b683c9c">BundleSettingsQsp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#adb44cfe4b58d344ca3d2c21ae5dc6e65">bundleSettings</a> ()</td></tr>
+<tr class="separator:adb44cfe4b58d344ca3d2c21ae5dc6e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3d577e0a0a1f8e151bf68cbd87b522e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#aa3d577e0a0a1f8e151bf68cbd87b522e">loadSettings</a> (const <a class="el" href="namespace_isis.html#a2a8ce6eaf289ace3131997657b683c9c">BundleSettingsQsp</a> settings)</td></tr>
+<tr class="memdesc:aa3d577e0a0a1f8e151bf68cbd87b522e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the passed bundle settings into the setup dialog.  <a href="class_isis_1_1_jigsaw_setup_dialog.html#aa3d577e0a0a1f8e151bf68cbd87b522e">More...</a><br /></td></tr>
+<tr class="separator:aa3d577e0a0a1f8e151bf68cbd87b522e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7dfe565b1598216f8fcd484f6a4d608"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#ad7dfe565b1598216f8fcd484f6a4d608">selectControl</a> (const QString &amp;controlName)</td></tr>
+<tr class="memdesc:ad7dfe565b1598216f8fcd484f6a4d608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Selects a control in the control network combo box by trying to find an item with the matching name.  <a href="class_isis_1_1_jigsaw_setup_dialog.html#ad7dfe565b1598216f8fcd484f6a4d608">More...</a><br /></td></tr>
+<tr class="separator:ad7dfe565b1598216f8fcd484f6a4d608"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="section author"><dt>Author</dt><dd>2014-04-21 Ken Edmundson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af5a3ac707fde03b6ee780858d16e97d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5a3ac707fde03b6ee780858d16e97d4">&#9670;&nbsp;</a></span>JigsawSetupDialog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::JigsawSetupDialog::JigsawSetupDialog </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>useLastSettings</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>readOnly</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#a2a17689cf477d3cdafb4e278acf23cc6">Isis::BundleObservationSolveSettings::addObservationNumber()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#af26a0fe59c646f0f3879c0d5d1007122aa16b882e18bddc672fb160ca89a6c54d">Isis::BundleObservationSolveSettings::AnglesVelocityAcceleration</a>, <a class="el" href="class_isis_1_1_file_name.html#a5596aba89aab7d88ff1b67c1637145a3">Isis::FileName::baseName()</a>, <a class="el" href="class_isis_1_1_project.html#ab5d3f5e43dd470d90138e808b1f69abb">Isis::Project::bundleSolutionInfo()</a>, <a class="el" href="class_isis_1_1_cube.html#a5801f8947361ef4e0fa8a12ed8e480f9">Isis::Cube::camera()</a>, <a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#a2fa32fbf07ce6321b13cbb1cc684215b">checkIsValid()</a>, <a class="el" href="class_isis_1_1_project_item.html#af243ef3402ea1ee1f4088f1dc3989f1b">Isis::ProjectItem::child()</a>, <a class="el" href="class_isis_1_1_project.html#aa8988aaa7163506a7e9d52141de256b4">Isis::Project::controls()</a>, <a class="el" href="class_isis_1_1_image.html#a05d6cbd0cc8c11b667c48e6aa655f48d">Isis::Image::cube()</a>, <a class="el" href="class_isis_1_1_project.html#aac601da397ddfa37ab9f10c241232cbd">Isis::Project::directory()</a>, <a class="el" href="class_isis_1_1_display_properties.html#a142d239a553918e48f67df7f3bf7b62e">Isis::DisplayProperties::displayName()</a>, <a class="el" href="class_isis_1_1_control.html#a0e9eae2214ebc5b49cb9ecc920d2ddf2">Isis::Control::displayProperties()</a>, <a class="el" href="class_isis_1_1_project_item_model.html#a9d387ce77b344339ec3cfd3478bf4e32">Isis::ProjectItemModel::findItemData()</a>, <a class="el" href="class_isis_1_1_camera.html#aa89ff60852003dd1ecbd0a7f45a533c2">Isis::Camera::GetCameraType()</a>, <a class="el" href="class_isis_1_1_project_item.html#ad103f1bb91af8523a87f9bd571008868">Isis::ProjectItem::image()</a>, <a class="el" href="class_isis_1_1_project_item.html#ae79bab8f797d90910c7a2b1005a543d2">Isis::ProjectItem::isImage()</a>, <a class="el" href="class_isis_1_1_project_item.html#a8c925ee88fa41381a994b99986be530f">Isis::ProjectItem::isImageList()</a>, <a class="el" href="class_isis_1_1_camera.html#a80b18de8e907645e31a489b39adc4524a9305c430fe127136e78b0cc63aa39f30">Isis::Camera::LineScan</a>, <a class="el" href="class_isis_1_1_directory.html#adf79181b5c3ed0a4c99b34eb023cc731">Isis::Directory::model()</a>, <a class="el" href="class_isis_1_1_image.html#ad48f01aafb7c19940e491d680eee5734">Isis::Image::observationNumber()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#ad9b7c84be53c99d36818f68f0628876b">Isis::BundleObservationSolveSettings::observationNumbers()</a>, <a class="el" href="class_isis_1_1_project_item_model.html#a1b218a3e62a7a06c630051b36152c564">Isis::ProjectItemModel::selectedItems()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#ac0114cf02e7dd374519d27c0e77f4a2f">Isis::BundleObservationSolveSettings::setInstrumentPointingSettings()</a>, <a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#a5429d6313e58e66731d2560b6af86ae7">slotTextChanged()</a>, and <a class="el" href="class_isis_1_1_project.html#a69d19b32928faabf2458f25230ca742f">Isis::Project::targetBodies()</a>.</p>
+
+</div>
+</div>
+<a id="a53e11d67596cc75df30f6de644e523ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53e11d67596cc75df30f6de644e523ac">&#9670;&nbsp;</a></span>~JigsawSetupDialog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::JigsawSetupDialog::~JigsawSetupDialog </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="adb44cfe4b58d344ca3d2c21ae5dc6e65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb44cfe4b58d344ca3d2c21ae5dc6e65">&#9670;&nbsp;</a></span>bundleSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#a2a8ce6eaf289ace3131997657b683c9c">BundleSettingsQsp</a> Isis::JigsawSetupDialog::bundleSettings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="class_isis_1_1_distance.html#accb6199bc155f11ff0f36236c6c1a902a92d8820f17a47638b5d9f7e4e62e7069">Isis::Distance::Kilometers</a>, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223a256c8dadbfa862853fc27317f7a17978">Isis::SurfacePoint::Latitudinal</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a621c3bd02660845d30f52bf42afcf24c">Isis::BundleTargetBody::MeanRadius</a>, <a class="el" href="class_isis_1_1_distance.html#accb6199bc155f11ff0f36236c6c1a902ab89a588cde6b6f8840cee8991ffc9278">Isis::Distance::Meters</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a0c528ea2dd1cc54ba9e38d1dea739ab0">Isis::BundleTargetBody::PM</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a6a608d5a4035d5193408ad4334d2f894">Isis::BundleTargetBody::PoleDec</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390acbfae654823d3313bd7c379a75b5cf08">Isis::BundleTargetBody::PoleRA</a>, <a class="el" href="class_isis_1_1_bundle_settings.html#a35e79edd9688064637b030d2564d9135a6244a68168660e4d8362a45f335237d9">Isis::BundleSettings::Sigma0</a>, <a class="el" href="class_isis_1_1_maximum_likelihood_w_functions.html#a79f867930a7b06921eca18bf3d35f544">Isis::MaximumLikelihoodWFunctions::stringToModel()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390ab466057d5284b34c80226fe505b7e49d">Isis::BundleTargetBody::TriaxialRadiusA</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a82223f8dfbdf92921049aded28fd83cf">Isis::BundleTargetBody::TriaxialRadiusB</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a2da676cc0637271645c3cbd5bbeb7910">Isis::BundleTargetBody::TriaxialRadiusC</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a532060601544c19ee68c4b4eaeab9a25">Isis::BundleTargetBody::VelocityPM</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aa0415b4e1ddde399b7485daaa2694bd7">Isis::BundleTargetBody::VelocityPoleDec</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aaa076ccaff64ab6e56fb3ca63e477290">Isis::BundleTargetBody::VelocityPoleRA</a>.</p>
+
+</div>
+</div>
+<a id="a2fa32fbf07ce6321b13cbb1cc684215b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fa32fbf07ce6321b13cbb1cc684215b">&#9670;&nbsp;</a></span>checkIsValid</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::JigsawSetupDialog::checkIsValid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#af5a3ac707fde03b6ee780858d16e97d4">JigsawSetupDialog()</a>.</p>
+
+</div>
+</div>
+<a id="aa3d577e0a0a1f8e151bf68cbd87b522e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3d577e0a0a1f8e151bf68cbd87b522e">&#9670;&nbsp;</a></span>loadSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::JigsawSetupDialog::loadSettings </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#a2a8ce6eaf289ace3131997657b683c9c">BundleSettingsQsp</a>&#160;</td>
+          <td class="paramname"><em>settings</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Loads the passed bundle settings into the setup dialog. </p>
+<p>This is used by JigsawDialog to load its current settings when not using the last (most recent) bundle settings in the project.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>BundleSettingsQsp settings Shared pointer to the settings to load up. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaa5ed64bd38a2ca4e1fc836e6fe527a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa5ed64bd38a2ca4e1fc836e6fe527a4">&#9670;&nbsp;</a></span>outputControlName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::JigsawSetupDialog::outputControlName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad7dfe565b1598216f8fcd484f6a4d608"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7dfe565b1598216f8fcd484f6a4d608">&#9670;&nbsp;</a></span>selectControl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::JigsawSetupDialog::selectControl </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>controlName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Selects a control in the control network combo box by trying to find an item with the matching name. </p>
+<p>If the name is found in the combo box, the box's index is set to that found control network index. If the name is not found and the box is not empty, the current index is set to 0 (the first item). If the name is not found and the box is empty, the index is set to -1 (see Qt).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>QString &amp;controlName The name of the control to try to find in the combo box. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_name.html#a5ac7c4ccd0692dc427e117a5c9a2df79">Isis::FileName::name()</a>.</p>
+
+</div>
+</div>
+<a id="a45f8cb69a0c476f543b9fcda857befae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45f8cb69a0c476f543b9fcda857befae">&#9670;&nbsp;</a></span>selectedControl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control.html">Control</a> * Isis::JigsawSetupDialog::selectedControl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a22c246485e39df41bae23a1a623bdf9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22c246485e39df41bae23a1a623bdf9e">&#9670;&nbsp;</a></span>selectedControlName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::JigsawSetupDialog::selectedControlName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5429d6313e58e66731d2560b6af86ae7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5429d6313e58e66731d2560b6af86ae7">&#9670;&nbsp;</a></span>slotTextChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::JigsawSetupDialog::slotTextChanged </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#af5a3ac707fde03b6ee780858d16e97d4">JigsawSetupDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a5ad04945c88dbc936f79d575ca8c0c25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ad04945c88dbc936f79d575ca8c0c25">&#9670;&nbsp;</a></span>treeViewSelectionChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::JigsawSetupDialog::treeViewSelectionChanged </td>
+          <td>(</td>
+          <td class="paramtype">const QItemSelection &amp;&#160;</td>
+          <td class="paramname"><em>selected</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QItemSelection &amp;&#160;</td>
+          <td class="paramname"><em>deselected</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#a9bdcc73677ce2675717f3410a505f0e6">Isis::BundleObservationSolveSettings::aprioriPointingSigmas()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#a82bc83b0e2ad3edb695d8d546ec77561">Isis::BundleObservationSolveSettings::aprioriPositionSigmas()</a>, <a class="el" href="class_isis_1_1_project_item.html#af243ef3402ea1ee1f4088f1dc3989f1b">Isis::ProjectItem::child()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#a77370b8de71977f447b0ff1e87cea0f7">Isis::BundleObservationSolveSettings::ckDegree()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#aaabcfa1362a944fcd413b8f45c2d7a09">Isis::BundleObservationSolveSettings::ckSolveDegree()</a>, <a class="el" href="class_isis_1_1_project_item.html#ad103f1bb91af8523a87f9bd571008868">Isis::ProjectItem::image()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#aecb907d1484a9df20d9fa5aef9ecb794">Isis::BundleObservationSolveSettings::instrumentPointingSolveOption()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#a3007cf621c8e6202c2075daccb57bba1">Isis::BundleObservationSolveSettings::instrumentPositionSolveOption()</a>, <a class="el" href="class_isis_1_1_project_item.html#a8c925ee88fa41381a994b99986be530f">Isis::ProjectItem::isImageList()</a>, <a class="el" href="class_isis_1_1_project_item_model.html#a4a2324605dad8072288f516c2852510f">Isis::ProjectItemModel::itemFromIndex()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_image.html#ad48f01aafb7c19940e491d680eee5734">Isis::Image::observationNumber()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#a595e88c0d69b72777bfcf17045c751ee">Isis::BundleObservationSolveSettings::solvePolyOverPointing()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#ac2e747538f0ee2f2cbfe6daa904e8c4b">Isis::BundleObservationSolveSettings::solvePositionOverHermite()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#a353f8ed91bafbbc619647220b50c5421">Isis::BundleObservationSolveSettings::solveTwist()</a>, <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#af97a1f143dfe01dd832d4319670cd9d3">Isis::BundleObservationSolveSettings::spkDegree()</a>, and <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#aea8651419f55b67d8cd7959c5a4b703b">Isis::BundleObservationSolveSettings::spkSolveDegree()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/JigsawSetupDialog/<a class="el" href="_jigsaw_setup_dialog_8h_source.html">JigsawSetupDialog.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/JigsawSetupDialog/<a class="el" href="_jigsaw_setup_dialog_8cpp.html">JigsawSetupDialog.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html">JigsawSetupDialog</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ControlNetValidMeasure,Control Networks,isis/src/control/objs/ControlNetValidMeasure/ControlNetValidMeasure.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ControlNetValidMeasure,isis_pybind.ControlNetValidMeasure,N,Python class symbol not found in current binding files
+Construction/Enum,ControlNetValidMeasure(),isis_pybind.ControlNetValidMeasure(),N,Constructor binding not detected in current binding files
+Public API,void InitStdOptions(void),isis_pybind.ControlNetValidMeasure.init_std_options,N,Method not found in current binding files
+Public API,void InitStdOptionsGroup(void),isis_pybind.ControlNetValidMeasure.init_std_options_group,N,Method not found in current binding files
+Public API,void Parse(Pvl &pvlDef),isis_pybind.ControlNetValidMeasure.parse,N,Method not found in current binding files
+Public API,virtual Pvl &GetLogPvl(void) { return mPvlLog,isis_pybind.ControlNetValidMeasure.get_log_pvl,N,Method not found in current binding files
+Public API,virtual void FindCnetRef(ControlNet &pNewNet) {},isis_pybind.ControlNetValidMeasure.find_cnet_ref,N,Method not found in current binding files
+Query,bool ValidEmissionAngle(double pdEmissionAngle),isis_pybind.ControlNetValidMeasure.valid_emission_angle,N,Method not found in current binding files
+Query,bool ValidIncidenceAngle(double pdIncidenceAngle),isis_pybind.ControlNetValidMeasure.valid_incidence_angle,N,Method not found in current binding files
+Query,bool ValidDnValue(double pdDnValue),isis_pybind.ControlNetValidMeasure.valid_dn_value,N,Method not found in current binding files
+Query,bool ValidResolution(double pdResolution),isis_pybind.ControlNetValidMeasure.valid_resolution,N,Method not found in current binding files
+Query,"bool ValidResidualTolerances(double pdSampleResidual, double pdLineResidual, double pdResidualMagnitude, MeasureValidationResults & pResults)",isis_pybind.ControlNetValidMeasure.valid_residual_tolerances,N,Method not found in current binding files
+Query,"bool ValidShiftTolerances(double sampleShift, double lineShift, double pixelShift, MeasureValidationResults &results)",isis_pybind.ControlNetValidMeasure.valid_shift_tolerances,N,Method not found in current binding files
+Query,"bool ValidLatLon(Isis::Camera *pCamera, int piSample, int piLine)",isis_pybind.ControlNetValidMeasure.valid_lat_lon,N,Method not found in current binding files
+Public API,PvlGroup &GetStdOptions(void) { return mStdOptionsGrp,isis_pybind.ControlNetValidMeasure.get_std_options,N,Method not found in current binding files
+Public API,PvlGroup &GetStatistics(void) { return mStatisticsGrp,isis_pybind.ControlNetValidMeasure.get_statistics,N,Method not found in current binding files
+Public API,double GetMinDN(void) { return mdMinDN,isis_pybind.ControlNetValidMeasure.get_min_dn,N,Method not found in current binding files
+Public API,double GetMaxDN(void) { return mdMaxDN,isis_pybind.ControlNetValidMeasure.get_max_dn,N,Method not found in current binding files
+Public API,double GetMinEmissionAngle(void) { return mdMinEmissionAngle,isis_pybind.ControlNetValidMeasure.get_min_emission_angle,N,Method not found in current binding files
+Public API,double GetMaxEmissionAngle(void) { return mdMaxEmissionAngle,isis_pybind.ControlNetValidMeasure.get_max_emission_angle,N,Method not found in current binding files
+Public API,double GetMinIncidenceAngle(void) { return mdMinIncidenceAngle,isis_pybind.ControlNetValidMeasure.get_min_incidence_angle,N,Method not found in current binding files
+Public API,double GetMaxIncidenceAngle(void) { return mdMaxIncidenceAngle,isis_pybind.ControlNetValidMeasure.get_max_incidence_angle,N,Method not found in current binding files
+Public API,double GetPixelsFromEdge(void) { return miPixelsFromEdge,isis_pybind.ControlNetValidMeasure.get_pixels_from_edge,N,Method not found in current binding files
+Public API,double GetMetersFromEdge(void) { return mdMetersFromEdge,isis_pybind.ControlNetValidMeasure.get_meters_from_edge,N,Method not found in current binding files
+Public API,"QString LocationString(double pdSample, double pdLine) const { return toString((int)pdSample) + "","" + toString((int)pdLine)",isis_pybind.ControlNetValidMeasure.location_string,N,Method not found in current binding files
+Public API,"bool PixelsFromEdge(int piSample, int piLine, Cube *pCube)",isis_pybind.ControlNetValidMeasure.pixels_from_edge,N,Method not found in current binding files
+Public API,"bool MetersFromEdge(int piSample, int piLine, Cube *pCube)",isis_pybind.ControlNetValidMeasure.meters_from_edge,N,Method not found in current binding files
+Query,"MeasureValidationResults ValidStandardOptions(const ControlMeasure *pMeasure, Cube *pCube, PvlGroup *pMeasureGrp = NULL)",isis_pybind.ControlNetValidMeasure.valid_standard_options,N,Method not found in current binding files
+Query,"MeasureValidationResults ValidStandardOptions(const ControlMeasure *pMeasure, Cube *pCube, Camera *camera, PvlGroup *pMeasureGrp = NULL)",isis_pybind.ControlNetValidMeasure.valid_standard_options,N,Method not found in current binding files
+Query,"MeasureValidationResults ValidStandardOptions(double pSample, double pLine, const ControlMeasure *pMeasure, Cube *pCube, PvlGroup *pMeasureGrp = NULL)",isis_pybind.ControlNetValidMeasure.valid_standard_options,N,Method not found in current binding files
+Query,"MeasureValidationResults ValidStandardOptions(double pSample, double pLine, const ControlMeasure *pMeasure, Cube *pCube, Camera *measureCamera, PvlGroup *pMeasureGrp = NULL)",isis_pybind.ControlNetValidMeasure.valid_standard_options,N,Method not found in current binding files
+Query,"MeasureValidationResults ValidStandardOptions(double pSample, double pLine, Cube *pCube, PvlGroup *pMeasureGrp = NULL)",isis_pybind.ControlNetValidMeasure.valid_standard_options,N,Method not found in current binding files
+Query,bool IsCubeRequired() { return IsCameraRequired() || mbValidateDN || mbValidateFromEdge,isis_pybind.ControlNetValidMeasure.is_cube_required,N,Method not found in current binding files
+Query,bool IsCameraRequired() { return mbCameraRequired,isis_pybind.ControlNetValidMeasure.is_camera_required,N,Method not found in current binding files

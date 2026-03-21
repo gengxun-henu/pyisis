@@ -1,0 +1,624 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::TreeView Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_tree_view.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_tree_view-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::TreeView Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="_tree_view_8h_source.html">TreeView.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::TreeView:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_tree_view__inherit__graph.png" border="0" usemap="#a_isis_1_1_tree_view_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_tree_view_inherit__map" id="a_isis_1_1_tree_view_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,135,226,392"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="79,5,152,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::TreeView:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_tree_view__coll__graph.png" border="0" usemap="#a_isis_1_1_tree_view_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_tree_view_coll__map" id="a_isis_1_1_tree_view_coll__map">
+<area shape="rect" title=" " alt="" coords="5,135,226,392"/>
+<area shape="rect" href="class_q_widget.html" title=" " alt="" coords="79,5,152,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a382e3b2b768a4b73720830d1ad817eb6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#a382e3b2b768a4b73720830d1ad817eb6">deactivate</a> ()</td></tr>
+<tr class="separator:a382e3b2b768a4b73720830d1ad817eb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac05cd4127a3867ba9734470a76cb0700"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#ac05cd4127a3867ba9734470a76cb0700">activate</a> ()</td></tr>
+<tr class="separator:ac05cd4127a3867ba9734470a76cb0700"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05e7ee5ff8a2b34549ba34724a02ae32"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#a05e7ee5ff8a2b34549ba34724a02ae32">handleModelSelectionChanged</a> ()</td></tr>
+<tr class="separator:a05e7ee5ff8a2b34549ba34724a02ae32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a21a94eda31232a66109188dde10ba508"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#a21a94eda31232a66109188dde10ba508">activated</a> ()</td></tr>
+<tr class="separator:a21a94eda31232a66109188dde10ba508"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4f3f0cba7716aa66cac3cca88209c27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#aa4f3f0cba7716aa66cac3cca88209c27">selectionChanged</a> ()</td></tr>
+<tr class="separator:aa4f3f0cba7716aa66cac3cca88209c27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a013867333e5079f61f1df57f70f4ac29"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#a013867333e5079f61f1df57f70f4ac29">TreeView</a> (<a class="el" href="class_q_widget.html">QWidget</a> *parent=0)</td></tr>
+<tr class="separator:a013867333e5079f61f1df57f70f4ac29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d92a1d0e6593f243508915a88970c9c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#a5d92a1d0e6593f243508915a88970c9c">~TreeView</a> ()</td></tr>
+<tr class="separator:a5d92a1d0e6593f243508915a88970c9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e48109cc0b954a4cd9b349a85270bdb"><td class="memItemLeft" align="right" valign="top">QSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#a6e48109cc0b954a4cd9b349a85270bdb">sizeHint</a> () const</td></tr>
+<tr class="separator:a6e48109cc0b954a4cd9b349a85270bdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a96a8b93c24ecb83871940915092d73"><td class="memItemLeft" align="right" valign="top">QFont&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#a2a96a8b93c24ecb83871940915092d73">getContentFont</a> () const</td></tr>
+<tr class="separator:a2a96a8b93c24ecb83871940915092d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46b503a1f6af966939fd4ee2b05baab4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#a46b503a1f6af966939fd4ee2b05baab4">setModel</a> (<a class="el" href="class_isis_1_1_abstract_tree_model.html">AbstractTreeModel</a> *someModel)</td></tr>
+<tr class="separator:a46b503a1f6af966939fd4ee2b05baab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0083de2012f60174818d6acb064c207"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_abstract_tree_model.html">AbstractTreeModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#aa0083de2012f60174818d6acb064c207">getModel</a> () const</td></tr>
+<tr class="separator:aa0083de2012f60174818d6acb064c207"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f4b168a7feeb5d58c5c390905df9baa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#a4f4b168a7feeb5d58c5c390905df9baa">isActive</a> () const</td></tr>
+<tr class="separator:a4f4b168a7feeb5d58c5c390905df9baa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35dc054ba3ebab82cd1265db43368c20"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#a35dc054ba3ebab82cd1265db43368c20">getTitle</a> () const</td></tr>
+<tr class="separator:a35dc054ba3ebab82cd1265db43368c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54ef33196da5fd763a893a1cf7e85f36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_tree_view.html#a54ef33196da5fd763a893a1cf7e85f36">setTitle</a> (QString someTitle)</td></tr>
+<tr class="separator:a54ef33196da5fd763a893a1cf7e85f36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="section author"><dt>Author</dt><dd>????-??-?? Unknown </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a013867333e5079f61f1df57f70f4ac29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a013867333e5079f61f1df57f70f4ac29">&#9670;&nbsp;</a></span>TreeView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TreeView::TreeView </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>0</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tree_view.html#a21a94eda31232a66109188dde10ba508">activated()</a>, and <a class="el" href="class_isis_1_1_tree_view.html#aa4f3f0cba7716aa66cac3cca88209c27">selectionChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a5d92a1d0e6593f243508915a88970c9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d92a1d0e6593f243508915a88970c9c">&#9670;&nbsp;</a></span>~TreeView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::TreeView::~TreeView </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac05cd4127a3867ba9734470a76cb0700"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac05cd4127a3867ba9734470a76cb0700">&#9670;&nbsp;</a></span>activate</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TreeView::activate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tree_view_header.html#a6fe5d247dd6d845234663fbcf2016ca9">Isis::TreeViewHeader::setActive()</a>.</p>
+
+</div>
+</div>
+<a id="a21a94eda31232a66109188dde10ba508"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21a94eda31232a66109188dde10ba508">&#9670;&nbsp;</a></span>activated</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TreeView::activated </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tree_view.html#a013867333e5079f61f1df57f70f4ac29">TreeView()</a>.</p>
+
+</div>
+</div>
+<a id="a382e3b2b768a4b73720830d1ad817eb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a382e3b2b768a4b73720830d1ad817eb6">&#9670;&nbsp;</a></span>deactivate</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TreeView::deactivate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tree_view_header.html#a6fe5d247dd6d845234663fbcf2016ca9">Isis::TreeViewHeader::setActive()</a>.</p>
+
+</div>
+</div>
+<a id="a2a96a8b93c24ecb83871940915092d73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a96a8b93c24ecb83871940915092d73">&#9670;&nbsp;</a></span>getContentFont()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QFont Isis::TreeView::getContentFont </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa0083de2012f60174818d6acb064c207"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0083de2012f60174818d6acb064c207">&#9670;&nbsp;</a></span>getModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_abstract_tree_model.html">AbstractTreeModel</a> * Isis::TreeView::getModel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tree_view_content.html#ac421f4d19eb7679883e9ceb2b534373d">Isis::TreeViewContent::getModel()</a>.</p>
+
+</div>
+</div>
+<a id="a35dc054ba3ebab82cd1265db43368c20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35dc054ba3ebab82cd1265db43368c20">&#9670;&nbsp;</a></span>getTitle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::TreeView::getTitle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tree_view_header.html#ae0c688245ac4d9e63ef62b25d7d0c804">Isis::TreeViewHeader::getText()</a>.</p>
+
+</div>
+</div>
+<a id="a05e7ee5ff8a2b34549ba34724a02ae32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05e7ee5ff8a2b34549ba34724a02ae32">&#9670;&nbsp;</a></span>handleModelSelectionChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TreeView::handleModelSelectionChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tree_view_content.html#afeaa2469ca59667af1347a25799167dd">Isis::TreeViewContent::refresh()</a>.</p>
+
+</div>
+</div>
+<a id="a4f4b168a7feeb5d58c5c390905df9baa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f4b168a7feeb5d58c5c390905df9baa">&#9670;&nbsp;</a></span>isActive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::TreeView::isActive </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa4f3f0cba7716aa66cac3cca88209c27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4f3f0cba7716aa66cac3cca88209c27">&#9670;&nbsp;</a></span>selectionChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TreeView::selectionChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_tree_view.html#a46b503a1f6af966939fd4ee2b05baab4">setModel()</a>, and <a class="el" href="class_isis_1_1_tree_view.html#a013867333e5079f61f1df57f70f4ac29">TreeView()</a>.</p>
+
+</div>
+</div>
+<a id="a46b503a1f6af966939fd4ee2b05baab4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46b503a1f6af966939fd4ee2b05baab4">&#9670;&nbsp;</a></span>setModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TreeView::setModel </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_abstract_tree_model.html">AbstractTreeModel</a> *&#160;</td>
+          <td class="paramname"><em>someModel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tree_view.html#aa4f3f0cba7716aa66cac3cca88209c27">selectionChanged()</a>, and <a class="el" href="class_isis_1_1_tree_view_content.html#a5d1071efac5c9beb647eff5d1ce736f5">Isis::TreeViewContent::setModel()</a>.</p>
+
+</div>
+</div>
+<a id="a54ef33196da5fd763a893a1cf7e85f36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54ef33196da5fd763a893a1cf7e85f36">&#9670;&nbsp;</a></span>setTitle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::TreeView::setTitle </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>someTitle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_tree_view_header.html#aedacf3bacdb8506eb093172b53117873">Isis::TreeViewHeader::setText()</a>.</p>
+
+</div>
+</div>
+<a id="a6e48109cc0b954a4cd9b349a85270bdb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e48109cc0b954a4cd9b349a85270bdb">&#9670;&nbsp;</a></span>sizeHint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSize Isis::TreeView::sizeHint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_tree_view_8h_source.html">TreeView.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_tree_view_8cpp.html">TreeView.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_tree_view.html">TreeView</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

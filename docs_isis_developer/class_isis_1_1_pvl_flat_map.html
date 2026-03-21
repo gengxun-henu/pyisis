@@ -1,0 +1,1123 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::PvlFlatMap Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_pvl_flat_map.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_pvl_flat_map-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::PvlFlatMap Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Provides a flat map of PvlKeywords.  
+ <a href="class_isis_1_1_pvl_flat_map.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_pvl_flat_map_8h_source.html">PvlFlatMap.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::PvlFlatMap:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_pvl_flat_map__inherit__graph.png" border="0" usemap="#a_isis_1_1_pvl_flat_map_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_pvl_flat_map_inherit__map" id="a_isis_1_1_pvl_flat_map_inherit__map">
+<area shape="rect" title="Provides a flat map of PvlKeywords." alt="" coords="42,135,171,392"/>
+<area shape="rect" href="class_q_map.html" title=" " alt="" coords="5,5,208,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::PvlFlatMap:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_pvl_flat_map__coll__graph.png" border="0" usemap="#a_isis_1_1_pvl_flat_map_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_pvl_flat_map_coll__map" id="a_isis_1_1_pvl_flat_map_coll__map">
+<area shape="rect" title="Provides a flat map of PvlKeywords." alt="" coords="42,135,171,392"/>
+<area shape="rect" href="class_q_map.html" title=" " alt="" coords="5,5,208,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:aae403feff0a4a4152dbbb1b5b562ece4"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_q_map.html">QMap</a>&lt; QString, <a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &gt;::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#aae403feff0a4a4152dbbb1b5b562ece4">ConstPvlFlatMapIterator</a></td></tr>
+<tr class="memdesc:aae403feff0a4a4152dbbb1b5b562ece4"><td class="mdescLeft">&#160;</td><td class="mdescRight">A const iterator for the underling <a class="el" href="class_q_map.html" title="This is free and unencumbered software released into the public domain.">QMap</a> that <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> is built on.  <a href="class_isis_1_1_pvl_flat_map.html#aae403feff0a4a4152dbbb1b5b562ece4">More...</a><br /></td></tr>
+<tr class="separator:aae403feff0a4a4152dbbb1b5b562ece4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad56e4a48fba2ebcf1561375018033c76"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_q_map.html">QMap</a>&lt; QString, <a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#ad56e4a48fba2ebcf1561375018033c76">PvlFlatMapIterator</a></td></tr>
+<tr class="memdesc:ad56e4a48fba2ebcf1561375018033c76"><td class="mdescLeft">&#160;</td><td class="mdescRight">An iterator for the underlying <a class="el" href="class_q_map.html" title="This is free and unencumbered software released into the public domain.">QMap</a> that <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> is built on.  <a href="class_isis_1_1_pvl_flat_map.html#ad56e4a48fba2ebcf1561375018033c76">More...</a><br /></td></tr>
+<tr class="separator:ad56e4a48fba2ebcf1561375018033c76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ab461ef30bbfe63b10c23e75d6b275c2f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#ab461ef30bbfe63b10c23e75d6b275c2f">PvlFlatMap</a> ()</td></tr>
+<tr class="memdesc:ab461ef30bbfe63b10c23e75d6b275c2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="class_isis_1_1_pvl_flat_map.html#ab461ef30bbfe63b10c23e75d6b275c2f">More...</a><br /></td></tr>
+<tr class="separator:ab461ef30bbfe63b10c23e75d6b275c2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a227bf06ab11b6ab87d0336517f71a8ee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a227bf06ab11b6ab87d0336517f71a8ee">PvlFlatMap</a> (const <a class="el" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;other)</td></tr>
+<tr class="memdesc:a227bf06ab11b6ab87d0336517f71a8ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> from another <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> object.  <a href="class_isis_1_1_pvl_flat_map.html#a227bf06ab11b6ab87d0336517f71a8ee">More...</a><br /></td></tr>
+<tr class="separator:a227bf06ab11b6ab87d0336517f71a8ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acda1e6bb65f8e4c8fec9bea40230062f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#acda1e6bb65f8e4c8fec9bea40230062f">PvlFlatMap</a> (const <a class="el" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;pmap1, const <a class="el" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;pmap2)</td></tr>
+<tr class="memdesc:acda1e6bb65f8e4c8fec9bea40230062f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> from two <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> objects.  <a href="class_isis_1_1_pvl_flat_map.html#acda1e6bb65f8e4c8fec9bea40230062f">More...</a><br /></td></tr>
+<tr class="separator:acda1e6bb65f8e4c8fec9bea40230062f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9861ea5fe5e7b4b10138030ad77b0921"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a9861ea5fe5e7b4b10138030ad77b0921">PvlFlatMap</a> (const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;pvl, const <a class="el" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> &amp;constraints=<a class="el" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a>())</td></tr>
+<tr class="memdesc:a9861ea5fe5e7b4b10138030ad77b0921"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> (with constraints) from a <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a>.  <a href="class_isis_1_1_pvl_flat_map.html#a9861ea5fe5e7b4b10138030ad77b0921">More...</a><br /></td></tr>
+<tr class="separator:a9861ea5fe5e7b4b10138030ad77b0921"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fb549a7a55a5f8bc7ad52361fe77f8e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a6fb549a7a55a5f8bc7ad52361fe77f8e">PvlFlatMap</a> (const <a class="el" href="class_isis_1_1_pvl_container.html">PvlContainer</a> &amp;pvl, const <a class="el" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> &amp;constraints=<a class="el" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a>())</td></tr>
+<tr class="memdesc:a6fb549a7a55a5f8bc7ad52361fe77f8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> (with constraints) from the keywords in a <a class="el" href="class_isis_1_1_pvl_container.html" title="Contains more than one keyword-value pair.">PvlContainer</a> (i.e <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> or <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a>).  <a href="class_isis_1_1_pvl_flat_map.html#a6fb549a7a55a5f8bc7ad52361fe77f8e">More...</a><br /></td></tr>
+<tr class="separator:a6fb549a7a55a5f8bc7ad52361fe77f8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b53ae892a2f9c09fc46c912d4642306"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a8b53ae892a2f9c09fc46c912d4642306">~PvlFlatMap</a> ()</td></tr>
+<tr class="memdesc:a8b53ae892a2f9c09fc46c912d4642306"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_pvl_flat_map.html#a8b53ae892a2f9c09fc46c912d4642306">More...</a><br /></td></tr>
+<tr class="separator:a8b53ae892a2f9c09fc46c912d4642306"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7570ee99bc1528ae19d623ffdb380940"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a7570ee99bc1528ae19d623ffdb380940">exists</a> (const QString &amp;key) const</td></tr>
+<tr class="memdesc:a7570ee99bc1528ae19d623ffdb380940"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether a given keyword exists in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#a7570ee99bc1528ae19d623ffdb380940">More...</a><br /></td></tr>
+<tr class="separator:a7570ee99bc1528ae19d623ffdb380940"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a549724ff0c6502a3f866e024979bdc3b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a549724ff0c6502a3f866e024979bdc3b">count</a> (const QString &amp;key) const</td></tr>
+<tr class="memdesc:a549724ff0c6502a3f866e024979bdc3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of values associated with a given keyword.  <a href="class_isis_1_1_pvl_flat_map.html#a549724ff0c6502a3f866e024979bdc3b">More...</a><br /></td></tr>
+<tr class="separator:a549724ff0c6502a3f866e024979bdc3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8587d9db595cc92f20bdcdc28535092"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#ab8587d9db595cc92f20bdcdc28535092">isNull</a> (const QString &amp;key, const int index=0) const</td></tr>
+<tr class="memdesc:ab8587d9db595cc92f20bdcdc28535092"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the value of a keyword is Null.  <a href="class_isis_1_1_pvl_flat_map.html#ab8587d9db595cc92f20bdcdc28535092">More...</a><br /></td></tr>
+<tr class="separator:ab8587d9db595cc92f20bdcdc28535092"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a279bc8f74233f3959f594db82c1b1ac9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a279bc8f74233f3959f594db82c1b1ac9">add</a> (const QString &amp;key, const QString &amp;value)</td></tr>
+<tr class="memdesc:a279bc8f74233f3959f594db82c1b1ac9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> with the given name and value to the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#a279bc8f74233f3959f594db82c1b1ac9">More...</a><br /></td></tr>
+<tr class="separator:a279bc8f74233f3959f594db82c1b1ac9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20b05ce67cdbeeddfe8cc6cd7d6dde08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a20b05ce67cdbeeddfe8cc6cd7d6dde08">add</a> (const <a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &amp;<a class="el" href="class_isis_1_1_pvl_flat_map.html#a20403df8dee578677691d7ef44cf9e19">keyword</a>)</td></tr>
+<tr class="memdesc:a20b05ce67cdbeeddfe8cc6cd7d6dde08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the given <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> to the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#a20b05ce67cdbeeddfe8cc6cd7d6dde08">More...</a><br /></td></tr>
+<tr class="separator:a20b05ce67cdbeeddfe8cc6cd7d6dde08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a0084cf4f3293f0f541ad85eee41478"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a0a0084cf4f3293f0f541ad85eee41478">append</a> (const <a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &amp;key)</td></tr>
+<tr class="memdesc:a0a0084cf4f3293f0f541ad85eee41478"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends the given <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a>'s values to the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#a0a0084cf4f3293f0f541ad85eee41478">More...</a><br /></td></tr>
+<tr class="separator:a0a0084cf4f3293f0f541ad85eee41478"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa7a8e67ea411c3df2410a2e49ef2723"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#afa7a8e67ea411c3df2410a2e49ef2723">append</a> (const QString &amp;key, const QString &amp;value)</td></tr>
+<tr class="memdesc:afa7a8e67ea411c3df2410a2e49ef2723"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a the given keyword and value to the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#afa7a8e67ea411c3df2410a2e49ef2723">More...</a><br /></td></tr>
+<tr class="separator:afa7a8e67ea411c3df2410a2e49ef2723"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62394503d5abc8081e87765bc37336a2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a62394503d5abc8081e87765bc37336a2">erase</a> (const QString &amp;key)</td></tr>
+<tr class="memdesc:a62394503d5abc8081e87765bc37336a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erases a keyword from the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#a62394503d5abc8081e87765bc37336a2">More...</a><br /></td></tr>
+<tr class="separator:a62394503d5abc8081e87765bc37336a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b673c39c9b468e1aee6fd5042c64bc8"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a5b673c39c9b468e1aee6fd5042c64bc8">get</a> (const QString &amp;key, const int &amp;index=0) const</td></tr>
+<tr class="memdesc:a5b673c39c9b468e1aee6fd5042c64bc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the value of a keyword in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#a5b673c39c9b468e1aee6fd5042c64bc8">More...</a><br /></td></tr>
+<tr class="separator:a5b673c39c9b468e1aee6fd5042c64bc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa18fcd0cc24f0144f4122afaf28018e7"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#aa18fcd0cc24f0144f4122afaf28018e7">get</a> (const QString &amp;key, const QString &amp;defValue, const int &amp;index=0) const</td></tr>
+<tr class="memdesc:aa18fcd0cc24f0144f4122afaf28018e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the value of a keyword in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#aa18fcd0cc24f0144f4122afaf28018e7">More...</a><br /></td></tr>
+<tr class="separator:aa18fcd0cc24f0144f4122afaf28018e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37ec7d1f888c804269ace66e6ddf3345"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a37ec7d1f888c804269ace66e6ddf3345">operator()</a> (const QString &amp;name) const</td></tr>
+<tr class="memdesc:a37ec7d1f888c804269ace66e6ddf3345"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the first value of a keyword in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#a37ec7d1f888c804269ace66e6ddf3345">More...</a><br /></td></tr>
+<tr class="separator:a37ec7d1f888c804269ace66e6ddf3345"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41b996cd22893d4b4c0fa6b4386b9ee7"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a41b996cd22893d4b4c0fa6b4386b9ee7">allValues</a> (const QString &amp;key) const</td></tr>
+<tr class="memdesc:a41b996cd22893d4b4c0fa6b4386b9ee7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all the values associated with a keyword in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#a41b996cd22893d4b4c0fa6b4386b9ee7">More...</a><br /></td></tr>
+<tr class="separator:a41b996cd22893d4b4c0fa6b4386b9ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20403df8dee578677691d7ef44cf9e19"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a20403df8dee578677691d7ef44cf9e19">keyword</a> (const QString &amp;key) const</td></tr>
+<tr class="memdesc:a20403df8dee578677691d7ef44cf9e19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a keyword in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#a20403df8dee578677691d7ef44cf9e19">More...</a><br /></td></tr>
+<tr class="separator:a20403df8dee578677691d7ef44cf9e19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61a2775f5ce357ffe7ee3dfb8499c23d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#a61a2775f5ce357ffe7ee3dfb8499c23d">merge</a> (const <a class="el" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;other)</td></tr>
+<tr class="memdesc:a61a2775f5ce357ffe7ee3dfb8499c23d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the keywords from another <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>.  <a href="class_isis_1_1_pvl_flat_map.html#a61a2775f5ce357ffe7ee3dfb8499c23d">More...</a><br /></td></tr>
+<tr class="separator:a61a2775f5ce357ffe7ee3dfb8499c23d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:acded2faf645b74d05cddf72e7148ee47"><td class="memItemLeft" align="right" valign="top">static QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_pvl_flat_map.html#acded2faf645b74d05cddf72e7148ee47">keywordValues</a> (const <a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &amp;<a class="el" href="class_isis_1_1_pvl_flat_map.html#a20403df8dee578677691d7ef44cf9e19">keyword</a>)</td></tr>
+<tr class="memdesc:acded2faf645b74d05cddf72e7148ee47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all of a <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a>'s values.  <a href="class_isis_1_1_pvl_flat_map.html#acded2faf645b74d05cddf72e7148ee47">More...</a><br /></td></tr>
+<tr class="separator:acded2faf645b74d05cddf72e7148ee47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Provides a flat map of PvlKeywords. </p>
+<p>This class provides a very fast convenient way to store PVL keywords for applications that require extensive use of them. It is intended to provide a much easier interface to ISIS <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> structures that represents them as a single flat lookup table.</p>
+<p>Note that if you use the methods provided in this class, then the keywords names will be converted to lowercase to provide a consistent interface. One could choose to use the Qt <a class="el" href="class_q_map.html" title="This is free and unencumbered software released into the public domain.">QMap</a> interface directly (which is the base class of this class) to use a case sensitive map. Restricting use to <a class="el" href="class_isis_1_1_pvl_flat_map.html#a279bc8f74233f3959f594db82c1b1ac9" title="Adds PvlKeyword with the given name and value to the PvlFlatMap.">add()</a> and <a class="el" href="class_isis_1_1_pvl_flat_map.html#a5b673c39c9b468e1aee6fd5042c64bc8" title="Gets the value of a keyword in the PvlFlatMap.">get()</a> methods provides the case insensitive representation.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-07-15 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="aae403feff0a4a4152dbbb1b5b562ece4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae403feff0a4a4152dbbb1b5b562ece4">&#9670;&nbsp;</a></span>ConstPvlFlatMapIterator</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="class_q_map.html">QMap</a>&lt;QString,<a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a>&gt;::const_iterator <a class="el" href="class_isis_1_1_pvl_flat_map.html#aae403feff0a4a4152dbbb1b5b562ece4">Isis::PvlFlatMap::ConstPvlFlatMapIterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A const iterator for the underling <a class="el" href="class_q_map.html" title="This is free and unencumbered software released into the public domain.">QMap</a> that <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> is built on. </p>
+
+</div>
+</div>
+<a id="ad56e4a48fba2ebcf1561375018033c76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad56e4a48fba2ebcf1561375018033c76">&#9670;&nbsp;</a></span>PvlFlatMapIterator</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="class_q_map.html">QMap</a>&lt;QString,<a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a>&gt;::iterator <a class="el" href="class_isis_1_1_pvl_flat_map.html#ad56e4a48fba2ebcf1561375018033c76">Isis::PvlFlatMap::PvlFlatMapIterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>An iterator for the underlying <a class="el" href="class_q_map.html" title="This is free and unencumbered software released into the public domain.">QMap</a> that <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> is built on. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ab461ef30bbfe63b10c23e75d6b275c2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab461ef30bbfe63b10c23e75d6b275c2f">&#9670;&nbsp;</a></span>PvlFlatMap() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlFlatMap::PvlFlatMap </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default constructor. </p>
+
+</div>
+</div>
+<a id="a227bf06ab11b6ab87d0336517f71a8ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a227bf06ab11b6ab87d0336517f71a8ee">&#9670;&nbsp;</a></span>PvlFlatMap() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlFlatMap::PvlFlatMap </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> from another <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> to copy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_flat_map.html#a61a2775f5ce357ffe7ee3dfb8499c23d">merge()</a>.</p>
+
+</div>
+</div>
+<a id="acda1e6bb65f8e4c8fec9bea40230062f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acda1e6bb65f8e4c8fec9bea40230062f">&#9670;&nbsp;</a></span>PvlFlatMap() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlFlatMap::PvlFlatMap </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;&#160;</td>
+          <td class="paramname"><em>pmap1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;&#160;</td>
+          <td class="paramname"><em>pmap2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> from two <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> objects. </p>
+<p>This constructor creates a <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> from the contents of two <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> objects. The constructed <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> contains the first <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>'s contents followed by the second <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>'s contents.</p>
+<p>If there are keywords of the same in both maps, then the last loaded keyword in pmap2 will overwrite any previous values.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_pvl_flat_map.html#a61a2775f5ce357ffe7ee3dfb8499c23d" title="Adds the keywords from another PvlFlatMap.">merge()</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pmap1</td><td>The first <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> </td></tr>
+    <tr><td class="paramname">pmap2</td><td>The second <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_flat_map.html#a61a2775f5ce357ffe7ee3dfb8499c23d">merge()</a>.</p>
+
+</div>
+</div>
+<a id="a9861ea5fe5e7b4b10138030ad77b0921"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9861ea5fe5e7b4b10138030ad77b0921">&#9670;&nbsp;</a></span>PvlFlatMap() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlFlatMap::PvlFlatMap </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> &amp;&#160;</td>
+          <td class="paramname"><em>constraints</em> = <code><a class="el" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a>()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> (with constraints) from a <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a>. </p>
+<p>This Constructor creates a <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> from a <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> according to any constraints passed to the constructor. If no <a class="el" href="class_isis_1_1_pvl_constraints.html" title="This class can be used to define import/export behavior of Pvl structures when used in the PvlFlatMap...">PvlConstraints</a> object is provided, the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> will be created from all the objects and groups within the passed <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a>.</p>
+<dl class="section see"><dt>See also</dt><dd>loadObject()</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td>The <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> to use for creating the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> </td></tr>
+    <tr><td class="paramname">constraints</td><td>The <a class="el" href="class_isis_1_1_pvl_constraints.html" title="This class can be used to define import/export behavior of Pvl structures when used in the PvlFlatMap...">PvlConstraints</a> that determine which <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> objects/groups are included or excluded in the constructed <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6fb549a7a55a5f8bc7ad52361fe77f8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fb549a7a55a5f8bc7ad52361fe77f8e">&#9670;&nbsp;</a></span>PvlFlatMap() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlFlatMap::PvlFlatMap </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_container.html">PvlContainer</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> &amp;&#160;</td>
+          <td class="paramname"><em>constraints</em> = <code><a class="el" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a>()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> (with constraints) from the keywords in a <a class="el" href="class_isis_1_1_pvl_container.html" title="Contains more than one keyword-value pair.">PvlContainer</a> (i.e <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> or <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a>). </p>
+<p>This constructor creates a <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> from a <a class="el" href="class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers.">PvlGroup</a> object according to any constraints passed to the constructor. If no <a class="el" href="class_isis_1_1_pvl_constraints.html" title="This class can be used to define import/export behavior of Pvl structures when used in the PvlFlatMap...">PvlConstraints</a> object is provided, the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> will be created from all of the objects and groups within the passed <a class="el" href="class_isis_1_1_pvl_container.html" title="Contains more than one keyword-value pair.">PvlContainer</a>.</p>
+<dl class="section see"><dt>See also</dt><dd>loadKeywords()</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td>The <a class="el" href="class_isis_1_1_pvl_container.html" title="Contains more than one keyword-value pair.">PvlContainer</a> to use for creating the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> </td></tr>
+    <tr><td class="paramname">constraints</td><td>The <a class="el" href="class_isis_1_1_pvl_constraints.html" title="This class can be used to define import/export behavior of Pvl structures when used in the PvlFlatMap...">PvlConstraints</a> that determine which <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> objects/groups are included or excluded in the constructed <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8b53ae892a2f9c09fc46c912d4642306"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b53ae892a2f9c09fc46c912d4642306">&#9670;&nbsp;</a></span>~PvlFlatMap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::PvlFlatMap::~PvlFlatMap </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a20b05ce67cdbeeddfe8cc6cd7d6dde08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20b05ce67cdbeeddfe8cc6cd7d6dde08">&#9670;&nbsp;</a></span>add() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PvlFlatMap::add </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds the given <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> to the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<p>This will overwrite any existing keyword in the map keyword with the same name.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> to add to the map. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_keyword.html#a297f07b8935a1f8752a45a5c77ee7ffa">Isis::PvlKeyword::name()</a>.</p>
+
+</div>
+</div>
+<a id="a279bc8f74233f3959f594db82c1b1ac9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a279bc8f74233f3959f594db82c1b1ac9">&#9670;&nbsp;</a></span>add() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PvlFlatMap::add </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> with the given name and value to the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<p>This will overwrite any existing keyword in the map with the same name.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The name of the keyword to add </td></tr>
+    <tr><td class="paramname">value</td><td>The value of the added keyword </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_flat_map.html#a61a2775f5ce357ffe7ee3dfb8499c23d">merge()</a>.</p>
+
+</div>
+</div>
+<a id="a41b996cd22893d4b4c0fa6b4386b9ee7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41b996cd22893d4b4c0fa6b4386b9ee7">&#9670;&nbsp;</a></span>allValues()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::PvlFlatMap::allValues </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets all the values associated with a keyword in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<p>If the keyword does not exist, an empty QStringList is returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The name of the keyword</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QStringList The list of values associated with the keyword </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_flat_map.html#acded2faf645b74d05cddf72e7148ee47">keywordValues()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_strategy.html#a4f86d12cd064a15bed732ea4a2892cca">Isis::Strategy::composite()</a>, <a class="el" href="class_isis_1_1_strategy.html#a70e4158380735307e1c5c61202cbd3f8">Isis::Strategy::importGeometry()</a>, <a class="el" href="class_isis_1_1_strategy.html#a1bfe7a711aaf104e05b4b104ff18c829">Isis::Strategy::propagateKeys()</a>, and <a class="el" href="class_isis_1_1_strategy.html#ab9c3ba7edfe660f4cafc80b40f477488">Isis::Strategy::translateKeywordArgs()</a>.</p>
+
+</div>
+</div>
+<a id="a0a0084cf4f3293f0f541ad85eee41478"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a0084cf4f3293f0f541ad85eee41478">&#9670;&nbsp;</a></span>append() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PvlFlatMap::append </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends the given <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a>'s values to the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<p>If the keyword already exists in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>, the values of the provided keyword are appended to the keyword's list of values in the map.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>A <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> to append to the map. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_flat_map.html#a7570ee99bc1528ae19d623ffdb380940">exists()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#a297f07b8935a1f8752a45a5c77ee7ffa">Isis::PvlKeyword::name()</a>, and <a class="el" href="class_isis_1_1_pvl_keyword.html#a2c88473ba977e24be39e95a3ac4f29c8">Isis::PvlKeyword::size()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_flat_map.html#afa7a8e67ea411c3df2410a2e49ef2723">append()</a>.</p>
+
+</div>
+</div>
+<a id="afa7a8e67ea411c3df2410a2e49ef2723"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa7a8e67ea411c3df2410a2e49ef2723">&#9670;&nbsp;</a></span>append() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PvlFlatMap::append </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends a the given keyword and value to the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<p>If the keyword already exists in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>, the provided value is appended to the keyword's list of values in the map.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The name of the keyword to be appended </td></tr>
+    <tr><td class="paramname">value</td><td>The value of the keyword to be appended </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_flat_map.html#a0a0084cf4f3293f0f541ad85eee41478">append()</a>.</p>
+
+</div>
+</div>
+<a id="a549724ff0c6502a3f866e024979bdc3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a549724ff0c6502a3f866e024979bdc3b">&#9670;&nbsp;</a></span>count()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::PvlFlatMap::count </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of values associated with a given keyword. </p>
+<p>If the keyword does not exist, this method returns 0.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The name of the keyword</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The number of values associated with the keyword. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_flat_map.html#a7570ee99bc1528ae19d623ffdb380940">exists()</a>, and <a class="el" href="class_isis_1_1_pvl_flat_map.html#a20403df8dee578677691d7ef44cf9e19">keyword()</a>.</p>
+
+</div>
+</div>
+<a id="a62394503d5abc8081e87765bc37336a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62394503d5abc8081e87765bc37336a2">&#9670;&nbsp;</a></span>erase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::PvlFlatMap::erase </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Erases a keyword from the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The keyword to erase</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Indicates whether a keyword of the given name was found and succesfully erased. </dd></dl>
+
+</div>
+</div>
+<a id="a7570ee99bc1528ae19d623ffdb380940"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7570ee99bc1528ae19d623ffdb380940">&#9670;&nbsp;</a></span>exists()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::PvlFlatMap::exists </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines whether a given keyword exists in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The name of the keyword</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if the keyword exists in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_flat_map.html#a0a0084cf4f3293f0f541ad85eee41478">append()</a>, <a class="el" href="class_isis_1_1_pvl_flat_map.html#a549724ff0c6502a3f866e024979bdc3b">count()</a>, <a class="el" href="class_isis_1_1_strategy.html#a70e4158380735307e1c5c61202cbd3f8">Isis::Strategy::importGeometry()</a>, <a class="el" href="class_isis_1_1_pvl_flat_map.html#ab8587d9db595cc92f20bdcdc28535092">isNull()</a>, and <a class="el" href="class_isis_1_1_strategy.html#ab9c3ba7edfe660f4cafc80b40f477488">Isis::Strategy::translateKeywordArgs()</a>.</p>
+
+</div>
+</div>
+<a id="a5b673c39c9b468e1aee6fd5042c64bc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b673c39c9b468e1aee6fd5042c64bc8">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlFlatMap::get </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the value of a keyword in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<p>By default, this method gets the first value associated with the passed keyword name. If the keyword does not exist, an exception is thrown.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The name of the keyword </td></tr>
+    <tr><td class="paramname">index</td><td>The index of the value to get</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString The keyword's value at the specified index</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"Keyword does not exist." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"Index does not exist for the given keyword." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_strategy.html#a5021524550e3d40db6ee6fc85dc477fa">Isis::Strategy::applyToIntersectedGeometry()</a>, <a class="el" href="class_isis_1_1_shape_model_factory.html#ab8610c5b0640a2418a7c4941363e6476">Isis::ShapeModelFactory::create()</a>, <a class="el" href="class_isis_1_1_strategy.html#a70e4158380735307e1c5c61202cbd3f8">Isis::Strategy::importGeometry()</a>, <a class="el" href="class_isis_1_1_strategy.html#ae79668a04a284a571c0940ef858247e7">Isis::Strategy::initProgress()</a>, <a class="el" href="class_isis_1_1_pvl_flat_map.html#a37ec7d1f888c804269ace66e6ddf3345">operator()()</a>, <a class="el" href="class_isis_1_1_strategy.html#a873688e560d838f8db0cfe9b9c4734a0">Isis::Strategy::Strategy()</a>, and <a class="el" href="class_isis_1_1_strategy.html#ab9c3ba7edfe660f4cafc80b40f477488">Isis::Strategy::translateKeywordArgs()</a>.</p>
+
+</div>
+</div>
+<a id="aa18fcd0cc24f0144f4122afaf28018e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa18fcd0cc24f0144f4122afaf28018e7">&#9670;&nbsp;</a></span>get() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlFlatMap::get </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>defValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the value of a keyword in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<p>By default, this method gets the first value associated with the passed keyword name. If the keyword does not exist, this method returns the QString specified in defValue.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The name of the keyword </td></tr>
+    <tr><td class="paramname">defValue</td><td>The default value to return if the keyword does not exist </td></tr>
+    <tr><td class="paramname">index</td><td>The index of the value to get</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString The keyword's value </dd></dl>
+
+</div>
+</div>
+<a id="ab8587d9db595cc92f20bdcdc28535092"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8587d9db595cc92f20bdcdc28535092">&#9670;&nbsp;</a></span>isNull()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::PvlFlatMap::isNull </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines if the value of a keyword is Null. </p>
+<p>By default, this method checks the first value associated with the passed keyword. If the keyword does not exist, this method returns true.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The name of the keyword </td></tr>
+    <tr><td class="paramname">index</td><td>The index of the value associated with the keyword</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if the keyword's value at the given index is Null or if the keyword does not exist </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_flat_map.html#a7570ee99bc1528ae19d623ffdb380940">exists()</a>, and <a class="el" href="class_isis_1_1_pvl_flat_map.html#a20403df8dee578677691d7ef44cf9e19">keyword()</a>.</p>
+
+</div>
+</div>
+<a id="a20403df8dee578677691d7ef44cf9e19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20403df8dee578677691d7ef44cf9e19">&#9670;&nbsp;</a></span>keyword()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> Isis::PvlFlatMap::keyword </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Finds a keyword in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The name of the keyword to find</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> The found keyword</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"Keyword does not exist" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_flat_map.html#a549724ff0c6502a3f866e024979bdc3b">count()</a>, <a class="el" href="class_isis_1_1_pvl_flat_map.html#ab8587d9db595cc92f20bdcdc28535092">isNull()</a>, and <a class="el" href="class_isis_1_1_pvl_flat_map.html#acded2faf645b74d05cddf72e7148ee47">keywordValues()</a>.</p>
+
+</div>
+</div>
+<a id="acded2faf645b74d05cddf72e7148ee47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acded2faf645b74d05cddf72e7148ee47">&#9670;&nbsp;</a></span>keywordValues()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::PvlFlatMap::keywordValues </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &amp;&#160;</td>
+          <td class="paramname"><em>keyword</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets all of a <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a>'s values. </p>
+<p>(Helper method for <a class="el" href="class_isis_1_1_pvl_flat_map.html#a41b996cd22893d4b4c0fa6b4386b9ee7" title="Gets all the values associated with a keyword in the PvlFlatMap.">PvlFlatMap::allValues</a>)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">keyword</td><td>The <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a> to get values from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QStringList A list of the <a class="el" href="class_isis_1_1_pvl_keyword.html" title="A single keyword-value pair.">PvlKeyword</a>'s values </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_flat_map.html#a20403df8dee578677691d7ef44cf9e19">keyword()</a>, and <a class="el" href="class_isis_1_1_pvl_keyword.html#a2c88473ba977e24be39e95a3ac4f29c8">Isis::PvlKeyword::size()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_flat_map.html#a41b996cd22893d4b4c0fa6b4386b9ee7">allValues()</a>.</p>
+
+</div>
+</div>
+<a id="a61a2775f5ce357ffe7ee3dfb8499c23d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61a2775f5ce357ffe7ee3dfb8499c23d">&#9670;&nbsp;</a></span>merge()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::PvlFlatMap::merge </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds the keywords from another <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<p>If there are keywords of the same in both maps, then the last loaded keyword in the "other" map will overwrite any previous values.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a> to get keywords from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The number of keywords added </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_flat_map.html#a279bc8f74233f3959f594db82c1b1ac9">add()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape_model_factory.html#ab8610c5b0640a2418a7c4941363e6476">Isis::ShapeModelFactory::create()</a>, and <a class="el" href="class_isis_1_1_pvl_flat_map.html#a227bf06ab11b6ab87d0336517f71a8ee">PvlFlatMap()</a>.</p>
+
+</div>
+</div>
+<a id="a37ec7d1f888c804269ace66e6ddf3345"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37ec7d1f888c804269ace66e6ddf3345">&#9670;&nbsp;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PvlFlatMap::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the first value of a keyword in the <a class="el" href="class_isis_1_1_pvl_flat_map.html" title="Provides a flat map of PvlKeywords.">PvlFlatMap</a>. </p>
+<p>This method will get the first value of the keyword if the keyword has multiple values associated with it.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the keyword</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString The value of the keyword </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_flat_map.html#a5b673c39c9b468e1aee6fd5042c64bc8">get()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/PvlFlatMap/<a class="el" href="_pvl_flat_map_8h_source.html">PvlFlatMap.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/PvlFlatMap/<a class="el" href="_pvl_flat_map_8cpp.html">PvlFlatMap.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

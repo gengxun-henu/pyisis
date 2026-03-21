@@ -1,0 +1,754 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::CnetDisplayProperties Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_cnet_display_properties.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_cnet_display_properties-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::CnetDisplayProperties Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Handles how control networks should be displayed to the user.  
+ <a href="class_isis_1_1_cnet_display_properties.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_cnet_display_properties_8h_source.html">CnetDisplayProperties.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::CnetDisplayProperties:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_cnet_display_properties__inherit__graph.png" border="0" usemap="#a_isis_1_1_cnet_display_properties_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_cnet_display_properties_inherit__map" id="a_isis_1_1_cnet_display_properties_inherit__map">
+<area shape="rect" title="Handles how control networks should be displayed to the user." alt="" coords="5,135,200,408"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="68,5,137,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::CnetDisplayProperties:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_cnet_display_properties__coll__graph.png" border="0" usemap="#a_isis_1_1_cnet_display_properties_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_cnet_display_properties_coll__map" id="a_isis_1_1_cnet_display_properties_coll__map">
+<area shape="rect" title="Handles how control networks should be displayed to the user." alt="" coords="5,135,200,408"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="68,5,137,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:af08e2344b4b50ab0a285916b60e570e2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2">coordinateDisplayType</a> { <a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2a9d998e8ee1e69fa406c1ab1753ba4eb6">LatLonRadius</a> = 0
+, <a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2a484fb2db4c15ba200d93c8edfe44133a">XYZ</a> = 1
+ }</td></tr>
+<tr class="memdesc:af08e2344b4b50ab0a285916b60e570e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns coordinate display type (0 = LatLonRadius, 1 = XYZ).  <a href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2">More...</a><br /></td></tr>
+<tr class="separator:af08e2344b4b50ab0a285916b60e570e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:acf7d9d5b1b8b92f8765a303cfb37a105"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#acf7d9d5b1b8b92f8765a303cfb37a105">composeProgressChanged</a> (int)</td></tr>
+<tr class="separator:acf7d9d5b1b8b92f8765a303cfb37a105"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac700f7373ee36cf7b00dd86abf3b8f5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#ac700f7373ee36cf7b00dd86abf3b8f5f">composeProgressRangeChanged</a> (int, int)</td></tr>
+<tr class="separator:ac700f7373ee36cf7b00dd86abf3b8f5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0330919e20e6851e82074bde31d78cb7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#a0330919e20e6851e82074bde31d78cb7">compositionFinished</a> ()</td></tr>
+<tr class="separator:a0330919e20e6851e82074bde31d78cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a81fe07f894509f6fcc0a3a950372b946"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#a81fe07f894509f6fcc0a3a950372b946">~CnetDisplayProperties</a> ()</td></tr>
+<tr class="separator:a81fe07f894509f6fcc0a3a950372b946"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bb7accfbcb7bfde0be0212c334b59f1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#a0bb7accfbcb7bfde0be0212c334b59f1">currentlyComposing</a> () const</td></tr>
+<tr class="separator:a0bb7accfbcb7bfde0be0212c334b59f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c066c083810266d61a4f9ec80ca7a50"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; QString &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#a0c066c083810266d61a4f9ec80ca7a50">getCubeList</a> (<a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *cnet) const</td></tr>
+<tr class="memdesc:a0c066c083810266d61a4f9ec80ca7a50"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO comment me.  <a href="class_isis_1_1_cnet_display_properties.html#a0c066c083810266d61a4f9ec80ca7a50">More...</a><br /></td></tr>
+<tr class="separator:a0c066c083810266d61a4f9ec80ca7a50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d1aeb42b3d075ae150319a3546353eb"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#a4d1aeb42b3d075ae150319a3546353eb">getFileName</a> (QString fileName, bool forceFullPaths=false) const</td></tr>
+<tr class="separator:a4d1aeb42b3d075ae150319a3546353eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a413b59a0aa9a4a8e4b8f954b3d5a69c1"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#a413b59a0aa9a4a8e4b8f954b3d5a69c1">getImageName</a> (QString cubeSerialNumber, bool forceFullPaths=false) const</td></tr>
+<tr class="separator:a413b59a0aa9a4a8e4b8f954b3d5a69c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f19011bff6e05347bebb5333f8389e8"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#a6f19011bff6e05347bebb5333f8389e8">getSerialNumber</a> (QString imageId)</td></tr>
+<tr class="separator:a6f19011bff6e05347bebb5333f8389e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0e3aa0afa11700d7015826252743a8e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#ad0e3aa0afa11700d7015826252743a8e">getShowsFullPaths</a> () const</td></tr>
+<tr class="separator:ad0e3aa0afa11700d7015826252743a8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a895f83d7a59d9eb1ffc320a86d67ad2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2">CnetDisplayProperties::coordinateDisplayType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#a895f83d7a59d9eb1ffc320a86d67ad2d">coordinateDisplayType</a> ()</td></tr>
+<tr class="separator:a895f83d7a59d9eb1ffc320a86d67ad2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae9be7df3488563632fc02afc1ad5724"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#aae9be7df3488563632fc02afc1ad5724">setCubeList</a> (QString fileName)</td></tr>
+<tr class="separator:aae9be7df3488563632fc02afc1ad5724"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa96b2500aba6c5e6f19ac5ade32cc96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#afa96b2500aba6c5e6f19ac5ade32cc96">setFileNameUsage</a> (bool preferFileNames)</td></tr>
+<tr class="separator:afa96b2500aba6c5e6f19ac5ade32cc96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9d7f712736102513972f6b3e10a2c08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#af9d7f712736102513972f6b3e10a2c08">setShowsFullPaths</a> (bool newState)</td></tr>
+<tr class="separator:af9d7f712736102513972f6b3e10a2c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a635abfc421d4055e87ca5b9d84d94592"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#a635abfc421d4055e87ca5b9d84d94592">setCoordinateDisplayType</a> (enum <a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2">coordinateDisplayType</a> coordDisplay)</td></tr>
+<tr class="memdesc:a635abfc421d4055e87ca5b9d84d94592"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the coordinate display type (0 = LatLonRadius, 1 = XYZ).  <a href="class_isis_1_1_cnet_display_properties.html#a635abfc421d4055e87ca5b9d84d94592">More...</a><br /></td></tr>
+<tr class="separator:a635abfc421d4055e87ca5b9d84d94592"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a5379064ad177a4143e1065eb3d5c0dc4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_cnet_display_properties.html">CnetDisplayProperties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cnet_display_properties.html#a5379064ad177a4143e1065eb3d5c0dc4">getInstance</a> ()</td></tr>
+<tr class="separator:a5379064ad177a4143e1065eb3d5c0dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Handles how control networks should be displayed to the user. </p>
+<p>This class handles how control networks should be displayed to the user. For example, this class keeps track of whether cube serial numbers or file names should be displayed to the user, and provides an interface to translate between the two.</p>
+<p>This class is a singleton.</p>
+<dl class="section author"><dt>Author</dt><dd>????-??-?? Eric Hyer </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="af08e2344b4b50ab0a285916b60e570e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af08e2344b4b50ab0a285916b60e570e2">&#9670;&nbsp;</a></span>coordinateDisplayType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum enum <a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2">CnetDisplayProperties::coordinateDisplayType</a> <a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2">Isis::CnetDisplayProperties::coordinateDisplayType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns coordinate display type (0 = LatLonRadius, 1 = XYZ). </p>
+<dl class="section return"><dt>Returns</dt><dd>enum <a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2" title="Returns coordinate display type (0 = LatLonRadius, 1 = XYZ).">CnetDisplayProperties::coordinateDisplayType</a>. </dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af08e2344b4b50ab0a285916b60e570e2a9d998e8ee1e69fa406c1ab1753ba4eb6"></a>LatLonRadius&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af08e2344b4b50ab0a285916b60e570e2a484fb2db4c15ba200d93c8edfe44133a"></a>XYZ&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a81fe07f894509f6fcc0a3a950372b946"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81fe07f894509f6fcc0a3a950372b946">&#9670;&nbsp;</a></span>~CnetDisplayProperties()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CnetDisplayProperties::~CnetDisplayProperties </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="acf7d9d5b1b8b92f8765a303cfb37a105"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf7d9d5b1b8b92f8765a303cfb37a105">&#9670;&nbsp;</a></span>composeProgressChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetDisplayProperties::composeProgressChanged </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac700f7373ee36cf7b00dd86abf3b8f5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac700f7373ee36cf7b00dd86abf3b8f5f">&#9670;&nbsp;</a></span>composeProgressRangeChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetDisplayProperties::composeProgressRangeChanged </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0330919e20e6851e82074bde31d78cb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0330919e20e6851e82074bde31d78cb7">&#9670;&nbsp;</a></span>compositionFinished</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetDisplayProperties::compositionFinished </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a895f83d7a59d9eb1ffc320a86d67ad2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a895f83d7a59d9eb1ffc320a86d67ad2d">&#9670;&nbsp;</a></span>coordinateDisplayType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2">CnetDisplayProperties::coordinateDisplayType</a> <a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2">Isis::CnetDisplayProperties::coordinateDisplayType</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0bb7accfbcb7bfde0be0212c334b59f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bb7accfbcb7bfde0be0212c334b59f1">&#9670;&nbsp;</a></span>currentlyComposing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::CnetDisplayProperties::currentlyComposing </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_display_properties.html#a0c066c083810266d61a4f9ec80ca7a50">getCubeList()</a>.</p>
+
+</div>
+</div>
+<a id="a0c066c083810266d61a4f9ec80ca7a50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c066c083810266d61a4f9ec80ca7a50">&#9670;&nbsp;</a></span>getCubeList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; QString &gt; Isis::CnetDisplayProperties::getCubeList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_net.html">ControlNet</a> *&#160;</td>
+          <td class="paramname"><em>cnet</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>TODO comment me. </p>
+<p>If a cube list is currently being loaded, this method will return an empty list. If there is no cube list, it will also return an empty list.</p>
+<p>This method is thread safe. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cnet_display_properties.html#a0bb7accfbcb7bfde0be0212c334b59f1">currentlyComposing()</a>, <a class="el" href="class_isis_1_1_control_net.html#ae07d72d19611ee35af8987fe8959414c">Isis::ControlNet::GetCubeSerials()</a>, and <a class="el" href="class_isis_1_1_cnet_display_properties.html#a413b59a0aa9a4a8e4b8f954b3d5a69c1">getImageName()</a>.</p>
+
+</div>
+</div>
+<a id="a4d1aeb42b3d075ae150319a3546353eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d1aeb42b3d075ae150319a3546353eb">&#9670;&nbsp;</a></span>getFileName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::CnetDisplayProperties::getFileName </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>fileName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forceFullPaths</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cnet_display_properties.html#ad0e3aa0afa11700d7015826252743a8e">getShowsFullPaths()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_display_properties.html#a413b59a0aa9a4a8e4b8f954b3d5a69c1">getImageName()</a>.</p>
+
+</div>
+</div>
+<a id="a413b59a0aa9a4a8e4b8f954b3d5a69c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a413b59a0aa9a4a8e4b8f954b3d5a69c1">&#9670;&nbsp;</a></span>getImageName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::CnetDisplayProperties::getImageName </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>cubeSerialNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forceFullPaths</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cubeSerialNumber</td><td><a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> serial number as a QString</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The file name associated with the given cube serial number, or the given cube serial number if a file name can not be found in the current cube list.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_cnet_display_properties.html#aae9be7df3488563632fc02afc1ad5724">setCubeList()</a></dd></dl>
+<p>This method is thread safe! </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_cnet_display_properties.html#a4d1aeb42b3d075ae150319a3546353eb">getFileName()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_display_properties.html#a0c066c083810266d61a4f9ec80ca7a50">getCubeList()</a>.</p>
+
+</div>
+</div>
+<a id="a5379064ad177a4143e1065eb3d5c0dc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5379064ad177a4143e1065eb3d5c0dc4">&#9670;&nbsp;</a></span>getInstance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cnet_display_properties.html">CnetDisplayProperties</a> * Isis::CnetDisplayProperties::getInstance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#a0acfefd74fd56ceb5972525c291c4b01">Isis::PointMeasureFilterSelector::changeFilter()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a644008f82747ede81485fa1b7690e928">Isis::CnetEditorWidget::CnetEditorWidget()</a>, <a class="el" href="class_isis_1_1_image_point_filter_selector.html#a75ee9a7c9561d8b7a91fb2f7a0dd434e">Isis::ImagePointFilterSelector::createSelector()</a>, <a class="el" href="class_isis_1_1_point_measure_filter_selector.html#aca0b63e1e10807df9ef360ff3867635e">Isis::PointMeasureFilterSelector::createSelector()</a>, <a class="el" href="class_isis_1_1_image_id_filter.html#aa2f817780678ae2f0d42271dff4e6394">Isis::ImageIdFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#ab02c55a0580f8b3a13f9abd6a6c21842">Isis::AbstractPointItem::getColumnName()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#afb387e76d69a69a5d167b3c9655c63f5">Isis::AbstractMeasureItem::getData()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#a3090d3bed1f4ff3eeefbba05eb180ac4">Isis::AbstractPointItem::getData()</a>, <a class="el" href="class_isis_1_1_point_table_model.html#a776e25d07a31a23dfcf1763827e0ad00">Isis::PointTableModel::getPointWarningMessage()</a>, <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#a1bc8466f7ac3a779e37b496854cc0cc9">Isis::AbstractPointItem::setData()</a>, <a class="el" href="class_isis_1_1_cnet_editor_widget.html#ad4ba05347c74e97a8fe8525290abbbdf">Isis::CnetEditorWidget::setLatLonRadiusCoordinateDisplay()</a>, and <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a9f4ae29629965da5cabc1048929213cb">Isis::CnetEditorWidget::setXYZCoordinateDisplay()</a>.</p>
+
+</div>
+</div>
+<a id="a6f19011bff6e05347bebb5333f8389e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f19011bff6e05347bebb5333f8389e8">&#9670;&nbsp;</a></span>getSerialNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::CnetDisplayProperties::getSerialNumber </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>imageId</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_abstract_measure_item.html#a623bcd1ce28828bd4a22c142e126b759">Isis::AbstractMeasureItem::setData()</a>.</p>
+
+</div>
+</div>
+<a id="ad0e3aa0afa11700d7015826252743a8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0e3aa0afa11700d7015826252743a8e">&#9670;&nbsp;</a></span>getShowsFullPaths()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::CnetDisplayProperties::getShowsFullPaths </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_display_properties.html#a4d1aeb42b3d075ae150319a3546353eb">getFileName()</a>.</p>
+
+</div>
+</div>
+<a id="a635abfc421d4055e87ca5b9d84d94592"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a635abfc421d4055e87ca5b9d84d94592">&#9670;&nbsp;</a></span>setCoordinateDisplayType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetDisplayProperties::setCoordinateDisplayType </td>
+          <td>(</td>
+          <td class="paramtype">enum <a class="el" href="class_isis_1_1_cnet_display_properties.html#af08e2344b4b50ab0a285916b60e570e2">coordinateDisplayType</a>&#160;</td>
+          <td class="paramname"><em>coordDisplay</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the coordinate display type (0 = LatLonRadius, 1 = XYZ). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coordDisplay</td><td>coordinate display type.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cnet_editor_widget.html#ad4ba05347c74e97a8fe8525290abbbdf">Isis::CnetEditorWidget::setLatLonRadiusCoordinateDisplay()</a>, and <a class="el" href="class_isis_1_1_cnet_editor_widget.html#a9f4ae29629965da5cabc1048929213cb">Isis::CnetEditorWidget::setXYZCoordinateDisplay()</a>.</p>
+
+</div>
+</div>
+<a id="aae9be7df3488563632fc02afc1ad5724"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae9be7df3488563632fc02afc1ad5724">&#9670;&nbsp;</a></span>setCubeList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetDisplayProperties::setCubeList </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>fileName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+</div>
+</div>
+<a id="afa96b2500aba6c5e6f19ac5ade32cc96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa96b2500aba6c5e6f19ac5ade32cc96">&#9670;&nbsp;</a></span>setFileNameUsage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetDisplayProperties::setFileNameUsage </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>preferFileNames</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af9d7f712736102513972f6b3e10a2c08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9d7f712736102513972f6b3e10a2c08">&#9670;&nbsp;</a></span>setShowsFullPaths()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::CnetDisplayProperties::setShowsFullPaths </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>newState</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_cnet_display_properties_8h_source.html">CnetDisplayProperties.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/<a class="el" href="_cnet_display_properties_8cpp.html">CnetDisplayProperties.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_cnet_display_properties.html">CnetDisplayProperties</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

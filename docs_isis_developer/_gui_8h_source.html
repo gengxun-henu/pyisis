@@ -1,0 +1,399 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Gui/Gui.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_gui_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">Gui.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_gui_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef Isis_GuiMainWindow_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define Isis_GuiMainWindow_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;QAction&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;QGroupBox&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;QLabel&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;QLayout&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;QLineEdit&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;QMainWindow&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;QProgressBar&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;QScrollArea&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_object_8h.html">PvlObject.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_group_8h.html">PvlGroup.h</a>&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_gui_log_8h.html">GuiLog.h</a>&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_gui_parameter_8h.html">GuiParameter.h</a>&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_gui_parameter_factory_8h.html">GuiParameterFactory.h</a>&quot;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="class_isis_1_1_gui.html">   73</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_gui.html">Gui</a> : <span class="keyword">public</span> <a class="code" href="class_q_main_window.html">QMainWindow</a> {</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_gui.html#af5b35b50c022c6a59cbf1bfee879e337">checkX11</a>();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_gui.html">Gui</a> *<a class="code" href="class_isis_1_1_gui.html#a81ca3492b2881b6a3cd0c67ed2628f9e">Create</a>(<a class="code" href="class_isis_1_1_user_interface.html">Isis::UserInterface</a> &amp;ui, <span class="keywordtype">int</span> &amp;argc, <span class="keywordtype">char</span> *argv[]);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_gui.html#a1e677be3aa91fe026f838cf483bb3ff3">ProgressText</a>(<span class="keyword">const</span> QString &amp;text);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_gui.html#a8466879b5fa13373235b14e87d57018f">Progress</a>(<span class="keywordtype">int</span> percent);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_gui.html#a12f50eefa075eb6697e3836c6cdea220">Exec</a>(<span class="keywordtype">void</span> (*funct)());</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_gui.html#ad5f9df88198574357d8c41bc8b161df9">ProcessEvents</a>();</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_gui.html#a98a89bbe964142fddbd93823b730c986">LoadMessage</a>(<span class="keyword">const</span> QString &amp;message);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_gui.html#a2ebc28383c6263fa2a06411072b4a847">ShowWarning</a>();</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="class_isis_1_1_gui.html#af3fd08e54ef0815a08adc697660c45aa">   90</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_gui.html#af3fd08e54ef0815a08adc697660c45aa">ShowLog</a>() {};</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_gui.html#a15c5012c9574f342da6406c015435a33">Log</a>(<span class="keyword">const</span> QString &amp;text);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      <a class="code" href="class_isis_1_1_gui.html#ab5ee6d1c9ec09d0789143f5d95fa06d0">Gui</a>(<a class="code" href="class_isis_1_1_user_interface.html">Isis::UserInterface</a> &amp;ui);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      <a class="code" href="class_isis_1_1_gui.html#a08a5f6e4a12ee5ef655436a32c6a668f">~Gui</a>();</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_gui.html#ab5b3b9cec3bed2bca4594234463fef88">eventFilter</a>(<a class="code" href="class_q_object.html">QObject</a> *o, QEvent *e);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_gui.html">Gui</a> *p_gui;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <a class="code" href="class_isis_1_1_gui_parameter.html">GuiParameter</a> *AddParameter(<a class="code" href="class_isis_1_1_user_interface.html">Isis::UserInterface</a> &amp;ui, <span class="keywordtype">int</span> group, <span class="keywordtype">int</span> param);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keywordtype">void</span> Preferences();</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      <span class="keywordtype">void</span> CreateAreas();</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *CreateProcessAction();</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *CreateStopAction();</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *CreateExitAction();</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *CreateResetAction();</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *CreatePreviousHistoryAction();</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *CreateNextHistoryAction();</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *CreateSaveLogAction();</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *CreateClearLogAction();</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *CreateWhatsThisAction();</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      void (*p_funct)(); <span class="comment">// Function to be called for procesing phase</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;      QScrollArea *p_scrollArea;   <span class="comment">// Scrolling area for parameter group boxes</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *p_scrollWidget;     <span class="comment">// Widget with layout for group boxes</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;      QVBoxLayout *p_scrollLayout; <span class="comment">// Layout for all parameter group boxes</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      QLabel *p_statusText;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      <a class="code" href="class_q_progress_bar.html">QProgressBar</a> *p_progressBar;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      <a class="code" href="class_isis_1_1_gui_log.html">GuiLog</a> *p_log;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *p_processAction;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *p_exitAction;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *p_stopAction;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *p_resetAction;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *p_saveLogAction;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *p_clearLogAction;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *p_previousHistoryAction;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *p_nextHistoryAction;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      <a class="code" href="class_q_map.html">QMap&lt;QString, QGridLayout *&gt;</a> p_grids;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;      std::vector&lt;GuiParameter *&gt; p_parameters;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      QString p_errorString;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;      <span class="keywordtype">bool</span> p_stop;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;      <span class="keywordtype">void</span> UpdateHistory();</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;      <span class="keywordtype">int</span> p_historyEntry;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;      QLineEdit *p_commandLineEdit;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keyword">private</span> slots:</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;      <span class="keywordtype">void</span> StartProcess();</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;      <span class="keywordtype">void</span> StopProcessing();</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;      <span class="keywordtype">void</span> ResetParameters();</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;      <span class="keywordtype">void</span> NextHistory();</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      <span class="keywordtype">void</span> PreviousHistory();</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      <span class="keywordtype">void</span> UpdateExclusions();</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;      <span class="keywordtype">void</span> UpdateCommandLine();</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;      <span class="keywordtype">void</span> UpdateParameters();</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;      <span class="keywordtype">void</span> WhatsThis();</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;      <span class="keywordtype">void</span> AboutProgram();</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      <span class="keywordtype">void</span> AboutIsis();</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;      <span class="keywordtype">void</span> InvokeHelper(<span class="keyword">const</span> QString &amp;funct);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  };</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;};</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_gui_log_8h_html"><div class="ttname"><a href="_gui_log_8h.html">GuiLog.h</a></div></div>
+<div class="ttc" id="a_gui_parameter_8h_html"><div class="ttname"><a href="_gui_parameter_8h.html">GuiParameter.h</a></div></div>
+<div class="ttc" id="a_gui_parameter_factory_8h_html"><div class="ttname"><a href="_gui_parameter_factory_8h.html">GuiParameterFactory.h</a></div></div>
+<div class="ttc" id="a_pvl_group_8h_html"><div class="ttname"><a href="_pvl_group_8h.html">PvlGroup.h</a></div></div>
+<div class="ttc" id="a_pvl_object_8h_html"><div class="ttname"><a href="_pvl_object_8h.html">PvlObject.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html"><div class="ttname"><a href="class_isis_1_1_gui.html">Isis::Gui</a></div><div class="ttdoc">Gui for Isis Applications.</div><div class="ttdef"><b>Definition:</b> Gui.h:73</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_a08a5f6e4a12ee5ef655436a32c6a668f"><div class="ttname"><a href="class_isis_1_1_gui.html#a08a5f6e4a12ee5ef655436a32c6a668f">Isis::Gui::~Gui</a></div><div class="ttdeci">~Gui()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> Gui.cpp:175</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_a12f50eefa075eb6697e3836c6cdea220"><div class="ttname"><a href="class_isis_1_1_gui.html#a12f50eefa075eb6697e3836c6cdea220">Isis::Gui::Exec</a></div><div class="ttdeci">int Exec(void(*funct)())</div><div class="ttdoc">Start the Gui and enter the main loop This routine only returns when the program is ready to exit.</div><div class="ttdef"><b>Definition:</b> Gui.cpp:580</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_a15c5012c9574f342da6406c015435a33"><div class="ttname"><a href="class_isis_1_1_gui.html#a15c5012c9574f342da6406c015435a33">Isis::Gui::Log</a></div><div class="ttdeci">void Log(const QString &amp;text)</div><div class="ttdoc">Write text to the gui log.</div><div class="ttdef"><b>Definition:</b> Gui.cpp:617</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_a1e677be3aa91fe026f838cf483bb3ff3"><div class="ttname"><a href="class_isis_1_1_gui.html#a1e677be3aa91fe026f838cf483bb3ff3">Isis::Gui::ProgressText</a></div><div class="ttdeci">void ProgressText(const QString &amp;text)</div><div class="ttdoc">Change progress text.</div><div class="ttdef"><b>Definition:</b> Gui.cpp:565</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_a2ebc28383c6263fa2a06411072b4a847"><div class="ttname"><a href="class_isis_1_1_gui.html#a2ebc28383c6263fa2a06411072b4a847">Isis::Gui::ShowWarning</a></div><div class="ttdeci">int ShowWarning()</div><div class="ttdoc">Show an error message and return if the user wants to continue/abort.</div><div class="ttdef"><b>Definition:</b> Gui.cpp:606</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_a81ca3492b2881b6a3cd0c67ed2628f9e"><div class="ttname"><a href="class_isis_1_1_gui.html#a81ca3492b2881b6a3cd0c67ed2628f9e">Isis::Gui::Create</a></div><div class="ttdeci">static Gui * Create(Isis::UserInterface &amp;ui, int &amp;argc, char *argv[])</div><div class="ttdef"><b>Definition:</b> Gui.cpp:84</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_a8466879b5fa13373235b14e87d57018f"><div class="ttname"><a href="class_isis_1_1_gui.html#a8466879b5fa13373235b14e87d57018f">Isis::Gui::Progress</a></div><div class="ttdeci">void Progress(int percent)</div><div class="ttdoc">Update the progress bar.</div><div class="ttdef"><b>Definition:</b> Gui.cpp:571</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_a98a89bbe964142fddbd93823b730c986"><div class="ttname"><a href="class_isis_1_1_gui.html#a98a89bbe964142fddbd93823b730c986">Isis::Gui::LoadMessage</a></div><div class="ttdeci">void LoadMessage(const QString &amp;message)</div><div class="ttdoc">Add more information to the error message.</div><div class="ttdef"><b>Definition:</b> Gui.cpp:586</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_ab5b3b9cec3bed2bca4594234463fef88"><div class="ttname"><a href="class_isis_1_1_gui.html#ab5b3b9cec3bed2bca4594234463fef88">Isis::Gui::eventFilter</a></div><div class="ttdeci">bool eventFilter(QObject *o, QEvent *e)</div><div class="ttdoc">Reset the Progress bar when the user moves the mouse onto the toolbar.</div><div class="ttdef"><b>Definition:</b> Gui.cpp:622</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_ab5ee6d1c9ec09d0789143f5d95fa06d0"><div class="ttname"><a href="class_isis_1_1_gui.html#ab5ee6d1c9ec09d0789143f5d95fa06d0">Isis::Gui::Gui</a></div><div class="ttdeci">Gui(Isis::UserInterface &amp;ui)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> Gui.cpp:130</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_ad5f9df88198574357d8c41bc8b161df9"><div class="ttname"><a href="class_isis_1_1_gui.html#ad5f9df88198574357d8c41bc8b161df9">Isis::Gui::ProcessEvents</a></div><div class="ttdeci">bool ProcessEvents()</div><div class="ttdoc">Let the event loop have some time to see if we need to cancel.</div><div class="ttdef"><b>Definition:</b> Gui.cpp:661</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_af3fd08e54ef0815a08adc697660c45aa"><div class="ttname"><a href="class_isis_1_1_gui.html#af3fd08e54ef0815a08adc697660c45aa">Isis::Gui::ShowLog</a></div><div class="ttdeci">void ShowLog()</div><div class="ttdef"><b>Definition:</b> Gui.h:90</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_html_af5b35b50c022c6a59cbf1bfee879e337"><div class="ttname"><a href="class_isis_1_1_gui.html#af5b35b50c022c6a59cbf1bfee879e337">Isis::Gui::checkX11</a></div><div class="ttdeci">static void checkX11()</div><div class="ttdoc">check to see if X is available</div><div class="ttdef"><b>Definition:</b> Gui.cpp:55</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_log_html"><div class="ttname"><a href="class_isis_1_1_gui_log.html">Isis::GuiLog</a></div><div class="ttdef"><b>Definition:</b> GuiLog.h:18</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_parameter_html"><div class="ttname"><a href="class_isis_1_1_gui_parameter.html">Isis::GuiParameter</a></div><div class="ttdef"><b>Definition:</b> GuiParameter.h:34</div></div>
+<div class="ttc" id="aclass_isis_1_1_user_interface_html"><div class="ttname"><a href="class_isis_1_1_user_interface.html">Isis::UserInterface</a></div><div class="ttdoc">Command Line and Xml loader, validation, and access.</div><div class="ttdef"><b>Definition:</b> UserInterface.h:139</div></div>
+<div class="ttc" id="aclass_q_action_html"><div class="ttname"><a href="class_q_action.html">QAction</a></div></div>
+<div class="ttc" id="aclass_q_main_window_html"><div class="ttname"><a href="class_q_main_window.html">QMainWindow</a></div></div>
+<div class="ttc" id="aclass_q_map_html"><div class="ttname"><a href="class_q_map.html">QMap&lt; QString, QGridLayout * &gt;</a></div></div>
+<div class="ttc" id="aclass_q_object_html"><div class="ttname"><a href="class_q_object.html">QObject</a></div></div>
+<div class="ttc" id="aclass_q_progress_bar_html"><div class="ttname"><a href="class_q_progress_bar.html">QProgressBar</a></div></div>
+<div class="ttc" id="aclass_q_widget_html"><div class="ttname"><a href="class_q_widget.html">QWidget</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_b0c9439a1a76827d26e5174c3fdee469.html">Gui</a></li><li class="navelem"><a class="el" href="_gui_8h.html">Gui.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

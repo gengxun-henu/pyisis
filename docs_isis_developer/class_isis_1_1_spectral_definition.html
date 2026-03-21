@@ -1,0 +1,761 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::SpectralDefinition Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_spectral_definition.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_spectral_definition-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::SpectralDefinition Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>contains calibration info for spectral smile correction (center wavelengths and widths for the whole nxn chip)  
+ <a href="class_isis_1_1_spectral_definition.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_spectral_definition_8h_source.html">SpectralDefinition.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::SpectralDefinition:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_spectral_definition__inherit__graph.png" border="0" usemap="#a_isis_1_1_spectral_definition_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_spectral_definition_inherit__map" id="a_isis_1_1_spectral_definition_inherit__map">
+<area shape="rect" title="contains calibration info for spectral smile correction (center wavelengths and widths for the whole ..." alt="" coords="112,5,302,279"/>
+<area shape="rect" href="class_isis_1_1_spectral_definition1_d.html" title="A Spectral definition that includes wavelength and center values for each (line, sample) coordinate." alt="" coords="5,327,196,536"/>
+<area shape="rect" href="class_isis_1_1_spectral_definition2_d.html" title="A Spectral definition that includes wavelength and center values for each (line, sample) coordinate." alt="" coords="220,327,410,536"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::SpectralDefinition:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_spectral_definition__coll__graph.png" border="0" usemap="#a_isis_1_1_spectral_definition_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_spectral_definition_coll__map" id="a_isis_1_1_spectral_definition_coll__map">
+<area shape="rect" title="contains calibration info for spectral smile correction (center wavelengths and widths for the whole ..." alt="" coords="5,199,196,424"/>
+<area shape="rect" title=" " alt="" coords="81,5,120,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a2ade0ff0162778d582f70997b8c839a1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#a2ade0ff0162778d582f70997b8c839a1">SpectralDefinition</a> ()</td></tr>
+<tr class="memdesc:a2ade0ff0162778d582f70997b8c839a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an empty <a class="el" href="class_isis_1_1_spectral_definition.html" title="contains calibration info for spectral smile correction (center wavelengths and widths for the whole ...">SpectralDefinition</a> object.  <a href="class_isis_1_1_spectral_definition.html#a2ade0ff0162778d582f70997b8c839a1">More...</a><br /></td></tr>
+<tr class="separator:a2ade0ff0162778d582f70997b8c839a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b53b7a7692620402ae56bcd026e3b3a"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#a4b53b7a7692620402ae56bcd026e3b3a">~SpectralDefinition</a> ()</td></tr>
+<tr class="memdesc:a4b53b7a7692620402ae56bcd026e3b3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">default destructor  <a href="class_isis_1_1_spectral_definition.html#a4b53b7a7692620402ae56bcd026e3b3a">More...</a><br /></td></tr>
+<tr class="separator:a4b53b7a7692620402ae56bcd026e3b3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab896cc867ede4d0a9845d2877e50d09f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_spectel.html">Spectel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#ab896cc867ede4d0a9845d2877e50d09f">findSpectel</a> (const int sample, const int line, const int band) const =0</td></tr>
+<tr class="separator:ab896cc867ede4d0a9845d2877e50d09f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af125340ab778395bb1c184350d2ed615"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_spectel.html">Spectel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#af125340ab778395bb1c184350d2ed615">findSpectel</a> (const <a class="el" href="class_isis_1_1_spectel.html">Spectel</a> &amp;inSpectel, int <a class="el" href="class_isis_1_1_spectral_definition.html#a6e67da701db3a0d7ce43a2825d876816">sectionNumber</a>) const =0</td></tr>
+<tr class="separator:af125340ab778395bb1c184350d2ed615"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d5bb0206b6f6943d50c50cc4220e31c"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_spectel.html">Spectel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#a3d5bb0206b6f6943d50c50cc4220e31c">findSpectelByWavelength</a> (const double wavlength, int <a class="el" href="class_isis_1_1_spectral_definition.html#a6e67da701db3a0d7ce43a2825d876816">sectionNumber</a>) const =0</td></tr>
+<tr class="separator:a3d5bb0206b6f6943d50c50cc4220e31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8b24ed80453139e77706294b9685065"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#aa8b24ed80453139e77706294b9685065">sampleCount</a> () const</td></tr>
+<tr class="memdesc:aa8b24ed80453139e77706294b9685065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of samples in the calibration image.  <a href="class_isis_1_1_spectral_definition.html#aa8b24ed80453139e77706294b9685065">More...</a><br /></td></tr>
+<tr class="separator:aa8b24ed80453139e77706294b9685065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4eacff3c4b29279230576de0fafe0d3d"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#a4eacff3c4b29279230576de0fafe0d3d">lineCount</a> () const</td></tr>
+<tr class="memdesc:a4eacff3c4b29279230576de0fafe0d3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of line in the calibration image.  <a href="class_isis_1_1_spectral_definition.html#a4eacff3c4b29279230576de0fafe0d3d">More...</a><br /></td></tr>
+<tr class="separator:a4eacff3c4b29279230576de0fafe0d3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba464c9f6c9ba447b57c6eb029e66f59"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#aba464c9f6c9ba447b57c6eb029e66f59">bandCount</a> () const</td></tr>
+<tr class="memdesc:aba464c9f6c9ba447b57c6eb029e66f59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of bands in the calibration image.  <a href="class_isis_1_1_spectral_definition.html#aba464c9f6c9ba447b57c6eb029e66f59">More...</a><br /></td></tr>
+<tr class="separator:aba464c9f6c9ba447b57c6eb029e66f59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78db9b182f52783634f69db82c89fda0"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#a78db9b182f52783634f69db82c89fda0">sectionCount</a> () const</td></tr>
+<tr class="memdesc:a78db9b182f52783634f69db82c89fda0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of sections in the calibration image.  <a href="class_isis_1_1_spectral_definition.html#a78db9b182f52783634f69db82c89fda0">More...</a><br /></td></tr>
+<tr class="separator:a78db9b182f52783634f69db82c89fda0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e67da701db3a0d7ce43a2825d876816"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#a6e67da701db3a0d7ce43a2825d876816">sectionNumber</a> (int s, int l, int b) const =0</td></tr>
+<tr class="separator:a6e67da701db3a0d7ce43a2825d876816"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:ade74c32ca22d302014f9cb09f2f0f00c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#ade74c32ca22d302014f9cb09f2f0f00c">m_ns</a></td></tr>
+<tr class="memdesc:ade74c32ca22d302014f9cb09f2f0f00c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of samples in input <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a>.  <a href="class_isis_1_1_spectral_definition.html#ade74c32ca22d302014f9cb09f2f0f00c">More...</a><br /></td></tr>
+<tr class="separator:ade74c32ca22d302014f9cb09f2f0f00c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a163aae0988054433bacefbf72f332afd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#a163aae0988054433bacefbf72f332afd">m_nl</a></td></tr>
+<tr class="memdesc:a163aae0988054433bacefbf72f332afd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of lines in input <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a>.  <a href="class_isis_1_1_spectral_definition.html#a163aae0988054433bacefbf72f332afd">More...</a><br /></td></tr>
+<tr class="separator:a163aae0988054433bacefbf72f332afd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed0480678ee3f368132707ffa58d670a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#aed0480678ee3f368132707ffa58d670a">m_nb</a></td></tr>
+<tr class="memdesc:aed0480678ee3f368132707ffa58d670a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of bands in input <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a>.  <a href="class_isis_1_1_spectral_definition.html#aed0480678ee3f368132707ffa58d670a">More...</a><br /></td></tr>
+<tr class="separator:aed0480678ee3f368132707ffa58d670a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02c2032c8fd79c61040b73b357bc8969"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spectral_definition.html#a02c2032c8fd79c61040b73b357bc8969">m_numSections</a></td></tr>
+<tr class="memdesc:a02c2032c8fd79c61040b73b357bc8969"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of sections of the chip/wavelength data.  <a href="class_isis_1_1_spectral_definition.html#a02c2032c8fd79c61040b73b357bc8969">More...</a><br /></td></tr>
+<tr class="separator:a02c2032c8fd79c61040b73b357bc8969"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>contains calibration info for spectral smile correction (center wavelengths and widths for the whole nxn chip) </p>
+<p>Right now doens't do any calculations; just organizes contents of input and output smile definitions.</p>
+<dl class="section author"><dt>Author</dt><dd>2015-05-11 Kristin Berry <br  />
+ </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a2ade0ff0162778d582f70997b8c839a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ade0ff0162778d582f70997b8c839a1">&#9670;&nbsp;</a></span>SpectralDefinition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SpectralDefinition::SpectralDefinition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an empty <a class="el" href="class_isis_1_1_spectral_definition.html" title="contains calibration info for spectral smile correction (center wavelengths and widths for the whole ...">SpectralDefinition</a> object. </p>
+
+</div>
+</div>
+<a id="a4b53b7a7692620402ae56bcd026e3b3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b53b7a7692620402ae56bcd026e3b3a">&#9670;&nbsp;</a></span>~SpectralDefinition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SpectralDefinition::~SpectralDefinition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>default destructor </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aba464c9f6c9ba447b57c6eb029e66f59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba464c9f6c9ba447b57c6eb029e66f59">&#9670;&nbsp;</a></span>bandCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SpectralDefinition::bandCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of bands in the calibration image. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spectral_definition.html#aed0480678ee3f368132707ffa58d670a">m_nb</a>.</p>
+
+</div>
+</div>
+<a id="ab896cc867ede4d0a9845d2877e50d09f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab896cc867ede4d0a9845d2877e50d09f">&#9670;&nbsp;</a></span>findSpectel() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="class_isis_1_1_spectel.html">Spectel</a> Isis::SpectralDefinition::findSpectel </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>sample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>band</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_spectral_definition2_d.html#ada585ab6cef2d507f973a6948a1aa162">Isis::SpectralDefinition2D</a>, and <a class="el" href="class_isis_1_1_spectral_definition1_d.html#a438e889b00e78a2eb38e601a7c247aa1">Isis::SpectralDefinition1D</a>.</p>
+
+</div>
+</div>
+<a id="af125340ab778395bb1c184350d2ed615"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af125340ab778395bb1c184350d2ed615">&#9670;&nbsp;</a></span>findSpectel() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="class_isis_1_1_spectel.html">Spectel</a> Isis::SpectralDefinition::findSpectel </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_spectel.html">Spectel</a> &amp;&#160;</td>
+          <td class="paramname"><em>inSpectel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>sectionNumber</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_spectral_definition2_d.html#add335d2f24f3bdd5b480c38250736ff5">Isis::SpectralDefinition2D</a>, and <a class="el" href="class_isis_1_1_spectral_definition1_d.html#aba8e88628cfbb35b52672e467a9164c2">Isis::SpectralDefinition1D</a>.</p>
+
+</div>
+</div>
+<a id="a3d5bb0206b6f6943d50c50cc4220e31c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d5bb0206b6f6943d50c50cc4220e31c">&#9670;&nbsp;</a></span>findSpectelByWavelength()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="class_isis_1_1_spectel.html">Spectel</a> Isis::SpectralDefinition::findSpectelByWavelength </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>wavlength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>sectionNumber</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_spectral_definition1_d.html#a45c2693dd3abf808a4fbd4eb28f9b616">Isis::SpectralDefinition1D</a>, and <a class="el" href="class_isis_1_1_spectral_definition2_d.html#a7f75100275777f6bcfd729033f345f1f">Isis::SpectralDefinition2D</a>.</p>
+
+</div>
+</div>
+<a id="a4eacff3c4b29279230576de0fafe0d3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eacff3c4b29279230576de0fafe0d3d">&#9670;&nbsp;</a></span>lineCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SpectralDefinition::lineCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of line in the calibration image. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spectral_definition.html#a163aae0988054433bacefbf72f332afd">m_nl</a>.</p>
+
+</div>
+</div>
+<a id="aa8b24ed80453139e77706294b9685065"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8b24ed80453139e77706294b9685065">&#9670;&nbsp;</a></span>sampleCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SpectralDefinition::sampleCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of samples in the calibration image. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spectral_definition.html#ade74c32ca22d302014f9cb09f2f0f00c">m_ns</a>.</p>
+
+</div>
+</div>
+<a id="a78db9b182f52783634f69db82c89fda0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78db9b182f52783634f69db82c89fda0">&#9670;&nbsp;</a></span>sectionCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SpectralDefinition::sectionCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of sections in the calibration image. </p>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_spectral_definition2_d.html#ac93b8184e7770f32ea8899f0503fe7f8">Isis::SpectralDefinition2D</a>, and <a class="el" href="class_isis_1_1_spectral_definition1_d.html#a880a55cd686a060e5bca2d7fd4282aaf">Isis::SpectralDefinition1D</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_spectral_definition.html#a02c2032c8fd79c61040b73b357bc8969">m_numSections</a>.</p>
+
+</div>
+</div>
+<a id="a6e67da701db3a0d7ce43a2825d876816"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e67da701db3a0d7ce43a2825d876816">&#9670;&nbsp;</a></span>sectionNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int Isis::SpectralDefinition::sectionNumber </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_spectral_definition2_d.html#a14fe6eef67452004c727ea8cdfbb95c1">Isis::SpectralDefinition2D</a>, and <a class="el" href="class_isis_1_1_spectral_definition1_d.html#aa2c27eff9be97790e4f6f7041907ffc9">Isis::SpectralDefinition1D</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aed0480678ee3f368132707ffa58d670a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed0480678ee3f368132707ffa58d670a">&#9670;&nbsp;</a></span>m_nb</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SpectralDefinition::m_nb</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of bands in input <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a>. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spectral_definition.html#aba464c9f6c9ba447b57c6eb029e66f59">bandCount()</a>, <a class="el" href="class_isis_1_1_spectral_definition1_d.html#aa0f4c24302b11da314501014bfeea27a">Isis::SpectralDefinition1D::SpectralDefinition1D()</a>, and <a class="el" href="class_isis_1_1_spectral_definition2_d.html#a34f0ab3a6463a8812b53fa9f5e3616c2">Isis::SpectralDefinition2D::SpectralDefinition2D()</a>.</p>
+
+</div>
+</div>
+<a id="a163aae0988054433bacefbf72f332afd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a163aae0988054433bacefbf72f332afd">&#9670;&nbsp;</a></span>m_nl</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SpectralDefinition::m_nl</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of lines in input <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a>. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spectral_definition.html#a4eacff3c4b29279230576de0fafe0d3d">lineCount()</a>, <a class="el" href="class_isis_1_1_spectral_definition1_d.html#aa0f4c24302b11da314501014bfeea27a">Isis::SpectralDefinition1D::SpectralDefinition1D()</a>, and <a class="el" href="class_isis_1_1_spectral_definition2_d.html#a34f0ab3a6463a8812b53fa9f5e3616c2">Isis::SpectralDefinition2D::SpectralDefinition2D()</a>.</p>
+
+</div>
+</div>
+<a id="ade74c32ca22d302014f9cb09f2f0f00c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade74c32ca22d302014f9cb09f2f0f00c">&#9670;&nbsp;</a></span>m_ns</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SpectralDefinition::m_ns</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of samples in input <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a>. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spectral_definition.html#aa8b24ed80453139e77706294b9685065">sampleCount()</a>, <a class="el" href="class_isis_1_1_spectral_definition1_d.html#aa0f4c24302b11da314501014bfeea27a">Isis::SpectralDefinition1D::SpectralDefinition1D()</a>, and <a class="el" href="class_isis_1_1_spectral_definition2_d.html#a34f0ab3a6463a8812b53fa9f5e3616c2">Isis::SpectralDefinition2D::SpectralDefinition2D()</a>.</p>
+
+</div>
+</div>
+<a id="a02c2032c8fd79c61040b73b357bc8969"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02c2032c8fd79c61040b73b357bc8969">&#9670;&nbsp;</a></span>m_numSections</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SpectralDefinition::m_numSections</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of sections of the chip/wavelength data. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spectral_definition.html#a78db9b182f52783634f69db82c89fda0">sectionCount()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/SpectralDefinition/<a class="el" href="_spectral_definition_8h_source.html">SpectralDefinition.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/SpectralDefinition/<a class="el" href="_spectral_definition_8cpp.html">SpectralDefinition.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_spectral_definition.html">SpectralDefinition</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

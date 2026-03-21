@@ -1,0 +1,403 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::CubeCachingAlgorithm Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_cube_caching_algorithm.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_cube_caching_algorithm-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::CubeCachingAlgorithm Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This is the parent of the caching algorithms.  
+ <a href="class_isis_1_1_cube_caching_algorithm.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_cube_caching_algorithm_8h_source.html">CubeCachingAlgorithm.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::CubeCachingAlgorithm:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_cube_caching_algorithm__inherit__graph.png" border="0" usemap="#a_isis_1_1_cube_caching_algorithm_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_cube_caching_algorithm_inherit__map" id="a_isis_1_1_cube_caching_algorithm_inherit__map">
+<area shape="rect" title="This is the parent of the caching algorithms." alt="" coords="336,5,530,119"/>
+<area shape="rect" href="class_isis_1_1_boxcar_caching_algorithm.html" title="This algorithm is designed for applications that jump around between a couple of spots in the cube wi..." alt="" coords="5,167,200,280"/>
+<area shape="rect" href="class_isis_1_1_filter_caching_algorithm.html" title="This algorithm is designed for applications that use ProcessByQuickFilter or very similar I/O pattern..." alt="" coords="224,167,418,280"/>
+<area shape="rect" href="class_isis_1_1_regional_caching_algorithm.html" title="This algorithm recommends chunks to be freed that are not within the last IO." alt="" coords="443,183,647,264"/>
+<area shape="rect" href="class_isis_1_1_unique_i_o_caching_algorithm.html" title="This algorithm is designed for applications that jump around between a couple of spots in the cube wi..." alt="" coords="672,167,880,280"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::CubeCachingAlgorithm:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_cube_caching_algorithm__coll__graph.png" border="0" usemap="#a_isis_1_1_cube_caching_algorithm_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_cube_caching_algorithm_coll__map" id="a_isis_1_1_cube_caching_algorithm_coll__map">
+<area shape="rect" title="This is the parent of the caching algorithms." alt="" coords="5,5,200,119"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_caching_algorithm_1_1_cache_result.html">CacheResult</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This stores the results of the caching algorithm.  <a href="class_isis_1_1_cube_caching_algorithm_1_1_cache_result.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a3fb2ce3b9e56f5ae9f0a2872a66670c6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_caching_algorithm.html#a3fb2ce3b9e56f5ae9f0a2872a66670c6">CubeCachingAlgorithm</a> ()</td></tr>
+<tr class="memdesc:a3fb2ce3b9e56f5ae9f0a2872a66670c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a caching algorithm.  <a href="class_isis_1_1_cube_caching_algorithm.html#a3fb2ce3b9e56f5ae9f0a2872a66670c6">More...</a><br /></td></tr>
+<tr class="separator:a3fb2ce3b9e56f5ae9f0a2872a66670c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf1dfd8452587f083b63f1f1b44d2ac6"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_caching_algorithm.html#aaf1dfd8452587f083b63f1f1b44d2ac6">~CubeCachingAlgorithm</a> ()</td></tr>
+<tr class="memdesc:aaf1dfd8452587f083b63f1f1b44d2ac6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up after a caching algorithm.  <a href="class_isis_1_1_cube_caching_algorithm.html#aaf1dfd8452587f083b63f1f1b44d2ac6">More...</a><br /></td></tr>
+<tr class="separator:aaf1dfd8452587f083b63f1f1b44d2ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a128aa997cea5dba3d37f0f5cdec4feb5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_cube_caching_algorithm_1_1_cache_result.html">CacheResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_cube_caching_algorithm.html#a128aa997cea5dba3d37f0f5cdec4feb5">recommendChunksToFree</a> (<a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_raw_cube_chunk.html">RawCubeChunk</a> * &gt; allocated, <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_raw_cube_chunk.html">RawCubeChunk</a> * &gt; justUsed, const <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> &amp;justRequested)=0</td></tr>
+<tr class="memdesc:a128aa997cea5dba3d37f0f5cdec4feb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this to determine which chunks should be freed from memory.  <a href="class_isis_1_1_cube_caching_algorithm.html#a128aa997cea5dba3d37f0f5cdec4feb5">More...</a><br /></td></tr>
+<tr class="separator:a128aa997cea5dba3d37f0f5cdec4feb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This is the parent of the caching algorithms. </p>
+<p>The caching algorithms are given some limited/easy to acquire data about recent IOs and the allocated cube chunks. Their job is to quickly determine which allocated cube chunks should be put on disk or just freed from memory. These will not be called until there is at least a few allocated chunks in memory.</p>
+<dl class="section author"><dt>Author</dt><dd>????-??-?? Jai Rideout and Steven Lambright </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a3fb2ce3b9e56f5ae9f0a2872a66670c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fb2ce3b9e56f5ae9f0a2872a66670c6">&#9670;&nbsp;</a></span>CubeCachingAlgorithm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CubeCachingAlgorithm::CubeCachingAlgorithm </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a caching algorithm. </p>
+
+</div>
+</div>
+<a id="aaf1dfd8452587f083b63f1f1b44d2ac6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf1dfd8452587f083b63f1f1b44d2ac6">&#9670;&nbsp;</a></span>~CubeCachingAlgorithm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::CubeCachingAlgorithm::~CubeCachingAlgorithm </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cleans up after a caching algorithm. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a128aa997cea5dba3d37f0f5cdec4feb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a128aa997cea5dba3d37f0f5cdec4feb5">&#9670;&nbsp;</a></span>recommendChunksToFree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="class_isis_1_1_cube_caching_algorithm_1_1_cache_result.html">CacheResult</a> Isis::CubeCachingAlgorithm::recommendChunksToFree </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_raw_cube_chunk.html">RawCubeChunk</a> * &gt;&#160;</td>
+          <td class="paramname"><em>allocated</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_raw_cube_chunk.html">RawCubeChunk</a> * &gt;&#160;</td>
+          <td class="paramname"><em>justUsed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_buffer.html">Buffer</a> &amp;&#160;</td>
+          <td class="paramname"><em>justRequested</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Call this to determine which chunks should be freed from memory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">allocated</td><td>This is an unordered list of all of the allocated chunks. </td></tr>
+    <tr><td class="paramname">justUsed</td><td>This should be the chunks required in the current read or write. Many algorithms will use this to not clean it up. </td></tr>
+    <tr><td class="paramname">justRequested</td><td>This must be the buffer area requested </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A list of chunks to be freed from memory </dd></dl>
+
+<p>Implemented in <a class="el" href="class_isis_1_1_unique_i_o_caching_algorithm.html#a1b86b140f47df76d51342b9acd362cb4">Isis::UniqueIOCachingAlgorithm</a>, <a class="el" href="class_isis_1_1_filter_caching_algorithm.html#a93e945d863dc54da26c4c59eb384105d">Isis::FilterCachingAlgorithm</a>, <a class="el" href="class_isis_1_1_regional_caching_algorithm.html#ad35ada29690bb142ba202ca2ca3e7d42">Isis::RegionalCachingAlgorithm</a>, and <a class="el" href="class_isis_1_1_boxcar_caching_algorithm.html#a239ce1d78149d9f5022441972729be70">Isis::BoxcarCachingAlgorithm</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CubeCachingAlgorithm/<a class="el" href="_cube_caching_algorithm_8h_source.html">CubeCachingAlgorithm.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CubeCachingAlgorithm/<a class="el" href="_cube_caching_algorithm_8cpp.html">CubeCachingAlgorithm.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_cube_caching_algorithm.html">CubeCachingAlgorithm</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

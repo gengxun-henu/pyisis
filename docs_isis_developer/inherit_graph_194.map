@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_isis_1_1_reduce.html" title="Reduce the pixel dimensions of an image." alt="" coords="5,32,101,60"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_average.html" title="Functor for reduce using average functionality." alt="" coords="149,5,247,33"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_nearest.html" title="Functor for reduce using near functionality." alt="" coords="150,57,246,85"/>
+</map>

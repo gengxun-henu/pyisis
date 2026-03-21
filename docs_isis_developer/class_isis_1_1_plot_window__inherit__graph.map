@@ -1,0 +1,8 @@
+<map id="Isis::PlotWindow" name="Isis::PlotWindow">
+<area shape="rect" id="node1" title=" " alt="" coords="233,344,401,921"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_histogram_plot_window.html" title=" " alt="" coords="5,1033,186,1195"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_scatter_plot_window.html" title="Scatter Plot Window." alt="" coords="210,969,424,1259"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_spectral_plot_window.html" title=" " alt="" coords="448,1033,623,1195"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_main_window.html" title="Base class for the Qisis main windows." alt="" coords="245,135,389,296"/>
+<area shape="rect" id="node3" href="$class_q_main_window.html" title=" " alt="" coords="264,5,370,87"/>
+</map>

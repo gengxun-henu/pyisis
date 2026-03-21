@@ -1,0 +1,23 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ImageImporter,High Level Cube I/O,isis/src/base/objs/ImageImporter/ImageImporter.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ImageImporter,isis_pybind.ImageImporter,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,ImageImporter(),isis_pybind.ImageImporter(),N,抽象基类/纯虚接口
+Read/Write IO,Cube * import(FileName outputName),isis_pybind.ImageImporter.import,N,抽象基类/纯虚接口
+Read/Write IO,"Cube * import(FileName outputName, CubeAttributeOutput &att)",isis_pybind.ImageImporter.import,N,抽象基类/纯虚接口
+Mutation/Configuration,"void setNullRange(double min, double max)",isis_pybind.ImageImporter.set_null_range,N,抽象基类/纯虚接口
+Mutation/Configuration,"void setLrsRange(double min, double max)",isis_pybind.ImageImporter.set_lrs_range,N,抽象基类/纯虚接口
+Mutation/Configuration,"void setHrsRange(double min, double max)",isis_pybind.ImageImporter.set_hrs_range,N,抽象基类/纯虚接口
+Mutation/Configuration,void setSamples(int s),isis_pybind.ImageImporter.set_samples,N,抽象基类/纯虚接口
+Mutation/Configuration,void setLines(int l),isis_pybind.ImageImporter.set_lines,N,抽象基类/纯虚接口
+Mutation/Configuration,void setBands(int b),isis_pybind.ImageImporter.set_bands,N,抽象基类/纯虚接口
+Public API,int samples() const,isis_pybind.ImageImporter.samples,N,抽象基类/纯虚接口
+Public API,int lines() const,isis_pybind.ImageImporter.lines,N,抽象基类/纯虚接口
+Public API,int bands() const,isis_pybind.ImageImporter.bands,N,抽象基类/纯虚接口
+Public API,FileName filename() const,isis_pybind.ImageImporter.filename,N,抽象基类/纯虚接口
+Public API,virtual PvlGroup convertProjection() const,isis_pybind.ImageImporter.convert_projection,N,抽象基类/纯虚接口
+Query,virtual bool isGrayscale() const = 0,isis_pybind.ImageImporter.is_grayscale,N,抽象基类/纯虚接口
+Query,virtual bool isRgb() const = 0,isis_pybind.ImageImporter.is_rgb,N,抽象基类/纯虚接口
+Query,virtual bool isArgb() const = 0,isis_pybind.ImageImporter.is_argb,N,抽象基类/纯虚接口
+Static/Factory,static ImageImporter * fromFileName(FileName inputName),isis_pybind.ImageImporter.from_file_name,N,抽象基类/纯虚接口

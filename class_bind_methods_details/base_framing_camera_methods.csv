@@ -1,0 +1,8 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+FramingCamera,"Spice, Instruments, and Cameras",isis/src/base/objs/FramingCamera/FramingCamera.h,isis_pybind_standalone/src/bind_camera_hierarchy.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已验证层级关系
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,FramingCamera,isis_pybind.FramingCamera,Y,Python class symbol is exported; constructor exposure may be limited; 抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已验证层级关系
+Construction/Enum,FramingCamera(),isis_pybind.FramingCamera(),N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已验证层级关系
+Public API,virtual CameraType GetCameraType() const { return Framing,isis_pybind.FramingCamera.get_camera_type,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已验证层级关系
+Public API,"virtual std::pair<iTime, iTime> ShutterOpenCloseTimes(double time, double exposureDuration) = 0",isis_pybind.FramingCamera.shutter_open_close_times,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已验证层级关系

@@ -1,0 +1,44 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+PvlObject,Parsing,isis/src/base/objs/PvlObject/PvlObject.h,isis_pybind_standalone/src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,PvlObject,isis_pybind.Pvl,Y,Python class symbol is exported
+Construction/Enum,"FindOptions enum (None, Traverse)",isis_pybind.Pvl.FindOptions,N,Enum exposure not detected in current binding files
+Construction/Enum,PvlObject(),isis_pybind.Pvl(),Y,Constructor is explicitly bound
+Public API,int groups() const { return m_groups.size(),isis_pybind.Pvl.groups,N,Method not found in current binding files
+Public API,PvlGroup &group(const int index),isis_pybind.Pvl.group,N,Method not found in current binding files
+Public API,const PvlGroup &group(const int index) const,isis_pybind.Pvl.group,N,Method not found in current binding files
+Public API,PvlGroupIterator beginGroup() { return m_groups.begin(),isis_pybind.Pvl.begin_group,N,Method not found in current binding files
+Public API,ConstPvlGroupIterator beginGroup() const { return m_groups.begin(),isis_pybind.Pvl.begin_group,N,Method not found in current binding files
+Public API,PvlGroupIterator endGroup() { return m_groups.end(),isis_pybind.Pvl.end_group,N,Method not found in current binding files
+Public API,ConstPvlGroupIterator endGroup() const { return m_groups.end(),isis_pybind.Pvl.end_group,N,Method not found in current binding files
+Public API,"PvlGroupIterator findGroup(const QString &name, PvlGroupIterator beg, PvlGroupIterator end) { Isis::PvlGroup temp(name)",isis_pybind.Pvl.find_group,N,Method not found in current binding files
+Public API,"return std::find(beg, end, temp)",isis_pybind.Pvl.find,N,Method not found in current binding files
+Public API,"ConstPvlGroupIterator findGroup(const QString &name, ConstPvlGroupIterator beg, ConstPvlGroupIterator end) const { Isis::PvlGroup temp(name)",isis_pybind.Pvl.find_group,N,Method not found in current binding files
+Public API,"PvlKeyword &findKeyword(const QString &kname, FindOptions opts)",isis_pybind.Pvl.find_keyword,N,Method not found in current binding files
+Query,"bool hasKeyword(const QString &kname, FindOptions opts) const",isis_pybind.Pvl.has_keyword,N,Method not found in current binding files
+Public API,"Isis::PvlGroup &findGroup(const QString &name, FindOptions opts = None)",isis_pybind.Pvl.find_group,N,Method not found in current binding files
+Public API,"const Isis::PvlGroup &findGroup(const QString &name, FindOptions opts = None) const",isis_pybind.Pvl.find_group,N,Method not found in current binding files
+Mutation/Configuration,void addGroup(const Isis::PvlGroup &group) { m_groups.push_back(group),isis_pybind.Pvl.add_group,N,Method not found in current binding files
+Mutation/Configuration,void deleteGroup(const QString &name),isis_pybind.Pvl.delete_group,N,Method not found in current binding files
+Mutation/Configuration,void deleteGroup(const int index),isis_pybind.Pvl.delete_group,N,Method not found in current binding files
+Query,"bool hasGroup(const QString &name) const { if(findGroup(name, beginGroup(), endGroup()) == endGroup()) return false",isis_pybind.Pvl.has_group,N,Method not found in current binding files
+Public API,int objects() const { return m_objects.size(),isis_pybind.Pvl.objects,N,Method not found in current binding files
+Public API,PvlObject &object(const int index),isis_pybind.Pvl.object,N,Method not found in current binding files
+Public API,const PvlObject &object(const int index) const,isis_pybind.Pvl.object,N,Method not found in current binding files
+Public API,PvlObjectIterator beginObject() { return m_objects.begin(),isis_pybind.Pvl.begin_object,N,Method not found in current binding files
+Public API,ConstPvlObjectIterator beginObject() const { return m_objects.begin(),isis_pybind.Pvl.begin_object,N,Method not found in current binding files
+Public API,PvlObjectIterator endObject() { return m_objects.end(),isis_pybind.Pvl.end_object,N,Method not found in current binding files
+Public API,ConstPvlObjectIterator endObject() const { return m_objects.end(),isis_pybind.Pvl.end_object,N,Method not found in current binding files
+Public API,"PvlObjectIterator findObject(const QString &name, PvlObjectIterator beg, PvlObjectIterator end) { PvlObject temp(name)",isis_pybind.Pvl.find_object,N,Method not found in current binding files
+Public API,"ConstPvlObjectIterator findObject(const QString &name, ConstPvlObjectIterator beg, ConstPvlObjectIterator end) const { PvlObject temp(name)",isis_pybind.Pvl.find_object,N,Method not found in current binding files
+Public API,"PvlObject &findObject(const QString &name, FindOptions opts = None)",isis_pybind.Pvl.find_object,N,Method not found in current binding files
+Public API,"const PvlObject &findObject(const QString &name, FindOptions opts = None) const",isis_pybind.Pvl.find_object,N,Method not found in current binding files
+Mutation/Configuration,void addObject(const PvlObject &object) { m_objects.push_back(object),isis_pybind.Pvl.add_object,N,Method not found in current binding files
+Mutation/Configuration,void deleteObject(const QString &name),isis_pybind.Pvl.delete_object,N,Method not found in current binding files
+Mutation/Configuration,void deleteObject(const int index),isis_pybind.Pvl.delete_object,N,Method not found in current binding files
+Query,"bool hasObject(const QString &name) const { if(findObject(name, beginObject(), endObject()) == endObject()) return false",isis_pybind.Pvl.has_object,N,Method not found in current binding files
+Mutation/Configuration,void clear() { Isis::PvlContainer::clear(),isis_pybind.Pvl.clear,N,Method not found in current binding files
+Mutation/Configuration,m_objects.clear(),isis_pybind.Pvl.clear,N,Method not found in current binding files
+Mutation/Configuration,m_groups.clear(),isis_pybind.Pvl.clear,N,Method not found in current binding files
+Query,void validateObject(PvlObject & pPvlObj),isis_pybind.Pvl.validate_object,N,Method not found in current binding files

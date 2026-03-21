@@ -1,0 +1,413 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CubeViewport/ViewportBuffer.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_viewport_buffer_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">ViewportBuffer.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_viewport_buffer_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef ViewportBuffer_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define ViewportBuffer_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QRect&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_cube_8h.html">Cube.h</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_brick_8h.html">Brick.h</a>&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// parent</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;QObject&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> T &gt; <span class="keyword">class </span><a class="code" href="class_q_queue.html">QQueue</a>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">class </span>QRect;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">class </span>CubeDataThread;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keyword">class </span>Brick;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">class </span>CubeViewport;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">class </span>ViewportBufferAction;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">class </span>ViewportBufferFill;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <span class="keyword">class </span>ViewportBufferStretch;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keyword">class </span>ViewportBufferTransform;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="class_isis_1_1_viewport_buffer.html">   63</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_viewport_buffer.html">ViewportBuffer</a> : <span class="keyword">public</span> <a class="code" href="class_q_object.html">QObject</a> {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      <a class="code" href="class_isis_1_1_viewport_buffer.html#a8a31ede5df6e13253035366e6897c4b6">ViewportBuffer</a>(<a class="code" href="class_isis_1_1_cube_viewport.html">CubeViewport</a> *viewport, <a class="code" href="class_isis_1_1_cube_data_thread.html">CubeDataThread</a> *cubeData,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                     <span class="keywordtype">int</span> cubeId);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#a766a543acaedab85b5fb1602dd030ba6">~ViewportBuffer</a>();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      <span class="keyword">const</span> std::vector&lt;double&gt; &amp;<a class="code" href="class_isis_1_1_viewport_buffer.html#a2e3119154792778af8135207ed1ea0fc">getLine</a>(<span class="keywordtype">int</span> line);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#ac2174b183344333146fead333540962f">resizedViewport</a>();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#aed4e5e87965777148766d6a4a9bc86a2">pan</a>(<span class="keywordtype">int</span> deltaX, <span class="keywordtype">int</span> deltaY);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#af3669e6420df49e5e330e5e3483f628f">scaleChanged</a>();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#adff08d8d4bdeff80265c05b85e6af7b4">fillBuffer</a>(QRect rect);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#adff08d8d4bdeff80265c05b85e6af7b4">fillBuffer</a>(QRect rect, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_brick.html">Brick</a> *data);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#ae0c21eb66e1db92995bc78922fec3391">emptyBuffer</a>(<span class="keywordtype">bool</span> force = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;      QRect <a class="code" href="class_isis_1_1_viewport_buffer.html#aa8001598c5e0c36ae20e9b01673a0a22">bufferXYRect</a>();</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#a4915ca6f6322b0c05ca686c23b854a33">setBand</a>(<span class="keywordtype">int</span> band);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="class_isis_1_1_viewport_buffer.html#ae8c4303a7f82642a825072476c547eac">   88</a></span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#ae8c4303a7f82642a825072476c547eac">getBand</a>() {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">return</span> p_band;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      }</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#a9437d94223cc47645639479de946eca1">enable</a>(<span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#ac5233251aa0f7b92bdb0e700603baf84">enabled</a>);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#a09fdef8acc63f1116b8cedd2b8162340">addStretchAction</a>();</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#a53bb71bae049a390b29e9d9b01de079f">currentProgress</a>();</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#a42028accef2df535a5c3a5e57b8942c0">totalUnfilledArea</a>();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="class_isis_1_1_viewport_buffer.html#ac5233251aa0f7b92bdb0e700603baf84">  105</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#ac5233251aa0f7b92bdb0e700603baf84">enabled</a>() {</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordflow">return</span> p_enabled;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#ae8aa7972e13af563f385d41f8248482d">working</a>();</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#adc0c00a1f0117ddcf616e288648e44ab">hasEntireCube</a>();</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">DataReady</a>(<span class="keywordtype">void</span> *requester, <span class="keywordtype">int</span> cubeId, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_brick.html">Isis::Brick</a> *brick);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    signals:</div>
+<div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="class_isis_1_1_viewport_buffer.html#a5cc0a6c7e869f406d9ffc1b5aedf5d67">  127</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#a5cc0a6c7e869f406d9ffc1b5aedf5d67">ReadCube</a>(<span class="keywordtype">int</span> cubeId, <span class="keywordtype">int</span> startSample, <span class="keywordtype">int</span> startLine,</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                    <span class="keywordtype">int</span> endSample, <span class="keywordtype">int</span> endLine, <span class="keywordtype">int</span> band, <span class="keywordtype">void</span> *caller);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno"><a class="line" href="class_isis_1_1_viewport_buffer.html#a12f04a379080d4ba30f911c352c5890f">  131</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_viewport_buffer.html#a12f04a379080d4ba30f911c352c5890f">DoneWithData</a>(<span class="keywordtype">int</span>, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_brick.html">Isis::Brick</a> *);</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      QRect getXYBoundingRect();</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;double&gt;</a> getSampLineBoundingRect();</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      <span class="keywordtype">void</span> updateBoundingRects();</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      <span class="keywordtype">void</span> doQueuedActions();</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;      <span class="keywordtype">void</span> doTransformAction(<a class="code" href="class_isis_1_1_viewport_buffer_transform.html">ViewportBufferTransform</a> *action);</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;      <span class="keywordtype">void</span> doStretchAction(<a class="code" href="class_isis_1_1_viewport_buffer_stretch.html">ViewportBufferStretch</a> *action);</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      <span class="keywordtype">void</span> startFillAction(<a class="code" href="class_isis_1_1_viewport_buffer_fill.html">ViewportBufferFill</a> *action);</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      <a class="code" href="class_isis_1_1_viewport_buffer_fill.html">ViewportBufferFill</a> *createViewportBufferFill(QRect, <span class="keywordtype">bool</span>);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;      <span class="keywordtype">void</span> requestCubeLine(<a class="code" href="class_isis_1_1_viewport_buffer_fill.html">ViewportBufferFill</a> *fill);</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;      <span class="keywordtype">void</span> resizeBuffer(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> width, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> height);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;      <span class="keywordtype">void</span> shiftBuffer(<span class="keywordtype">int</span> deltaX, <span class="keywordtype">int</span> deltaY);</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;      <span class="keywordtype">void</span> reinitialize();</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;      <span class="keywordtype">bool</span> actionsPreserveData();</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;      <span class="keywordtype">bool</span> reinitializeActionExists();</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;      <span class="keywordtype">void</span> enqueueAction(<a class="code" href="class_isis_1_1_viewport_buffer_action.html">ViewportBufferAction</a> *);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;      <a class="code" href="class_isis_1_1_cube_viewport.html">CubeViewport</a> *p_viewport;  </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;      <span class="keywordtype">int</span> p_cubeId; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      <a class="code" href="class_isis_1_1_cube_data_thread.html">CubeDataThread</a> *p_dataThread;  </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      <span class="keywordtype">int</span> p_band; </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;      <span class="keywordtype">bool</span> p_enabled; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;      std::vector&lt; std::vector&lt;double&gt; &gt; p_buffer; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;      <span class="keywordtype">bool</span> p_bufferInitialized; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;      QRect p_XYBoundingRect;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;      QRect p_oldXYBoundingRect; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; double &gt;</a> p_sampLineBoundingRect;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; double &gt;</a> p_oldSampLineBoundingRect; </div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;      <span class="keywordtype">int</span> p_viewportHeight; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;      <span class="keywordtype">int</span> p_oldViewportHeight; </div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;      <span class="keywordtype">int</span> p_vertScrollBarPos; </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;      <span class="keywordtype">int</span> p_oldVertScrollBarPos; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;      <span class="keywordtype">bool</span> p_initialStretchDone; </div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;      <span class="keywordtype">double</span> p_requestedFillArea; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;      <span class="keyword">enum</span> sampLineRectPosition {</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        rectLeft = 0, </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        rectTop,  </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        rectRight, </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        rectBottom </div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;      };</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;      <a class="code" href="class_q_queue.html">QQueue&lt; ViewportBufferAction * &gt;</a> * p_actions;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;      <span class="keywordtype">bool</span> p_bricksOrdered;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;  };</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;}</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160; </div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_brick_8h_html"><div class="ttname"><a href="_brick_8h.html">Brick.h</a></div></div>
+<div class="ttc" id="a_cube_8h_html"><div class="ttname"><a href="_cube_8h.html">Cube.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_brick_html"><div class="ttname"><a href="class_isis_1_1_brick.html">Isis::Brick</a></div><div class="ttdoc">Buffer for containing a three dimensional section of an image.</div><div class="ttdef"><b>Definition:</b> Brick.h:45</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_data_thread_html"><div class="ttname"><a href="class_isis_1_1_cube_data_thread.html">Isis::CubeDataThread</a></div><div class="ttdoc">Encapsulation of Cube I/O with Change Notifications.</div><div class="ttdef"><b>Definition:</b> CubeDataThread.h:59</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_viewport_html"><div class="ttname"><a href="class_isis_1_1_cube_viewport.html">Isis::CubeViewport</a></div><div class="ttdoc">Widget to display Isis cubes for qt apps.</div><div class="ttdef"><b>Definition:</b> CubeViewport.h:122</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_action_html"><div class="ttname"><a href="class_isis_1_1_viewport_buffer_action.html">Isis::ViewportBufferAction</a></div><div class="ttdef"><b>Definition:</b> ViewportBufferAction.h:18</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_fill_html"><div class="ttname"><a href="class_isis_1_1_viewport_buffer_fill.html">Isis::ViewportBufferFill</a></div><div class="ttdef"><b>Definition:</b> ViewportBufferFill.h:29</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html">Isis::ViewportBuffer</a></div><div class="ttdoc">Reads and stores visible DN values.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.h:63</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_a09fdef8acc63f1116b8cedd2b8162340"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#a09fdef8acc63f1116b8cedd2b8162340">Isis::ViewportBuffer::addStretchAction</a></div><div class="ttdeci">void addStretchAction()</div><div class="ttdoc">When all current operations finish the cube viewport will be asked to do a stretch if you call this.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:1224</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_a12f04a379080d4ba30f911c352c5890f"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#a12f04a379080d4ba30f911c352c5890f">Isis::ViewportBuffer::DoneWithData</a></div><div class="ttdeci">void DoneWithData(int, const Isis::Brick *)</div><div class="ttdoc">Tell cube data thread we're done with a brick.</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_a2e3119154792778af8135207ed1ea0fc"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#a2e3119154792778af8135207ed1ea0fc">Isis::ViewportBuffer::getLine</a></div><div class="ttdeci">const std::vector&lt; double &gt; &amp; getLine(int line)</div><div class="ttdoc">Retrieves a line from the buffer.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:339</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_a41f22dd90f357299473b7cc0f0b45e4b"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#a41f22dd90f357299473b7cc0f0b45e4b">Isis::ViewportBuffer::DataReady</a></div><div class="ttdeci">void DataReady(void *requester, int cubeId, const Isis::Brick *brick)</div><div class="ttdoc">This method is called when requested bricks become available.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:205</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_a42028accef2df535a5c3a5e57b8942c0"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#a42028accef2df535a5c3a5e57b8942c0">Isis::ViewportBuffer::totalUnfilledArea</a></div><div class="ttdeci">double totalUnfilledArea()</div><div class="ttdoc">This returns the amount of area in the queue that needs new cube data/will be filled by fill actions.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:646</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_a4915ca6f6322b0c05ca686c23b854a33"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#a4915ca6f6322b0c05ca686c23b854a33">Isis::ViewportBuffer::setBand</a></div><div class="ttdeci">void setBand(int band)</div><div class="ttdoc">Sets the band to read from, the buffer will be re-read if the band changes.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:1323</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_a53bb71bae049a390b29e9d9b01de079f"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#a53bb71bae049a390b29e9d9b01de079f">Isis::ViewportBuffer::currentProgress</a></div><div class="ttdeci">double currentProgress()</div><div class="ttdoc">Returns the viewport buffer's loading progress.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:630</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_a5cc0a6c7e869f406d9ffc1b5aedf5d67"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#a5cc0a6c7e869f406d9ffc1b5aedf5d67">Isis::ViewportBuffer::ReadCube</a></div><div class="ttdeci">void ReadCube(int cubeId, int startSample, int startLine, int endSample, int endLine, int band, void *caller)</div><div class="ttdoc">Ask the cube data thread for data.</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_a766a543acaedab85b5fb1602dd030ba6"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#a766a543acaedab85b5fb1602dd030ba6">Isis::ViewportBuffer::~ViewportBuffer</a></div><div class="ttdeci">virtual ~ViewportBuffer()</div><div class="ttdoc">Updates total buffer size on destruction.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:78</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_a8a31ede5df6e13253035366e6897c4b6"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#a8a31ede5df6e13253035366e6897c4b6">Isis::ViewportBuffer::ViewportBuffer</a></div><div class="ttdeci">ViewportBuffer(CubeViewport *viewport, CubeDataThread *cubeData, int cubeId)</div><div class="ttdoc">ViewportBuffer constructor.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_a9437d94223cc47645639479de946eca1"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#a9437d94223cc47645639479de946eca1">Isis::ViewportBuffer::enable</a></div><div class="ttdeci">void enable(bool enabled)</div><div class="ttdoc">This turns on or off reading from the cube.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:1306</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_aa8001598c5e0c36ae20e9b01673a0a22"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#aa8001598c5e0c36ae20e9b01673a0a22">Isis::ViewportBuffer::bufferXYRect</a></div><div class="ttdeci">QRect bufferXYRect()</div><div class="ttdoc">Returns a rect, in screen pixels, of the area this buffer covers.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:1261</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_ac2174b183344333146fead333540962f"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#ac2174b183344333146fead333540962f">Isis::ViewportBuffer::resizedViewport</a></div><div class="ttdeci">void resizedViewport()</div><div class="ttdoc">Call this when the viewport is resized (not zoomed).</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:905</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_ac5233251aa0f7b92bdb0e700603baf84"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#ac5233251aa0f7b92bdb0e700603baf84">Isis::ViewportBuffer::enabled</a></div><div class="ttdeci">bool enabled()</div><div class="ttdoc">Returns whether the buffer is enabled (reading data) or not.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.h:105</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_adc0c00a1f0117ddcf616e288648e44ab"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#adc0c00a1f0117ddcf616e288648e44ab">Isis::ViewportBuffer::hasEntireCube</a></div><div class="ttdeci">bool hasEntireCube()</div><div class="ttdoc">Method to see if the entire cube is in the buffer.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:420</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_adff08d8d4bdeff80265c05b85e6af7b4"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#adff08d8d4bdeff80265c05b85e6af7b4">Isis::ViewportBuffer::fillBuffer</a></div><div class="ttdeci">void fillBuffer(QRect rect)</div><div class="ttdoc">This method will convert the rect to sample/line positions and read from the cube into the buffer.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:112</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_ae0c21eb66e1db92995bc78922fec3391"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#ae0c21eb66e1db92995bc78922fec3391">Isis::ViewportBuffer::emptyBuffer</a></div><div class="ttdeci">void emptyBuffer(bool force=false)</div><div class="ttdoc">This is meant to clear up ram on non-active viewports.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:1245</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_ae8aa7972e13af563f385d41f8248482d"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#ae8aa7972e13af563f385d41f8248482d">Isis::ViewportBuffer::working</a></div><div class="ttdeci">bool working()</div><div class="ttdoc">This tests if queued actions exist in the viewport buffer.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:756</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_ae8c4303a7f82642a825072476c547eac"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#ae8c4303a7f82642a825072476c547eac">Isis::ViewportBuffer::getBand</a></div><div class="ttdeci">int getBand()</div><div class="ttdoc">Return the band associated with this viewport buffer.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.h:88</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_aed4e5e87965777148766d6a4a9bc86a2"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#aed4e5e87965777148766d6a4a9bc86a2">Isis::ViewportBuffer::pan</a></div><div class="ttdeci">void pan(int deltaX, int deltaY)</div><div class="ttdoc">Call this when the viewport is panned.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:1052</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_html_af3669e6420df49e5e330e5e3483f628f"><div class="ttname"><a href="class_isis_1_1_viewport_buffer.html#af3669e6420df49e5e330e5e3483f628f">Isis::ViewportBuffer::scaleChanged</a></div><div class="ttdeci">void scaleChanged()</div><div class="ttdoc">Call this when zoomed, re-reads visible area.</div><div class="ttdef"><b>Definition:</b> ViewportBuffer.cpp:1285</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_stretch_html"><div class="ttname"><a href="class_isis_1_1_viewport_buffer_stretch.html">Isis::ViewportBufferStretch</a></div><div class="ttdef"><b>Definition:</b> ViewportBufferStretch.h:22</div></div>
+<div class="ttc" id="aclass_isis_1_1_viewport_buffer_transform_html"><div class="ttname"><a href="class_isis_1_1_viewport_buffer_transform.html">Isis::ViewportBufferTransform</a></div><div class="ttdef"><b>Definition:</b> ViewportBufferTransform.h:21</div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList&lt; double &gt;</a></div></div>
+<div class="ttc" id="aclass_q_object_html"><div class="ttname"><a href="class_q_object.html">QObject</a></div></div>
+<div class="ttc" id="aclass_q_queue_html"><div class="ttname"><a href="class_q_queue.html">QQueue</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:14</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_a63b2b17b5769513db4a52bc7874acab.html">CubeViewport</a></li><li class="navelem"><a class="el" href="_viewport_buffer_8h.html">ViewportBuffer.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

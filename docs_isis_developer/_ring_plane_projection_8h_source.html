@@ -1,0 +1,419 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/RingPlaneProjection/RingPlaneProjection.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_ring_plane_projection_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">RingPlaneProjection.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_ring_plane_projection_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef RingPlaneProjection_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define RingPlaneProjection_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_projection_8h.html">Projection.h</a>&quot;</span>  </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_group_8h.html">PvlGroup.h</a>&quot;</span> <span class="comment">// protected data member object (m_mappingGrp) </span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <span class="keyword">class </span>Displacement;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="keyword">class </span>Pvl;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keyword">class </span>WorldMapper;</div>
+<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html">  147</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_ring_plane_projection.html">RingPlaneProjection</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_projection.html">Projection</a> {</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;      <span class="comment">// constructor</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;      <a class="code" href="class_isis_1_1_ring_plane_projection.html#a41e332e43c140d7bcccc3fc37fe54802">RingPlaneProjection</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;label);</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a5639448fb84fbd90611fe2fef188f2d3">~RingPlaneProjection</a>();</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a660a2c7ed07a2a6f0892dbd7b958ab2e">operator== </a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_projection.html">Projection</a> &amp;proj);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;      <span class="comment">// These return properties of the target</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a6df3f5c867ee3cd6ee1ca76f68a1f059">LocalRadius</a>() <span class="keyword">const</span>; <span class="comment">// requires SetGround or SetCoordinate</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      <span class="comment">// These return or change properties of the projection, independent of calculations</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#a438947a51b05838efd17992dc6f5ee54">  164</a></span>&#160;<span class="comment"></span>      <span class="keyword">virtual</span> QString <a class="code" href="class_isis_1_1_ring_plane_projection.html#a438947a51b05838efd17992dc6f5ee54">Name</a>() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00171"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#a8469355db3469446ccec1cc034ff0de9">  171</a></span>&#160;      <span class="keyword">virtual</span> QString <a class="code" href="class_isis_1_1_ring_plane_projection.html#a8469355db3469446ccec1cc034ff0de9">Version</a>() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a43f262fa9977c4026b1c2119e5dc7d62">TrueScaleRingRadius</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00178"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#adad4ea220ccd8d0903d414fc7d6c5aa6">  178</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#adad4ea220ccd8d0903d414fc7d6c5aa6">RingLongitudeDirection</a> { <a class="code" href="class_isis_1_1_ring_plane_projection.html#adad4ea220ccd8d0903d414fc7d6c5aa6a1d05cb383f9fecc4c64dbc81bc6b8a4e">Clockwise</a>, </div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                                <a class="code" href="class_isis_1_1_ring_plane_projection.html#adad4ea220ccd8d0903d414fc7d6c5aa6a720f2790f58bf0038c94a352a68181d1">CounterClockwise</a>  </div>
+<div class="line"><a name="l00182"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#adad4ea220ccd8d0903d414fc7d6c5aa6a720f2790f58bf0038c94a352a68181d1">  182</a></span>&#160;                              };</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;      <span class="comment">// Check ring longitude direction or get ring longitude direction as a string</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a56a1365484a7f7df1fa3b7306e3b5ba0">IsClockwise</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a70bfc49b07e91d2e9f0699dbd2337222">IsCounterClockwise</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;      std::string <a class="code" href="class_isis_1_1_ring_plane_projection.html#a857e47589e4eb138150eabf204ead2bf">RingLongitudeDirectionString</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;      <span class="comment">// Check ring longitude domain or get ring longitude domain as a string  TODO** check implementation to see if this can go in Projection</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#adc8b122c1df013d9b7b66b252773dba2">Has180Domain</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a1432e6dee2a919eff4ecd6386e60048f">Has360Domain</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;      std::string <a class="code" href="class_isis_1_1_ring_plane_projection.html#ad047b2b5795efb5e44658642cc90e84c">RingLongitudeDomainString</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;      <span class="comment">// Get min/max ring rad/lon</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#ae55d63b0fdd453d8461c938a03c068c7">MinimumRingRadius</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#ac875e7e2c6e1a8e9e15482e33a693302">MaximumRingRadius</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#ae4ee7f696528685f1c3d78c4a9baff3f">MinimumRingLongitude</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a29d4ebaad49ac3e8d27ffc5e3e385d79">MaximumRingLongitude</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;      <span class="comment">//  Calculations</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;      <span class="comment">// Set ground position or x/y coordinate</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#aff48ae8d55fc97643dc2aae74dc94021">SetGround</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> ringRadius, <span class="keyword">const</span> <span class="keywordtype">double</span> ringLongitude);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#abfab15ea82b4d5ada26a83c34bc1ca9c">SetCoordinate</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> x, <span class="keyword">const</span> <span class="keywordtype">double</span> y);</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;      <span class="comment">// Methods that depend on successful completion</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;      <span class="comment">// of SetGround/SetCoordinate Get ring rad,ring</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;      <span class="comment">// lon, x,y</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a3555998825b582b10dd4be1d377e6f8c">RingRadius</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#af5f9bfbe103e00ad616bf16ea6749620">RingLongitude</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160; </div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;      <span class="comment">// Set the universal ground coordinate (calls SetGround)</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#aae55056f3980ad93429d42448d7b34fe">SetUniversalGround</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> ringRadius, <span class="keyword">const</span> <span class="keywordtype">double</span> ringLongitude);</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;      <span class="comment">// Return the universal ground coordinate after successful SetCoordinate</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a39b275dbc93529481c75697d343528cb">UniversalRingRadius</a>();</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a176fdb3a3838e5508adbebff3beda9da">UniversalRingLongitude</a>();</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;      <span class="comment">// convert from world coordinate to projected coordinate</span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;      <span class="comment">//      double ToProjectionX(const double worldX) const;</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;      <span class="comment">//      double ToProjectionY(const double worldY) const;</span></div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;      <span class="comment">// get resolution and scale for mapping world coordinates</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#ac7903e5c106d74c4be5ada5d72bbf6ce">Scale</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;      <span class="comment">// Return the x/y range which covers the ring rad/lon range in the labels</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#af867869aa1242f8f77ecedd068d53171">XYRange</a>(<span class="keywordtype">double</span> &amp;minX, <span class="keywordtype">double</span> &amp;maxX, </div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                           <span class="keywordtype">double</span> &amp;minY, <span class="keywordtype">double</span> &amp;maxY);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;      <span class="comment">// get mapping information</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a5f33f7a7370d2ec8c237517ddae4be7e">Mapping</a>();</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> <a class="code" href="class_isis_1_1_ring_plane_projection.html#aba4583fb59ea7b9e7c49cbf8e7393e93">MappingRingRadii</a>();</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a37ad786c0166ca7a5f046ca7e23b049e">MappingRingLongitudes</a>();</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;      <span class="comment">// change ring longitude direction</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a0e51406bd6c6adc542e1105e43162fac">ToClockwise</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> ringLongitude, <span class="keyword">const</span> <span class="keywordtype">int</span> domain);</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#ac1e21d079526849a0687c01fe06807dd">ToCounterClockwise</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> ringLongitude, <span class="keyword">const</span> <span class="keywordtype">int</span> domain);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;      <span class="comment">// change ring longitude domain </span></div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a6fc83a15254d51dfcb097c15413a2975">To180Domain</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> lon);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a1f04edbe886c2a9e432ff554da843651">To360Domain</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> lon);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a9ddaa27d932d8b46fe909e5b1fa78e9f">XYRangeCheck</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> ringRadius, <span class="keyword">const</span> <span class="keywordtype">double</span> ringLongitude);</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;      <span class="comment">//      bool xyRangeOblique(double &amp;minX, double &amp;maxX, </span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;      <span class="comment">//                          double &amp;minY, double &amp;maxY);</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;      <span class="comment">// These methods are not currectly being used by the ring plane projections</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;      <span class="comment">/*      void doSearch(double minBorder, double maxBorder, </span></div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="comment">                    double &amp;extremeVal, const double constBorder,</span></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="comment">                    bool searchX, bool searchRingLongitude, bool findMin);</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="comment">      void findExtreme(double &amp;minBorder,  double &amp;maxBorder, </span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="comment">                       double &amp;minBorderX, double &amp;minBorderY, </span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="comment">                       double &amp;maxBorderX, double &amp;maxBorderY, </span></div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="comment">                       const double constBorder, bool searchX, </span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="comment">                       bool searchRingLongitude, bool findMin);</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="comment">      void setSearchGround(const double variableBorder, </span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="comment">                           const double constBorder, bool variableIsRad);</span></div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="comment">      */</span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00261"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#aac19698b4f3171c7804ade1222f6460c">  261</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#aac19698b4f3171c7804ade1222f6460c">m_ringRadius</a>;   </div>
+<div class="line"><a name="l00263"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#ac1b0fca870f05bc0b5efc7c2df93964c">  263</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#ac1b0fca870f05bc0b5efc7c2df93964c">m_ringLongitude</a>;  </div>
+<div class="line"><a name="l00267"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#adb7f5f385a9030f220917fac63216f88">  267</a></span>&#160;      <a class="code" href="class_isis_1_1_ring_plane_projection.html#adad4ea220ccd8d0903d414fc7d6c5aa6">RingLongitudeDirection</a> <a class="code" href="class_isis_1_1_ring_plane_projection.html#adb7f5f385a9030f220917fac63216f88">m_ringLongitudeDirection</a>; </div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;      <span class="comment">// TODO** Can this be generalized for both longitude and ring longitude???</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#a5bf872655020c20780fb746cc9297fa6">  275</a></span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a5bf872655020c20780fb746cc9297fa6">m_ringLongitudeDomain</a>; </div>
+<div class="line"><a name="l00281"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#afabd15e0cacfb0599f06719e4201f567">  281</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#afabd15e0cacfb0599f06719e4201f567">m_minimumRingRadius</a>;   </div>
+<div class="line"><a name="l00284"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#a68bd0abef7f0c7c067224661c7ef93ed">  284</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a68bd0abef7f0c7c067224661c7ef93ed">m_maximumRingRadius</a>;   </div>
+<div class="line"><a name="l00287"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#a10bd151523bdf05ea8872e38cebdb09a">  287</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a10bd151523bdf05ea8872e38cebdb09a">m_minimumRingLongitude</a>;  </div>
+<div class="line"><a name="l00290"></a><span class="lineno"><a class="line" href="class_isis_1_1_ring_plane_projection.html#a78f5a2c8534342c799dc8ebd9af0d191">  290</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_ring_plane_projection.html#a78f5a2c8534342c799dc8ebd9af0d191">m_maximumRingLongitude</a>;  </div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;  };</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;};</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="ttc" id="a_projection_8h_html"><div class="ttname"><a href="_projection_8h.html">Projection.h</a></div></div>
+<div class="ttc" id="a_pvl_group_8h_html"><div class="ttname"><a href="_pvl_group_8h.html">PvlGroup.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_projection_html"><div class="ttname"><a href="class_isis_1_1_projection.html">Isis::Projection</a></div><div class="ttdoc">Base class for Map Projections.</div><div class="ttdef"><b>Definition:</b> Projection.h:155</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_group_html"><div class="ttname"><a href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a></div><div class="ttdoc">Contains multiple PvlContainers.</div><div class="ttdef"><b>Definition:</b> PvlGroup.h:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_html"><div class="ttname"><a href="class_isis_1_1_pvl.html">Isis::Pvl</a></div><div class="ttdoc">Container for cube-like labels.</div><div class="ttdef"><b>Definition:</b> Pvl.h:119</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html">Isis::RingPlaneProjection</a></div><div class="ttdoc">Base class for Map Projections of plane shapes.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:147</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a0e51406bd6c6adc542e1105e43162fac"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a0e51406bd6c6adc542e1105e43162fac">Isis::RingPlaneProjection::ToClockwise</a></div><div class="ttdeci">static double ToClockwise(const double ringLongitude, const int domain)</div><div class="ttdoc">This method converts an ring longitude into the clockwise direction.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:240</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a10bd151523bdf05ea8872e38cebdb09a"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a10bd151523bdf05ea8872e38cebdb09a">Isis::RingPlaneProjection::m_minimumRingLongitude</a></div><div class="ttdeci">double m_minimumRingLongitude</div><div class="ttdoc">Contains the minimum longitude for the entire ground range.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:287</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a1432e6dee2a919eff4ecd6386e60048f"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a1432e6dee2a919eff4ecd6386e60048f">Isis::RingPlaneProjection::Has360Domain</a></div><div class="ttdeci">bool Has360Domain() const</div><div class="ttdoc">This indicates if the ring longitude domain is 0 to 360 (as opposed to -180 to 180).</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:337</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a176fdb3a3838e5508adbebff3beda9da"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a176fdb3a3838e5508adbebff3beda9da">Isis::RingPlaneProjection::UniversalRingLongitude</a></div><div class="ttdeci">double UniversalRingLongitude()</div><div class="ttdoc">This returns a universal ring longitude (clockwise in 0 to 360 domain).</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:589</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a1f04edbe886c2a9e432ff554da843651"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a1f04edbe886c2a9e432ff554da843651">Isis::RingPlaneProjection::To360Domain</a></div><div class="ttdeci">static double To360Domain(const double lon)</div><div class="ttdoc">This method converts an ring longitude into the 0 to 360 domain.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:370</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a29d4ebaad49ac3e8d27ffc5e3e385d79"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a29d4ebaad49ac3e8d27ffc5e3e385d79">Isis::RingPlaneProjection::MaximumRingLongitude</a></div><div class="ttdeci">double MaximumRingLongitude() const</div><div class="ttdoc">This returns the maximum ring longitude of the area of interest.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:438</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a3555998825b582b10dd4be1d377e6f8c"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a3555998825b582b10dd4be1d377e6f8c">Isis::RingPlaneProjection::RingRadius</a></div><div class="ttdeci">double RingRadius() const</div><div class="ttdoc">This returns a radius.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:506</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a37ad786c0166ca7a5f046ca7e23b049e"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a37ad786c0166ca7a5f046ca7e23b049e">Isis::RingPlaneProjection::MappingRingLongitudes</a></div><div class="ttdeci">virtual PvlGroup MappingRingLongitudes()</div><div class="ttdoc">This function returns the ring longitude keywords that this projection uses.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:1313</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a39b275dbc93529481c75697d343528cb"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a39b275dbc93529481c75697d343528cb">Isis::RingPlaneProjection::UniversalRingRadius</a></div><div class="ttdeci">double UniversalRingRadius()</div><div class="ttdoc">This returns a universal radius, which is just the radius in meters.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:575</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a41e332e43c140d7bcccc3fc37fe54802"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a41e332e43c140d7bcccc3fc37fe54802">Isis::RingPlaneProjection::RingPlaneProjection</a></div><div class="ttdeci">RingPlaneProjection(Pvl &amp;label)</div><div class="ttdoc">Constructs an empty RingPlaneProjection object.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:69</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a438947a51b05838efd17992dc6f5ee54"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a438947a51b05838efd17992dc6f5ee54">Isis::RingPlaneProjection::Name</a></div><div class="ttdeci">virtual QString Name() const =0</div><div class="ttdoc">This method returns the name of the map projection.</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a43f262fa9977c4026b1c2119e5dc7d62"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a43f262fa9977c4026b1c2119e5dc7d62">Isis::RingPlaneProjection::TrueScaleRingRadius</a></div><div class="ttdeci">virtual double TrueScaleRingRadius() const</div><div class="ttdoc">This method returns the radius of true scale.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:199</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a5639448fb84fbd90611fe2fef188f2d3"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a5639448fb84fbd90611fe2fef188f2d3">Isis::RingPlaneProjection::~RingPlaneProjection</a></div><div class="ttdeci">virtual ~RingPlaneProjection()</div><div class="ttdoc">Destroys the Projection object.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:169</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a56a1365484a7f7df1fa3b7306e3b5ba0"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a56a1365484a7f7df1fa3b7306e3b5ba0">Isis::RingPlaneProjection::IsClockwise</a></div><div class="ttdeci">bool IsClockwise() const</div><div class="ttdoc">This indicates if the longitude direction type is positive west (as opposed to postive east).</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:211</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a5bf872655020c20780fb746cc9297fa6"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a5bf872655020c20780fb746cc9297fa6">Isis::RingPlaneProjection::m_ringLongitudeDomain</a></div><div class="ttdeci">int m_ringLongitudeDomain</div><div class="ttdoc">This integer is either 180 or 360 and is read from the labels.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:275</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a5f33f7a7370d2ec8c237517ddae4be7e"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a5f33f7a7370d2ec8c237517ddae4be7e">Isis::RingPlaneProjection::Mapping</a></div><div class="ttdeci">virtual PvlGroup Mapping()</div><div class="ttdoc">This method is used to find the XY range for oblique aspect projections (non-polar projections) by &quot;w...</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:1253</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a660a2c7ed07a2a6f0892dbd7b958ab2e"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a660a2c7ed07a2a6f0892dbd7b958ab2e">Isis::RingPlaneProjection::operator==</a></div><div class="ttdeci">virtual bool operator==(const Projection &amp;proj)</div><div class="ttdoc">This method determines whether two map projection objects are equal by comparing the ring longitude d...</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:181</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a68bd0abef7f0c7c067224661c7ef93ed"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a68bd0abef7f0c7c067224661c7ef93ed">Isis::RingPlaneProjection::m_maximumRingRadius</a></div><div class="ttdeci">double m_maximumRingRadius</div><div class="ttdoc">Contains the maximum ring radius for the entire ground range.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:284</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a6df3f5c867ee3cd6ee1ca76f68a1f059"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a6df3f5c867ee3cd6ee1ca76f68a1f059">Isis::RingPlaneProjection::LocalRadius</a></div><div class="ttdeci">double LocalRadius() const</div><div class="ttdoc">This returns a local radius.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:518</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a6fc83a15254d51dfcb097c15413a2975"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a6fc83a15254d51dfcb097c15413a2975">Isis::RingPlaneProjection::To180Domain</a></div><div class="ttdeci">static double To180Domain(const double lon)</div><div class="ttdoc">This method converts a ring longitude into the -180 to 180 domain.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:352</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a70bfc49b07e91d2e9f0699dbd2337222"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a70bfc49b07e91d2e9f0699dbd2337222">Isis::RingPlaneProjection::IsCounterClockwise</a></div><div class="ttdeci">bool IsCounterClockwise() const</div><div class="ttdoc">This indicates if the longitude direction type is positive east (as opposed to postive west).</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:222</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a78f5a2c8534342c799dc8ebd9af0d191"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a78f5a2c8534342c799dc8ebd9af0d191">Isis::RingPlaneProjection::m_maximumRingLongitude</a></div><div class="ttdeci">double m_maximumRingLongitude</div><div class="ttdoc">Contains the maximum longitude for the entire ground range.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:290</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a8469355db3469446ccec1cc034ff0de9"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a8469355db3469446ccec1cc034ff0de9">Isis::RingPlaneProjection::Version</a></div><div class="ttdeci">virtual QString Version() const =0</div><div class="ttdoc">This method returns the Version of the map projection.</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a857e47589e4eb138150eabf204ead2bf"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a857e47589e4eb138150eabf204ead2bf">Isis::RingPlaneProjection::RingLongitudeDirectionString</a></div><div class="ttdeci">std::string RingLongitudeDirectionString() const</div><div class="ttdoc">This method returns the ring longitude direction as a string.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:314</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_a9ddaa27d932d8b46fe909e5b1fa78e9f"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#a9ddaa27d932d8b46fe909e5b1fa78e9f">Isis::RingPlaneProjection::XYRangeCheck</a></div><div class="ttdeci">void XYRangeCheck(const double ringRadius, const double ringLongitude)</div><div class="ttdoc">This convience function is established to assist in the development of the XYRange virtual method.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:709</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_aac19698b4f3171c7804ade1222f6460c"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#aac19698b4f3171c7804ade1222f6460c">Isis::RingPlaneProjection::m_ringRadius</a></div><div class="ttdeci">double m_ringRadius</div><div class="ttdoc">This contain a ring radius value in m.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:261</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_aae55056f3980ad93429d42448d7b34fe"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#aae55056f3980ad93429d42448d7b34fe">Isis::RingPlaneProjection::SetUniversalGround</a></div><div class="ttdeci">bool SetUniversalGround(const double ringRadius, const double ringLongitude)</div><div class="ttdoc">This method is used to set the ring radius/longitude which must be PositiveEast/Domain360 (ring longi...</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:546</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_aba4583fb59ea7b9e7c49cbf8e7393e93"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#aba4583fb59ea7b9e7c49cbf8e7393e93">Isis::RingPlaneProjection::MappingRingRadii</a></div><div class="ttdeci">virtual PvlGroup MappingRingRadii()</div><div class="ttdoc">This function returns the ring radius keywords that this projection uses.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:1296</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_abfab15ea82b4d5ada26a83c34bc1ca9c"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#abfab15ea82b4d5ada26a83c34bc1ca9c">Isis::RingPlaneProjection::SetCoordinate</a></div><div class="ttdeci">virtual bool SetCoordinate(const double x, const double y)</div><div class="ttdoc">This method is used to set the projection x/y.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:485</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_ac1b0fca870f05bc0b5efc7c2df93964c"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#ac1b0fca870f05bc0b5efc7c2df93964c">Isis::RingPlaneProjection::m_ringLongitude</a></div><div class="ttdeci">double m_ringLongitude</div><div class="ttdoc">This contain a ring longitude value.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:263</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_ac1e21d079526849a0687c01fe06807dd"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#ac1e21d079526849a0687c01fe06807dd">Isis::RingPlaneProjection::ToCounterClockwise</a></div><div class="ttdeci">static double ToCounterClockwise(const double ringLongitude, const int domain)</div><div class="ttdoc">This method converts an ring longitude into the counterclockwise direction.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:280</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_ac7903e5c106d74c4be5ada5d72bbf6ce"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#ac7903e5c106d74c4be5ada5d72bbf6ce">Isis::RingPlaneProjection::Scale</a></div><div class="ttdeci">double Scale() const</div><div class="ttdoc">This method returns the scale for mapping world coordinates into projection coordinates.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:607</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_ac875e7e2c6e1a8e9e15482e33a693302"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#ac875e7e2c6e1a8e9e15482e33a693302">Isis::RingPlaneProjection::MaximumRingRadius</a></div><div class="ttdeci">double MaximumRingRadius() const</div><div class="ttdoc">This returns the maximum radius of the area of interest.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:416</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_ad047b2b5795efb5e44658642cc90e84c"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#ad047b2b5795efb5e44658642cc90e84c">Isis::RingPlaneProjection::RingLongitudeDomainString</a></div><div class="ttdeci">std::string RingLongitudeDomainString() const</div><div class="ttdoc">This method returns the ring longitude domain as a string.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:393</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_adad4ea220ccd8d0903d414fc7d6c5aa6"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#adad4ea220ccd8d0903d414fc7d6c5aa6">Isis::RingPlaneProjection::RingLongitudeDirection</a></div><div class="ttdeci">RingLongitudeDirection</div><div class="ttdoc">This enum defines the types of ring longitude directions supported in this class.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:178</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_adad4ea220ccd8d0903d414fc7d6c5aa6a1d05cb383f9fecc4c64dbc81bc6b8a4e"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#adad4ea220ccd8d0903d414fc7d6c5aa6a1d05cb383f9fecc4c64dbc81bc6b8a4e">Isis::RingPlaneProjection::Clockwise</a></div><div class="ttdeci">@ Clockwise</div><div class="ttdoc">Ring longitude values increase in the clockwise direction.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:178</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_adad4ea220ccd8d0903d414fc7d6c5aa6a720f2790f58bf0038c94a352a68181d1"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#adad4ea220ccd8d0903d414fc7d6c5aa6a720f2790f58bf0038c94a352a68181d1">Isis::RingPlaneProjection::CounterClockwise</a></div><div class="ttdeci">@ CounterClockwise</div><div class="ttdoc">Ring longitude values increase in the counterclockwise direction.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:180</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_adb7f5f385a9030f220917fac63216f88"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#adb7f5f385a9030f220917fac63216f88">Isis::RingPlaneProjection::m_ringLongitudeDirection</a></div><div class="ttdeci">RingLongitudeDirection m_ringLongitudeDirection</div><div class="ttdoc">An enumerated type indicating the LongitudeDirection read from the labels.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:267</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_adc8b122c1df013d9b7b66b252773dba2"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#adc8b122c1df013d9b7b66b252773dba2">Isis::RingPlaneProjection::Has180Domain</a></div><div class="ttdeci">bool Has180Domain() const</div><div class="ttdoc">This indicates if the longitude domain is -180 to 180 (as opposed to 0 to 360).</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:326</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_ae4ee7f696528685f1c3d78c4a9baff3f"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#ae4ee7f696528685f1c3d78c4a9baff3f">Isis::RingPlaneProjection::MinimumRingLongitude</a></div><div class="ttdeci">double MinimumRingLongitude() const</div><div class="ttdoc">This returns the minimum ring longitude of the area of interest.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:427</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_ae55d63b0fdd453d8461c938a03c068c7"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#ae55d63b0fdd453d8461c938a03c068c7">Isis::RingPlaneProjection::MinimumRingRadius</a></div><div class="ttdeci">double MinimumRingRadius() const</div><div class="ttdoc">This returns the minimum radius of the area of interest.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:405</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_af5f9bfbe103e00ad616bf16ea6749620"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#af5f9bfbe103e00ad616bf16ea6749620">Isis::RingPlaneProjection::RingLongitude</a></div><div class="ttdeci">double RingLongitude() const</div><div class="ttdoc">This returns a ring longitude with correct ring longitude direction and domain as specified in the la...</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:530</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_af867869aa1242f8f77ecedd068d53171"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#af867869aa1242f8f77ecedd068d53171">Isis::RingPlaneProjection::XYRange</a></div><div class="ttdeci">virtual bool XYRange(double &amp;minX, double &amp;maxX, double &amp;minY, double &amp;maxY)</div><div class="ttdoc">This method is used to determine the x/y range which completely covers the area of interest specified...</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:656</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_afabd15e0cacfb0599f06719e4201f567"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#afabd15e0cacfb0599f06719e4201f567">Isis::RingPlaneProjection::m_minimumRingRadius</a></div><div class="ttdeci">double m_minimumRingRadius</div><div class="ttdoc">Contains the minimum ring radius for the entire ground range.</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.h:281</div></div>
+<div class="ttc" id="aclass_isis_1_1_ring_plane_projection_html_aff48ae8d55fc97643dc2aae74dc94021"><div class="ttname"><a href="class_isis_1_1_ring_plane_projection.html#aff48ae8d55fc97643dc2aae74dc94021">Isis::RingPlaneProjection::SetGround</a></div><div class="ttdeci">virtual bool SetGround(const double ringRadius, const double ringLongitude)</div><div class="ttdoc">This method is used to set the ring radius/longitude (assumed to be of the correct LatitudeType,...</div><div class="ttdef"><b>Definition:</b> RingPlaneProjection.cpp:456</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_86b17b838e9ff536958ddc49814449e8.html">RingPlaneProjection</a></li><li class="navelem"><a class="el" href="_ring_plane_projection_8h.html">RingPlaneProjection.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

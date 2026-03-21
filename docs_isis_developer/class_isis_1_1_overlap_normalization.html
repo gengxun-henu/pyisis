@@ -1,0 +1,742 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::OverlapNormalization Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_overlap_normalization.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_overlap_normalization-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::OverlapNormalization Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Calculate the bases and multipliers for normalizing overlapping "data sets" (e.g., cubes).  
+ <a href="class_isis_1_1_overlap_normalization.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_overlap_normalization_8h_source.html">OverlapNormalization.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::OverlapNormalization:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_overlap_normalization__coll__graph.png" border="0" usemap="#a_isis_1_1_overlap_normalization_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_overlap_normalization_coll__map" id="a_isis_1_1_overlap_normalization_coll__map">
+<area shape="rect" title="Calculate the bases and multipliers for normalizing overlapping &quot;data sets&quot; (e.g.,..." alt="" coords="5,5,181,215"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ae0c954da5160be5c4efec7131219e9c4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_normalization.html#ae0c954da5160be5c4efec7131219e9c4">AddStatus</a> { <a class="el" href="class_isis_1_1_overlap_normalization.html#ae0c954da5160be5c4efec7131219e9c4a330d3fd0df79be73e98930cd26194de8">Success</a>
+, <a class="el" href="class_isis_1_1_overlap_normalization.html#ae0c954da5160be5c4efec7131219e9c4a0e1db8fcd5788294fc2fbc03f2cbe433">NoOverlap</a>
+, <a class="el" href="class_isis_1_1_overlap_normalization.html#ae0c954da5160be5c4efec7131219e9c4a8f1e31255c5fbba2501a6cd1fb21f651">NoContrast</a>
+ }</td></tr>
+<tr class="memdesc:ae0c954da5160be5c4efec7131219e9c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The result of the attempt to add overlap data to the list of valid overlaps, where Success is a successful add, NoOverlap is a failure due to one or both <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> objects containing no data, and NoContrast is a failure due to one or both averages being 0.  <a href="class_isis_1_1_overlap_normalization.html#ae0c954da5160be5c4efec7131219e9c4">More...</a><br /></td></tr>
+<tr class="separator:ae0c954da5160be5c4efec7131219e9c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade0495c12bfdeccd0c1287072c266e37"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_normalization.html#ade0495c12bfdeccd0c1287072c266e37">SolutionType</a> { <a class="el" href="class_isis_1_1_overlap_normalization.html#ade0495c12bfdeccd0c1287072c266e37aacf50bef91df3515506718c7b9ac3483">Gains</a>
+, <a class="el" href="class_isis_1_1_overlap_normalization.html#ade0495c12bfdeccd0c1287072c266e37a24da8a1e899ba66fee85e3e82cd2e13f">Offsets</a>
+, <a class="el" href="class_isis_1_1_overlap_normalization.html#ade0495c12bfdeccd0c1287072c266e37a79a4a8300ce91a705fdc1262ac1395c1">Both</a>
+, <a class="el" href="class_isis_1_1_overlap_normalization.html#ade0495c12bfdeccd0c1287072c266e37ae68658b7037f7638ff8beeacb0257ce8">GainsWithoutNormalization</a>
+ }</td></tr>
+<tr class="memdesc:ade0495c12bfdeccd0c1287072c266e37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration for whether user/programmer wants to calculate new gains, offsets, or both when solving.  <a href="class_isis_1_1_overlap_normalization.html#ade0495c12bfdeccd0c1287072c266e37">More...</a><br /></td></tr>
+<tr class="separator:ade0495c12bfdeccd0c1287072c266e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a2fa69f499bb1684bb78caeb4b6b29475"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_normalization.html#a2fa69f499bb1684bb78caeb4b6b29475">OverlapNormalization</a> (std::vector&lt; <a class="el" href="class_isis_1_1_statistics.html">Statistics</a> * &gt; statsList)</td></tr>
+<tr class="memdesc:a2fa69f499bb1684bb78caeb4b6b29475"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an <a class="el" href="class_isis_1_1_overlap_normalization.html" title="Calculate the bases and multipliers for normalizing overlapping &quot;data sets&quot; (e.g.,...">OverlapNormalization</a> object.  <a href="class_isis_1_1_overlap_normalization.html#a2fa69f499bb1684bb78caeb4b6b29475">More...</a><br /></td></tr>
+<tr class="separator:a2fa69f499bb1684bb78caeb4b6b29475"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe492c68f7211908a0ffd3c794fc1140"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_normalization.html#abe492c68f7211908a0ffd3c794fc1140">~OverlapNormalization</a> ()</td></tr>
+<tr class="memdesc:abe492c68f7211908a0ffd3c794fc1140"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_isis_1_1_overlap_normalization.html" title="Calculate the bases and multipliers for normalizing overlapping &quot;data sets&quot; (e.g.,...">OverlapNormalization</a> object, frees up pointers.  <a href="class_isis_1_1_overlap_normalization.html#abe492c68f7211908a0ffd3c794fc1140">More...</a><br /></td></tr>
+<tr class="separator:abe492c68f7211908a0ffd3c794fc1140"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4258e3edc689bb0401ff70aae68a016"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_overlap_normalization.html#ae0c954da5160be5c4efec7131219e9c4">AddStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_normalization.html#ac4258e3edc689bb0401ff70aae68a016">AddOverlap</a> (const <a class="el" href="class_isis_1_1_statistics.html">Statistics</a> &amp;area1, const unsigned index1, const <a class="el" href="class_isis_1_1_statistics.html">Statistics</a> &amp;area2, const unsigned index2, double weight=1.0)</td></tr>
+<tr class="memdesc:ac4258e3edc689bb0401ff70aae68a016"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to add the given overlap data to a collection of valid overlaps, and returns the success or failure of that attempt.  <a href="class_isis_1_1_overlap_normalization.html#ac4258e3edc689bb0401ff70aae68a016">More...</a><br /></td></tr>
+<tr class="separator:ac4258e3edc689bb0401ff70aae68a016"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaffc5a7af8ef10a3e5f6809ad7066078"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_normalization.html#aaffc5a7af8ef10a3e5f6809ad7066078">AddHold</a> (unsigned holdIndex)</td></tr>
+<tr class="memdesc:aaffc5a7af8ef10a3e5f6809ad7066078"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the list of files to be held during the solving process.  <a href="class_isis_1_1_overlap_normalization.html#aaffc5a7af8ef10a3e5f6809ad7066078">More...</a><br /></td></tr>
+<tr class="separator:aaffc5a7af8ef10a3e5f6809ad7066078"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afde3996b086ee7437224fe2537fa20dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_normalization.html#afde3996b086ee7437224fe2537fa20dc">Solve</a> (<a class="el" href="class_isis_1_1_overlap_normalization.html#ade0495c12bfdeccd0c1287072c266e37">SolutionType</a> type=<a class="el" href="class_isis_1_1_overlap_normalization.html#ade0495c12bfdeccd0c1287072c266e37a79a4a8300ce91a705fdc1262ac1395c1">Both</a>, <a class="el" href="class_isis_1_1_least_squares.html#a8ba3bbbec91360068918ef822d451829">LeastSquares::SolveMethod</a> method=<a class="el" href="class_isis_1_1_least_squares.html#a8ba3bbbec91360068918ef822d451829ad11dd4859132e456c3ddcfb91ae62d03">LeastSquares::QRD</a>)</td></tr>
+<tr class="memdesc:afde3996b086ee7437224fe2537fa20dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to solve the least squares equation for all data sets.  <a href="class_isis_1_1_overlap_normalization.html#afde3996b086ee7437224fe2537fa20dc">More...</a><br /></td></tr>
+<tr class="separator:afde3996b086ee7437224fe2537fa20dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ead707155bdaadc0a8ce264757cf91d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_normalization.html#a8ead707155bdaadc0a8ce264757cf91d">Average</a> (const unsigned index) const</td></tr>
+<tr class="memdesc:a8ead707155bdaadc0a8ce264757cf91d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the calculated average DN value for the given data set.  <a href="class_isis_1_1_overlap_normalization.html#a8ead707155bdaadc0a8ce264757cf91d">More...</a><br /></td></tr>
+<tr class="separator:a8ead707155bdaadc0a8ce264757cf91d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed76d92952265ac52653bd53e0626b31"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_normalization.html#aed76d92952265ac52653bd53e0626b31">Gain</a> (const unsigned index) const</td></tr>
+<tr class="memdesc:aed76d92952265ac52653bd53e0626b31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the calculated gain (multiplier) for the given data set.  <a href="class_isis_1_1_overlap_normalization.html#aed76d92952265ac52653bd53e0626b31">More...</a><br /></td></tr>
+<tr class="separator:aed76d92952265ac52653bd53e0626b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49421fd6eb53a6c9673822363181c853"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_normalization.html#a49421fd6eb53a6c9673822363181c853">Offset</a> (const unsigned index) const</td></tr>
+<tr class="memdesc:a49421fd6eb53a6c9673822363181c853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the calculated offset (base) for the given data set.  <a href="class_isis_1_1_overlap_normalization.html#a49421fd6eb53a6c9673822363181c853">More...</a><br /></td></tr>
+<tr class="separator:a49421fd6eb53a6c9673822363181c853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae656849e688b03821aa712435a70a321"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_overlap_normalization.html#ae656849e688b03821aa712435a70a321">Evaluate</a> (double dn, unsigned index) const</td></tr>
+<tr class="memdesc:ae656849e688b03821aa712435a70a321"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a new DN from an old using the calculated gains and offsets of the data set the pixel belongs to.  <a href="class_isis_1_1_overlap_normalization.html#ae656849e688b03821aa712435a70a321">More...</a><br /></td></tr>
+<tr class="separator:ae656849e688b03821aa712435a70a321"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Calculate the bases and multipliers for normalizing overlapping "data sets" (e.g., cubes). </p>
+<p>Specifically, this class is designed for normalizing data in equalization applications such as equalizer and hiequal. Given collections for statistical data sets, overlapping statistics between these sets, and at least one data set to be "held", this class will use a least squares solution to calculate gain and offset coefficients for every set of data in the collection.</p>
+<p>Once the multiplicative and additive corrections have been derived, this class can then be used to calculate new DN values for a known data set. The actual equation to be used for calculating new DN values with the derived gains and offsets is:</p>
+<p class="formulaDsp">
+\[ newDN = (oldDN - avg(i)) * MULT(i) + avg(i) + BASE(i) \]
+</p>
+<p>where i is the index of a known data set from the statistics list.</p>
+<dl class="section author"><dt>Author</dt><dd>2009-05-07 Travis Addair </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="ae0c954da5160be5c4efec7131219e9c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0c954da5160be5c4efec7131219e9c4">&#9670;&nbsp;</a></span>AddStatus</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_overlap_normalization.html#ae0c954da5160be5c4efec7131219e9c4">Isis::OverlapNormalization::AddStatus</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The result of the attempt to add overlap data to the list of valid overlaps, where Success is a successful add, NoOverlap is a failure due to one or both <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> objects containing no data, and NoContrast is a failure due to one or both averages being 0. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ae0c954da5160be5c4efec7131219e9c4a330d3fd0df79be73e98930cd26194de8"></a>Success&#160;</td><td class="fielddoc"><p>Overlap is valid and was added successfully. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0c954da5160be5c4efec7131219e9c4a0e1db8fcd5788294fc2fbc03f2cbe433"></a>NoOverlap&#160;</td><td class="fielddoc"><p>Data sets do not overlap one another. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0c954da5160be5c4efec7131219e9c4a8f1e31255c5fbba2501a6cd1fb21f651"></a>NoContrast&#160;</td><td class="fielddoc"><p>One or both areas contain no valid average. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="ade0495c12bfdeccd0c1287072c266e37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade0495c12bfdeccd0c1287072c266e37">&#9670;&nbsp;</a></span>SolutionType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_overlap_normalization.html#ade0495c12bfdeccd0c1287072c266e37">Isis::OverlapNormalization::SolutionType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enumeration for whether user/programmer wants to calculate new gains, offsets, or both when solving. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ade0495c12bfdeccd0c1287072c266e37aacf50bef91df3515506718c7b9ac3483"></a>Gains&#160;</td><td class="fielddoc"><p>Calculate only the gains. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ade0495c12bfdeccd0c1287072c266e37a24da8a1e899ba66fee85e3e82cd2e13f"></a>Offsets&#160;</td><td class="fielddoc"><p>Calculate only the offsets. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ade0495c12bfdeccd0c1287072c266e37a79a4a8300ce91a705fdc1262ac1395c1"></a>Both&#160;</td><td class="fielddoc"><p>Calculate both gains and offsets. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ade0495c12bfdeccd0c1287072c266e37ae68658b7037f7638ff8beeacb0257ce8"></a>GainsWithoutNormalization&#160;</td><td class="fielddoc"><p>The equation being solved for Gains, Offsets, and Both is output = (input - average) * gain + offset + average. </p>
+<p>This solution type is for the equation output = input * gain </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a2fa69f499bb1684bb78caeb4b6b29475"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fa69f499bb1684bb78caeb4b6b29475">&#9670;&nbsp;</a></span>OverlapNormalization()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::OverlapNormalization::OverlapNormalization </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="class_isis_1_1_statistics.html">Statistics</a> * &gt;&#160;</td>
+          <td class="paramname"><em>statsList</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an <a class="el" href="class_isis_1_1_overlap_normalization.html" title="Calculate the bases and multipliers for normalizing overlapping &quot;data sets&quot; (e.g.,...">OverlapNormalization</a> object. </p>
+<p>Compares and stores the vector, and initializes the basis and least squares functions. This object will also take ownership of the pointers in the vector parameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">statsList</td><td>The list of <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> objects corresponding to specific data sets (e.g., cubes) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abe492c68f7211908a0ffd3c794fc1140"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe492c68f7211908a0ffd3c794fc1140">&#9670;&nbsp;</a></span>~OverlapNormalization()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::OverlapNormalization::~OverlapNormalization </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destroys the <a class="el" href="class_isis_1_1_overlap_normalization.html" title="Calculate the bases and multipliers for normalizing overlapping &quot;data sets&quot; (e.g.,...">OverlapNormalization</a> object, frees up pointers. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aaffc5a7af8ef10a3e5f6809ad7066078"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaffc5a7af8ef10a3e5f6809ad7066078">&#9670;&nbsp;</a></span>AddHold()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::OverlapNormalization::AddHold </td>
+          <td>(</td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>holdIndex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the list of files to be held during the solving process. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">holdIndex</td><td>The index of a set of data from the list of <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> objects to be held </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization.html#a37cd9516e8fdc728304628d58193ef54">Isis::Equalization::loadHolds()</a>.</p>
+
+</div>
+</div>
+<a id="ac4258e3edc689bb0401ff70aae68a016"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4258e3edc689bb0401ff70aae68a016">&#9670;&nbsp;</a></span>AddOverlap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_overlap_normalization.html#ae0c954da5160be5c4efec7131219e9c4">OverlapNormalization::AddStatus</a> Isis::OverlapNormalization::AddOverlap </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_statistics.html">Statistics</a> &amp;&#160;</td>
+          <td class="paramname"><em>area1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned&#160;</td>
+          <td class="paramname"><em>index1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_statistics.html">Statistics</a> &amp;&#160;</td>
+          <td class="paramname"><em>area2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned&#160;</td>
+          <td class="paramname"><em>index2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>weight</em> = <code>1.0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attempts to add the given overlap data to a collection of valid overlaps, and returns the success or failure of that attempt. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">area1</td><td>The statistics for the overlap area of the first overlapping data set </td></tr>
+    <tr><td class="paramname">index1</td><td>The index in the list of <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> of the first data set </td></tr>
+    <tr><td class="paramname">area2</td><td>The statistics for the overlap area of the second data set </td></tr>
+    <tr><td class="paramname">index2</td><td>The index in the list of <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> of the second overlapping data set </td></tr>
+    <tr><td class="paramname">weight</td><td>Relative significance of this overlap. Default value = 1.0</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>AddStatus An enumeration representing either a successful add, or the reason for failure</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Identifying index 1 must exist in the statsList </td></tr>
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Identifying index 2 must exist in the statsList </td></tr>
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Weights must be all positive real numbers </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_statistics.html#a28f531f8a2800b24b0c659a2fa16da4c">Isis::Statistics::Average()</a>, and <a class="el" href="class_isis_1_1_statistics.html#a6b7294833d95a880392938edd5bda155">Isis::Statistics::ValidPixels()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hi_equalization.html#a6cc97d8cd3a9752f03c69cbed1522f4e">Isis::HiEqualization::calculateStatistics()</a>.</p>
+
+</div>
+</div>
+<a id="a8ead707155bdaadc0a8ce264757cf91d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ead707155bdaadc0a8ce264757cf91d">&#9670;&nbsp;</a></span>Average()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::OverlapNormalization::Average </td>
+          <td>(</td>
+          <td class="paramtype">const unsigned&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the calculated average DN value for the given data set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index in the <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> list corresponding to the data set desired</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double The average for the data</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Identifying index must exist in the statsList </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hi_equalization.html#a6cc97d8cd3a9752f03c69cbed1522f4e">Isis::HiEqualization::calculateStatistics()</a>.</p>
+
+</div>
+</div>
+<a id="ae656849e688b03821aa712435a70a321"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae656849e688b03821aa712435a70a321">&#9670;&nbsp;</a></span>Evaluate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::OverlapNormalization::Evaluate </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>dn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a new DN from an old using the calculated gains and offsets of the data set the pixel belongs to. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dn</td><td>The value of the pixel prior to equalization</td></tr>
+    <tr><td class="paramname">index</td><td>The index in the <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> list corresponding to the data set for the pixel</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double The newly calculated DN value</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Least Squares equation must be solved before returning the gain </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>.</p>
+
+</div>
+</div>
+<a id="aed76d92952265ac52653bd53e0626b31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed76d92952265ac52653bd53e0626b31">&#9670;&nbsp;</a></span>Gain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::OverlapNormalization::Gain </td>
+          <td>(</td>
+          <td class="paramtype">const unsigned&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the calculated gain (multiplier) for the given data set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index in the <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> list corresponding to the data set desired</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double The gain for the data</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Identifying index must exist in the statsList </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hi_equalization.html#a6cc97d8cd3a9752f03c69cbed1522f4e">Isis::HiEqualization::calculateStatistics()</a>.</p>
+
+</div>
+</div>
+<a id="a49421fd6eb53a6c9673822363181c853"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49421fd6eb53a6c9673822363181c853">&#9670;&nbsp;</a></span>Offset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::OverlapNormalization::Offset </td>
+          <td>(</td>
+          <td class="paramtype">const unsigned&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the calculated offset (base) for the given data set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index in the <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> list corresponding to the data set desired</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double The offset for the data</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- Identifying index must exist in the statsList </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hi_equalization.html#a6cc97d8cd3a9752f03c69cbed1522f4e">Isis::HiEqualization::calculateStatistics()</a>.</p>
+
+</div>
+</div>
+<a id="afde3996b086ee7437224fe2537fa20dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afde3996b086ee7437224fe2537fa20dc">&#9670;&nbsp;</a></span>Solve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::OverlapNormalization::Solve </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_overlap_normalization.html#ade0495c12bfdeccd0c1287072c266e37">SolutionType</a>&#160;</td>
+          <td class="paramname"><em>type</em> = <code><a class="el" href="class_isis_1_1_overlap_normalization.html#ade0495c12bfdeccd0c1287072c266e37a79a4a8300ce91a705fdc1262ac1395c1">Both</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_least_squares.html#a8ba3bbbec91360068918ef822d451829">LeastSquares::SolveMethod</a>&#160;</td>
+          <td class="paramname"><em>method</em> = <code><a class="el" href="class_isis_1_1_least_squares.html#a8ba3bbbec91360068918ef822d451829ad11dd4859132e456c3ddcfb91ae62d03">LeastSquares::QRD</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attempts to solve the least squares equation for all data sets. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>The enumeration clarifying whether the offset, gain, or both should be solved here </td></tr>
+    <tr><td class="paramname">method</td><td>The enumeration clarifying the <a class="el" href="class_isis_1_1_least_squares.html#a8ba3bbbec91360068918ef822d451829">LeastSquares::SolveMethod</a> to be used.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Is the least squares equation now solved</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::User</td><td>- Number of overlaps and holds must be greater than the number of data sets </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hi_equalization.html#a6cc97d8cd3a9752f03c69cbed1522f4e">Isis::HiEqualization::calculateStatistics()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/OverlapNormalization/<a class="el" href="_overlap_normalization_8h_source.html">OverlapNormalization.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/OverlapNormalization/<a class="el" href="_overlap_normalization_8cpp.html">OverlapNormalization.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_overlap_normalization.html">OverlapNormalization</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

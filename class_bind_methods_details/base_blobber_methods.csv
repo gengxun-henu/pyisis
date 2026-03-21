@@ -1,0 +1,18 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Blobber,Low Level Cube I/O,isis/src/base/objs/Blobber/Blobber.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Blobber,isis_pybind.Blobber,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,Blobber(),isis_pybind.Blobber(),N,抽象基类/纯虚接口
+Public API,Blobber deepcopy() const,isis_pybind.Blobber.deepcopy,N,抽象基类/纯虚接口
+Mutation/Configuration,void setName(const QString &name) { _name = name,isis_pybind.Blobber.set_name,N,抽象基类/纯虚接口
+Mutation/Configuration,void setBlobName(const QString &bname) { _blobname = bname,isis_pybind.Blobber.set_blob_name,N,抽象基类/纯虚接口
+Mutation/Configuration,void setFieldName(const QString &fname) { _fieldname = fname,isis_pybind.Blobber.set_field_name,N,抽象基类/纯虚接口
+Query,inline int size() const { return (Lines() * Samples()),isis_pybind.Blobber.size,N,抽象基类/纯虚接口
+Public API,inline int Lines() const { return (_buf.dim1()),isis_pybind.Blobber.lines,N,抽象基类/纯虚接口
+Public API,inline int Samples() const { return (_buf.dim2()),isis_pybind.Blobber.samples,N,抽象基类/纯虚接口
+Public API,QString getName() const { return (_name),isis_pybind.Blobber.get_name,N,抽象基类/纯虚接口
+Public API,QString getBlobName() const { return (_blobname),isis_pybind.Blobber.get_blob_name,N,抽象基类/纯虚接口
+Public API,QString getFieldName() const { return (_fieldname),isis_pybind.Blobber.get_field_name,N,抽象基类/纯虚接口
+Read/Write IO,void load(const QString &filename),isis_pybind.Blobber.load,N,抽象基类/纯虚接口
+Read/Write IO,void load(Cube &cube),isis_pybind.Blobber.load,N,抽象基类/纯虚接口

@@ -1,0 +1,13 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Interpolator,Geometry,isis/src/base/objs/Interpolator/Interpolator.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Interpolator,isis_pybind.Interpolator,N,Python class symbol not found in current binding files
+Construction/Enum,"interpType enum (None, NearestNeighborType, BiLinearType, CubicConvolutionType)",isis_pybind.Interpolator.interpType,N,Enum exposure not detected in current binding files
+Construction/Enum,Interpolator(),isis_pybind.Interpolator(),N,Constructor binding not detected in current binding files
+Public API,"double Interpolate(const double isamp, const double iline, const double buf[])",isis_pybind.Interpolator.interpolate,N,Method not found in current binding files
+Mutation/Configuration,void SetType(const interpType &type),isis_pybind.Interpolator.set_type,N,Method not found in current binding files
+Public API,int Samples(),isis_pybind.Interpolator.samples,N,Method not found in current binding files
+Public API,int Lines(),isis_pybind.Interpolator.lines,N,Method not found in current binding files
+Public API,double HotSample(),isis_pybind.Interpolator.hot_sample,N,Method not found in current binding files
+Public API,double HotLine(),isis_pybind.Interpolator.hot_line,N,Method not found in current binding files

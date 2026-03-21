@@ -1,0 +1,15 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+EndianSwapper,Utility,isis/src/base/objs/EndianSwapper/EndianSwapper.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,EndianSwapper,isis_pybind.EndianSwapper,N,Python class symbol not found in current binding files
+Construction/Enum,EndianSwapper(),isis_pybind.EndianSwapper(),N,Constructor binding not detected in current binding files
+Public API,double Double(void *buf),isis_pybind.EndianSwapper.double,N,Method not found in current binding files
+Public API,float Float(void *buf),isis_pybind.EndianSwapper.float,N,Method not found in current binding files
+Read/Write IO,int ExportFloat(void *buf),isis_pybind.EndianSwapper.export_float,N,Method not found in current binding files
+Public API,int Int(void *buf),isis_pybind.EndianSwapper.int,N,Method not found in current binding files
+Public API,uint32_t Uint32_t(void *buf),isis_pybind.EndianSwapper.uint32_t,N,Method not found in current binding files
+Public API,long long int LongLongInt(void *buf),isis_pybind.EndianSwapper.long_long_int,N,Method not found in current binding files
+Public API,short int ShortInt(void *buf),isis_pybind.EndianSwapper.short_int,N,Method not found in current binding files
+Public API,unsigned short int UnsignedShortInt(void *buf),isis_pybind.EndianSwapper.unsigned_short_int,N,Method not found in current binding files
+Public API,bool willSwap() const { return p_needSwap,isis_pybind.EndianSwapper.will_swap,N,Method not found in current binding files

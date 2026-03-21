@@ -1,0 +1,56 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Calculator,Math,isis/src/base/objs/Calculator/Calculator.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Calculator,isis_pybind.Calculator,N,Python class symbol not found in current binding files
+Construction/Enum,Calculator(),isis_pybind.Calculator(),N,Constructor binding not detected in current binding files
+Public API,void Negative(),isis_pybind.Calculator.negative,N,Method not found in current binding files
+Public API,void Multiply(),isis_pybind.Calculator.multiply,N,Method not found in current binding files
+Mutation/Configuration,void Add(),isis_pybind.Calculator.add,N,Method not found in current binding files
+Public API,void Subtract(),isis_pybind.Calculator.subtract,N,Method not found in current binding files
+Public API,void Divide(),isis_pybind.Calculator.divide,N,Method not found in current binding files
+Public API,void Modulus(),isis_pybind.Calculator.modulus,N,Method not found in current binding files
+Public API,void Exponent(),isis_pybind.Calculator.exponent,N,Method not found in current binding files
+Public API,void SquareRoot(),isis_pybind.Calculator.square_root,N,Method not found in current binding files
+Public API,void AbsoluteValue(),isis_pybind.Calculator.absolute_value,N,Method not found in current binding files
+Public API,void Log(),isis_pybind.Calculator.log,N,Method not found in current binding files
+Public API,void Log10(),isis_pybind.Calculator.log10,N,Method not found in current binding files
+Public API,void LeftShift(),isis_pybind.Calculator.left_shift,N,Method not found in current binding files
+Public API,void RightShift(),isis_pybind.Calculator.right_shift,N,Method not found in current binding files
+Public API,void MinimumPixel(),isis_pybind.Calculator.minimum_pixel,N,Method not found in current binding files
+Public API,void MaximumPixel(),isis_pybind.Calculator.maximum_pixel,N,Method not found in current binding files
+Public API,void MinimumLine(),isis_pybind.Calculator.minimum_line,N,Method not found in current binding files
+Public API,void MaximumLine(),isis_pybind.Calculator.maximum_line,N,Method not found in current binding files
+Public API,void Minimum2(),isis_pybind.Calculator.minimum2,N,Method not found in current binding files
+Public API,void Maximum2(),isis_pybind.Calculator.maximum2,N,Method not found in current binding files
+Public API,void GreaterThan(),isis_pybind.Calculator.greater_than,N,Method not found in current binding files
+Public API,void LessThan(),isis_pybind.Calculator.less_than,N,Method not found in current binding files
+Public API,void Equal(),isis_pybind.Calculator.equal,N,Method not found in current binding files
+Public API,void LessThanOrEqual(),isis_pybind.Calculator.less_than_or_equal,N,Method not found in current binding files
+Public API,void GreaterThanOrEqual(),isis_pybind.Calculator.greater_than_or_equal,N,Method not found in current binding files
+Public API,void NotEqual(),isis_pybind.Calculator.not_equal,N,Method not found in current binding files
+Public API,void And(),isis_pybind.Calculator.and,N,Method not found in current binding files
+Public API,void Or(),isis_pybind.Calculator.or,N,Method not found in current binding files
+Public API,void Sine(),isis_pybind.Calculator.sine,N,Method not found in current binding files
+Public API,void Cosine(),isis_pybind.Calculator.cosine,N,Method not found in current binding files
+Public API,void Tangent(),isis_pybind.Calculator.tangent,N,Method not found in current binding files
+Public API,void Secant(),isis_pybind.Calculator.secant,N,Method not found in current binding files
+Public API,void Cosecant(),isis_pybind.Calculator.cosecant,N,Method not found in current binding files
+Public API,void Cotangent(),isis_pybind.Calculator.cotangent,N,Method not found in current binding files
+Public API,void Arcsine(),isis_pybind.Calculator.arcsine,N,Method not found in current binding files
+Public API,void Arccosine(),isis_pybind.Calculator.arccosine,N,Method not found in current binding files
+Public API,void Arctangent(),isis_pybind.Calculator.arctangent,N,Method not found in current binding files
+Public API,void Arctangent2(),isis_pybind.Calculator.arctangent2,N,Method not found in current binding files
+Public API,void SineH(),isis_pybind.Calculator.sine_h,N,Method not found in current binding files
+Public API,void CosineH(),isis_pybind.Calculator.cosine_h,N,Method not found in current binding files
+Public API,void TangentH(),isis_pybind.Calculator.tangent_h,N,Method not found in current binding files
+Public API,void ArcsineH(),isis_pybind.Calculator.arcsine_h,N,Method not found in current binding files
+Public API,void ArccosineH(),isis_pybind.Calculator.arccosine_h,N,Method not found in current binding files
+Public API,void ArctangentH(),isis_pybind.Calculator.arctangent_h,N,Method not found in current binding files
+Public API,void Push(double scalar),isis_pybind.Calculator.push,N,Method not found in current binding files
+Public API,void Push(Buffer &buff),isis_pybind.Calculator.push,N,Method not found in current binding files
+Public API,void Push(QVector<double> &vect),isis_pybind.Calculator.push,N,Method not found in current binding files
+Public API,QVector<double> Pop(bool keepSpecials = false),isis_pybind.Calculator.pop,N,Method not found in current binding files
+Public API,void PrintTop(),isis_pybind.Calculator.print_top,N,Method not found in current binding files
+Public API,bool Empty(),isis_pybind.Calculator.empty,N,Method not found in current binding files
+Mutation/Configuration,virtual void Clear(),isis_pybind.Calculator.clear,N,Method not found in current binding files

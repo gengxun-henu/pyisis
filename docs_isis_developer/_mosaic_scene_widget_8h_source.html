@@ -1,0 +1,586 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/MosaicSceneWidget/MosaicSceneWidget.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_mosaic_scene_widget_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">MosaicSceneWidget.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_mosaic_scene_widget_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef MosaicSceneWidget_H</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define MosaicSceneWidget_H</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_image_list_8h.html">ImageList.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_8h.html">Pvl.h</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> A&gt; <span class="keyword">class </span><a class="code" href="class_q_list.html">QList</a>;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">class </span>QGraphicsPolygonItem;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_graphics_rect_item.html">QGraphicsRectItem</a>;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_graphics_scene.html">QGraphicsScene</a>;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">class </span>QGraphicsSceneContextMenuEvent;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_menu.html">QMenu</a>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_progress_bar.html">QProgressBar</a>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">class </span>QRubberBand;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">class </span>QStatusBar;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_tool_bar.html">QToolBar</a>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">class </span>QToolButton;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keyword">class </span>ControlPoint;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keyword">class </span>Directory;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <span class="keyword">class </span>Image;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">class </span>MosaicGraphicsView;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keyword">class </span>MosaicSceneItem;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">class </span>MosaicTool;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">class </span>ProgressBar;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">class </span>Projection;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <span class="keyword">class </span>PvlGroup;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keyword">class </span>PvlObject;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  <span class="keyword">class </span>ToolPad;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html">  153</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_mosaic_scene_widget.html">MosaicSceneWidget</a> : <span class="keyword">public</span> <a class="code" href="class_q_widget.html">QWidget</a> {</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">MosaicSceneWidget</a>(QStatusBar *status,</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                        <span class="keywordtype">bool</span> showTools, <span class="keywordtype">bool</span> internalizeToolBarsAndProgress,</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                        <a class="code" href="class_isis_1_1_directory.html">Directory</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a051ac779b76abb3f04487fc502955029">directory</a>, <a class="code" href="class_q_widget.html">QWidget</a> *parent = 0);</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#acd53f193937bef5946ce1d6469d9b59c">~MosaicSceneWidget</a>();</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a1b4cedb1d3a1730f0cff86acaa56e10a">  162</a></span>&#160;      <a class="code" href="class_isis_1_1_mosaic_graphics_view.html">MosaicGraphicsView</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a1b4cedb1d3a1730f0cff86acaa56e10a">getView</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <span class="keywordflow">return</span> m_graphicsView;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;      }</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
+<div class="line"><a name="l00166"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a4b4d5da6f300487cae7156dcb7106d2d">  166</a></span>&#160;      <a class="code" href="class_q_graphics_scene.html">QGraphicsScene</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a4b4d5da6f300487cae7156dcb7106d2d">getScene</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="keywordflow">return</span> m_graphicsScene;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;      }</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a75e2df7fda8f778e37b6863d45de62c8">  170</a></span>&#160;      <a class="code" href="class_isis_1_1_projection.html">Projection</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a75e2df7fda8f778e37b6863d45de62c8">getProjection</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordflow">return</span> m_projection;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;      }</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a88a30d786934f86d3387e1318bcb8c91">  174</a></span>&#160;      <a class="code" href="class_q_list.html">QList&lt;MosaicSceneItem *&gt;</a> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a88a30d786934f86d3387e1318bcb8c91">allMosaicSceneItems</a>() {</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keywordflow">return</span> *m_mosaicSceneItems;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;      }</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a6015c55b9a1c8a7f20f2ba2d6f42b5f9">addTo</a>(<a class="code" href="class_q_menu.html">QMenu</a> *menu);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a6015c55b9a1c8a7f20f2ba2d6f42b5f9">addTo</a>(<a class="code" href="class_isis_1_1_tool_pad.html">ToolPad</a> *toolPad);</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a50615081352a1492ab59701bcdf0f465">addToPermanent</a>(<a class="code" href="class_q_tool_bar.html">QToolBar</a> *toolBar);</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a6015c55b9a1c8a7f20f2ba2d6f42b5f9">addTo</a>(<a class="code" href="class_q_tool_bar.html">QToolBar</a> *toolBar);</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;      <span class="keyword">using</span> QWidget::contextMenuEvent;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a1549856176b4e4346be5d2b5ae3d8987">contextMenuEvent</a>(QGraphicsSceneContextMenuEvent *event);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;      <a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#af2d03740247310f30990123ff75ff609">cubeToMosaic</a>(<a class="code" href="class_isis_1_1_image.html">Image</a> *);</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a956899f2cb84ef8bc7c5215a2d24e350">  188</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a956899f2cb84ef8bc7c5215a2d24e350">cubesSelectable</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="keywordflow">return</span> m_cubesSelectable;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;      }</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a66f4ff35ef001a91d22d14a84c51256d">enableRubberBand</a>(<span class="keywordtype">bool</span>);</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a0ad95b01ac32790a37f31f524e3f8665">blockSelectionChange</a>(<span class="keywordtype">bool</span>);</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
+<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#ae3d6759e7abaf2ef4193a6d1c75f69ee">  195</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ae3d6759e7abaf2ef4193a6d1c75f69ee">userHasTools</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="keywordflow">return</span> m_userToolControl;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;      }</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;      <a class="code" href="class_q_progress_bar.html">QProgressBar</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a301754f48171978cd35d119564f44849">getProgress</a>();</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a8c57aeab5dc0595c28fcf2374e90bdc1">toPvl</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#aa13e1353c66e095e6852b53ad2becdff">fromPvl</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ae346bfa82252910ca00b1d335e03c974">save</a>(QXmlStreamWriter &amp;stream, <a class="code" href="class_isis_1_1_project.html">Project</a> *project, <a class="code" href="class_isis_1_1_file_name.html">FileName</a> newProjectRoot) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="comment">//    QPointF currentLatLonPosition();</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;      QRectF <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a81d4e2e9d30981ee0adb4fabc9d1f197">cubesBoundingRect</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;      QStringList <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a6da9755cae605f1041b0942912626ee5">cubeFileNames</a>();</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;      <a class="code" href="class_isis_1_1_directory.html">Directory</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a051ac779b76abb3f04487fc502955029">directory</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;      <a class="code" href="class_isis_1_1_image_list.html">ImageList</a> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a2385fc90ab3a7caa7ce772e8392d3d60">images</a>();</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;      <a class="code" href="class_isis_1_1_image_list.html">ImageList</a> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a75d1193441a457891155f22c40b2a566">selectedImages</a>();</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;QAction *&gt;</a> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a92c3837e2ce730a9766043c6f3ddcfde">getExportActions</a>();</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;QAction *&gt;</a> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#afb7a239605acfb76aad1da280d18a354">getViewActions</a>();</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;QAction *&gt;</a> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a0ecb62bb6309ef13d88b998501bb2999">supportedActions</a>(<a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *);</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;      <span class="keywordtype">double</span> moveDownOne(<a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *);</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;      <span class="keywordtype">double</span> moveDownOne(<a class="code" href="class_isis_1_1_image.html">Image</a> *);</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;double&gt;</a> moveDownOne(<a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;      <span class="keywordtype">double</span> moveToBottom(<a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *);</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;      <span class="keywordtype">double</span> moveToBottom(<a class="code" href="class_isis_1_1_image.html">Image</a> *);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;double&gt;</a> moveToBottom(<a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *);</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;      <span class="keywordtype">double</span> moveUpOne(<a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *);</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;      <span class="keywordtype">double</span> moveUpOne(<a class="code" href="class_isis_1_1_image.html">Image</a> *);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;double&gt;</a> moveUpOne(<a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *);</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;      <span class="keywordtype">double</span> moveToTop(<a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *);</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;      <span class="keywordtype">double</span> moveToTop(<a class="code" href="class_isis_1_1_image.html">Image</a> *);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;double&gt;</a> moveToTop(<a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *);</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ada0c0a17d9b6219704481f451e1fd255">moveZ</a>(<a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *sceneItem, <span class="keywordtype">double</span> newZ, <span class="keywordtype">bool</span> newZValueMightExist = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ada0c0a17d9b6219704481f451e1fd255">moveZ</a>(<a class="code" href="class_isis_1_1_image.html">Image</a> *image, <span class="keywordtype">double</span> newZ, <span class="keywordtype">bool</span> newZValueMightExist = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;      <span class="keyword">template</span> &lt;<span class="keyword">typename</span> DataType&gt;</div>
+<div class="line"><a name="l00239"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a304be7dbf5b18f1cfaae4297844ec34e">  239</a></span>&#160;      <a class="code" href="class_q_list.html">QList&lt;QAction *&gt;</a> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a304be7dbf5b18f1cfaae4297844ec34e">supportedActions</a>(DataType) {</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="class_q_list.html">QList&lt;QAction *&gt;</a>();</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;      }</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#abcca9da6c586e7f05d6aad852cf90ef3">isControlNetToolActive</a>();</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ab803d0e0a84a264a9f4e36e38f4933e2">getControlNetHelp</a>(<a class="code" href="class_q_widget.html">QWidget</a> *cnetToolContainer = NULL);</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ad1bbe08facce4988a6fb7e053fc4e020">getGridHelp</a>(<a class="code" href="class_q_widget.html">QWidget</a> *gridToolContainer = NULL);</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a24d593ef3b6bd43a6e6fc085e0a2490e">getLongHelp</a>(<a class="code" href="class_q_widget.html">QWidget</a> *mosaicSceneContainer = NULL);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a005c0a4e6b5a5504d2c54574230ca54b">getMapHelp</a>(<a class="code" href="class_q_widget.html">QWidget</a> *mapContainer = NULL);</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#aea09d8105a5b6d8b0e783d053effd834">getPreviewHelp</a>(<a class="code" href="class_q_widget.html">QWidget</a> *worldViewContainer = NULL);</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160; </div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    signals:</div>
+<div class="line"><a name="l00252"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#add513eb7db007785bde92b545a77ebee">  252</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#add513eb7db007785bde92b545a77ebee">mouseEnter</a>();</div>
+<div class="line"><a name="l00253"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#adac885559cc177e2d5ce601c29df47a4">  253</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#adac885559cc177e2d5ce601c29df47a4">mouseMove</a>(QPointF);</div>
+<div class="line"><a name="l00254"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#aee7e753e4d2d4970159b64c11b395ec8">  254</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#aee7e753e4d2d4970159b64c11b395ec8">mouseLeave</a>();</div>
+<div class="line"><a name="l00255"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a3e86fc618a548eb259d3601fc2cbd64f">  255</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a3e86fc618a548eb259d3601fc2cbd64f">mouseDoubleClick</a>(QPointF);</div>
+<div class="line"><a name="l00256"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a7c74b7f416bd3afe449c9f066a685641">  256</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a7c74b7f416bd3afe449c9f066a685641">mouseButtonPress</a>(QPointF, Qt::MouseButton s);</div>
+<div class="line"><a name="l00257"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#aa33f189452bc7f2084cf0e063adb70c6">  257</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#aa33f189452bc7f2084cf0e063adb70c6">mouseButtonRelease</a>(QPointF, Qt::MouseButton s);</div>
+<div class="line"><a name="l00258"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a1407f0dc7f7d12c7f9c1c8dc6dff50b8">  258</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a1407f0dc7f7d12c7f9c1c8dc6dff50b8">mouseWheel</a>(QPointF, <span class="keywordtype">int</span> delta);</div>
+<div class="line"><a name="l00259"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a506bfefb3f9e770049aa5ff38fcb2199">  259</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a506bfefb3f9e770049aa5ff38fcb2199">projectionChanged</a>(<a class="code" href="class_isis_1_1_projection.html">Projection</a> *);</div>
+<div class="line"><a name="l00260"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a30f04ba2d23eb830617231f340241f8b">  260</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a30f04ba2d23eb830617231f340241f8b">rubberBandComplete</a>(QRectF r, Qt::MouseButton s);</div>
+<div class="line"><a name="l00261"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a2d876d9f8cdd354f72b94898b0d50869">  261</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a2d876d9f8cdd354f72b94898b0d50869">visibleRectChanged</a>(QRectF);</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
+<div class="line"><a name="l00263"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#ad57a4fad13da688efc5e4030f8bdb995">  263</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ad57a4fad13da688efc5e4030f8bdb995">cubesChanged</a>();</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
+<div class="line"><a name="l00265"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a5b4edad91cbd8c0ca520dc48875672a5">  265</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a5b4edad91cbd8c0ca520dc48875672a5">queueSelectionChanged</a>();</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
+<div class="line"><a name="l00267"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a1e409631a09b0194ee938e1fd2f1cc34">  267</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a1e409631a09b0194ee938e1fd2f1cc34">modifyControlPoint</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *controlPoint);</div>
+<div class="line"><a name="l00268"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a738a48a0955279bad9182362862afffd">  268</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a738a48a0955279bad9182362862afffd">deleteControlPoint</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *controlPoint);</div>
+<div class="line"><a name="l00269"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#ae9b25dd649c12e3b415fea3aa6897bff">  269</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ae9b25dd649c12e3b415fea3aa6897bff">createControlPoint</a>(<span class="keywordtype">double</span> latitude, <span class="keywordtype">double</span> longitude);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
+<div class="line"><a name="l00271"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a876015290cdd309bad2ba2f18c44e984">  271</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a876015290cdd309bad2ba2f18c44e984">controlPointSelected</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *);</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
+<div class="line"><a name="l00273"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a0a49e9738c718f58c3ed79b150ca2361">  273</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a0a49e9738c718f58c3ed79b150ca2361">cnetModified</a>();</div>
+<div class="line"><a name="l00274"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a33482d5b4bfc62ca07ad96bc02b97402">  274</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a33482d5b4bfc62ca07ad96bc02b97402">controlPointChanged</a>(QString pointId);</div>
+<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a216471dc988cd7a0ee7ffb28f5af7ee3">  275</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a216471dc988cd7a0ee7ffb28f5af7ee3">controlPointDeleted</a>();</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;      </div>
+<div class="line"><a name="l00277"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_scene_widget.html#a31e81ead7426feefa7b9b5468bbf9733">  277</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a31e81ead7426feefa7b9b5468bbf9733">mosCubeClosed</a>(<a class="code" href="class_isis_1_1_image.html">Image</a> *);</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a0ff0c990aed6a5852b703b7efd499362">addImages</a>(<a class="code" href="class_isis_1_1_image_list.html">ImageList</a>);</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a94f24eac4bdccea4b47dd4befdeee5c8">removeImages</a>(<a class="code" href="class_isis_1_1_image_list.html">ImageList</a>);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a5802314f82ea240a499031f50625b57e">refit</a>();</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a490f415ed25b162fe732cde3d39a2021">setCubesSelectable</a>(<span class="keywordtype">bool</span>);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ae02ba7bd439f8e153aaf861dac061c43">setProjection</a>(<a class="code" href="class_isis_1_1_projection.html">Projection</a> *);</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ae2232780ad3a6709e170676848ecef72">setOutlineRect</a>(QRectF);</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <span class="keyword">private</span> slots:</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;      <span class="keywordtype">void</span> exportView();</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;      <span class="keywordtype">void</span> saveList();</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;      <span class="keywordtype">void</span> removeMosItem(<a class="code" href="class_q_object.html">QObject</a> *);</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ae0257af3ff6b50414364a00fbd6f0026">moveDownOne</a>();</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a327a1e18cb4fba27afabf6dde49061a5">moveToBottom</a>();</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#a9027a7cbf2c08c2f1c94a5e5cc8f2f7b">moveUpOne</a>();</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ab0c6935fef32f71dcebb26d640aa6ada">moveToTop</a>();</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;      <span class="keywordtype">void</span> fitInView();</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;      <span class="keywordtype">void</span> onSelectionChanged();</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;      <span class="keywordtype">void</span> onQueuedSelectionChanged();</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;      <span class="keywordtype">void</span> configProjectionParameters();</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;      <span class="keywordtype">void</span> quickConfigProjectionParameters();</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;      <span class="keywordtype">void</span> sendVisibleRectChanged();</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">eventFilter</a>(<a class="code" href="class_q_object.html">QObject</a> *obj, QEvent *ev);</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_scene_widget.html#ae02ba7bd439f8e153aaf861dac061c43">setProjection</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;mappingGroup, <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> label=<a class="code" href="class_isis_1_1_pvl.html">Pvl</a>());</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;      <a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *addImage(<a class="code" href="class_isis_1_1_image.html">Image</a> *image);</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;      <span class="keywordtype">void</span> reprojectItems();</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;      <span class="keywordtype">double</span> maximumZ();</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;      <span class="keywordtype">double</span> minimumZ();</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;      <span class="keywordtype">void</span> recalcSceneRect();</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160; </div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;      <a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *getNextItem(<a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *item, <span class="keywordtype">bool</span> up);</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;      <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> createInitialProjection(<a class="code" href="class_isis_1_1_image.html">Image</a> *cube);</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;      <a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *<a class="code" href="class_isis_1_1_mosaic_scene_widget.html#af2d03740247310f30990123ff75ff609">cubeToMosaic</a>(<a class="code" href="class_isis_1_1_display_properties.html">DisplayProperties</a> *props);</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160; </div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">bool</span> zOrderGreaterThan(<a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *first,</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;                                    <a class="code" href="class_isis_1_1_mosaic_scene_item.html">MosaicSceneItem</a> *second);</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;      <a class="code" href="class_isis_1_1_directory.html">Directory</a> *m_directory;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;      <span class="keywordtype">bool</span> m_cubesSelectable;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;      <span class="keywordtype">bool</span> m_customRubberBandEnabled;</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;      QRubberBand *m_customRubberBand;</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;      QPoint *m_rubberBandOrigin;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;      <a class="code" href="class_q_graphics_scene.html">QGraphicsScene</a> *m_graphicsScene; </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;      <a class="code" href="class_isis_1_1_mosaic_graphics_view.html">MosaicGraphicsView</a> *m_graphicsView; </div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;      <a class="code" href="class_isis_1_1_projection.html">Projection</a> *m_projection; </div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;MosaicSceneItem *&gt;</a> *m_mosaicSceneItems;</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;      <a class="code" href="class_q_map.html">QMap&lt;DisplayProperties *, MosaicSceneItem *&gt;</a> m_displayPropsToMosaicSceneItemMap;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;      <a class="code" href="class_q_graphics_rect_item.html">QGraphicsRectItem</a> *m_outlineRect;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;      QToolButton *m_mapButton;</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *m_quickMapAction;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;MosaicTool *&gt;</a> *m_tools;</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160; </div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;      <a class="code" href="class_isis_1_1_tool_pad.html">ToolPad</a> *m_toolpad;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;      <a class="code" href="class_q_tool_bar.html">QToolBar</a> *m_permToolbar;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;      <a class="code" href="class_q_tool_bar.html">QToolBar</a> *m_activeToolbar;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;      <a class="code" href="class_isis_1_1_progress_bar.html">ProgressBar</a> *m_progress;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;      <a class="code" href="class_q_hash.html">QHash&lt;QString, double&gt;</a> *m_projectImageZOrders;</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;      <span class="keywordtype">bool</span> m_blockingSelectionChanged;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;      <span class="keywordtype">bool</span> m_userToolControl;</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;      <span class="keywordtype">bool</span> m_ownProjection;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;      <span class="keywordtype">bool</span> m_queuedSelectionChanged;</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;      <span class="keywordtype">bool</span> m_shouldRequeueSelectionChanged;</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160; </div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;      <span class="keywordtype">double</span> m_currentMinimumFootprintZ;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;      <span class="keywordtype">double</span> m_currentMaximumFootprintZ;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;      </div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> *m_projectViewTransform;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;  };</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;}</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
+<div class="ttc" id="a_image_list_8h_html"><div class="ttname"><a href="_image_list_8h.html">ImageList.h</a></div></div>
+<div class="ttc" id="a_pvl_8h_html"><div class="ttname"><a href="_pvl_8h.html">Pvl.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_html"><div class="ttname"><a href="class_isis_1_1_control_point.html">Isis::ControlPoint</a></div><div class="ttdoc">A single control point.</div><div class="ttdef"><b>Definition:</b> ControlPoint.h:356</div></div>
+<div class="ttc" id="aclass_isis_1_1_directory_html"><div class="ttname"><a href="class_isis_1_1_directory.html">Isis::Directory</a></div><div class="ttdef"><b>Definition:</b> Directory.h:271</div></div>
+<div class="ttc" id="aclass_isis_1_1_display_properties_html"><div class="ttname"><a href="class_isis_1_1_display_properties.html">Isis::DisplayProperties</a></div><div class="ttdef"><b>Definition:</b> DisplayProperties.h:32</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_name_html"><div class="ttname"><a href="class_isis_1_1_file_name.html">Isis::FileName</a></div><div class="ttdoc">File name manipulation and expansion.</div><div class="ttdef"><b>Definition:</b> FileName.h:100</div></div>
+<div class="ttc" id="aclass_isis_1_1_image_html"><div class="ttname"><a href="class_isis_1_1_image.html">Isis::Image</a></div><div class="ttdoc">This represents a cube in a project-based GUI interface.</div><div class="ttdef"><b>Definition:</b> Image.h:105</div></div>
+<div class="ttc" id="aclass_isis_1_1_image_list_html"><div class="ttname"><a href="class_isis_1_1_image_list.html">Isis::ImageList</a></div><div class="ttdoc">Internalizes a list of images and allows for operations on the entire list.</div><div class="ttdef"><b>Definition:</b> ImageList.h:53</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_graphics_view_html"><div class="ttname"><a href="class_isis_1_1_mosaic_graphics_view.html">Isis::MosaicGraphicsView</a></div><div class="ttdoc">A graphics view that resizes in a more friendly way.</div><div class="ttdef"><b>Definition:</b> MosaicGraphicsView.h:19</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_item_html"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_item.html">Isis::MosaicSceneItem</a></div><div class="ttdoc">A single cube in the mosaic scene.</div><div class="ttdef"><b>Definition:</b> MosaicSceneItem.h:47</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html">Isis::MosaicSceneWidget</a></div><div class="ttdoc">This widget encompasses the entire mosaic scene.</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.h:153</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a005c0a4e6b5a5504d2c54574230ca54b"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a005c0a4e6b5a5504d2c54574230ca54b">Isis::MosaicSceneWidget::getMapHelp</a></div><div class="ttdeci">static QWidget * getMapHelp(QWidget *mapContainer=NULL)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1072</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a051ac779b76abb3f04487fc502955029"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a051ac779b76abb3f04487fc502955029">Isis::MosaicSceneWidget::directory</a></div><div class="ttdeci">Directory * directory() const</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:711</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a0a49e9738c718f58c3ed79b150ca2361"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a0a49e9738c718f58c3ed79b150ca2361">Isis::MosaicSceneWidget::cnetModified</a></div><div class="ttdeci">void cnetModified()</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a0ad95b01ac32790a37f31f524e3f8665"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a0ad95b01ac32790a37f31f524e3f8665">Isis::MosaicSceneWidget::blockSelectionChange</a></div><div class="ttdeci">bool blockSelectionChange(bool)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:508</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a0ecb62bb6309ef13d88b998501bb2999"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a0ecb62bb6309ef13d88b998501bb2999">Isis::MosaicSceneWidget::supportedActions</a></div><div class="ttdeci">QList&lt; QAction * &gt; supportedActions(ImageList *)</div><div class="ttdoc">Get a list of actions this scene can perform given &quot;images&quot;.</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:804</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a0ff0c990aed6a5852b703b7efd499362"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a0ff0c990aed6a5852b703b7efd499362">Isis::MosaicSceneWidget::addImages</a></div><div class="ttdeci">void addImages(ImageList)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1348</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a1407f0dc7f7d12c7f9c1c8dc6dff50b8"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a1407f0dc7f7d12c7f9c1c8dc6dff50b8">Isis::MosaicSceneWidget::mouseWheel</a></div><div class="ttdeci">void mouseWheel(QPointF, int delta)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a1549856176b4e4346be5d2b5ae3d8987"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a1549856176b4e4346be5d2b5ae3d8987">Isis::MosaicSceneWidget::contextMenuEvent</a></div><div class="ttdeci">bool contextMenuEvent(QGraphicsSceneContextMenuEvent *event)</div><div class="ttdoc">This is called by MosaicGraphicsScene::contextMenuEvent.</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:439</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a1b4cedb1d3a1730f0cff86acaa56e10a"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a1b4cedb1d3a1730f0cff86acaa56e10a">Isis::MosaicSceneWidget::getView</a></div><div class="ttdeci">MosaicGraphicsView * getView() const</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.h:162</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a1e409631a09b0194ee938e1fd2f1cc34"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a1e409631a09b0194ee938e1fd2f1cc34">Isis::MosaicSceneWidget::modifyControlPoint</a></div><div class="ttdeci">void modifyControlPoint(ControlPoint *controlPoint)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a216471dc988cd7a0ee7ffb28f5af7ee3"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a216471dc988cd7a0ee7ffb28f5af7ee3">Isis::MosaicSceneWidget::controlPointDeleted</a></div><div class="ttdeci">void controlPointDeleted()</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a2385fc90ab3a7caa7ce772e8392d3d60"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a2385fc90ab3a7caa7ce772e8392d3d60">Isis::MosaicSceneWidget::images</a></div><div class="ttdeci">ImageList images()</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:716</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a24d593ef3b6bd43a6e6fc085e0a2490e"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a24d593ef3b6bd43a6e6fc085e0a2490e">Isis::MosaicSceneWidget::getLongHelp</a></div><div class="ttdeci">static QWidget * getLongHelp(QWidget *mosaicSceneContainer=NULL)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1022</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a2d876d9f8cdd354f72b94898b0d50869"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a2d876d9f8cdd354f72b94898b0d50869">Isis::MosaicSceneWidget::visibleRectChanged</a></div><div class="ttdeci">void visibleRectChanged(QRectF)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a301754f48171978cd35d119564f44849"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a301754f48171978cd35d119564f44849">Isis::MosaicSceneWidget::getProgress</a></div><div class="ttdeci">QProgressBar * getProgress()</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:517</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a304be7dbf5b18f1cfaae4297844ec34e"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a304be7dbf5b18f1cfaae4297844ec34e">Isis::MosaicSceneWidget::supportedActions</a></div><div class="ttdeci">QList&lt; QAction * &gt; supportedActions(DataType)</div><div class="ttdoc">Return an empty list of actions for unknown data types.</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.h:239</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a30f04ba2d23eb830617231f340241f8b"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a30f04ba2d23eb830617231f340241f8b">Isis::MosaicSceneWidget::rubberBandComplete</a></div><div class="ttdeci">void rubberBandComplete(QRectF r, Qt::MouseButton s)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a31e81ead7426feefa7b9b5468bbf9733"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a31e81ead7426feefa7b9b5468bbf9733">Isis::MosaicSceneWidget::mosCubeClosed</a></div><div class="ttdeci">void mosCubeClosed(Image *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a327a1e18cb4fba27afabf6dde49061a5"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a327a1e18cb4fba27afabf6dde49061a5">Isis::MosaicSceneWidget::moveToBottom</a></div><div class="ttdeci">double moveToBottom(MosaicSceneItem *)</div><div class="ttdoc">This doesn't compress the Z values - the original Z values of this scene item is guaranteed to be emp...</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1781</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a33482d5b4bfc62ca07ad96bc02b97402"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a33482d5b4bfc62ca07ad96bc02b97402">Isis::MosaicSceneWidget::controlPointChanged</a></div><div class="ttdeci">void controlPointChanged(QString pointId)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a3e86fc618a548eb259d3601fc2cbd64f"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a3e86fc618a548eb259d3601fc2cbd64f">Isis::MosaicSceneWidget::mouseDoubleClick</a></div><div class="ttdeci">void mouseDoubleClick(QPointF)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a490f415ed25b162fe732cde3d39a2021"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a490f415ed25b162fe732cde3d39a2021">Isis::MosaicSceneWidget::setCubesSelectable</a></div><div class="ttdeci">void setCubesSelectable(bool)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1491</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a4b4d5da6f300487cae7156dcb7106d2d"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a4b4d5da6f300487cae7156dcb7106d2d">Isis::MosaicSceneWidget::getScene</a></div><div class="ttdeci">QGraphicsScene * getScene() const</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.h:166</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a50615081352a1492ab59701bcdf0f465"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a50615081352a1492ab59701bcdf0f465">Isis::MosaicSceneWidget::addToPermanent</a></div><div class="ttdeci">void addToPermanent(QToolBar *toolBar)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:376</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a506bfefb3f9e770049aa5ff38fcb2199"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a506bfefb3f9e770049aa5ff38fcb2199">Isis::MosaicSceneWidget::projectionChanged</a></div><div class="ttdeci">void projectionChanged(Projection *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a5802314f82ea240a499031f50625b57e"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a5802314f82ea240a499031f50625b57e">Isis::MosaicSceneWidget::refit</a></div><div class="ttdeci">void refit()</div><div class="ttdoc">This method refits t:he items in the graphics view.</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1477</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a5b4edad91cbd8c0ca520dc48875672a5"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a5b4edad91cbd8c0ca520dc48875672a5">Isis::MosaicSceneWidget::queueSelectionChanged</a></div><div class="ttdeci">void queueSelectionChanged()</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a6015c55b9a1c8a7f20f2ba2d6f42b5f9"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a6015c55b9a1c8a7f20f2ba2d6f42b5f9">Isis::MosaicSceneWidget::addTo</a></div><div class="ttdeci">void addTo(QMenu *menu)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:418</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a66f4ff35ef001a91d22d14a84c51256d"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a66f4ff35ef001a91d22d14a84c51256d">Isis::MosaicSceneWidget::enableRubberBand</a></div><div class="ttdeci">void enableRubberBand(bool)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:493</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a6707a080d09d3026c35223ead956632e"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a6707a080d09d3026c35223ead956632e">Isis::MosaicSceneWidget::MosaicSceneWidget</a></div><div class="ttdeci">MosaicSceneWidget(QStatusBar *status, bool showTools, bool internalizeToolBarsAndProgress, Directory *directory, QWidget *parent=0)</div><div class="ttdoc">Create a scene widget.</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:63</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a6da9755cae605f1041b0942912626ee5"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a6da9755cae605f1041b0942912626ee5">Isis::MosaicSceneWidget::cubeFileNames</a></div><div class="ttdeci">QStringList cubeFileNames()</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:698</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a738a48a0955279bad9182362862afffd"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a738a48a0955279bad9182362862afffd">Isis::MosaicSceneWidget::deleteControlPoint</a></div><div class="ttdeci">void deleteControlPoint(ControlPoint *controlPoint)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a75d1193441a457891155f22c40b2a566"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a75d1193441a457891155f22c40b2a566">Isis::MosaicSceneWidget::selectedImages</a></div><div class="ttdeci">ImageList selectedImages()</div><div class="ttdoc">Returns a list of all the cubes selected in the scene.</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:734</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a75e2df7fda8f778e37b6863d45de62c8"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a75e2df7fda8f778e37b6863d45de62c8">Isis::MosaicSceneWidget::getProjection</a></div><div class="ttdeci">Projection * getProjection() const</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.h:170</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a7c74b7f416bd3afe449c9f066a685641"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a7c74b7f416bd3afe449c9f066a685641">Isis::MosaicSceneWidget::mouseButtonPress</a></div><div class="ttdeci">void mouseButtonPress(QPointF, Qt::MouseButton s)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a81d4e2e9d30981ee0adb4fabc9d1f197"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a81d4e2e9d30981ee0adb4fabc9d1f197">Isis::MosaicSceneWidget::cubesBoundingRect</a></div><div class="ttdeci">QRectF cubesBoundingRect() const</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:670</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a876015290cdd309bad2ba2f18c44e984"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a876015290cdd309bad2ba2f18c44e984">Isis::MosaicSceneWidget::controlPointSelected</a></div><div class="ttdeci">void controlPointSelected(ControlPoint *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a88a30d786934f86d3387e1318bcb8c91"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a88a30d786934f86d3387e1318bcb8c91">Isis::MosaicSceneWidget::allMosaicSceneItems</a></div><div class="ttdeci">QList&lt; MosaicSceneItem * &gt; allMosaicSceneItems()</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.h:174</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a8c57aeab5dc0595c28fcf2374e90bdc1"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a8c57aeab5dc0595c28fcf2374e90bdc1">Isis::MosaicSceneWidget::toPvl</a></div><div class="ttdeci">PvlObject toPvl() const</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:522</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a9027a7cbf2c08c2f1c94a5e5cc8f2f7b"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a9027a7cbf2c08c2f1c94a5e5cc8f2f7b">Isis::MosaicSceneWidget::moveUpOne</a></div><div class="ttdeci">double moveUpOne(MosaicSceneItem *)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1833</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a92c3837e2ce730a9766043c6f3ddcfde"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a92c3837e2ce730a9766043c6f3ddcfde">Isis::MosaicSceneWidget::getExportActions</a></div><div class="ttdeci">QList&lt; QAction * &gt; getExportActions()</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:771</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a94f24eac4bdccea4b47dd4befdeee5c8"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a94f24eac4bdccea4b47dd4befdeee5c8">Isis::MosaicSceneWidget::removeImages</a></div><div class="ttdeci">void removeImages(ImageList)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1400</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_a956899f2cb84ef8bc7c5215a2d24e350"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#a956899f2cb84ef8bc7c5215a2d24e350">Isis::MosaicSceneWidget::cubesSelectable</a></div><div class="ttdeci">bool cubesSelectable() const</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.h:188</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_aa13e1353c66e095e6852b53ad2becdff"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#aa13e1353c66e095e6852b53ad2becdff">Isis::MosaicSceneWidget::fromPvl</a></div><div class="ttdeci">void fromPvl(const PvlObject &amp;)</div><div class="ttdoc">Call this method after loading any cubes when loading a project.</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:578</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_aa33f189452bc7f2084cf0e063adb70c6"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#aa33f189452bc7f2084cf0e063adb70c6">Isis::MosaicSceneWidget::mouseButtonRelease</a></div><div class="ttdeci">void mouseButtonRelease(QPointF, Qt::MouseButton s)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_ab0c6935fef32f71dcebb26d640aa6ada"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#ab0c6935fef32f71dcebb26d640aa6ada">Isis::MosaicSceneWidget::moveToTop</a></div><div class="ttdeci">double moveToTop(MosaicSceneItem *)</div><div class="ttdoc">This doesn't compress the Z values - the original Z values of this scene item is guaranteed to be emp...</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1879</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_ab803d0e0a84a264a9f4e36e38f4933e2"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#ab803d0e0a84a264a9f4e36e38f4933e2">Isis::MosaicSceneWidget::getControlNetHelp</a></div><div class="ttdeci">static QWidget * getControlNetHelp(QWidget *cnetToolContainer=NULL)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:856</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_abcca9da6c586e7f05d6aad852cf90ef3"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#abcca9da6c586e7f05d6aad852cf90ef3">Isis::MosaicSceneWidget::isControlNetToolActive</a></div><div class="ttdeci">bool isControlNetToolActive()</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:844</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_acd53f193937bef5946ce1d6469d9b59c"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#acd53f193937bef5946ce1d6469d9b59c">Isis::MosaicSceneWidget::~MosaicSceneWidget</a></div><div class="ttdeci">virtual ~MosaicSceneWidget()</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:243</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_ad1bbe08facce4988a6fb7e053fc4e020"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#ad1bbe08facce4988a6fb7e053fc4e020">Isis::MosaicSceneWidget::getGridHelp</a></div><div class="ttdeci">static QWidget * getGridHelp(QWidget *gridToolContainer=NULL)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:930</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_ad57a4fad13da688efc5e4030f8bdb995"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#ad57a4fad13da688efc5e4030f8bdb995">Isis::MosaicSceneWidget::cubesChanged</a></div><div class="ttdeci">void cubesChanged()</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_ada0c0a17d9b6219704481f451e1fd255"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#ada0c0a17d9b6219704481f451e1fd255">Isis::MosaicSceneWidget::moveZ</a></div><div class="ttdeci">double moveZ(MosaicSceneItem *sceneItem, double newZ, bool newZValueMightExist=true)</div><div class="ttdoc">This method moves the given scene item to the given Z value.</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1947</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_adaaa67f2891fc0fb409c1edbf1a8d92d"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#adaaa67f2891fc0fb409c1edbf1a8d92d">Isis::MosaicSceneWidget::eventFilter</a></div><div class="ttdeci">virtual bool eventFilter(QObject *obj, QEvent *ev)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1531</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_adac885559cc177e2d5ce601c29df47a4"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#adac885559cc177e2d5ce601c29df47a4">Isis::MosaicSceneWidget::mouseMove</a></div><div class="ttdeci">void mouseMove(QPointF)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_add513eb7db007785bde92b545a77ebee"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#add513eb7db007785bde92b545a77ebee">Isis::MosaicSceneWidget::mouseEnter</a></div><div class="ttdeci">void mouseEnter()</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_ae0257af3ff6b50414364a00fbd6f0026"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#ae0257af3ff6b50414364a00fbd6f0026">Isis::MosaicSceneWidget::moveDownOne</a></div><div class="ttdeci">double moveDownOne(MosaicSceneItem *)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1736</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_ae02ba7bd439f8e153aaf861dac061c43"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#ae02ba7bd439f8e153aaf861dac061c43">Isis::MosaicSceneWidget::setProjection</a></div><div class="ttdeci">void setProjection(Projection *)</div><div class="ttdoc">This method takes ownership of proj.</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:287</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_ae2232780ad3a6709e170676848ecef72"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#ae2232780ad3a6709e170676848ecef72">Isis::MosaicSceneWidget::setOutlineRect</a></div><div class="ttdeci">void setOutlineRect(QRectF)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:312</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_ae346bfa82252910ca00b1d335e03c974"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#ae346bfa82252910ca00b1d335e03c974">Isis::MosaicSceneWidget::save</a></div><div class="ttdeci">void save(QXmlStreamWriter &amp;stream, Project *project, FileName newProjectRoot) const</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:619</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_ae3d6759e7abaf2ef4193a6d1c75f69ee"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#ae3d6759e7abaf2ef4193a6d1c75f69ee">Isis::MosaicSceneWidget::userHasTools</a></div><div class="ttdeci">bool userHasTools() const</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.h:195</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_ae9b25dd649c12e3b415fea3aa6897bff"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#ae9b25dd649c12e3b415fea3aa6897bff">Isis::MosaicSceneWidget::createControlPoint</a></div><div class="ttdeci">void createControlPoint(double latitude, double longitude)</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_aea09d8105a5b6d8b0e783d053effd834"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#aea09d8105a5b6d8b0e783d053effd834">Isis::MosaicSceneWidget::getPreviewHelp</a></div><div class="ttdeci">static QWidget * getPreviewHelp(QWidget *worldViewContainer=NULL)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:1228</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_aee7e753e4d2d4970159b64c11b395ec8"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#aee7e753e4d2d4970159b64c11b395ec8">Isis::MosaicSceneWidget::mouseLeave</a></div><div class="ttdeci">void mouseLeave()</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_af2d03740247310f30990123ff75ff609"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#af2d03740247310f30990123ff75ff609">Isis::MosaicSceneWidget::cubeToMosaic</a></div><div class="ttdeci">MosaicSceneItem * cubeToMosaic(Image *)</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:498</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_scene_widget_html_afb7a239605acfb76aad1da280d18a354"><div class="ttname"><a href="class_isis_1_1_mosaic_scene_widget.html#afb7a239605acfb76aad1da280d18a354">Isis::MosaicSceneWidget::getViewActions</a></div><div class="ttdeci">QList&lt; QAction * &gt; getViewActions()</div><div class="ttdef"><b>Definition:</b> MosaicSceneWidget.cpp:789</div></div>
+<div class="ttc" id="aclass_isis_1_1_progress_bar_html"><div class="ttname"><a href="class_isis_1_1_progress_bar.html">Isis::ProgressBar</a></div><div class="ttdef"><b>Definition:</b> ProgressBar.h:15</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_html"><div class="ttname"><a href="class_isis_1_1_project.html">Isis::Project</a></div><div class="ttdoc">The main project for ipce.</div><div class="ttdef"><b>Definition:</b> Project.h:287</div></div>
+<div class="ttc" id="aclass_isis_1_1_projection_html"><div class="ttname"><a href="class_isis_1_1_projection.html">Isis::Projection</a></div><div class="ttdoc">Base class for Map Projections.</div><div class="ttdef"><b>Definition:</b> Projection.h:155</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_group_html"><div class="ttname"><a href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a></div><div class="ttdoc">Contains multiple PvlContainers.</div><div class="ttdef"><b>Definition:</b> PvlGroup.h:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_html"><div class="ttname"><a href="class_isis_1_1_pvl.html">Isis::Pvl</a></div><div class="ttdoc">Container for cube-like labels.</div><div class="ttdef"><b>Definition:</b> Pvl.h:119</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html"><div class="ttname"><a href="class_isis_1_1_pvl_object.html">Isis::PvlObject</a></div><div class="ttdoc">Contains Pvl Groups and Pvl Objects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_tool_pad_html"><div class="ttname"><a href="class_isis_1_1_tool_pad.html">Isis::ToolPad</a></div><div class="ttdef"><b>Definition:</b> ToolPad.h:14</div></div>
+<div class="ttc" id="aclass_q_action_html"><div class="ttname"><a href="class_q_action.html">QAction</a></div></div>
+<div class="ttc" id="aclass_q_graphics_rect_item_html"><div class="ttname"><a href="class_q_graphics_rect_item.html">QGraphicsRectItem</a></div></div>
+<div class="ttc" id="aclass_q_graphics_scene_html"><div class="ttname"><a href="class_q_graphics_scene.html">QGraphicsScene</a></div></div>
+<div class="ttc" id="aclass_q_hash_html"><div class="ttname"><a href="class_q_hash.html">QHash&lt; QString, double &gt;</a></div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="aclass_q_map_html"><div class="ttname"><a href="class_q_map.html">QMap</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> CubeIoHandler.h:22</div></div>
+<div class="ttc" id="aclass_q_menu_html"><div class="ttname"><a href="class_q_menu.html">QMenu</a></div></div>
+<div class="ttc" id="aclass_q_object_html"><div class="ttname"><a href="class_q_object.html">QObject</a></div></div>
+<div class="ttc" id="aclass_q_progress_bar_html"><div class="ttname"><a href="class_q_progress_bar.html">QProgressBar</a></div></div>
+<div class="ttc" id="aclass_q_tool_bar_html"><div class="ttname"><a href="class_q_tool_bar.html">QToolBar</a></div></div>
+<div class="ttc" id="aclass_q_widget_html"><div class="ttname"><a href="class_q_widget.html">QWidget</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_910f955828120431efe3b62a171d7728.html">MosaicSceneWidget</a></li><li class="navelem"><a class="el" href="_mosaic_scene_widget_8h.html">MosaicSceneWidget.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

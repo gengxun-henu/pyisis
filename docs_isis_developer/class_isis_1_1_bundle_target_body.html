@@ -1,0 +1,2068 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::BundleTargetBody Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_bundle_target_body.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_bundle_target_body-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::BundleTargetBody Class Reference<div class="ingroups"><a class="el" href="group___control_networks.html">Control Networks</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This class is used to represent a target body in a bundle and how to solve for it.  
+ <a href="class_isis_1_1_bundle_target_body.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_bundle_target_body_8h_source.html">BundleTargetBody.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::BundleTargetBody:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bundle_target_body__coll__graph.png" border="0" usemap="#a_isis_1_1_bundle_target_body_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_bundle_target_body_coll__map" id="a_isis_1_1_bundle_target_body_coll__map">
+<area shape="rect" title="This class is used to represent a target body in a bundle and how to solve for it." alt="" coords="5,5,197,279"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a0561e5d2d5507d777a90e36acb8ed83c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83c">TargetRadiiSolveMethod</a> { <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca17ffdf79ee8fec9fcfa222da9b30a57f">None</a> = 0
+, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca2371821cff2969caed002c160bfea009">Mean</a> = 1
+, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83caa5ca27ddc3ec83c3a643d59f14f127a9">All</a> = 2
+ }</td></tr>
+<tr class="memdesc:a0561e5d2d5507d777a90e36acb8ed83c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration that defines how to solve for target radii.  <a href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83c">More...</a><br /></td></tr>
+<tr class="separator:a0561e5d2d5507d777a90e36acb8ed83c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93da0771c8236607384baaafc1049390"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390">TargetSolveCodes</a> { <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390acbfae654823d3313bd7c379a75b5cf08">PoleRA</a> = 0
+, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aaa076ccaff64ab6e56fb3ca63e477290">VelocityPoleRA</a> = 1
+, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a71db26ff19fa735dbeaa6aa00762eb4e">AccelerationPoleRA</a> = 2
+, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a6a608d5a4035d5193408ad4334d2f894">PoleDec</a> = 3
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aa0415b4e1ddde399b7485daaa2694bd7">VelocityPoleDec</a> = 4
+, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a390afd93ef0b2161283b982627bf3f1d">AccelerationPoleDec</a> = 5
+, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a0c528ea2dd1cc54ba9e38d1dea739ab0">PM</a> = 6
+, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a532060601544c19ee68c4b4eaeab9a25">VelocityPM</a> = 7
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a71fc367422b8b800200dba566c7e101b">AccelerationPM</a> = 8
+, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390ab466057d5284b34c80226fe505b7e49d">TriaxialRadiusA</a> = 9
+, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a82223f8dfbdf92921049aded28fd83cf">TriaxialRadiusB</a> = 10
+, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a2da676cc0637271645c3cbd5bbeb7910">TriaxialRadiusC</a> = 11
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a621c3bd02660845d30f52bf42afcf24c">MeanRadius</a> = 12
+<br />
+ }</td></tr>
+<tr class="memdesc:a93da0771c8236607384baaafc1049390"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration that defines what <a class="el" href="class_isis_1_1_bundle_target_body.html" title="This class is used to represent a target body in a bundle and how to solve for it.">BundleTargetBody</a> can solve for.  <a href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390">More...</a><br /></td></tr>
+<tr class="separator:a93da0771c8236607384baaafc1049390"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ab07515cbf7eb78aaf4b363f34f13b5dc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#ab07515cbf7eb78aaf4b363f34f13b5dc">BundleTargetBody</a> ()</td></tr>
+<tr class="memdesc:ab07515cbf7eb78aaf4b363f34f13b5dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an empty <a class="el" href="class_isis_1_1_bundle_target_body.html" title="This class is used to represent a target body in a bundle and how to solve for it.">BundleTargetBody</a> object.  <a href="class_isis_1_1_bundle_target_body.html#ab07515cbf7eb78aaf4b363f34f13b5dc">More...</a><br /></td></tr>
+<tr class="separator:ab07515cbf7eb78aaf4b363f34f13b5dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac963d06e4749c4947e48789a43fe540e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#ac963d06e4749c4947e48789a43fe540e">BundleTargetBody</a> (<a class="el" href="class_isis_1_1_target.html">Target</a> *target)</td></tr>
+<tr class="memdesc:ac963d06e4749c4947e48789a43fe540e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an <a class="el" href="class_isis_1_1_bundle_target_body.html" title="This class is used to represent a target body in a bundle and how to solve for it.">BundleTargetBody</a> object from a target.  <a href="class_isis_1_1_bundle_target_body.html#ac963d06e4749c4947e48789a43fe540e">More...</a><br /></td></tr>
+<tr class="separator:ac963d06e4749c4947e48789a43fe540e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90582fa1540f1ae46b1842feff31e8f5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a90582fa1540f1ae46b1842feff31e8f5">BundleTargetBody</a> (const <a class="el" href="class_isis_1_1_bundle_target_body.html">BundleTargetBody</a> &amp;src)</td></tr>
+<tr class="memdesc:a90582fa1540f1ae46b1842feff31e8f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="class_isis_1_1_bundle_target_body.html#a90582fa1540f1ae46b1842feff31e8f5">More...</a><br /></td></tr>
+<tr class="separator:a90582fa1540f1ae46b1842feff31e8f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab41d34205a301f523ac3d36befbf72d0"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#ab41d34205a301f523ac3d36befbf72d0">~BundleTargetBody</a> ()</td></tr>
+<tr class="memdesc:ab41d34205a301f523ac3d36befbf72d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_bundle_target_body.html#ab41d34205a301f523ac3d36befbf72d0">More...</a><br /></td></tr>
+<tr class="separator:ab41d34205a301f523ac3d36befbf72d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3874ffeb84e1daa5b0a9225f060dc65c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_bundle_target_body.html">BundleTargetBody</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a3874ffeb84e1daa5b0a9225f060dc65c">operator=</a> (const <a class="el" href="class_isis_1_1_bundle_target_body.html">BundleTargetBody</a> &amp;src)</td></tr>
+<tr class="memdesc:a3874ffeb84e1daa5b0a9225f060dc65c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator.  <a href="class_isis_1_1_bundle_target_body.html#a3874ffeb84e1daa5b0a9225f060dc65c">More...</a><br /></td></tr>
+<tr class="separator:a3874ffeb84e1daa5b0a9225f060dc65c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d2c7a540a7c315983cdb2e3d43a0ed0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0">setSolveSettings</a> (std::set&lt; int &gt; targetParameterSolveCodes, <a class="el" href="class_isis_1_1_angle.html">Angle</a> aprioriPoleRA, <a class="el" href="class_isis_1_1_angle.html">Angle</a> sigmaPoleRA, <a class="el" href="class_isis_1_1_angle.html">Angle</a> aprioriVelocityPoleRA, <a class="el" href="class_isis_1_1_angle.html">Angle</a> sigmaVelocityPoleRA, <a class="el" href="class_isis_1_1_angle.html">Angle</a> aprioriPoleDec, <a class="el" href="class_isis_1_1_angle.html">Angle</a> sigmaPoleDec, <a class="el" href="class_isis_1_1_angle.html">Angle</a> aprioriVelocityPoleDec, <a class="el" href="class_isis_1_1_angle.html">Angle</a> sigmaVelocityPoleDec, <a class="el" href="class_isis_1_1_angle.html">Angle</a> aprioriPM, <a class="el" href="class_isis_1_1_angle.html">Angle</a> sigmaPM, <a class="el" href="class_isis_1_1_angle.html">Angle</a> aprioriVelocityPM, <a class="el" href="class_isis_1_1_angle.html">Angle</a> sigmaVelocityPM, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83c">TargetRadiiSolveMethod</a> solveRadiiMethod, <a class="el" href="class_isis_1_1_distance.html">Distance</a> aprioriRadiusA, <a class="el" href="class_isis_1_1_distance.html">Distance</a> sigmaRadiusA, <a class="el" href="class_isis_1_1_distance.html">Distance</a> aprioriRadiusB, <a class="el" href="class_isis_1_1_distance.html">Distance</a> sigmaRadiusB, <a class="el" href="class_isis_1_1_distance.html">Distance</a> aprioriRadiusC, <a class="el" href="class_isis_1_1_distance.html">Distance</a> sigmaRadiusC, <a class="el" href="class_isis_1_1_distance.html">Distance</a> aprioriMeanRadius, <a class="el" href="class_isis_1_1_distance.html">Distance</a> sigmaMeanRadius)</td></tr>
+<tr class="memdesc:a2d2c7a540a7c315983cdb2e3d43a0ed0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the solve settings for the target body.  <a href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0">More...</a><br /></td></tr>
+<tr class="separator:a2d2c7a540a7c315983cdb2e3d43a0ed0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc9c05aa4579294682303ebd431417ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#adc9c05aa4579294682303ebd431417ef">readFromPvl</a> (<a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;tbPvlObject)</td></tr>
+<tr class="memdesc:adc9c05aa4579294682303ebd431417ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set bundle solve parameters for target body from a pvl file.  <a href="class_isis_1_1_bundle_target_body.html#adc9c05aa4579294682303ebd431417ef">More...</a><br /></td></tr>
+<tr class="separator:adc9c05aa4579294682303ebd431417ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e08d0abdfa56faa097dbcd5b88601eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a0e08d0abdfa56faa097dbcd5b88601eb">parameterWeights</a> ()</td></tr>
+<tr class="memdesc:a0e08d0abdfa56faa097dbcd5b88601eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the vector of parameter weights.  <a href="class_isis_1_1_bundle_target_body.html#a0e08d0abdfa56faa097dbcd5b88601eb">More...</a><br /></td></tr>
+<tr class="separator:a0e08d0abdfa56faa097dbcd5b88601eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e3310d6727bd51d6d3b90f07180e268"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a2e3310d6727bd51d6d3b90f07180e268">parameterCorrections</a> ()</td></tr>
+<tr class="memdesc:a2e3310d6727bd51d6d3b90f07180e268"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the vector of corrections applied to the parameters.  <a href="class_isis_1_1_bundle_target_body.html#a2e3310d6727bd51d6d3b90f07180e268">More...</a><br /></td></tr>
+<tr class="separator:a2e3310d6727bd51d6d3b90f07180e268"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74b4d467f33ce2496e22ad9a76881a38"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a74b4d467f33ce2496e22ad9a76881a38">parameterSolution</a> ()</td></tr>
+<tr class="memdesc:a74b4d467f33ce2496e22ad9a76881a38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the vector of parameters solution.  <a href="class_isis_1_1_bundle_target_body.html#a74b4d467f33ce2496e22ad9a76881a38">More...</a><br /></td></tr>
+<tr class="separator:a74b4d467f33ce2496e22ad9a76881a38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16f2c9328c840982b6772c9ec0c33c6d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a16f2c9328c840982b6772c9ec0c33c6d">aprioriSigmas</a> ()</td></tr>
+<tr class="memdesc:a16f2c9328c840982b6772c9ec0c33c6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the vector of apriori parameters sigmas.  <a href="class_isis_1_1_bundle_target_body.html#a16f2c9328c840982b6772c9ec0c33c6d">More...</a><br /></td></tr>
+<tr class="separator:a16f2c9328c840982b6772c9ec0c33c6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41b074ebb0b91385f4a0fc1b2f79ed55"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a41b074ebb0b91385f4a0fc1b2f79ed55">adjustedSigmas</a> ()</td></tr>
+<tr class="memdesc:a41b074ebb0b91385f4a0fc1b2f79ed55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the vector of adjusted parameters sigmas.  <a href="class_isis_1_1_bundle_target_body.html#a41b074ebb0b91385f4a0fc1b2f79ed55">More...</a><br /></td></tr>
+<tr class="separator:a41b074ebb0b91385f4a0fc1b2f79ed55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bfd51e1a3b32b9d872e484ea6fec6b2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_isis_1_1_angle.html">Angle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a1bfd51e1a3b32b9d872e484ea6fec6b2">poleRaCoefs</a> ()</td></tr>
+<tr class="memdesc:a1bfd51e1a3b32b9d872e484ea6fec6b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the coefficients of the right ascension polynomial.  <a href="class_isis_1_1_bundle_target_body.html#a1bfd51e1a3b32b9d872e484ea6fec6b2">More...</a><br /></td></tr>
+<tr class="separator:a1bfd51e1a3b32b9d872e484ea6fec6b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac92e6e39da25499d0e1fe155694a9895"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_isis_1_1_angle.html">Angle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#ac92e6e39da25499d0e1fe155694a9895">poleDecCoefs</a> ()</td></tr>
+<tr class="memdesc:ac92e6e39da25499d0e1fe155694a9895"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the coefficients of the declination polynomial.  <a href="class_isis_1_1_bundle_target_body.html#ac92e6e39da25499d0e1fe155694a9895">More...</a><br /></td></tr>
+<tr class="separator:ac92e6e39da25499d0e1fe155694a9895"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4002d6cdd379489a5b5f08946f896535"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_isis_1_1_angle.html">Angle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a4002d6cdd379489a5b5f08946f896535">pmCoefs</a> ()</td></tr>
+<tr class="memdesc:a4002d6cdd379489a5b5f08946f896535"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the coefficients of the prime meridian polynomial.  <a href="class_isis_1_1_bundle_target_body.html#a4002d6cdd379489a5b5f08946f896535">More...</a><br /></td></tr>
+<tr class="separator:a4002d6cdd379489a5b5f08946f896535"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3326eee615f7df19232b41bc476d15da"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_isis_1_1_distance.html">Distance</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a3326eee615f7df19232b41bc476d15da">radii</a> ()</td></tr>
+<tr class="memdesc:a3326eee615f7df19232b41bc476d15da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the radius values.  <a href="class_isis_1_1_bundle_target_body.html#a3326eee615f7df19232b41bc476d15da">More...</a><br /></td></tr>
+<tr class="separator:a3326eee615f7df19232b41bc476d15da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a739d9bf7fa1d6c7f115db24847f74fe5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a739d9bf7fa1d6c7f115db24847f74fe5">meanRadius</a> ()</td></tr>
+<tr class="memdesc:a739d9bf7fa1d6c7f115db24847f74fe5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the mean radius.  <a href="class_isis_1_1_bundle_target_body.html#a739d9bf7fa1d6c7f115db24847f74fe5">More...</a><br /></td></tr>
+<tr class="separator:a739d9bf7fa1d6c7f115db24847f74fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6691fe8bd903504355d777e183daa48d"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">formatBundleOutputString</a> (bool errorPropagation)</td></tr>
+<tr class="memdesc:a6691fe8bd903504355d777e183daa48d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats and returns the parameter values as a QString.  <a href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">More...</a><br /></td></tr>
+<tr class="separator:a6691fe8bd903504355d777e183daa48d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accd91415a72d0f5009c9c2fb8ed904e0"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#accd91415a72d0f5009c9c2fb8ed904e0">parameterList</a> ()</td></tr>
+<tr class="memdesc:accd91415a72d0f5009c9c2fb8ed904e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all the parameters being solved for as QStrings.  <a href="class_isis_1_1_bundle_target_body.html#accd91415a72d0f5009c9c2fb8ed904e0">More...</a><br /></td></tr>
+<tr class="separator:accd91415a72d0f5009c9c2fb8ed904e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37938932456d740b566e9faf4127130e"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a37938932456d740b566e9faf4127130e">formatValue</a> (double value, int fieldWidth, int precision) const</td></tr>
+<tr class="separator:a37938932456d740b566e9faf4127130e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36a41120831dd9af7ded70e27493b43a"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a36a41120831dd9af7ded70e27493b43a">formatAprioriSigmaString</a> (int type, int fieldWidth, int precision) const</td></tr>
+<tr class="separator:a36a41120831dd9af7ded70e27493b43a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab77643c7671fcd5fbdef97b25779bfb5"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#ab77643c7671fcd5fbdef97b25779bfb5">formatPolePositionAprioriSigmaString</a> (int fieldWidth, int precision) const</td></tr>
+<tr class="separator:ab77643c7671fcd5fbdef97b25779bfb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad5e05345d5255ff0ec63f93be622902"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#aad5e05345d5255ff0ec63f93be622902">formatW0AprioriSigmaString</a> (int fieldWidth, int precision) const</td></tr>
+<tr class="separator:aad5e05345d5255ff0ec63f93be622902"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b9295897dc9d17fb4dd33f58efe1e92"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a0b9295897dc9d17fb4dd33f58efe1e92">formatWDotAprioriSigmaString</a> (int fieldWidth, int precision) const</td></tr>
+<tr class="separator:a0b9295897dc9d17fb4dd33f58efe1e92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03ab3f01570c0b786c9b1642a3dceba0"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a03ab3f01570c0b786c9b1642a3dceba0">formatRadiusAprioriSigmaString</a> (int fieldWidth, int precision) const</td></tr>
+<tr class="separator:a03ab3f01570c0b786c9b1642a3dceba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63fbb7571b0a67f28d027d78cb550323"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a63fbb7571b0a67f28d027d78cb550323">formatPolePositionAdjustedSigmaString</a> (int fieldWidth, int precision) const</td></tr>
+<tr class="separator:a63fbb7571b0a67f28d027d78cb550323"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a77fc30277917da3663b1bb606e28f2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a1a77fc30277917da3663b1bb606e28f2">formatW0AdjustedSigmaString</a> (int fieldWidth, int precision) const</td></tr>
+<tr class="separator:a1a77fc30277917da3663b1bb606e28f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b872ec394c6be3336c7668655f96bc3"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a8b872ec394c6be3336c7668655f96bc3">formatWDotAdjustedSigmaString</a> (int fieldWidth, int precision) const</td></tr>
+<tr class="separator:a8b872ec394c6be3336c7668655f96bc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a221c3714f69d1eb848592d7bcfd13c8a"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a221c3714f69d1eb848592d7bcfd13c8a">formatRadiusAdjustedSigmaString</a> (int fieldWidth, int precision) const</td></tr>
+<tr class="separator:a221c3714f69d1eb848592d7bcfd13c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45cb1d58c524fa3bdc779f8fe0429951"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a45cb1d58c524fa3bdc779f8fe0429951">solvePoleRA</a> ()</td></tr>
+<tr class="memdesc:a45cb1d58c524fa3bdc779f8fe0429951"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the pole right ascension angle will be solved for with this target body.  <a href="class_isis_1_1_bundle_target_body.html#a45cb1d58c524fa3bdc779f8fe0429951">More...</a><br /></td></tr>
+<tr class="separator:a45cb1d58c524fa3bdc779f8fe0429951"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa74698c0b99e9babe243775d8309db2c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#aa74698c0b99e9babe243775d8309db2c">solvePoleRAVelocity</a> ()</td></tr>
+<tr class="memdesc:aa74698c0b99e9babe243775d8309db2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the pole right ascension velocity will be solved for with this target body.  <a href="class_isis_1_1_bundle_target_body.html#aa74698c0b99e9babe243775d8309db2c">More...</a><br /></td></tr>
+<tr class="separator:aa74698c0b99e9babe243775d8309db2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14ae8a56e49f381fd13f3a141d09c022"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a14ae8a56e49f381fd13f3a141d09c022">solvePoleRAAcceleration</a> ()</td></tr>
+<tr class="memdesc:a14ae8a56e49f381fd13f3a141d09c022"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the pole right ascension acceleration will be solved for with this target body.  <a href="class_isis_1_1_bundle_target_body.html#a14ae8a56e49f381fd13f3a141d09c022">More...</a><br /></td></tr>
+<tr class="separator:a14ae8a56e49f381fd13f3a141d09c022"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a204e8b980576ff3f7ff4fc8a15dbf39a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a204e8b980576ff3f7ff4fc8a15dbf39a">solvePoleDec</a> ()</td></tr>
+<tr class="memdesc:a204e8b980576ff3f7ff4fc8a15dbf39a"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the pole declination angle will be solved for with this target body.  <a href="class_isis_1_1_bundle_target_body.html#a204e8b980576ff3f7ff4fc8a15dbf39a">More...</a><br /></td></tr>
+<tr class="separator:a204e8b980576ff3f7ff4fc8a15dbf39a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aa3f20c7efd034a17452a4b7872e9e2"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a2aa3f20c7efd034a17452a4b7872e9e2">solvePoleDecVelocity</a> ()</td></tr>
+<tr class="memdesc:a2aa3f20c7efd034a17452a4b7872e9e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the pole declination velocity will be solved for with this target body.  <a href="class_isis_1_1_bundle_target_body.html#a2aa3f20c7efd034a17452a4b7872e9e2">More...</a><br /></td></tr>
+<tr class="separator:a2aa3f20c7efd034a17452a4b7872e9e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa61f50cc6bb2d7e87c6653e0159d013"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#aaa61f50cc6bb2d7e87c6653e0159d013">solvePoleDecAcceleration</a> ()</td></tr>
+<tr class="memdesc:aaa61f50cc6bb2d7e87c6653e0159d013"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the pole declination acceleration will be solved for with this target body.  <a href="class_isis_1_1_bundle_target_body.html#aaa61f50cc6bb2d7e87c6653e0159d013">More...</a><br /></td></tr>
+<tr class="separator:aaa61f50cc6bb2d7e87c6653e0159d013"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a533303d146a986cace7e5fc686b31a31"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a533303d146a986cace7e5fc686b31a31">solvePM</a> ()</td></tr>
+<tr class="memdesc:a533303d146a986cace7e5fc686b31a31"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the prime meridian angle will be solved for with this target body.  <a href="class_isis_1_1_bundle_target_body.html#a533303d146a986cace7e5fc686b31a31">More...</a><br /></td></tr>
+<tr class="separator:a533303d146a986cace7e5fc686b31a31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af09d4a3f2d6b5c5bf051772b615bfadc"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#af09d4a3f2d6b5c5bf051772b615bfadc">solvePMVelocity</a> ()</td></tr>
+<tr class="memdesc:af09d4a3f2d6b5c5bf051772b615bfadc"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the prime meridian velocity will be solved for with this target body.  <a href="class_isis_1_1_bundle_target_body.html#af09d4a3f2d6b5c5bf051772b615bfadc">More...</a><br /></td></tr>
+<tr class="separator:af09d4a3f2d6b5c5bf051772b615bfadc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7feff34d0760482ec792a5439b91d8c6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a7feff34d0760482ec792a5439b91d8c6">solvePMAcceleration</a> ()</td></tr>
+<tr class="memdesc:a7feff34d0760482ec792a5439b91d8c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the prime meridian acceleration will be solved for with this target body.  <a href="class_isis_1_1_bundle_target_body.html#a7feff34d0760482ec792a5439b91d8c6">More...</a><br /></td></tr>
+<tr class="separator:a7feff34d0760482ec792a5439b91d8c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f38c591f719eb282ee967bd959af3a2"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a8f38c591f719eb282ee967bd959af3a2">solveTriaxialRadii</a> ()</td></tr>
+<tr class="memdesc:a8f38c591f719eb282ee967bd959af3a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the triaxial radii will be solved for with this target body.  <a href="class_isis_1_1_bundle_target_body.html#a8f38c591f719eb282ee967bd959af3a2">More...</a><br /></td></tr>
+<tr class="separator:a8f38c591f719eb282ee967bd959af3a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f9d6102f37f80cece93dfeefc69688f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a8f9d6102f37f80cece93dfeefc69688f">solveMeanRadius</a> ()</td></tr>
+<tr class="memdesc:a8f9d6102f37f80cece93dfeefc69688f"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the mean radius will be solved for with this target body.  <a href="class_isis_1_1_bundle_target_body.html#a8f9d6102f37f80cece93dfeefc69688f">More...</a><br /></td></tr>
+<tr class="separator:a8f9d6102f37f80cece93dfeefc69688f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4803d9090b728bb2c7209549194b2e5f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a4803d9090b728bb2c7209549194b2e5f">numberRadiusParameters</a> ()</td></tr>
+<tr class="memdesc:a4803d9090b728bb2c7209549194b2e5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of radius parameters being solved for.  <a href="class_isis_1_1_bundle_target_body.html#a4803d9090b728bb2c7209549194b2e5f">More...</a><br /></td></tr>
+<tr class="separator:a4803d9090b728bb2c7209549194b2e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d63ed30749a41cc136467192d43a9b4"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a9d63ed30749a41cc136467192d43a9b4">numberParameters</a> ()</td></tr>
+<tr class="memdesc:a9d63ed30749a41cc136467192d43a9b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total number of parameters being solved for.  <a href="class_isis_1_1_bundle_target_body.html#a9d63ed30749a41cc136467192d43a9b4">More...</a><br /></td></tr>
+<tr class="separator:a9d63ed30749a41cc136467192d43a9b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af168c6a37c4754633f1ba4fab078547b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#af168c6a37c4754633f1ba4fab078547b">applyParameterCorrections</a> (<a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> corrections)</td></tr>
+<tr class="memdesc:af168c6a37c4754633f1ba4fab078547b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a vector of corrections to the parameters for the target body.  <a href="class_isis_1_1_bundle_target_body.html#af168c6a37c4754633f1ba4fab078547b">More...</a><br /></td></tr>
+<tr class="separator:af168c6a37c4754633f1ba4fab078547b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f7dcad77e60b1e91b3e60580568031e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a3f7dcad77e60b1e91b3e60580568031e">vtpv</a> ()</td></tr>
+<tr class="memdesc:a3f7dcad77e60b1e91b3e60580568031e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates and returns the weighted sum of the squares of the corrections.  <a href="class_isis_1_1_bundle_target_body.html#a3f7dcad77e60b1e91b3e60580568031e">More...</a><br /></td></tr>
+<tr class="separator:a3f7dcad77e60b1e91b3e60580568031e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5bf5c6feef902ab806513bfd0a36a29"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#aa5bf5c6feef902ab806513bfd0a36a29">localRadius</a> (const <a class="el" href="class_isis_1_1_latitude.html">Latitude</a> &amp;lat, const <a class="el" href="class_isis_1_1_longitude.html">Longitude</a> &amp;lon)</td></tr>
+<tr class="memdesc:aa5bf5c6feef902ab806513bfd0a36a29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the local radius for the given latitude/longitude coordinate.  <a href="class_isis_1_1_bundle_target_body.html#aa5bf5c6feef902ab806513bfd0a36a29">More...</a><br /></td></tr>
+<tr class="separator:aa5bf5c6feef902ab806513bfd0a36a29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:aa09e8eb5c1caeee4354dadfb58f2795a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83c">TargetRadiiSolveMethod</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#aa09e8eb5c1caeee4354dadfb58f2795a">stringToTargetRadiiOption</a> (QString option)</td></tr>
+<tr class="memdesc:aa09e8eb5c1caeee4354dadfb58f2795a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a QString to a TargetRadiiSolveMethod.  <a href="class_isis_1_1_bundle_target_body.html#aa09e8eb5c1caeee4354dadfb58f2795a">More...</a><br /></td></tr>
+<tr class="separator:aa09e8eb5c1caeee4354dadfb58f2795a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a4562f1bbceb6b24aaad9ff11f7431a"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_target_body.html#a2a4562f1bbceb6b24aaad9ff11f7431a">targetRadiiOptionToString</a> (<a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83c">TargetRadiiSolveMethod</a> targetRadiiSolveMethod)</td></tr>
+<tr class="memdesc:a2a4562f1bbceb6b24aaad9ff11f7431a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a TargetRadiiSolveMethod to a QString.  <a href="class_isis_1_1_bundle_target_body.html#a2a4562f1bbceb6b24aaad9ff11f7431a">More...</a><br /></td></tr>
+<tr class="separator:a2a4562f1bbceb6b24aaad9ff11f7431a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class is used to represent a target body in a bundle and how to solve for it. </p>
+<dl class="section author"><dt>Author</dt><dd>2015-05-15 Ken Edmundson </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a0561e5d2d5507d777a90e36acb8ed83c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0561e5d2d5507d777a90e36acb8ed83c">&#9670;&nbsp;</a></span>TargetRadiiSolveMethod</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83c">Isis::BundleTargetBody::TargetRadiiSolveMethod</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enumeration that defines how to solve for target radii. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a0561e5d2d5507d777a90e36acb8ed83ca17ffdf79ee8fec9fcfa222da9b30a57f"></a>None&#160;</td><td class="fielddoc"><p>Solve for none. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0561e5d2d5507d777a90e36acb8ed83ca2371821cff2969caed002c160bfea009"></a>Mean&#160;</td><td class="fielddoc"><p>Solve for mean radius. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0561e5d2d5507d777a90e36acb8ed83caa5ca27ddc3ec83c3a643d59f14f127a9"></a>All&#160;</td><td class="fielddoc"><p>Solve for all radii. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a93da0771c8236607384baaafc1049390"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93da0771c8236607384baaafc1049390">&#9670;&nbsp;</a></span>TargetSolveCodes</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390">Isis::BundleTargetBody::TargetSolveCodes</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enumeration that defines what <a class="el" href="class_isis_1_1_bundle_target_body.html" title="This class is used to represent a target body in a bundle and how to solve for it.">BundleTargetBody</a> can solve for. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390acbfae654823d3313bd7c379a75b5cf08"></a>PoleRA&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390aaa076ccaff64ab6e56fb3ca63e477290"></a>VelocityPoleRA&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390a71db26ff19fa735dbeaa6aa00762eb4e"></a>AccelerationPoleRA&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390a6a608d5a4035d5193408ad4334d2f894"></a>PoleDec&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390aa0415b4e1ddde399b7485daaa2694bd7"></a>VelocityPoleDec&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390a390afd93ef0b2161283b982627bf3f1d"></a>AccelerationPoleDec&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390a0c528ea2dd1cc54ba9e38d1dea739ab0"></a>PM&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390a532060601544c19ee68c4b4eaeab9a25"></a>VelocityPM&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390a71fc367422b8b800200dba566c7e101b"></a>AccelerationPM&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390ab466057d5284b34c80226fe505b7e49d"></a>TriaxialRadiusA&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390a82223f8dfbdf92921049aded28fd83cf"></a>TriaxialRadiusB&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390a2da676cc0637271645c3cbd5bbeb7910"></a>TriaxialRadiusC&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a93da0771c8236607384baaafc1049390a621c3bd02660845d30f52bf42afcf24c"></a>MeanRadius&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ab07515cbf7eb78aaf4b363f34f13b5dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab07515cbf7eb78aaf4b363f34f13b5dc">&#9670;&nbsp;</a></span>BundleTargetBody() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleTargetBody::BundleTargetBody </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates an empty <a class="el" href="class_isis_1_1_bundle_target_body.html" title="This class is used to represent a target body in a bundle and how to solve for it.">BundleTargetBody</a> object. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca17ffdf79ee8fec9fcfa222da9b30a57f">None</a>.</p>
+
+</div>
+</div>
+<a id="ac963d06e4749c4947e48789a43fe540e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac963d06e4749c4947e48789a43fe540e">&#9670;&nbsp;</a></span>BundleTargetBody() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleTargetBody::BundleTargetBody </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_target.html">Target</a> *&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates an <a class="el" href="class_isis_1_1_bundle_target_body.html" title="This class is used to represent a target body in a bundle and how to solve for it.">BundleTargetBody</a> object from a target. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>A pointer to the target body that this object will represent. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca17ffdf79ee8fec9fcfa222da9b30a57f">None</a>, <a class="el" href="class_isis_1_1_target.html#a749e5c55b4f6e963e7791426c4ecb465">Isis::Target::pmCoefs()</a>, <a class="el" href="class_isis_1_1_target.html#aa2bcf497a2b2adb49a227ddc1d9096a1">Isis::Target::poleDecCoefs()</a>, <a class="el" href="class_isis_1_1_target.html#ae96e5b9b23a95f0fd3965c514d505ab0">Isis::Target::poleRaCoefs()</a>, and <a class="el" href="class_isis_1_1_target.html#a75257dc75d5f262f160b69889e4fb053">Isis::Target::radii()</a>.</p>
+
+</div>
+</div>
+<a id="a90582fa1540f1ae46b1842feff31e8f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90582fa1540f1ae46b1842feff31e8f5">&#9670;&nbsp;</a></span>BundleTargetBody() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleTargetBody::BundleTargetBody </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bundle_target_body.html">BundleTargetBody</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy constructor. </p>
+<p>Makes a copy of another <a class="el" href="class_isis_1_1_bundle_target_body.html" title="This class is used to represent a target body in a bundle and how to solve for it.">BundleTargetBody</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The <a class="el" href="class_isis_1_1_bundle_target_body.html" title="This class is used to represent a target body in a bundle and how to solve for it.">BundleTargetBody</a> to copy from. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab41d34205a301f523ac3d36befbf72d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab41d34205a301f523ac3d36befbf72d0">&#9670;&nbsp;</a></span>~BundleTargetBody()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleTargetBody::~BundleTargetBody </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a41b074ebb0b91385f4a0fc1b2f79ed55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41b074ebb0b91385f4a0fc1b2f79ed55">&#9670;&nbsp;</a></span>adjustedSigmas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp; Isis::BundleTargetBody::adjustedSigmas </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the vector of adjusted parameters sigmas. </p>
+<p>See setSolveSettings for how the vector is ordered.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>vector&lt;double&gt;&amp;</b> The vector of adjusted parameter sigmas.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0" title="Sets the solve settings for the target body.">setSolveSettings</a> </dd></dl>
+
+</div>
+</div>
+<a id="af168c6a37c4754633f1ba4fab078547b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af168c6a37c4754633f1ba4fab078547b">&#9670;&nbsp;</a></span>applyParameterCorrections()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleTargetBody::applyParameterCorrections </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a>&#160;</td>
+          <td class="paramname"><em>corrections</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies a vector of corrections to the parameters for the target body. </p>
+<p>Applies a vector of corrections to the internal parameters for the target body and records the corrections in the internal corrections vector. The corrections vector should be ordered the same as the parameter vector descriped in setSolveSettings.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">corrections</td><td>The vector containing correction values.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"In BundleTargetBody::applyParameterCorrections:
+                                correction and m_targetParameter vectors sizes don't match." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78" title="A type of error that cannot be classified as any of the other error types.">IException::Unknown</a></td><td>"Unable to apply parameter corrections to BundleTargetBody."</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0" title="Sets the solve settings for the target body.">setSolveSettings</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a71fc367422b8b800200dba566c7e101b">AccelerationPM</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a390afd93ef0b2161283b982627bf3f1d">AccelerationPoleDec</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a71db26ff19fa735dbeaa6aa00762eb4e">AccelerationPoleRA</a>, <a class="el" href="class_isis_1_1_distance.html#accb6199bc155f11ff0f36236c6c1a902a92d8820f17a47638b5d9f7e4e62e7069">Isis::Distance::Kilometers</a>, <a class="el" href="class_isis_1_1_distance.html#a758c909952d591390686a315120ed4b7">Isis::Distance::kilometers()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a621c3bd02660845d30f52bf42afcf24c">MeanRadius</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a0c528ea2dd1cc54ba9e38d1dea739ab0">PM</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a6a608d5a4035d5193408ad4334d2f894">PoleDec</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390acbfae654823d3313bd7c379a75b5cf08">PoleRA</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390ab466057d5284b34c80226fe505b7e49d">TriaxialRadiusA</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a82223f8dfbdf92921049aded28fd83cf">TriaxialRadiusB</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a2da676cc0637271645c3cbd5bbeb7910">TriaxialRadiusC</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78">Isis::IException::Unknown</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a532060601544c19ee68c4b4eaeab9a25">VelocityPM</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aa0415b4e1ddde399b7485daaa2694bd7">VelocityPoleDec</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aaa076ccaff64ab6e56fb3ca63e477290">VelocityPoleRA</a>.</p>
+
+</div>
+</div>
+<a id="a16f2c9328c840982b6772c9ec0c33c6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16f2c9328c840982b6772c9ec0c33c6d">&#9670;&nbsp;</a></span>aprioriSigmas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp; Isis::BundleTargetBody::aprioriSigmas </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the vector of apriori parameters sigmas. </p>
+<p>See setSolveSettings for how the vector is ordered.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>vector&lt;double&gt;&amp;</b> The vector of apriori parameter sigmas.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0" title="Sets the solve settings for the target body.">setSolveSettings</a> </dd></dl>
+
+</div>
+</div>
+<a id="a36a41120831dd9af7ded70e27493b43a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36a41120831dd9af7ded70e27493b43a">&#9670;&nbsp;</a></span>formatAprioriSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::formatAprioriSigmaString </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6691fe8bd903504355d777e183daa48d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6691fe8bd903504355d777e183daa48d">&#9670;&nbsp;</a></span>formatBundleOutputString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::formatBundleOutputString </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>errorPropagation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Formats and returns the parameter values as a QString. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">errorPropagation</td><td>If adjusted sigmas should be output.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> A formatted QString containing the parameter values. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">Isis::Angle::degrees()</a>, <a class="el" href="class_isis_1_1_distance.html#a758c909952d591390686a315120ed4b7">Isis::Distance::kilometers()</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a8f9d6102f37f80cece93dfeefc69688f">solveMeanRadius()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a533303d146a986cace7e5fc686b31a31">solvePM()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#af09d4a3f2d6b5c5bf051772b615bfadc">solvePMVelocity()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a204e8b980576ff3f7ff4fc8a15dbf39a">solvePoleDec()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#aaa61f50cc6bb2d7e87c6653e0159d013">solvePoleDecAcceleration()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a2aa3f20c7efd034a17452a4b7872e9e2">solvePoleDecVelocity()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a45cb1d58c524fa3bdc779f8fe0429951">solvePoleRA()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a14ae8a56e49f381fd13f3a141d09c022">solvePoleRAAcceleration()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#aa74698c0b99e9babe243775d8309db2c">solvePoleRAVelocity()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a8f38c591f719eb282ee967bd959af3a2">solveTriaxialRadii()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a63fbb7571b0a67f28d027d78cb550323"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63fbb7571b0a67f28d027d78cb550323">&#9670;&nbsp;</a></span>formatPolePositionAdjustedSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::formatPolePositionAdjustedSigmaString </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab77643c7671fcd5fbdef97b25779bfb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab77643c7671fcd5fbdef97b25779bfb5">&#9670;&nbsp;</a></span>formatPolePositionAprioriSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::formatPolePositionAprioriSigmaString </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a221c3714f69d1eb848592d7bcfd13c8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a221c3714f69d1eb848592d7bcfd13c8a">&#9670;&nbsp;</a></span>formatRadiusAdjustedSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::formatRadiusAdjustedSigmaString </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a03ab3f01570c0b786c9b1642a3dceba0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03ab3f01570c0b786c9b1642a3dceba0">&#9670;&nbsp;</a></span>formatRadiusAprioriSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::formatRadiusAprioriSigmaString </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a37938932456d740b566e9faf4127130e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37938932456d740b566e9faf4127130e">&#9670;&nbsp;</a></span>formatValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::formatValue </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1a77fc30277917da3663b1bb606e28f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a77fc30277917da3663b1bb606e28f2">&#9670;&nbsp;</a></span>formatW0AdjustedSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::formatW0AdjustedSigmaString </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad5e05345d5255ff0ec63f93be622902"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad5e05345d5255ff0ec63f93be622902">&#9670;&nbsp;</a></span>formatW0AprioriSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::formatW0AprioriSigmaString </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8b872ec394c6be3336c7668655f96bc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b872ec394c6be3336c7668655f96bc3">&#9670;&nbsp;</a></span>formatWDotAdjustedSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::formatWDotAdjustedSigmaString </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0b9295897dc9d17fb4dd33f58efe1e92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b9295897dc9d17fb4dd33f58efe1e92">&#9670;&nbsp;</a></span>formatWDotAprioriSigmaString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::formatWDotAprioriSigmaString </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fieldWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa5bf5c6feef902ab806513bfd0a36a29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5bf5c6feef902ab806513bfd0a36a29">&#9670;&nbsp;</a></span>localRadius()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_distance.html">Distance</a> Isis::BundleTargetBody::localRadius </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_latitude.html">Latitude</a> &amp;&#160;</td>
+          <td class="paramname"><em>lat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_longitude.html">Longitude</a> &amp;&#160;</td>
+          <td class="paramname"><em>lon</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the local radius for the given latitude/longitude coordinate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lat</td><td><a class="el" href="class_isis_1_1_latitude.html" title="This class is designed to encapsulate the concept of a Latitude.">Latitude</a> coordinate. </td></tr>
+    <tr><td class="paramname">lon</td><td><a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> coordinate.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_distance.html" title="Distance measurement, usually in meters.">Distance</a></b> The distance from the center of the ellipsoid to its surface at the given lat/lon location.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"Local radius can only be found if
+                                triaxial radii were solved for." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_distance.html#accb6199bc155f11ff0f36236c6c1a902a92d8820f17a47638b5d9f7e4e62e7069">Isis::Distance::Kilometers</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a8f38c591f719eb282ee967bd959af3a2">solveTriaxialRadii()</a>.</p>
+
+</div>
+</div>
+<a id="a739d9bf7fa1d6c7f115db24847f74fe5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a739d9bf7fa1d6c7f115db24847f74fe5">&#9670;&nbsp;</a></span>meanRadius()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_distance.html">Distance</a> Isis::BundleTargetBody::meanRadius </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the mean radius. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_distance.html" title="Distance measurement, usually in meters.">Distance</a></b> The mean radius.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"The mean radius can only be accessed
+                                when solving for mean radius." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a8f9d6102f37f80cece93dfeefc69688f">solveMeanRadius()</a>.</p>
+
+</div>
+</div>
+<a id="a9d63ed30749a41cc136467192d43a9b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d63ed30749a41cc136467192d43a9b4">&#9670;&nbsp;</a></span>numberParameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BundleTargetBody::numberParameters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the total number of parameters being solved for. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The number of parameters being solved for. </dd></dl>
+
+</div>
+</div>
+<a id="a4803d9090b728bb2c7209549194b2e5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4803d9090b728bb2c7209549194b2e5f">&#9670;&nbsp;</a></span>numberRadiusParameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BundleTargetBody::numberRadiusParameters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of radius parameters being solved for. </p>
+<p>Returns the number of radius parameters being solved for which is based on the target radius solve method: None -&gt; 0 Mean -&gt; 1 All -&gt; 3</p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The number of radius parameters being solved for.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83c" title="Enumeration that defines how to solve for target radii.">TargetRadiiSolveMethod</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83caa5ca27ddc3ec83c3a643d59f14f127a9">All</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca2371821cff2969caed002c160bfea009">Mean</a>.</p>
+
+</div>
+</div>
+<a id="a3874ffeb84e1daa5b0a9225f060dc65c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3874ffeb84e1daa5b0a9225f060dc65c">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_bundle_target_body.html">BundleTargetBody</a> &amp; Isis::BundleTargetBody::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bundle_target_body.html">BundleTargetBody</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Assignment operator. </p>
+<p>Makes this a copy of another <a class="el" href="class_isis_1_1_bundle_target_body.html" title="This class is used to represent a target body in a bundle and how to solve for it.">BundleTargetBody</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The other <a class="el" href="class_isis_1_1_bundle_target_body.html" title="This class is used to represent a target body in a bundle and how to solve for it.">BundleTargetBody</a> to assign from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2e3310d6727bd51d6d3b90f07180e268"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e3310d6727bd51d6d3b90f07180e268">&#9670;&nbsp;</a></span>parameterCorrections()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp; Isis::BundleTargetBody::parameterCorrections </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the vector of corrections applied to the parameters. </p>
+<p>See setSolveSettings for how the vector is ordered.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>vector&lt;double&gt;&amp;</b> The vector of parameter corrections.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0" title="Sets the solve settings for the target body.">setSolveSettings</a> </dd></dl>
+
+</div>
+</div>
+<a id="accd91415a72d0f5009c9c2fb8ed904e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accd91415a72d0f5009c9c2fb8ed904e0">&#9670;&nbsp;</a></span>parameterList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::BundleTargetBody::parameterList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a list of all the parameters being solved for as QStrings. </p>
+<p>This should only be called after formatBundleOutputString.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>QStringList</b> A list of the parameters being solved for.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d" title="Formats and returns the parameter values as a QString.">formatBundleOutputString</a> </dd></dl>
+
+</div>
+</div>
+<a id="a74b4d467f33ce2496e22ad9a76881a38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74b4d467f33ce2496e22ad9a76881a38">&#9670;&nbsp;</a></span>parameterSolution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp; Isis::BundleTargetBody::parameterSolution </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the vector of parameters solution. </p>
+<p>See setSolveSettings for how the vector is ordered.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>vector&lt;double&gt;&amp;</b> The vector of parameter solution.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0" title="Sets the solve settings for the target body.">setSolveSettings</a> </dd></dl>
+
+</div>
+</div>
+<a id="a0e08d0abdfa56faa097dbcd5b88601eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e08d0abdfa56faa097dbcd5b88601eb">&#9670;&nbsp;</a></span>parameterWeights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp; Isis::BundleTargetBody::parameterWeights </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the vector of parameter weights. </p>
+<p>See setSolveSettings for how the vector is ordered.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>vector&lt;double&gt;&amp;</b> The vector of parameter weights.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0" title="Sets the solve settings for the target body.">setSolveSettings</a> </dd></dl>
+
+</div>
+</div>
+<a id="a4002d6cdd379489a5b5f08946f896535"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4002d6cdd379489a5b5f08946f896535">&#9670;&nbsp;</a></span>pmCoefs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="class_isis_1_1_angle.html">Angle</a> &gt; Isis::BundleTargetBody::pmCoefs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the coefficients of the prime meridian polynomial. </p>
+<p>Returns The vector of prime meridian polynomial coefficients ordered as:</p>
+<p>angle, velocity, acceleration.</p>
+<p>Only coefficients that are being solved for will be included.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>vector&lt;Angle&gt;</b> The prime meridian polynomial coefficients. </dd></dl>
+
+</div>
+</div>
+<a id="ac92e6e39da25499d0e1fe155694a9895"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac92e6e39da25499d0e1fe155694a9895">&#9670;&nbsp;</a></span>poleDecCoefs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="class_isis_1_1_angle.html">Angle</a> &gt; Isis::BundleTargetBody::poleDecCoefs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the coefficients of the declination polynomial. </p>
+<p>Returns The vector of declination polynomial coefficients ordered as:</p>
+<p>angle, velocity, acceleration.</p>
+<p>Only coefficients that are being solved for will be included.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>vector&lt;Angle&gt;</b> The declination polynomial coefficients. </dd></dl>
+
+</div>
+</div>
+<a id="a1bfd51e1a3b32b9d872e484ea6fec6b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bfd51e1a3b32b9d872e484ea6fec6b2">&#9670;&nbsp;</a></span>poleRaCoefs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="class_isis_1_1_angle.html">Angle</a> &gt; Isis::BundleTargetBody::poleRaCoefs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the coefficients of the right ascension polynomial. </p>
+<p>Returns The vector of right ascension polynomial coefficients ordered as:</p>
+<p>angle, velocity, acceleration.</p>
+<p>Only coefficients that are being solved for will be included.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>vector&lt;Angle&gt;</b> The right ascension polynomial coefficients. </dd></dl>
+
+</div>
+</div>
+<a id="a3326eee615f7df19232b41bc476d15da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3326eee615f7df19232b41bc476d15da">&#9670;&nbsp;</a></span>radii()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="class_isis_1_1_distance.html">Distance</a> &gt; Isis::BundleTargetBody::radii </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the radius values. </p>
+<p>Returns the vector of radius values formatted as RadiusA, RadiusB, RadiusC.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>vector&lt;Distance&gt;</b> The vector of radius values.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"The triaxial radii can only be accessed
+                                when solving for triaxial radii." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a8f38c591f719eb282ee967bd959af3a2">solveTriaxialRadii()</a>.</p>
+
+</div>
+</div>
+<a id="adc9c05aa4579294682303ebd431417ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc9c05aa4579294682303ebd431417ef">&#9670;&nbsp;</a></span>readFromPvl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::readFromPvl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;&#160;</td>
+          <td class="paramname"><em>tbObject</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set bundle solve parameters for target body from a pvl file. </p>
+<p>specifically for standard jigsaw interface, not the Integrated Photogrammetric <a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> <a class="el" href="class_isis_1_1_environment.html">Environment</a> (IPCE)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tbObject</td><td>The <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> file to read from.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If the solve parameters were successfuly set.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"Ra must be given as none, position, velocity, or acceleration" </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"Dec must be given as none, position, velocity, or acceleration" </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"Pm must be given as none, position, velocity, or acceleration" </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiiSolveOption must be given as none, triaxial, or mean" </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RaValue must be a valid double (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RaSigma must be a valid double (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RaVelocityValue must be a valid double (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RaVelocitySigma must be a valid double (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RaAccelerationValue must be a valid double
+                          (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RaAccelerationSigma must be a valid double
+                          (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"DecValue must be a valid double (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"DecSigma must be a valid double (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"DecVelocityValue must be a valid double
+                          (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"DecVelocitySigma must be a valid double
+                          (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"DecAccelerationValue must be a valid double
+                          (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"DecAccelerationSigma must be a valid double
+                          (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"PmValue must be a valid double (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"PmSigma must be a valid double (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"PmVelocityValue must be a valid double (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"PmVelocitySigma must be a valid double (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"PmAccelerationValue must be a valid double
+                          (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"PmAccelerationSigma must be a valid double
+                          (&gt;= 0; blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusAValue must be a valid double (blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusAValue must be &gt;= 0." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusASigma must be a valid double (blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusASigma must be &gt;= 0." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusBValue must be a valid double (blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusBValue must be &gt;= 0". </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusBSigma must be a valid double (blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusBSigma must be &gt;= 0". </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusCValue must be a valid double (blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusCValue must be &gt;= 0". </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusCSigma must be a valid double (blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"RadiusCSigma must be &gt;= 0". </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"MeanRadiusValue must be a valid double (blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"MeanRadiusValue must be &gt;= 0". </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"MeanRadiusSigma must be a valid double (blank defaults to 0)." </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">IException::User</a></td><td>"MeanRadiusSigma must be &gt;= 0".</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0" title="Sets the solve settings for the target body.">setSolveSettings</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a71fc367422b8b800200dba566c7e101b">AccelerationPM</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a390afd93ef0b2161283b982627bf3f1d">AccelerationPoleDec</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a71db26ff19fa735dbeaa6aa00762eb4e">AccelerationPoleRA</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83caa5ca27ddc3ec83c3a643d59f14f127a9">All</a>, <a class="el" href="class_isis_1_1_pvl_object.html#a104ace5831925cd02bb8829c484ec77e">Isis::PvlObject::beginGroup()</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="class_isis_1_1_pvl_object.html#ad24c09c470081027b0ddbf50958e481d">Isis::PvlObject::endGroup()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca2371821cff2969caed002c160bfea009">Mean</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a621c3bd02660845d30f52bf42afcf24c">MeanRadius</a>, <a class="el" href="class_isis_1_1_distance.html#accb6199bc155f11ff0f36236c6c1a902ab89a588cde6b6f8840cee8991ffc9278">Isis::Distance::Meters</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca17ffdf79ee8fec9fcfa222da9b30a57f">None</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a0c528ea2dd1cc54ba9e38d1dea739ab0">PM</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a6a608d5a4035d5193408ad4334d2f894">PoleDec</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390acbfae654823d3313bd7c379a75b5cf08">PoleRA</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0">setSolveSettings()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390ab466057d5284b34c80226fe505b7e49d">TriaxialRadiusA</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a82223f8dfbdf92921049aded28fd83cf">TriaxialRadiusB</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a2da676cc0637271645c3cbd5bbeb7910">TriaxialRadiusC</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a532060601544c19ee68c4b4eaeab9a25">VelocityPM</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aa0415b4e1ddde399b7485daaa2694bd7">VelocityPoleDec</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aaa076ccaff64ab6e56fb3ca63e477290">VelocityPoleRA</a>.</p>
+
+</div>
+</div>
+<a id="a2d2c7a540a7c315983cdb2e3d43a0ed0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d2c7a540a7c315983cdb2e3d43a0ed0">&#9670;&nbsp;</a></span>setSolveSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleTargetBody::setSolveSettings </td>
+          <td>(</td>
+          <td class="paramtype">std::set&lt; int &gt;&#160;</td>
+          <td class="paramname"><em>targetParameterSolveCodes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>aprioriPoleRA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>sigmaPoleRA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>aprioriVelocityPoleRA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>sigmaVelocityPoleRA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>aprioriPoleDec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>sigmaPoleDec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>aprioriVelocityPoleDec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>sigmaVelocityPoleDec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>aprioriPM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>sigmaPM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>aprioriVelocityPM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_angle.html">Angle</a>&#160;</td>
+          <td class="paramname"><em>sigmaVelocityPM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83c">TargetRadiiSolveMethod</a>&#160;</td>
+          <td class="paramname"><em>solveRadiiMethod</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td>
+          <td class="paramname"><em>aprioriRadiusA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td>
+          <td class="paramname"><em>sigmaRadiusA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td>
+          <td class="paramname"><em>aprioriRadiusB</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td>
+          <td class="paramname"><em>sigmaRadiusB</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td>
+          <td class="paramname"><em>aprioriRadiusC</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td>
+          <td class="paramname"><em>sigmaRadiusC</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td>
+          <td class="paramname"><em>aprioriMeanRadius</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td>
+          <td class="paramname"><em>sigmaMeanRadius</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the solve settings for the target body. </p>
+<p>Sets the solve settings for the target body's right ascension, declination, prime meridian, and radius based on the input values. Parameter vectors, sigma vectors and the weight vector will be filled in the following order:</p>
+<p>pole right ascension, pole right ascension velocity, pole right ascension acceleration, pole declination, pole declination velocity, pole declination acceleration, prime meridian, prime meridian velocity, prime meridian acceleration, triaxial radius A, triaxial radius B, triaxial radius C, mean radius.</p>
+<p>Any parameters that are not being solved for (based on targetParameterSolveCodes) will be omitted. For example, if solving for pole right ascension, pole declination, prime meridian, and mean radius; the vectors would be:</p>
+<p>pole right ascension, pole declination, prime meridian, mean radius.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">targetParameterSolveCodes</td><td>A set of TargetSolveCodes indicating what to solve for. </td></tr>
+    <tr><td class="paramname">aprioriPoleRA</td><td>The apriori pole right ascension angle. </td></tr>
+    <tr><td class="paramname">sigmaPoleRA</td><td>The apriori pole right ascension angle sigma. </td></tr>
+    <tr><td class="paramname">aprioriVelocityPoleRA</td><td>The apriori pole right ascension velocity. </td></tr>
+    <tr><td class="paramname">sigmaVelocityPoleRA</td><td>The apriori pole right ascension velocity sigma. </td></tr>
+    <tr><td class="paramname">aprioriPoleDec</td><td>The apriori pole declination angle. </td></tr>
+    <tr><td class="paramname">sigmaPoleDec</td><td>The apriori pole declination angle sigma. </td></tr>
+    <tr><td class="paramname">aprioriVelocityPoleDec</td><td>The apriori pole declination velocity. </td></tr>
+    <tr><td class="paramname">sigmaVelocityPoleDec</td><td>The apriori pole declination velocity sigma. </td></tr>
+    <tr><td class="paramname">aprioriPM</td><td>The apriori prime meridian angle. </td></tr>
+    <tr><td class="paramname">sigmaPM</td><td>The apriori prime meridian angle sigma. </td></tr>
+    <tr><td class="paramname">aprioriVelocityPM</td><td>The apriori prime meridian velocity. </td></tr>
+    <tr><td class="paramname">sigmaVelocityPM</td><td>The apriori prime meridian velocity sigma. </td></tr>
+    <tr><td class="paramname">solveRadiiMethod</td><td>What radius to solve for. </td></tr>
+    <tr><td class="paramname">aprioriRadiusA</td><td>The apriori A radius distance. </td></tr>
+    <tr><td class="paramname">sigmaRadiusA</td><td>The apriori A radius distance sigma. </td></tr>
+    <tr><td class="paramname">aprioriRadiusB</td><td>The apriori B radius distance. </td></tr>
+    <tr><td class="paramname">sigmaRadiusB</td><td>The apriori B Radius distance sigma. </td></tr>
+    <tr><td class="paramname">aprioriRadiusC</td><td>The apriori C radius distance. </td></tr>
+    <tr><td class="paramname">sigmaRadiusC</td><td>The apriori C radius distance sigma. </td></tr>
+    <tr><td class="paramname">aprioriMeanRadius</td><td>The apriori mean radius distance. </td></tr>
+    <tr><td class="paramname">sigmaMeanRadius</td><td>the apriori mean radius distance sigma.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_bundle_target_body.html#adc9c05aa4579294682303ebd431417ef" title="Set bundle solve parameters for target body from a pvl file.">readFromPvl(PvlObject &amp;tbObject)</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83caa5ca27ddc3ec83c3a643d59f14f127a9">All</a>, <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">Isis::Angle::degrees()</a>, <a class="el" href="class_isis_1_1_distance.html#a758c909952d591390686a315120ed4b7">Isis::Distance::kilometers()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca2371821cff2969caed002c160bfea009">Mean</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a621c3bd02660845d30f52bf42afcf24c">MeanRadius</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a0c528ea2dd1cc54ba9e38d1dea739ab0">PM</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a6a608d5a4035d5193408ad4334d2f894">PoleDec</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390acbfae654823d3313bd7c379a75b5cf08">PoleRA</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4af5e719ba5a60cbf4a9a4f26d2608acd0">Isis::Angle::Radians</a>, <a class="el" href="class_isis_1_1_angle.html#a540094df5ef34039be5e146b7281145a">Isis::Angle::radians()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a533303d146a986cace7e5fc686b31a31">solvePM()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#af09d4a3f2d6b5c5bf051772b615bfadc">solvePMVelocity()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a204e8b980576ff3f7ff4fc8a15dbf39a">solvePoleDec()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a2aa3f20c7efd034a17452a4b7872e9e2">solvePoleDecVelocity()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a45cb1d58c524fa3bdc779f8fe0429951">solvePoleRA()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#aa74698c0b99e9babe243775d8309db2c">solvePoleRAVelocity()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390ab466057d5284b34c80226fe505b7e49d">TriaxialRadiusA</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a82223f8dfbdf92921049aded28fd83cf">TriaxialRadiusB</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a2da676cc0637271645c3cbd5bbeb7910">TriaxialRadiusC</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a532060601544c19ee68c4b4eaeab9a25">VelocityPM</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aa0415b4e1ddde399b7485daaa2694bd7">VelocityPoleDec</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aaa076ccaff64ab6e56fb3ca63e477290">VelocityPoleRA</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_target_body.html#adc9c05aa4579294682303ebd431417ef">readFromPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a8f9d6102f37f80cece93dfeefc69688f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f9d6102f37f80cece93dfeefc69688f">&#9670;&nbsp;</a></span>solveMeanRadius()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::solveMeanRadius </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the mean radius will be solved for with this target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If it will be solved for. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a621c3bd02660845d30f52bf42afcf24c">MeanRadius</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">formatBundleOutputString()</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a739d9bf7fa1d6c7f115db24847f74fe5">meanRadius()</a>.</p>
+
+</div>
+</div>
+<a id="a533303d146a986cace7e5fc686b31a31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a533303d146a986cace7e5fc686b31a31">&#9670;&nbsp;</a></span>solvePM()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::solvePM </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the prime meridian angle will be solved for with this target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If it will be solved for. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a0c528ea2dd1cc54ba9e38d1dea739ab0">PM</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">formatBundleOutputString()</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0">setSolveSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a7feff34d0760482ec792a5439b91d8c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7feff34d0760482ec792a5439b91d8c6">&#9670;&nbsp;</a></span>solvePMAcceleration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::solvePMAcceleration </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the prime meridian acceleration will be solved for with this target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If it will be solved for. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a71fc367422b8b800200dba566c7e101b">AccelerationPM</a>.</p>
+
+</div>
+</div>
+<a id="af09d4a3f2d6b5c5bf051772b615bfadc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af09d4a3f2d6b5c5bf051772b615bfadc">&#9670;&nbsp;</a></span>solvePMVelocity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::solvePMVelocity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the prime meridian velocity will be solved for with this target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If it will be solved for. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a532060601544c19ee68c4b4eaeab9a25">VelocityPM</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">formatBundleOutputString()</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0">setSolveSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a204e8b980576ff3f7ff4fc8a15dbf39a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a204e8b980576ff3f7ff4fc8a15dbf39a">&#9670;&nbsp;</a></span>solvePoleDec()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::solvePoleDec </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the pole declination angle will be solved for with this target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If it will be solved for. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a6a608d5a4035d5193408ad4334d2f894">PoleDec</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">formatBundleOutputString()</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0">setSolveSettings()</a>.</p>
+
+</div>
+</div>
+<a id="aaa61f50cc6bb2d7e87c6653e0159d013"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa61f50cc6bb2d7e87c6653e0159d013">&#9670;&nbsp;</a></span>solvePoleDecAcceleration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::solvePoleDecAcceleration </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the pole declination acceleration will be solved for with this target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If it will be solved for. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a390afd93ef0b2161283b982627bf3f1d">AccelerationPoleDec</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">formatBundleOutputString()</a>.</p>
+
+</div>
+</div>
+<a id="a2aa3f20c7efd034a17452a4b7872e9e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2aa3f20c7efd034a17452a4b7872e9e2">&#9670;&nbsp;</a></span>solvePoleDecVelocity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::solvePoleDecVelocity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the pole declination velocity will be solved for with this target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If it will be solved for. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aa0415b4e1ddde399b7485daaa2694bd7">VelocityPoleDec</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">formatBundleOutputString()</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0">setSolveSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a45cb1d58c524fa3bdc779f8fe0429951"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45cb1d58c524fa3bdc779f8fe0429951">&#9670;&nbsp;</a></span>solvePoleRA()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::solvePoleRA </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the pole right ascension angle will be solved for with this target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If it will be solved for. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390acbfae654823d3313bd7c379a75b5cf08">PoleRA</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">formatBundleOutputString()</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0">setSolveSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a14ae8a56e49f381fd13f3a141d09c022"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14ae8a56e49f381fd13f3a141d09c022">&#9670;&nbsp;</a></span>solvePoleRAAcceleration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::solvePoleRAAcceleration </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the pole right ascension acceleration will be solved for with this target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If it will be solved for. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a71db26ff19fa735dbeaa6aa00762eb4e">AccelerationPoleRA</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">formatBundleOutputString()</a>.</p>
+
+</div>
+</div>
+<a id="aa74698c0b99e9babe243775d8309db2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa74698c0b99e9babe243775d8309db2c">&#9670;&nbsp;</a></span>solvePoleRAVelocity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::solvePoleRAVelocity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the pole right ascension velocity will be solved for with this target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If it will be solved for. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390aaa076ccaff64ab6e56fb3ca63e477290">VelocityPoleRA</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">formatBundleOutputString()</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a2d2c7a540a7c315983cdb2e3d43a0ed0">setSolveSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a8f38c591f719eb282ee967bd959af3a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f38c591f719eb282ee967bd959af3a2">&#9670;&nbsp;</a></span>solveTriaxialRadii()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BundleTargetBody::solveTriaxialRadii </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If the triaxial radii will be solved for with this target body. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> If it will be solved for. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390ab466057d5284b34c80226fe505b7e49d">TriaxialRadiusA</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a82223f8dfbdf92921049aded28fd83cf">TriaxialRadiusB</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a93da0771c8236607384baaafc1049390a2da676cc0637271645c3cbd5bbeb7910">TriaxialRadiusC</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_target_body.html#a6691fe8bd903504355d777e183daa48d">formatBundleOutputString()</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#aa5bf5c6feef902ab806513bfd0a36a29">localRadius()</a>, and <a class="el" href="class_isis_1_1_bundle_target_body.html#a3326eee615f7df19232b41bc476d15da">radii()</a>.</p>
+
+</div>
+</div>
+<a id="aa09e8eb5c1caeee4354dadfb58f2795a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa09e8eb5c1caeee4354dadfb58f2795a">&#9670;&nbsp;</a></span>stringToTargetRadiiOption()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83c">BundleTargetBody::TargetRadiiSolveMethod</a> Isis::BundleTargetBody::stringToTargetRadiiOption </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a QString to a TargetRadiiSolveMethod. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The Qstring of a solve method.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>TargetRadiiSolveMethod</b> The converted solve method.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"Unknown target body radius solution method" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83caa5ca27ddc3ec83c3a643d59f14f127a9">All</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca2371821cff2969caed002c160bfea009">Mean</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca17ffdf79ee8fec9fcfa222da9b30a57f">None</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+</div>
+</div>
+<a id="a2a4562f1bbceb6b24aaad9ff11f7431a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a4562f1bbceb6b24aaad9ff11f7431a">&#9670;&nbsp;</a></span>targetRadiiOptionToString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleTargetBody::targetRadiiOptionToString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83c">TargetRadiiSolveMethod</a>&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a TargetRadiiSolveMethod to a QString. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The TargetRadiiSolveMethod to convert.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The solve method as a QString.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"Unknown target body radius solve method enum" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83caa5ca27ddc3ec83c3a643d59f14f127a9">All</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca2371821cff2969caed002c160bfea009">Mean</a>, <a class="el" href="class_isis_1_1_bundle_target_body.html#a0561e5d2d5507d777a90e36acb8ed83ca17ffdf79ee8fec9fcfa222da9b30a57f">None</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a3f7dcad77e60b1e91b3e60580568031e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f7dcad77e60b1e91b3e60580568031e">&#9670;&nbsp;</a></span>vtpv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BundleTargetBody::vtpv </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates and returns the weighted sum of the squares of the corrections. </p>
+<p>Calculates and returns the weighted sum of the squares of the corrections computed by V(T)*P*V where: V is the vector of corrections, P is the weight matrix, V(T) is the transpose of V.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> The weighted sum of the squares of the corrections (vtpv). </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleUtilities/<a class="el" href="_bundle_target_body_8h_source.html">BundleTargetBody.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleUtilities/<a class="el" href="_bundle_target_body_8cpp.html">BundleTargetBody.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_bundle_target_body.html">BundleTargetBody</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

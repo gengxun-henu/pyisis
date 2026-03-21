@@ -1,0 +1,377 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/BulletShapeModel/BulletShapeModel.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_bullet_shape_model_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">BulletShapeModel.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_bullet_shape_model_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef BulletShapeModel_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define BulletShapeModel_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_shape_model_8h.html">ShapeModel.h</a>&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QList&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QMap&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_intercept_8h.html">Intercept.h</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_bullet_all_hits_ray_callback_8h.html">BulletAllHitsRayCallback.h</a>&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_bullet_closest_ray_callback_8h.html">BulletClosestRayCallback.h</a>&quot;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_bullet_target_shape_8h.html">BulletTargetShape.h</a>&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_bullet_world_manager_8h.html">BulletWorldManager.h</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_target_8h.html">Target.h</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keyword">class </span>Target;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="class_isis_1_1_bullet_shape_model.html">   35</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_bullet_shape_model.html">BulletShapeModel</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_shape_model.html">ShapeModel</a> {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;      <span class="comment">// Constructors</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;      <a class="code" href="class_isis_1_1_bullet_shape_model.html#a579ec0e14d20f63bb554301ed801e8e6">BulletShapeModel</a>();</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;      <a class="code" href="class_isis_1_1_bullet_shape_model.html#a579ec0e14d20f63bb554301ed801e8e6">BulletShapeModel</a>(<a class="code" href="class_isis_1_1_target.html">Target</a> *target, <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl);</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="class_isis_1_1_bullet_shape_model.html#a1a3c7ac596a2f215999a4b196be6e017">   40</a></span>&#160;      <a class="code" href="class_isis_1_1_bullet_shape_model.html#a1a3c7ac596a2f215999a4b196be6e017">BulletShapeModel</a>(<span class="keyword">const</span> QString &amp;shapefile, <a class="code" href="class_isis_1_1_target.html">Target</a> *target, <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;      <a class="code" href="class_isis_1_1_bullet_shape_model.html#a579ec0e14d20f63bb554301ed801e8e6">BulletShapeModel</a>(<a class="code" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> *shape, <a class="code" href="class_isis_1_1_target.html">Target</a> *target, <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;      <a class="code" href="class_isis_1_1_bullet_shape_model.html#a579ec0e14d20f63bb554301ed801e8e6">BulletShapeModel</a>(<a class="code" href="class_isis_1_1_bullet_world_manager.html">BulletWorldManager</a> *<a class="code" href="class_isis_1_1_bullet_shape_model.html#a02981ff600d602204fd1051fbb53abec">model</a>, <a class="code" href="class_isis_1_1_target.html">Target</a> *target, <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;      <span class="comment">// Destructor</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;      <a class="code" href="class_isis_1_1_bullet_shape_model.html#aa5f9046a661c0484f1314c83a710d2a8">~BulletShapeModel</a>();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#a4f213254609f0b39151aed29b2ce3321">getTolerance</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;      <span class="keywordtype">void</span>   <a class="code" href="class_isis_1_1_bullet_shape_model.html#afabfa323c12c7848c2bb302b737375d7">setTolerance</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> &amp;tolerance);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;      <span class="comment">// Intersect the shape model</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#ae3122dde9d6b50300828df08c808de1e">intersectSurface</a>(std::vector&lt;double&gt; observerPos,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                            std::vector&lt;double&gt; lookDirection);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#ae3122dde9d6b50300828df08c808de1e">intersectSurface</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_latitude.html">Latitude</a> &amp;lat, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_longitude.html">Longitude</a> &amp;lon,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                                    <span class="keyword">const</span> std::vector&lt;double&gt; &amp;observerPos,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                    <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;checkOcclusion = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#ae3122dde9d6b50300828df08c808de1e">intersectSurface</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> &amp;surfpt, </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                                    <span class="keyword">const</span> std::vector&lt;double&gt; &amp;observerPos,</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                                    <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;checkOcclusion = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#ae3b4a18dece05165d32dd9d984ae700b">setSurfacePoint</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> &amp;surfacePoint);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#aa9511754d32c722f26ad9e4f1d1eead7">clearSurfacePoint</a>();</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      <span class="comment">// Calculate the default normal of the current intersection point</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#a64578567500811bd56d2f7b11f10c696">calculateDefaultNormal</a>();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#ad9fbd5dee5d3a6168643bd43f1ae4994">isDEM</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      <span class="comment">// Calculate the surface normal of the current intersection point</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#ac3a65944aeb676f63ae1dac30e69da6f">setLocalNormalFromIntercept</a>();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#a258fc0331f0621d23afdb9dab38dff8e">calculateLocalNormal</a>(<a class="code" href="class_q_vector.html">QVector&lt;double *&gt;</a> cornerNeighborPoints);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#a1d6d76106a20cc6ed0fa6735ae23e403">calculateSurfaceNormal</a>();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      <a class="code" href="class_isis_1_1_distance.html">Distance</a> <a class="code" href="class_isis_1_1_bullet_shape_model.html#a296727972842ab32c8bce5d8664dc153">localRadius</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_latitude.html">Latitude</a> &amp;lat, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_longitude.html">Longitude</a> &amp;lon);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      <a class="code" href="class_q_vector.html">QVector&lt;double&gt;</a> <a class="code" href="class_isis_1_1_bullet_shape_model.html#a41d289fd7cb3cc790e53ff6c80663058">ellipsoidNormal</a>();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_bullet_world_manager.html">BulletWorldManager</a> &amp;<a class="code" href="class_isis_1_1_bullet_shape_model.html#a02981ff600d602204fd1051fbb53abec">model</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <span class="comment">// Determine if the internal intercept is occluded from the observer/lookdir</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_bullet_shape_model.html#a4f56cc2b7e150bde73dc9f752b246751">isVisibleFrom</a>(<span class="keyword">const</span> std::vector&lt;double&gt; observerPos,</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                                 <span class="keyword">const</span> std::vector&lt;double&gt; lookDirection);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <span class="comment">// Disallow copying because ShapeModel is not copyable</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      Q_DISABLE_COPY(<a class="code" href="class_isis_1_1_bullet_shape_model.html">BulletShapeModel</a>)</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      QScopedPointer&lt;BulletWorldManager&gt; m_model;        </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      <span class="keywordtype">double</span>                             m_tolerance;    </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <a class="code" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a>           m_intercept;    </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      btScalar maxDistance() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      btVector3 castLookDir(<span class="keyword">const</span> btVector3 &amp;observer, <span class="keyword">const</span> btVector3 &amp;lookdir) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;      btVector3 latlonToVector(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_latitude.html">Latitude</a> &amp;lat, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_longitude.html">Longitude</a> &amp;lon) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      btVector3 pointToVector(<span class="keyword">const</span>  <a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> &amp;point) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      <a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> makeSurfacePoint(<span class="keyword">const</span> btVector3 &amp;point) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <a class="code" href="class_q_vector.html">QVector&lt;BulletClosestRayCallback&gt;</a> sortHits(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_bullet_all_hits_ray_callback.html">BulletAllHitsRayCallback</a> &amp;hits,</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                                                 <span class="keyword">const</span> btVector3 &amp;sortPoint) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <span class="keywordtype">bool</span> isOccluded(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a> &amp;hit,</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                      <span class="keyword">const</span> btVector3 &amp;observer) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      <span class="keywordtype">void</span> updateShapeModel(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_bullet_closest_ray_callback.html">BulletClosestRayCallback</a> &amp;result);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  };</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;}</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_bullet_all_hits_ray_callback_8h_html"><div class="ttname"><a href="_bullet_all_hits_ray_callback_8h.html">BulletAllHitsRayCallback.h</a></div></div>
+<div class="ttc" id="a_bullet_closest_ray_callback_8h_html"><div class="ttname"><a href="_bullet_closest_ray_callback_8h.html">BulletClosestRayCallback.h</a></div></div>
+<div class="ttc" id="a_bullet_target_shape_8h_html"><div class="ttname"><a href="_bullet_target_shape_8h.html">BulletTargetShape.h</a></div></div>
+<div class="ttc" id="a_bullet_world_manager_8h_html"><div class="ttname"><a href="_bullet_world_manager_8h.html">BulletWorldManager.h</a></div></div>
+<div class="ttc" id="a_intercept_8h_html"><div class="ttname"><a href="_intercept_8h.html">Intercept.h</a></div></div>
+<div class="ttc" id="a_shape_model_8h_html"><div class="ttname"><a href="_shape_model_8h.html">ShapeModel.h</a></div></div>
+<div class="ttc" id="a_target_8h_html"><div class="ttname"><a href="_target_8h.html">Target.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_all_hits_ray_callback_html"><div class="ttname"><a href="class_isis_1_1_bullet_all_hits_ray_callback.html">Isis::BulletAllHitsRayCallback</a></div><div class="ttdoc">Bullet ray tracing callback to return all intersections along a ray's path.</div><div class="ttdef"><b>Definition:</b> BulletAllHitsRayCallback.h:30</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_closest_ray_callback_html"><div class="ttname"><a href="class_isis_1_1_bullet_closest_ray_callback.html">Isis::BulletClosestRayCallback</a></div><div class="ttdoc">Bullet ray tracing callback for closest hit on target surface.</div><div class="ttdef"><b>Definition:</b> BulletClosestRayCallback.h:33</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html">Isis::BulletShapeModel</a></div><div class="ttdoc">Shape model that uses the Bullet library to perform ray tracing.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.h:35</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_a02981ff600d602204fd1051fbb53abec"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#a02981ff600d602204fd1051fbb53abec">Isis::BulletShapeModel::model</a></div><div class="ttdeci">const BulletWorldManager &amp; model() const</div><div class="ttdoc">Returns a direct reference to the Bullet world that contains the target shape and can perform ray cas...</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:600</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_a1a3c7ac596a2f215999a4b196be6e017"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#a1a3c7ac596a2f215999a4b196be6e017">Isis::BulletShapeModel::BulletShapeModel</a></div><div class="ttdeci">BulletShapeModel(const QString &amp;shapefile, Target *target, Pvl &amp;pvl)</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_a1d6d76106a20cc6ed0fa6735ae23e403"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#a1d6d76106a20cc6ed0fa6735ae23e403">Isis::BulletShapeModel::calculateSurfaceNormal</a></div><div class="ttdeci">void calculateSurfaceNormal()</div><div class="ttdoc">compute the ellipsoid surface normal of the target</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:539</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_a258fc0331f0621d23afdb9dab38dff8e"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#a258fc0331f0621d23afdb9dab38dff8e">Isis::BulletShapeModel::calculateLocalNormal</a></div><div class="ttdeci">void calculateLocalNormal(QVector&lt; double * &gt; cornerNeighborPoints)</div><div class="ttdoc">Compute the normal for a local region of surface points.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:516</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_a296727972842ab32c8bce5d8664dc153"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#a296727972842ab32c8bce5d8664dc153">Isis::BulletShapeModel::localRadius</a></div><div class="ttdeci">Distance localRadius(const Latitude &amp;lat, const Longitude &amp;lon)</div><div class="ttdoc">Compute the radius of the body at a lat/lon point.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:410</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_a41d289fd7cb3cc790e53ff6c80663058"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#a41d289fd7cb3cc790e53ff6c80663058">Isis::BulletShapeModel::ellipsoidNormal</a></div><div class="ttdeci">QVector&lt; double &gt; ellipsoidNormal()</div><div class="ttdoc">Compute the true surface normal vector of an ellipsoid.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:560</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_a4f213254609f0b39151aed29b2ce3321"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#a4f213254609f0b39151aed29b2ce3321">Isis::BulletShapeModel::getTolerance</a></div><div class="ttdeci">double getTolerance() const</div><div class="ttdoc">Returns the occlusion tolerance in kilometers.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:167</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_a4f56cc2b7e150bde73dc9f752b246751"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#a4f56cc2b7e150bde73dc9f752b246751">Isis::BulletShapeModel::isVisibleFrom</a></div><div class="ttdeci">virtual bool isVisibleFrom(const std::vector&lt; double &gt; observerPos, const std::vector&lt; double &gt; lookDirection)</div><div class="ttdoc">Check if the saved intercept is visible from a observer with a given look direction.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:470</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_a579ec0e14d20f63bb554301ed801e8e6"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#a579ec0e14d20f63bb554301ed801e8e6">Isis::BulletShapeModel::BulletShapeModel</a></div><div class="ttdeci">BulletShapeModel()</div><div class="ttdoc">Default constructor that creates a shape model without any internal model.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:53</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_a64578567500811bd56d2f7b11f10c696"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#a64578567500811bd56d2f7b11f10c696">Isis::BulletShapeModel::calculateDefaultNormal</a></div><div class="ttdeci">void calculateDefaultNormal()</div><div class="ttdoc">Calculate the surface normal of the ellipsoid as the default.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:531</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_aa5f9046a661c0484f1314c83a710d2a8"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#aa5f9046a661c0484f1314c83a710d2a8">Isis::BulletShapeModel::~BulletShapeModel</a></div><div class="ttdeci">~BulletShapeModel()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:159</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_aa9511754d32c722f26ad9e4f1d1eead7"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#aa9511754d32c722f26ad9e4f1d1eead7">Isis::BulletShapeModel::clearSurfacePoint</a></div><div class="ttdeci">virtual void clearSurfacePoint()</div><div class="ttdoc">Clear the saved surface point and reset the saved intersection.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:388</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_ac3a65944aeb676f63ae1dac30e69da6f"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#ac3a65944aeb676f63ae1dac30e69da6f">Isis::BulletShapeModel::setLocalNormalFromIntercept</a></div><div class="ttdeci">void setLocalNormalFromIntercept()</div><div class="ttdoc">Set the normal vector to the intercept point normal.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:436</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_ad9fbd5dee5d3a6168643bd43f1ae4994"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#ad9fbd5dee5d3a6168643bd43f1ae4994">Isis::BulletShapeModel::isDEM</a></div><div class="ttdeci">bool isDEM() const</div><div class="ttdoc">Indicates that this shape model is not from a DEM.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:456</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_ae3122dde9d6b50300828df08c808de1e"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#ae3122dde9d6b50300828df08c808de1e">Isis::BulletShapeModel::intersectSurface</a></div><div class="ttdeci">bool intersectSurface(std::vector&lt; double &gt; observerPos, std::vector&lt; double &gt; lookDirection)</div><div class="ttdoc">This method computes a DEM intercept point given an observer location and look direction using the Bu...</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:193</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_ae3b4a18dece05165d32dd9d984ae700b"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#ae3b4a18dece05165d32dd9d984ae700b">Isis::BulletShapeModel::setSurfacePoint</a></div><div class="ttdeci">virtual void setSurfacePoint(const SurfacePoint &amp;surfacePoint)</div><div class="ttdoc">Set the internal surface point.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:379</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_shape_model_html_afabfa323c12c7848c2bb302b737375d7"><div class="ttname"><a href="class_isis_1_1_bullet_shape_model.html#afabfa323c12c7848c2bb302b737375d7">Isis::BulletShapeModel::setTolerance</a></div><div class="ttdeci">void setTolerance(const double &amp;tolerance)</div><div class="ttdoc">Sets the occlusion tolerance.</div><div class="ttdef"><b>Definition:</b> BulletShapeModel.cpp:177</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_target_shape_html"><div class="ttname"><a href="class_isis_1_1_bullet_target_shape.html">Isis::BulletTargetShape</a></div><div class="ttdoc">Bullet Target Shape for planetary bodies.</div><div class="ttdef"><b>Definition:</b> BulletTargetShape.h:33</div></div>
+<div class="ttc" id="aclass_isis_1_1_bullet_world_manager_html"><div class="ttname"><a href="class_isis_1_1_bullet_world_manager.html">Isis::BulletWorldManager</a></div><div class="ttdoc">Bullet World manager maintains a proper state for target bodies.</div><div class="ttdef"><b>Definition:</b> BulletWorldManager.h:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_distance_html"><div class="ttname"><a href="class_isis_1_1_distance.html">Isis::Distance</a></div><div class="ttdoc">Distance measurement, usually in meters.</div><div class="ttdef"><b>Definition:</b> Distance.h:34</div></div>
+<div class="ttc" id="aclass_isis_1_1_latitude_html"><div class="ttname"><a href="class_isis_1_1_latitude.html">Isis::Latitude</a></div><div class="ttdoc">This class is designed to encapsulate the concept of a Latitude.</div><div class="ttdef"><b>Definition:</b> Latitude.h:51</div></div>
+<div class="ttc" id="aclass_isis_1_1_longitude_html"><div class="ttname"><a href="class_isis_1_1_longitude.html">Isis::Longitude</a></div><div class="ttdoc">This class is designed to encapsulate the concept of a Longitude.</div><div class="ttdef"><b>Definition:</b> Longitude.h:40</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_html"><div class="ttname"><a href="class_isis_1_1_pvl.html">Isis::Pvl</a></div><div class="ttdoc">Container for cube-like labels.</div><div class="ttdef"><b>Definition:</b> Pvl.h:119</div></div>
+<div class="ttc" id="aclass_isis_1_1_shape_model_html"><div class="ttname"><a href="class_isis_1_1_shape_model.html">Isis::ShapeModel</a></div><div class="ttdoc">Define shapes and provide utilities for Isis targets.</div><div class="ttdef"><b>Definition:</b> ShapeModel.h:66</div></div>
+<div class="ttc" id="aclass_isis_1_1_surface_point_html"><div class="ttname"><a href="class_isis_1_1_surface_point.html">Isis::SurfacePoint</a></div><div class="ttdoc">This class defines a body-fixed surface point.</div><div class="ttdef"><b>Definition:</b> SurfacePoint.h:132</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_html"><div class="ttname"><a href="class_isis_1_1_target.html">Isis::Target</a></div><div class="ttdoc">This class is used to create and store valid Isis targets.</div><div class="ttdef"><b>Definition:</b> Target.h:63</div></div>
+<div class="ttc" id="aclass_q_vector_html"><div class="ttname"><a href="class_q_vector.html">QVector</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Calculator.h:18</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_91dfc37a37d20436d0b2f58e1f8a1a21.html">BulletShapeModel</a></li><li class="navelem"><a class="el" href="_bullet_shape_model_8h.html">BulletShapeModel.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

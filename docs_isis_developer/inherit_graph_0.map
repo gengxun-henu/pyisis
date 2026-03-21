@@ -1,0 +1,31 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,195,33"/>
+<area shape="rect" id="node2" href="$class_delete_control_point_dialog.html" title="This is free and unencumbered software released into the public domain." alt="" coords="261,9,429,37"/>
+<area shape="rect" id="node3" title=" " alt="" coords="15,57,185,101"/>
+<area shape="rect" id="node4" href="$class_match_tool_delete_point_dialog.html" title=" " alt="" coords="252,65,438,93"/>
+<area shape="rect" id="node5" title=" " alt="" coords="42,125,158,153"/>
+<area shape="rect" id="node6" href="$class_profile_dialog.html" title=" " alt="" coords="297,117,393,145"/>
+<area shape="rect" id="node7" href="$class_q_dialog.html" title=" " alt="" coords="66,659,134,687"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_advanced_stretch_dialog.html" title="Advanced Stretch Dialog." alt="" coords="251,857,439,885"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_cnet_editor_sort_config_dialog.html" title="Configure user&#39;s sorting settings for the cneteditor widget." alt="" coords="258,909,432,953"/>
+<area shape="rect" id="node10" href="$class_isis_1_1_cube_plot_curve_configure_dialog.html" title="This should be an inner class for CubePlotCurve, but Qt doesn&#39;t support having a QObject as an inner ..." alt="" coords="247,977,443,1021"/>
+<area shape="rect" id="node11" href="$class_isis_1_1_gui_input_attribute.html" title="GUI interface for input cube file attributes." alt="" coords="271,1045,419,1073"/>
+<area shape="rect" id="node12" href="$class_isis_1_1_gui_output_attribute.html" title=" " alt="" coords="266,1097,424,1125"/>
+<area shape="rect" id="node13" href="$class_isis_1_1_jigsaw_setup_dialog.html" title=" " alt="" coords="264,1149,426,1177"/>
+<area shape="rect" id="node14" href="$class_isis_1_1_match_tool_new_point_dialog.html" title=" " alt="" coords="243,1201,447,1229"/>
+<area shape="rect" id="node15" href="$class_isis_1_1_matrix_options_dialog.html" title="This widget allows the user to modify the matrix display." alt="" coords="261,1253,429,1281"/>
+<area shape="rect" id="node16" href="$class_isis_1_1_mosaic_control_net_tool_movement_config_dialog.html" title="Configure qmos Control Net Tool&#39;s movement arrows." alt="" coords="255,169,435,213"/>
+<area shape="rect" id="node17" href="$class_isis_1_1_mosaic_grid_tool_config_dialog.html" title="Configure user&#39;s settings for the grid tool." alt="" coords="256,237,434,281"/>
+<area shape="rect" id="node18" href="$class_isis_1_1_new_control_point_dialog.html" title=" " alt="" coords="252,305,438,333"/>
+<area shape="rect" id="node19" href="$class_isis_1_1_nomenclature_tool_config_dialog.html" title="Configure user&#39;s settings for the nomenclature tool." alt="" coords="248,357,442,401"/>
+<area shape="rect" id="node20" href="$class_isis_1_1_plot_window_best_fit_dialog.html" title=" " alt="" coords="245,425,445,453"/>
+<area shape="rect" id="node21" href="$class_isis_1_1_projection_config_dialog.html" title="This is the configuration dialog for the MosaicSceneWidget&#39;s projection parameters (map file)." alt="" coords="253,477,437,505"/>
+<area shape="rect" id="node22" href="$class_isis_1_1_pvl_edit_dialog.html" title="PvlEditDialog creates a QDialog window in which a QTextEdit box displays the contents of a pvl file." alt="" coords="280,529,410,557"/>
+<area shape="rect" id="node23" href="$class_isis_1_1_qnet_fixed_point_dialog.html" title=" " alt="" coords="256,581,434,609"/>
+<area shape="rect" id="node24" href="$class_isis_1_1_qnet_new_measure_dialog.html" title=" " alt="" coords="249,633,441,661"/>
+<area shape="rect" id="node25" href="$class_isis_1_1_qnet_set_apriori_dialog.html" title=" " alt="" coords="259,685,431,713"/>
+<area shape="rect" id="node26" href="$class_isis_1_1_scatter_plot_alarm_config_dialog.html" title="This is the configuration dialog for alarming scatter plots between the plot window and cube viewport..." alt="" coords="251,737,439,781"/>
+<area shape="rect" id="node27" href="$class_isis_1_1_scatter_plot_config_dialog.html" title="This configuration dialog is for users to determine the scatter plot parameters required to create a ..." alt="" coords="250,805,440,833"/>
+<area shape="rect" id="node28" href="$class_qnet_delete_point_dialog.html" title=" " alt="" coords="268,1305,422,1333"/>
+<area shape="rect" id="node29" title=" " alt="" coords="12,1305,188,1333"/>
+</map>

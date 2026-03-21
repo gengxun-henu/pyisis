@@ -1,0 +1,8 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ZeroDarkRate,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/ZeroDarkRate.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ZeroDarkRate,isis_pybind.ZeroDarkRate,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,"ZeroDarkRate() : Module(""ZeroDarkRate"") { }",isis_pybind.ZeroDarkRate(),N,抽象基类/纯虚接口
+Construction/Enum,"ZeroDarkRate(const HiCalConf &conf) : Module(""ZeroDarkRate"") { init(conf)",isis_pybind.ZeroDarkRate(),N,抽象基类/纯虚接口
+Public API,const Statistics &Stats() const { return (_stats); },isis_pybind.ZeroDarkRate.stats,N,抽象基类/纯虚接口

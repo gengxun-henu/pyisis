@@ -1,0 +1,957 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Affine Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_affine.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_affine-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Affine Class Reference<div class="ingroups"><a class="el" href="group___math.html">Math</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> basis function.  
+ <a href="class_isis_1_1_affine.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_affine_8h_source.html">Affine.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::Affine:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_affine__coll__graph.png" border="0" usemap="#a_isis_1_1_affine_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_affine_coll__map" id="a_isis_1_1_affine_coll__map">
+<area shape="rect" title="Affine basis function." alt="" coords="5,5,108,263"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a52a1493ab5e9ffd93af41ed2e532842a"><td class="memItemLeft" align="right" valign="top">typedef TNT::Array2D&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a">AMatrix</a></td></tr>
+<tr class="memdesc:a52a1493ab5e9ffd93af41ed2e532842a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> <a class="el" href="class_isis_1_1_matrix.html" title="Matrix class.">Matrix</a>.  <a href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a">More...</a><br /></td></tr>
+<tr class="separator:a52a1493ab5e9ffd93af41ed2e532842a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:acf40d58eaf36ee7b547579bb5c87f412"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#acf40d58eaf36ee7b547579bb5c87f412">Affine</a> ()</td></tr>
+<tr class="memdesc:acf40d58eaf36ee7b547579bb5c87f412"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> transform.  <a href="class_isis_1_1_affine.html#acf40d58eaf36ee7b547579bb5c87f412">More...</a><br /></td></tr>
+<tr class="separator:acf40d58eaf36ee7b547579bb5c87f412"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6ed0da3de8f99e3e3a8287c56e0d970"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#aa6ed0da3de8f99e3e3a8287c56e0d970">Affine</a> (const <a class="el" href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a">AMatrix</a> &amp;a)</td></tr>
+<tr class="memdesc:aa6ed0da3de8f99e3e3a8287c56e0d970"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> transform from matrix.  <a href="class_isis_1_1_affine.html#aa6ed0da3de8f99e3e3a8287c56e0d970">More...</a><br /></td></tr>
+<tr class="separator:aa6ed0da3de8f99e3e3a8287c56e0d970"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1f8bed419649a7b4c0c30d4b90fe530"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#ac1f8bed419649a7b4c0c30d4b90fe530">~Affine</a> ()</td></tr>
+<tr class="memdesc:ac1f8bed419649a7b4c0c30d4b90fe530"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> object.  <a href="class_isis_1_1_affine.html#ac1f8bed419649a7b4c0c30d4b90fe530">More...</a><br /></td></tr>
+<tr class="separator:ac1f8bed419649a7b4c0c30d4b90fe530"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf7dc36b1593b11c46940ffb7f9db72a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#adf7dc36b1593b11c46940ffb7f9db72a">Solve</a> (const double <a class="el" href="class_isis_1_1_affine.html#af759dbd520cc1e96a92ca192e6ac6099">x</a>[], const double <a class="el" href="class_isis_1_1_affine.html#a3922802d662ddc25bbcf0f651fd15b27">y</a>[], const double <a class="el" href="class_isis_1_1_affine.html#a1f57d6570d4c5c5c46fb2738d821ddb8">xp</a>[], const double <a class="el" href="class_isis_1_1_affine.html#a4a103a171ebc98cec2b73faffd754d21">yp</a>[], int n)</td></tr>
+<tr class="memdesc:adf7dc36b1593b11c46940ffb7f9db72a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a set of coordinate pairs (n &gt;= 3), compute the affine transform that best fits the points.  <a href="class_isis_1_1_affine.html#adf7dc36b1593b11c46940ffb7f9db72a">More...</a><br /></td></tr>
+<tr class="separator:adf7dc36b1593b11c46940ffb7f9db72a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4db83ef8879cf99f8aa4c26ca13bbc1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#ad4db83ef8879cf99f8aa4c26ca13bbc1">Identity</a> ()</td></tr>
+<tr class="memdesc:ad4db83ef8879cf99f8aa4c26ca13bbc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the forward and inverse affine transform to the identity.  <a href="class_isis_1_1_affine.html#ad4db83ef8879cf99f8aa4c26ca13bbc1">More...</a><br /></td></tr>
+<tr class="separator:ad4db83ef8879cf99f8aa4c26ca13bbc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44bf750d0ca92554d62b1a7d215ad233"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a44bf750d0ca92554d62b1a7d215ad233">Translate</a> (double tx, double ty)</td></tr>
+<tr class="memdesc:a44bf750d0ca92554d62b1a7d215ad233"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a translation to the current affine transform.  <a href="class_isis_1_1_affine.html#a44bf750d0ca92554d62b1a7d215ad233">More...</a><br /></td></tr>
+<tr class="separator:a44bf750d0ca92554d62b1a7d215ad233"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af691e684fcdcfa3e3729b9607d5a7470"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#af691e684fcdcfa3e3729b9607d5a7470">Rotate</a> (double rot)</td></tr>
+<tr class="memdesc:af691e684fcdcfa3e3729b9607d5a7470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a translation to the current affine transform.  <a href="class_isis_1_1_affine.html#af691e684fcdcfa3e3729b9607d5a7470">More...</a><br /></td></tr>
+<tr class="separator:af691e684fcdcfa3e3729b9607d5a7470"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6414c6f3e3da3f0c3f242fce40a4d793"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a6414c6f3e3da3f0c3f242fce40a4d793">Scale</a> (double scaleFactor)</td></tr>
+<tr class="memdesc:a6414c6f3e3da3f0c3f242fce40a4d793"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a scale to the current affine transform.  <a href="class_isis_1_1_affine.html#a6414c6f3e3da3f0c3f242fce40a4d793">More...</a><br /></td></tr>
+<tr class="separator:a6414c6f3e3da3f0c3f242fce40a4d793"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a985accc47a55ba3aa66cb48c798f030d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a985accc47a55ba3aa66cb48c798f030d">Compute</a> (double <a class="el" href="class_isis_1_1_affine.html#af759dbd520cc1e96a92ca192e6ac6099">x</a>, double <a class="el" href="class_isis_1_1_affine.html#a3922802d662ddc25bbcf0f651fd15b27">y</a>)</td></tr>
+<tr class="memdesc:a985accc47a55ba3aa66cb48c798f030d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute (xp,yp) given (x,y).  <a href="class_isis_1_1_affine.html#a985accc47a55ba3aa66cb48c798f030d">More...</a><br /></td></tr>
+<tr class="separator:a985accc47a55ba3aa66cb48c798f030d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f57d6570d4c5c5c46fb2738d821ddb8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a1f57d6570d4c5c5c46fb2738d821ddb8">xp</a> () const</td></tr>
+<tr class="memdesc:a1f57d6570d4c5c5c46fb2738d821ddb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the computed x'.  <a href="class_isis_1_1_affine.html#a1f57d6570d4c5c5c46fb2738d821ddb8">More...</a><br /></td></tr>
+<tr class="separator:a1f57d6570d4c5c5c46fb2738d821ddb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a103a171ebc98cec2b73faffd754d21"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a4a103a171ebc98cec2b73faffd754d21">yp</a> () const</td></tr>
+<tr class="memdesc:a4a103a171ebc98cec2b73faffd754d21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the computed y'.  <a href="class_isis_1_1_affine.html#a4a103a171ebc98cec2b73faffd754d21">More...</a><br /></td></tr>
+<tr class="separator:a4a103a171ebc98cec2b73faffd754d21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14eb1fa9a91f2c5ac087263715c5584f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a14eb1fa9a91f2c5ac087263715c5584f">ComputeInverse</a> (double <a class="el" href="class_isis_1_1_affine.html#a1f57d6570d4c5c5c46fb2738d821ddb8">xp</a>, double <a class="el" href="class_isis_1_1_affine.html#a4a103a171ebc98cec2b73faffd754d21">yp</a>)</td></tr>
+<tr class="memdesc:a14eb1fa9a91f2c5ac087263715c5584f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute (x,y) given (xp,yp).  <a href="class_isis_1_1_affine.html#a14eb1fa9a91f2c5ac087263715c5584f">More...</a><br /></td></tr>
+<tr class="separator:a14eb1fa9a91f2c5ac087263715c5584f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af759dbd520cc1e96a92ca192e6ac6099"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#af759dbd520cc1e96a92ca192e6ac6099">x</a> () const</td></tr>
+<tr class="memdesc:af759dbd520cc1e96a92ca192e6ac6099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the computed x.  <a href="class_isis_1_1_affine.html#af759dbd520cc1e96a92ca192e6ac6099">More...</a><br /></td></tr>
+<tr class="separator:af759dbd520cc1e96a92ca192e6ac6099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3922802d662ddc25bbcf0f651fd15b27"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a3922802d662ddc25bbcf0f651fd15b27">y</a> () const</td></tr>
+<tr class="memdesc:a3922802d662ddc25bbcf0f651fd15b27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the computed y.  <a href="class_isis_1_1_affine.html#a3922802d662ddc25bbcf0f651fd15b27">More...</a><br /></td></tr>
+<tr class="separator:a3922802d662ddc25bbcf0f651fd15b27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12418f798e531380da3266bf5ec359cf"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a12418f798e531380da3266bf5ec359cf">Coefficients</a> (int var)</td></tr>
+<tr class="memdesc:a12418f798e531380da3266bf5ec359cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the affine coeffients for the entered variable (1 or 2).  <a href="class_isis_1_1_affine.html#a12418f798e531380da3266bf5ec359cf">More...</a><br /></td></tr>
+<tr class="separator:a12418f798e531380da3266bf5ec359cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea7c471f1bcda0267fd5c75eafb3a1a5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#aea7c471f1bcda0267fd5c75eafb3a1a5">InverseCoefficients</a> (int var)</td></tr>
+<tr class="memdesc:aea7c471f1bcda0267fd5c75eafb3a1a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the inverse affine coeffients for the entered variable (1 or 2).  <a href="class_isis_1_1_affine.html#aea7c471f1bcda0267fd5c75eafb3a1a5">More...</a><br /></td></tr>
+<tr class="separator:aea7c471f1bcda0267fd5c75eafb3a1a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f096cea5f18ebca995d7d24015f662e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a">AMatrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a0f096cea5f18ebca995d7d24015f662e">Forward</a> () const</td></tr>
+<tr class="memdesc:a0f096cea5f18ebca995d7d24015f662e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the forward <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> matrix.  <a href="class_isis_1_1_affine.html#a0f096cea5f18ebca995d7d24015f662e">More...</a><br /></td></tr>
+<tr class="separator:a0f096cea5f18ebca995d7d24015f662e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aafd8ce94925d51673124d199d984e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a">AMatrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a2aafd8ce94925d51673124d199d984e4">Inverse</a> () const</td></tr>
+<tr class="memdesc:a2aafd8ce94925d51673124d199d984e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the inverse <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> matrix.  <a href="class_isis_1_1_affine.html#a2aafd8ce94925d51673124d199d984e4">More...</a><br /></td></tr>
+<tr class="separator:a2aafd8ce94925d51673124d199d984e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a477c7d1f9555f671bb582cda2d8506bb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a">AMatrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_affine.html#a477c7d1f9555f671bb582cda2d8506bb">getIdentity</a> ()</td></tr>
+<tr class="memdesc:a477c7d1f9555f671bb582cda2d8506bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> identity matrix.  <a href="class_isis_1_1_affine.html#a477c7d1f9555f671bb582cda2d8506bb">More...</a><br /></td></tr>
+<tr class="separator:a477c7d1f9555f671bb582cda2d8506bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> basis function. </p>
+<p>An affine transform in two-dimensional space is defined as</p>
+<div class="fragment"><div class="line"><a class="code" href="class_isis_1_1_affine.html#af759dbd520cc1e96a92ca192e6ac6099">x</a><span class="stringliteral">&#39; = Ax + By + C</span></div>
+<div class="line"><span class="stringliteral">y&#39;</span> = Dx + Ey + <a class="code" href="md5_8cpp.html#a96d73bbd7af15cb1fc38c3f4a3bd82e9">F</a></div>
+<div class="ttc" id="aclass_isis_1_1_affine_html_af759dbd520cc1e96a92ca192e6ac6099"><div class="ttname"><a href="class_isis_1_1_affine.html#af759dbd520cc1e96a92ca192e6ac6099">Isis::Affine::x</a></div><div class="ttdeci">double x() const</div><div class="ttdoc">Returns the computed x.</div><div class="ttdef"><b>Definition:</b> Affine.h:106</div></div>
+<div class="ttc" id="amd5_8cpp_html_a96d73bbd7af15cb1fc38c3f4a3bd82e9"><div class="ttname"><a href="md5_8cpp.html#a96d73bbd7af15cb1fc38c3f4a3bd82e9">F</a></div><div class="ttdeci">#define F(x, y, z)</div><div class="ttdef"><b>Definition:</b> md5.cpp:62</div></div>
+</div><!-- fragment --><p>This routine allows the programmer to define three or more mappings from (x,y) to (x',y') and will solve for A,B,C,D,E,F.</p>
+<p>If the above coefficients can be computed then the inverse of the affine transform exists and will be computed such that</p>
+<div class="fragment"><div class="line"><a class="code" href="class_isis_1_1_affine.html#af759dbd520cc1e96a92ca192e6ac6099">x</a> = A<span class="charliteral">&#39;x&#39;</span> + B<span class="charliteral">&#39;y&#39;</span> + C<span class="stringliteral">&#39;</span></div>
+<div class="line"><span class="stringliteral">y = D&#39;</span><a class="code" href="class_isis_1_1_affine.html#af759dbd520cc1e96a92ca192e6ac6099">x</a><span class="stringliteral">&#39; + E&#39;</span><a class="code" href="class_isis_1_1_affine.html#a3922802d662ddc25bbcf0f651fd15b27">y</a><span class="stringliteral">&#39; + F&#39;</span></div>
+<div class="ttc" id="aclass_isis_1_1_affine_html_a3922802d662ddc25bbcf0f651fd15b27"><div class="ttname"><a href="class_isis_1_1_affine.html#a3922802d662ddc25bbcf0f651fd15b27">Isis::Affine::y</a></div><div class="ttdeci">double y() const</div><div class="ttdoc">Returns the computed y.</div><div class="ttdef"><b>Definition:</b> Affine.h:115</div></div>
+</div><!-- fragment --><p>Alternatively (or in combination), translations and rotations can be applied to create a transform.</p>
+<dl class="section see"><dt>See also</dt><dd><a href="http://www.gnome.org/~mathieu/libart/libart-affine-transformation-matrices.html">http://www.gnome.org/~mathieu/libart/libart-affine-transformation-matrices.html</a></dd></dl>
+<dl class="section author"><dt>Author</dt><dd>2005-03-24 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a52a1493ab5e9ffd93af41ed2e532842a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52a1493ab5e9ffd93af41ed2e532842a">&#9670;&nbsp;</a></span>AMatrix</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef TNT::Array2D&lt;double&gt; <a class="el" href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a">Isis::Affine::AMatrix</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> <a class="el" href="class_isis_1_1_matrix.html" title="Matrix class.">Matrix</a>. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="acf40d58eaf36ee7b547579bb5c87f412"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf40d58eaf36ee7b547579bb5c87f412">&#9670;&nbsp;</a></span>Affine() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Affine::Affine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> transform. </p>
+<p>The default transform is the identity. </p>
+
+</div>
+</div>
+<a id="aa6ed0da3de8f99e3e3a8287c56e0d970"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6ed0da3de8f99e3e3a8287c56e0d970">&#9670;&nbsp;</a></span>Affine() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Affine::Affine </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a">AMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> transform from matrix. </p>
+<p>This constructor creates the affine transform from a forward matrix. The input matrix is checked for the proper dimensions (3x3) and is then inverted to complete the inverse functionality.</p>
+<p>The input matrix must be invertable or an exception will be thrown!</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>Forward affine matrix </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac1f8bed419649a7b4c0c30d4b90fe530"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1f8bed419649a7b4c0c30d4b90fe530">&#9670;&nbsp;</a></span>~Affine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Affine::~Affine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys the <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a12418f798e531380da3266bf5ec359cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12418f798e531380da3266bf5ec359cf">&#9670;&nbsp;</a></span>Coefficients()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; double &gt; Isis::Affine::Coefficients </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>var</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the affine coeffients for the entered variable (1 or 2). </p>
+<p>The coefficients are returned in a 3-dimensional vector</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">var</td><td>The coefficient vector index (1 or 2)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>vector&lt;double&gt; Vector of coefficients </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">Isis::CameraFocalPlaneMap::CameraFocalPlaneMap()</a>.</p>
+
+</div>
+</div>
+<a id="a985accc47a55ba3aa66cb48c798f030d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a985accc47a55ba3aa66cb48c798f030d">&#9670;&nbsp;</a></span>Compute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Affine::Compute </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute (xp,yp) given (x,y). </p>
+<p>Use the methods <a class="el" href="class_isis_1_1_affine.html#a1f57d6570d4c5c5c46fb2738d821ddb8" title="Returns the computed x&#39;.">xp()</a> and <a class="el" href="class_isis_1_1_affine.html#a4a103a171ebc98cec2b73faffd754d21" title="Returns the computed y&#39;.">yp()</a> to obtain the results.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The transformation x factor </td></tr>
+    <tr><td class="paramname">y</td><td>The transformation y factor </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip.html#a493ecbe9f2ec00477b9ff930236ad9b4">Isis::Chip::Extract()</a>.</p>
+
+</div>
+</div>
+<a id="a14eb1fa9a91f2c5ac087263715c5584f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14eb1fa9a91f2c5ac087263715c5584f">&#9670;&nbsp;</a></span>ComputeInverse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Affine::ComputeInverse </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>xp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>yp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute (x,y) given (xp,yp). </p>
+<p>Use the methods <a class="el" href="class_isis_1_1_affine.html#af759dbd520cc1e96a92ca192e6ac6099" title="Returns the computed x.">x()</a> and <a class="el" href="class_isis_1_1_affine.html#a3922802d662ddc25bbcf0f651fd15b27" title="Returns the computed y.">y()</a> to obtain the results.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">xp</td><td>The inverse transformation xp factor </td></tr>
+    <tr><td class="paramname">yp</td><td>The inverse transformation yp factor </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0f096cea5f18ebca995d7d24015f662e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f096cea5f18ebca995d7d24015f662e">&#9670;&nbsp;</a></span>Forward()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a">AMatrix</a> Isis::Affine::Forward </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the forward <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> matrix. </p>
+<dl class="section return"><dt>Returns</dt><dd>AMatrix Forward <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> matrix </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip.html#a493ecbe9f2ec00477b9ff930236ad9b4">Isis::Chip::Extract()</a>.</p>
+
+</div>
+</div>
+<a id="a477c7d1f9555f671bb582cda2d8506bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a477c7d1f9555f671bb582cda2d8506bb">&#9670;&nbsp;</a></span>getIdentity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a">Affine::AMatrix</a> Isis::Affine::getIdentity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return an <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> identity matrix. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a" title="Affine Matrix.">Affine::AMatrix</a> The identity matrix </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_threshold.html#a465dca2d781090cdc9757f6568aa2566">Isis::Threshold::hasConverged()</a>, <a class="el" href="class_isis_1_1_affine_radio.html#aeee9a99cf13bd24eaee3fcefbfbbd378">Isis::AffineRadio::operator+=()</a>, and <a class="el" href="class_isis_1_1_affine_radio.html#acd848172e8fbd2b3b659202395cad4c1">Isis::AffineRadio::Translate()</a>.</p>
+
+</div>
+</div>
+<a id="ad4db83ef8879cf99f8aa4c26ca13bbc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4db83ef8879cf99f8aa4c26ca13bbc1">&#9670;&nbsp;</a></span>Identity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Affine::Identity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the forward and inverse affine transform to the identity. </p>
+<p>That is, xp = x and yp = y for all (x,y). </p>
+
+</div>
+</div>
+<a id="a2aafd8ce94925d51673124d199d984e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2aafd8ce94925d51673124d199d984e4">&#9670;&nbsp;</a></span>Inverse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_affine.html#a52a1493ab5e9ffd93af41ed2e532842a">AMatrix</a> Isis::Affine::Inverse </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the inverse <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> matrix. </p>
+<dl class="section return"><dt>Returns</dt><dd>AMatrix Inverse <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> matrix </dd></dl>
+
+</div>
+</div>
+<a id="aea7c471f1bcda0267fd5c75eafb3a1a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea7c471f1bcda0267fd5c75eafb3a1a5">&#9670;&nbsp;</a></span>InverseCoefficients()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; double &gt; Isis::Affine::InverseCoefficients </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>var</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the inverse affine coeffients for the entered variable (1 or 2). </p>
+<p>The coefficients are returned in a 3-dimensional vector</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">var</td><td>The inverse coefficient vector index</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>vector&lt;double&gt; Vector of inverse coefficients </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_focal_plane_map.html#a3cc7a674aa6783a38387245245d75c36">Isis::CameraFocalPlaneMap::CameraFocalPlaneMap()</a>.</p>
+
+</div>
+</div>
+<a id="af691e684fcdcfa3e3729b9607d5a7470"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af691e684fcdcfa3e3729b9607d5a7470">&#9670;&nbsp;</a></span>Rotate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Affine::Rotate </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Apply a translation to the current affine transform. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle</td><td>degrees of counterclockwise rotation </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>.</p>
+
+</div>
+</div>
+<a id="a6414c6f3e3da3f0c3f242fce40a4d793"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6414c6f3e3da3f0c3f242fce40a4d793">&#9670;&nbsp;</a></span>Scale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Affine::Scale </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>scaleFactor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Apply a scale to the current affine transform. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">scaleFactor</td><td>The scale factor </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adf7dc36b1593b11c46940ffb7f9db72a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf7dc36b1593b11c46940ffb7f9db72a">&#9670;&nbsp;</a></span>Solve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Affine::Solve </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>x</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>y</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>xp</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>yp</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Given a set of coordinate pairs (n &gt;= 3), compute the affine transform that best fits the points. </p>
+<p>If given exactly three coordinates that are not colinear, the fit will be guarenteed to be exact through the points.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The transformation x coordinates </td></tr>
+    <tr><td class="paramname">y</td><td>The transformation y coordinates </td></tr>
+    <tr><td class="paramname">xp</td><td>The transformation xp coordinates </td></tr>
+    <tr><td class="paramname">yp</td><td>The transformation yp coordinates </td></tr>
+    <tr><td class="paramname">n</td><td>The number of coordiante pairs</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Math</td><td>- <a class="el" href="class_isis_1_1_affine.html" title="Affine basis function.">Affine</a> transform not invertible </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_least_squares.html#adebcd2ef3d6a18bcf59224560a796d86">Isis::LeastSquares::AddKnown()</a>, <a class="el" href="class_isis_1_1_basis_function.html#a88a87e2fee6295031c9fa5148d40f00d">Isis::BasisFunction::Coefficient()</a>, and <a class="el" href="class_isis_1_1_least_squares.html#aa6d220932140932c25b7799ba67a0bc8">Isis::LeastSquares::Solve()</a>.</p>
+
+</div>
+</div>
+<a id="a44bf750d0ca92554d62b1a7d215ad233"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44bf750d0ca92554d62b1a7d215ad233">&#9670;&nbsp;</a></span>Translate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Affine::Translate </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>ty</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Apply a translation to the current affine transform. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tx</td><td>translatation to add to x' </td></tr>
+    <tr><td class="paramname">ty</td><td>translation to add to y' </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af759dbd520cc1e96a92ca192e6ac6099"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af759dbd520cc1e96a92ca192e6ac6099">&#9670;&nbsp;</a></span>x()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Affine::x </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the computed x. </p>
+<dl class="section return"><dt>Returns</dt><dd>double Computed x </dd></dl>
+
+</div>
+</div>
+<a id="a1f57d6570d4c5c5c46fb2738d821ddb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f57d6570d4c5c5c46fb2738d821ddb8">&#9670;&nbsp;</a></span>xp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Affine::xp </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the computed x'. </p>
+<dl class="section return"><dt>Returns</dt><dd>double Computed x' </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip.html#a493ecbe9f2ec00477b9ff930236ad9b4">Isis::Chip::Extract()</a>.</p>
+
+</div>
+</div>
+<a id="a3922802d662ddc25bbcf0f651fd15b27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3922802d662ddc25bbcf0f651fd15b27">&#9670;&nbsp;</a></span>y()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Affine::y </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the computed y. </p>
+<dl class="section return"><dt>Returns</dt><dd>double Computed y </dd></dl>
+
+</div>
+</div>
+<a id="a4a103a171ebc98cec2b73faffd754d21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a103a171ebc98cec2b73faffd754d21">&#9670;&nbsp;</a></span>yp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Affine::yp </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the computed y'. </p>
+<dl class="section return"><dt>Returns</dt><dd>double Computed y' </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_chip.html#a493ecbe9f2ec00477b9ff930236ad9b4">Isis::Chip::Extract()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Affine/<a class="el" href="_affine_8h_source.html">Affine.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Affine/<a class="el" href="_affine_8cpp.html">Affine.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_affine.html">Affine</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

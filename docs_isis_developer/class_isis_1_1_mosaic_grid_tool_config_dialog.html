@@ -1,0 +1,775 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::MosaicGridToolConfigDialog Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_mosaic_grid_tool_config_dialog.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_mosaic_grid_tool_config_dialog-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::MosaicGridToolConfigDialog Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Configure user's settings for the grid tool.  
+ <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_mosaic_grid_tool_config_dialog_8h_source.html">MosaicGridToolConfigDialog.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::MosaicGridToolConfigDialog:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_mosaic_grid_tool_config_dialog__inherit__graph.png" border="0" usemap="#a_isis_1_1_mosaic_grid_tool_config_dialog_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_mosaic_grid_tool_config_dialog_inherit__map" id="a_isis_1_1_mosaic_grid_tool_config_dialog_inherit__map">
+<area shape="rect" title="Configure user&#39;s settings for the grid tool." alt="" coords="5,135,230,456"/>
+<area shape="rect" href="class_q_dialog.html" title=" " alt="" coords="83,5,152,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::MosaicGridToolConfigDialog:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_mosaic_grid_tool_config_dialog__coll__graph.png" border="0" usemap="#a_isis_1_1_mosaic_grid_tool_config_dialog_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_mosaic_grid_tool_config_dialog_coll__map" id="a_isis_1_1_mosaic_grid_tool_config_dialog_coll__map">
+<area shape="rect" title="Configure user&#39;s settings for the grid tool." alt="" coords="5,135,230,456"/>
+<area shape="rect" href="class_q_dialog.html" title=" " alt="" coords="83,5,152,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:a2d5452ae04ef5bb5490df12498ba1563"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a2d5452ae04ef5bb5490df12498ba1563">applySettings</a> ()</td></tr>
+<tr class="memdesc:a2d5452ae04ef5bb5490df12498ba1563"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot that calls applySettings with true to call readSettings also.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a2d5452ae04ef5bb5490df12498ba1563">More...</a><br /></td></tr>
+<tr class="separator:a2d5452ae04ef5bb5490df12498ba1563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ebb3a2b09953cacc9d88750a4607835"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a1ebb3a2b09953cacc9d88750a4607835">applySettings</a> (bool shouldReadSettings)</td></tr>
+<tr class="memdesc:a1ebb3a2b09953cacc9d88750a4607835"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the user's current settings to the tool.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a1ebb3a2b09953cacc9d88750a4607835">More...</a><br /></td></tr>
+<tr class="separator:a1ebb3a2b09953cacc9d88750a4607835"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad27b4fb69924b943881347acd083acf3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad27b4fb69924b943881347acd083acf3">readSettings</a> ()</td></tr>
+<tr class="memdesc:ad27b4fb69924b943881347acd083acf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the tool's current settings and set the widget states to match.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad27b4fb69924b943881347acd083acf3">More...</a><br /></td></tr>
+<tr class="separator:ad27b4fb69924b943881347acd083acf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74dfdc3b6b220eb832760fd6c5652748"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a74dfdc3b6b220eb832760fd6c5652748">refreshWidgetStates</a> ()</td></tr>
+<tr class="memdesc:a74dfdc3b6b220eb832760fd6c5652748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the private method refreshWidgetStates with true as the argument in order to have refreshWidgetStates call apply settings.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a74dfdc3b6b220eb832760fd6c5652748">More...</a><br /></td></tr>
+<tr class="separator:a74dfdc3b6b220eb832760fd6c5652748"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9fc5d446605d9ed89efa56930fd98b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#aa9fc5d446605d9ed89efa56930fd98b4">onBaseLatSliderChanged</a> ()</td></tr>
+<tr class="memdesc:aa9fc5d446605d9ed89efa56930fd98b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the corresponding line edit when the baseLatSlider changes.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#aa9fc5d446605d9ed89efa56930fd98b4">More...</a><br /></td></tr>
+<tr class="separator:aa9fc5d446605d9ed89efa56930fd98b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a909e72cefb6172e5a6bd619c76e9d57f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a909e72cefb6172e5a6bd619c76e9d57f">onBaseLonSliderChanged</a> ()</td></tr>
+<tr class="memdesc:a909e72cefb6172e5a6bd619c76e9d57f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the corresponding line edit when the baseLonSlider changes.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a909e72cefb6172e5a6bd619c76e9d57f">More...</a><br /></td></tr>
+<tr class="separator:a909e72cefb6172e5a6bd619c76e9d57f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9110de87539e7e4043a3c7c02a6f910e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a9110de87539e7e4043a3c7c02a6f910e">onLatIncSliderChanged</a> ()</td></tr>
+<tr class="memdesc:a9110de87539e7e4043a3c7c02a6f910e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the corresponding line edit when the latIncSlider changes.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a9110de87539e7e4043a3c7c02a6f910e">More...</a><br /></td></tr>
+<tr class="separator:a9110de87539e7e4043a3c7c02a6f910e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a394b1fcaf5d3f54a6354f88d2d4772"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a1a394b1fcaf5d3f54a6354f88d2d4772">onLonIncSliderChanged</a> ()</td></tr>
+<tr class="memdesc:a1a394b1fcaf5d3f54a6354f88d2d4772"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the corresponding line edit when the lonIncSlider changes.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a1a394b1fcaf5d3f54a6354f88d2d4772">More...</a><br /></td></tr>
+<tr class="separator:a1a394b1fcaf5d3f54a6354f88d2d4772"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a945adb34aba4feb5ecb09894bed0d1dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a945adb34aba4feb5ecb09894bed0d1dd">onExtentTypeChanged</a> ()</td></tr>
+<tr class="memdesc:a945adb34aba4feb5ecb09894bed0d1dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the dialog when the lat or lon extent source is changed.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a945adb34aba4feb5ecb09894bed0d1dd">More...</a><br /></td></tr>
+<tr class="separator:a945adb34aba4feb5ecb09894bed0d1dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a569d6690cb9c650c288afbaafa44b9a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a569d6690cb9c650c288afbaafa44b9a0">onMinLatExtentSliderChanged</a> ()</td></tr>
+<tr class="memdesc:a569d6690cb9c650c288afbaafa44b9a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the corresponding line edit when the minLatSlider changes.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a569d6690cb9c650c288afbaafa44b9a0">More...</a><br /></td></tr>
+<tr class="separator:a569d6690cb9c650c288afbaafa44b9a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6afc224b7f3a0a1c2cf54f8d5585d420"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a6afc224b7f3a0a1c2cf54f8d5585d420">onMaxLatExtentSliderChanged</a> ()</td></tr>
+<tr class="memdesc:a6afc224b7f3a0a1c2cf54f8d5585d420"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the corresponding line edit when the maxLatSlider changes.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a6afc224b7f3a0a1c2cf54f8d5585d420">More...</a><br /></td></tr>
+<tr class="separator:a6afc224b7f3a0a1c2cf54f8d5585d420"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28a6d742801d63472b5eb22636a6f691"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a28a6d742801d63472b5eb22636a6f691">onMinLonExtentSliderChanged</a> ()</td></tr>
+<tr class="memdesc:a28a6d742801d63472b5eb22636a6f691"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the corresponding line edit when the minLonSlider changes.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a28a6d742801d63472b5eb22636a6f691">More...</a><br /></td></tr>
+<tr class="separator:a28a6d742801d63472b5eb22636a6f691"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63d8a577eecebb40016a691d2f07b1d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a63d8a577eecebb40016a691d2f07b1d0">onMaxLonExtentSliderChanged</a> ()</td></tr>
+<tr class="memdesc:a63d8a577eecebb40016a691d2f07b1d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the corresponding line edit when the maxLonSlider changes.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a63d8a577eecebb40016a691d2f07b1d0">More...</a><br /></td></tr>
+<tr class="separator:a63d8a577eecebb40016a691d2f07b1d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a86c88015a55aa2f3a937dad7c888d341"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog</a> (<a class="el" href="class_isis_1_1_mosaic_grid_tool.html">MosaicGridTool</a> *tool, <a class="el" href="class_q_widget.html">QWidget</a> *parent)</td></tr>
+<tr class="memdesc:a86c88015a55aa2f3a937dad7c888d341"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a config dialog that configures the given <a class="el" href="class_isis_1_1_mosaic_grid_tool.html" title="This controls the &#39;Grid&#39; abilities in the MosaicSceneWidget.">MosaicGridTool</a>.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">More...</a><br /></td></tr>
+<tr class="separator:a86c88015a55aa2f3a937dad7c888d341"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3c05c2c55ee49f7dc34c64d1e97e9ad"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad3c05c2c55ee49f7dc34c64d1e97e9ad">~MosaicGridToolConfigDialog</a> ()</td></tr>
+<tr class="memdesc:ad3c05c2c55ee49f7dc34c64d1e97e9ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clean up allocated memory.  <a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad3c05c2c55ee49f7dc34c64d1e97e9ad">More...</a><br /></td></tr>
+<tr class="separator:ad3c05c2c55ee49f7dc34c64d1e97e9ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Configure user's settings for the grid tool. </p>
+<p>This dialog enables the user to configure the given grid tool. You can show or hid the grid, draw an auto grid that is based on the open cubes or the user selected grid extents, and change the parameters of a custom drawn grid. It allows the user to select the source of the longitude and latitude ranges (from the map, from the open cubes, or manually entered). The widgets are enabled/disabled depending on the state of the tool. There is also an option to 'auto apply' the grid settings, which allows the user to see live updates of the grid as the parameters are changed. If the tool and dialog take too long to update the grid, the density will be reduced to increase the speed with which the grid is drawn. References #604.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-07-25 Kimberly Oyama and Steven Lambright </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a86c88015a55aa2f3a937dad7c888d341"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86c88015a55aa2f3a937dad7c888d341">&#9670;&nbsp;</a></span>MosaicGridToolConfigDialog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::MosaicGridToolConfigDialog::MosaicGridToolConfigDialog </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_mosaic_grid_tool.html">MosaicGridTool</a> *&#160;</td>
+          <td class="paramname"><em>tool</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_widget.html">QWidget</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a config dialog that configures the given <a class="el" href="class_isis_1_1_mosaic_grid_tool.html" title="This controls the &#39;Grid&#39; abilities in the MosaicSceneWidget.">MosaicGridTool</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tool</td><td>The tool to read settings from and write settings to. </td></tr>
+    <tr><td class="paramname">parent</td><td>The qt-parent relationship parent. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a2d5452ae04ef5bb5490df12498ba1563">applySettings()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a5d2f46703bb610f4ab32394215cc2f30a2c032acfe0b199ec4293abd46a1cc120">Isis::MosaicGridTool::Cubes</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#afdd85d325f871305a3ea3abb80917a7b">Isis::MosaicGridTool::latExtents()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#ad5c1bd625e2dbdd769146d023c2f2304">Isis::MosaicGridTool::latType()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#aed727e90e3e25ce652d776250b4fde5a">Isis::MosaicGridTool::lonDomain()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a3b352764fa7f0c9c3f55522a5b4da5a6">Isis::MosaicGridTool::lonExtents()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a5d2f46703bb610f4ab32394215cc2f30a3a9e1c9f71ae0fc20243712304ddc0ca">Isis::MosaicGridTool::Manual</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a5d2f46703bb610f4ab32394215cc2f30a3d5abc109535e39b2060ddf51c2b8778">Isis::MosaicGridTool::Map</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#aa9fc5d446605d9ed89efa56930fd98b4">onBaseLatSliderChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a909e72cefb6172e5a6bd619c76e9d57f">onBaseLonSliderChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a945adb34aba4feb5ecb09894bed0d1dd">onExtentTypeChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a9110de87539e7e4043a3c7c02a6f910e">onLatIncSliderChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a1a394b1fcaf5d3f54a6354f88d2d4772">onLonIncSliderChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a6afc224b7f3a0a1c2cf54f8d5585d420">onMaxLatExtentSliderChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a63d8a577eecebb40016a691d2f07b1d0">onMaxLonExtentSliderChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a569d6690cb9c650c288afbaafa44b9a0">onMinLatExtentSliderChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a28a6d742801d63472b5eb22636a6f691">onMinLonExtentSliderChanged()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad27b4fb69924b943881347acd083acf3">readSettings()</a>, and <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a74dfdc3b6b220eb832760fd6c5652748">refreshWidgetStates()</a>.</p>
+
+</div>
+</div>
+<a id="ad3c05c2c55ee49f7dc34c64d1e97e9ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3c05c2c55ee49f7dc34c64d1e97e9ad">&#9670;&nbsp;</a></span>~MosaicGridToolConfigDialog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::MosaicGridToolConfigDialog::~MosaicGridToolConfigDialog </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clean up allocated memory. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2d5452ae04ef5bb5490df12498ba1563"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d5452ae04ef5bb5490df12498ba1563">&#9670;&nbsp;</a></span>applySettings <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::applySettings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Slot that calls applySettings with true to call readSettings also. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>, and <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a945adb34aba4feb5ecb09894bed0d1dd">onExtentTypeChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a1ebb3a2b09953cacc9d88750a4607835"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ebb3a2b09953cacc9d88750a4607835">&#9670;&nbsp;</a></span>applySettings <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::applySettings </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>shouldReadSettings</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Apply the user's current settings to the tool. </p>
+<p>Draw or clear the grid depending on the settings. </p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#ad143ab369ad4ddde8ee7386a0a41b537">Isis::MosaicGridTool::autoGrid()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a819acc688d19d2895a0abc8744470a82">Isis::MosaicGridTool::clearGrid()</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#aacf9ef69c8404ea7bb17c1db57fc74ba">Isis::MosaicGridTool::drawGrid()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a75e2df7fda8f778e37b6863d45de62c8">Isis::MosaicSceneWidget::getProjection()</a>, <a class="el" href="class_isis_1_1_projection.html#ac909e5f4a7a7aa2afc8b2c745feb1940">Isis::Projection::Mapping()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad27b4fb69924b943881347acd083acf3">readSettings()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a1d691d2e46819959684fc710c61b4d29">Isis::MosaicGridTool::sceneWidget()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#ab3bcc6d3bf0af2c22e9b137337074156">Isis::MosaicGridTool::setAutoGridCheckBox()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#adfb2c64a11b6d71a6204f75ad64da316">Isis::MosaicGridTool::setBaseLat()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#acfb71e5cc454ad7d347fefd8b5f0b0dc">Isis::MosaicGridTool::setBaseLon()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a4dbc8d0b65d0f00dd0e72b99267b276f">Isis::MosaicGridTool::setDensity()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#aae1c7683fa1ee0762e1dbbbb4edc8050">Isis::MosaicGridTool::setLatExtents()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#ad900984e30b00714231b6e08d79de2c9">Isis::MosaicGridTool::setLatInc()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a171bfb1c016674662a6a605185997efa">Isis::MosaicGridTool::setLonExtents()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#ad8c352bfeaeef293691a10e2a870a2ff">Isis::MosaicGridTool::setLonInc()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a07a51e98256319628f56ca6454fd849d">Isis::MosaicGridTool::setShowGrid()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78">Isis::IException::Unknown</a>.</p>
+
+</div>
+</div>
+<a id="aa9fc5d446605d9ed89efa56930fd98b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9fc5d446605d9ed89efa56930fd98b4">&#9670;&nbsp;</a></span>onBaseLatSliderChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::onBaseLatSliderChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the corresponding line edit when the baseLatSlider changes. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a909e72cefb6172e5a6bd619c76e9d57f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a909e72cefb6172e5a6bd619c76e9d57f">&#9670;&nbsp;</a></span>onBaseLonSliderChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::onBaseLonSliderChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the corresponding line edit when the baseLonSlider changes. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a945adb34aba4feb5ecb09894bed0d1dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a945adb34aba4feb5ecb09894bed0d1dd">&#9670;&nbsp;</a></span>onExtentTypeChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::onExtentTypeChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the dialog when the lat or lon extent source is changed. </p>
+<p>This is necessary because the tools values will change and they need to be brought back to the dialog. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a2d5452ae04ef5bb5490df12498ba1563">applySettings()</a>, and <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a74dfdc3b6b220eb832760fd6c5652748">refreshWidgetStates()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a9110de87539e7e4043a3c7c02a6f910e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9110de87539e7e4043a3c7c02a6f910e">&#9670;&nbsp;</a></span>onLatIncSliderChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::onLatIncSliderChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the corresponding line edit when the latIncSlider changes. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a1a394b1fcaf5d3f54a6354f88d2d4772"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a394b1fcaf5d3f54a6354f88d2d4772">&#9670;&nbsp;</a></span>onLonIncSliderChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::onLonIncSliderChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the corresponding line edit when the lonIncSlider changes. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a6afc224b7f3a0a1c2cf54f8d5585d420"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6afc224b7f3a0a1c2cf54f8d5585d420">&#9670;&nbsp;</a></span>onMaxLatExtentSliderChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::onMaxLatExtentSliderChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the corresponding line edit when the maxLatSlider changes. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a63d8a577eecebb40016a691d2f07b1d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63d8a577eecebb40016a691d2f07b1d0">&#9670;&nbsp;</a></span>onMaxLonExtentSliderChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::onMaxLonExtentSliderChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the corresponding line edit when the maxLonSlider changes. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a569d6690cb9c650c288afbaafa44b9a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a569d6690cb9c650c288afbaafa44b9a0">&#9670;&nbsp;</a></span>onMinLatExtentSliderChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::onMinLatExtentSliderChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the corresponding line edit when the minLatSlider changes. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a28a6d742801d63472b5eb22636a6f691"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28a6d742801d63472b5eb22636a6f691">&#9670;&nbsp;</a></span>onMinLonExtentSliderChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::onMinLonExtentSliderChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the corresponding line edit when the minLonSlider changes. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>.</p>
+
+</div>
+</div>
+<a id="ad27b4fb69924b943881347acd083acf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad27b4fb69924b943881347acd083acf3">&#9670;&nbsp;</a></span>readSettings</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::readSettings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read the tool's current settings and set the widget states to match. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a431ef644a6ce3bf8e87e97179617a9fe">Isis::MosaicGridTool::autoGridCheckBox()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a7ee17714fa7de230043bde59ef4217e8">Isis::MosaicGridTool::baseLat()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a957bc12fcfb61740da97ef2d9bacbd53">Isis::MosaicGridTool::baseLon()</a>, <a class="el" href="class_isis_1_1_angle.html#ab85b3fa4ca45c6daeb787f9a9bfa65d4aded589b30815a760d90ec831d42e7bc0">Isis::Angle::Degrees</a>, <a class="el" href="class_isis_1_1_angle.html#a69a6b1d46b95904456ab57dc9693ab00">Isis::Angle::degrees()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a99ef9f99d8fc6ceed4be43c9f84c79c5">Isis::MosaicGridTool::density()</a>, <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a75e2df7fda8f778e37b6863d45de62c8">Isis::MosaicSceneWidget::getProjection()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#afdd85d325f871305a3ea3abb80917a7b">Isis::MosaicGridTool::latExtents()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a0f301c2affcd989feaba2fb883a98cf1">Isis::MosaicGridTool::latInc()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a3b352764fa7f0c9c3f55522a5b4da5a6">Isis::MosaicGridTool::lonExtents()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#aaaacdd9634d52a4a886be2e81f3449f3">Isis::MosaicGridTool::lonInc()</a>, <a class="el" href="class_isis_1_1_projection.html#ac909e5f4a7a7aa2afc8b2c745feb1940">Isis::Projection::Mapping()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a2fc200e98bcbae8106f3291ab041a942">Isis::MosaicGridTool::maxLat()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#adb18765c6d37183d8d87868cf5dc4e28">Isis::MosaicGridTool::maxLon()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a5c6d13631789e49be0fe5d59eb1bdee5">Isis::MosaicGridTool::minLat()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a54cc1c4f385fdf3383c40ad980767453">Isis::MosaicGridTool::minLon()</a>, <a class="el" href="class_isis_1_1_latitude.html#a86c19225315ad4647ebb7c7c51785e48">Isis::Latitude::planetographic()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a74dfdc3b6b220eb832760fd6c5652748">refreshWidgetStates()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a1d691d2e46819959684fc710c61b4d29">Isis::MosaicGridTool::sceneWidget()</a>, and <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a6f158a5fc04dedfce27d506822e945e4">Isis::MosaicGridTool::showGrid()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a1ebb3a2b09953cacc9d88750a4607835">applySettings()</a>, and <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a74dfdc3b6b220eb832760fd6c5652748"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74dfdc3b6b220eb832760fd6c5652748">&#9670;&nbsp;</a></span>refreshWidgetStates</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::MosaicGridToolConfigDialog::refreshWidgetStates </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calls the private method refreshWidgetStates with true as the argument in order to have refreshWidgetStates call apply settings. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog()</a>, <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a945adb34aba4feb5ecb09894bed0d1dd">onExtentTypeChanged()</a>, and <a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad27b4fb69924b943881347acd083acf3">readSettings()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/MosaicSceneWidget/<a class="el" href="_mosaic_grid_tool_config_dialog_8h_source.html">MosaicGridToolConfigDialog.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/MosaicSceneWidget/<a class="el" href="_mosaic_grid_tool_config_dialog_8cpp.html">MosaicGridToolConfigDialog.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html">MosaicGridToolConfigDialog</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

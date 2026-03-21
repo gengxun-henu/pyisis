@@ -1,0 +1,4 @@
+<map id="Isis::Portal" name="Isis::Portal">
+<area shape="rect" id="node1" title="Buffer for containing a two dimensional section of an image." alt="" coords="24,535,134,664"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data." alt="" coords="5,5,153,487"/>
+</map>

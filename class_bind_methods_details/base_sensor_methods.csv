@@ -1,0 +1,42 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Sensor,"Spice, Instruments, and Cameras",isis/src/base/objs/Sensor/Sensor.h,isis_pybind_standalone/src/bind_sensor.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Sensor,isis_pybind.Sensor,Y,Python class symbol is exported; constructor exposure may be limited; 抽象基类/纯虚接口
+Construction/Enum,Sensor(),isis_pybind.Sensor(),N,抽象基类/纯虚接口
+Mutation/Configuration,void setTime(const iTime &time),isis_pybind.Sensor.set_time,N,抽象基类/纯虚接口
+Mutation/Configuration,bool SetLookDirection(const double v[3]),isis_pybind.Sensor.set_look_direction,N,抽象基类/纯虚接口
+Mutation/Configuration,"bool SetRightAscensionDeclination(const double ra, const double dec)",isis_pybind.Sensor.set_right_ascension_declination,Y,Current Python name
+Mutation/Configuration,"bool SetUniversalGround(const double latitude, const double longitude, bool backCheck = true)",isis_pybind.Sensor.set_universal_ground,N,抽象基类/纯虚接口
+Mutation/Configuration,"bool SetUniversalGround(const double latitude, const double longitude, const double radius, bool backCheck = true)",isis_pybind.Sensor.set_universal_ground,N,抽象基类/纯虚接口
+Mutation/Configuration,"bool SetGround(const SurfacePoint &surfacePt, bool backCheck = true)",isis_pybind.Sensor.set_ground,N,抽象基类/纯虚接口
+Query,bool HasSurfaceIntersection() const,isis_pybind.Sensor.has_surface_intersection,Y,Current Python name
+Public API,void Coordinate(double p[3]) const,isis_pybind.Sensor.coordinate,N,抽象基类/纯虚接口
+Public API,virtual double UniversalLatitude() const,isis_pybind.Sensor.universal_latitude,Y,Current Python name
+Public API,Latitude GetLatitude() const,isis_pybind.Sensor.get_latitude,N,抽象基类/纯虚接口
+Public API,virtual double UniversalLongitude() const,isis_pybind.Sensor.universal_longitude,Y,Current Python name
+Public API,Longitude GetLongitude() const,isis_pybind.Sensor.get_longitude,N,抽象基类/纯虚接口
+Public API,virtual SurfacePoint GetSurfacePoint() const,isis_pybind.Sensor.get_surface_point,N,抽象基类/纯虚接口
+Public API,Distance LocalRadius() const,isis_pybind.Sensor.local_radius,N,抽象基类/纯虚接口
+Public API,"Distance LocalRadius(Latitude lat, Longitude lon)",isis_pybind.Sensor.local_radius,N,抽象基类/纯虚接口
+Public API,"Distance LocalRadius(double lat, double lon)",isis_pybind.Sensor.local_radius,N,抽象基类/纯虚接口
+Public API,virtual double PhaseAngle() const,isis_pybind.Sensor.phase_angle,Y,Current Python name
+Public API,virtual double EmissionAngle() const,isis_pybind.Sensor.emission_angle,Y,Current Python name
+Public API,virtual double IncidenceAngle() const,isis_pybind.Sensor.incidence_angle,Y,Current Python name
+Public API,void LookDirection(double v[3]) const,isis_pybind.Sensor.look_direction,N,抽象基类/纯虚接口
+Public API,virtual std::vector<double> lookDirectionJ2000() const,isis_pybind.Sensor.look_direction_j2000,N,抽象基类/纯虚接口
+Public API,virtual std::vector<double> lookDirectionBodyFixed() const,isis_pybind.Sensor.look_direction_body_fixed,N,抽象基类/纯虚接口
+Public API,virtual double RightAscension(),isis_pybind.Sensor.right_ascension,Y,Current Python name
+Public API,virtual double Declination(),isis_pybind.Sensor.declination,Y,Current Python name
+Public API,void SpacecraftSurfaceVector(double scSurfaceVector[3]) const,isis_pybind.Sensor.spacecraft_surface_vector,N,抽象基类/纯虚接口
+Public API,virtual double SlantDistance() const,isis_pybind.Sensor.slant_distance,Y,Current Python name
+Public API,double LocalSolarTime(),isis_pybind.Sensor.local_solar_time,Y,Current Python name
+Public API,virtual double SolarDistance() const,isis_pybind.Sensor.solar_distance,Y,Current Python name
+Public API,double SpacecraftAltitude(),isis_pybind.Sensor.spacecraft_altitude,Y,Current Python name
+Public API,virtual double resolution() { return 1.0,isis_pybind.Sensor.resolution,Y,Current Python name
+Public API,void IgnoreElevationModel(bool ignore),isis_pybind.Sensor.ignore_elevation_model,Y,Current Python name
+Public API,virtual QList<QPointF> PixelIfovOffsets(),isis_pybind.Sensor.pixel_ifov_offsets,N,抽象基类/纯虚接口
+Public API,virtual QString instrumentNameLong() const = 0,isis_pybind.Sensor.instrument_name_long,Y,Current Python name
+Public API,virtual QString instrumentNameShort() const = 0,isis_pybind.Sensor.instrument_name_short,Y,Current Python name
+Public API,virtual QString spacecraftNameLong() const = 0,isis_pybind.Sensor.spacecraft_name_long,Y,Current Python name
+Public API,virtual QString spacecraftNameShort() const = 0,isis_pybind.Sensor.spacecraft_name_short,Y,Current Python name

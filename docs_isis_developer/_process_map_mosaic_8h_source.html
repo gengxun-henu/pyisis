@@ -1,0 +1,332 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/ProcessMapMosaic/ProcessMapMosaic.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_process_map_mosaic_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">ProcessMapMosaic.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_process_map_mosaic_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef ProcessMapMosaic_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define ProcessMapMosaic_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_process_mosaic_8h.html">ProcessMosaic.h</a>&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_buffer_8h.html">Buffer.h</a>&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_file_list_8h.html">FileList.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="class_isis_1_1_process_map_mosaic.html">   97</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_process_map_mosaic.html">ProcessMapMosaic</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_process_mosaic.html">Isis::ProcessMosaic</a> {</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <a class="code" href="class_isis_1_1_process_map_mosaic.html#aa831c3cc76e61920e6f93293e059557b">ProcessMapMosaic</a>();</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_process_map_mosaic.html#adaa0f2e7fb2d91e0a83134f7ed363933">~ProcessMapMosaic</a>();</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      <span class="comment">// SetOutputCube() is not virtual in the Process class nor in the</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      <span class="comment">// ProcessMosaic class, so the following definitions for this method are</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <span class="comment">// the only ones that are allowed for ProcessMapMosaic objects and child</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <span class="comment">// objects</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_map_mosaic.html#a00070768c10367cea402e335b5d68476">SetOutputCube</a>(<a class="code" href="class_isis_1_1_file_list.html">FileList</a> &amp;propagationCubes, <a class="code" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a> &amp;oAtt,</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                                <span class="keyword">const</span> QString &amp;mosaicFile);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;      <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_map_mosaic.html#a1983ce5bead8a75cfe0284852ac0f573">RingsSetOutputCube</a>(<a class="code" href="class_isis_1_1_file_list.html">FileList</a> &amp;propagationCubes, <a class="code" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a> &amp;oAtt,</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                                <span class="keyword">const</span> QString &amp;mosaicFile);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_map_mosaic.html#a00070768c10367cea402e335b5d68476">SetOutputCube</a>(<a class="code" href="class_isis_1_1_file_list.html">FileList</a> &amp;propagationCubes,</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                                <span class="keywordtype">double</span> slat, <span class="keywordtype">double</span> elat, <span class="keywordtype">double</span> slon, <span class="keywordtype">double</span> elon,</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                                <a class="code" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a> &amp;oAtt, <span class="keyword">const</span> QString &amp;mosaicFile);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;      <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_map_mosaic.html#a1983ce5bead8a75cfe0284852ac0f573">RingsSetOutputCube</a>(<a class="code" href="class_isis_1_1_file_list.html">FileList</a> &amp;propagationCubes,</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                                <span class="keywordtype">double</span> srad, <span class="keywordtype">double</span> erad, <span class="keywordtype">double</span> saz, <span class="keywordtype">double</span> eaz,</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                                <a class="code" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a> &amp;oAtt, <span class="keyword">const</span> QString &amp;mosaicFile);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_map_mosaic.html#a00070768c10367cea402e335b5d68476">SetOutputCube</a>(<span class="keyword">const</span> QString &amp;inputFile,</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                                <span class="keywordtype">double</span> xmin, <span class="keywordtype">double</span> xmax, <span class="keywordtype">double</span> ymin, <span class="keywordtype">double</span> ymax,</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                                <span class="keywordtype">double</span> slat, <span class="keywordtype">double</span> elat, <span class="keywordtype">double</span> slon, <span class="keywordtype">double</span> elon, <span class="keywordtype">int</span> nbands,</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                                <a class="code" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a> &amp;oAtt, <span class="keyword">const</span> QString &amp;mosaicFile,</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                                <span class="keywordtype">bool</span> latlonflag=<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;      <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_map_mosaic.html#a1983ce5bead8a75cfe0284852ac0f573">RingsSetOutputCube</a>(<span class="keyword">const</span> QString &amp;inputFile,</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                                <span class="keywordtype">double</span> xmin, <span class="keywordtype">double</span> xmax, <span class="keywordtype">double</span> ymin, <span class="keywordtype">double</span> ymax,</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                                <span class="keywordtype">double</span> srad, <span class="keywordtype">double</span> erad, <span class="keywordtype">double</span> saz, <span class="keywordtype">double</span> eaz, <span class="keywordtype">int</span> nbands,</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                                <a class="code" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a> &amp;oAtt, <span class="keyword">const</span> QString &amp;mosaicFile);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_map_mosaic.html#a00070768c10367cea402e335b5d68476">SetOutputCube</a>(<span class="keyword">const</span> QString &amp;inputFile, <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> mapping,</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;                                <a class="code" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a> &amp;oAtt, <span class="keyword">const</span> QString &amp;mosaicFile);</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_map_mosaic.html#a1983ce5bead8a75cfe0284852ac0f573">RingsSetOutputCube</a>(<span class="keyword">const</span> QString &amp;inputFile, <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> mapping,</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;                                <a class="code" href="class_isis_1_1_cube_attribute_output.html">CubeAttributeOutput</a> &amp;oAtt, <span class="keyword">const</span> QString &amp;mosaicFile);</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_map_mosaic.html#a00070768c10367cea402e335b5d68476">SetOutputCube</a>(<span class="keyword">const</span> QString &amp;mosaicFile);</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_map_mosaic.html#a1983ce5bead8a75cfe0284852ac0f573">RingsSetOutputCube</a>(<span class="keyword">const</span> QString &amp;mosaicFile);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;      <span class="keyword">using</span> <a class="code" href="class_isis_1_1_process_mosaic.html#ad208f1c88c7d72af1babe59efcbf47a4">Isis::ProcessMosaic::SetInputCube</a>;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cube.html">Isis::Cube</a> *<a class="code" href="class_isis_1_1_process_map_mosaic.html#a24fc3ede8b64ccd7058889efb75747aa">SetInputCube</a>();</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;      <span class="keyword">using</span> <a class="code" href="class_isis_1_1_process_mosaic.html#a120773bc59ecdf91cc10b8c1fdaa349b">Isis::ProcessMosaic::StartProcess</a>;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_process_map_mosaic.html#a563612b295d62206b3e322900252f3ef">StartProcess</a>(QString inputFile);</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">void</span> FillNull(<a class="code" href="class_isis_1_1_buffer.html">Buffer</a> &amp;data);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      <span class="keywordtype">bool</span> p_createMosaic;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;  };</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;};</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_buffer_8h_html"><div class="ttname"><a href="_buffer_8h.html">Buffer.h</a></div></div>
+<div class="ttc" id="a_file_list_8h_html"><div class="ttname"><a href="_file_list_8h.html">FileList.h</a></div></div>
+<div class="ttc" id="a_process_mosaic_8h_html"><div class="ttname"><a href="_process_mosaic_8h.html">ProcessMosaic.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_buffer_html"><div class="ttname"><a href="class_isis_1_1_buffer.html">Isis::Buffer</a></div><div class="ttdoc">Buffer for reading and writing cube data.</div><div class="ttdef"><b>Definition:</b> Buffer.h:53</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_attribute_output_html"><div class="ttname"><a href="class_isis_1_1_cube_attribute_output.html">Isis::CubeAttributeOutput</a></div><div class="ttdoc">Manipulate and parse attributes of output cube filenames.</div><div class="ttdef"><b>Definition:</b> CubeAttribute.h:473</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_html"><div class="ttname"><a href="class_isis_1_1_cube.html">Isis::Cube</a></div><div class="ttdoc">IO Handler for Isis Cubes.</div><div class="ttdef"><b>Definition:</b> Cube.h:168</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_list_html"><div class="ttname"><a href="class_isis_1_1_file_list.html">Isis::FileList</a></div><div class="ttdoc">Internalizes a list of files.</div><div class="ttdef"><b>Definition:</b> FileList.h:54</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_map_mosaic_html"><div class="ttname"><a href="class_isis_1_1_process_map_mosaic.html">Isis::ProcessMapMosaic</a></div><div class="ttdoc">Mosaic two cubs together.</div><div class="ttdef"><b>Definition:</b> ProcessMapMosaic.h:97</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_map_mosaic_html_a00070768c10367cea402e335b5d68476"><div class="ttname"><a href="class_isis_1_1_process_map_mosaic.html#a00070768c10367cea402e335b5d68476">Isis::ProcessMapMosaic::SetOutputCube</a></div><div class="ttdeci">virtual Isis::Cube * SetOutputCube(FileList &amp;propagationCubes, CubeAttributeOutput &amp;oAtt, const QString &amp;mosaicFile)</div><div class="ttdoc">Set the output cube to specified file name and specified input images and output attributes.</div><div class="ttdef"><b>Definition:</b> ProcessMapMosaic.cpp:195</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_map_mosaic_html_a1983ce5bead8a75cfe0284852ac0f573"><div class="ttname"><a href="class_isis_1_1_process_map_mosaic.html#a1983ce5bead8a75cfe0284852ac0f573">Isis::ProcessMapMosaic::RingsSetOutputCube</a></div><div class="ttdeci">Isis::Cube * RingsSetOutputCube(FileList &amp;propagationCubes, CubeAttributeOutput &amp;oAtt, const QString &amp;mosaicFile)</div><div class="ttdoc">Set the output cube to specified file name and specified input images and output attributes.</div><div class="ttdef"><b>Definition:</b> ProcessMapMosaic.cpp:274</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_map_mosaic_html_a24fc3ede8b64ccd7058889efb75747aa"><div class="ttname"><a href="class_isis_1_1_process_map_mosaic.html#a24fc3ede8b64ccd7058889efb75747aa">Isis::ProcessMapMosaic::SetInputCube</a></div><div class="ttdeci">virtual Isis::Cube * SetInputCube()</div><div class="ttdoc">Input cube cannot be set here.</div><div class="ttdef"><b>Definition:</b> ProcessMapMosaic.cpp:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_map_mosaic_html_a563612b295d62206b3e322900252f3ef"><div class="ttname"><a href="class_isis_1_1_process_map_mosaic.html#a563612b295d62206b3e322900252f3ef">Isis::ProcessMapMosaic::StartProcess</a></div><div class="ttdeci">virtual bool StartProcess(QString inputFile)</div><div class="ttdoc">Mosaic Processing method, returns false if the cube is not inside the mosaic.</div><div class="ttdef"><b>Definition:</b> ProcessMapMosaic.cpp:52</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_map_mosaic_html_aa831c3cc76e61920e6f93293e059557b"><div class="ttname"><a href="class_isis_1_1_process_map_mosaic.html#aa831c3cc76e61920e6f93293e059557b">Isis::ProcessMapMosaic::ProcessMapMosaic</a></div><div class="ttdeci">ProcessMapMosaic()</div><div class="ttdoc">Constructs a Mosaic object.</div><div class="ttdef"><b>Definition:</b> ProcessMapMosaic.cpp:30</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_map_mosaic_html_adaa0f2e7fb2d91e0a83134f7ed363933"><div class="ttname"><a href="class_isis_1_1_process_map_mosaic.html#adaa0f2e7fb2d91e0a83134f7ed363933">Isis::ProcessMapMosaic::~ProcessMapMosaic</a></div><div class="ttdeci">virtual ~ProcessMapMosaic()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> ProcessMapMosaic.cpp:36</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_mosaic_html"><div class="ttname"><a href="class_isis_1_1_process_mosaic.html">Isis::ProcessMosaic</a></div><div class="ttdoc">Mosaic two cubes together.</div><div class="ttdef"><b>Definition:</b> ProcessMosaic.h:194</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_mosaic_html_a120773bc59ecdf91cc10b8c1fdaa349b"><div class="ttname"><a href="class_isis_1_1_process_mosaic.html#a120773bc59ecdf91cc10b8c1fdaa349b">Isis::ProcessMosaic::StartProcess</a></div><div class="ttdeci">virtual void StartProcess(const int &amp;piOutSample, const int &amp;piOutLine, const int &amp;piOutBand)</div><div class="ttdoc">This method invokes the process by mosaic operation over a single input cube and single output cube.</div><div class="ttdef"><b>Definition:</b> ProcessMosaic.cpp:106</div></div>
+<div class="ttc" id="aclass_isis_1_1_process_mosaic_html_ad208f1c88c7d72af1babe59efcbf47a4"><div class="ttname"><a href="class_isis_1_1_process_mosaic.html#ad208f1c88c7d72af1babe59efcbf47a4">Isis::ProcessMosaic::SetInputCube</a></div><div class="ttdeci">virtual Isis::Cube * SetInputCube(const QString &amp;parameter, const int requirements=0)</div><div class="ttdoc">Opens an input cube specified by the user and verifies requirements are met.</div><div class="ttdef"><b>Definition:</b> Process.cpp:139</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_group_html"><div class="ttname"><a href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a></div><div class="ttdoc">Contains multiple PvlContainers.</div><div class="ttdef"><b>Definition:</b> PvlGroup.h:41</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_7e794fac547447ad3c026d7378c65596.html">ProcessMapMosaic</a></li><li class="navelem"><a class="el" href="_process_map_mosaic_8h.html">ProcessMapMosaic.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,514 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/PvlObject/PvlObject.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_pvl_object_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">PvlObject.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_pvl_object_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PvlObject_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define PvlObject_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_container_8h.html">PvlContainer.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_group_8h.html">PvlGroup.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QMetaType&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;nlohmann/json.hpp&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="keyword">class </span><a class="code" href="class_q_list.html">QList</a>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html">   61</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_pvl_container.html">Isis::PvlContainer</a> {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a2be338fe6a627c3a7e6563dff3b3dab9">PvlObject</a>();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a2be338fe6a627c3a7e6563dff3b3dab9">PvlObject</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a2be338fe6a627c3a7e6563dff3b3dab9">PvlObject</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;other);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a2be338fe6a627c3a7e6563dff3b3dab9">PvlObject</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>, <span class="keyword">const</span> <a class="code" href="_c_s_m_camera_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">nlohmann::json</a> &amp;jsonobj);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      <span class="keyword">friend</span> std::ostream &amp;<a class="code" href="class_isis_1_1_pvl_object.html#a68c9ca947314cdfdc3d61b8e4fadb230">operator&lt;&lt;</a>(std::ostream &amp;os, <a class="code" href="class_isis_1_1_pvl_object.html">Isis::PvlObject</a> &amp;<span class="keywordtype">object</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <span class="keyword">friend</span> std::istream &amp;<a class="code" href="class_isis_1_1_pvl_object.html#a42e4c4d0cdc515cae1105e6a68631f6a">operator&gt;&gt;</a>(std::istream &amp;is, <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;result);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a41c1f43a2edb9718e15c71f217d67170">   75</a></span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_pvl_object.html#a41c1f43a2edb9718e15c71f217d67170">groups</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordflow">return</span> m_groups.size();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      };</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#a29980505ccab03cacec964af00cb0548">group</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#a29980505ccab03cacec964af00cb0548">group</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a256c0d722be574e04b54d8e9f1081b5d">   83</a></span>&#160;      <span class="keyword">typedef</span> <a class="code" href="class_q_list.html">QList&lt;Isis::PvlGroup&gt;::iterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#a256c0d722be574e04b54d8e9f1081b5d">PvlGroupIterator</a>;</div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a98d8dce14782b9fb369b27d8dbf4dc9f">   84</a></span>&#160;      <span class="keyword">typedef</span> <a class="code" href="class_q_list.html">QList&lt;Isis::PvlGroup&gt;::const_iterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#a98d8dce14782b9fb369b27d8dbf4dc9f">ConstPvlGroupIterator</a>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a104ace5831925cd02bb8829c484ec77e">   91</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a256c0d722be574e04b54d8e9f1081b5d">PvlGroupIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#a104ace5831925cd02bb8829c484ec77e">beginGroup</a>() {</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">return</span> m_groups.begin();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      };</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a2b470d44b3ec82f80ec789f23397271c">  100</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a98d8dce14782b9fb369b27d8dbf4dc9f">ConstPvlGroupIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#a2b470d44b3ec82f80ec789f23397271c">beginGroup</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordflow">return</span> m_groups.begin();</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      };</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#ad24c09c470081027b0ddbf50958e481d">  109</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a256c0d722be574e04b54d8e9f1081b5d">PvlGroupIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#ad24c09c470081027b0ddbf50958e481d">endGroup</a>() {</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordflow">return</span> m_groups.end();</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      };</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a849ff89a8154ea9ec5887c02ea8768e5">  118</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a98d8dce14782b9fb369b27d8dbf4dc9f">ConstPvlGroupIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#a849ff89a8154ea9ec5887c02ea8768e5">endGroup</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keywordflow">return</span> m_groups.end();</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      };</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">  129</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a256c0d722be574e04b54d8e9f1081b5d">PvlGroupIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">findGroup</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>,</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                                 <a class="code" href="class_isis_1_1_pvl_object.html#a256c0d722be574e04b54d8e9f1081b5d">PvlGroupIterator</a> beg,</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                                 <a class="code" href="class_isis_1_1_pvl_object.html#a256c0d722be574e04b54d8e9f1081b5d">PvlGroupIterator</a> <a class="code" href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">end</a>) {</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <a class="code" href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a> temp(<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordflow">return</span> std::find(beg, <a class="code" href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">end</a>, temp);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      }</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a057861a1ebc84e9286a4cc5db8aaff26">  143</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a98d8dce14782b9fb369b27d8dbf4dc9f">ConstPvlGroupIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#a057861a1ebc84e9286a4cc5db8aaff26">findGroup</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>,</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                                      <a class="code" href="class_isis_1_1_pvl_object.html#a98d8dce14782b9fb369b27d8dbf4dc9f">ConstPvlGroupIterator</a> beg,</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                                      <a class="code" href="class_isis_1_1_pvl_object.html#a98d8dce14782b9fb369b27d8dbf4dc9f">ConstPvlGroupIterator</a> <a class="code" href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">end</a>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <a class="code" href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a> temp(<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keywordflow">return</span> std::find(beg, <a class="code" href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">end</a>, temp);</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;      }</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261">  154</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261">FindOptions</a> {</div>
+<div class="line"><a name="l00156"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261ab057586270bd693dbe1832f57d8fbc40">  156</a></span>&#160;        <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261ab057586270bd693dbe1832f57d8fbc40">None</a>,</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261aa29caa5de1aa5d875ec6127aa5b5e490">Traverse</a></div>
+<div class="line"><a name="l00159"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261aa29caa5de1aa5d875ec6127aa5b5e490">  159</a></span>&#160;      };</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;      <span class="comment">// The using statements below are used to make the PvlContainer&#39;s version</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;      <span class="comment">// of FindKeyword and HasKeyword visible to other code that otherwise would not be</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      <span class="comment">// able to see those versions.</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;      <span class="keyword">using</span> <a class="code" href="class_isis_1_1_pvl_container.html#aec162efdd61490e50dc5211e7f97469b">PvlContainer::findKeyword</a>;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;      <a class="code" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#aec162efdd61490e50dc5211e7f97469b">findKeyword</a>(<span class="keyword">const</span> QString &amp;kname,</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                              <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261">FindOptions</a> opts);</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;      <span class="keyword">using</span> <a class="code" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">PvlContainer::hasKeyword</a>;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pvl_object.html#a1b5704b2eef84a9a0dea1384193dd9c1">hasKeyword</a>(<span class="keyword">const</span> QString &amp;kname,</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                      <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261">FindOptions</a> opts) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      <a class="code" href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">findGroup</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>,</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                                <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261">FindOptions</a> opts = <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261ab057586270bd693dbe1832f57d8fbc40">None</a>);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">findGroup</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>,</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                                      <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261">FindOptions</a> opts = <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261ab057586270bd693dbe1832f57d8fbc40">None</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00186"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#ac18c485fdccb8e8bf16866e6c6ad2e3d">  186</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_object.html#ac18c485fdccb8e8bf16866e6c6ad2e3d">addGroup</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#a29980505ccab03cacec964af00cb0548">group</a>) {</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        m_groups.push_back(<a class="code" href="class_isis_1_1_pvl_object.html#a29980505ccab03cacec964af00cb0548">group</a>);</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="comment">//m_groups[m_groups.size()-1].SetFileName(FileName());</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;      };</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;      <span class="keyword">using</span> PvlContainer::operator+=;</div>
+<div class="line"><a name="l00192"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a6b27174baf05991d53eccc11e4929ad4">  192</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_object.html#a8a7565d1e67eb8d5ab6299ad1ca2ec1a">operator+= </a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#a29980505ccab03cacec964af00cb0548">group</a>) {</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <a class="code" href="class_isis_1_1_pvl_object.html#ac18c485fdccb8e8bf16866e6c6ad2e3d">addGroup</a>(<a class="code" href="class_isis_1_1_pvl_object.html#a29980505ccab03cacec964af00cb0548">group</a>);</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;      }</div>
+<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a26745389e92b9480c2208a7bce1b9e57">  195</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_object.html#a8a7565d1e67eb8d5ab6299ad1ca2ec1a">operator+= </a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">Isis::PvlObject</a> &amp;obj) {</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <a class="code" href="class_isis_1_1_pvl_object.html#a9fa1d7c4be1eb69b102c86a38dd5eea3">addObject</a>(obj);</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;      }</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_object.html#acefdb20ebea6f16b776980219c828b19">deleteGroup</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_object.html#acefdb20ebea6f16b776980219c828b19">deleteGroup</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a901539ec62d2075b4fd01f2eab06e80f">  210</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pvl_object.html#a901539ec62d2075b4fd01f2eab06e80f">hasGroup</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <span class="keywordflow">if</span>(<a class="code" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">findGroup</a>(<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>, <a class="code" href="class_isis_1_1_pvl_object.html#a104ace5831925cd02bb8829c484ec77e">beginGroup</a>(), <a class="code" href="class_isis_1_1_pvl_object.html#ad24c09c470081027b0ddbf50958e481d">endGroup</a>()) == <a class="code" href="class_isis_1_1_pvl_object.html#ad24c09c470081027b0ddbf50958e481d">endGroup</a>()) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;      }</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
+<div class="line"><a name="l00219"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a65ee598aba830797a9cea5f8d5499413">  219</a></span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_pvl_object.html#a65ee598aba830797a9cea5f8d5499413">objects</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        <span class="keywordflow">return</span> m_objects.size();</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;      };</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#a7fa8ba89de242fe5390df9290f58e078">object</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#a7fa8ba89de242fe5390df9290f58e078">object</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
+<div class="line"><a name="l00227"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a66f08d8f2b22decd476d8dca198295f6">  227</a></span>&#160;      <span class="keyword">typedef</span> <a class="code" href="class_q_list.html">QList&lt;PvlObject&gt;::iterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#a66f08d8f2b22decd476d8dca198295f6">PvlObjectIterator</a>;</div>
+<div class="line"><a name="l00228"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a2e0f424a3e6a4fa0ffe9e72c5ff6e51e">  228</a></span>&#160;      <span class="keyword">typedef</span> <a class="code" href="class_q_list.html">QList&lt;PvlObject&gt;::const_iterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#a2e0f424a3e6a4fa0ffe9e72c5ff6e51e">ConstPvlObjectIterator</a>;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
+<div class="line"><a name="l00235"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a0549cb2da1910398021a3e14e987b412">  235</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a66f08d8f2b22decd476d8dca198295f6">PvlObjectIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#a0549cb2da1910398021a3e14e987b412">beginObject</a>() {</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <span class="keywordflow">return</span> m_objects.begin();</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;      };</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00244"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#af6501629062656be46abd8bb1ad60169">  244</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a2e0f424a3e6a4fa0ffe9e72c5ff6e51e">ConstPvlObjectIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#af6501629062656be46abd8bb1ad60169">beginObject</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordflow">return</span> m_objects.begin();</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;      };</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00253"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a9fc43639d606bbb17aa900cb4de3a8d7">  253</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a66f08d8f2b22decd476d8dca198295f6">PvlObjectIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#a9fc43639d606bbb17aa900cb4de3a8d7">endObject</a>() {</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="keywordflow">return</span> m_objects.end();</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;      };</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
+<div class="line"><a name="l00262"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#abbff135feaeb26b07c408e1cf9805587">  262</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a2e0f424a3e6a4fa0ffe9e72c5ff6e51e">ConstPvlObjectIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#abbff135feaeb26b07c408e1cf9805587">endObject</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="keywordflow">return</span> m_objects.end();</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;      };</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
+<div class="line"><a name="l00274"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a4c09ebe5d216cb7711fccfe3f7ffac37">  274</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a66f08d8f2b22decd476d8dca198295f6">PvlObjectIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#a4c09ebe5d216cb7711fccfe3f7ffac37">findObject</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>,</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                                   <a class="code" href="class_isis_1_1_pvl_object.html#a66f08d8f2b22decd476d8dca198295f6">PvlObjectIterator</a> beg,</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                                   <a class="code" href="class_isis_1_1_pvl_object.html#a66f08d8f2b22decd476d8dca198295f6">PvlObjectIterator</a> <a class="code" href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">end</a>) {</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> temp(<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>);</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keywordflow">return</span> std::find(beg, <a class="code" href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">end</a>, temp);</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;      }</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
+<div class="line"><a name="l00289"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#aced46c89c7a44173c2d7f5f48f3e91ad">  289</a></span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html#a2e0f424a3e6a4fa0ffe9e72c5ff6e51e">ConstPvlObjectIterator</a> <a class="code" href="class_isis_1_1_pvl_object.html#aced46c89c7a44173c2d7f5f48f3e91ad">findObject</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>,</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                                        <a class="code" href="class_isis_1_1_pvl_object.html#a2e0f424a3e6a4fa0ffe9e72c5ff6e51e">ConstPvlObjectIterator</a> beg,</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;                                        <a class="code" href="class_isis_1_1_pvl_object.html#a2e0f424a3e6a4fa0ffe9e72c5ff6e51e">ConstPvlObjectIterator</a> <a class="code" href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">end</a>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> temp(<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>);</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keywordflow">return</span> std::find(beg, <a class="code" href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">end</a>, temp);</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;      }</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;      <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#a4c09ebe5d216cb7711fccfe3f7ffac37">findObject</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>,</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                            <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261">FindOptions</a> opts = <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261ab057586270bd693dbe1832f57d8fbc40">None</a>);</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160; </div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#a4c09ebe5d216cb7711fccfe3f7ffac37">findObject</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>,</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                                  <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261">FindOptions</a> opts = <a class="code" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261ab057586270bd693dbe1832f57d8fbc40">None</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160; </div>
+<div class="line"><a name="l00307"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a9fa1d7c4be1eb69b102c86a38dd5eea3">  307</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_object.html#a9fa1d7c4be1eb69b102c86a38dd5eea3">addObject</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<span class="keywordtype">object</span>) {</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        m_objects.push_back(<span class="keywordtype">object</span>);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        m_objects[m_objects.size()-1].setFileName(<a class="code" href="class_isis_1_1_pvl_container.html#a6cdb4c84baf37ecc870517b6c23ebe6d">fileName</a>());</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;      }</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_object.html#a622d18b4f152bd76aafb33b172f35bce">deleteObject</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>);</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_object.html#a622d18b4f152bd76aafb33b172f35bce">deleteObject</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160; </div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
+<div class="line"><a name="l00323"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a3ca8017f3ad5fb9eb082c08e8c77aa39">  323</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pvl_object.html#a3ca8017f3ad5fb9eb082c08e8c77aa39">hasObject</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <span class="keywordflow">if</span>(<a class="code" href="class_isis_1_1_pvl_object.html#a4c09ebe5d216cb7711fccfe3f7ffac37">findObject</a>(<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>, <a class="code" href="class_isis_1_1_pvl_object.html#a0549cb2da1910398021a3e14e987b412">beginObject</a>(), <a class="code" href="class_isis_1_1_pvl_object.html#a9fc43639d606bbb17aa900cb4de3a8d7">endObject</a>()) == <a class="code" href="class_isis_1_1_pvl_object.html#a9fc43639d606bbb17aa900cb4de3a8d7">endObject</a>()) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;      }</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
+<div class="line"><a name="l00335"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#af8980fe7bf759a80e44dcb263e295a12">  335</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pvl_object.html#af8980fe7bf759a80e44dcb263e295a12">operator==</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<span class="keywordtype">object</span>)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="class_isis_1_1_pvl_keyword.html#a7ef0c7e8f73df31e6a1b6ca87e176bd9">PvlKeyword::stringEqual</a>(<span class="keywordtype">object</span>.<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>(), this-&gt;<a class="code" href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">name</a>());</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;      }</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160; </div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
+<div class="line"><a name="l00341"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_object.html#a93efa0b07ce1fff644e3ba3bfb6adee7">  341</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_object.html#a93efa0b07ce1fff644e3ba3bfb6adee7">clear</a>() {</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <a class="code" href="class_isis_1_1_pvl_container.html#a3def2ae360eecd7f3d5b59a7d296ad14">Isis::PvlContainer::clear</a>();</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        m_objects.clear();</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        m_groups.clear();</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;      }</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<a class="code" href="class_isis_1_1_pvl_object.html#a10afe048d6846ff8001d381d281b754f">operator=</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;other);</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_object.html#ab148bd1d30dd5e59e87342a80ee09b10">validateObject</a>(<a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp; pPvlObj);</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;PvlObject&gt;</a> m_objects;    </div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;      <a class="code" href="class_q_list.html">QList&lt;PvlGroup&gt;</a> m_groups;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;  };</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;}</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160; </div>
+<div class="line"><a name="l00360"></a><span class="lineno"><a class="line" href="_pvl_object_8h.html#ae8f75751694235be00a0f1fcbf9b5886">  360</a></span>&#160;<a class="code" href="_pvl_object_8h.html#ae8f75751694235be00a0f1fcbf9b5886">Q_DECLARE_METATYPE</a>(<a class="code" href="class_isis_1_1_pvl_object.html">Isis::PvlObject</a>);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160; </div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_c_s_m_camera_8cpp_html_ab701e3ac61a85b337ec5c1abaad6742d"><div class="ttname"><a href="_c_s_m_camera_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">json</a></div><div class="ttdeci">nlohmann::json json</div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> CSMCamera.cpp:46</div></div>
+<div class="ttc" id="a_pvl_container_8h_html"><div class="ttname"><a href="_pvl_container_8h.html">PvlContainer.h</a></div></div>
+<div class="ttc" id="a_pvl_group_8h_html"><div class="ttname"><a href="_pvl_group_8h.html">PvlGroup.h</a></div></div>
+<div class="ttc" id="a_pvl_object_8h_html_ae8f75751694235be00a0f1fcbf9b5886"><div class="ttname"><a href="_pvl_object_8h.html#ae8f75751694235be00a0f1fcbf9b5886">Q_DECLARE_METATYPE</a></div><div class="ttdeci">Q_DECLARE_METATYPE(Isis::PvlObject)</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_container_html"><div class="ttname"><a href="class_isis_1_1_pvl_container.html">Isis::PvlContainer</a></div><div class="ttdoc">Contains more than one keyword-value pair.</div><div class="ttdef"><b>Definition:</b> PvlContainer.h:49</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_container_html_a1b5704b2eef84a9a0dea1384193dd9c1"><div class="ttname"><a href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword</a></div><div class="ttdeci">bool hasKeyword(const QString &amp;name) const</div><div class="ttdoc">Check to see if a keyword exists.</div><div class="ttdef"><b>Definition:</b> PvlContainer.cpp:159</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_container_html_a3def2ae360eecd7f3d5b59a7d296ad14"><div class="ttname"><a href="class_isis_1_1_pvl_container.html#a3def2ae360eecd7f3d5b59a7d296ad14">Isis::PvlContainer::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdoc">Clears PvlKeywords.</div><div class="ttdef"><b>Definition:</b> PvlContainer.h:91</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_container_html_a6cdb4c84baf37ecc870517b6c23ebe6d"><div class="ttname"><a href="class_isis_1_1_pvl_container.html#a6cdb4c84baf37ecc870517b6c23ebe6d">Isis::PvlContainer::fileName</a></div><div class="ttdeci">QString fileName() const</div><div class="ttdoc">Returns the filename used to initialise the Pvl object.</div><div class="ttdef"><b>Definition:</b> PvlContainer.h:232</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_container_html_a964e6046cc43e397f6ae239b854836ca"><div class="ttname"><a href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">Isis::PvlContainer::end</a></div><div class="ttdeci">PvlKeywordIterator end()</div><div class="ttdoc">Return the ending iterator.</div><div class="ttdef"><b>Definition:</b> PvlContainer.h:194</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_container_html_ab23ab2b0e03d663f90613991af7054c6"><div class="ttname"><a href="class_isis_1_1_pvl_container.html#ab23ab2b0e03d663f90613991af7054c6">Isis::PvlContainer::name</a></div><div class="ttdeci">QString name() const</div><div class="ttdoc">Returns the container name.</div><div class="ttdef"><b>Definition:</b> PvlContainer.h:63</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_container_html_aec162efdd61490e50dc5211e7f97469b"><div class="ttname"><a href="class_isis_1_1_pvl_container.html#aec162efdd61490e50dc5211e7f97469b">Isis::PvlContainer::findKeyword</a></div><div class="ttdeci">PvlKeyword &amp; findKeyword(const QString &amp;name)</div><div class="ttdoc">Find a keyword with a specified name.</div><div class="ttdef"><b>Definition:</b> PvlContainer.cpp:62</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_group_html"><div class="ttname"><a href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a></div><div class="ttdoc">Contains multiple PvlContainers.</div><div class="ttdef"><b>Definition:</b> PvlGroup.h:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_keyword_html"><div class="ttname"><a href="class_isis_1_1_pvl_keyword.html">Isis::PvlKeyword</a></div><div class="ttdoc">A single keyword-value pair.</div><div class="ttdef"><b>Definition:</b> PvlKeyword.h:87</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_keyword_html_a7ef0c7e8f73df31e6a1b6ca87e176bd9"><div class="ttname"><a href="class_isis_1_1_pvl_keyword.html#a7ef0c7e8f73df31e6a1b6ca87e176bd9">Isis::PvlKeyword::stringEqual</a></div><div class="ttdeci">static bool stringEqual(const QString &amp;string1, const QString &amp;string2)</div><div class="ttdoc">Checks to see if two QStrings are equal.</div><div class="ttdef"><b>Definition:</b> PvlKeyword.cpp:612</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html"><div class="ttname"><a href="class_isis_1_1_pvl_object.html">Isis::PvlObject</a></div><div class="ttdoc">Contains Pvl Groups and Pvl Objects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a0549cb2da1910398021a3e14e987b412"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a0549cb2da1910398021a3e14e987b412">Isis::PvlObject::beginObject</a></div><div class="ttdeci">PvlObjectIterator beginObject()</div><div class="ttdoc">Returns the index of the beginning object.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:235</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a057861a1ebc84e9286a4cc5db8aaff26"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a057861a1ebc84e9286a4cc5db8aaff26">Isis::PvlObject::findGroup</a></div><div class="ttdeci">ConstPvlGroupIterator findGroup(const QString &amp;name, ConstPvlGroupIterator beg, ConstPvlGroupIterator end) const</div><div class="ttdoc">Find a group with the specified name, within these indexes.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:143</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a104ace5831925cd02bb8829c484ec77e"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a104ace5831925cd02bb8829c484ec77e">Isis::PvlObject::beginGroup</a></div><div class="ttdeci">PvlGroupIterator beginGroup()</div><div class="ttdoc">Returns the beginning group index.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:91</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a10afe048d6846ff8001d381d281b754f"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a10afe048d6846ff8001d381d281b754f">Isis::PvlObject::operator=</a></div><div class="ttdeci">const PvlObject &amp; operator=(const PvlObject &amp;other)</div><div class="ttdoc">This is an assignment operator.</div><div class="ttdef"><b>Definition:</b> PvlObject.cpp:813</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a1b5704b2eef84a9a0dea1384193dd9c1"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlObject::hasKeyword</a></div><div class="ttdeci">bool hasKeyword(const QString &amp;name) const</div><div class="ttdoc">Check to see if a keyword exists.</div><div class="ttdef"><b>Definition:</b> PvlContainer.cpp:159</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a256c0d722be574e04b54d8e9f1081b5d"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a256c0d722be574e04b54d8e9f1081b5d">Isis::PvlObject::PvlGroupIterator</a></div><div class="ttdeci">QList&lt; Isis::PvlGroup &gt;::iterator PvlGroupIterator</div><div class="ttdoc">The counter for groups.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:83</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a29980505ccab03cacec964af00cb0548"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a29980505ccab03cacec964af00cb0548">Isis::PvlObject::group</a></div><div class="ttdeci">PvlGroup &amp; group(const int index)</div><div class="ttdoc">Return the group at the specified index.</div><div class="ttdef"><b>Definition:</b> PvlObject.cpp:444</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a2b470d44b3ec82f80ec789f23397271c"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a2b470d44b3ec82f80ec789f23397271c">Isis::PvlObject::beginGroup</a></div><div class="ttdeci">ConstPvlGroupIterator beginGroup() const</div><div class="ttdoc">Returns the beginning group index.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:100</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a2be338fe6a627c3a7e6563dff3b3dab9"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a2be338fe6a627c3a7e6563dff3b3dab9">Isis::PvlObject::PvlObject</a></div><div class="ttdeci">PvlObject()</div><div class="ttdoc">Creates a blank PvlObject.</div><div class="ttdef"><b>Definition:</b> PvlObject.cpp:26</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a2e0f424a3e6a4fa0ffe9e72c5ff6e51e"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a2e0f424a3e6a4fa0ffe9e72c5ff6e51e">Isis::PvlObject::ConstPvlObjectIterator</a></div><div class="ttdeci">QList&lt; PvlObject &gt;::const_iterator ConstPvlObjectIterator</div><div class="ttdef"><b>Definition:</b> PvlObject.h:228</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a3ca8017f3ad5fb9eb082c08e8c77aa39"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a3ca8017f3ad5fb9eb082c08e8c77aa39">Isis::PvlObject::hasObject</a></div><div class="ttdeci">bool hasObject(const QString &amp;name) const</div><div class="ttdoc">Returns a boolean value based on whether the object exists in the current PvlObject or not.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:323</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a41c1f43a2edb9718e15c71f217d67170"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a41c1f43a2edb9718e15c71f217d67170">Isis::PvlObject::groups</a></div><div class="ttdeci">int groups() const</div><div class="ttdoc">Returns the number of groups contained.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:75</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a42e4c4d0cdc515cae1105e6a68631f6a"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a42e4c4d0cdc515cae1105e6a68631f6a">Isis::PvlObject::operator&gt;&gt;</a></div><div class="ttdeci">friend std::istream &amp; operator&gt;&gt;(std::istream &amp;is, PvlObject &amp;result)</div><div class="ttdoc">This method reads a PvlObject from the input stream.</div><div class="ttdef"><b>Definition:</b> PvlObject.cpp:697</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a4c09ebe5d216cb7711fccfe3f7ffac37"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a4c09ebe5d216cb7711fccfe3f7ffac37">Isis::PvlObject::findObject</a></div><div class="ttdeci">PvlObjectIterator findObject(const QString &amp;name, PvlObjectIterator beg, PvlObjectIterator end)</div><div class="ttdoc">Find the index of object with a specified name, between two indexes.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:274</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a622d18b4f152bd76aafb33b172f35bce"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a622d18b4f152bd76aafb33b172f35bce">Isis::PvlObject::deleteObject</a></div><div class="ttdeci">void deleteObject(const QString &amp;name)</div><div class="ttdoc">Remove an object from the current PvlObject.</div><div class="ttdef"><b>Definition:</b> PvlObject.cpp:358</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a65ee598aba830797a9cea5f8d5499413"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a65ee598aba830797a9cea5f8d5499413">Isis::PvlObject::objects</a></div><div class="ttdeci">int objects() const</div><div class="ttdoc">Returns the number of objects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:219</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a66f08d8f2b22decd476d8dca198295f6"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a66f08d8f2b22decd476d8dca198295f6">Isis::PvlObject::PvlObjectIterator</a></div><div class="ttdeci">QList&lt; PvlObject &gt;::iterator PvlObjectIterator</div><div class="ttdoc">The counter for objects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:227</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a68c9ca947314cdfdc3d61b8e4fadb230"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a68c9ca947314cdfdc3d61b8e4fadb230">Isis::PvlObject::operator&lt;&lt;</a></div><div class="ttdeci">friend std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, Isis::PvlObject &amp;object)</div><div class="ttdoc">Outputs the PvlObject data to a specified output stream.</div><div class="ttdef"><b>Definition:</b> PvlObject.cpp:515</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a7fa8ba89de242fe5390df9290f58e078"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a7fa8ba89de242fe5390df9290f58e078">Isis::PvlObject::object</a></div><div class="ttdeci">PvlObject &amp; object(const int index)</div><div class="ttdoc">Return the object at the specified index.</div><div class="ttdef"><b>Definition:</b> PvlObject.cpp:481</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a849ff89a8154ea9ec5887c02ea8768e5"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a849ff89a8154ea9ec5887c02ea8768e5">Isis::PvlObject::endGroup</a></div><div class="ttdeci">ConstPvlGroupIterator endGroup() const</div><div class="ttdoc">Returns the const ending group index.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:118</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a8a7565d1e67eb8d5ab6299ad1ca2ec1a"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a8a7565d1e67eb8d5ab6299ad1ca2ec1a">Isis::PvlObject::operator+=</a></div><div class="ttdeci">void operator+=(const PvlKeyword &amp;keyword)</div><div class="ttdoc">When you use the += operator with a PvlKeyword, it will call the addKeyword() method.</div><div class="ttdef"><b>Definition:</b> PvlContainer.h:110</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a901539ec62d2075b4fd01f2eab06e80f"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a901539ec62d2075b4fd01f2eab06e80f">Isis::PvlObject::hasGroup</a></div><div class="ttdeci">bool hasGroup(const QString &amp;name) const</div><div class="ttdoc">Returns a boolean value based on whether the object has the specified group or not.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:210</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a93efa0b07ce1fff644e3ba3bfb6adee7"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a93efa0b07ce1fff644e3ba3bfb6adee7">Isis::PvlObject::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdoc">Remove everything from the current PvlObject.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:341</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a955c705d25fd292b9e6021d4ea962261"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261">Isis::PvlObject::FindOptions</a></div><div class="ttdeci">FindOptions</div><div class="ttdoc">A collection of options to use when finding.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:154</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a955c705d25fd292b9e6021d4ea962261aa29caa5de1aa5d875ec6127aa5b5e490"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261aa29caa5de1aa5d875ec6127aa5b5e490">Isis::PvlObject::Traverse</a></div><div class="ttdeci">@ Traverse</div><div class="ttdoc">Search child objects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:158</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a955c705d25fd292b9e6021d4ea962261ab057586270bd693dbe1832f57d8fbc40"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261ab057586270bd693dbe1832f57d8fbc40">Isis::PvlObject::None</a></div><div class="ttdeci">@ None</div><div class="ttdoc">Search only the current level.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:156</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a98d8dce14782b9fb369b27d8dbf4dc9f"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a98d8dce14782b9fb369b27d8dbf4dc9f">Isis::PvlObject::ConstPvlGroupIterator</a></div><div class="ttdeci">QList&lt; Isis::PvlGroup &gt;::const_iterator ConstPvlGroupIterator</div><div class="ttdef"><b>Definition:</b> PvlObject.h:84</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a9fa1d7c4be1eb69b102c86a38dd5eea3"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a9fa1d7c4be1eb69b102c86a38dd5eea3">Isis::PvlObject::addObject</a></div><div class="ttdeci">void addObject(const PvlObject &amp;object)</div><div class="ttdoc">Add a PvlObject.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:307</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_a9fc43639d606bbb17aa900cb4de3a8d7"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#a9fc43639d606bbb17aa900cb4de3a8d7">Isis::PvlObject::endObject</a></div><div class="ttdeci">PvlObjectIterator endObject()</div><div class="ttdoc">Returns the index of the ending object.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:253</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_ab148bd1d30dd5e59e87342a80ee09b10"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#ab148bd1d30dd5e59e87342a80ee09b10">Isis::PvlObject::validateObject</a></div><div class="ttdeci">void validateObject(PvlObject &amp;pPvlObj)</div><div class="ttdoc">Validate Object.</div><div class="ttdef"><b>Definition:</b> PvlObject.cpp:833</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_abbff135feaeb26b07c408e1cf9805587"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#abbff135feaeb26b07c408e1cf9805587">Isis::PvlObject::endObject</a></div><div class="ttdeci">ConstPvlObjectIterator endObject() const</div><div class="ttdoc">Returns the const index of the ending object.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:262</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_ac18c485fdccb8e8bf16866e6c6ad2e3d"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#ac18c485fdccb8e8bf16866e6c6ad2e3d">Isis::PvlObject::addGroup</a></div><div class="ttdeci">void addGroup(const Isis::PvlGroup &amp;group)</div><div class="ttdoc">Add a group to the object.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:186</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_aced46c89c7a44173c2d7f5f48f3e91ad"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#aced46c89c7a44173c2d7f5f48f3e91ad">Isis::PvlObject::findObject</a></div><div class="ttdeci">ConstPvlObjectIterator findObject(const QString &amp;name, ConstPvlObjectIterator beg, ConstPvlObjectIterator end) const</div><div class="ttdoc">Find the index of object with a specified name, between two indexes.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:289</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_acefdb20ebea6f16b776980219c828b19"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#acefdb20ebea6f16b776980219c828b19">Isis::PvlObject::deleteGroup</a></div><div class="ttdeci">void deleteGroup(const QString &amp;name)</div><div class="ttdoc">Remove a group from the current PvlObject.</div><div class="ttdef"><b>Definition:</b> PvlObject.cpp:400</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_ad24c09c470081027b0ddbf50958e481d"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#ad24c09c470081027b0ddbf50958e481d">Isis::PvlObject::endGroup</a></div><div class="ttdeci">PvlGroupIterator endGroup()</div><div class="ttdoc">Returns the ending group index.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:109</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_adb78b47b7518c15cbdc02fe95a350a38"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">Isis::PvlObject::findGroup</a></div><div class="ttdeci">PvlGroupIterator findGroup(const QString &amp;name, PvlGroupIterator beg, PvlGroupIterator end)</div><div class="ttdoc">Find a group with the specified name, within these indexes.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:129</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_aec162efdd61490e50dc5211e7f97469b"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#aec162efdd61490e50dc5211e7f97469b">Isis::PvlObject::findKeyword</a></div><div class="ttdeci">PvlKeyword &amp; findKeyword(const QString &amp;name)</div><div class="ttdoc">Find a keyword with a specified name.</div><div class="ttdef"><b>Definition:</b> PvlContainer.cpp:62</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_af6501629062656be46abd8bb1ad60169"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#af6501629062656be46abd8bb1ad60169">Isis::PvlObject::beginObject</a></div><div class="ttdeci">ConstPvlObjectIterator beginObject() const</div><div class="ttdoc">Returns the const index of the beginning object.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:244</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html_af8980fe7bf759a80e44dcb263e295a12"><div class="ttname"><a href="class_isis_1_1_pvl_object.html#af8980fe7bf759a80e44dcb263e295a12">Isis::PvlObject::operator==</a></div><div class="ttdeci">bool operator==(const PvlObject &amp;object) const</div><div class="ttdoc">Compares two PvlObjects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:335</div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_a89e1575da60f958884eeee602433767.html">PvlObject</a></li><li class="navelem"><a class="el" href="_pvl_object_8h.html">PvlObject.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

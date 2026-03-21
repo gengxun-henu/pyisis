@@ -1,0 +1,317 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/ControlNetValidMeasure/MeasureValidationResults.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_measure_validation_results_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">MeasureValidationResults.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_measure_validation_results_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef _MeasureValidationResults_h_</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define _MeasureValidationResults_h_</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">class </span>QString;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">class</span> T &gt; <span class="keyword">class </span><a class="code" href="class_q_vector.html">QVector</a>;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html">   29</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_measure_validation_results.html">MeasureValidationResults</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5">   32</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5">Option</a> {</div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a70cd28244d0eacaf02509c661cbbe163">   33</a></span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a70cd28244d0eacaf02509c661cbbe163">EmissionAngle</a>,</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5adf64b6ddc0db44c304090ffa23371a61">   34</a></span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5adf64b6ddc0db44c304090ffa23371a61">IncidenceAngle</a>,</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a73a446d8166ed47739b1df74f58b087c">   35</a></span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a73a446d8166ed47739b1df74f58b087c">DNValue</a>,</div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a998511f45f552817f20bfa24bc2646b9">   36</a></span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a998511f45f552817f20bfa24bc2646b9">Resolution</a>,</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5abec30d3ebb4279b3ff832aa99b083afc">   37</a></span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5abec30d3ebb4279b3ff832aa99b083afc">PixelsFromEdge</a>,</div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a62def9d49f40dbaedd3aad340b8e9535">   38</a></span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a62def9d49f40dbaedd3aad340b8e9535">MetersFromEdge</a>,</div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a91d2b66c80270b37596c229c43daaf13">   39</a></span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a91d2b66c80270b37596c229c43daaf13">SampleResidual</a>,</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ae16d1a4a0a278dac13f15e1d45b1b0c1">   40</a></span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ae16d1a4a0a278dac13f15e1d45b1b0c1">LineResidual</a>,</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a2e4ecb3eec8b9950ae59f2a315e5d770">   41</a></span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a2e4ecb3eec8b9950ae59f2a315e5d770">ResidualMagnitude</a>,</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ab2b5b9fa885a425dc106fe8d1b651620">   42</a></span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ab2b5b9fa885a425dc106fe8d1b651620">SampleShift</a>,</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ac9237c2da1f709cbe7efffbce4e6445b">   43</a></span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ac9237c2da1f709cbe7efffbce4e6445b">LineShift</a>,</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ae68535bfb441ab7029bde3567e1c1a81">PixelShift</a></div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ae68535bfb441ab7029bde3567e1c1a81">   45</a></span>&#160;      };</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;      <a class="code" href="class_isis_1_1_measure_validation_results.html#a14c627e445c110e4a65532e05aebaac4">MeasureValidationResults</a>();</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;      <a class="code" href="class_isis_1_1_measure_validation_results.html#a60a9f8b765ddab9180238feb8f18628e">~MeasureValidationResults</a>();</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_measure_validation_results.html#ae186568fbd459a37a14069b121487695">isValid</a>();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_measure_validation_results.html#ab577265002d4f71b093af8ab8ea1f350">getValidStatus</a>(<a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5">Option</a> opt);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      QString <a class="code" href="class_isis_1_1_measure_validation_results.html#a3b4f6da91318ad7fb9c4200dce875cfd">toString</a>();</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      QString <a class="code" href="class_isis_1_1_measure_validation_results.html#a3b4f6da91318ad7fb9c4200dce875cfd">toString</a>(QString serialNumber, QString pointID);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;      QString <a class="code" href="class_isis_1_1_measure_validation_results.html#a3b4f6da91318ad7fb9c4200dce875cfd">toString</a>(QString sample, QString line, QString serialNumber,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;          QString pointID);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_measure_validation_results.html#a9d714c564ff605830fb185ea52c34ec7">addFailure</a>(<a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5">Option</a> opt, <span class="keywordtype">double</span> tolerance, <span class="keyword">const</span> <span class="keywordtype">char</span>* compare=<span class="stringliteral">&quot;less&quot;</span>);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_measure_validation_results.html#a9d714c564ff605830fb185ea52c34ec7">addFailure</a>(<a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5">Option</a> opt, <span class="keywordtype">double</span> computed, <span class="keywordtype">double</span> min, <span class="keywordtype">double</span> max);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      QString <a class="code" href="class_isis_1_1_measure_validation_results.html#a1f26a28e75c136ab2821e90698424f62">getFailurePrefix</a>(<a class="code" href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5">Option</a> opt);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <a class="code" href="class_q_vector.html">QVector&lt;Option&gt;</a> * failures;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      QString * errorMsg;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  };</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;};</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html">Isis::MeasureValidationResults</a></div><div class="ttdoc">MeasureValidationResults class.</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:29</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a14c627e445c110e4a65532e05aebaac4"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a14c627e445c110e4a65532e05aebaac4">Isis::MeasureValidationResults::MeasureValidationResults</a></div><div class="ttdeci">MeasureValidationResults()</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.cpp:16</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a1f26a28e75c136ab2821e90698424f62"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a1f26a28e75c136ab2821e90698424f62">Isis::MeasureValidationResults::getFailurePrefix</a></div><div class="ttdeci">QString getFailurePrefix(Option opt)</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.cpp:87</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a3b4f6da91318ad7fb9c4200dce875cfd"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a3b4f6da91318ad7fb9c4200dce875cfd">Isis::MeasureValidationResults::toString</a></div><div class="ttdeci">QString toString()</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.cpp:47</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5">Isis::MeasureValidationResults::Option</a></div><div class="ttdeci">Option</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:32</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5a2e4ecb3eec8b9950ae59f2a315e5d770"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a2e4ecb3eec8b9950ae59f2a315e5d770">Isis::MeasureValidationResults::ResidualMagnitude</a></div><div class="ttdeci">@ ResidualMagnitude</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5a62def9d49f40dbaedd3aad340b8e9535"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a62def9d49f40dbaedd3aad340b8e9535">Isis::MeasureValidationResults::MetersFromEdge</a></div><div class="ttdeci">@ MetersFromEdge</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:38</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5a70cd28244d0eacaf02509c661cbbe163"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a70cd28244d0eacaf02509c661cbbe163">Isis::MeasureValidationResults::EmissionAngle</a></div><div class="ttdeci">@ EmissionAngle</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:33</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5a73a446d8166ed47739b1df74f58b087c"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a73a446d8166ed47739b1df74f58b087c">Isis::MeasureValidationResults::DNValue</a></div><div class="ttdeci">@ DNValue</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:35</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5a91d2b66c80270b37596c229c43daaf13"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a91d2b66c80270b37596c229c43daaf13">Isis::MeasureValidationResults::SampleResidual</a></div><div class="ttdeci">@ SampleResidual</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:39</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5a998511f45f552817f20bfa24bc2646b9"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5a998511f45f552817f20bfa24bc2646b9">Isis::MeasureValidationResults::Resolution</a></div><div class="ttdeci">@ Resolution</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:36</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5ab2b5b9fa885a425dc106fe8d1b651620"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ab2b5b9fa885a425dc106fe8d1b651620">Isis::MeasureValidationResults::SampleShift</a></div><div class="ttdeci">@ SampleShift</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5abec30d3ebb4279b3ff832aa99b083afc"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5abec30d3ebb4279b3ff832aa99b083afc">Isis::MeasureValidationResults::PixelsFromEdge</a></div><div class="ttdeci">@ PixelsFromEdge</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:37</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5ac9237c2da1f709cbe7efffbce4e6445b"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ac9237c2da1f709cbe7efffbce4e6445b">Isis::MeasureValidationResults::LineShift</a></div><div class="ttdeci">@ LineShift</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:43</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5adf64b6ddc0db44c304090ffa23371a61"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5adf64b6ddc0db44c304090ffa23371a61">Isis::MeasureValidationResults::IncidenceAngle</a></div><div class="ttdeci">@ IncidenceAngle</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:34</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5ae16d1a4a0a278dac13f15e1d45b1b0c1"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ae16d1a4a0a278dac13f15e1d45b1b0c1">Isis::MeasureValidationResults::LineResidual</a></div><div class="ttdeci">@ LineResidual</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:40</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a59990b60ae29b8d5a39e1fb3a4a29df5ae68535bfb441ab7029bde3567e1c1a81"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a59990b60ae29b8d5a39e1fb3a4a29df5ae68535bfb441ab7029bde3567e1c1a81">Isis::MeasureValidationResults::PixelShift</a></div><div class="ttdeci">@ PixelShift</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.h:44</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a60a9f8b765ddab9180238feb8f18628e"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a60a9f8b765ddab9180238feb8f18628e">Isis::MeasureValidationResults::~MeasureValidationResults</a></div><div class="ttdeci">~MeasureValidationResults()</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.cpp:25</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_a9d714c564ff605830fb185ea52c34ec7"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#a9d714c564ff605830fb185ea52c34ec7">Isis::MeasureValidationResults::addFailure</a></div><div class="ttdeci">void addFailure(Option opt, double tolerance, const char *compare=&quot;less&quot;)</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.cpp:68</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_ab577265002d4f71b093af8ab8ea1f350"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#ab577265002d4f71b093af8ab8ea1f350">Isis::MeasureValidationResults::getValidStatus</a></div><div class="ttdeci">bool getValidStatus(Option opt)</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.cpp:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_validation_results_html_ae186568fbd459a37a14069b121487695"><div class="ttname"><a href="class_isis_1_1_measure_validation_results.html#ae186568fbd459a37a14069b121487695">Isis::MeasureValidationResults::isValid</a></div><div class="ttdeci">bool isValid()</div><div class="ttdef"><b>Definition:</b> MeasureValidationResults.cpp:37</div></div>
+<div class="ttc" id="aclass_q_vector_html"><div class="ttname"><a href="class_q_vector.html">QVector</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Calculator.h:18</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_a576af9f1f3bb26b082d16585a91e73c.html">control</a></li><li class="navelem"><a class="el" href="dir_8e87adfb2431123dc47fe3f2bd06feca.html">objs</a></li><li class="navelem"><a class="el" href="dir_4c4b99ddf591c6e4d45f7404b6e04410.html">ControlNetValidMeasure</a></li><li class="navelem"><a class="el" href="_measure_validation_results_8h.html">MeasureValidationResults.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

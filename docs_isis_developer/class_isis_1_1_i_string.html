@@ -1,0 +1,2296 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::IString Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_i_string.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_i_string-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::IString Class Reference<div class="ingroups"><a class="el" href="group___parsing.html">Parsing</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Adds specific functionality to C++ strings.  
+ <a href="class_isis_1_1_i_string.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_i_string_8h_source.html">IString.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::IString:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_i_string__inherit__graph.png" border="0" usemap="#a_isis_1_1_i_string_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_i_string_inherit__map" id="a_isis_1_1_i_string_inherit__map">
+<area shape="rect" title="Adds specific functionality to C++ strings." alt="" coords="5,135,120,552"/>
+<area shape="rect" title=" " alt="" coords="23,5,102,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::IString:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_i_string__coll__graph.png" border="0" usemap="#a_isis_1_1_i_string_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_i_string_coll__map" id="a_isis_1_1_i_string_coll__map">
+<area shape="rect" title="Adds specific functionality to C++ strings." alt="" coords="5,135,120,552"/>
+<area shape="rect" title=" " alt="" coords="23,5,102,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a67fee616115b6610e3ebeb970017a13a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a67fee616115b6610e3ebeb970017a13a">IString</a> ()</td></tr>
+<tr class="memdesc:a67fee616115b6610e3ebeb970017a13a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an empty <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object.  <a href="class_isis_1_1_i_string.html#a67fee616115b6610e3ebeb970017a13a">More...</a><br /></td></tr>
+<tr class="separator:a67fee616115b6610e3ebeb970017a13a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c74162cb44ea4a6186f34e771d5f623"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a3c74162cb44ea4a6186f34e771d5f623">IString</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:a3c74162cb44ea4a6186f34e771d5f623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object with initial value set to the string argument.  <a href="class_isis_1_1_i_string.html#a3c74162cb44ea4a6186f34e771d5f623">More...</a><br /></td></tr>
+<tr class="separator:a3c74162cb44ea4a6186f34e771d5f623"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf51cc69f82615af9ef1f9222e3e6a27"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#aaf51cc69f82615af9ef1f9222e3e6a27">IString</a> (const <a class="el" href="class_isis_1_1_i_string.html">IString</a> &amp;str)</td></tr>
+<tr class="memdesc:aaf51cc69f82615af9ef1f9222e3e6a27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> with initial value set to the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> argument.  <a href="class_isis_1_1_i_string.html#aaf51cc69f82615af9ef1f9222e3e6a27">More...</a><br /></td></tr>
+<tr class="separator:aaf51cc69f82615af9ef1f9222e3e6a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11fc5309e05d34ec6e53a236e43c3fdf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a11fc5309e05d34ec6e53a236e43c3fdf">IString</a> (const char *str)</td></tr>
+<tr class="memdesc:a11fc5309e05d34ec6e53a236e43c3fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> with initial value set to the argument.  <a href="class_isis_1_1_i_string.html#a11fc5309e05d34ec6e53a236e43c3fdf">More...</a><br /></td></tr>
+<tr class="separator:a11fc5309e05d34ec6e53a236e43c3fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78c18d24e88eefba3f7cd3044a92b24d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a78c18d24e88eefba3f7cd3044a92b24d">IString</a> (const int &amp;num)</td></tr>
+<tr class="memdesc:a78c18d24e88eefba3f7cd3044a92b24d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object with its initial value set to the string representation of the int argument.  <a href="class_isis_1_1_i_string.html#a78c18d24e88eefba3f7cd3044a92b24d">More...</a><br /></td></tr>
+<tr class="separator:a78c18d24e88eefba3f7cd3044a92b24d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0754552f72f2f1453af6adfe62f97f14"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a0754552f72f2f1453af6adfe62f97f14">IString</a> (const double &amp;num, const int piPrecision=14)</td></tr>
+<tr class="memdesc:a0754552f72f2f1453af6adfe62f97f14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object with its initial value set to the string representation of the double argument.  <a href="class_isis_1_1_i_string.html#a0754552f72f2f1453af6adfe62f97f14">More...</a><br /></td></tr>
+<tr class="separator:a0754552f72f2f1453af6adfe62f97f14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f63275f62dad1658adf4c9a0f8804b4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a9f63275f62dad1658adf4c9a0f8804b4">IString</a> (const <a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> &amp;num)</td></tr>
+<tr class="memdesc:a9f63275f62dad1658adf4c9a0f8804b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object with its initial value set to the string representation of the BigInt argument.  <a href="class_isis_1_1_i_string.html#a9f63275f62dad1658adf4c9a0f8804b4">More...</a><br /></td></tr>
+<tr class="separator:a9f63275f62dad1658adf4c9a0f8804b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae98f9ac5ba527403df561001cf47a79a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#ae98f9ac5ba527403df561001cf47a79a">IString</a> (const QString &amp;str)</td></tr>
+<tr class="memdesc:ae98f9ac5ba527403df561001cf47a79a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object with initial value set to the input QString.  <a href="class_isis_1_1_i_string.html#ae98f9ac5ba527403df561001cf47a79a">More...</a><br /></td></tr>
+<tr class="separator:ae98f9ac5ba527403df561001cf47a79a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f10a5ba3562661eccba1d50f23f71e6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a6f10a5ba3562661eccba1d50f23f71e6">~IString</a> ()</td></tr>
+<tr class="memdesc:a6f10a5ba3562661eccba1d50f23f71e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_i_string.html#a6f10a5ba3562661eccba1d50f23f71e6">More...</a><br /></td></tr>
+<tr class="separator:a6f10a5ba3562661eccba1d50f23f71e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e2177424ba4fe476e605f56d3edba01"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a5e2177424ba4fe476e605f56d3edba01">Trim</a> (const std::string &amp;chars)</td></tr>
+<tr class="memdesc:a5e2177424ba4fe476e605f56d3edba01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes characters from the beginning and end of the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>.  <a href="class_isis_1_1_i_string.html#a5e2177424ba4fe476e605f56d3edba01">More...</a><br /></td></tr>
+<tr class="separator:a5e2177424ba4fe476e605f56d3edba01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2c773451719a9b93a74c67ecb0b89cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#aa2c773451719a9b93a74c67ecb0b89cc">TrimHead</a> (const std::string &amp;chars)</td></tr>
+<tr class="memdesc:aa2c773451719a9b93a74c67ecb0b89cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trims The input characters from the beginning of the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>.  <a href="class_isis_1_1_i_string.html#aa2c773451719a9b93a74c67ecb0b89cc">More...</a><br /></td></tr>
+<tr class="separator:aa2c773451719a9b93a74c67ecb0b89cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fcef6024854a36b2cdb70db1d2f1380"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a0fcef6024854a36b2cdb70db1d2f1380">TrimTail</a> (const std::string &amp;chars)</td></tr>
+<tr class="memdesc:a0fcef6024854a36b2cdb70db1d2f1380"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trims the input characters from the end of the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>.  <a href="class_isis_1_1_i_string.html#a0fcef6024854a36b2cdb70db1d2f1380">More...</a><br /></td></tr>
+<tr class="separator:a0fcef6024854a36b2cdb70db1d2f1380"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69f44966f3c629e79aec55ba5b921d75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a69f44966f3c629e79aec55ba5b921d75">UpCase</a> ()</td></tr>
+<tr class="memdesc:a69f44966f3c629e79aec55ba5b921d75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converst any lower case characters in the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> with uppercase characters.  <a href="class_isis_1_1_i_string.html#a69f44966f3c629e79aec55ba5b921d75">More...</a><br /></td></tr>
+<tr class="separator:a69f44966f3c629e79aec55ba5b921d75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bc0f2894a15418c9057ed501c6bf63a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a6bc0f2894a15418c9057ed501c6bf63a">DownCase</a> ()</td></tr>
+<tr class="memdesc:a6bc0f2894a15418c9057ed501c6bf63a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts all upper case letters in the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> into lower case characters.  <a href="class_isis_1_1_i_string.html#a6bc0f2894a15418c9057ed501c6bf63a">More...</a><br /></td></tr>
+<tr class="separator:a6bc0f2894a15418c9057ed501c6bf63a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3909013ffe92c8ec4efc796dde1f228d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">ToInteger</a> () const</td></tr>
+<tr class="memdesc:a3909013ffe92c8ec4efc796dde1f228d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the object string as an integer.  <a href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">More...</a><br /></td></tr>
+<tr class="separator:a3909013ffe92c8ec4efc796dde1f228d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba0ff422cce649c125f26e5e3e1a7421"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#aba0ff422cce649c125f26e5e3e1a7421">ToBigInteger</a> () const</td></tr>
+<tr class="memdesc:aba0ff422cce649c125f26e5e3e1a7421"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the BigInt representation of the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>.  <a href="class_isis_1_1_i_string.html#aba0ff422cce649c125f26e5e3e1a7421">More...</a><br /></td></tr>
+<tr class="separator:aba0ff422cce649c125f26e5e3e1a7421"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae56ed251df5ac88b2a1bf48bb7bc1cf7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#ae56ed251df5ac88b2a1bf48bb7bc1cf7">ToDouble</a> () const</td></tr>
+<tr class="memdesc:ae56ed251df5ac88b2a1bf48bb7bc1cf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the floating point value the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> represents.  <a href="class_isis_1_1_i_string.html#ae56ed251df5ac88b2a1bf48bb7bc1cf7">More...</a><br /></td></tr>
+<tr class="separator:ae56ed251df5ac88b2a1bf48bb7bc1cf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a771e32c8a3cbe76ba8ff9916da73effb"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a771e32c8a3cbe76ba8ff9916da73effb">ToQt</a> () const</td></tr>
+<tr class="memdesc:a771e32c8a3cbe76ba8ff9916da73effb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retuns the object string as a QString.  <a href="class_isis_1_1_i_string.html#a771e32c8a3cbe76ba8ff9916da73effb">More...</a><br /></td></tr>
+<tr class="separator:a771e32c8a3cbe76ba8ff9916da73effb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a748288dc2f51058c6d2f9e1d5e4259fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a748288dc2f51058c6d2f9e1d5e4259fd">Token</a> (const <a class="el" href="class_isis_1_1_i_string.html">IString</a> &amp;separator)</td></tr>
+<tr class="memdesc:a748288dc2f51058c6d2f9e1d5e4259fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first token in the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>.  <a href="class_isis_1_1_i_string.html#a748288dc2f51058c6d2f9e1d5e4259fd">More...</a><br /></td></tr>
+<tr class="separator:a748288dc2f51058c6d2f9e1d5e4259fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34b49a636a1030576689d2dcc5cb18f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a34b49a636a1030576689d2dcc5cb18f8">Compress</a> (bool force=false)</td></tr>
+<tr class="memdesc:a34b49a636a1030576689d2dcc5cb18f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collapses multiple spaces into single spaces.  <a href="class_isis_1_1_i_string.html#a34b49a636a1030576689d2dcc5cb18f8">More...</a><br /></td></tr>
+<tr class="separator:a34b49a636a1030576689d2dcc5cb18f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94382f1fb513bebfae23aaccd783287a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a94382f1fb513bebfae23aaccd783287a">Replace</a> (const std::string &amp;from, const std::string &amp;to, int maxReplaceCount=20)</td></tr>
+<tr class="memdesc:a94382f1fb513bebfae23aaccd783287a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces all instances of the first input string with the second input string.  <a href="class_isis_1_1_i_string.html#a94382f1fb513bebfae23aaccd783287a">More...</a><br /></td></tr>
+<tr class="separator:a94382f1fb513bebfae23aaccd783287a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32a9154c79f8dbde1a65ea4578c432bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a32a9154c79f8dbde1a65ea4578c432bc">Replace</a> (const std::string &amp;from, const std::string &amp;to, bool honorquotes)</td></tr>
+<tr class="memdesc:a32a9154c79f8dbde1a65ea4578c432bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces all instances of the first input string with the second input string.  <a href="class_isis_1_1_i_string.html#a32a9154c79f8dbde1a65ea4578c432bc">More...</a><br /></td></tr>
+<tr class="separator:a32a9154c79f8dbde1a65ea4578c432bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a493ac3c8510e8974061a2564710b4067"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a493ac3c8510e8974061a2564710b4067">Convert</a> (const std::string &amp;listofchars, const char &amp;to)</td></tr>
+<tr class="memdesc:a493ac3c8510e8974061a2564710b4067"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the string with all occurrences of any character in the "from" argument converted to the "to" argument.  <a href="class_isis_1_1_i_string.html#a493ac3c8510e8974061a2564710b4067">More...</a><br /></td></tr>
+<tr class="separator:a493ac3c8510e8974061a2564710b4067"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abea51d980d41857b34abb146e9608f4b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#abea51d980d41857b34abb146e9608f4b">ConvertWhiteSpace</a> ()</td></tr>
+<tr class="memdesc:abea51d980d41857b34abb146e9608f4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the string with all "new lines", "carriage returns", "tabs", "form
+feeds", "vertical tabs" and "back spaces" converted to single spaces.  <a href="class_isis_1_1_i_string.html#abea51d980d41857b34abb146e9608f4b">More...</a><br /></td></tr>
+<tr class="separator:abea51d980d41857b34abb146e9608f4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a312a46e9feefd6cf043e4eb8004a9cd1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a312a46e9feefd6cf043e4eb8004a9cd1">Remove</a> (const std::string &amp;del)</td></tr>
+<tr class="memdesc:a312a46e9feefd6cf043e4eb8004a9cd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove all instances of any character in the string from the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>.  <a href="class_isis_1_1_i_string.html#a312a46e9feefd6cf043e4eb8004a9cd1">More...</a><br /></td></tr>
+<tr class="separator:a312a46e9feefd6cf043e4eb8004a9cd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad238b423f15c80b7110e40d80b7bf5e6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#ad238b423f15c80b7110e40d80b7bf5e6">operator int</a> () const</td></tr>
+<tr class="memdesc:ad238b423f15c80b7110e40d80b7bf5e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to convert the stirng to a 32 bit integer and return that int.  <a href="class_isis_1_1_i_string.html#ad238b423f15c80b7110e40d80b7bf5e6">More...</a><br /></td></tr>
+<tr class="separator:ad238b423f15c80b7110e40d80b7bf5e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab92840faa6a45bef936de659a67be873"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#ab92840faa6a45bef936de659a67be873">operator BigInt</a> () const</td></tr>
+<tr class="memdesc:ab92840faa6a45bef936de659a67be873"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to convert the stirng to a 64 bit integer and return that int.  <a href="class_isis_1_1_i_string.html#ab92840faa6a45bef936de659a67be873">More...</a><br /></td></tr>
+<tr class="separator:ab92840faa6a45bef936de659a67be873"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a254590590d4c808391e72282878b5beb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a254590590d4c808391e72282878b5beb">operator double</a> () const</td></tr>
+<tr class="memdesc:a254590590d4c808391e72282878b5beb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to convert the stirng to a 64 bit double and return that double.  <a href="class_isis_1_1_i_string.html#a254590590d4c808391e72282878b5beb">More...</a><br /></td></tr>
+<tr class="separator:a254590590d4c808391e72282878b5beb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b11bc78926b531ffde346c8b6c9850a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a0b11bc78926b531ffde346c8b6c9850a">operator=</a> (const int &amp;value)</td></tr>
+<tr class="memdesc:a0b11bc78926b531ffde346c8b6c9850a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to convert the stirng to a QStirng (Qt) and return that <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>.  <a href="class_isis_1_1_i_string.html#a0b11bc78926b531ffde346c8b6c9850a">More...</a><br /></td></tr>
+<tr class="separator:a0b11bc78926b531ffde346c8b6c9850a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7321ec855927cc61b118d44db0edc795"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a7321ec855927cc61b118d44db0edc795">operator=</a> (const <a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> &amp;value)</td></tr>
+<tr class="memdesc:a7321ec855927cc61b118d44db0edc795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to convert a 64 bit integer into its string representation.  <a href="class_isis_1_1_i_string.html#a7321ec855927cc61b118d44db0edc795">More...</a><br /></td></tr>
+<tr class="separator:a7321ec855927cc61b118d44db0edc795"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa89fc0990f8ba0a8551685bb411e3f9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_i_string.html">IString</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#aa89fc0990f8ba0a8551685bb411e3f9b">operator=</a> (const double &amp;value)</td></tr>
+<tr class="memdesc:aa89fc0990f8ba0a8551685bb411e3f9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to convert double into its string representation.  <a href="class_isis_1_1_i_string.html#aa89fc0990f8ba0a8551685bb411e3f9b">More...</a><br /></td></tr>
+<tr class="separator:aa89fc0990f8ba0a8551685bb411e3f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08663c4c18d8630917f7bfd47fd79cab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a08663c4c18d8630917f7bfd47fd79cab">Equal</a> (const std::string &amp;str) const</td></tr>
+<tr class="memdesc:a08663c4c18d8630917f7bfd47fd79cab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare a string to the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>.  <a href="class_isis_1_1_i_string.html#a08663c4c18d8630917f7bfd47fd79cab">More...</a><br /></td></tr>
+<tr class="separator:a08663c4c18d8630917f7bfd47fd79cab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a9c8e646620975f736af0d5cb752d7390"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a9c8e646620975f736af0d5cb752d7390">Trim</a> (const std::string &amp;chars, const std::string &amp;str)</td></tr>
+<tr class="memdesc:a9c8e646620975f736af0d5cb752d7390"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all occurences of the input characters from the beginning and end of the input string.  <a href="class_isis_1_1_i_string.html#a9c8e646620975f736af0d5cb752d7390">More...</a><br /></td></tr>
+<tr class="separator:a9c8e646620975f736af0d5cb752d7390"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa35fb779d8a7931f7762cf4abed1b36b"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#aa35fb779d8a7931f7762cf4abed1b36b">TrimHead</a> (const std::string &amp;chars, const std::string &amp;str)</td></tr>
+<tr class="memdesc:aa35fb779d8a7931f7762cf4abed1b36b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trims the input characters from the beginning of the input string.  <a href="class_isis_1_1_i_string.html#aa35fb779d8a7931f7762cf4abed1b36b">More...</a><br /></td></tr>
+<tr class="separator:aa35fb779d8a7931f7762cf4abed1b36b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c522b191a20c1f0fb1bcbb471bf0bca"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a2c522b191a20c1f0fb1bcbb471bf0bca">TrimTail</a> (const std::string &amp;chars, const std::string &amp;str)</td></tr>
+<tr class="memdesc:a2c522b191a20c1f0fb1bcbb471bf0bca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trims the input characters from the end of the input string.  <a href="class_isis_1_1_i_string.html#a2c522b191a20c1f0fb1bcbb471bf0bca">More...</a><br /></td></tr>
+<tr class="separator:a2c522b191a20c1f0fb1bcbb471bf0bca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae08ec86f22eb18d3c1c59682f2ae940c"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#ae08ec86f22eb18d3c1c59682f2ae940c">UpCase</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:ae08ec86f22eb18d3c1c59682f2ae940c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts lower case characters in the input string to upper case characters.  <a href="class_isis_1_1_i_string.html#ae08ec86f22eb18d3c1c59682f2ae940c">More...</a><br /></td></tr>
+<tr class="separator:ae08ec86f22eb18d3c1c59682f2ae940c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20bc9b0ef6b8739543d28ddb25a99824"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a20bc9b0ef6b8739543d28ddb25a99824">DownCase</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:a20bc9b0ef6b8739543d28ddb25a99824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts all upper case letters in the input string into lower case characters.  <a href="class_isis_1_1_i_string.html#a20bc9b0ef6b8739543d28ddb25a99824">More...</a><br /></td></tr>
+<tr class="separator:a20bc9b0ef6b8739543d28ddb25a99824"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a243346734ca51bdedb9e5c65ff986e7e"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a243346734ca51bdedb9e5c65ff986e7e">ToInteger</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:a243346734ca51bdedb9e5c65ff986e7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the integer representation of the input string.  <a href="class_isis_1_1_i_string.html#a243346734ca51bdedb9e5c65ff986e7e">More...</a><br /></td></tr>
+<tr class="separator:a243346734ca51bdedb9e5c65ff986e7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6912112f4c5a65026b51f39fe11c42d4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a6912112f4c5a65026b51f39fe11c42d4">ToBigInteger</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:a6912112f4c5a65026b51f39fe11c42d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the Big Integer representation of the input string.  <a href="class_isis_1_1_i_string.html#a6912112f4c5a65026b51f39fe11c42d4">More...</a><br /></td></tr>
+<tr class="separator:a6912112f4c5a65026b51f39fe11c42d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30a4b72b2bc55fa7af33deebe6fa9167"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a30a4b72b2bc55fa7af33deebe6fa9167">ToDouble</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:a30a4b72b2bc55fa7af33deebe6fa9167"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the floating-point value represented by the input string.  <a href="class_isis_1_1_i_string.html#a30a4b72b2bc55fa7af33deebe6fa9167">More...</a><br /></td></tr>
+<tr class="separator:a30a4b72b2bc55fa7af33deebe6fa9167"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04315cb37e43c54780190297ff826aac"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a04315cb37e43c54780190297ff826aac">ToQt</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:a04315cb37e43c54780190297ff826aac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the input string as a QString.  <a href="class_isis_1_1_i_string.html#a04315cb37e43c54780190297ff826aac">More...</a><br /></td></tr>
+<tr class="separator:a04315cb37e43c54780190297ff826aac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac86fd7d6b985b09cd733ff17b4771324"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#ac86fd7d6b985b09cd733ff17b4771324">Split</a> (const char separator, const std::string &amp;instr, std::vector&lt; std::string &gt; &amp;tokens, bool allowEmptyEntries=true)</td></tr>
+<tr class="memdesc:ac86fd7d6b985b09cd733ff17b4771324"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find separators between characters and split them into strings.  <a href="class_isis_1_1_i_string.html#ac86fd7d6b985b09cd733ff17b4771324">More...</a><br /></td></tr>
+<tr class="separator:ac86fd7d6b985b09cd733ff17b4771324"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaad03c0ef2e592f5431a35ce987a8a96"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#aaad03c0ef2e592f5431a35ce987a8a96">Compress</a> (const std::string &amp;str, bool force=false)</td></tr>
+<tr class="memdesc:aaad03c0ef2e592f5431a35ce987a8a96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the input string with multiple spaces collapsed into single spaces.  <a href="class_isis_1_1_i_string.html#aaad03c0ef2e592f5431a35ce987a8a96">More...</a><br /></td></tr>
+<tr class="separator:aaad03c0ef2e592f5431a35ce987a8a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9c2bd94e12b24ba3af474808651cf33"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#ad9c2bd94e12b24ba3af474808651cf33">Replace</a> (const std::string &amp;str, const std::string &amp;from, const std::string &amp;to, int maxReplacementCount=20)</td></tr>
+<tr class="memdesc:ad9c2bd94e12b24ba3af474808651cf33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace specified substring with replacement substring in a string.  <a href="class_isis_1_1_i_string.html#ad9c2bd94e12b24ba3af474808651cf33">More...</a><br /></td></tr>
+<tr class="separator:ad9c2bd94e12b24ba3af474808651cf33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5971b1fcbbc6f9850fc1ec2b5037791"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_i_string.html">IString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#aa5971b1fcbbc6f9850fc1ec2b5037791">Replace</a> (const std::string &amp;str, const std::string &amp;from, const std::string &amp;to, bool honorquotes)</td></tr>
+<tr class="memdesc:aa5971b1fcbbc6f9850fc1ec2b5037791"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace specified substring with replacement substring in a string honoring quotes if requested.  <a href="class_isis_1_1_i_string.html#aa5971b1fcbbc6f9850fc1ec2b5037791">More...</a><br /></td></tr>
+<tr class="separator:aa5971b1fcbbc6f9850fc1ec2b5037791"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28de8a4f133f02b5ac1ed79770b72217"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a28de8a4f133f02b5ac1ed79770b72217">Convert</a> (const std::string &amp;str, const std::string &amp;listofchars, const char &amp;to)</td></tr>
+<tr class="memdesc:a28de8a4f133f02b5ac1ed79770b72217"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts all occurences in the input string of any character in the "from" string to the "to" character.  <a href="class_isis_1_1_i_string.html#a28de8a4f133f02b5ac1ed79770b72217">More...</a><br /></td></tr>
+<tr class="separator:a28de8a4f133f02b5ac1ed79770b72217"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95ae512fd13fb96864f9a69ae796cd5e"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a95ae512fd13fb96864f9a69ae796cd5e">ConvertWhiteSpace</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:a95ae512fd13fb96864f9a69ae796cd5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts all forms of whitespace in the input string into single spaces.  <a href="class_isis_1_1_i_string.html#a95ae512fd13fb96864f9a69ae796cd5e">More...</a><br /></td></tr>
+<tr class="separator:a95ae512fd13fb96864f9a69ae796cd5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d3556a96c801acd984ea13b3f80b462"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a4d3556a96c801acd984ea13b3f80b462">Remove</a> (const std::string &amp;del, const std::string &amp;str)</td></tr>
+<tr class="memdesc:a4d3556a96c801acd984ea13b3f80b462"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove all instances of any character in the "del" argument from the input string.  <a href="class_isis_1_1_i_string.html#a4d3556a96c801acd984ea13b3f80b462">More...</a><br /></td></tr>
+<tr class="separator:a4d3556a96c801acd984ea13b3f80b462"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c146f6298f6ab5812e791a2c3be9924"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a7c146f6298f6ab5812e791a2c3be9924">Equal</a> (const std::string &amp;str1, const std::string &amp;str2)</td></tr>
+<tr class="memdesc:a7c146f6298f6ab5812e791a2c3be9924"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two strings, case-insensitive.  <a href="class_isis_1_1_i_string.html#a7c146f6298f6ab5812e791a2c3be9924">More...</a><br /></td></tr>
+<tr class="separator:a7c146f6298f6ab5812e791a2c3be9924"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45f0615a503707d29517e2ca7e7dbb60"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#a45f0615a503707d29517e2ca7e7dbb60">ToStd</a> (const QString &amp;str)</td></tr>
+<tr class="memdesc:a45f0615a503707d29517e2ca7e7dbb60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Qt string into a std::string.  <a href="class_isis_1_1_i_string.html#a45f0615a503707d29517e2ca7e7dbb60">More...</a><br /></td></tr>
+<tr class="separator:a45f0615a503707d29517e2ca7e7dbb60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0fcd64355d3f366a9e54a3dfcce4ef7"><td class="memItemLeft" align="right" valign="top">static QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#af0fcd64355d3f366a9e54a3dfcce4ef7">ToQt</a> (const std::vector&lt; std::string &gt; &amp;sl)</td></tr>
+<tr class="memdesc:af0fcd64355d3f366a9e54a3dfcce4ef7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a vector of strings into a QStringList.  <a href="class_isis_1_1_i_string.html#af0fcd64355d3f366a9e54a3dfcce4ef7">More...</a><br /></td></tr>
+<tr class="separator:af0fcd64355d3f366a9e54a3dfcce4ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad29bb11a361c30021ae23f7d95fce0dd"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_i_string.html#ad29bb11a361c30021ae23f7d95fce0dd">ToStd</a> (const QStringList &amp;sl)</td></tr>
+<tr class="memdesc:ad29bb11a361c30021ae23f7d95fce0dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a QStringList into a vector of strings.  <a href="class_isis_1_1_i_string.html#ad29bb11a361c30021ae23f7d95fce0dd">More...</a><br /></td></tr>
+<tr class="separator:ad29bb11a361c30021ae23f7d95fce0dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Adds specific functionality to C++ strings. </p>
+<p>This class extends the standard C++ string class with specific functionality useable by ISIS programmers.</p>
+<dl class="section author"><dt>Author</dt><dd>2002-09-10 Stuart Sides </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a67fee616115b6610e3ebeb970017a13a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67fee616115b6610e3ebeb970017a13a">&#9670;&nbsp;</a></span>IString() <span class="overload">[1/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::IString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an empty <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000003">Deprecated:</a></b></dt><dd></dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_i_string.html#a94382f1fb513bebfae23aaccd783287a">Replace()</a>.</p>
+
+</div>
+</div>
+<a id="a3c74162cb44ea4a6186f34e771d5f623"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c74162cb44ea4a6186f34e771d5f623">&#9670;&nbsp;</a></span>IString() <span class="overload">[2/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::IString </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object with initial value set to the string argument. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000004">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The initial value of the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaf51cc69f82615af9ef1f9222e3e6a27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf51cc69f82615af9ef1f9222e3e6a27">&#9670;&nbsp;</a></span>IString() <span class="overload">[3/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::IString </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_i_string.html">IString</a> &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> with initial value set to the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> argument. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The initial value of the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a11fc5309e05d34ec6e53a236e43c3fdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11fc5309e05d34ec6e53a236e43c3fdf">&#9670;&nbsp;</a></span>IString() <span class="overload">[4/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::IString </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> with initial value set to the argument. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The inital value of the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a78c18d24e88eefba3f7cd3044a92b24d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78c18d24e88eefba3f7cd3044a92b24d">&#9670;&nbsp;</a></span>IString() <span class="overload">[5/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::IString </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object with its initial value set to the string representation of the int argument. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>The initial value of the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. The integer value is converted to a string representation and stored as the value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0754552f72f2f1453af6adfe62f97f14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0754552f72f2f1453af6adfe62f97f14">&#9670;&nbsp;</a></span>IString() <span class="overload">[6/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::IString </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>piPrecision</em> = <code>14</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object with its initial value set to the string representation of the double argument. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>The initial value of the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. The double value is converted to a string representation and stored as the value. The conversion is handled in the following manner: If (abs(num) &lt; 0.1) it is presented in scientific notation If (abs(log10(num)) &lt; 16) it is presented in normal notation if (abs(log10(num)) &gt;= 16) it is presented in scientific notation Trailing zeros are removed such that 5.000 is presented as 5.0 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9f63275f62dad1658adf4c9a0f8804b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f63275f62dad1658adf4c9a0f8804b4">&#9670;&nbsp;</a></span>IString() <span class="overload">[7/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::IString </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> &amp;&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object with its initial value set to the string representation of the BigInt argument. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">num</td><td>The initial value of the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. The integer value is converted to a string representation and stored as the value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae98f9ac5ba527403df561001cf47a79a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae98f9ac5ba527403df561001cf47a79a">&#9670;&nbsp;</a></span>IString() <span class="overload">[8/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::IString </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> object with initial value set to the input QString. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6f10a5ba3562661eccba1d50f23f71e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f10a5ba3562661eccba1d50f23f71e6">&#9670;&nbsp;</a></span>~IString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::~IString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated:</a></b></dt><dd></dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a34b49a636a1030576689d2dcc5cb18f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34b49a636a1030576689d2dcc5cb18f8">&#9670;&nbsp;</a></span>Compress() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::Compress </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>force</em> = <code>false</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Collapses multiple spaces into single spaces. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000036">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">force</td><td>Determines whether to compress inside quotes (single and double) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaad03c0ef2e592f5431a35ce987a8a96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaad03c0ef2e592f5431a35ce987a8a96">&#9670;&nbsp;</a></span>Compress() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::IString::Compress </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>force</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the input string with multiple spaces collapsed into single spaces. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000037">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to be compressed</td></tr>
+    <tr><td class="paramname">force</td><td>Determines whether to compress inside quotes</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string The compressed version of the input string </dd></dl>
+
+</div>
+</div>
+<a id="a493ac3c8510e8974061a2564710b4067"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a493ac3c8510e8974061a2564710b4067">&#9670;&nbsp;</a></span>Convert() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::Convert </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>listofchars</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char &amp;&#160;</td>
+          <td class="paramname"><em>to</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the string with all occurrences of any character in the "from" argument converted to the "to" argument. </p>
+<p>The original string is modified.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000042">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">listofchars</td><td>The string of characters to be replaced. The order of the characters is not important.</td></tr>
+    <tr><td class="paramname">to</td><td>The single character used as the replacement.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_i_string.html#a95ae512fd13fb96864f9a69ae796cd5e">ConvertWhiteSpace()</a>, <a class="el" href="class_isis_1_1_image_file_list_widget.html#ae2f856dccc52f9a93369fd69fc6bcd76">Isis::ImageFileListWidget::fromPvl()</a>, and <a class="el" href="class_isis_1_1_image_file_list_widget.html#a9181aa5404f44bb8617aa013e56311f2">Isis::ImageFileListWidget::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a28de8a4f133f02b5ac1ed79770b72217"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28de8a4f133f02b5ac1ed79770b72217">&#9670;&nbsp;</a></span>Convert() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string Isis::IString::Convert </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>listofchars</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char &amp;&#160;</td>
+          <td class="paramname"><em>to</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts all occurences in the input string of any character in the "from" string to the "to" character. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000043">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The input string</td></tr>
+    <tr><td class="paramname">listofchars</td><td>The string of characters to be replaced. The order of the characters is unimportant</td></tr>
+    <tr><td class="paramname">to</td><td>The single character used as replacement</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string The converted string (the input string is unmodified) </dd></dl>
+
+</div>
+</div>
+<a id="abea51d980d41857b34abb146e9608f4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abea51d980d41857b34abb146e9608f4b">&#9670;&nbsp;</a></span>ConvertWhiteSpace() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::ConvertWhiteSpace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the string with all "new lines", "carriage returns", "tabs", "form
+feeds", "vertical tabs" and "back spaces" converted to single spaces. </p>
+<p>All quotes are ignored. The original string is modified.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000044">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_keyword.html#a7ef0c7e8f73df31e6a1b6ca87e176bd9">Isis::PvlKeyword::stringEqual()</a>.</p>
+
+</div>
+</div>
+<a id="a95ae512fd13fb96864f9a69ae796cd5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95ae512fd13fb96864f9a69ae796cd5e">&#9670;&nbsp;</a></span>ConvertWhiteSpace() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::IString::ConvertWhiteSpace </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts all forms of whitespace in the input string into single spaces. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000045">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a493ac3c8510e8974061a2564710b4067">Convert()</a>.</p>
+
+</div>
+</div>
+<a id="a6bc0f2894a15418c9057ed501c6bf63a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bc0f2894a15418c9057ed501c6bf63a">&#9670;&nbsp;</a></span>DownCase() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::DownCase </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts all upper case letters in the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> into lower case characters. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000021">Deprecated:</a></b></dt><dd></dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_aml.html#a63477890b183d16e0bc5a4824beb9748">IsisAml::CreatePVL()</a>, <a class="el" href="class_isis_1_1_cube_io_handler.html#a977a2c0ac88819ac7c5a3f199e6ac091">Isis::CubeIoHandler::CubeIoHandler()</a>, <a class="el" href="class_isis_aml.html#ab09c6ecde6373ca82927f9fd04f65c94">IsisAml::GroupIndex()</a>, <a class="el" href="class_isis_aml.html#af6a2e7c2c6417dda660b79e1db379f95">IsisAml::IsParamInPvlInclude()</a>, <a class="el" href="class_isis_1_1_preference.html#a35d16633d2cb46ae9a97d274d16ec6c3">Isis::Preference::Load()</a>, <a class="el" href="class_isis_1_1_text_file.html#a552757a83a57fd616c32ba41440aa46a">Isis::TextFile::Open()</a>, <a class="el" href="struct_isis_1_1_no_case_string_compare.html#ada4f6d842dc95fec5168bdcb5fc16e90">Isis::NoCaseStringCompare&lt; K &gt;::operator()()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a4c64e024a2f626daeaaeb93841df848c">Isis::ControlNetFilter::PointMeasurePropertiesFilter()</a>, <a class="el" href="class_isis_1_1_control_net_filter.html#a3514fa565108666ebc41981e51c76067">Isis::ControlNetFilter::PointPropertiesFilter()</a>, and <a class="el" href="class_isis_1_1_infix_to_postfix.html#aadbfb266e95030c7fe23441e97ccb60b">Isis::InfixToPostfix::tokenizeEquation()</a>.</p>
+
+</div>
+</div>
+<a id="a20bc9b0ef6b8739543d28ddb25a99824"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20bc9b0ef6b8739543d28ddb25a99824">&#9670;&nbsp;</a></span>DownCase() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::IString::DownCase </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts all upper case letters in the input string into lower case characters. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000022">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+</div>
+</div>
+<a id="a08663c4c18d8630917f7bfd47fd79cab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08663c4c18d8630917f7bfd47fd79cab">&#9670;&nbsp;</a></span>Equal() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::IString::Equal </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare a string to the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000024">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string with which the comparison is made</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if they are equal, false if they are not. </dd></dl>
+
+</div>
+</div>
+<a id="a7c146f6298f6ab5812e791a2c3be9924"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c146f6298f6ab5812e791a2c3be9924">&#9670;&nbsp;</a></span>Equal() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::IString::Equal </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compare two strings, case-insensitive. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000025">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str1</td><td>[in] The first string to compare </td></tr>
+    <tr><td class="paramname">str2</td><td>[in] The second string to compare</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the two input strings are identical otherwise false </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aa6cf8d3c286373925e67a6464de85cf5">Isis::nocase_compare()</a>.</p>
+
+</div>
+</div>
+<a id="ab92840faa6a45bef936de659a67be873"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab92840faa6a45bef936de659a67be873">&#9670;&nbsp;</a></span>operator BigInt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::operator <a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Attempts to convert the stirng to a 64 bit integer and return that int. </p>
+<dl class="section return"><dt>Returns</dt><dd>BigInt </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#aba0ff422cce649c125f26e5e3e1a7421">ToBigInteger()</a>.</p>
+
+</div>
+</div>
+<a id="a254590590d4c808391e72282878b5beb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a254590590d4c808391e72282878b5beb">&#9670;&nbsp;</a></span>operator double()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::operator double </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Attempts to convert the stirng to a 64 bit double and return that double. </p>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#ae56ed251df5ac88b2a1bf48bb7bc1cf7">ToDouble()</a>.</p>
+
+</div>
+</div>
+<a id="ad238b423f15c80b7110e40d80b7bf5e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad238b423f15c80b7110e40d80b7bf5e6">&#9670;&nbsp;</a></span>operator int()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::IString::operator int </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Attempts to convert the stirng to a 32 bit integer and return that int. </p>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a3909013ffe92c8ec4efc796dde1f228d">ToInteger()</a>.</p>
+
+</div>
+</div>
+<a id="a7321ec855927cc61b118d44db0edc795"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7321ec855927cc61b118d44db0edc795">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> &amp; Isis::IString::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attempts to convert a 64 bit integer into its string representation. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000049">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>[in] The 64 bit integer to be converted to a string</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">Isis::IString</a> representation of the BigInt </dd></dl>
+
+</div>
+</div>
+<a id="aa89fc0990f8ba0a8551685bb411e3f9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa89fc0990f8ba0a8551685bb411e3f9b">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a>&amp; Isis::IString::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Attempts to convert double into its string representation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>[in] The double to be converted to a string</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> representation of the double </dd></dl>
+
+</div>
+</div>
+<a id="a0b11bc78926b531ffde346c8b6c9850a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b11bc78926b531ffde346c8b6c9850a">&#9670;&nbsp;</a></span>operator=() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> &amp; Isis::IString::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attempts to convert the stirng to a QStirng (Qt) and return that <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. </p>
+<p>Attempts to convert a 32 bit integer into its string representation.</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a></dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000048">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>[in] The 32 bit integer to be converted to a string</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">Isis::IString</a> representation of the int </dd></dl>
+
+</div>
+</div>
+<a id="a312a46e9feefd6cf043e4eb8004a9cd1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a312a46e9feefd6cf043e4eb8004a9cd1">&#9670;&nbsp;</a></span>Remove() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::Remove </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>del</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Remove all instances of any character in the string from the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000046">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">del</td><td>The characters to be removed from the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. The character is unimportant</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_infix_to_postfix.html#a1c938588820a26992dcd5bbf8cdebcde">Isis::InfixToPostfix::convert()</a>, and <a class="el" href="class_isis_1_1_pvl_keyword.html#a7ef0c7e8f73df31e6a1b6ca87e176bd9">Isis::PvlKeyword::stringEqual()</a>.</p>
+
+</div>
+</div>
+<a id="a4d3556a96c801acd984ea13b3f80b462"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d3556a96c801acd984ea13b3f80b462">&#9670;&nbsp;</a></span>Remove() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::IString::Remove </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>del</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Remove all instances of any character in the "del" argument from the input string. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000047">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string from which characters are to be removed</td></tr>
+    <tr><td class="paramname">del</td><td>The string of characters to be removed. Order is unimportant.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string The string with the characters removed. The original string is unmodified </dd></dl>
+
+</div>
+</div>
+<a id="a32a9154c79f8dbde1a65ea4578c432bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32a9154c79f8dbde1a65ea4578c432bc">&#9670;&nbsp;</a></span>Replace() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::Replace </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>from</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>to</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>honorquotes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Replaces all instances of the first input string with the second input string. </p>
+<p>Honoring quotes if requested by the boolean</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000040">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">from</td><td>Search string that when found in str, it is replaced with to. </td></tr>
+    <tr><td class="paramname">to</td><td><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> that will replace every occurance of from in str. </td></tr>
+    <tr><td class="paramname">honorquotes</td><td>Set to true to honor quotes and not replace inside them</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> New string with subTarg replaced with subRep </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a94382f1fb513bebfae23aaccd783287a">Replace()</a>.</p>
+
+</div>
+</div>
+<a id="a94382f1fb513bebfae23aaccd783287a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94382f1fb513bebfae23aaccd783287a">&#9670;&nbsp;</a></span>Replace() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::Replace </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>from</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>to</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxReplaceCount</em> = <code>20</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Replaces all instances of the first input string with the second input string. </p>
+<p>For more information, see <a class="el" href="class_isis_1_1_i_string.html#a94382f1fb513bebfae23aaccd783287a" title="Replaces all instances of the first input string with the second input string.">IString::Replace</a>(const string, const string, const string, int)</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000038">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">from</td><td>Search string that when found in str, it is replaced with to </td></tr>
+    <tr><td class="paramname">to</td><td><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> that will replace every occurance of from in str. </td></tr>
+    <tr><td class="paramname">maxReplaceCount</td><td>Maximum number of replacements to allow per call </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a67fee616115b6610e3ebeb970017a13a">IString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_i_string.html#a32a9154c79f8dbde1a65ea4578c432bc">Replace()</a>.</p>
+
+</div>
+</div>
+<a id="aa5971b1fcbbc6f9850fc1ec2b5037791"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5971b1fcbbc6f9850fc1ec2b5037791">&#9670;&nbsp;</a></span>Replace() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::Replace </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>from</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>to</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>honorquotes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Replace specified substring with replacement substring in a string honoring quotes if requested. </p>
+<p>This routine is case sensitive and will only replace exact matches.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000041">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>Input string to search and replace substrings in </td></tr>
+    <tr><td class="paramname">from</td><td>Search string that when found in str, it is replaced with to. </td></tr>
+    <tr><td class="paramname">to</td><td><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> that will replace every occurance of from in str. </td></tr>
+    <tr><td class="paramname">honorquotes</td><td>Set to true to honor quotes and not replace inside them</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> New string with subTarg replaced with subRep </dd></dl>
+
+</div>
+</div>
+<a id="ad9c2bd94e12b24ba3af474808651cf33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9c2bd94e12b24ba3af474808651cf33">&#9670;&nbsp;</a></span>Replace() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::IString::Replace </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>from</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>to</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxReplaceCount</em> = <code>20</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Replace specified substring with replacement substring in a string. </p>
+<p>This method accepts a string, a target substring and a replacement substring with the intent to find all occurances of the <b>subTarg</b> substring in <b>s</b> and replace them with the substring <b>subRep</b>. The <b>maxReplaceCount</b> parameter is so that a should the replacement substring contain the target substring, an infinite loop would occur.</p>
+<p>Note that the search for strings are implemented as a loop that always starts at the begining of <b>s</b>. So should the above scenario occur, it will be limited.</p>
+<p>I have found this useful for formulating database SQL queries in a loop. The following example illustrates this usage: </p><div class="fragment"><div class="line">  <span class="keywordtype">string</span> pntDist  = <span class="stringliteral">&quot;distance(giscpt,UPCPoint(%longitude,%latitude))&quot;</span>;</div>
+<div class="line">  <span class="keywordtype">string</span> pntQuery = <span class="stringliteral">&quot;SELECT pointid, latitude, longitude, radius, &quot;</span></div>
+<div class="line">                    <span class="stringliteral">&quot; %distance AS Distance FROM &quot;</span>  + pntTable +</div>
+<div class="line">                    <span class="stringliteral">&quot; WHERE (%distance &lt;= &quot;</span> + <a class="code" href="class_isis_1_1_i_string.html#a67fee616115b6610e3ebeb970017a13a">IString</a>(maxDist) + <span class="stringliteral">&quot;)&quot;</span>;</div>
+<div class="line"> </div>
+<div class="line">SqlQuery finder;  <span class="comment">// Uses whatever the default database is</span></div>
+<div class="line"><span class="keywordflow">while</span> (!theEndOfTime()) {</div>
+<div class="line">   <a class="code" href="class_isis_1_1_i_string.html#a67fee616115b6610e3ebeb970017a13a">IString</a> longitude(source.getLongitude());</div>
+<div class="line">   <a class="code" href="class_isis_1_1_i_string.html#a67fee616115b6610e3ebeb970017a13a">IString</a> latitude(source.getLatitude());</div>
+<div class="line"> </div>
+<div class="line">   <span class="keywordtype">string</span> qDist = StringTools::replace(pntDist,<span class="stringliteral">&quot;%longitude&quot;</span>, longitude);</div>
+<div class="line">   qDist = StringTools::replace(qDist,<span class="stringliteral">&quot;%latitude&quot;</span>, latitude);</div>
+<div class="line">   <span class="keywordtype">string</span> query = StringTools::replace(pntQuery, <span class="stringliteral">&quot;%distance&quot;</span>, qDist);</div>
+<div class="line">   finder.exec(query);</div>
+<div class="line">   ... <span class="comment">//  Do what you will with the results!</span></div>
+<div class="line">}</div>
+<div class="ttc" id="aclass_isis_1_1_i_string_html_a67fee616115b6610e3ebeb970017a13a"><div class="ttname"><a href="class_isis_1_1_i_string.html#a67fee616115b6610e3ebeb970017a13a">Isis::IString::IString</a></div><div class="ttdeci">IString()</div><div class="ttdoc">Constructs an empty IString object.</div><div class="ttdef"><b>Definition:</b> IString.cpp:403</div></div>
+</div><!-- fragment --><p>This routine <b>is</b> case sensitive and will only replace exact matches.</p>
+<p>To prevent infinite recursion, where the replace string contains the search string, use the <b>maxReplaceCount</b> to adjust appropriately.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000039">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>Input string to search and replace substrings </td></tr>
+    <tr><td class="paramname">from</td><td>Search string that when found in str, it is replaced with to </td></tr>
+    <tr><td class="paramname">to</td><td><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> that will replace every occurance of from in str. </td></tr>
+    <tr><td class="paramname">maxReplaceCount</td><td>Maximum number of replacements to allow per call</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::string NEw string with from replaced with to </dd></dl>
+
+</div>
+</div>
+<a id="ac86fd7d6b985b09cd733ff17b4771324"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac86fd7d6b985b09cd733ff17b4771324">&#9670;&nbsp;</a></span>Split()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::IString::Split </td>
+          <td>(</td>
+          <td class="paramtype">const char&#160;</td>
+          <td class="paramname"><em>separator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>instr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>tokens</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>allowEmptyEntries</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Find separators between characters and split them into strings. </p>
+<p>This method will break up the input string into tokens that are separated by one or more of the specified character. If allowEmptyEntries == true, then one or separator characters are deem a single separator and the string is split into two different sections. If allowEmptyEntries == false, then should more than one separator character occur in succession, this will result in the number of separator characters less one empty strings returned to the caller.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000035">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">separator</td><td>A single character that separates each substring </td></tr>
+    <tr><td class="paramname">str</td><td>The string to break into separate fields or tokens </td></tr>
+    <tr><td class="paramname">tokens</td><td>A vector of strings that will receive the tokens as separated by the separator character. </td></tr>
+    <tr><td class="paramname">allowEmptyEntries</td><td>If true, treat successive separator characters as a single separator. If false, successive separator characters result in empty strings/tokens. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The number of fields/tokens found in str </dd></dl>
+
+</div>
+</div>
+<a id="aba0ff422cce649c125f26e5e3e1a7421"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba0ff422cce649c125f26e5e3e1a7421">&#9670;&nbsp;</a></span>ToBigInteger() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> Isis::IString::ToBigInteger </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the BigInt representation of the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000028">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>BigInt The Big Integer representation of the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_i_string.html#ab92840faa6a45bef936de659a67be873">operator BigInt()</a>.</p>
+
+</div>
+</div>
+<a id="a6912112f4c5a65026b51f39fe11c42d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6912112f4c5a65026b51f39fe11c42d4">&#9670;&nbsp;</a></span>ToBigInteger() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> Isis::IString::ToBigInteger </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the Big Integer representation of the input string. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000029">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string representing an integer value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>BigInt The string as a BigInt </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78">Isis::IException::Unknown</a>.</p>
+
+</div>
+</div>
+<a id="ae56ed251df5ac88b2a1bf48bb7bc1cf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae56ed251df5ac88b2a1bf48bb7bc1cf7">&#9670;&nbsp;</a></span>ToDouble() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::IString::ToDouble </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the floating point value the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> represents. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000030">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>double The <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> as a double </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_scatter_plot_alarm_config_dialog.html#a5feebe49ccda880fbee6fabeaa3d38b2">Isis::ScatterPlotAlarmConfigDialog::applySettingsToScatterPlot()</a>, <a class="el" href="class_isis_aml.html#a03243cea1e054c22324b079af34bb282">IsisAml::GetDouble()</a>, <a class="el" href="class_isis_1_1_mosaic_find_tool.html#ac2d935fa40c74359ddb9b37567110c81">Isis::MosaicFindTool::getUserGroundPoint()</a>, <a class="el" href="class_isis_1_1_i_string.html#a254590590d4c808391e72282878b5beb">operator double()</a>, <a class="el" href="class_isis_1_1_cube_calculator.html#aaee4acf79f857c4d3df7d11cd6d65cc8">Isis::CubeCalculator::prepareCalculations()</a>, <a class="el" href="class_isis_1_1i_time.html#a2f317f67f6e68cee981dbf64a6c38b7e">Isis::iTime::Second()</a>, and <a class="el" href="class_isis_1_1_mosaic_area_tool.html#ad590bc9b0888d0688730e0070c5c4bf2">Isis::MosaicAreaTool::userChangedBox()</a>.</p>
+
+</div>
+</div>
+<a id="a30a4b72b2bc55fa7af33deebe6fa9167"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30a4b72b2bc55fa7af33deebe6fa9167">&#9670;&nbsp;</a></span>ToDouble() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::IString::ToDouble </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the floating-point value represented by the input string. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000031">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string representing the numeric value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double The number the string represents </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78">Isis::IException::Unknown</a>.</p>
+
+</div>
+</div>
+<a id="a3909013ffe92c8ec4efc796dde1f228d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3909013ffe92c8ec4efc796dde1f228d">&#9670;&nbsp;</a></span>ToInteger() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::IString::ToInteger </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the object string as an integer. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000026">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>int The integer te string represents </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_workspace.html#a637f4fc35d5b063f1f067bd9a07c6a87">Isis::Workspace::addCubeViewport()</a>, <a class="el" href="class_isis_1_1_workspace.html#a8d6e17ae88043f5a134f28e87b2e3440">Isis::Workspace::addCubeViewportFromList()</a>, <a class="el" href="class_isis_1_1i_time.html#a59a04649b1dc3254d0949ce540bd3a82">Isis::iTime::Day()</a>, <a class="el" href="class_isis_1_1i_time.html#aa4a5a7753158acf8ef0e9526442e8988">Isis::iTime::DayOfYear()</a>, <a class="el" href="class_isis_aml.html#a1255853ec80b40d1308b0a45cf83345b">IsisAml::GetInteger()</a>, <a class="el" href="class_isis_1_1i_time.html#a0b056db65c0be20cd650ddce7a1e60e3">Isis::iTime::Hour()</a>, <a class="el" href="class_isis_1_1_kernel_db.html#a560fb1e2f2a0ce4d09757c111ba1f5b7">Isis::KernelDb::matches()</a>, <a class="el" href="class_isis_1_1i_time.html#aa33c884d05d0408ae8f7e918594e884f">Isis::iTime::Minute()</a>, <a class="el" href="class_isis_1_1i_time.html#a93c6d768b952328ac5cfda0c80c2236b">Isis::iTime::Month()</a>, <a class="el" href="class_isis_1_1_i_string.html#ad238b423f15c80b7110e40d80b7bf5e6">operator int()</a>, <a class="el" href="class_isis_1_1_cube_calculator.html#aaee4acf79f857c4d3df7d11cd6d65cc8">Isis::CubeCalculator::prepareCalculations()</a>, and <a class="el" href="class_isis_1_1i_time.html#ae5ad0d24f46e1aae3bad010199a24926">Isis::iTime::Year()</a>.</p>
+
+</div>
+</div>
+<a id="a243346734ca51bdedb9e5c65ff986e7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a243346734ca51bdedb9e5c65ff986e7e">&#9670;&nbsp;</a></span>ToInteger() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::IString::ToInteger </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the integer representation of the input string. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000027">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string representing an integer value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The integer value represented by the string </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78">Isis::IException::Unknown</a>.</p>
+
+</div>
+</div>
+<a id="a748288dc2f51058c6d2f9e1d5e4259fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a748288dc2f51058c6d2f9e1d5e4259fd">&#9670;&nbsp;</a></span>Token()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::Token </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_i_string.html">IString</a> &amp;&#160;</td>
+          <td class="paramname"><em>separator</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the first token in the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. </p>
+<p>A token is defined as a string of characters from the beginning of the string to, but not including, the first character matching any character in the separator string. The token is removed from the original string along with the separator.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000034">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">separator</td><td>The string of characters used to separate tokens. The order of the characters is not important.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_pvl_keyword.html#aa54f5c3d207992b26363ba81d1efa3dc">Isis::PvlKeyword::addCommentWrapped()</a>, <a class="el" href="class_isis_1_1_infix_to_postfix.html#a1c938588820a26992dcd5bbf8cdebcde">Isis::InfixToPostfix::convert()</a>, <a class="el" href="namespace_isis.html#a6101ff263da853e7beef7951742ad20a">Isis::fitsToJson()</a>, <a class="el" href="class_isis_1_1_kernel_db.html#a560fb1e2f2a0ce4d09757c111ba1f5b7">Isis::KernelDb::matches()</a>, <a class="el" href="class_isis_1_1_cube_calculator.html#aaee4acf79f857c4d3df7d11cd6d65cc8">Isis::CubeCalculator::prepareCalculations()</a>, <a class="el" href="class_isis_1_1_file_list.html#afe2b42733276b71890c7672a1d93a11e">Isis::FileList::read()</a>, <a class="el" href="class_isis_1_1_socket_thread.html#a23db6af9c505fdfff6b4b97cd859323f">Isis::SocketThread::run()</a>, <a class="el" href="class_isis_1_1_user_interface.html#adea9a8e2cc4f788f9f633656adbd92e4">Isis::UserInterface::SetBatchList()</a>, <a class="el" href="class_isis_1_1_minnaert_empirical.html#a44dbb35d45fda08a6b2a071c9a58cdb6">Isis::MinnaertEmpirical::SetPhotoKList()</a>, <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a4c1e45ce7e8652b11859388d02342e26">Isis::LunarLambertEmpirical::SetPhotoLList()</a>, <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a1631f174c98dc455e0d750db87b0effb">Isis::LunarLambertEmpirical::SetPhotoPhaseCurveList()</a>, <a class="el" href="class_isis_1_1_minnaert_empirical.html#ab2b53b2dc938fead1cd24e8524a477c5">Isis::MinnaertEmpirical::SetPhotoPhaseCurveList()</a>, <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#af7197b3c9199df06b2744414d21d3d88">Isis::LunarLambertEmpirical::SetPhotoPhaseList()</a>, and <a class="el" href="class_isis_1_1_minnaert_empirical.html#a8d6410dd030627d08ca7d72f2b75c8fe">Isis::MinnaertEmpirical::SetPhotoPhaseList()</a>.</p>
+
+</div>
+</div>
+<a id="a771e32c8a3cbe76ba8ff9916da73effb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a771e32c8a3cbe76ba8ff9916da73effb">&#9670;&nbsp;</a></span>ToQt() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::IString::ToQt </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retuns the object string as a QString. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000032">Deprecated:</a></b></dt><dd></dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_scatter_plot_alarm_config_dialog.html#a5feebe49ccda880fbee6fabeaa3d38b2">Isis::ScatterPlotAlarmConfigDialog::applySettingsToScatterPlot()</a>, <a class="el" href="class_isis_1_1_infix_to_postfix.html#a1c938588820a26992dcd5bbf8cdebcde">Isis::InfixToPostfix::convert()</a>, <a class="el" href="class_isis_1_1_environment.html#a54280e2d72c143bee7f3626df3cd7841">Isis::Environment::Environment()</a>, <a class="el" href="class_isis_1_1_sql_query.html#aaec26470937fe7080691b878876547a3">Isis::SqlQuery::exec()</a>, <a class="el" href="class_isis_1_1_sql_query.html#aa55f21e3de90f7426ef59ec144045c37">Isis::SqlQuery::fieldIndex()</a>, <a class="el" href="namespace_isis.html#a6101ff263da853e7beef7951742ad20a">Isis::fitsToJson()</a>, <a class="el" href="class_isis_1_1_image_file_list_widget.html#ae2f856dccc52f9a93369fd69fc6bcd76">Isis::ImageFileListWidget::fromPvl()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">Isis::DbProfile::key()</a>, <a class="el" href="class_isis_1_1_preference.html#a35d16633d2cb46ae9a97d274d16ec6c3">Isis::Preference::Load()</a>, <a class="el" href="class_isis_1_1_cube_manager.html#a46e27c8010ddbad3fd3c16eea1bab8ec">Isis::CubeManager::OpenCube()</a>, <a class="el" href="class_isis_1_1_preference.html#adf0ccf180777271a0f82d80f157b62e5">Isis::Preference::Preferences()</a>, <a class="el" href="class_isis_1_1_cube_calculator.html#aaee4acf79f857c4d3df7d11cd6d65cc8">Isis::CubeCalculator::prepareCalculations()</a>, <a class="el" href="class_isis_1_1_file_list.html#afe2b42733276b71890c7672a1d93a11e">Isis::FileList::read()</a>, <a class="el" href="class_isis_1_1_scatter_plot_alarm_config_dialog.html#af5ff31519fccf70d27806837552c1ae1">Isis::ScatterPlotAlarmConfigDialog::readSettingsFromScatterPlot()</a>, <a class="el" href="class_isis_1_1_image.html#a7e991dfc0e52ae33d3f216215eca3167">Isis::Image::save()</a>, <a class="el" href="class_isis_1_1_shape.html#a69682744743694a571524d071f85654e">Isis::Shape::save()</a>, <a class="el" href="class_isis_1_1_user_interface.html#adea9a8e2cc4f788f9f633656adbd92e4">Isis::UserInterface::SetBatchList()</a>, <a class="el" href="class_isis_1_1_infix_to_postfix.html#aadbfb266e95030c7fe23441e97ccb60b">Isis::InfixToPostfix::tokenizeEquation()</a>, <a class="el" href="class_isis_1_1_image_file_list_widget.html#a9181aa5404f44bb8617aa013e56311f2">Isis::ImageFileListWidget::toPvl()</a>, and <a class="el" href="class_isis_1_1_i_string.html#af0fcd64355d3f366a9e54a3dfcce4ef7">ToQt()</a>.</p>
+
+</div>
+</div>
+<a id="a04315cb37e43c54780190297ff826aac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04315cb37e43c54780190297ff826aac">&#9670;&nbsp;</a></span>ToQt() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::IString::ToQt </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the input string as a QString. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000033">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>[in] The standard string to be converted to a Qt string </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af0fcd64355d3f366a9e54a3dfcce4ef7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0fcd64355d3f366a9e54a3dfcce4ef7">&#9670;&nbsp;</a></span>ToQt() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::IString::ToQt </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>sl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a vector of strings into a QStringList. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000051">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sl</td><td>STL vector of strings</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QStringList </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a771e32c8a3cbe76ba8ff9916da73effb">ToQt()</a>.</p>
+
+</div>
+</div>
+<a id="a45f0615a503707d29517e2ca7e7dbb60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45f0615a503707d29517e2ca7e7dbb60">&#9670;&nbsp;</a></span>ToStd() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::IString::ToStd </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a Qt string into a std::string. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000050">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>[in] The Qt string to be converted to a std::string</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The std::string representation of the Qt string </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sql_query.html#a1d2646570cb120234ca1ee3e7631b1ad">Isis::SqlQuery::fieldName()</a>, <a class="el" href="class_isis_1_1_sql_query.html#a85b21b987d2915fad0c4c44d149df17e">Isis::SqlQuery::fieldNameList()</a>, <a class="el" href="class_isis_1_1_sql_query.html#a736217a5e99ed7a61930b3ac54a9d5de">Isis::SqlQuery::getQuery()</a>, and <a class="el" href="class_isis_1_1_i_string.html#ad29bb11a361c30021ae23f7d95fce0dd">ToStd()</a>.</p>
+
+</div>
+</div>
+<a id="ad29bb11a361c30021ae23f7d95fce0dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad29bb11a361c30021ae23f7d95fce0dd">&#9670;&nbsp;</a></span>ToStd() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; Isis::IString::ToStd </td>
+          <td>(</td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>sl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a QStringList into a vector of strings. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000052">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sl</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>vector&lt;string&gt; </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a45f0615a503707d29517e2ca7e7dbb60">ToStd()</a>.</p>
+
+</div>
+</div>
+<a id="a5e2177424ba4fe476e605f56d3edba01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e2177424ba4fe476e605f56d3edba01">&#9670;&nbsp;</a></span>Trim() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::Trim </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>chars</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes characters from the beginning and end of the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. </p>
+<p>The order of the characters makes no difference.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chars</td><td>The string of characters to be trimmed</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#aa2c773451719a9b93a74c67ecb0b89cc">TrimHead()</a>, and <a class="el" href="class_isis_1_1_i_string.html#a0fcef6024854a36b2cdb70db1d2f1380">TrimTail()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_aml.html#a06d7d5a4631f630f439cd3b618e66b54">IsisAml::CommandLine()</a>.</p>
+
+</div>
+</div>
+<a id="a9c8e646620975f736af0d5cb752d7390"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c8e646620975f736af0d5cb752d7390">&#9670;&nbsp;</a></span>Trim() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::IString::Trim </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>chars</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes all occurences of the input characters from the beginning and end of the input string. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chars</td><td>The string of characters to be removed. Order makes no difference</td></tr>
+    <tr><td class="paramname">str</td><td>The input string to be trimmed</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string The result of the trimming operation </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#aa2c773451719a9b93a74c67ecb0b89cc">TrimHead()</a>, and <a class="el" href="class_isis_1_1_i_string.html#a0fcef6024854a36b2cdb70db1d2f1380">TrimTail()</a>.</p>
+
+</div>
+</div>
+<a id="aa2c773451719a9b93a74c67ecb0b89cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2c773451719a9b93a74c67ecb0b89cc">&#9670;&nbsp;</a></span>TrimHead() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::TrimHead </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>chars</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Trims The input characters from the beginning of the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chars</td><td>The string of characters to be trimmed. Order makes no difference </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="namespace_isis.html#a6101ff263da853e7beef7951742ad20a">Isis::fitsToJson()</a>, <a class="el" href="class_isis_1_1_file_list.html#afe2b42733276b71890c7672a1d93a11e">Isis::FileList::read()</a>, and <a class="el" href="class_isis_1_1_i_string.html#a5e2177424ba4fe476e605f56d3edba01">Trim()</a>.</p>
+
+</div>
+</div>
+<a id="aa35fb779d8a7931f7762cf4abed1b36b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa35fb779d8a7931f7762cf4abed1b36b">&#9670;&nbsp;</a></span>TrimHead() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::IString::TrimHead </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>chars</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Trims the input characters from the beginning of the input string. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chars</td><td>The input characters to be removed. Order makes no difference </td></tr>
+    <tr><td class="paramname">str</td><td>The string to be trimmed</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string The resulting string </dd></dl>
+
+</div>
+</div>
+<a id="a0fcef6024854a36b2cdb70db1d2f1380"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fcef6024854a36b2cdb70db1d2f1380">&#9670;&nbsp;</a></span>TrimTail() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::TrimTail </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>chars</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Trims the input characters from the end of the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a>. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chars</td><td>The string of characters to be removed. Order is irrelevant </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="namespace_isis.html#a6101ff263da853e7beef7951742ad20a">Isis::fitsToJson()</a>, <a class="el" href="class_isis_1_1_file_list.html#afe2b42733276b71890c7672a1d93a11e">Isis::FileList::read()</a>, and <a class="el" href="class_isis_1_1_i_string.html#a5e2177424ba4fe476e605f56d3edba01">Trim()</a>.</p>
+
+</div>
+</div>
+<a id="a2c522b191a20c1f0fb1bcbb471bf0bca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c522b191a20c1f0fb1bcbb471bf0bca">&#9670;&nbsp;</a></span>TrimTail() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::IString::TrimTail </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>chars</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Trims the input characters from the end of the input string. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chars</td><td>The characters to be removed from the input string. Order does not matter, all characters are treated individually.</td></tr>
+    <tr><td class="paramname">str</td><td>The string to be trimmed</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string The result of the trimming </dd></dl>
+
+</div>
+</div>
+<a id="a69f44966f3c629e79aec55ba5b921d75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69f44966f3c629e79aec55ba5b921d75">&#9670;&nbsp;</a></span>UpCase() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_i_string.html">IString</a> Isis::IString::UpCase </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converst any lower case characters in the object <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> with uppercase characters. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated:</a></b></dt><dd></dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_aml.html#a06d7d5a4631f630f439cd3b618e66b54">IsisAml::CommandLine()</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a906f5bb492fb3a011bc7480f93617774">Isis::AtmosModel::GenerateAhTable()</a>, <a class="el" href="class_isis_1_1_table_record.html#afc3c783a8cd038b720d5d425eb44550b">Isis::TableRecord::operator[]()</a>, <a class="el" href="class_isis_1_1_grid_polygon_seeder.html#a2c67918a16e4e5ff3654a0d1499cb0a5">Isis::GridPolygonSeeder::Parse()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#a6d92ebfb16020556719289005594d62a">Isis::PvlKeyword::reform()</a>, <a class="el" href="class_isis_aml.html#a9a4ca9655a7fc66807b21548e7683685">IsisAml::ReturnParam()</a>, <a class="el" href="class_isis_1_1_gui_combo_box_parameter.html#a03134a49d3d56bb2e7c07833df69a961">Isis::GuiComboBoxParameter::Set()</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a36b298cb584bec404c32235ba81c184f">Isis::AtmosModel::SetAtmosEstTau()</a>, <a class="el" href="class_isis_1_1_atmos_model.html#a7c60bbe2498e7f46aba6e590c7005855">Isis::AtmosModel::SetAtmosIord()</a>, <a class="el" href="class_isis_1_1_atmos_model.html#ab3ae7a267ec2c26e5980cea73c0e6664">Isis::AtmosModel::SetAtmosNulneg()</a>, <a class="el" href="class_isis_1_1_hapke.html#af889e9c933dcac42112f0c559402e1c5">Isis::Hapke::SetPhoto0B0Standard()</a>, and <a class="el" href="class_isis_1_1_pvl_keyword.html#a7ef0c7e8f73df31e6a1b6ca87e176bd9">Isis::PvlKeyword::stringEqual()</a>.</p>
+
+</div>
+</div>
+<a id="ae08ec86f22eb18d3c1c59682f2ae940c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae08ec86f22eb18d3c1c59682f2ae940c">&#9670;&nbsp;</a></span>UpCase() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::IString::UpCase </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts lower case characters in the input string to upper case characters. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated:</a></b></dt><dd></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to be converted</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string The result of the conversion </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/IString/<a class="el" href="_i_string_8h_source.html">IString.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/IString/<a class="el" href="_i_string_8cpp.html">IString.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_i_string.html">IString</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+<map id="Isis::AutoReg" name="Isis::AutoReg">
+<area shape="rect" id="node1" title="Auto Registration class." alt="" coords="193,5,374,423"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm." alt="" coords="5,471,175,872"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_maximum_correlation.html" title="Maximum correlation pattern matching." alt="" coords="198,591,369,752"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_minimum_difference.html" title="Minimum difference pattern matching." alt="" coords="393,583,561,760"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_adaptive_gruen.html" title="Gruen (adaptive) pattern matching." alt="" coords="22,920,158,1049"/>
+</map>

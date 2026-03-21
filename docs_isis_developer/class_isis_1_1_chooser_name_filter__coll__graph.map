@@ -1,0 +1,5 @@
+<map id="Isis::ChooserNameFilter" name="Isis::ChooserNameFilter">
+<area shape="rect" id="node1" title="Allows filtering by the chooser name." alt="" coords="31,712,194,921"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_abstract_string_filter.html" title="Base class for filters that are string&#45;based." alt="" coords="31,519,194,664"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_abstract_filter.html" title="Base class for control net filters." alt="" coords="5,5,220,471"/>
+</map>

@@ -1,0 +1,1120 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ZeroReverse Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_zero_reverse.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_zero_reverse-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ZeroReverse Class Reference<div class="ingroups"><a class="el" href="group___utility.html">Utility</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Processes Reverse Clock calibration data (<a class="el" href="class_isis_1_1_zero_reverse.html" title="Processes Reverse Clock calibration data (ZeroReverse Module)">ZeroReverse</a> <a class="el" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources.">Module</a>)  
+ <a href="class_isis_1_1_zero_reverse.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_zero_reverse_8h_source.html">ZeroReverse.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ZeroReverse:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_zero_reverse__inherit__graph.png" border="0" usemap="#a_isis_1_1_zero_reverse_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_zero_reverse_inherit__map" id="a_isis_1_1_zero_reverse_inherit__map">
+<area shape="rect" title="Processes Reverse Clock calibration data (ZeroReverse Module)" alt="" coords="5,407,131,552"/>
+<area shape="rect" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources." alt="" coords="12,5,124,359"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ZeroReverse:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_zero_reverse__coll__graph.png" border="0" usemap="#a_isis_1_1_zero_reverse_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_zero_reverse_coll__map" id="a_isis_1_1_zero_reverse_coll__map">
+<area shape="rect" title="Processes Reverse Clock calibration data (ZeroReverse Module)" alt="" coords="195,601,321,747"/>
+<area shape="rect" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources." alt="" coords="207,279,309,552"/>
+<area shape="rect" href="class_isis_1_1_hi_history.html" title=" " alt="" coords="5,5,111,199"/>
+<area shape="rect" title=" " alt="" coords="135,61,266,143"/>
+<area shape="rect" title=" " alt="" coords="291,61,356,143"/>
+<area shape="rect" title=" " alt="" coords="387,61,425,143"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a6ee12c80ae1656ad4ce2caf8bd307d62"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_reverse.html#a6ee12c80ae1656ad4ce2caf8bd307d62">ZeroReverse</a> ()</td></tr>
+<tr class="separator:a6ee12c80ae1656ad4ce2caf8bd307d62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c4c65441c0ac8e76eb5811df173cb80"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_reverse.html#a3c4c65441c0ac8e76eb5811df173cb80">ZeroReverse</a> (<a class="el" href="class_isis_1_1_hi_cal_data.html">HiCalData</a> &amp;cal, const HiCalConf &amp;conf)</td></tr>
+<tr class="separator:a3c4c65441c0ac8e76eb5811df173cb80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fe19703d419c933a0f399c27471f921"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_reverse.html#a0fe19703d419c933a0f399c27471f921">~ZeroReverse</a> ()</td></tr>
+<tr class="memdesc:a0fe19703d419c933a0f399c27471f921"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_zero_reverse.html#a0fe19703d419c933a0f399c27471f921">More...</a><br /></td></tr>
+<tr class="separator:a0fe19703d419c933a0f399c27471f921"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63485302af7503d94cf2f264b2b4a0b6"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_statistics.html">Statistics</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_reverse.html#a63485302af7503d94cf2f264b2b4a0b6">Stats</a> () const</td></tr>
+<tr class="memdesc:a63485302af7503d94cf2f264b2b4a0b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return statistics for raw Reverse Clock buffer.  <a href="class_isis_1_1_zero_reverse.html#a63485302af7503d94cf2f264b2b4a0b6">More...</a><br /></td></tr>
+<tr class="separator:a63485302af7503d94cf2f264b2b4a0b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accf688363e86271ccaf2838fcbbd7140"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_reverse.html#accf688363e86271ccaf2838fcbbd7140">wasTriggered</a> () const</td></tr>
+<tr class="memdesc:accf688363e86271ccaf2838fcbbd7140"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the input trigger conditions were met.  <a href="class_isis_1_1_zero_reverse.html#accf688363e86271ccaf2838fcbbd7140">More...</a><br /></td></tr>
+<tr class="separator:accf688363e86271ccaf2838fcbbd7140"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99ead949c89174a0deac29664e561524"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a99ead949c89174a0deac29664e561524">name</a> () const</td></tr>
+<tr class="memdesc:a99ead949c89174a0deac29664e561524"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns name of component.  <a href="class_isis_1_1_module.html#a99ead949c89174a0deac29664e561524">More...</a><br /></td></tr>
+<tr class="separator:a99ead949c89174a0deac29664e561524"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fe08b4d228f61fdcfe426004632b1da"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a0fe08b4d228f61fdcfe426004632b1da">getcsvFile</a> () const</td></tr>
+<tr class="memdesc:a0fe08b4d228f61fdcfe426004632b1da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns expanded name of last CSV file loaded by loadCsv.  <a href="class_isis_1_1_module.html#a0fe08b4d228f61fdcfe426004632b1da">More...</a><br /></td></tr>
+<tr class="separator:a0fe08b4d228f61fdcfe426004632b1da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a588cb633e5dc4fd674c2afe756912a97"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a588cb633e5dc4fd674c2afe756912a97">size</a> () const</td></tr>
+<tr class="memdesc:a588cb633e5dc4fd674c2afe756912a97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size (number of elements) of data array.  <a href="class_isis_1_1_module.html#a588cb633e5dc4fd674c2afe756912a97">More...</a><br /></td></tr>
+<tr class="separator:a588cb633e5dc4fd674c2afe756912a97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace6913a240430e7b6f09b50684c30581"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#ace6913a240430e7b6f09b50684c30581">Process</a> (const <a class="el" href="class_isis_1_1_module.html">Module</a> &amp;c)</td></tr>
+<tr class="memdesc:ace6913a240430e7b6f09b50684c30581"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invokes the process method on the <a class="el" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources.">Module</a> vector.  <a href="class_isis_1_1_module.html#ace6913a240430e7b6f09b50684c30581">More...</a><br /></td></tr>
+<tr class="separator:ace6913a240430e7b6f09b50684c30581"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a219df8ec46bf6f7f0e323a6efac82b1f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a219df8ec46bf6f7f0e323a6efac82b1f">Process</a> (const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> &amp;v)</td></tr>
+<tr class="memdesc:a219df8ec46bf6f7f0e323a6efac82b1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default processing behavior makes a reference copy of data array.  <a href="class_isis_1_1_module.html#a219df8ec46bf6f7f0e323a6efac82b1f">More...</a><br /></td></tr>
+<tr class="separator:a219df8ec46bf6f7f0e323a6efac82b1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae38e6020b27097a9c12b005ff0b99284"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#ae38e6020b27097a9c12b005ff0b99284">loadCsv</a> (const QString &amp;csvBase, const HiCalConf &amp;conf, const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;prof, const int &amp;elements=0)</td></tr>
+<tr class="memdesc:ae38e6020b27097a9c12b005ff0b99284"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provide generic loading of CSV file for all modules.  <a href="class_isis_1_1_module.html#ae38e6020b27097a9c12b005ff0b99284">More...</a><br /></td></tr>
+<tr class="separator:ae38e6020b27097a9c12b005ff0b99284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a429129a3c98d079bc38008a1bea6d046"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a429129a3c98d079bc38008a1bea6d046">ref</a> () const</td></tr>
+<tr class="memdesc:a429129a3c98d079bc38008a1bea6d046"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return data via a const reference.  <a href="class_isis_1_1_module.html#a429129a3c98d079bc38008a1bea6d046">More...</a><br /></td></tr>
+<tr class="separator:a429129a3c98d079bc38008a1bea6d046"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08c34671b3c7548458e5fdca28890c12"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a08c34671b3c7548458e5fdca28890c12">operator()</a> (int index) const</td></tr>
+<tr class="memdesc:a08c34671b3c7548458e5fdca28890c12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return individual element of the data vector.  <a href="class_isis_1_1_module.html#a08c34671b3c7548458e5fdca28890c12">More...</a><br /></td></tr>
+<tr class="separator:a08c34671b3c7548458e5fdca28890c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf92b4d6049f1a0aec6e3bbd53f4e5a4"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_hi_history.html">HiHistory</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#adf92b4d6049f1a0aec6e3bbd53f4e5a4">History</a> () const</td></tr>
+<tr class="memdesc:adf92b4d6049f1a0aec6e3bbd53f4e5a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return recorded history of events.  <a href="class_isis_1_1_module.html#adf92b4d6049f1a0aec6e3bbd53f4e5a4">More...</a><br /></td></tr>
+<tr class="separator:adf92b4d6049f1a0aec6e3bbd53f4e5a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6663a73c2f9154b9166b552cea3e7b6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#ac6663a73c2f9154b9166b552cea3e7b6">record</a> (<a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;pvl, const QString keyname=&quot;ModuleHistory&quot;) const</td></tr>
+<tr class="memdesc:ac6663a73c2f9154b9166b552cea3e7b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record history in <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> group object.  <a href="class_isis_1_1_module.html#ac6663a73c2f9154b9166b552cea3e7b6">More...</a><br /></td></tr>
+<tr class="separator:ac6663a73c2f9154b9166b552cea3e7b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9643785aedb120064920b7e47eb33b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#ac9643785aedb120064920b7e47eb33b5">Dump</a> (const QString &amp;fname) const</td></tr>
+<tr class="memdesc:ac9643785aedb120064920b7e47eb33b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dumps the component to a specified file.  <a href="class_isis_1_1_module.html#ac9643785aedb120064920b7e47eb33b5">More...</a><br /></td></tr>
+<tr class="separator:ac9643785aedb120064920b7e47eb33b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:aaed96e188ee3971b100e1d802fbcb95f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="class_isis_1_1_module.html#aaed96e188ee3971b100e1d802fbcb95fa0e531ce204e776746f8e9c0ba7515516">DefaultWidth</a> = 10
+, <a class="el" href="class_isis_1_1_module.html#aaed96e188ee3971b100e1d802fbcb95fac7d552e6dac88d1d406d0ec563b8b4b4">DefaultPrecision</a> = 6
+ }</td></tr>
+<tr class="separator:aaed96e188ee3971b100e1d802fbcb95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:af9b8842ec0e6751b0a038e8143eabb1b"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#af9b8842ec0e6751b0a038e8143eabb1b">formatDbl</a> (const double &amp;value) const</td></tr>
+<tr class="memdesc:af9b8842ec0e6751b0a038e8143eabb1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Properly format values that could be special pixels.  <a href="class_isis_1_1_module.html#af9b8842ec0e6751b0a038e8143eabb1b">More...</a><br /></td></tr>
+<tr class="separator:af9b8842ec0e6751b0a038e8143eabb1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a7c9523f44ab26e8eb1562ca701e7fdc0"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a7c9523f44ab26e8eb1562ca701e7fdc0">_name</a></td></tr>
+<tr class="memdesc:a7c9523f44ab26e8eb1562ca701e7fdc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of component.  <a href="class_isis_1_1_module.html#a7c9523f44ab26e8eb1562ca701e7fdc0">More...</a><br /></td></tr>
+<tr class="separator:a7c9523f44ab26e8eb1562ca701e7fdc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67182d4696ae5bf7d27ee4450e4b52df"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a67182d4696ae5bf7d27ee4450e4b52df">_csvFile</a></td></tr>
+<tr class="memdesc:a67182d4696ae5bf7d27ee4450e4b52df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fully expanded name of CSV file if present.  <a href="class_isis_1_1_module.html#a67182d4696ae5bf7d27ee4450e4b52df">More...</a><br /></td></tr>
+<tr class="separator:a67182d4696ae5bf7d27ee4450e4b52df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01f4704d4302c9f2c132d6d2297456b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a01f4704d4302c9f2c132d6d2297456b2">_data</a></td></tr>
+<tr class="memdesc:a01f4704d4302c9f2c132d6d2297456b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data vector.  <a href="class_isis_1_1_module.html#a01f4704d4302c9f2c132d6d2297456b2">More...</a><br /></td></tr>
+<tr class="separator:a01f4704d4302c9f2c132d6d2297456b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11c9231f61fe197580ebcfbce76d992f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_hi_history.html">HiHistory</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">_history</a></td></tr>
+<tr class="memdesc:a11c9231f61fe197580ebcfbce76d992f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hierarchial component history.  <a href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">More...</a><br /></td></tr>
+<tr class="separator:a11c9231f61fe197580ebcfbce76d992f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab430d0afa727db1b858f1a5d92629f7f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#ab430d0afa727db1b858f1a5d92629f7f">_fmtWidth</a></td></tr>
+<tr class="memdesc:ab430d0afa727db1b858f1a5d92629f7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default field with of double.  <a href="class_isis_1_1_module.html#ab430d0afa727db1b858f1a5d92629f7f">More...</a><br /></td></tr>
+<tr class="separator:ab430d0afa727db1b858f1a5d92629f7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f69df4304491e49ef58cd71e0beef8c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a0f69df4304491e49ef58cd71e0beef8c">_fmtPrecision</a></td></tr>
+<tr class="memdesc:a0f69df4304491e49ef58cd71e0beef8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default field with of double.  <a href="class_isis_1_1_module.html#a0f69df4304491e49ef58cd71e0beef8c">More...</a><br /></td></tr>
+<tr class="separator:a0f69df4304491e49ef58cd71e0beef8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Processes Reverse Clock calibration data (<a class="el" href="class_isis_1_1_zero_reverse.html" title="Processes Reverse Clock calibration data (ZeroReverse Module)">ZeroReverse</a> <a class="el" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources.">Module</a>) </p>
+<p>This class loads and processes the Reverse Clock data from a HiRISE image for offset correction purposes. Additional processing may occur in subsequent modules.</p>
+<dl class="section author"><dt>Author</dt><dd>2008-06-13 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="aaed96e188ee3971b100e1d802fbcb95f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaed96e188ee3971b100e1d802fbcb95f">&#9670;&nbsp;</a></span>anonymous enum</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aaed96e188ee3971b100e1d802fbcb95fa0e531ce204e776746f8e9c0ba7515516"></a>DefaultWidth&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aaed96e188ee3971b100e1d802fbcb95fac7d552e6dac88d1d406d0ec563b8b4b4"></a>DefaultPrecision&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a6ee12c80ae1656ad4ce2caf8bd307d62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ee12c80ae1656ad4ce2caf8bd307d62">&#9670;&nbsp;</a></span>ZeroReverse() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ZeroReverse::ZeroReverse </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3c4c65441c0ac8e76eb5811df173cb80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c4c65441c0ac8e76eb5811df173cb80">&#9670;&nbsp;</a></span>ZeroReverse() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ZeroReverse::ZeroReverse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_hi_cal_data.html">HiCalData</a> &amp;&#160;</td>
+          <td class="paramname"><em>cal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const HiCalConf &amp;&#160;</td>
+          <td class="paramname"><em>conf</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0fe19703d419c933a0f399c27471f921"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fe19703d419c933a0f399c27471f921">&#9670;&nbsp;</a></span>~ZeroReverse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::ZeroReverse::~ZeroReverse </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac9643785aedb120064920b7e47eb33b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9643785aedb120064920b7e47eb33b5">&#9670;&nbsp;</a></span>Dump()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Module::Dump </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>fname</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Dumps the component to a specified file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fname</td><td>Name of file to dump contents to </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>.</p>
+
+</div>
+</div>
+<a id="af9b8842ec0e6751b0a038e8143eabb1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9b8842ec0e6751b0a038e8143eabb1b">&#9670;&nbsp;</a></span>formatDbl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Module::formatDbl </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Properly format values that could be special pixels. </p>
+<p>This method applies ISIS special pixel value conventions to properly print pixel values.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">(double)</td><td>value Input value to test for specialness and print as requested by caller </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">(int)</td><td>width Width of field in which to print the value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">(int)</td><td>prec Precision used to format the value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>(string) Formatted double value </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a0f69df4304491e49ef58cd71e0beef8c">Isis::Module::_fmtPrecision</a>, <a class="el" href="class_isis_1_1_module.html#ab430d0afa727db1b858f1a5d92629f7f">Isis::Module::_fmtWidth</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, and <a class="el" href="namespace_isis.html#ad52e1e7f5b377a13b07cc19ab28dfe98">Isis::PixelToString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_module.html#a90535d33e8f0038286d3883f5741b4ef">Isis::Module::printOn()</a>.</p>
+
+</div>
+</div>
+<a id="a0fe08b4d228f61fdcfe426004632b1da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fe08b4d228f61fdcfe426004632b1da">&#9670;&nbsp;</a></span>getcsvFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Module::getcsvFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns expanded name of last CSV file loaded by loadCsv. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a67182d4696ae5bf7d27ee4450e4b52df">Isis::Module::_csvFile</a>.</p>
+
+</div>
+</div>
+<a id="adf92b4d6049f1a0aec6e3bbd53f4e5a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf92b4d6049f1a0aec6e3bbd53f4e5a4">&#9670;&nbsp;</a></span>History()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_hi_history.html">HiHistory</a>&amp; Isis::Module::History </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return recorded history of events. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">Isis::Module::_history</a>.</p>
+
+</div>
+</div>
+<a id="ae38e6020b27097a9c12b005ff0b99284"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae38e6020b27097a9c12b005ff0b99284">&#9670;&nbsp;</a></span>loadCsv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> Isis::Module::loadCsv </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>csvBase</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const HiCalConf &amp;&#160;</td>
+          <td class="paramname"><em>conf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;&#160;</td>
+          <td class="paramname"><em>prof</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>elements</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Provide generic loading of CSV file for all modules. </p>
+<p>This method provides generalized access to CSV files through the standardized format.</p>
+<dl class="section author"><dt>Author</dt><dd>Kris Becker - 4/16/2010</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cvsBase</td><td>Name of base keyword for CSV file </td></tr>
+    <tr><td class="paramname">conf</td><td>Configuration parameters </td></tr>
+    <tr><td class="paramname">prof</td><td><a class="el" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources.">Module</a> profile parameters </td></tr>
+    <tr><td class="paramname">samples</td><td>Number of expect elements to be read from CSV file</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>HiVector </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a67182d4696ae5bf7d27ee4450e4b52df">Isis::Module::_csvFile</a>, <a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">Isis::Module::_history</a>, <a class="el" href="class_isis_1_1_load_c_s_v.html#a39ba4b0373e606ce309400b532af8dfd">Isis::LoadCSV::filename()</a>, <a class="el" href="class_isis_1_1_load_c_s_v.html#aee29bda63993024c0615c74db4838cd9">Isis::LoadCSV::getVector()</a>, <a class="el" href="class_isis_1_1_load_c_s_v.html#acf85d596ef21c2344b169843b128ce8b">Isis::LoadCSV::History()</a>, and <a class="el" href="class_isis_1_1_load_c_s_v.html#ab30b901fff2a2add840ec8d05746940f">Isis::LoadCSV::validateSize()</a>.</p>
+
+</div>
+</div>
+<a id="a99ead949c89174a0deac29664e561524"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99ead949c89174a0deac29664e561524">&#9670;&nbsp;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Module::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns name of component. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a7c9523f44ab26e8eb1562ca701e7fdc0">Isis::Module::_name</a>.</p>
+
+</div>
+</div>
+<a id="a08c34671b3c7548458e5fdca28890c12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08c34671b3c7548458e5fdca28890c12">&#9670;&nbsp;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Module::operator() </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return individual element of the data vector. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a01f4704d4302c9f2c132d6d2297456b2">Isis::Module::_data</a>.</p>
+
+</div>
+</div>
+<a id="a219df8ec46bf6f7f0e323a6efac82b1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a219df8ec46bf6f7f0e323a6efac82b1f">&#9670;&nbsp;</a></span>Process() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Module::Process </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Default processing behavior makes a reference copy of data array. </p>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_spline_fill.html#a95c5638092f963af9cb503315b50a330">Isis::SplineFill</a>, and <a class="el" href="class_isis_1_1_low_pass_filter.html#a4e411061bf243b0a6e19ed3c5d07b4c3">Isis::LowPassFilter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a01f4704d4302c9f2c132d6d2297456b2">Isis::Module::_data</a>.</p>
+
+</div>
+</div>
+<a id="ace6913a240430e7b6f09b50684c30581"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace6913a240430e7b6f09b50684c30581">&#9670;&nbsp;</a></span>Process() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Module::Process </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_module.html">Module</a> &amp;&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Invokes the process method on the <a class="el" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources.">Module</a> vector. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a429129a3c98d079bc38008a1bea6d046">Isis::Module::ref()</a>.</p>
+
+</div>
+</div>
+<a id="ac6663a73c2f9154b9166b552cea3e7b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6663a73c2f9154b9166b552cea3e7b6">&#9670;&nbsp;</a></span>record()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Module::record </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>keyname</em> = <code>&quot;ModuleHistory&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Record history in <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> group object. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">Isis::Module::_history</a>, and <a class="el" href="class_isis_1_1_hi_history.html#a30dce403f3e4f5039ad1388c811774fc">Isis::HiHistory::makekey()</a>.</p>
+
+</div>
+</div>
+<a id="a429129a3c98d079bc38008a1bea6d046"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a429129a3c98d079bc38008a1bea6d046">&#9670;&nbsp;</a></span>ref()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a>&amp; Isis::Module::ref </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return data via a const reference. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a01f4704d4302c9f2c132d6d2297456b2">Isis::Module::_data</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a822f3d4cf3df453f6faeba990dbd0455">Isis::ZeroBufferFit::guess()</a>, <a class="el" href="class_isis_1_1_low_pass_filter.html#ab58ba80d66836a602e9616e3e339a32c">Isis::LowPassFilter::LowPassFilter()</a>, <a class="el" href="class_isis_1_1_module.html#ace6913a240430e7b6f09b50684c30581">Isis::Module::Process()</a>, and <a class="el" href="class_isis_1_1_spline_fill.html#ac8655cc0f59d421ae31345d2d6c0b9c6">Isis::SplineFill::SplineFill()</a>.</p>
+
+</div>
+</div>
+<a id="a588cb633e5dc4fd674c2afe756912a97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a588cb633e5dc4fd674c2afe756912a97">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Module::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the size (number of elements) of data array. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a01f4704d4302c9f2c132d6d2297456b2">Isis::Module::_data</a>.</p>
+
+</div>
+</div>
+<a id="a63485302af7503d94cf2f264b2b4a0b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63485302af7503d94cf2f264b2b4a0b6">&#9670;&nbsp;</a></span>Stats()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_statistics.html">Statistics</a>&amp; Isis::ZeroReverse::Stats </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return statistics for raw Reverse Clock buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a>&amp; <a class="el" href="class_isis_1_1_statistics.html" title="This class is used to accumulate statistics on double arrays.">Statistics</a> class with all stats </dd></dl>
+
+</div>
+</div>
+<a id="accf688363e86271ccaf2838fcbbd7140"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accf688363e86271ccaf2838fcbbd7140">&#9670;&nbsp;</a></span>wasTriggered()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ZeroReverse::wasTriggered </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Specifies if the input trigger conditions were met. </p>
+<p>If trigger conditions where met, the reverse clock correction becomes a constant as opposed to processed reverse clock pixels.</p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if triggered, false otherwise </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a67182d4696ae5bf7d27ee4450e4b52df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67182d4696ae5bf7d27ee4450e4b52df">&#9670;&nbsp;</a></span>_csvFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Module::_csvFile</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Fully expanded name of CSV file if present. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_module.html#a0fe08b4d228f61fdcfe426004632b1da">Isis::Module::getcsvFile()</a>, and <a class="el" href="class_isis_1_1_module.html#ae38e6020b27097a9c12b005ff0b99284">Isis::Module::loadCsv()</a>.</p>
+
+</div>
+</div>
+<a id="a01f4704d4302c9f2c132d6d2297456b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01f4704d4302c9f2c132d6d2297456b2">&#9670;&nbsp;</a></span>_data</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> Isis::Module::_data</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Data vector. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_low_pass_filter.html#ab58ba80d66836a602e9616e3e339a32c">Isis::LowPassFilter::LowPassFilter()</a>, <a class="el" href="class_isis_1_1_module.html#a08c34671b3c7548458e5fdca28890c12">Isis::Module::operator()()</a>, <a class="el" href="class_isis_1_1_module.html#a90535d33e8f0038286d3883f5741b4ef">Isis::Module::printOn()</a>, <a class="el" href="class_isis_1_1_low_pass_filter.html#a4e411061bf243b0a6e19ed3c5d07b4c3">Isis::LowPassFilter::Process()</a>, <a class="el" href="class_isis_1_1_module.html#a219df8ec46bf6f7f0e323a6efac82b1f">Isis::Module::Process()</a>, <a class="el" href="class_isis_1_1_module.html#a429129a3c98d079bc38008a1bea6d046">Isis::Module::ref()</a>, and <a class="el" href="class_isis_1_1_module.html#a588cb633e5dc4fd674c2afe756912a97">Isis::Module::size()</a>.</p>
+
+</div>
+</div>
+<a id="a0f69df4304491e49ef58cd71e0beef8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f69df4304491e49ef58cd71e0beef8c">&#9670;&nbsp;</a></span>_fmtPrecision</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Module::_fmtPrecision</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Default field with of double. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_module.html#af9b8842ec0e6751b0a038e8143eabb1b">Isis::Module::formatDbl()</a>.</p>
+
+</div>
+</div>
+<a id="ab430d0afa727db1b858f1a5d92629f7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab430d0afa727db1b858f1a5d92629f7f">&#9670;&nbsp;</a></span>_fmtWidth</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Module::_fmtWidth</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Default field with of double. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_module.html#af9b8842ec0e6751b0a038e8143eabb1b">Isis::Module::formatDbl()</a>.</p>
+
+</div>
+</div>
+<a id="a11c9231f61fe197580ebcfbce76d992f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11c9231f61fe197580ebcfbce76d992f">&#9670;&nbsp;</a></span>_history</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_hi_history.html">HiHistory</a> Isis::Module::_history</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Hierarchial component history. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a822f3d4cf3df453f6faeba990dbd0455">Isis::ZeroBufferFit::guess()</a>, <a class="el" href="class_isis_1_1_module.html#adf92b4d6049f1a0aec6e3bbd53f4e5a4">Isis::Module::History()</a>, <a class="el" href="class_isis_1_1_module.html#ae38e6020b27097a9c12b005ff0b99284">Isis::Module::loadCsv()</a>, <a class="el" href="class_isis_1_1_low_pass_filter.html#ab58ba80d66836a602e9616e3e339a32c">Isis::LowPassFilter::LowPassFilter()</a>, <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a27a60d198c26cd0d7842c721f574873a">Isis::ZeroBufferFit::Normalize()</a>, <a class="el" href="class_isis_1_1_module.html#a90535d33e8f0038286d3883f5741b4ef">Isis::Module::printOn()</a>, <a class="el" href="class_isis_1_1_low_pass_filter.html#a4e411061bf243b0a6e19ed3c5d07b4c3">Isis::LowPassFilter::Process()</a>, <a class="el" href="class_isis_1_1_spline_fill.html#a95c5638092f963af9cb503315b50a330">Isis::SplineFill::Process()</a>, <a class="el" href="class_isis_1_1_module.html#ac6663a73c2f9154b9166b552cea3e7b6">Isis::Module::record()</a>, <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Isis::ZeroBufferFit::Solve()</a>, <a class="el" href="class_isis_1_1_spline_fill.html#ac8655cc0f59d421ae31345d2d6c0b9c6">Isis::SplineFill::SplineFill()</a>, and <a class="el" href="class_isis_1_1_zero_buffer_fit.html#af96c4998476f9bbc11aee4a99a660818">Isis::ZeroBufferFit::ZeroBufferFit()</a>.</p>
+
+</div>
+</div>
+<a id="a7c9523f44ab26e8eb1562ca701e7fdc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c9523f44ab26e8eb1562ca701e7fdc0">&#9670;&nbsp;</a></span>_name</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Module::_name</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Name of component. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_module.html#a99ead949c89174a0deac29664e561524">Isis::Module::name()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/mro/objs/HiCal/<a class="el" href="_zero_reverse_8h_source.html">ZeroReverse.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_zero_reverse.html">ZeroReverse</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+<map id="Isis::Brick" name="Isis::Brick">
+<area shape="rect" id="node1" title="Buffer for containing a three dimensional section of an image." alt="" coords="10,936,148,1161"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_buffer_manager.html" title="Manages a Buffer over a cube." alt="" coords="11,535,147,888"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data." alt="" coords="5,5,153,487"/>
+</map>

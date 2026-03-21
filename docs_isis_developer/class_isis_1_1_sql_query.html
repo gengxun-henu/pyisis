@@ -1,0 +1,895 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::SqlQuery Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_sql_query.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_sql_query-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::SqlQuery Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Construct and execute a query on a database and manage result.  
+ <a href="class_isis_1_1_sql_query.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_sql_query_8h_source.html">SqlQuery.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::SqlQuery:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_sql_query__inherit__graph.png" border="0" usemap="#a_isis_1_1_sql_query_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_sql_query_inherit__map" id="a_isis_1_1_sql_query_inherit__map">
+<area shape="rect" title="Construct and execute a query on a database and manage result." alt="" coords="5,135,174,376"/>
+<area shape="rect" href="class_q_sql_query.html" title=" " alt="" coords="47,5,132,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::SqlQuery:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_sql_query__coll__graph.png" border="0" usemap="#a_isis_1_1_sql_query_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_sql_query_coll__map" id="a_isis_1_1_sql_query_coll__map">
+<area shape="rect" title="Construct and execute a query on a database and manage result." alt="" coords="5,135,174,376"/>
+<area shape="rect" href="class_q_sql_query.html" title=" " alt="" coords="47,5,132,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:af65b9601b018eff9b26d0eb39c524172"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#af65b9601b018eff9b26d0eb39c524172">SqlQuery</a> ()</td></tr>
+<tr class="memdesc:af65b9601b018eff9b26d0eb39c524172"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="class_isis_1_1_sql_query.html#af65b9601b018eff9b26d0eb39c524172">More...</a><br /></td></tr>
+<tr class="separator:af65b9601b018eff9b26d0eb39c524172"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0638b3f417ed32bfb2851e22ae13aef6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a0638b3f417ed32bfb2851e22ae13aef6">SqlQuery</a> (<a class="el" href="class_isis_1_1_database.html">Database</a> &amp;db)</td></tr>
+<tr class="memdesc:a0638b3f417ed32bfb2851e22ae13aef6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construtor using a specified database.  <a href="class_isis_1_1_sql_query.html#a0638b3f417ed32bfb2851e22ae13aef6">More...</a><br /></td></tr>
+<tr class="separator:a0638b3f417ed32bfb2851e22ae13aef6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f300c36ec1b85a71faca9a85f349108"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a4f300c36ec1b85a71faca9a85f349108">SqlQuery</a> (const std::string &amp;query, <a class="el" href="class_isis_1_1_database.html">Database</a> db=<a class="el" href="class_isis_1_1_database.html">Database</a>(<a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Database::Connect</a>))</td></tr>
+<tr class="memdesc:a4f300c36ec1b85a71faca9a85f349108"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a query object and execute the provided query string.  <a href="class_isis_1_1_sql_query.html#a4f300c36ec1b85a71faca9a85f349108">More...</a><br /></td></tr>
+<tr class="separator:a4f300c36ec1b85a71faca9a85f349108"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5af4a8c4e8b035a69668aad33a1e876a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a5af4a8c4e8b035a69668aad33a1e876a">SqlQuery</a> (const <a class="el" href="class_isis_1_1_sql_query.html">SqlQuery</a> &amp;other)</td></tr>
+<tr class="memdesc:a5af4a8c4e8b035a69668aad33a1e876a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor using an existing <a class="el" href="class_isis_1_1_sql_query.html" title="Construct and execute a query on a database and manage result.">SqlQuery</a> object.  <a href="class_isis_1_1_sql_query.html#a5af4a8c4e8b035a69668aad33a1e876a">More...</a><br /></td></tr>
+<tr class="separator:a5af4a8c4e8b035a69668aad33a1e876a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefd8e646573eed5e24e684156ba862e8"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#aefd8e646573eed5e24e684156ba862e8">~SqlQuery</a> ()</td></tr>
+<tr class="separator:aefd8e646573eed5e24e684156ba862e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12e2bd2bb3b444d6beb80b9ea31a4445"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a12e2bd2bb3b444d6beb80b9ea31a4445">isThrowing</a> () const</td></tr>
+<tr class="memdesc:a12e2bd2bb3b444d6beb80b9ea31a4445"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report error status when executing queries.  <a href="class_isis_1_1_sql_query.html#a12e2bd2bb3b444d6beb80b9ea31a4445">More...</a><br /></td></tr>
+<tr class="separator:a12e2bd2bb3b444d6beb80b9ea31a4445"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a864b33ceb90e82526ed186317efb5ef6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a864b33ceb90e82526ed186317efb5ef6">setThrowOnFailure</a> ()</td></tr>
+<tr class="memdesc:a864b33ceb90e82526ed186317efb5ef6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets throwing of exceptions on errors to true.  <a href="class_isis_1_1_sql_query.html#a864b33ceb90e82526ed186317efb5ef6">More...</a><br /></td></tr>
+<tr class="separator:a864b33ceb90e82526ed186317efb5ef6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41975736ee1396f9b31bd5aad258e5ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a41975736ee1396f9b31bd5aad258e5ba">setNoThrowOnFailure</a> ()</td></tr>
+<tr class="memdesc:a41975736ee1396f9b31bd5aad258e5ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns throwing of iExceptions off on errors.  <a href="class_isis_1_1_sql_query.html#a41975736ee1396f9b31bd5aad258e5ba">More...</a><br /></td></tr>
+<tr class="separator:a41975736ee1396f9b31bd5aad258e5ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaec26470937fe7080691b878876547a3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#aaec26470937fe7080691b878876547a3">exec</a> (const std::string &amp;query)</td></tr>
+<tr class="memdesc:aaec26470937fe7080691b878876547a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute an SQL query provided in the query string.  <a href="class_isis_1_1_sql_query.html#aaec26470937fe7080691b878876547a3">More...</a><br /></td></tr>
+<tr class="separator:aaec26470937fe7080691b878876547a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2eff84da54dac26996dc988418b7ed63"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a2eff84da54dac26996dc988418b7ed63">exec</a> ()</td></tr>
+<tr class="separator:a2eff84da54dac26996dc988418b7ed63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a736217a5e99ed7a61930b3ac54a9d5de"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a736217a5e99ed7a61930b3ac54a9d5de">getQuery</a> () const</td></tr>
+<tr class="memdesc:a736217a5e99ed7a61930b3ac54a9d5de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the executed query string.  <a href="class_isis_1_1_sql_query.html#a736217a5e99ed7a61930b3ac54a9d5de">More...</a><br /></td></tr>
+<tr class="separator:a736217a5e99ed7a61930b3ac54a9d5de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a223f6edf77603b884abc1d9c5de6ebcf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a223f6edf77603b884abc1d9c5de6ebcf">nFields</a> () const</td></tr>
+<tr class="memdesc:a223f6edf77603b884abc1d9c5de6ebcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of fields (columns) from query.  <a href="class_isis_1_1_sql_query.html#a223f6edf77603b884abc1d9c5de6ebcf">More...</a><br /></td></tr>
+<tr class="separator:a223f6edf77603b884abc1d9c5de6ebcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d2646570cb120234ca1ee3e7631b1ad"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a1d2646570cb120234ca1ee3e7631b1ad">fieldName</a> (int index) const</td></tr>
+<tr class="memdesc:a1d2646570cb120234ca1ee3e7631b1ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the column name of the resulting query at the given index.  <a href="class_isis_1_1_sql_query.html#a1d2646570cb120234ca1ee3e7631b1ad">More...</a><br /></td></tr>
+<tr class="separator:a1d2646570cb120234ca1ee3e7631b1ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa55f21e3de90f7426ef59ec144045c37"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#aa55f21e3de90f7426ef59ec144045c37">fieldIndex</a> (const std::string &amp;name) const</td></tr>
+<tr class="memdesc:aa55f21e3de90f7426ef59ec144045c37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns index of column for given name.  <a href="class_isis_1_1_sql_query.html#aa55f21e3de90f7426ef59ec144045c37">More...</a><br /></td></tr>
+<tr class="separator:aa55f21e3de90f7426ef59ec144045c37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85b21b987d2915fad0c4c44d149df17e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a85b21b987d2915fad0c4c44d149df17e">fieldNameList</a> () const</td></tr>
+<tr class="memdesc:a85b21b987d2915fad0c4c44d149df17e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the names of all fields in the resulting query.  <a href="class_isis_1_1_sql_query.html#a85b21b987d2915fad0c4c44d149df17e">More...</a><br /></td></tr>
+<tr class="separator:a85b21b987d2915fad0c4c44d149df17e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a470cb87a5893fcf26df001ab6460a539"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a470cb87a5893fcf26df001ab6460a539">fieldTypeList</a> () const</td></tr>
+<tr class="memdesc:a470cb87a5893fcf26df001ab6460a539"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the types of each field/column in a resutling query.  <a href="class_isis_1_1_sql_query.html#a470cb87a5893fcf26df001ab6460a539">More...</a><br /></td></tr>
+<tr class="separator:a470cb87a5893fcf26df001ab6460a539"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a6ba0ae4fb40494c341b8a7dfd1f7f2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a4a6ba0ae4fb40494c341b8a7dfd1f7f2">nRows</a> () const</td></tr>
+<tr class="memdesc:a4a6ba0ae4fb40494c341b8a7dfd1f7f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the count of rows resulting from the query.  <a href="class_isis_1_1_sql_query.html#a4a6ba0ae4fb40494c341b8a7dfd1f7f2">More...</a><br /></td></tr>
+<tr class="separator:a4a6ba0ae4fb40494c341b8a7dfd1f7f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b483027cad7355d541014e20de6dcc6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_sql_record.html">SqlRecord</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_sql_query.html#a7b483027cad7355d541014e20de6dcc6">getRecord</a> () const</td></tr>
+<tr class="memdesc:a7b483027cad7355d541014e20de6dcc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="class_isis_1_1_sql_record.html" title="Provide simplified access to resulting SQL query row.">SqlRecord</a> for the current query row.  <a href="class_isis_1_1_sql_query.html#a7b483027cad7355d541014e20de6dcc6">More...</a><br /></td></tr>
+<tr class="separator:a7b483027cad7355d541014e20de6dcc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Construct and execute a query on a database and manage result. </p>
+<p>This class is derived from the <a href="http://doc.trolltech.com/4.1/qsqlquery.html">Qt QSqlQuery</a> class. It is designed to be used in conjunction with the functionality of that class.</p>
+<p>The major features are to to make it easier to specify what happens when errors occurs (<a class="el" href="class_isis_1_1_sql_query.html#a864b33ceb90e82526ed186317efb5ef6" title="Sets throwing of exceptions on errors to true.">setThrowOnFailure()</a>) and return and accept query strings and results using the standard C++ library and classes (vector, string). It exists mainly as a convenience class interface to the Qt <a class="el" href="class_q_sql_query.html">QSqlQuery</a> class, providing standard C++ elements as opposed to Qt elements.</p>
+<p><b>NOTE</b> all constructors initially set exception throwing as the default.</p>
+<p>Some examples follow:</p>
+<p>This example uses some of Qt's features, which you can use at will throughout this and other classes. This one uses the named/positional binding features" </p><div class="fragment"><div class="line"> Database mptdb(<span class="stringliteral">&quot;matchpoints&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">//  We now have a match point table.  Populate it with the data read in.</span></div>
+<div class="line">  <a class="code" href="class_isis_1_1_sql_query.html#af65b9601b018eff9b26d0eb39c524172">SqlQuery</a> inserter(mptdb);</div>
+<div class="line">  inserter.setThrowOnFailure();</div>
+<div class="line">  inserter.prepare(<span class="stringliteral">&quot;INSERT INTO &quot;</span></div>
+<div class="line">                   <span class="stringliteral">&quot;matchpt (pointid, fsc, line, samp, class, diameter) &quot;</span></div>
+<div class="line">                   <span class="stringliteral">&quot;VALUES (:pointid, :fsc, :line, :samp, :class,:diameter)&quot;</span>);</div>
+<div class="line">  mptdb.transaction();</div>
+<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> row = 0 ; row &lt; mpt.rows() ; row++) {</div>
+<div class="line">    <a class="code" href="class_isis_1_1_c_s_v_reader.html#aab5c22d312c57d449fab46e82e36d048">CSVReader::CSVAxis</a> matchpt = mpt.getRow(row);</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i &lt; 6 ; i++) {*</div>
+<div class="line">      inserter.bindValue(i, QVariant(matchpt[i].c_str()));</div>
+<div class="line">    }</div>
+<div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;Inserting row &quot;</span> &lt;&lt; row &lt;&lt; <span class="stringliteral">&quot;, status...&quot;</span> &lt;&lt; inserter.exec()</div>
+<div class="line">         &lt;&lt; endl;</div>
+<div class="line"> </div>
+<div class="line">  }</div>
+<div class="line">  mptdb.commit();</div>
+<div class="line">  mptdb.close();</div>
+<div class="line">}</div>
+<div class="ttc" id="aclass_isis_1_1_c_s_v_reader_html_aab5c22d312c57d449fab46e82e36d048"><div class="ttname"><a href="class_isis_1_1_c_s_v_reader.html#aab5c22d312c57d449fab46e82e36d048">Isis::CSVReader::CSVAxis</a></div><div class="ttdeci">Parser::TokenList CSVAxis</div><div class="ttdoc">Row/Column token list.</div><div class="ttdef"><b>Definition:</b> CSVReader.h:247</div></div>
+<div class="ttc" id="aclass_isis_1_1_sql_query_html_af65b9601b018eff9b26d0eb39c524172"><div class="ttname"><a href="class_isis_1_1_sql_query.html#af65b9601b018eff9b26d0eb39c524172">Isis::SqlQuery::SqlQuery</a></div><div class="ttdeci">SqlQuery()</div><div class="ttdoc">Default constructor.</div><div class="ttdef"><b>Definition:</b> SqlQuery.cpp:30</div></div>
+</div><!-- fragment --><p>Thats all well and good but Qt's binding is restricted to using it in the INSERT/VALUES constructs. They have no support for binding used outside this SQL operation. Below is an example with a more general approach provided with this API, although a bit less robust.</p>
+<div class="fragment"><div class="line">auto_ptr&lt;Database&gt; db = auto_ptr&lt;Database&gt; (<span class="keyword">new</span> Database(dbProf,</div>
+<div class="line">                                                         <a class="code" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Database::Connect</a>));</div>
+<div class="line"> </div>
+<div class="line"><a class="code" href="class_isis_1_1_sql_query.html#af65b9601b018eff9b26d0eb39c524172">SqlQuery</a> finder(*db);</div>
+<div class="line">finder.setThrowOnFailure();</div>
+<div class="line"><span class="keywordtype">string</span> pntDist  = <span class="stringliteral">&quot;distance(giscpt,UPCPoint(%longitude,%latitude))&quot;</span>;</div>
+<div class="line"><span class="keywordtype">string</span> pntQuery = <span class="stringliteral">&quot;SELECT pointid, latitude, longitude, radius FROM &quot;</span></div>
+<div class="line">                  + pntTable + <span class="stringliteral">&quot; WHERE (%distance &lt;= &quot;</span> + QString(maxDist) +</div>
+<div class="line">                  <span class="stringliteral">&quot;)&quot;</span>;</div>
+<div class="line"> </div>
+<div class="line">Progress progress;</div>
+<div class="line">progress.SetText(<span class="stringliteral">&quot;lodbnet&quot;</span>);</div>
+<div class="line">progress.SetMaximumSteps(pnts.rows());</div>
+<div class="line"><span class="keywordflow">for</span> (<span class="keywordtype">int</span> row = 0 ; row &lt; pnts.rows() ; row++) {</div>
+<div class="line">  <a class="code" href="class_isis_1_1_c_s_v_reader.html#aab5c22d312c57d449fab46e82e36d048">CSVReader::CSVAxis</a> pntR = pnts.getRow(row);</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">// Convert longitude to proper system if requested</span></div>
+<div class="line">  <span class="keywordtype">double</span> longitude = QString(pntR[1]).ToDouble();</div>
+<div class="line">  <span class="keywordflow">if</span> ((make360) &amp;&amp; (longitude &lt; 0.0)) { longitude += 360.0; }</div>
+<div class="line">  <span class="keywordtype">double</span> latitude = QString(pntR[0]).ToDouble();</div>
+<div class="line">  <span class="keywordtype">double</span> radius = QString(pntR[2]).ToDouble();</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">// Prepare the query, converting the longitude</span></div>
+<div class="line">  <span class="keywordtype">string</span> dcheck(QString::Replace(pntDist, <span class="stringliteral">&quot;%longitude&quot;</span>,</div>
+<div class="line">  QString(longitude))); dcheck = QString::Replace(dcheck, <span class="stringliteral">&quot;%latitude&quot;</span>,</div>
+<div class="line">  QString(latitude)); <span class="keywordtype">string</span> query = QString::Replace(pntQuery, <span class="stringliteral">&quot;%distance&quot;</span>,</div>
+<div class="line">  dcheck);</div>
+<div class="line"> </div>
+<div class="line">  finder.exec(query);</div>
+<div class="line">  <span class="keywordflow">if</span> (finder.size() &gt; 0) {</div>
+<div class="line">    Statistics stats;</div>
+<div class="line">    vector&lt;OutPoint&gt; pointList;</div>
+<div class="line">    <span class="keywordflow">while</span> (finder.next()) {</div>
+<div class="line">      SqlRecord record = finder.getRecord();</div>
+<div class="line">      OutPoint point;</div>
+<div class="line">      point.latitude = QString(record.getValue(<span class="stringliteral">&quot;latitude&quot;</span>)).ToDouble(),</div>
+<div class="line">      point.longitude = QString(record.getValue(<span class="stringliteral">&quot;longitude&quot;</span>)).ToDouble(),</div>
+<div class="line">      point.radius = QString(record.getValue(<span class="stringliteral">&quot;radius&quot;</span>)).ToDouble(),</div>
+<div class="line">      point.pointid = QString(record.getValue(<span class="stringliteral">&quot;pointid&quot;</span>)),</div>
+<div class="line">      stats.AddData(&amp;point.radius, 1);</div>
+<div class="line">      pointList.push_back(point);</div>
+<div class="line">    }</div>
+<div class="line">  }</div>
+<div class="line">  progress.CheckStatus();</div>
+<div class="line">}</div>
+<div class="ttc" id="aclass_isis_1_1_database_html_a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d"><div class="ttname"><a href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Isis::Database::Connect</a></div><div class="ttdeci">@ Connect</div><div class="ttdoc">Connect to database immediately.</div><div class="ttdef"><b>Definition:</b> Database.h:74</div></div>
+</div><!-- fragment --><dl class="section see"><dt>See also</dt><dd>QString</dd></dl>
+<dl class="section author"><dt>Author</dt><dd>2006-11-09 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af65b9601b018eff9b26d0eb39c524172"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af65b9601b018eff9b26d0eb39c524172">&#9670;&nbsp;</a></span>SqlQuery() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SqlQuery::SqlQuery </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default constructor. </p>
+<p>This constructor prepares a query using the default database as established through the <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> class. It will also ensure that on any error, an exception is thrown, in line with the <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> way of doing things. </p>
+
+</div>
+</div>
+<a id="a0638b3f417ed32bfb2851e22ae13aef6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0638b3f417ed32bfb2851e22ae13aef6">&#9670;&nbsp;</a></span>SqlQuery() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SqlQuery::SqlQuery </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_database.html">Database</a> &amp;&#160;</td>
+          <td class="paramname"><em>db</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construtor using a specified database. </p>
+<p>This constructor should be used for preparing for queries using a specified database. This would be used when using a database other than the default.</p>
+<p>Turns exception throwing on.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">db</td><td><a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> to use for subsequent database queries </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4f300c36ec1b85a71faca9a85f349108"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f300c36ec1b85a71faca9a85f349108">&#9670;&nbsp;</a></span>SqlQuery() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SqlQuery::SqlQuery </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>query</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_database.html">Database</a>&#160;</td>
+          <td class="paramname"><em>db</em> = <code><a class="el" href="class_isis_1_1_database.html">Database</a>(<a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Database::Connect</a>)</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a query object and execute the provided query string. </p>
+<p>This constructor will take a query string and an optional database specification and execute the query all after the initial construction. If the caller does not provide a <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a>, the default one is used and a connection is automatically attempted.</p>
+<p>It can be used to execute an initial query and is perhaps the most powerful example of the <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> database design. It could be used as the starting point for any database access and an initial query in one line of code. For example, below is a line of code that executes a line of code showing all the tables in a PostgreSQL database using the default database: </p><div class="fragment"><div class="line"><a class="code" href="class_isis_1_1_sql_query.html#af65b9601b018eff9b26d0eb39c524172">SqlQuery</a> pgtables(<span class="stringliteral">&quot;select tblname from pg_tables&quot;</span>);</div>
+</div><!-- fragment --><p>This will use the Database() default constructor since one is not explicitly provide. That constructor attempts a connection using the default database access profile as read from your IsisPreferences file. Its default behaviour is to initiate the connection to the database. If that suceeds, the query is issued. The resulting <em>pgtables</em> <a class="el" href="class_isis_1_1_sql_query.html" title="Construct and execute a query on a database and manage result.">SqlQuery</a> object can now be contiually used for other queries until it goes out of scope.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td><a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> containing a valid SQL query to execute </td></tr>
+    <tr><td class="paramname">db</td><td>An optional database object to issue the query to. This database now becomes the one used in all subsequent queries using this <a class="el" href="class_isis_1_1_sql_query.html" title="Construct and execute a query on a database and manage result.">SqlQuery</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_sql_query.html#a2eff84da54dac26996dc988418b7ed63">exec()</a>.</p>
+
+</div>
+</div>
+<a id="a5af4a8c4e8b035a69668aad33a1e876a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5af4a8c4e8b035a69668aad33a1e876a">&#9670;&nbsp;</a></span>SqlQuery() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SqlQuery::SqlQuery </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_sql_query.html">SqlQuery</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor using an existing <a class="el" href="class_isis_1_1_sql_query.html" title="Construct and execute a query on a database and manage result.">SqlQuery</a> object. </p>
+<p>This constructor creates a new <a class="el" href="class_isis_1_1_sql_query.html" title="Construct and execute a query on a database and manage result.">SqlQuery</a> object from an existing one, inheriting all its characteristics - including a <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> if one is associated to the object.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>A <a class="el" href="class_isis_1_1_sql_query.html" title="Construct and execute a query on a database and manage result.">SqlQuery</a> object used to create this one from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aefd8e646573eed5e24e684156ba862e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefd8e646573eed5e24e684156ba862e8">&#9670;&nbsp;</a></span>~SqlQuery()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::SqlQuery::~SqlQuery </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2eff84da54dac26996dc988418b7ed63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2eff84da54dac26996dc988418b7ed63">&#9670;&nbsp;</a></span>exec() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::SqlQuery::exec </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sql_query.html#a4f300c36ec1b85a71faca9a85f349108">SqlQuery()</a>.</p>
+
+</div>
+</div>
+<a id="aaec26470937fe7080691b878876547a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaec26470937fe7080691b878876547a3">&#9670;&nbsp;</a></span>exec() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::SqlQuery::exec </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>query</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Execute an SQL query provided in the query string. </p>
+<p>This method executes the given query in the string. This method assumes this query object has a valid and open <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> connection associated with it. It will also check the result for valid completion and toss an iException if the caller has established this course of action when it fails.</p>
+<p>Results are ready for processing on completion.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_sql_record.html" title="Provide simplified access to resulting SQL query row.">SqlRecord</a>.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>An SQL query string to issue to a database</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if successful, false if it fails. This will only return valse if <a class="el" href="class_isis_1_1_sql_query.html#a41975736ee1396f9b31bd5aad258e5ba" title="Turns throwing of iExceptions off on errors.">setNoThrowOnFailure()</a> has been issued, otherwise an iException is thrown if it fails. </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_sql_query.html#a12e2bd2bb3b444d6beb80b9ea31a4445">isThrowing()</a>, and <a class="el" href="class_isis_1_1_i_string.html#a771e32c8a3cbe76ba8ff9916da73effb">Isis::IString::ToQt()</a>.</p>
+
+</div>
+</div>
+<a id="aa55f21e3de90f7426ef59ec144045c37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa55f21e3de90f7426ef59ec144045c37">&#9670;&nbsp;</a></span>fieldIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SqlQuery::fieldIndex </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns index of column for given name. </p>
+<p>This method returns the index of the given column name.</p>
+<p><b>NOTE</b> this is not valid until <em>after</em> the first next() is issued.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of column to get index for</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int Zero-based index of named column </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a771e32c8a3cbe76ba8ff9916da73effb">Isis::IString::ToQt()</a>.</p>
+
+</div>
+</div>
+<a id="a1d2646570cb120234ca1ee3e7631b1ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d2646570cb120234ca1ee3e7631b1ad">&#9670;&nbsp;</a></span>fieldName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::SqlQuery::fieldName </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the column name of the resulting query at the given index. </p>
+<p>This method returns the name of the column heading as a result of the query at the given index.</p>
+<p><b>NOTE</b> this is not valid until <em>after</em> the first next() is issued.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Zero-based starting index of column name ot retreive</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::string Name of column at given index </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a45f0615a503707d29517e2ca7e7dbb60">Isis::IString::ToStd()</a>.</p>
+
+</div>
+</div>
+<a id="a85b21b987d2915fad0c4c44d149df17e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85b21b987d2915fad0c4c44d149df17e">&#9670;&nbsp;</a></span>fieldNameList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; Isis::SqlQuery::fieldNameList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the names of all fields in the resulting query. </p>
+<p>After a query has been issued, this method will return the names of all fields/columns in the resulting query.</p>
+<p><b>NOTE</b> this is not valid until <em>after</em> the first next() is issued.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_sql_record.html#a46a7ca9a4157ae956af9adfd24736d3a" title="Returns the name of a field/column at a particular index.">SqlRecord::getFieldName()</a>.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; Vector of strings of all fields/columns in a query. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a45f0615a503707d29517e2ca7e7dbb60">Isis::IString::ToStd()</a>.</p>
+
+</div>
+</div>
+<a id="a470cb87a5893fcf26df001ab6460a539"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a470cb87a5893fcf26df001ab6460a539">&#9670;&nbsp;</a></span>fieldTypeList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; Isis::SqlQuery::fieldTypeList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the types of each field/column in a resutling query. </p>
+<p>After a query has been issued, this method will return the types of all fields/columns. These types are defined by the <a class="el" href="class_isis_1_1_sql_record.html#a461d7ff8962f16b88fc7129a22938204" title="Returns the type of a field/column at the specified index.">SqlRecord::getType()</a> method.</p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> vector of all field types. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_sql_query.html#a7b483027cad7355d541014e20de6dcc6">getRecord()</a>, and <a class="el" href="class_isis_1_1_sql_record.html#a461d7ff8962f16b88fc7129a22938204">Isis::SqlRecord::getType()</a>.</p>
+
+</div>
+</div>
+<a id="a736217a5e99ed7a61930b3ac54a9d5de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a736217a5e99ed7a61930b3ac54a9d5de">&#9670;&nbsp;</a></span>getQuery()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::SqlQuery::getQuery </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the executed query string. </p>
+<p>This method returns the last executed query string as it was issued to the database. Note that some database systems do not support this option directly. This routine will attempt to return the last executed query first from the Qt <a class="el" href="class_q_sql_query.html">QSqlQuery</a> class. If this is empty/undefined, then the last current query will be returned.</p>
+<dl class="section return"><dt>Returns</dt><dd>std::string The last executed query string. If undetermined or undefined, an empty string is returned. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_string.html#a45f0615a503707d29517e2ca7e7dbb60">Isis::IString::ToStd()</a>.</p>
+
+</div>
+</div>
+<a id="a7b483027cad7355d541014e20de6dcc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b483027cad7355d541014e20de6dcc6">&#9670;&nbsp;</a></span>getRecord()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_sql_record.html">SqlRecord</a> Isis::SqlQuery::getRecord </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a <a class="el" href="class_isis_1_1_sql_record.html" title="Provide simplified access to resulting SQL query row.">SqlRecord</a> for the current query row. </p>
+<p>While traversing through the resulting query row set, this method returns a lower level interface to individual rows. The returned object is provided by the <a class="el" href="class_isis_1_1_sql_record.html" title="Provide simplified access to resulting SQL query row.">SqlRecord</a> class.</p>
+<p><b>NOTE</b> this is not valid until <em>after</em> the first next() is issued. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_sql_record.html" title="Provide simplified access to resulting SQL query row.">SqlRecord</a>.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_sql_record.html" title="Provide simplified access to resulting SQL query row.">SqlRecord</a> A single resulting row of a query after an next() is issued. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sql_query.html#a470cb87a5893fcf26df001ab6460a539">fieldTypeList()</a>.</p>
+
+</div>
+</div>
+<a id="a12e2bd2bb3b444d6beb80b9ea31a4445"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12e2bd2bb3b444d6beb80b9ea31a4445">&#9670;&nbsp;</a></span>isThrowing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::SqlQuery::isThrowing </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Report error status when executing queries. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if iExceptions are thrown upon errors, otherwise returns false. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sql_query.html#aaec26470937fe7080691b878876547a3">exec()</a>.</p>
+
+</div>
+</div>
+<a id="a223f6edf77603b884abc1d9c5de6ebcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a223f6edf77603b884abc1d9c5de6ebcf">&#9670;&nbsp;</a></span>nFields()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SqlQuery::nFields </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of fields (columns) from query. </p>
+<p>The method returns the number of fields or columns returned by the last issued query string. Note that if the query has not been issued, it will return 0 or an undefined value (-1?).</p>
+<p><b>NOTE</b> this is not valid until <em>after</em> the first next() is issued.</p>
+<dl class="section return"><dt>Returns</dt><dd>int Number of fields/columns in last query issued </dd></dl>
+
+</div>
+</div>
+<a id="a4a6ba0ae4fb40494c341b8a7dfd1f7f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a6ba0ae4fb40494c341b8a7dfd1f7f2">&#9670;&nbsp;</a></span>nRows()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SqlQuery::nRows </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the count of rows resulting from the query. </p>
+<p>This returns the number of rows returned/accessable as a result of the issued query. Its value is governed by the Qt <a href="http://doc.trolltech.com/4.1/qsqlquery.html#size">QsqlQuery::size()</a> method. Namely, a -1 can be returned under many different conditions of the queray and the database (driver) support. Check the documentation for details.</p>
+<dl class="section return"><dt>Returns</dt><dd>int Number of rows returned by the query. -1 is typically returned under conditions where the value is not available or undefined. </dd></dl>
+
+</div>
+</div>
+<a id="a41975736ee1396f9b31bd5aad258e5ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41975736ee1396f9b31bd5aad258e5ba">&#9670;&nbsp;</a></span>setNoThrowOnFailure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SqlQuery::setNoThrowOnFailure </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Turns throwing of iExceptions off on errors. </p>
+
+</div>
+</div>
+<a id="a864b33ceb90e82526ed186317efb5ef6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a864b33ceb90e82526ed186317efb5ef6">&#9670;&nbsp;</a></span>setThrowOnFailure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SqlQuery::setThrowOnFailure </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets throwing of exceptions on errors to true. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/database/objs/SqlQuery/<a class="el" href="_sql_query_8h_source.html">SqlQuery.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/database/objs/SqlQuery/<a class="el" href="_sql_query_8cpp.html">SqlQuery.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_sql_query.html">SqlQuery</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,985 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::GSL::GSLUtility Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_g_s_l_1_1_g_s_l_utility.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::GSL::GSLUtility Class Reference<div class="ingroups"><a class="el" href="group___utility.html">Utility</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html" title="GSLUtility Provides top level interface to the GNU GSL.">GSLUtility</a> Provides top level interface to the GNU <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a>.  
+ <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_g_s_l_utility_8h_source.html">GSLUtility.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::GSL::GSLUtility:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_g_s_l_1_1_g_s_l_utility__coll__graph.png" border="0" usemap="#a_isis_1_1_g_s_l_1_1_g_s_l_utility_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_g_s_l_1_1_g_s_l_utility_coll__map" id="a_isis_1_1_g_s_l_1_1_g_s_l_utility_coll__map">
+<area shape="rect" title="GSLUtility Provides top level interface to the GNU GSL." alt="" coords="5,5,150,263"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a91ddc93180cb7735ccfde78885142b09"><td class="memItemLeft" align="right" valign="top">typedef TNT::Array1D&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">GSLVector</a></td></tr>
+<tr class="separator:a91ddc93180cb7735ccfde78885142b09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07456502a51850872a757df8a920ac85"><td class="memItemLeft" align="right" valign="top">typedef TNT::Array2D&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a></td></tr>
+<tr class="separator:a07456502a51850872a757df8a920ac85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a86b0eaf14b041cd426f07f1797e166df"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a86b0eaf14b041cd426f07f1797e166df">success</a> (int <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae30b25f688e5210eabf607070448ab6a">status</a>) const</td></tr>
+<tr class="memdesc:a86b0eaf14b041cd426f07f1797e166df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests if status is success.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a86b0eaf14b041cd426f07f1797e166df">More...</a><br /></td></tr>
+<tr class="separator:a86b0eaf14b041cd426f07f1797e166df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae30b25f688e5210eabf607070448ab6a"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae30b25f688e5210eabf607070448ab6a">status</a> (int gsl_errno) const</td></tr>
+<tr class="memdesc:ae30b25f688e5210eabf607070448ab6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> specific error text.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae30b25f688e5210eabf607070448ab6a">More...</a><br /></td></tr>
+<tr class="separator:ae30b25f688e5210eabf607070448ab6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac87bfb687484447f78f8b8891e4857bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ac87bfb687484447f78f8b8891e4857bf">check</a> (int gsl_status, const char *src=__FILE__, int line=__LINE__) const</td></tr>
+<tr class="memdesc:ac87bfb687484447f78f8b8891e4857bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a check on <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> library function return status.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ac87bfb687484447f78f8b8891e4857bf">More...</a><br /></td></tr>
+<tr class="separator:ac87bfb687484447f78f8b8891e4857bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dac4e7856739c681876abfd1d410726"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a0dac4e7856739c681876abfd1d410726">Rows</a> (const gsl_matrix *m) const</td></tr>
+<tr class="memdesc:a0dac4e7856739c681876abfd1d410726"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns number of rows in a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a0dac4e7856739c681876abfd1d410726">More...</a><br /></td></tr>
+<tr class="separator:a0dac4e7856739c681876abfd1d410726"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af112fc48a3b39088efba9a56715fc815"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af112fc48a3b39088efba9a56715fc815">Columns</a> (const gsl_matrix *m) const</td></tr>
+<tr class="memdesc:af112fc48a3b39088efba9a56715fc815"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of coulumns in a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af112fc48a3b39088efba9a56715fc815">More...</a><br /></td></tr>
+<tr class="separator:af112fc48a3b39088efba9a56715fc815"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9100fb7e1ea42f3be6bb982bee6c2f3d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a9100fb7e1ea42f3be6bb982bee6c2f3d">Rows</a> (const <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a> &amp;m) const</td></tr>
+<tr class="memdesc:a9100fb7e1ea42f3be6bb982bee6c2f3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of rows in TNT-based matrix <br  />
+  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a9100fb7e1ea42f3be6bb982bee6c2f3d">More...</a><br /></td></tr>
+<tr class="separator:a9100fb7e1ea42f3be6bb982bee6c2f3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af37560ae226aea0c2aaa9a3d701f9c05"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af37560ae226aea0c2aaa9a3d701f9c05">Columns</a> (const <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a> &amp;m) const</td></tr>
+<tr class="memdesc:af37560ae226aea0c2aaa9a3d701f9c05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of columns in TNT-based matrix.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af37560ae226aea0c2aaa9a3d701f9c05">More...</a><br /></td></tr>
+<tr class="separator:af37560ae226aea0c2aaa9a3d701f9c05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a174bcbf826514da27ab74636fa8d0385"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a174bcbf826514da27ab74636fa8d0385">size</a> (const gsl_vector *v) const</td></tr>
+<tr class="memdesc:a174bcbf826514da27ab74636fa8d0385"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size of a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a174bcbf826514da27ab74636fa8d0385">More...</a><br /></td></tr>
+<tr class="separator:a174bcbf826514da27ab74636fa8d0385"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6da350f628ca4dc968ba5249a574b341"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a6da350f628ca4dc968ba5249a574b341">size</a> (const gsl_matrix *m) const</td></tr>
+<tr class="memdesc:a6da350f628ca4dc968ba5249a574b341"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total number of elements in a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a6da350f628ca4dc968ba5249a574b341">More...</a><br /></td></tr>
+<tr class="separator:a6da350f628ca4dc968ba5249a574b341"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af521f5fb7aaee11eefb88313c9d88e39"><td class="memItemLeft" align="right" valign="top">gsl_vector *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af521f5fb7aaee11eefb88313c9d88e39">vector</a> (size_t n, bool zero=false) const</td></tr>
+<tr class="memdesc:af521f5fb7aaee11eefb88313c9d88e39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af521f5fb7aaee11eefb88313c9d88e39">More...</a><br /></td></tr>
+<tr class="separator:af521f5fb7aaee11eefb88313c9d88e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae002183ecb759cadd98e40ee289ff85a"><td class="memItemLeft" align="right" valign="top">gsl_matrix *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae002183ecb759cadd98e40ee289ff85a">matrix</a> (size_t n1, size_t n2, bool zero=false) const</td></tr>
+<tr class="memdesc:ae002183ecb759cadd98e40ee289ff85a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae002183ecb759cadd98e40ee289ff85a">More...</a><br /></td></tr>
+<tr class="separator:ae002183ecb759cadd98e40ee289ff85a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa24801a4006551f91f9c12912120118"><td class="memItemLeft" align="right" valign="top">gsl_matrix *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#afa24801a4006551f91f9c12912120118">identity</a> (size_t n1, size_t n2) const</td></tr>
+<tr class="memdesc:afa24801a4006551f91f9c12912120118"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> identity matrix of the specified size.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#afa24801a4006551f91f9c12912120118">More...</a><br /></td></tr>
+<tr class="separator:afa24801a4006551f91f9c12912120118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25691ce3a5797e63a58525096f3c0848"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a25691ce3a5797e63a58525096f3c0848">setIdentity</a> (gsl_matrix *m) const</td></tr>
+<tr class="memdesc:a25691ce3a5797e63a58525096f3c0848"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an existing <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix to the identity matrix.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a25691ce3a5797e63a58525096f3c0848">More...</a><br /></td></tr>
+<tr class="separator:a25691ce3a5797e63a58525096f3c0848"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a164233abced1532ea5df6f0f5659bb1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a164233abced1532ea5df6f0f5659bb1f">free</a> (gsl_vector *v) const</td></tr>
+<tr class="memdesc:a164233abced1532ea5df6f0f5659bb1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a164233abced1532ea5df6f0f5659bb1f">More...</a><br /></td></tr>
+<tr class="separator:a164233abced1532ea5df6f0f5659bb1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af44cc0d498fac0e45fb8791473c300d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af44cc0d498fac0e45fb8791473c300d0">free</a> (gsl_matrix *m) const</td></tr>
+<tr class="memdesc:af44cc0d498fac0e45fb8791473c300d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#af44cc0d498fac0e45fb8791473c300d0">More...</a><br /></td></tr>
+<tr class="separator:af44cc0d498fac0e45fb8791473c300d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18850c00f882e7b84c419d0e99048eab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">GSLVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a18850c00f882e7b84c419d0e99048eab">gslToGSL</a> (const gsl_vector *v) const</td></tr>
+<tr class="memdesc:a18850c00f882e7b84c419d0e99048eab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector to a TNT-based vector.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a18850c00f882e7b84c419d0e99048eab">More...</a><br /></td></tr>
+<tr class="separator:a18850c00f882e7b84c419d0e99048eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30d6c1b833606519d3676d2606d49e7a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a30d6c1b833606519d3676d2606d49e7a">gslToGSL</a> (const gsl_matrix *m) const</td></tr>
+<tr class="memdesc:a30d6c1b833606519d3676d2606d49e7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix to a TNT-based matrix.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a30d6c1b833606519d3676d2606d49e7a">More...</a><br /></td></tr>
+<tr class="separator:a30d6c1b833606519d3676d2606d49e7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c4a0bf550c22278bf9dc734f3561602"><td class="memItemLeft" align="right" valign="top">gsl_vector *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a2c4a0bf550c22278bf9dc734f3561602">GSLTogsl</a> (const <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">GSLVector</a> &amp;v, gsl_vector *gv=0) const</td></tr>
+<tr class="memdesc:a2c4a0bf550c22278bf9dc734f3561602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts TNT-based vector to <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a2c4a0bf550c22278bf9dc734f3561602">More...</a><br /></td></tr>
+<tr class="separator:a2c4a0bf550c22278bf9dc734f3561602"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53b258351d982058030076875c24d43c"><td class="memItemLeft" align="right" valign="top">gsl_matrix *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a53b258351d982058030076875c24d43c">GSLTogsl</a> (const <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a> &amp;m, gsl_matrix *gm=0) const</td></tr>
+<tr class="memdesc:a53b258351d982058030076875c24d43c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts TNT-based matrix to <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a53b258351d982058030076875c24d43c">More...</a><br /></td></tr>
+<tr class="separator:a53b258351d982058030076875c24d43c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ae26e52636a08f5e04caabd1ea8f993c4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html">GSLUtility</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae26e52636a08f5e04caabd1ea8f993c4">getInstance</a> ()</td></tr>
+<tr class="memdesc:ae26e52636a08f5e04caabd1ea8f993c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a reference to the <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> (singleton) object.  <a href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae26e52636a08f5e04caabd1ea8f993c4">More...</a><br /></td></tr>
+<tr class="separator:ae26e52636a08f5e04caabd1ea8f993c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html" title="GSLUtility Provides top level interface to the GNU GSL.">GSLUtility</a> Provides top level interface to the GNU <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a>. </p>
+<p>Provides <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> setup and interface utilities. This object is provided for convenience of <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector and matrix manipulation as well as better management of <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> error handling.</p>
+<p>Without setting up <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> error handling, the <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> will abort when certain errors occur. This singleton object, an object where there is never more than one instance, an error handler is established that captures <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> errors and formats them into ISIS exceptions.</p>
+<p>There are many convenience methods provided for manipulation of <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vectors and matrixs. Motivation for this is to address element access and efficient parameter and copy mechanisms (provided by the TNT library).</p>
+<p>There are some compile options on by default that help optimize the <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a>. When the compile time DEBUG macro is set, range checking is turned on. Inline functions are also turned on by default unless the DEBUG macro is set. In addition, an additional compile time macro called SAFE_GSL is provided to emulate the DEBUG behavior, but does not invoke additional DEBUG behavior/side effects.</p>
+<p>See <a href="http://www.gnu.org/software/gsl/">http://www.gnu.org/software/gsl/</a> for additional details on the GNU Scientific Library.</p>
+<dl class="section author"><dt>Author</dt><dd>2008-05-06 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a07456502a51850872a757df8a920ac85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07456502a51850872a757df8a920ac85">&#9670;&nbsp;</a></span>GSLMatrix</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef TNT::Array2D&lt;double&gt; <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">Isis::GSL::GSLUtility::GSLMatrix</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a91ddc93180cb7735ccfde78885142b09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91ddc93180cb7735ccfde78885142b09">&#9670;&nbsp;</a></span>GSLVector</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef TNT::Array1D&lt;double&gt; <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">Isis::GSL::GSLUtility::GSLVector</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac87bfb687484447f78f8b8891e4857bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac87bfb687484447f78f8b8891e4857bf">&#9670;&nbsp;</a></span>check()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GSL::GSLUtility::check </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>gsl_status</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>src</em> = <code>__FILE__</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>line</em> = <code>__LINE__</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Performs a check on <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> library function return status. </p>
+<p>This covenience method performs a validity check on the return status of a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> function. It will throw an ISIS exception should the status be anything other than GSL_SUCCESS.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gsl_status</td><td>Return value of <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> function </td></tr>
+    <tr><td class="paramname">src</td><td>Name of the source file where the function was called. </td></tr>
+    <tr><td class="paramname">line</td><td>Line number in the source where the call/error occurs </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af112fc48a3b39088efba9a56715fc815"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af112fc48a3b39088efba9a56715fc815">&#9670;&nbsp;</a></span>Columns() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Isis::GSL::GSLUtility::Columns </td>
+          <td>(</td>
+          <td class="paramtype">const gsl_matrix *&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of coulumns in a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix. </p>
+
+</div>
+</div>
+<a id="af37560ae226aea0c2aaa9a3d701f9c05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af37560ae226aea0c2aaa9a3d701f9c05">&#9670;&nbsp;</a></span>Columns() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Isis::GSL::GSLUtility::Columns </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of columns in TNT-based matrix. </p>
+
+</div>
+</div>
+<a id="af44cc0d498fac0e45fb8791473c300d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af44cc0d498fac0e45fb8791473c300d0">&#9670;&nbsp;</a></span>free() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GSL::GSLUtility::free </td>
+          <td>(</td>
+          <td class="paramtype">gsl_matrix *&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Frees a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix. </p>
+<p>Frees the memory allocated to a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix. As with any free operation, the matrix cannot be used thereafter.</p>
+<p>It is up to the user to manage all <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> allocated elements. It is not done automatically.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td><a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix to free </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a164233abced1532ea5df6f0f5659bb1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a164233abced1532ea5df6f0f5659bb1f">&#9670;&nbsp;</a></span>free() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GSL::GSLUtility::free </td>
+          <td>(</td>
+          <td class="paramtype">gsl_vector *&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Frees a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector. </p>
+<p>Frees the memory allocated to a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector. As with any free operation, the vector cannot be used thereafter.</p>
+<p>It is up to the user to manage all <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> allocated elements. It is not done automatically.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td><a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector to free </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae26e52636a08f5e04caabd1ea8f993c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae26e52636a08f5e04caabd1ea8f993c4">&#9670;&nbsp;</a></span>getInstance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html">GSLUtility</a> * Isis::GSL::GSLUtility::getInstance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return a reference to the <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> (singleton) object. </p>
+<p>This method returns a pointer reference to the <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> utility object. If it is not yet created, one is constructed and lives until the application terminates.</p>
+<dl class="section return"><dt>Returns</dt><dd>GSLUtility::GSLUtility* Pointer reference to <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html" title="GSLUtility Provides top level interface to the GNU GSL.">GSLUtility</a> singleton </dd></dl>
+
+</div>
+</div>
+<a id="a30d6c1b833606519d3676d2606d49e7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30d6c1b833606519d3676d2606d49e7a">&#9670;&nbsp;</a></span>gslToGSL() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLUtility::GSLMatrix</a> Isis::GSL::GSLUtility::gslToGSL </td>
+          <td>(</td>
+          <td class="paramtype">const gsl_matrix *&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix to a TNT-based matrix. </p>
+<p>Convenience method to convert to GSLMatrix type</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td><a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix to convert</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLUtility::GSLMatrix</a> TNT-based matrix </dd></dl>
+
+</div>
+</div>
+<a id="a18850c00f882e7b84c419d0e99048eab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18850c00f882e7b84c419d0e99048eab">&#9670;&nbsp;</a></span>gslToGSL() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">GSLUtility::GSLVector</a> Isis::GSL::GSLUtility::gslToGSL </td>
+          <td>(</td>
+          <td class="paramtype">const gsl_vector *&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector to a TNT-based vector. </p>
+<p>Convenience method to convert to GSLVector type</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td><a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector to convert</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">GSLUtility::GSLVector</a> TNT-based vector </dd></dl>
+
+</div>
+</div>
+<a id="a53b258351d982058030076875c24d43c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53b258351d982058030076875c24d43c">&#9670;&nbsp;</a></span>GSLTogsl() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gsl_matrix * Isis::GSL::GSLUtility::GSLTogsl </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gsl_matrix *&#160;</td>
+          <td class="paramname"><em>gm</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts TNT-based matrix to <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix. </p>
+<p>Convenience method to convert TNT-based matrix to a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>TNT-based matrix to convert </td></tr>
+    <tr><td class="paramname">gm</td><td>Optional <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix of same size to copy data to</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gsl_matrix* Pointer to <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix copy </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a2c4a0bf550c22278bf9dc734f3561602"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c4a0bf550c22278bf9dc734f3561602">&#9670;&nbsp;</a></span>GSLTogsl() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gsl_vector * Isis::GSL::GSLUtility::GSLTogsl </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a91ddc93180cb7735ccfde78885142b09">GSLVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">gsl_vector *&#160;</td>
+          <td class="paramname"><em>gv</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts TNT-based vector to <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector. </p>
+<p>Convenience method to convert TNT-based vector to a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>TNT-based vector to convert </td></tr>
+    <tr><td class="paramname">gv</td><td>Optional <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector of same size to copy data to</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gsl_vector* Pointer to <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector copy </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="afa24801a4006551f91f9c12912120118"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa24801a4006551f91f9c12912120118">&#9670;&nbsp;</a></span>identity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gsl_matrix * Isis::GSL::GSLUtility::identity </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> identity matrix of the specified size. </p>
+<p>This method allocates a square or rectanglar matrix and initilizes it to the identity matrix. The diagonal elements are all set to 1.0, all other elements are set to 0.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n1</td><td>Number rows to allocate </td></tr>
+    <tr><td class="paramname">n2</td><td>Number columns to allocate</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gsl_matrix* Returns pointer to identity matrix </dd></dl>
+
+</div>
+</div>
+<a id="ae002183ecb759cadd98e40ee289ff85a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae002183ecb759cadd98e40ee289ff85a">&#9670;&nbsp;</a></span>matrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gsl_matrix * Isis::GSL::GSLUtility::matrix </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>zero</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix. </p>
+<p>This convenience method creates a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix for use within applications. The memory is dynamically allocated and must be managed (i.e., freed) by the caller. See the <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a164233abced1532ea5df6f0f5659bb1f" title="Frees a GSL vector.">free()</a> method for this provision.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n1</td><td>Size of rows in the <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix to create </td></tr>
+    <tr><td class="paramname">n2</td><td>Size of columns in the <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix to create </td></tr>
+    <tr><td class="paramname">zero</td><td>Set to true if you want <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> to assign 0 to the allocated matrix otherwise, false will not initilize the memory.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gsl_matrix* Returns an allocated <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix </dd></dl>
+
+</div>
+</div>
+<a id="a0dac4e7856739c681876abfd1d410726"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dac4e7856739c681876abfd1d410726">&#9670;&nbsp;</a></span>Rows() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Isis::GSL::GSLUtility::Rows </td>
+          <td>(</td>
+          <td class="paramtype">const gsl_matrix *&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns number of rows in a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix. </p>
+
+</div>
+</div>
+<a id="a9100fb7e1ea42f3be6bb982bee6c2f3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9100fb7e1ea42f3be6bb982bee6c2f3d">&#9670;&nbsp;</a></span>Rows() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Isis::GSL::GSLUtility::Rows </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a07456502a51850872a757df8a920ac85">GSLMatrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of rows in TNT-based matrix <br  />
+ </p>
+
+</div>
+</div>
+<a id="a25691ce3a5797e63a58525096f3c0848"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25691ce3a5797e63a58525096f3c0848">&#9670;&nbsp;</a></span>setIdentity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GSL::GSLUtility::setIdentity </td>
+          <td>(</td>
+          <td class="paramtype">gsl_matrix *&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes an existing <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix to the identity matrix. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>Pointer to matrix to set to identity </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6da350f628ca4dc968ba5249a574b341"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6da350f628ca4dc968ba5249a574b341">&#9670;&nbsp;</a></span>size() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Isis::GSL::GSLUtility::size </td>
+          <td>(</td>
+          <td class="paramtype">const gsl_matrix *&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the total number of elements in a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> matrix. </p>
+
+</div>
+</div>
+<a id="a174bcbf826514da27ab74636fa8d0385"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a174bcbf826514da27ab74636fa8d0385">&#9670;&nbsp;</a></span>size() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Isis::GSL::GSLUtility::size </td>
+          <td>(</td>
+          <td class="paramtype">const gsl_vector *&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the size of a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector. </p>
+
+</div>
+</div>
+<a id="ae30b25f688e5210eabf607070448ab6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae30b25f688e5210eabf607070448ab6a">&#9670;&nbsp;</a></span>status()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::GSL::GSLUtility::status </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>gsl_errno</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> specific error text. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gsl_errno</td><td><a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> error number </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString Textual context of <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> error </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a86b0eaf14b041cd426f07f1797e166df">success()</a>.</p>
+
+</div>
+</div>
+<a id="a86b0eaf14b041cd426f07f1797e166df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86b0eaf14b041cd426f07f1797e166df">&#9670;&nbsp;</a></span>success()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::GSL::GSLUtility::success </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>status</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tests if status is success. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#ae30b25f688e5210eabf607070448ab6a">status()</a>.</p>
+
+</div>
+</div>
+<a id="af521f5fb7aaee11eefb88313c9d88e39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af521f5fb7aaee11eefb88313c9d88e39">&#9670;&nbsp;</a></span>vector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gsl_vector * Isis::GSL::GSLUtility::vector </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>zero</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector. </p>
+<p>This convenience method creates a <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector for use within applications. The memory is dynamically allocated and must be managed (i.e., freed) by the caller. See the <a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html#a164233abced1532ea5df6f0f5659bb1f" title="Frees a GSL vector.">free()</a> method for this provision.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Size of <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector to create </td></tr>
+    <tr><td class="paramname">zero</td><td>Set to true if you want <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> to assign 0 to the allocated vector otherwise, false will not initilize the memory.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gsl_vector* Returns an allocated <a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a> vector </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/GSLUtility/<a class="el" href="_g_s_l_utility_8h_source.html">GSLUtility.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/GSLUtility/<a class="el" href="_g_s_l_utility_8cpp.html">GSLUtility.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="namespace_isis_1_1_g_s_l.html">GSL</a></li><li class="navelem"><a class="el" href="class_isis_1_1_g_s_l_1_1_g_s_l_utility.html">GSLUtility</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

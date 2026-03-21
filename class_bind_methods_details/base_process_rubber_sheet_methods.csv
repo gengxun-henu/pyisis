@@ -1,0 +1,23 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ProcessRubberSheet,High Level Cube I/O,isis/src/base/objs/ProcessRubberSheet/ProcessRubberSheet.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ProcessRubberSheet,isis_pybind.ProcessRubberSheet,N,Python class symbol not found in current binding files; 流程/回调接口较多
+Construction/Enum,ProcessRubberSheet(),isis_pybind.ProcessRubberSheet(),N,流程/回调接口较多
+Public API,"virtual void StartProcess(Transform &trans, Interpolator &interp)",isis_pybind.ProcessRubberSheet.start_process,N,流程/回调接口较多
+Public API,"virtual void processPatchTransform(Transform &trans, Interpolator &interp)",isis_pybind.ProcessRubberSheet.process_patch_transform,N,流程/回调接口较多
+Public API,"virtual void ForceTile(double Samp, double Line) { p_forceSamp = Samp",isis_pybind.ProcessRubberSheet.force_tile,N,流程/回调接口较多
+Mutation/Configuration,"virtual void SetTiling(long long start, long long end) { p_startQuadSize = start",isis_pybind.ProcessRubberSheet.set_tiling,N,流程/回调接口较多
+Mutation/Configuration,"virtual void setPatchParameters(int startSample, int startLine, int samples, int lines, int sampleIncrement, int lineIncrement)",isis_pybind.ProcessRubberSheet.set_patch_parameters,N,流程/回调接口较多
+Public API,"void ProcessQuad(std::vector<Quad *> &quadTree, Transform &trans, std::vector< std::vector<double> > &lineMap, std::vector< std::vector<double> > &sampMap)",isis_pybind.ProcessRubberSheet.process_quad,N,流程/回调接口较多
+Public API,void SplitQuad(std::vector<Quad *> &quadTree),isis_pybind.ProcessRubberSheet.split_quad,N,流程/回调接口较多
+Public API,"void SlowQuad(std::vector<Quad *> &quadTree, Transform &trans, std::vector< std::vector<double> > &lineMap, std::vector< std::vector<double> > &sampMap)",isis_pybind.ProcessRubberSheet.slow_quad,N,流程/回调接口较多
+Public API,double Det4x4(double m[4][4]),isis_pybind.ProcessRubberSheet.det4x4,N,流程/回调接口较多
+Public API,double Det3x3(double m[3][3]),isis_pybind.ProcessRubberSheet.det3x3,N,流程/回调接口较多
+Public API,"void SlowGeom(TileManager &otile, Portal &iportal, Transform &trans, Interpolator &interp)",isis_pybind.ProcessRubberSheet.slow_geom,N,流程/回调接口较多
+Public API,"void QuadTree(TileManager &otile, Portal &iportal, Transform &trans, Interpolator &interp, bool useLastTileMap)",isis_pybind.ProcessRubberSheet.quad_tree,N,流程/回调接口较多
+Public API,"bool TestLine(Transform &trans, int ssamp, int esamp, int sline, int eline, int increment)",isis_pybind.ProcessRubberSheet.test_line,N,流程/回调接口较多
+Public API,"void transformPatch (double startingSample, double endingSample, double startingLine, double endingLine, Portal &iportal, Transform &trans, Interpolator &interp)",isis_pybind.ProcessRubberSheet.transform_patch,N,流程/回调接口较多
+Public API,"void splitPatch (double startingSample, double endingSample, double startingLine, double endingLine, Portal &iportal, Transform &trans, Interpolator &interp)",isis_pybind.ProcessRubberSheet.split_patch,N,流程/回调接口较多
+Public API,"#if 0 void transformPatch (double startingSample, double endingSample, double startingLine, double endingLine)",isis_pybind.ProcessRubberSheet.transform_patch,N,流程/回调接口较多
+Public API,"void splitPatch (double startingSample, double endingSample, double startingLine, double endingLine)",isis_pybind.ProcessRubberSheet.split_patch,N,流程/回调接口较多

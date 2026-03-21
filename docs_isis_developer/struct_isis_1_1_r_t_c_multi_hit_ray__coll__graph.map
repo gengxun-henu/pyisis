@@ -1,0 +1,7 @@
+<map id="Isis::RTCMultiHitRay" name="Isis::RTCMultiHitRay">
+<area shape="rect" id="node1" title="Struct for capturing multiple intersections when using embree::rtcintersectscene." alt="" coords="105,167,252,280"/>
+<area shape="rect" id="node2" href="$class_r_t_c_ray_hit.html" title=" " alt="" coords="5,5,96,87"/>
+<area shape="rect" id="node3" title=" " alt="" coords="119,5,166,87"/>
+<area shape="rect" id="node4" title=" " alt="" coords="197,5,235,87"/>
+<area shape="rect" id="node5" title=" " alt="" coords="261,5,334,87"/>
+</map>

@@ -1,0 +1,2374 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::LunarLambert Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_lunar_lambert.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_lunar_lambert-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::LunarLambert Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Lunar (Lommel-Seeliger)-<a class="el" href="class_isis_1_1_lambert.html">Lambert</a> law photometric model Derive model albedo for Lunar (Lommel-Seeliger)-<a class="el" href="class_isis_1_1_lambert.html">Lambert</a> law.  
+ <a href="class_isis_1_1_lunar_lambert.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_lunar_lambert_8h_source.html">LunarLambert.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::LunarLambert:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_lunar_lambert__inherit__graph.png" border="0" usemap="#a_isis_1_1_lunar_lambert_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_lunar_lambert_inherit__map" id="a_isis_1_1_lunar_lambert_inherit__map">
+<area shape="rect" title="Lunar (Lommel&#45;Seeliger)&#45;Lambert law photometric model Derive model albedo for Lunar (Lommel&#45;Seeliger)..." alt="" coords="11,487,175,616"/>
+<area shape="rect" href="class_isis_1_1_photo_model.html" title=" " alt="" coords="5,5,181,439"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::LunarLambert:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_lunar_lambert__coll__graph.png" border="0" usemap="#a_isis_1_1_lunar_lambert_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_lunar_lambert_coll__map" id="a_isis_1_1_lunar_lambert_coll__map">
+<area shape="rect" title="Lunar (Lommel&#45;Seeliger)&#45;Lambert law photometric model Derive model albedo for Lunar (Lommel&#45;Seeliger)..." alt="" coords="372,1147,537,1276"/>
+<area shape="rect" href="class_isis_1_1_photo_model.html" title=" " alt="" coords="367,728,542,1097"/>
+<area shape="rect" title=" " alt="" coords="7,5,126,87"/>
+<area shape="rect" href="class_isis_1_1_numerical_approximation.html" title="NumericalApproximation provides various numerical analysis methods of interpolation,..." alt="" coords="214,215,407,632"/>
+<area shape="rect" title=" " alt="" coords="342,5,401,87"/>
+<area shape="rect" title=" " alt="" coords="575,383,640,464"/>
+<area shape="rect" title=" " alt="" coords="706,383,744,464"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:abe574109f2ca8073f03283789e92fc0b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_lunar_lambert.html#abe574109f2ca8073f03283789e92fc0b">LunarLambert</a> (<a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;pvl)</td></tr>
+<tr class="separator:abe574109f2ca8073f03283789e92fc0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a904675addc716dd0fa6dc55b230400b1"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_lunar_lambert.html#a904675addc716dd0fa6dc55b230400b1">~LunarLambert</a> ()</td></tr>
+<tr class="separator:a904675addc716dd0fa6dc55b230400b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebf3eb82ef1381e2254c676a7c112406"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_lunar_lambert.html#aebf3eb82ef1381e2254c676a7c112406">SetPhotoL</a> (const double l)</td></tr>
+<tr class="memdesc:aebf3eb82ef1381e2254c676a7c112406"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Lunar-Lambert function weight.  <a href="class_isis_1_1_lunar_lambert.html#aebf3eb82ef1381e2254c676a7c112406">More...</a><br /></td></tr>
+<tr class="separator:aebf3eb82ef1381e2254c676a7c112406"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addf3410847d30cd30f18273b2446e89a"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#addf3410847d30cd30f18273b2446e89a">AlgorithmName</a> () const</td></tr>
+<tr class="memdesc:addf3410847d30cd30f18273b2446e89a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return algorithm name found in <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> file from constructor.  <a href="class_isis_1_1_photo_model.html#addf3410847d30cd30f18273b2446e89a">More...</a><br /></td></tr>
+<tr class="separator:addf3410847d30cd30f18273b2446e89a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa38f5ab6d284c02b05fce48be675524c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#aa38f5ab6d284c02b05fce48be675524c">SetStandardConditions</a> (bool standard)</td></tr>
+<tr class="memdesc:aa38f5ab6d284c02b05fce48be675524c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether standard conditions will be used.  <a href="class_isis_1_1_photo_model.html#aa38f5ab6d284c02b05fce48be675524c">More...</a><br /></td></tr>
+<tr class="separator:aa38f5ab6d284c02b05fce48be675524c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a340206e849e669447c99b9dde73af435"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a340206e849e669447c99b9dde73af435">StandardConditions</a> () const</td></tr>
+<tr class="memdesc:a340206e849e669447c99b9dde73af435"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if standard conditions are used, i.e., if SetStandardConditions(true) has been called. This is initialized to false in the constructor.  <a href="class_isis_1_1_photo_model.html#a340206e849e669447c99b9dde73af435">More...</a><br /></td></tr>
+<tr class="separator:a340206e849e669447c99b9dde73af435"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c828ddebf9e83d54d84cc88d54477c2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a9c828ddebf9e83d54d84cc88d54477c2">PhtTopder</a> (double phase, double incidence, double emission)</td></tr>
+<tr class="memdesc:a9c828ddebf9e83d54d84cc88d54477c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtain topographic derivative of an arbitrary photometric function.  <a href="class_isis_1_1_photo_model.html#a9c828ddebf9e83d54d84cc88d54477c2">More...</a><br /></td></tr>
+<tr class="separator:a9c828ddebf9e83d54d84cc88d54477c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a5465e26b8b0f2436d5109e8c3db6e0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a1a5465e26b8b0f2436d5109e8c3db6e0">CalcSurfAlbedo</a> (double pha, double inc, double ema)</td></tr>
+<tr class="memdesc:a1a5465e26b8b0f2436d5109e8c3db6e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the surface brightness using photometric angle information.  <a href="class_isis_1_1_photo_model.html#a1a5465e26b8b0f2436d5109e8c3db6e0">More...</a><br /></td></tr>
+<tr class="separator:a1a5465e26b8b0f2436d5109e8c3db6e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d645bc58d06cb48e62d287ae937b73e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a1d645bc58d06cb48e62d287ae937b73e">PhotoL</a> () const</td></tr>
+<tr class="memdesc:a1d645bc58d06cb48e62d287ae937b73e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric L value.  <a href="class_isis_1_1_photo_model.html#a1d645bc58d06cb48e62d287ae937b73e">More...</a><br /></td></tr>
+<tr class="separator:a1d645bc58d06cb48e62d287ae937b73e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4fab4b7e43b66ab635acb0469cdba11"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#aa4fab4b7e43b66ab635acb0469cdba11">SetPhotoK</a> (const double k)</td></tr>
+<tr class="separator:aa4fab4b7e43b66ab635acb0469cdba11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad76684d60622cb9143112a5ff5c9360"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#aad76684d60622cb9143112a5ff5c9360">PhotoK</a> () const</td></tr>
+<tr class="memdesc:aad76684d60622cb9143112a5ff5c9360"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric K value.  <a href="class_isis_1_1_photo_model.html#aad76684d60622cb9143112a5ff5c9360">More...</a><br /></td></tr>
+<tr class="separator:aad76684d60622cb9143112a5ff5c9360"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72161414b4cc0daedf58ff9ba6f73b35"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a72161414b4cc0daedf58ff9ba6f73b35">SetPhotoHg1</a> (const double hg1)</td></tr>
+<tr class="separator:a72161414b4cc0daedf58ff9ba6f73b35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10a636948a820ae8a644e44eb808973b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a10a636948a820ae8a644e44eb808973b">PhotoHg1</a> () const</td></tr>
+<tr class="memdesc:a10a636948a820ae8a644e44eb808973b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric Hg1 value.  <a href="class_isis_1_1_photo_model.html#a10a636948a820ae8a644e44eb808973b">More...</a><br /></td></tr>
+<tr class="separator:a10a636948a820ae8a644e44eb808973b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b21d04baff3e4c4d3c66a72498c29b4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a4b21d04baff3e4c4d3c66a72498c29b4">SetPhotoHg2</a> (const double hg2)</td></tr>
+<tr class="separator:a4b21d04baff3e4c4d3c66a72498c29b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a227c3dee0b2b07e991e5a11ceec801ee"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a227c3dee0b2b07e991e5a11ceec801ee">PhotoHg2</a> () const</td></tr>
+<tr class="memdesc:a227c3dee0b2b07e991e5a11ceec801ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric Hg2 value.  <a href="class_isis_1_1_photo_model.html#a227c3dee0b2b07e991e5a11ceec801ee">More...</a><br /></td></tr>
+<tr class="separator:a227c3dee0b2b07e991e5a11ceec801ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a075265ff0ec32c5a0fee5de786a3ac7b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a075265ff0ec32c5a0fee5de786a3ac7b">SetPhotoBh</a> (const double bh)</td></tr>
+<tr class="separator:a075265ff0ec32c5a0fee5de786a3ac7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20cba457ea1545921d78419155cddd4d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a20cba457ea1545921d78419155cddd4d">PhotoBh</a> () const</td></tr>
+<tr class="memdesc:a20cba457ea1545921d78419155cddd4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric Bh value.  <a href="class_isis_1_1_photo_model.html#a20cba457ea1545921d78419155cddd4d">More...</a><br /></td></tr>
+<tr class="separator:a20cba457ea1545921d78419155cddd4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a501c2f596f31b91b6477e9578fb00f50"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a501c2f596f31b91b6477e9578fb00f50">SetPhotoCh</a> (const double ch)</td></tr>
+<tr class="separator:a501c2f596f31b91b6477e9578fb00f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a8fe1f20d4c358708a5b9c7c93065dd"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a6a8fe1f20d4c358708a5b9c7c93065dd">PhotoCh</a> () const</td></tr>
+<tr class="memdesc:a6a8fe1f20d4c358708a5b9c7c93065dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric Ch value.  <a href="class_isis_1_1_photo_model.html#a6a8fe1f20d4c358708a5b9c7c93065dd">More...</a><br /></td></tr>
+<tr class="separator:a6a8fe1f20d4c358708a5b9c7c93065dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7445226ffc9d30dc4ce7f45c05b61575"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a7445226ffc9d30dc4ce7f45c05b61575">SetPhotoWh</a> (const double wh)</td></tr>
+<tr class="separator:a7445226ffc9d30dc4ce7f45c05b61575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af00c0b46f4357fd89bdbe35bc11162fa"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#af00c0b46f4357fd89bdbe35bc11162fa">PhotoWh</a> () const</td></tr>
+<tr class="memdesc:af00c0b46f4357fd89bdbe35bc11162fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric Wh value.  <a href="class_isis_1_1_photo_model.html#af00c0b46f4357fd89bdbe35bc11162fa">More...</a><br /></td></tr>
+<tr class="separator:af00c0b46f4357fd89bdbe35bc11162fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6458deba44e9523f0545a4ae3796c218"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a6458deba44e9523f0545a4ae3796c218">SetPhotoHh</a> (const double hh)</td></tr>
+<tr class="separator:a6458deba44e9523f0545a4ae3796c218"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd09fe6db5f6ff3c8845feb3e0dac1c5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#afd09fe6db5f6ff3c8845feb3e0dac1c5">PhotoHh</a> () const</td></tr>
+<tr class="memdesc:afd09fe6db5f6ff3c8845feb3e0dac1c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric Hh value.  <a href="class_isis_1_1_photo_model.html#afd09fe6db5f6ff3c8845feb3e0dac1c5">More...</a><br /></td></tr>
+<tr class="separator:afd09fe6db5f6ff3c8845feb3e0dac1c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08e5c5aabf4e0e8bfa16e3a7586e27d0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a08e5c5aabf4e0e8bfa16e3a7586e27d0">SetPhotoB0</a> (const double b0)</td></tr>
+<tr class="separator:a08e5c5aabf4e0e8bfa16e3a7586e27d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b3c414dbb711ffdf33d37a8f1e13da9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a3b3c414dbb711ffdf33d37a8f1e13da9">PhotoB0</a> () const</td></tr>
+<tr class="memdesc:a3b3c414dbb711ffdf33d37a8f1e13da9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric B0 value.  <a href="class_isis_1_1_photo_model.html#a3b3c414dbb711ffdf33d37a8f1e13da9">More...</a><br /></td></tr>
+<tr class="separator:a3b3c414dbb711ffdf33d37a8f1e13da9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fe3ffd4a1e50507ded51f6b7102d358"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a3fe3ffd4a1e50507ded51f6b7102d358">SetPhotoTheta</a> (const double theta)</td></tr>
+<tr class="separator:a3fe3ffd4a1e50507ded51f6b7102d358"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dc6a0a89d361fd6cc057b2c15578830"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a4dc6a0a89d361fd6cc057b2c15578830">PhotoTheta</a> () const</td></tr>
+<tr class="memdesc:a4dc6a0a89d361fd6cc057b2c15578830"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric Theta value.  <a href="class_isis_1_1_photo_model.html#a4dc6a0a89d361fd6cc057b2c15578830">More...</a><br /></td></tr>
+<tr class="separator:a4dc6a0a89d361fd6cc057b2c15578830"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbcb7bcd0155c203c8a2d3aae0cd0a2c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#afbcb7bcd0155c203c8a2d3aae0cd0a2c">SetPhoto0B0Standard</a> (const QString &amp;b0standard)</td></tr>
+<tr class="separator:afbcb7bcd0155c203c8a2d3aae0cd0a2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae26cd907798838e9fb4f6169e7774083"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#ae26cd907798838e9fb4f6169e7774083">Photo0B0Standard</a> () const</td></tr>
+<tr class="memdesc:ae26cd907798838e9fb4f6169e7774083"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric B0 standardization value.  <a href="class_isis_1_1_photo_model.html#ae26cd907798838e9fb4f6169e7774083">More...</a><br /></td></tr>
+<tr class="separator:ae26cd907798838e9fb4f6169e7774083"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57b00e54c3b4a6ff01fedfb30a88d20a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a57b00e54c3b4a6ff01fedfb30a88d20a">Hfunc</a> (double u, double gamma)</td></tr>
+<tr class="memdesc:a57b00e54c3b4a6ff01fedfb30a88d20a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_hapke.html" title="Hapke-Henyey-Greenstein photometric model.">Hapke</a>'s approximation to Chandra's H function.  <a href="class_isis_1_1_photo_model.html#a57b00e54c3b4a6ff01fedfb30a88d20a">More...</a><br /></td></tr>
+<tr class="separator:a57b00e54c3b4a6ff01fedfb30a88d20a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a905b10602445744eb95e7832e36e00d9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a905b10602445744eb95e7832e36e00d9">SetPhotoPhaseList</a> (const QString)</td></tr>
+<tr class="separator:a905b10602445744eb95e7832e36e00d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14e82a15499beb9633f9e5d9470acb92"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a14e82a15499beb9633f9e5d9470acb92">SetPhotoKList</a> (const QString)</td></tr>
+<tr class="separator:a14e82a15499beb9633f9e5d9470acb92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03c9dbee21331f20e4c2170c6b4fe49a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a03c9dbee21331f20e4c2170c6b4fe49a">SetPhotoLList</a> (const QString)</td></tr>
+<tr class="separator:a03c9dbee21331f20e4c2170c6b4fe49a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5deab3ac94c3fed4440d1fd8f3e53a57"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a5deab3ac94c3fed4440d1fd8f3e53a57">SetPhotoPhaseCurveList</a> (const QString)</td></tr>
+<tr class="separator:a5deab3ac94c3fed4440d1fd8f3e53a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3ee506138b34c20cb0fdfe4e5c07f4c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#af3ee506138b34c20cb0fdfe4e5c07f4c">PhotoPhaseList</a> () const</td></tr>
+<tr class="memdesc:af3ee506138b34c20cb0fdfe4e5c07f4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric phase angle list.  <a href="class_isis_1_1_photo_model.html#af3ee506138b34c20cb0fdfe4e5c07f4c">More...</a><br /></td></tr>
+<tr class="separator:af3ee506138b34c20cb0fdfe4e5c07f4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dad6d533d065c48d6155fdb4ea38d3e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a6dad6d533d065c48d6155fdb4ea38d3e">PhotoKList</a> () const</td></tr>
+<tr class="memdesc:a6dad6d533d065c48d6155fdb4ea38d3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric k value list.  <a href="class_isis_1_1_photo_model.html#a6dad6d533d065c48d6155fdb4ea38d3e">More...</a><br /></td></tr>
+<tr class="separator:a6dad6d533d065c48d6155fdb4ea38d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7be0650761e6850056a043b46becfd4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#ae7be0650761e6850056a043b46becfd4">PhotoLList</a> () const</td></tr>
+<tr class="memdesc:ae7be0650761e6850056a043b46becfd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric l value list.  <a href="class_isis_1_1_photo_model.html#ae7be0650761e6850056a043b46becfd4">More...</a><br /></td></tr>
+<tr class="separator:ae7be0650761e6850056a043b46becfd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6f1a31170251bc8fa59c0d9f10756c9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#aa6f1a31170251bc8fa59c0d9f10756c9">PhotoPhaseCurveList</a> () const</td></tr>
+<tr class="memdesc:aa6f1a31170251bc8fa59c0d9f10756c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric phase curve value list.  <a href="class_isis_1_1_photo_model.html#aa6f1a31170251bc8fa59c0d9f10756c9">More...</a><br /></td></tr>
+<tr class="separator:aa6f1a31170251bc8fa59c0d9f10756c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:af1ac33866243a35fac1a18a665cbd4dc"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#af1ac33866243a35fac1a18a665cbd4dc">PhtAcos</a> (double cosang)</td></tr>
+<tr class="memdesc:af1ac33866243a35fac1a18a665cbd4dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtain arccosine of input value.  <a href="class_isis_1_1_photo_model.html#af1ac33866243a35fac1a18a665cbd4dc">More...</a><br /></td></tr>
+<tr class="separator:af1ac33866243a35fac1a18a665cbd4dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a53e457bcf673f99877f0cfdd1a70b1ce"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_lunar_lambert.html#a53e457bcf673f99877f0cfdd1a70b1ce">PhotoModelAlgorithm</a> (double phase, double incidence, double emission)</td></tr>
+<tr class="memdesc:a53e457bcf673f99877f0cfdd1a70b1ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return photometric L value.  <a href="class_isis_1_1_lunar_lambert.html#a53e457bcf673f99877f0cfdd1a70b1ce">More...</a><br /></td></tr>
+<tr class="separator:a53e457bcf673f99877f0cfdd1a70b1ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a36faeb268f34fd61c0c6512862f19134"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a36faeb268f34fd61c0c6512862f19134">p_photoL</a></td></tr>
+<tr class="separator:a36faeb268f34fd61c0c6512862f19134"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64b4e90a23232abac24491655a3d8c5e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a64b4e90a23232abac24491655a3d8c5e">p_photoK</a></td></tr>
+<tr class="separator:a64b4e90a23232abac24491655a3d8c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae442611b6d949136f02170e2fd8222fb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#ae442611b6d949136f02170e2fd8222fb">p_photoHg1</a></td></tr>
+<tr class="separator:ae442611b6d949136f02170e2fd8222fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe12fe118fca5145fe3bd391e61976b9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#afe12fe118fca5145fe3bd391e61976b9">p_photoHg2</a></td></tr>
+<tr class="separator:afe12fe118fca5145fe3bd391e61976b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e4b664fe80fda4820279692770a906d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a5e4b664fe80fda4820279692770a906d">p_photoBh</a></td></tr>
+<tr class="separator:a5e4b664fe80fda4820279692770a906d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fb984dc52abb5e058149b56cb012b26"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a0fb984dc52abb5e058149b56cb012b26">p_photoCh</a></td></tr>
+<tr class="separator:a0fb984dc52abb5e058149b56cb012b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa516b50ed9df76929250547f82afec7e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#aa516b50ed9df76929250547f82afec7e">p_photoCott</a></td></tr>
+<tr class="separator:aa516b50ed9df76929250547f82afec7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab89ed377580aeb4a0ce4d610210c71f7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#ab89ed377580aeb4a0ce4d610210c71f7">p_photoCot2t</a></td></tr>
+<tr class="separator:ab89ed377580aeb4a0ce4d610210c71f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5413715f9342c4eb79598eb6d952ceaf"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a5413715f9342c4eb79598eb6d952ceaf">p_photoTant</a></td></tr>
+<tr class="separator:a5413715f9342c4eb79598eb6d952ceaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a146b4a5302daf28e7c0c92fa0f6096"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a7a146b4a5302daf28e7c0c92fa0f6096">p_photoSr</a></td></tr>
+<tr class="separator:a7a146b4a5302daf28e7c0c92fa0f6096"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac69b413c093c0ff57ce86e756d0bcdf8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#ac69b413c093c0ff57ce86e756d0bcdf8">p_photoOsr</a></td></tr>
+<tr class="separator:ac69b413c093c0ff57ce86e756d0bcdf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2384f97ad2b4c48672a8b4e1fa09f7b5"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a2384f97ad2b4c48672a8b4e1fa09f7b5">p_algName</a></td></tr>
+<tr class="separator:a2384f97ad2b4c48672a8b4e1fa09f7b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad69e7d93ebfb2d28886cb7f70496546c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#ad69e7d93ebfb2d28886cb7f70496546c">p_photo0B0Standard</a></td></tr>
+<tr class="separator:ad69e7d93ebfb2d28886cb7f70496546c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a741bb4635fea063452ff736e8fe1b7fa"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a741bb4635fea063452ff736e8fe1b7fa">p_photoWh</a></td></tr>
+<tr class="separator:a741bb4635fea063452ff736e8fe1b7fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26ab0d65bbcc0486ca1cbe483c845669"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a26ab0d65bbcc0486ca1cbe483c845669">p_photoHh</a></td></tr>
+<tr class="separator:a26ab0d65bbcc0486ca1cbe483c845669"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefafe1909eecc033ed44206ff3a6a395"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#aefafe1909eecc033ed44206ff3a6a395">p_photoB0</a></td></tr>
+<tr class="separator:aefafe1909eecc033ed44206ff3a6a395"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a580754d6a6d9cb7e2ef1bf1e6427b466"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a580754d6a6d9cb7e2ef1bf1e6427b466">p_photoB0save</a></td></tr>
+<tr class="separator:a580754d6a6d9cb7e2ef1bf1e6427b466"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a088757892c2b894cbdfc128f6c138a7e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a088757892c2b894cbdfc128f6c138a7e">p_photoTheta</a></td></tr>
+<tr class="separator:a088757892c2b894cbdfc128f6c138a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a69faa2519da1bfd0265f70ac737166"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a4a69faa2519da1bfd0265f70ac737166">p_photoThetaold</a></td></tr>
+<tr class="separator:a4a69faa2519da1bfd0265f70ac737166"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a040ee7b6ad4c8c4bfa8fb3d34cc04a4c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a040ee7b6ad4c8c4bfa8fb3d34cc04a4c">p_photoPhaseList</a></td></tr>
+<tr class="separator:a040ee7b6ad4c8c4bfa8fb3d34cc04a4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6c2d68489f765889294efa3779d1fcf"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#ac6c2d68489f765889294efa3779d1fcf">p_photoKList</a></td></tr>
+<tr class="separator:ac6c2d68489f765889294efa3779d1fcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ae81fa72c3d34b23fbde1ab63d07116"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a9ae81fa72c3d34b23fbde1ab63d07116">p_photoLList</a></td></tr>
+<tr class="separator:a9ae81fa72c3d34b23fbde1ab63d07116"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e00f54f7f314ff18ae373bdfe2b05d5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a4e00f54f7f314ff18ae373bdfe2b05d5">p_photoPhaseCurveList</a></td></tr>
+<tr class="separator:a4e00f54f7f314ff18ae373bdfe2b05d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1e4f643f3ab1d3125dbe61421046d50"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#ac1e4f643f3ab1d3125dbe61421046d50">p_photoPhaseAngleCount</a></td></tr>
+<tr class="separator:ac1e4f643f3ab1d3125dbe61421046d50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a2c42cb34def6711dd454760d69b230"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#a3a2c42cb34def6711dd454760d69b230">p_photoKSpline</a></td></tr>
+<tr class="separator:a3a2c42cb34def6711dd454760d69b230"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab923fd711e73b6b7b496a1796fd4c31c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#ab923fd711e73b6b7b496a1796fd4c31c">p_photoLSpline</a></td></tr>
+<tr class="separator:ab923fd711e73b6b7b496a1796fd4c31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0a18178c11c80e718bab74b2722fbc6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_photo_model.html#ac0a18178c11c80e718bab74b2722fbc6">p_photoBSpline</a></td></tr>
+<tr class="separator:ac0a18178c11c80e718bab74b2722fbc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Lunar (Lommel-Seeliger)-<a class="el" href="class_isis_1_1_lambert.html">Lambert</a> law photometric model Derive model albedo for Lunar (Lommel-Seeliger)-<a class="el" href="class_isis_1_1_lambert.html">Lambert</a> law. </p>
+<p>Phase independent and calculated analytically. Lommel-Seeliger law:</p>
+<p>Reflectance=1/(1+cos(E)/cos(I))</p>
+<p>Where: E=the angle between the observer and the slope normal I=the angle between the sun and the slope normal</p>
+<dl class="section author"><dt>Author</dt><dd>1999-01-08 Randy Kirk </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="abe574109f2ca8073f03283789e92fc0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe574109f2ca8073f03283789e92fc0b">&#9670;&nbsp;</a></span>LunarLambert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::LunarLambert::LunarLambert </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_object.html#a4c09ebe5d216cb7711fccfe3f7ffac37">Isis::PvlObject::findObject()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>, <a class="el" href="class_isis_1_1_lunar_lambert.html#aebf3eb82ef1381e2254c676a7c112406">SetPhotoL()</a>, and <a class="el" href="class_isis_1_1_pvl_object.html#a955c705d25fd292b9e6021d4ea962261aa29caa5de1aa5d875ec6127aa5b5e490">Isis::PvlObject::Traverse</a>.</p>
+
+</div>
+</div>
+<a id="a904675addc716dd0fa6dc55b230400b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a904675addc716dd0fa6dc55b230400b1">&#9670;&nbsp;</a></span>~LunarLambert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::LunarLambert::~LunarLambert </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="addf3410847d30cd30f18273b2446e89a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addf3410847d30cd30f18273b2446e89a">&#9670;&nbsp;</a></span>AlgorithmName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PhotoModel::AlgorithmName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return algorithm name found in <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> file from constructor. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#aa0042762a2f90c78511c72f21b81bc3f">Isis::Hapke::Hapke()</a>.</p>
+
+</div>
+</div>
+<a id="a1a5465e26b8b0f2436d5109e8c3db6e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a5465e26b8b0f2436d5109e8c3db6e0">&#9670;&nbsp;</a></span>CalcSurfAlbedo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::CalcSurfAlbedo </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>pha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>inc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>ema</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculate the surface brightness using photometric angle information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pha</td><td>Phase angle </td></tr>
+    <tr><td class="paramname">inc</td><td>Incidence angle </td></tr>
+    <tr><td class="paramname">ema</td><td>Emission angle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> Surface brightness calculated by the photometric function </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_albedo.html#a8847a4c022b20ff82ef4862e372b5549">Isis::Albedo::Albedo()</a>, <a class="el" href="class_isis_1_1_albedo_atm.html#ab95fdd4ee9d179f6cfe06c76a48c7f80">Isis::AlbedoAtm::AlbedoAtm()</a>, <a class="el" href="class_isis_1_1_numerical_atmos_approx.html#a00cf708f1323dfa441de8f8384563873">Isis::NumericalAtmosApprox::InrFunc2Bint()</a>, <a class="el" href="class_isis_1_1_mixed.html#a21ca7afe063a691bb04361039490cbac">Isis::Mixed::Mixed()</a>, <a class="el" href="class_isis_1_1_albedo.html#a1f37c790e7de853dd661e51cad5f6346">Isis::Albedo::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_albedo_atm.html#a6345d689d09fbbb39cc01a640daeaace">Isis::AlbedoAtm::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_mixed.html#a978b175479edf2c9206077a2532b4f83">Isis::Mixed::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_moon_albedo.html#a0c44a64d42e344ef93dd873266217b8c">Isis::MoonAlbedo::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_no_normalization.html#a8ec25035a0564a5063debd3c4e9e0e9a">Isis::NoNormalization::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_shade.html#a5337950c058a9ce8cd9de338dfe4bcdf">Isis::Shade::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_shade_atm.html#a60e6abc535dc32806af99c420f3da936">Isis::ShadeAtm::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_topo.html#acb8530fe6cbb49fa9107fd7c15bb229e">Isis::Topo::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_topo_atm.html#a25714f3a61adb32b634582bb55e128c1">Isis::TopoAtm::NormModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_topo_atm.html#af1b05b3751ae39daaea912d1162a085e">Isis::TopoAtm::TopoAtm()</a>.</p>
+
+</div>
+</div>
+<a id="a57b00e54c3b4a6ff01fedfb30a88d20a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57b00e54c3b4a6ff01fedfb30a88d20a">&#9670;&nbsp;</a></span>Hfunc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::Hfunc </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>u</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>gamma</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_hapke.html" title="Hapke-Henyey-Greenstein photometric model.">Hapke</a>'s approximation to Chandra's H function. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="ae26cd907798838e9fb4f6169e7774083"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae26cd907798838e9fb4f6169e7774083">&#9670;&nbsp;</a></span>Photo0B0Standard()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PhotoModel::Photo0B0Standard </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric B0 standardization value. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#ad69e7d93ebfb2d28886cb7f70496546c">Isis::PhotoModel::p_photo0B0Standard</a>.</p>
+
+</div>
+</div>
+<a id="a3b3c414dbb711ffdf33d37a8f1e13da9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b3c414dbb711ffdf33d37a8f1e13da9">&#9670;&nbsp;</a></span>PhotoB0()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhotoB0 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric B0 value. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#aefafe1909eecc033ed44206ff3a6a395">Isis::PhotoModel::p_photoB0</a>.</p>
+
+</div>
+</div>
+<a id="a20cba457ea1545921d78419155cddd4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20cba457ea1545921d78419155cddd4d">&#9670;&nbsp;</a></span>PhotoBh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhotoBh </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric Bh value. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a5e4b664fe80fda4820279692770a906d">Isis::PhotoModel::p_photoBh</a>.</p>
+
+</div>
+</div>
+<a id="a6a8fe1f20d4c358708a5b9c7c93065dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a8fe1f20d4c358708a5b9c7c93065dd">&#9670;&nbsp;</a></span>PhotoCh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhotoCh </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric Ch value. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a0fb984dc52abb5e058149b56cb012b26">Isis::PhotoModel::p_photoCh</a>.</p>
+
+</div>
+</div>
+<a id="a10a636948a820ae8a644e44eb808973b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10a636948a820ae8a644e44eb808973b">&#9670;&nbsp;</a></span>PhotoHg1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhotoHg1 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric Hg1 value. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#ae442611b6d949136f02170e2fd8222fb">Isis::PhotoModel::p_photoHg1</a>.</p>
+
+</div>
+</div>
+<a id="a227c3dee0b2b07e991e5a11ceec801ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a227c3dee0b2b07e991e5a11ceec801ee">&#9670;&nbsp;</a></span>PhotoHg2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhotoHg2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric Hg2 value. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#afe12fe118fca5145fe3bd391e61976b9">Isis::PhotoModel::p_photoHg2</a>.</p>
+
+</div>
+</div>
+<a id="afd09fe6db5f6ff3c8845feb3e0dac1c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd09fe6db5f6ff3c8845feb3e0dac1c5">&#9670;&nbsp;</a></span>PhotoHh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhotoHh </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric Hh value. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a26ab0d65bbcc0486ca1cbe483c845669">Isis::PhotoModel::p_photoHh</a>.</p>
+
+</div>
+</div>
+<a id="aad76684d60622cb9143112a5ff5c9360"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad76684d60622cb9143112a5ff5c9360">&#9670;&nbsp;</a></span>PhotoK()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhotoK </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric K value. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a64b4e90a23232abac24491655a3d8c5e">Isis::PhotoModel::p_photoK</a>.</p>
+
+</div>
+</div>
+<a id="a6dad6d533d065c48d6155fdb4ea38d3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dad6d533d065c48d6155fdb4ea38d3e">&#9670;&nbsp;</a></span>PhotoKList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Isis::PhotoModel::PhotoKList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric k value list. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#ac6c2d68489f765889294efa3779d1fcf">Isis::PhotoModel::p_photoKList</a>.</p>
+
+</div>
+</div>
+<a id="a1d645bc58d06cb48e62d287ae937b73e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d645bc58d06cb48e62d287ae937b73e">&#9670;&nbsp;</a></span>PhotoL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhotoL </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric L value. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a36faeb268f34fd61c0c6512862f19134">Isis::PhotoModel::p_photoL</a>.</p>
+
+</div>
+</div>
+<a id="ae7be0650761e6850056a043b46becfd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7be0650761e6850056a043b46becfd4">&#9670;&nbsp;</a></span>PhotoLList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Isis::PhotoModel::PhotoLList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric l value list. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a9ae81fa72c3d34b23fbde1ab63d07116">Isis::PhotoModel::p_photoLList</a>.</p>
+
+</div>
+</div>
+<a id="a53e457bcf673f99877f0cfdd1a70b1ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53e457bcf673f99877f0cfdd1a70b1ce">&#9670;&nbsp;</a></span>PhotoModelAlgorithm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::LunarLambert::PhotoModelAlgorithm </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>phase</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>incidence</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>emission</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric L value. </p>
+
+<p>Implements <a class="el" href="class_isis_1_1_photo_model.html#ae7ffe4537bdd51ccbefbed867c955307">Isis::PhotoModel</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a36faeb268f34fd61c0c6512862f19134">Isis::PhotoModel::p_photoL</a>, and <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>.</p>
+
+</div>
+</div>
+<a id="aa6f1a31170251bc8fa59c0d9f10756c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6f1a31170251bc8fa59c0d9f10756c9">&#9670;&nbsp;</a></span>PhotoPhaseCurveList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Isis::PhotoModel::PhotoPhaseCurveList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric phase curve value list. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a4e00f54f7f314ff18ae373bdfe2b05d5">Isis::PhotoModel::p_photoPhaseCurveList</a>.</p>
+
+</div>
+</div>
+<a id="af3ee506138b34c20cb0fdfe4e5c07f4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3ee506138b34c20cb0fdfe4e5c07f4c">&#9670;&nbsp;</a></span>PhotoPhaseList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Isis::PhotoModel::PhotoPhaseList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric phase angle list. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a040ee7b6ad4c8c4bfa8fb3d34cc04a4c">Isis::PhotoModel::p_photoPhaseList</a>.</p>
+
+</div>
+</div>
+<a id="a4dc6a0a89d361fd6cc057b2c15578830"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4dc6a0a89d361fd6cc057b2c15578830">&#9670;&nbsp;</a></span>PhotoTheta()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhotoTheta </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric Theta value. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a088757892c2b894cbdfc128f6c138a7e">Isis::PhotoModel::p_photoTheta</a>.</p>
+
+</div>
+</div>
+<a id="af00c0b46f4357fd89bdbe35bc11162fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af00c0b46f4357fd89bdbe35bc11162fa">&#9670;&nbsp;</a></span>PhotoWh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhotoWh </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return photometric Wh value. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a741bb4635fea063452ff736e8fe1b7fa">Isis::PhotoModel::p_photoWh</a>.</p>
+
+</div>
+</div>
+<a id="af1ac33866243a35fac1a18a665cbd4dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1ac33866243a35fac1a18a665cbd4dc">&#9670;&nbsp;</a></span>PhtAcos()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhtAcos </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>cosang</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Obtain arccosine of input value. </p>
+<p>If the input value is outside of the valid range (-1 to 1), then obtain the arccosine of the closest valid value.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cosang</td><td>input value to obtain arccosine of (in radians) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> Arccosine of <b>cosang</b>, if valid. </dd></dl>
+<dl class="history"><dt><b><a class="el" href="history.html#_history000017">History:</a></b></dt><dd>2008-11-05 Jeannie Walldren - This method was moved from NumericalMethods class.</dd></dl>
+
+</div>
+</div>
+<a id="a9c828ddebf9e83d54d84cc88d54477c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c828ddebf9e83d54d84cc88d54477c2">&#9670;&nbsp;</a></span>PhtTopder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::PhtTopder </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>phase</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>incidence</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>emission</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Obtain topographic derivative of an arbitrary photometric function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">phase</td><td>Input phase angle </td></tr>
+    <tr><td class="paramname">incidence</td><td>Input incidence angle </td></tr>
+    <tr><td class="paramname">emission</td><td>Input emission angle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> Gradient </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_mixed.html#a21ca7afe063a691bb04361039490cbac">Isis::Mixed::Mixed()</a>, <a class="el" href="class_isis_1_1_mixed.html#a978b175479edf2c9206077a2532b4f83">Isis::Mixed::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_topo.html#acb8530fe6cbb49fa9107fd7c15bb229e">Isis::Topo::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_topo_atm.html#a25714f3a61adb32b634582bb55e128c1">Isis::TopoAtm::NormModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_topo_atm.html#af1b05b3751ae39daaea912d1162a085e">Isis::TopoAtm::TopoAtm()</a>.</p>
+
+</div>
+</div>
+<a id="afbcb7bcd0155c203c8a2d3aae0cd0a2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbcb7bcd0155c203c8a2d3aae0cd0a2c">&#9670;&nbsp;</a></span>SetPhoto0B0Standard()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhoto0B0Standard </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>b0standard</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_hapke.html#af889e9c933dcac42112f0c559402e1c5">Isis::Hapke</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#ad69e7d93ebfb2d28886cb7f70496546c">Isis::PhotoModel::p_photo0B0Standard</a>.</p>
+
+</div>
+</div>
+<a id="a08e5c5aabf4e0e8bfa16e3a7586e27d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08e5c5aabf4e0e8bfa16e3a7586e27d0">&#9670;&nbsp;</a></span>SetPhotoB0()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoB0 </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>b0</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_hapke.html#a1db4a09371fc676c274fc8924edc1fa8">Isis::Hapke</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#aefafe1909eecc033ed44206ff3a6a395">Isis::PhotoModel::p_photoB0</a>.</p>
+
+</div>
+</div>
+<a id="a075265ff0ec32c5a0fee5de786a3ac7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a075265ff0ec32c5a0fee5de786a3ac7b">&#9670;&nbsp;</a></span>SetPhotoBh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoBh </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>bh</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_hapke.html#a73f1d0cac3ddf523f6b9ead00be530e7">Isis::Hapke</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a5e4b664fe80fda4820279692770a906d">Isis::PhotoModel::p_photoBh</a>.</p>
+
+</div>
+</div>
+<a id="a501c2f596f31b91b6477e9578fb00f50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a501c2f596f31b91b6477e9578fb00f50">&#9670;&nbsp;</a></span>SetPhotoCh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoCh </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>ch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_hapke.html#ade8c39f2d2b4ac4578911f50c6b55351">Isis::Hapke</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a0fb984dc52abb5e058149b56cb012b26">Isis::PhotoModel::p_photoCh</a>.</p>
+
+</div>
+</div>
+<a id="a72161414b4cc0daedf58ff9ba6f73b35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72161414b4cc0daedf58ff9ba6f73b35">&#9670;&nbsp;</a></span>SetPhotoHg1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoHg1 </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>hg1</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_hapke.html#a079a856e685bb8833b274f9d2e3770d9">Isis::Hapke</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#ae442611b6d949136f02170e2fd8222fb">Isis::PhotoModel::p_photoHg1</a>.</p>
+
+</div>
+</div>
+<a id="a4b21d04baff3e4c4d3c66a72498c29b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b21d04baff3e4c4d3c66a72498c29b4">&#9670;&nbsp;</a></span>SetPhotoHg2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoHg2 </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>hg2</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_hapke.html#ae45c9ee788aa23cfb5a5ccd4fb81af95">Isis::Hapke</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#afe12fe118fca5145fe3bd391e61976b9">Isis::PhotoModel::p_photoHg2</a>.</p>
+
+</div>
+</div>
+<a id="a6458deba44e9523f0545a4ae3796c218"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6458deba44e9523f0545a4ae3796c218">&#9670;&nbsp;</a></span>SetPhotoHh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoHh </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>hh</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_hapke.html#a78cc7304a231ba386213e8bf56d5ed10">Isis::Hapke</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a26ab0d65bbcc0486ca1cbe483c845669">Isis::PhotoModel::p_photoHh</a>.</p>
+
+</div>
+</div>
+<a id="aa4fab4b7e43b66ab635acb0469cdba11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4fab4b7e43b66ab635acb0469cdba11">&#9670;&nbsp;</a></span>SetPhotoK()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoK </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>k</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_minnaert.html#a22da3f722a5bc93bd215ce46e790a408">Isis::Minnaert</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a64b4e90a23232abac24491655a3d8c5e">Isis::PhotoModel::p_photoK</a>.</p>
+
+</div>
+</div>
+<a id="a14e82a15499beb9633f9e5d9470acb92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14e82a15499beb9633f9e5d9470acb92">&#9670;&nbsp;</a></span>SetPhotoKList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoKList </td>
+          <td>(</td>
+          <td class="paramtype">const&#160;</td>
+          <td class="paramname"><em>QString</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_minnaert_empirical.html#a44dbb35d45fda08a6b2a071c9a58cdb6">Isis::MinnaertEmpirical</a>.</p>
+
+</div>
+</div>
+<a id="aebf3eb82ef1381e2254c676a7c112406"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebf3eb82ef1381e2254c676a7c112406">&#9670;&nbsp;</a></span>SetPhotoL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::LunarLambert::SetPhotoL </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>l</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the Lunar-Lambert function weight. </p>
+<p>This is used to govern the limb-darkening in the Lunar-Lambert photometric function. Values of the Lunar-Lambert weight generally fall in the range from 0.0 (<a class="el" href="class_isis_1_1_lambert.html">Lambert</a> function) to 1.0 (Lommel-Seeliger or "lunar" function). There are no limits on the value of this parameter, but values far outside the 0 to 1 range will not be very useful.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">l</td><td>Lunar-Lambert function weight, default is 1.0 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_photo_model.html#a52627d024f009b0dcd0bd29a5d82b498">Isis::PhotoModel</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a36faeb268f34fd61c0c6512862f19134">Isis::PhotoModel::p_photoL</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lunar_lambert.html#abe574109f2ca8073f03283789e92fc0b">LunarLambert()</a>.</p>
+
+</div>
+</div>
+<a id="a03c9dbee21331f20e4c2170c6b4fe49a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03c9dbee21331f20e4c2170c6b4fe49a">&#9670;&nbsp;</a></span>SetPhotoLList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoLList </td>
+          <td>(</td>
+          <td class="paramtype">const&#160;</td>
+          <td class="paramname"><em>QString</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a4c1e45ce7e8652b11859388d02342e26">Isis::LunarLambertEmpirical</a>.</p>
+
+</div>
+</div>
+<a id="a5deab3ac94c3fed4440d1fd8f3e53a57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5deab3ac94c3fed4440d1fd8f3e53a57">&#9670;&nbsp;</a></span>SetPhotoPhaseCurveList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoPhaseCurveList </td>
+          <td>(</td>
+          <td class="paramtype">const&#160;</td>
+          <td class="paramname"><em>QString</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_minnaert_empirical.html#ab2b53b2dc938fead1cd24e8524a477c5">Isis::MinnaertEmpirical</a>, and <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a1631f174c98dc455e0d750db87b0effb">Isis::LunarLambertEmpirical</a>.</p>
+
+</div>
+</div>
+<a id="a905b10602445744eb95e7832e36e00d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a905b10602445744eb95e7832e36e00d9">&#9670;&nbsp;</a></span>SetPhotoPhaseList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoPhaseList </td>
+          <td>(</td>
+          <td class="paramtype">const&#160;</td>
+          <td class="paramname"><em>QString</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_minnaert_empirical.html#a8d6410dd030627d08ca7d72f2b75c8fe">Isis::MinnaertEmpirical</a>, and <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#af7197b3c9199df06b2744414d21d3d88">Isis::LunarLambertEmpirical</a>.</p>
+
+</div>
+</div>
+<a id="a3fe3ffd4a1e50507ded51f6b7102d358"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fe3ffd4a1e50507ded51f6b7102d358">&#9670;&nbsp;</a></span>SetPhotoTheta()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoTheta </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>theta</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_hapke.html#a899a383d2261d93411f3ae999528ca4e">Isis::Hapke</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a088757892c2b894cbdfc128f6c138a7e">Isis::PhotoModel::p_photoTheta</a>.</p>
+
+</div>
+</div>
+<a id="a7445226ffc9d30dc4ce7f45c05b61575"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7445226ffc9d30dc4ce7f45c05b61575">&#9670;&nbsp;</a></span>SetPhotoWh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::PhotoModel::SetPhotoWh </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>wh</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_hapke.html#a6178318f8aa274b6a6ee6c4d2932d247">Isis::Hapke</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_photo_model.html#a741bb4635fea063452ff736e8fe1b7fa">Isis::PhotoModel::p_photoWh</a>.</p>
+
+</div>
+</div>
+<a id="aa38f5ab6d284c02b05fce48be675524c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa38f5ab6d284c02b05fce48be675524c">&#9670;&nbsp;</a></span>SetStandardConditions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::PhotoModel::SetStandardConditions </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>standard</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets whether standard conditions will be used. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">standard</td><td>True if standard conditions are used. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_hapke.html#aed7488b823263c570e2d7f3913cceeb5">Isis::Hapke</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_albedo.html#a8847a4c022b20ff82ef4862e372b5549">Isis::Albedo::Albedo()</a>, <a class="el" href="class_isis_1_1_albedo_atm.html#ab95fdd4ee9d179f6cfe06c76a48c7f80">Isis::AlbedoAtm::AlbedoAtm()</a>, <a class="el" href="class_isis_1_1_mixed.html#a21ca7afe063a691bb04361039490cbac">Isis::Mixed::Mixed()</a>, <a class="el" href="class_isis_1_1_shade.html#a5337950c058a9ce8cd9de338dfe4bcdf">Isis::Shade::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_shade_atm.html#a60e6abc535dc32806af99c420f3da936">Isis::ShadeAtm::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_topo.html#acb8530fe6cbb49fa9107fd7c15bb229e">Isis::Topo::NormModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke.html#aed7488b823263c570e2d7f3913cceeb5">Isis::Hapke::SetStandardConditions()</a>, and <a class="el" href="class_isis_1_1_topo_atm.html#af1b05b3751ae39daaea912d1162a085e">Isis::TopoAtm::TopoAtm()</a>.</p>
+
+</div>
+</div>
+<a id="a340206e849e669447c99b9dde73af435"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a340206e849e669447c99b9dde73af435">&#9670;&nbsp;</a></span>StandardConditions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::PhotoModel::StandardConditions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if standard conditions are used, i.e., if SetStandardConditions(true) has been called. This is initialized to false in the constructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2384f97ad2b4c48672a8b4e1fa09f7b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2384f97ad2b4c48672a8b4e1fa09f7b5">&#9670;&nbsp;</a></span>p_algName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PhotoModel::p_algName</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#aa0042762a2f90c78511c72f21b81bc3f">Isis::Hapke::Hapke()</a>, and <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="ad69e7d93ebfb2d28886cb7f70496546c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad69e7d93ebfb2d28886cb7f70496546c">&#9670;&nbsp;</a></span>p_photo0B0Standard</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::PhotoModel::p_photo0B0Standard</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_photo_model.html#ae26cd907798838e9fb4f6169e7774083">Isis::PhotoModel::Photo0B0Standard()</a>, <a class="el" href="class_isis_1_1_hapke.html#af889e9c933dcac42112f0c559402e1c5">Isis::Hapke::SetPhoto0B0Standard()</a>, <a class="el" href="class_isis_1_1_photo_model.html#afbcb7bcd0155c203c8a2d3aae0cd0a2c">Isis::PhotoModel::SetPhoto0B0Standard()</a>, and <a class="el" href="class_isis_1_1_hapke.html#aed7488b823263c570e2d7f3913cceeb5">Isis::Hapke::SetStandardConditions()</a>.</p>
+
+</div>
+</div>
+<a id="aefafe1909eecc033ed44206ff3a6a395"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefafe1909eecc033ed44206ff3a6a395">&#9670;&nbsp;</a></span>p_photoB0</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoB0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#aa0042762a2f90c78511c72f21b81bc3f">Isis::Hapke::Hapke()</a>, <a class="el" href="class_isis_1_1_photo_model.html#a3b3c414dbb711ffdf33d37a8f1e13da9">Isis::PhotoModel::PhotoB0()</a>, <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke.html#a1db4a09371fc676c274fc8924edc1fa8">Isis::Hapke::SetPhotoB0()</a>, <a class="el" href="class_isis_1_1_photo_model.html#a08e5c5aabf4e0e8bfa16e3a7586e27d0">Isis::PhotoModel::SetPhotoB0()</a>, and <a class="el" href="class_isis_1_1_hapke.html#aed7488b823263c570e2d7f3913cceeb5">Isis::Hapke::SetStandardConditions()</a>.</p>
+
+</div>
+</div>
+<a id="a580754d6a6d9cb7e2ef1bf1e6427b466"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a580754d6a6d9cb7e2ef1bf1e6427b466">&#9670;&nbsp;</a></span>p_photoB0save</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoB0save</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#aa0042762a2f90c78511c72f21b81bc3f">Isis::Hapke::Hapke()</a>, and <a class="el" href="class_isis_1_1_hapke.html#aed7488b823263c570e2d7f3913cceeb5">Isis::Hapke::SetStandardConditions()</a>.</p>
+
+</div>
+</div>
+<a id="a5e4b664fe80fda4820279692770a906d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e4b664fe80fda4820279692770a906d">&#9670;&nbsp;</a></span>p_photoBh</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoBh</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_photo_model.html#a20cba457ea1545921d78419155cddd4d">Isis::PhotoModel::PhotoBh()</a>, <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke.html#a73f1d0cac3ddf523f6b9ead00be530e7">Isis::Hapke::SetPhotoBh()</a>, and <a class="el" href="class_isis_1_1_photo_model.html#a075265ff0ec32c5a0fee5de786a3ac7b">Isis::PhotoModel::SetPhotoBh()</a>.</p>
+
+</div>
+</div>
+<a id="ac0a18178c11c80e718bab74b2722fbc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0a18178c11c80e718bab74b2722fbc6">&#9670;&nbsp;</a></span>p_photoBSpline</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a> Isis::PhotoModel::p_photoBSpline</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a1a66d56c4462e66feff3957b352677ff">Isis::LunarLambertEmpirical::LunarLambertEmpirical()</a>, <a class="el" href="class_isis_1_1_minnaert_empirical.html#aaf2bf2b4c6aca6762a237ddda5ca13cc">Isis::MinnaertEmpirical::MinnaertEmpirical()</a>, <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#ae5b1a27129623cd8524ff6cddb230d60">Isis::LunarLambertEmpirical::PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_minnaert_empirical.html#a89624da8814aab826c7bb598902d62d8">Isis::MinnaertEmpirical::PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a9b119f428e3f317bbe9fb579c4493326">Isis::LunarLambertEmpirical::~LunarLambertEmpirical()</a>, and <a class="el" href="class_isis_1_1_minnaert_empirical.html#a5cac297a7844d064a6565e700c2161c6">Isis::MinnaertEmpirical::~MinnaertEmpirical()</a>.</p>
+
+</div>
+</div>
+<a id="a0fb984dc52abb5e058149b56cb012b26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fb984dc52abb5e058149b56cb012b26">&#9670;&nbsp;</a></span>p_photoCh</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoCh</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_photo_model.html#a6a8fe1f20d4c358708a5b9c7c93065dd">Isis::PhotoModel::PhotoCh()</a>, <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke.html#ade8c39f2d2b4ac4578911f50c6b55351">Isis::Hapke::SetPhotoCh()</a>, and <a class="el" href="class_isis_1_1_photo_model.html#a501c2f596f31b91b6477e9578fb00f50">Isis::PhotoModel::SetPhotoCh()</a>.</p>
+
+</div>
+</div>
+<a id="ab89ed377580aeb4a0ce4d610210c71f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab89ed377580aeb4a0ce4d610210c71f7">&#9670;&nbsp;</a></span>p_photoCot2t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoCot2t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="aa516b50ed9df76929250547f82afec7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa516b50ed9df76929250547f82afec7e">&#9670;&nbsp;</a></span>p_photoCott</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoCott</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="ae442611b6d949136f02170e2fd8222fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae442611b6d949136f02170e2fd8222fb">&#9670;&nbsp;</a></span>p_photoHg1</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoHg1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#aa0042762a2f90c78511c72f21b81bc3f">Isis::Hapke::Hapke()</a>, <a class="el" href="class_isis_1_1_photo_model.html#a10a636948a820ae8a644e44eb808973b">Isis::PhotoModel::PhotoHg1()</a>, <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke.html#a079a856e685bb8833b274f9d2e3770d9">Isis::Hapke::SetPhotoHg1()</a>, and <a class="el" href="class_isis_1_1_photo_model.html#a72161414b4cc0daedf58ff9ba6f73b35">Isis::PhotoModel::SetPhotoHg1()</a>.</p>
+
+</div>
+</div>
+<a id="afe12fe118fca5145fe3bd391e61976b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe12fe118fca5145fe3bd391e61976b9">&#9670;&nbsp;</a></span>p_photoHg2</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoHg2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#aa0042762a2f90c78511c72f21b81bc3f">Isis::Hapke::Hapke()</a>, <a class="el" href="class_isis_1_1_photo_model.html#a227c3dee0b2b07e991e5a11ceec801ee">Isis::PhotoModel::PhotoHg2()</a>, <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke.html#ae45c9ee788aa23cfb5a5ccd4fb81af95">Isis::Hapke::SetPhotoHg2()</a>, and <a class="el" href="class_isis_1_1_photo_model.html#a4b21d04baff3e4c4d3c66a72498c29b4">Isis::PhotoModel::SetPhotoHg2()</a>.</p>
+
+</div>
+</div>
+<a id="a26ab0d65bbcc0486ca1cbe483c845669"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26ab0d65bbcc0486ca1cbe483c845669">&#9670;&nbsp;</a></span>p_photoHh</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoHh</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#aa0042762a2f90c78511c72f21b81bc3f">Isis::Hapke::Hapke()</a>, <a class="el" href="class_isis_1_1_photo_model.html#afd09fe6db5f6ff3c8845feb3e0dac1c5">Isis::PhotoModel::PhotoHh()</a>, <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_hapke.html#a78cc7304a231ba386213e8bf56d5ed10">Isis::Hapke::SetPhotoHh()</a>, and <a class="el" href="class_isis_1_1_photo_model.html#a6458deba44e9523f0545a4ae3796c218">Isis::PhotoModel::SetPhotoHh()</a>.</p>
+
+</div>
+</div>
+<a id="a64b4e90a23232abac24491655a3d8c5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64b4e90a23232abac24491655a3d8c5e">&#9670;&nbsp;</a></span>p_photoK</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoK</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_photo_model.html#aad76684d60622cb9143112a5ff5c9360">Isis::PhotoModel::PhotoK()</a>, <a class="el" href="class_isis_1_1_minnaert.html#ac22661f8b102ff34bb13ba72fe85810e">Isis::Minnaert::PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_minnaert.html#a22da3f722a5bc93bd215ce46e790a408">Isis::Minnaert::SetPhotoK()</a>, and <a class="el" href="class_isis_1_1_photo_model.html#aa4fab4b7e43b66ab635acb0469cdba11">Isis::PhotoModel::SetPhotoK()</a>.</p>
+
+</div>
+</div>
+<a id="ac6c2d68489f765889294efa3779d1fcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6c2d68489f765889294efa3779d1fcf">&#9670;&nbsp;</a></span>p_photoKList</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Isis::PhotoModel::p_photoKList</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_minnaert_empirical.html#aaf2bf2b4c6aca6762a237ddda5ca13cc">Isis::MinnaertEmpirical::MinnaertEmpirical()</a>, <a class="el" href="class_isis_1_1_photo_model.html#a6dad6d533d065c48d6155fdb4ea38d3e">Isis::PhotoModel::PhotoKList()</a>, <a class="el" href="class_isis_1_1_minnaert_empirical.html#a44dbb35d45fda08a6b2a071c9a58cdb6">Isis::MinnaertEmpirical::SetPhotoKList()</a>, and <a class="el" href="class_isis_1_1_minnaert_empirical.html#a5cac297a7844d064a6565e700c2161c6">Isis::MinnaertEmpirical::~MinnaertEmpirical()</a>.</p>
+
+</div>
+</div>
+<a id="a3a2c42cb34def6711dd454760d69b230"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a2c42cb34def6711dd454760d69b230">&#9670;&nbsp;</a></span>p_photoKSpline</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a> Isis::PhotoModel::p_photoKSpline</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_minnaert_empirical.html#aaf2bf2b4c6aca6762a237ddda5ca13cc">Isis::MinnaertEmpirical::MinnaertEmpirical()</a>, <a class="el" href="class_isis_1_1_minnaert_empirical.html#a89624da8814aab826c7bb598902d62d8">Isis::MinnaertEmpirical::PhotoModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_minnaert_empirical.html#a5cac297a7844d064a6565e700c2161c6">Isis::MinnaertEmpirical::~MinnaertEmpirical()</a>.</p>
+
+</div>
+</div>
+<a id="a36faeb268f34fd61c0c6512862f19134"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36faeb268f34fd61c0c6512862f19134">&#9670;&nbsp;</a></span>p_photoL</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoL</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_photo_model.html#a1d645bc58d06cb48e62d287ae937b73e">Isis::PhotoModel::PhotoL()</a>, <a class="el" href="class_isis_1_1_lunar_lambert.html#a53e457bcf673f99877f0cfdd1a70b1ce">PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_lunar_lambert.html#aebf3eb82ef1381e2254c676a7c112406">SetPhotoL()</a>, and <a class="el" href="class_isis_1_1_photo_model.html#a52627d024f009b0dcd0bd29a5d82b498">Isis::PhotoModel::SetPhotoL()</a>.</p>
+
+</div>
+</div>
+<a id="a9ae81fa72c3d34b23fbde1ab63d07116"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ae81fa72c3d34b23fbde1ab63d07116">&#9670;&nbsp;</a></span>p_photoLList</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Isis::PhotoModel::p_photoLList</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a1a66d56c4462e66feff3957b352677ff">Isis::LunarLambertEmpirical::LunarLambertEmpirical()</a>, <a class="el" href="class_isis_1_1_photo_model.html#ae7be0650761e6850056a043b46becfd4">Isis::PhotoModel::PhotoLList()</a>, <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a4c1e45ce7e8652b11859388d02342e26">Isis::LunarLambertEmpirical::SetPhotoLList()</a>, and <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a9b119f428e3f317bbe9fb579c4493326">Isis::LunarLambertEmpirical::~LunarLambertEmpirical()</a>.</p>
+
+</div>
+</div>
+<a id="ab923fd711e73b6b7b496a1796fd4c31c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab923fd711e73b6b7b496a1796fd4c31c">&#9670;&nbsp;</a></span>p_photoLSpline</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_numerical_approximation.html">NumericalApproximation</a> Isis::PhotoModel::p_photoLSpline</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a1a66d56c4462e66feff3957b352677ff">Isis::LunarLambertEmpirical::LunarLambertEmpirical()</a>, <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#ae5b1a27129623cd8524ff6cddb230d60">Isis::LunarLambertEmpirical::PhotoModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a9b119f428e3f317bbe9fb579c4493326">Isis::LunarLambertEmpirical::~LunarLambertEmpirical()</a>.</p>
+
+</div>
+</div>
+<a id="ac69b413c093c0ff57ce86e756d0bcdf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac69b413c093c0ff57ce86e756d0bcdf8">&#9670;&nbsp;</a></span>p_photoOsr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoOsr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="ac1e4f643f3ab1d3125dbe61421046d50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1e4f643f3ab1d3125dbe61421046d50">&#9670;&nbsp;</a></span>p_photoPhaseAngleCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::PhotoModel::p_photoPhaseAngleCount</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a1a66d56c4462e66feff3957b352677ff">Isis::LunarLambertEmpirical::LunarLambertEmpirical()</a>, and <a class="el" href="class_isis_1_1_minnaert_empirical.html#aaf2bf2b4c6aca6762a237ddda5ca13cc">Isis::MinnaertEmpirical::MinnaertEmpirical()</a>.</p>
+
+</div>
+</div>
+<a id="a4e00f54f7f314ff18ae373bdfe2b05d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e00f54f7f314ff18ae373bdfe2b05d5">&#9670;&nbsp;</a></span>p_photoPhaseCurveList</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Isis::PhotoModel::p_photoPhaseCurveList</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a1a66d56c4462e66feff3957b352677ff">Isis::LunarLambertEmpirical::LunarLambertEmpirical()</a>, <a class="el" href="class_isis_1_1_minnaert_empirical.html#aaf2bf2b4c6aca6762a237ddda5ca13cc">Isis::MinnaertEmpirical::MinnaertEmpirical()</a>, <a class="el" href="class_isis_1_1_photo_model.html#aa6f1a31170251bc8fa59c0d9f10756c9">Isis::PhotoModel::PhotoPhaseCurveList()</a>, <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a1631f174c98dc455e0d750db87b0effb">Isis::LunarLambertEmpirical::SetPhotoPhaseCurveList()</a>, <a class="el" href="class_isis_1_1_minnaert_empirical.html#ab2b53b2dc938fead1cd24e8524a477c5">Isis::MinnaertEmpirical::SetPhotoPhaseCurveList()</a>, <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a9b119f428e3f317bbe9fb579c4493326">Isis::LunarLambertEmpirical::~LunarLambertEmpirical()</a>, and <a class="el" href="class_isis_1_1_minnaert_empirical.html#a5cac297a7844d064a6565e700c2161c6">Isis::MinnaertEmpirical::~MinnaertEmpirical()</a>.</p>
+
+</div>
+</div>
+<a id="a040ee7b6ad4c8c4bfa8fb3d34cc04a4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a040ee7b6ad4c8c4bfa8fb3d34cc04a4c">&#9670;&nbsp;</a></span>p_photoPhaseList</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Isis::PhotoModel::p_photoPhaseList</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a1a66d56c4462e66feff3957b352677ff">Isis::LunarLambertEmpirical::LunarLambertEmpirical()</a>, <a class="el" href="class_isis_1_1_minnaert_empirical.html#aaf2bf2b4c6aca6762a237ddda5ca13cc">Isis::MinnaertEmpirical::MinnaertEmpirical()</a>, <a class="el" href="class_isis_1_1_photo_model.html#af3ee506138b34c20cb0fdfe4e5c07f4c">Isis::PhotoModel::PhotoPhaseList()</a>, <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#af7197b3c9199df06b2744414d21d3d88">Isis::LunarLambertEmpirical::SetPhotoPhaseList()</a>, <a class="el" href="class_isis_1_1_minnaert_empirical.html#a8d6410dd030627d08ca7d72f2b75c8fe">Isis::MinnaertEmpirical::SetPhotoPhaseList()</a>, <a class="el" href="class_isis_1_1_lunar_lambert_empirical.html#a9b119f428e3f317bbe9fb579c4493326">Isis::LunarLambertEmpirical::~LunarLambertEmpirical()</a>, and <a class="el" href="class_isis_1_1_minnaert_empirical.html#a5cac297a7844d064a6565e700c2161c6">Isis::MinnaertEmpirical::~MinnaertEmpirical()</a>.</p>
+
+</div>
+</div>
+<a id="a7a146b4a5302daf28e7c0c92fa0f6096"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a146b4a5302daf28e7c0c92fa0f6096">&#9670;&nbsp;</a></span>p_photoSr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoSr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a5413715f9342c4eb79598eb6d952ceaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5413715f9342c4eb79598eb6d952ceaf">&#9670;&nbsp;</a></span>p_photoTant</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoTant</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>.</p>
+
+</div>
+</div>
+<a id="a088757892c2b894cbdfc128f6c138a7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a088757892c2b894cbdfc128f6c138a7e">&#9670;&nbsp;</a></span>p_photoTheta</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoTheta</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#aa0042762a2f90c78511c72f21b81bc3f">Isis::Hapke::Hapke()</a>, <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_photo_model.html#a4dc6a0a89d361fd6cc057b2c15578830">Isis::PhotoModel::PhotoTheta()</a>, <a class="el" href="class_isis_1_1_hapke.html#a899a383d2261d93411f3ae999528ca4e">Isis::Hapke::SetPhotoTheta()</a>, and <a class="el" href="class_isis_1_1_photo_model.html#a3fe3ffd4a1e50507ded51f6b7102d358">Isis::PhotoModel::SetPhotoTheta()</a>.</p>
+
+</div>
+</div>
+<a id="a4a69faa2519da1bfd0265f70ac737166"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a69faa2519da1bfd0265f70ac737166">&#9670;&nbsp;</a></span>p_photoThetaold</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoThetaold</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#aa0042762a2f90c78511c72f21b81bc3f">Isis::Hapke::Hapke()</a>, <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>, and <a class="el" href="class_isis_1_1_hapke.html#a99a2a4af476b759496cb55229e942942">Isis::Hapke::SetOldTheta()</a>.</p>
+
+</div>
+</div>
+<a id="a741bb4635fea063452ff736e8fe1b7fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a741bb4635fea063452ff736e8fe1b7fa">&#9670;&nbsp;</a></span>p_photoWh</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::PhotoModel::p_photoWh</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_hapke.html#aa0042762a2f90c78511c72f21b81bc3f">Isis::Hapke::Hapke()</a>, <a class="el" href="class_isis_1_1_hapke.html#af46feac3865cdf9e511f239500c0344a">Isis::Hapke::PhotoModelAlgorithm()</a>, <a class="el" href="class_isis_1_1_photo_model.html#af00c0b46f4357fd89bdbe35bc11162fa">Isis::PhotoModel::PhotoWh()</a>, <a class="el" href="class_isis_1_1_hapke.html#a6178318f8aa274b6a6ee6c4d2932d247">Isis::Hapke::SetPhotoWh()</a>, and <a class="el" href="class_isis_1_1_photo_model.html#a7445226ffc9d30dc4ce7f45c05b61575">Isis::PhotoModel::SetPhotoWh()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/LunarLambert/<a class="el" href="_lunar_lambert_8h_source.html">LunarLambert.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/LunarLambert/<a class="el" href="_lunar_lambert_8cpp.html">LunarLambert.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_lunar_lambert.html">LunarLambert</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+StreamExporter,High Level Cube I/O,isis/src/base/objs/StreamExporter/StreamExporter.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,StreamExporter,isis_pybind.StreamExporter,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,StreamExporter(),isis_pybind.StreamExporter(),N,抽象基类/纯虚接口
+Mutation/Configuration,virtual void setGrayscale(ExportDescription &desc),isis_pybind.StreamExporter.set_grayscale,N,抽象基类/纯虚接口
+Mutation/Configuration,virtual void setRgb(ExportDescription &desc),isis_pybind.StreamExporter.set_rgb,N,抽象基类/纯虚接口
+Mutation/Configuration,virtual void setRgba(ExportDescription &desc),isis_pybind.StreamExporter.set_rgba,N,抽象基类/纯虚接口

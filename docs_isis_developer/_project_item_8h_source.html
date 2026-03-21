@@ -1,0 +1,478 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ProjectItem/ProjectItem.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_project_item_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">ProjectItem.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_project_item_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef ProjectItem_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define ProjectItem_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QStandardItem&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_bundle_settings_8h.html">BundleSettings.h</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_file_item_8h.html">FileItem.h</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_gui_camera_8h.html">GuiCamera.h</a>&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_target_body_8h.html">TargetBody.h</a>&quot;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">class </span>QVariant;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_bundle_results.html">BundleResults</a>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_bundle_solution_info.html">BundleSolutionInfo</a>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_control.html">Control</a>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_control_list.html">ControlList</a>;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_file_item.html">FileItem</a>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_image.html">Image</a>;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_image_list.html">ImageList</a>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_gui_camera_list.html">GuiCameraList</a>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_project.html">Project</a>;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_project_item_model.html">ProjectItemModel</a>;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_shape.html">Shape</a>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_shape_list.html">ShapeList</a>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_target_body_list.html">TargetBodyList</a>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_template.html">Template</a>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_template_list.html">TemplateList</a>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno"><a class="line" href="class_isis_1_1_project_item.html">  134</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> : <span class="keyword">public</span> <a class="code" href="class_q_standard_item.html">QStandardItem</a> {</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>();</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      <span class="keyword">explicit</span> <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> *item);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_bundle_results.html">BundleResults</a> <a class="code" href="class_isis_1_1_project_item.html#a75ce6fd0b38e768027d207a5388de376">bundleResults</a>);</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_q_shared_pointer.html">BundleSettingsQsp</a> <a class="code" href="class_isis_1_1_project_item.html#a3bb2c552775abf6812cd62d1136ea5ff">bundleSettings</a>);</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_bundle_solution_info.html">BundleSolutionInfo</a> *<a class="code" href="class_isis_1_1_project_item.html#a2fbfd80307cead420949085376d221c4">bundleSolutionInfo</a>);</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_control.html">Control</a> *<a class="code" href="class_isis_1_1_project_item.html#ab929e3b3e5275668adb9a39a19aaa661">control</a>);</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_control_list.html">ControlList</a> *<a class="code" href="class_isis_1_1_project_item.html#ad92bec987938db8d257ef660d0735a65">controlList</a>);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_q_list.html">QList&lt;ControlList *&gt;</a> controls);</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a> <a class="code" href="class_isis_1_1_project_item.html#a78a0b928a8a51fc72810edfaa8123ad9">correlationMatrix</a>);</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_image.html">Image</a> *<a class="code" href="class_isis_1_1_project_item.html#ad103f1bb91af8523a87f9bd571008868">image</a>);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *<a class="code" href="class_isis_1_1_project_item.html#a9da0f8a5152a7e692cbdcffacf460817">imageList</a>);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_q_list.html">QList&lt;ImageList *&gt;</a> images);</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_shape.html">Shape</a> *<a class="code" href="class_isis_1_1_project_item.html#a7f80ddda487e959c033ca720dcdce851">shape</a>);</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_shape_list.html">ShapeList</a> *<a class="code" href="class_isis_1_1_project_item.html#a67bec6d8f593603d867999fdd7653fc2">shapeList</a>);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_q_list.html">QList&lt;ShapeList *&gt;</a> shapes);</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_q_shared_pointer.html">GuiCameraQsp</a> <a class="code" href="class_isis_1_1_project_item.html#aeb6356aeecbfd25c107d47006f12ce26">guiCamera</a>);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_gui_camera_list.html">GuiCameraList</a> *guiCameraList);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_project.html">Project</a> *<a class="code" href="class_isis_1_1_project_item.html#abbe4492476c2430b0ed6e858759ef915">project</a>);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_q_list.html">QList&lt;BundleSolutionInfo *&gt;</a> results);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_q_shared_pointer.html">TargetBodyQsp</a> <a class="code" href="class_isis_1_1_project_item.html#a1e8af313fbc479b325c7af041be22230">targetBody</a>);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_target_body_list.html">TargetBodyList</a> *targetBodyList);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_q_list.html">QList&lt;TemplateList *&gt;</a> templates);</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_template.html">Template</a> *newTemplate);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_isis_1_1_template_list.html">TemplateList</a> *<a class="code" href="class_isis_1_1_project_item.html#af846618700949084c4c9e4234eda9e3b">templateList</a>);</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_q_shared_pointer.html">FileItemQsp</a> filename, QString treeText, QIcon icon);</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">ProjectItem</a>(<a class="code" href="class_q_shared_pointer.html">FileItemQsp</a> filename, QString treeText, QString toolTipText, QIcon icon);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html#ad145d5459bfe18faf6ef786269c72b71">~ProjectItem</a>();</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;      <a class="code" href="class_isis_1_1_bundle_results.html">BundleResults</a> <a class="code" href="class_isis_1_1_project_item.html#a75ce6fd0b38e768027d207a5388de376">bundleResults</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;      <a class="code" href="class_q_shared_pointer.html">BundleSettingsQsp</a> <a class="code" href="class_isis_1_1_project_item.html#a3bb2c552775abf6812cd62d1136ea5ff">bundleSettings</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;      <a class="code" href="class_isis_1_1_bundle_solution_info.html">BundleSolutionInfo</a> *<a class="code" href="class_isis_1_1_project_item.html#a2fbfd80307cead420949085376d221c4">bundleSolutionInfo</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;      <a class="code" href="class_isis_1_1_control.html">Control</a> *<a class="code" href="class_isis_1_1_project_item.html#ab929e3b3e5275668adb9a39a19aaa661">control</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;      <a class="code" href="class_isis_1_1_control_list.html">ControlList</a> *<a class="code" href="class_isis_1_1_project_item.html#ad92bec987938db8d257ef660d0735a65">controlList</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;      <a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a> <a class="code" href="class_isis_1_1_project_item.html#a78a0b928a8a51fc72810edfaa8123ad9">correlationMatrix</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;      <a class="code" href="class_isis_1_1_image.html">Image</a> *<a class="code" href="class_isis_1_1_project_item.html#ad103f1bb91af8523a87f9bd571008868">image</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;      <a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *<a class="code" href="class_isis_1_1_project_item.html#a9da0f8a5152a7e692cbdcffacf460817">imageList</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;      <a class="code" href="class_isis_1_1_shape.html">Shape</a> *<a class="code" href="class_isis_1_1_project_item.html#a7f80ddda487e959c033ca720dcdce851">shape</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;      <a class="code" href="class_isis_1_1_shape_list.html">ShapeList</a> *<a class="code" href="class_isis_1_1_project_item.html#a67bec6d8f593603d867999fdd7653fc2">shapeList</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;      <a class="code" href="class_isis_1_1_project.html">Project</a> *<a class="code" href="class_isis_1_1_project_item.html#abbe4492476c2430b0ed6e858759ef915">project</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;      <a class="code" href="class_q_shared_pointer.html">GuiCameraQsp</a> <a class="code" href="class_isis_1_1_project_item.html#aeb6356aeecbfd25c107d47006f12ce26">guiCamera</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      <a class="code" href="class_q_shared_pointer.html">TargetBodyQsp</a> <a class="code" href="class_isis_1_1_project_item.html#a1e8af313fbc479b325c7af041be22230">targetBody</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;      <a class="code" href="class_isis_1_1_template.html">Template</a> *<a class="code" href="class_isis_1_1_project_item.html#a4556e7e8bf66cdd4e3d6da6711ab55f8">getTemplate</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;      <a class="code" href="class_isis_1_1_template_list.html">TemplateList</a> *<a class="code" href="class_isis_1_1_project_item.html#af846618700949084c4c9e4234eda9e3b">templateList</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;      <a class="code" href="class_q_shared_pointer.html">FileItemQsp</a> <a class="code" href="class_isis_1_1_project_item.html#a66c76c2d88c8b7dab9faaa6ef579df9a">fileItem</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#ab14d0990b1640e731aa8f6a6c739d546">isBundleResults</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#a94644aa7d600b1b6a43038304fc5e1a5">isBundleSettings</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#ae74c37d9341e8611247a403ad7b62b57">isBundleSolutionInfo</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#a6b293a5cefc9ac357b9b4af336e3953b">isControl</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#a6deba6b127ad3c46e8e4ab0b2736e945">isControlList</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#af551f986c217c13ce8f362cc5f561fc4">isCorrelationMatrix</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#ae79bab8f797d90910c7a2b1005a543d2">isImage</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#a8c925ee88fa41381a994b99986be530f">isImageList</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#a29fa2815d3989c8ad715140cd4c99ec5">isShape</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#a77a59a1c03dfcb5f5355a6880ddb58d8">isShapeList</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#a47b6e9865e6a7d52397dbdae556cbe91">isProject</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#af41615aa8100538f4a78ad2b94c44827">isGuiCamera</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#afaff8a553bedf5f4fc160953dcb7dfca">isTargetBody</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#ab4e317fc3b942f5263418802ef401c07">isFileItem</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_project_item.html#a480be3d203beadc83fbb060471c3cdb8">isTemplate</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a2970c0b952a4aeed84ec8c54da9bd133">setProjectItem</a>(<a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> *item);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a5bb160d6e1abf20b36156c4ffc00f0d1">setBundleResults</a>(<a class="code" href="class_isis_1_1_bundle_results.html">BundleResults</a> <a class="code" href="class_isis_1_1_project_item.html#a75ce6fd0b38e768027d207a5388de376">bundleResults</a>);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a918fa1d4bd3ad923ed753fab0a6c5380">setBundleSettings</a>(<a class="code" href="class_q_shared_pointer.html">BundleSettingsQsp</a> <a class="code" href="class_isis_1_1_project_item.html#a3bb2c552775abf6812cd62d1136ea5ff">bundleSettings</a>);</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#aecc14599326804736b3bb584b6ade2f9">setBundleSolutionInfo</a>(<a class="code" href="class_isis_1_1_bundle_solution_info.html">BundleSolutionInfo</a> *<a class="code" href="class_isis_1_1_project_item.html#a2fbfd80307cead420949085376d221c4">bundleSolutionInfo</a>);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a7d68f410d2380e5e8fc6e29b600f9e2b">setControl</a>(<a class="code" href="class_isis_1_1_control.html">Control</a> *<a class="code" href="class_isis_1_1_project_item.html#ab929e3b3e5275668adb9a39a19aaa661">control</a>);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a89684db259704512f6d48c4bc96fc32d">setControlList</a>(<a class="code" href="class_isis_1_1_control_list.html">ControlList</a> *<a class="code" href="class_isis_1_1_project_item.html#ad92bec987938db8d257ef660d0735a65">controlList</a>);</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a20fb62adabdff491b84142db1c4fadf6">setControls</a>();</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a4c620849520f4c57555db4403eb44e27">setCorrelationMatrix</a>(<a class="code" href="class_isis_1_1_correlation_matrix.html">CorrelationMatrix</a> <a class="code" href="class_isis_1_1_project_item.html#a78a0b928a8a51fc72810edfaa8123ad9">correlationMatrix</a>);</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#ac268d99d0639b1db932ad293d5eab819">setImage</a>(<a class="code" href="class_isis_1_1_image.html">Image</a> *<a class="code" href="class_isis_1_1_project_item.html#ad103f1bb91af8523a87f9bd571008868">image</a>);</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#adecca6b9d8bcdd2b92189f0da165a333">setImageList</a>(<a class="code" href="class_isis_1_1_image_list.html">ImageList</a> *<a class="code" href="class_isis_1_1_project_item.html#a9da0f8a5152a7e692cbdcffacf460817">imageList</a>);</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#ac5be240ae6e195d442bea3a68d275d78">setImages</a>();</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a2f0c90fe9ccff514e5755688f7c81bb0">setShape</a>(<a class="code" href="class_isis_1_1_shape.html">Shape</a> *<a class="code" href="class_isis_1_1_project_item.html#a7f80ddda487e959c033ca720dcdce851">shape</a>);</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#ae7ef6efa7dfa9f6967e0b6d5f62c882e">setShapeList</a>(<a class="code" href="class_isis_1_1_shape_list.html">ShapeList</a> *<a class="code" href="class_isis_1_1_project_item.html#a67bec6d8f593603d867999fdd7653fc2">shapeList</a>);</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a28d1f84551856502e0213f1d3d3c4ffb">setShapes</a>();</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a8de5ecfc2e3ddd7a420bd2ddea46e70c">setProject</a>(<a class="code" href="class_isis_1_1_project.html">Project</a> *<a class="code" href="class_isis_1_1_project_item.html#abbe4492476c2430b0ed6e858759ef915">project</a>);</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a26eafb5ac7c30b62042cac58fc06b4f4">setResults</a>();</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#abfbe11c9f12b8c4c62a9168276f1d353">setGuiCamera</a>(<a class="code" href="class_q_shared_pointer.html">GuiCameraQsp</a> <a class="code" href="class_isis_1_1_project_item.html#aeb6356aeecbfd25c107d47006f12ce26">guiCamera</a>);</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a7793dcbae5f4b29ea632710d4307c76c">setGuiCameraList</a>();</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a58ed647ba404edb8d4789715b377ab96">setSpacecraft</a>();</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a87360253f556e3e040dba2205adc8b3a">setTargetBody</a>(<a class="code" href="class_q_shared_pointer.html">TargetBodyQsp</a> <a class="code" href="class_isis_1_1_project_item.html#a1e8af313fbc479b325c7af041be22230">targetBody</a>);</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#af1cd323d98f628d6ed2510b27b2af5a8">setTargetBodyList</a>();</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a9045f6f082e8b3a032c71ebe2c08b6be">setTemplate</a>(<a class="code" href="class_isis_1_1_template.html">Template</a> *newTemplate);</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#acd9a2b4baeadac98468a75bead76a25e">setTemplates</a>();</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a216c9cc83b796e9758c6b334c8229e54">setTemplateList</a>(<a class="code" href="class_isis_1_1_template_list.html">TemplateList</a> *<a class="code" href="class_isis_1_1_project_item.html#af846618700949084c4c9e4234eda9e3b">templateList</a>);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> *<a class="code" href="class_isis_1_1_project_item.html#a4220db5c2278a5280ab39f9b511b44b5">findItemData</a>(<span class="keyword">const</span> QVariant &amp;value, <span class="keywordtype">int</span> role = Qt::UserRole+1);</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a26532fc22c8924bebe62ae9312679da1">appendRow</a>(<a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> *item);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> *<a class="code" href="class_isis_1_1_project_item.html#af243ef3402ea1ee1f4088f1dc3989f1b">child</a>(<span class="keywordtype">int</span> row) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#adea72f74cf0fc0c5e2f2d4b8746e1013">insertRow</a>(<span class="keywordtype">int</span> row, <a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> *item);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;      <a class="code" href="class_isis_1_1_project_item_model.html">ProjectItemModel</a> *<a class="code" href="class_isis_1_1_project_item.html#af7a89b870f445e0d9a1361c77f41cde5">model</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> *<a class="code" href="class_isis_1_1_project_item.html#a9615c52a8afc5f520b08b002f21e367e">parent</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a86495d58f9fc21cbc92f0a504dd3681d">setChild</a>(<span class="keywordtype">int</span> row, <a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> *item);</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;      <a class="code" href="class_isis_1_1_project_item.html">ProjectItem</a> *<a class="code" href="class_isis_1_1_project_item.html#afaba183fe16f2ac7344eadcbdd25dd39">takeChild</a>(<span class="keywordtype">int</span> row);</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_project_item.html#a188b3c7ebb769edc1bc5fa6ebf150c9d">setTextColor</a>(Qt::GlobalColor color);</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    };</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;}</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno"><a class="line" href="_project_item_8h.html#a60d98f039058d8c831c58726dfe49fbc">  238</a></span>&#160;<a class="code" href="_project_item_8h.html#a60d98f039058d8c831c58726dfe49fbc">Q_DECLARE_METATYPE</a>(<a class="code" href="class_isis_1_1_project_item.html">Isis::ProjectItem</a> *);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_bundle_settings_8h_html"><div class="ttname"><a href="_bundle_settings_8h.html">BundleSettings.h</a></div></div>
+<div class="ttc" id="a_file_item_8h_html"><div class="ttname"><a href="_file_item_8h.html">FileItem.h</a></div></div>
+<div class="ttc" id="a_gui_camera_8h_html"><div class="ttname"><a href="_gui_camera_8h.html">GuiCamera.h</a></div></div>
+<div class="ttc" id="a_project_item_8h_html_a60d98f039058d8c831c58726dfe49fbc"><div class="ttname"><a href="_project_item_8h.html#a60d98f039058d8c831c58726dfe49fbc">Q_DECLARE_METATYPE</a></div><div class="ttdeci">Q_DECLARE_METATYPE(Isis::ProjectItem *)</div></div>
+<div class="ttc" id="a_target_body_8h_html"><div class="ttname"><a href="_target_body_8h.html">TargetBody.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_results_html"><div class="ttname"><a href="class_isis_1_1_bundle_results.html">Isis::BundleResults</a></div><div class="ttdoc">A container class for statistical results from a BundleAdjust solution.</div><div class="ttdef"><b>Definition:</b> BundleResults.h:90</div></div>
+<div class="ttc" id="aclass_isis_1_1_bundle_solution_info_html"><div class="ttname"><a href="class_isis_1_1_bundle_solution_info.html">Isis::BundleSolutionInfo</a></div><div class="ttdoc">Container class for BundleAdjustment results.</div><div class="ttdef"><b>Definition:</b> BundleSolutionInfo.h:172</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_html"><div class="ttname"><a href="class_isis_1_1_control.html">Isis::Control</a></div><div class="ttdoc">This represents an ISIS control net in a project-based GUI interface.</div><div class="ttdef"><b>Definition:</b> Control.h:65</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_list_html"><div class="ttname"><a href="class_isis_1_1_control_list.html">Isis::ControlList</a></div><div class="ttdoc">Maintains a list of Controls so that control nets can easily be copied from one Project to another,...</div><div class="ttdef"><b>Definition:</b> ControlList.h:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_correlation_matrix_html"><div class="ttname"><a href="class_isis_1_1_correlation_matrix.html">Isis::CorrelationMatrix</a></div><div class="ttdoc">This is a container for the correlation matrix that comes from a bundle adjust.</div><div class="ttdef"><b>Definition:</b> CorrelationMatrix.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_file_item_html"><div class="ttname"><a href="class_isis_1_1_file_item.html">Isis::FileItem</a></div><div class="ttdoc">A container for a filename to be represented as a ProjectItem on the project tree.</div><div class="ttdef"><b>Definition:</b> FileItem.h:28</div></div>
+<div class="ttc" id="aclass_isis_1_1_gui_camera_list_html"><div class="ttname"><a href="class_isis_1_1_gui_camera_list.html">Isis::GuiCameraList</a></div><div class="ttdoc">List of GuiCameras saved as QSharedPointers.</div><div class="ttdef"><b>Definition:</b> GuiCameraList.h:33</div></div>
+<div class="ttc" id="aclass_isis_1_1_image_html"><div class="ttname"><a href="class_isis_1_1_image.html">Isis::Image</a></div><div class="ttdoc">This represents a cube in a project-based GUI interface.</div><div class="ttdef"><b>Definition:</b> Image.h:105</div></div>
+<div class="ttc" id="aclass_isis_1_1_image_list_html"><div class="ttname"><a href="class_isis_1_1_image_list.html">Isis::ImageList</a></div><div class="ttdoc">Internalizes a list of images and allows for operations on the entire list.</div><div class="ttdef"><b>Definition:</b> ImageList.h:53</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_html"><div class="ttname"><a href="class_isis_1_1_project.html">Isis::Project</a></div><div class="ttdoc">The main project for ipce.</div><div class="ttdef"><b>Definition:</b> Project.h:287</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html"><div class="ttname"><a href="class_isis_1_1_project_item.html">Isis::ProjectItem</a></div><div class="ttdoc">Represents an item of a ProjectItemModel in Qt's model-view framework.</div><div class="ttdef"><b>Definition:</b> ProjectItem.h:134</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a188b3c7ebb769edc1bc5fa6ebf150c9d"><div class="ttname"><a href="class_isis_1_1_project_item.html#a188b3c7ebb769edc1bc5fa6ebf150c9d">Isis::ProjectItem::setTextColor</a></div><div class="ttdeci">void setTextColor(Qt::GlobalColor color)</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1246</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a1e8af313fbc479b325c7af041be22230"><div class="ttname"><a href="class_isis_1_1_project_item.html#a1e8af313fbc479b325c7af041be22230">Isis::ProjectItem::targetBody</a></div><div class="ttdeci">TargetBodyQsp targetBody() const</div><div class="ttdoc">Returns the TargetBodyQsp stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:587</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a20fb62adabdff491b84142db1c4fadf6"><div class="ttname"><a href="class_isis_1_1_project_item.html#a20fb62adabdff491b84142db1c4fadf6">Isis::ProjectItem::setControls</a></div><div class="ttdeci">void setControls()</div><div class="ttdoc">Sets the text, icon, and data corresponding to a list of ControlList.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1002</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a216c9cc83b796e9758c6b334c8229e54"><div class="ttname"><a href="class_isis_1_1_project_item.html#a216c9cc83b796e9758c6b334c8229e54">Isis::ProjectItem::setTemplateList</a></div><div class="ttdeci">void setTemplateList(TemplateList *templateList)</div><div class="ttdoc">Sets the text, icon, and data corresponding to an TemplateList.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:931</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a26532fc22c8924bebe62ae9312679da1"><div class="ttname"><a href="class_isis_1_1_project_item.html#a26532fc22c8924bebe62ae9312679da1">Isis::ProjectItem::appendRow</a></div><div class="ttdeci">void appendRow(ProjectItem *item)</div><div class="ttdoc">Appends an item to the children of this item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1166</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a26eafb5ac7c30b62042cac58fc06b4f4"><div class="ttname"><a href="class_isis_1_1_project_item.html#a26eafb5ac7c30b62042cac58fc06b4f4">Isis::ProjectItem::setResults</a></div><div class="ttdeci">void setResults()</div><div class="ttdoc">Sets the text, icon, and data corresponding to a list of Results.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1048</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a28d1f84551856502e0213f1d3d3c4ffb"><div class="ttname"><a href="class_isis_1_1_project_item.html#a28d1f84551856502e0213f1d3d3c4ffb">Isis::ProjectItem::setShapes</a></div><div class="ttdeci">void setShapes()</div><div class="ttdoc">Sets the text, icon, and data corresponding to a list of ShapeList.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:904</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a2970c0b952a4aeed84ec8c54da9bd133"><div class="ttname"><a href="class_isis_1_1_project_item.html#a2970c0b952a4aeed84ec8c54da9bd133">Isis::ProjectItem::setProjectItem</a></div><div class="ttdeci">void setProjectItem(ProjectItem *item)</div><div class="ttdoc">Sets the text, icon, and data to those of another item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:767</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a29fa2815d3989c8ad715140cd4c99ec5"><div class="ttname"><a href="class_isis_1_1_project_item.html#a29fa2815d3989c8ad715140cd4c99ec5">Isis::ProjectItem::isShape</a></div><div class="ttdeci">bool isShape() const</div><div class="ttdoc">Returns true if an Shape is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:668</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a2f0c90fe9ccff514e5755688f7c81bb0"><div class="ttname"><a href="class_isis_1_1_project_item.html#a2f0c90fe9ccff514e5755688f7c81bb0">Isis::ProjectItem::setShape</a></div><div class="ttdeci">void setShape(Shape *shape)</div><div class="ttdoc">Sets the text, icon, and data corresponding to an Shape.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:873</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a2fbfd80307cead420949085376d221c4"><div class="ttname"><a href="class_isis_1_1_project_item.html#a2fbfd80307cead420949085376d221c4">Isis::ProjectItem::bundleSolutionInfo</a></div><div class="ttdeci">BundleSolutionInfo * bundleSolutionInfo() const</div><div class="ttdoc">Returns the BundleSolutionInfo stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:466</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a3bb2c552775abf6812cd62d1136ea5ff"><div class="ttname"><a href="class_isis_1_1_project_item.html#a3bb2c552775abf6812cd62d1136ea5ff">Isis::ProjectItem::bundleSettings</a></div><div class="ttdeci">BundleSettingsQsp bundleSettings() const</div><div class="ttdoc">Returns the BundleSettings stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:456</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a4220db5c2278a5280ab39f9b511b44b5"><div class="ttname"><a href="class_isis_1_1_project_item.html#a4220db5c2278a5280ab39f9b511b44b5">Isis::ProjectItem::findItemData</a></div><div class="ttdeci">ProjectItem * findItemData(const QVariant &amp;value, int role=Qt::UserRole+1)</div><div class="ttdoc">Finds and returns the first item in the model that contains the data in the role.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1145</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a4556e7e8bf66cdd4e3d6da6711ab55f8"><div class="ttname"><a href="class_isis_1_1_project_item.html#a4556e7e8bf66cdd4e3d6da6711ab55f8">Isis::ProjectItem::getTemplate</a></div><div class="ttdeci">Template * getTemplate() const</div><div class="ttdoc">Returns the Template stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:516</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a47b6e9865e6a7d52397dbdae556cbe91"><div class="ttname"><a href="class_isis_1_1_project_item.html#a47b6e9865e6a7d52397dbdae556cbe91">Isis::ProjectItem::isProject</a></div><div class="ttdeci">bool isProject() const</div><div class="ttdoc">Returns true if a Project is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:724</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a480be3d203beadc83fbb060471c3cdb8"><div class="ttname"><a href="class_isis_1_1_project_item.html#a480be3d203beadc83fbb060471c3cdb8">Isis::ProjectItem::isTemplate</a></div><div class="ttdeci">bool isTemplate() const</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:602</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a4c620849520f4c57555db4403eb44e27"><div class="ttname"><a href="class_isis_1_1_project_item.html#a4c620849520f4c57555db4403eb44e27">Isis::ProjectItem::setCorrelationMatrix</a></div><div class="ttdeci">void setCorrelationMatrix(CorrelationMatrix correlationMatrix)</div><div class="ttdoc">Sets the text, icon, and data corresponding to a CorrelationMatrix.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1016</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a58ed647ba404edb8d4789715b377ab96"><div class="ttname"><a href="class_isis_1_1_project_item.html#a58ed647ba404edb8d4789715b377ab96">Isis::ProjectItem::setSpacecraft</a></div><div class="ttdeci">void setSpacecraft()</div><div class="ttdoc">Sets the text, icon, and data corresponding to SpaceCraft.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1086</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a5bb160d6e1abf20b36156c4ffc00f0d1"><div class="ttname"><a href="class_isis_1_1_project_item.html#a5bb160d6e1abf20b36156c4ffc00f0d1">Isis::ProjectItem::setBundleResults</a></div><div class="ttdeci">void setBundleResults(BundleResults bundleResults)</div><div class="ttdoc">Sets the text, icon, and data corresponding to BundleResults.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:781</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a66c76c2d88c8b7dab9faaa6ef579df9a"><div class="ttname"><a href="class_isis_1_1_project_item.html#a66c76c2d88c8b7dab9faaa6ef579df9a">Isis::ProjectItem::fileItem</a></div><div class="ttdeci">FileItemQsp fileItem() const</div><div class="ttdoc">Returns the FileItemQsp stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:597</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a67bec6d8f593603d867999fdd7653fc2"><div class="ttname"><a href="class_isis_1_1_project_item.html#a67bec6d8f593603d867999fdd7653fc2">Isis::ProjectItem::shapeList</a></div><div class="ttdeci">ShapeList * shapeList() const</div><div class="ttdoc">Returns the ShapeList stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:506</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a6b293a5cefc9ac357b9b4af336e3953b"><div class="ttname"><a href="class_isis_1_1_project_item.html#a6b293a5cefc9ac357b9b4af336e3953b">Isis::ProjectItem::isControl</a></div><div class="ttdeci">bool isControl() const</div><div class="ttdoc">Returns true if a Control is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:690</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a6deba6b127ad3c46e8e4ab0b2736e945"><div class="ttname"><a href="class_isis_1_1_project_item.html#a6deba6b127ad3c46e8e4ab0b2736e945">Isis::ProjectItem::isControlList</a></div><div class="ttdeci">bool isControlList() const</div><div class="ttdoc">Returns true if a ControlList is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:702</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a75ce6fd0b38e768027d207a5388de376"><div class="ttname"><a href="class_isis_1_1_project_item.html#a75ce6fd0b38e768027d207a5388de376">Isis::ProjectItem::bundleResults</a></div><div class="ttdeci">BundleResults bundleResults() const</div><div class="ttdoc">Returns the BundleResults stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:446</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a7793dcbae5f4b29ea632710d4307c76c"><div class="ttname"><a href="class_isis_1_1_project_item.html#a7793dcbae5f4b29ea632710d4307c76c">Isis::ProjectItem::setGuiCameraList</a></div><div class="ttdeci">void setGuiCameraList()</div><div class="ttdoc">Sets the text, icon, and data corresponding to a GuiCameraQsp.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1074</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a77a59a1c03dfcb5f5355a6880ddb58d8"><div class="ttname"><a href="class_isis_1_1_project_item.html#a77a59a1c03dfcb5f5355a6880ddb58d8">Isis::ProjectItem::isShapeList</a></div><div class="ttdeci">bool isShapeList() const</div><div class="ttdoc">Returns true if an ShapeList is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:679</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a78a0b928a8a51fc72810edfaa8123ad9"><div class="ttname"><a href="class_isis_1_1_project_item.html#a78a0b928a8a51fc72810edfaa8123ad9">Isis::ProjectItem::correlationMatrix</a></div><div class="ttdeci">CorrelationMatrix correlationMatrix() const</div><div class="ttdoc">Returns the CorrelationMatrix stored the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:556</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a7d68f410d2380e5e8fc6e29b600f9e2b"><div class="ttname"><a href="class_isis_1_1_project_item.html#a7d68f410d2380e5e8fc6e29b600f9e2b">Isis::ProjectItem::setControl</a></div><div class="ttdeci">void setControl(Control *control)</div><div class="ttdoc">Sets the text, icon, and data corresponding to a Control.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:976</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a7f80ddda487e959c033ca720dcdce851"><div class="ttname"><a href="class_isis_1_1_project_item.html#a7f80ddda487e959c033ca720dcdce851">Isis::ProjectItem::shape</a></div><div class="ttdeci">Shape * shape() const</div><div class="ttdoc">Returns the Shape stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:496</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a86495d58f9fc21cbc92f0a504dd3681d"><div class="ttname"><a href="class_isis_1_1_project_item.html#a86495d58f9fc21cbc92f0a504dd3681d">Isis::ProjectItem::setChild</a></div><div class="ttdeci">void setChild(int row, ProjectItem *item)</div><div class="ttdoc">Sets the child at the given row to an item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1222</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a87360253f556e3e040dba2205adc8b3a"><div class="ttname"><a href="class_isis_1_1_project_item.html#a87360253f556e3e040dba2205adc8b3a">Isis::ProjectItem::setTargetBody</a></div><div class="ttdeci">void setTargetBody(TargetBodyQsp targetBody)</div><div class="ttdoc">Sets the text, icon, and data corresponding to a TargetBodyQsp.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1101</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a89684db259704512f6d48c4bc96fc32d"><div class="ttname"><a href="class_isis_1_1_project_item.html#a89684db259704512f6d48c4bc96fc32d">Isis::ProjectItem::setControlList</a></div><div class="ttdeci">void setControlList(ControlList *controlList)</div><div class="ttdoc">Sets the text, icon, and data corresponding to a ControlList.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:990</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a8c925ee88fa41381a994b99986be530f"><div class="ttname"><a href="class_isis_1_1_project_item.html#a8c925ee88fa41381a994b99986be530f">Isis::ProjectItem::isImageList</a></div><div class="ttdeci">bool isImageList() const</div><div class="ttdoc">Returns true if an ImageList is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:657</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a8de5ecfc2e3ddd7a420bd2ddea46e70c"><div class="ttname"><a href="class_isis_1_1_project_item.html#a8de5ecfc2e3ddd7a420bd2ddea46e70c">Isis::ProjectItem::setProject</a></div><div class="ttdeci">void setProject(Project *project)</div><div class="ttdoc">Sets the text, icon, and data corresponding to a Project.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1035</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a9045f6f082e8b3a032c71ebe2c08b6be"><div class="ttname"><a href="class_isis_1_1_project_item.html#a9045f6f082e8b3a032c71ebe2c08b6be">Isis::ProjectItem::setTemplate</a></div><div class="ttdeci">void setTemplate(Template *newTemplate)</div><div class="ttdoc">Sets the text, icon, and data corresponding to a Template.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:918</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a918fa1d4bd3ad923ed753fab0a6c5380"><div class="ttname"><a href="class_isis_1_1_project_item.html#a918fa1d4bd3ad923ed753fab0a6c5380">Isis::ProjectItem::setBundleSettings</a></div><div class="ttdeci">void setBundleSettings(BundleSettingsQsp bundleSettings)</div><div class="ttdoc">Sets the text, icon, and data corresponding to BundleSettings.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:795</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a94644aa7d600b1b6a43038304fc5e1a5"><div class="ttname"><a href="class_isis_1_1_project_item.html#a94644aa7d600b1b6a43038304fc5e1a5">Isis::ProjectItem::isBundleSettings</a></div><div class="ttdeci">bool isBundleSettings() const</div><div class="ttdoc">Returns true if BundleSettings are stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:624</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a9615c52a8afc5f520b08b002f21e367e"><div class="ttname"><a href="class_isis_1_1_project_item.html#a9615c52a8afc5f520b08b002f21e367e">Isis::ProjectItem::parent</a></div><div class="ttdeci">ProjectItem * parent() const</div><div class="ttdoc">Returns the parent item of this item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1211</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_a9da0f8a5152a7e692cbdcffacf460817"><div class="ttname"><a href="class_isis_1_1_project_item.html#a9da0f8a5152a7e692cbdcffacf460817">Isis::ProjectItem::imageList</a></div><div class="ttdeci">ImageList * imageList() const</div><div class="ttdoc">Returns the ImageList stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:486</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ab14d0990b1640e731aa8f6a6c739d546"><div class="ttname"><a href="class_isis_1_1_project_item.html#ab14d0990b1640e731aa8f6a6c739d546">Isis::ProjectItem::isBundleResults</a></div><div class="ttdeci">bool isBundleResults() const</div><div class="ttdoc">Returns true if BundleResults are stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:613</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ab4e317fc3b942f5263418802ef401c07"><div class="ttname"><a href="class_isis_1_1_project_item.html#ab4e317fc3b942f5263418802ef401c07">Isis::ProjectItem::isFileItem</a></div><div class="ttdeci">bool isFileItem() const</div><div class="ttdoc">Returns true if a FileItemQsp is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:757</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ab929e3b3e5275668adb9a39a19aaa661"><div class="ttname"><a href="class_isis_1_1_project_item.html#ab929e3b3e5275668adb9a39a19aaa661">Isis::ProjectItem::control</a></div><div class="ttdeci">Control * control() const</div><div class="ttdoc">Returns the Control stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:536</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_abbe4492476c2430b0ed6e858759ef915"><div class="ttname"><a href="class_isis_1_1_project_item.html#abbe4492476c2430b0ed6e858759ef915">Isis::ProjectItem::project</a></div><div class="ttdeci">Project * project() const</div><div class="ttdoc">Returns the Project stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:566</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_abfbe11c9f12b8c4c62a9168276f1d353"><div class="ttname"><a href="class_isis_1_1_project_item.html#abfbe11c9f12b8c4c62a9168276f1d353">Isis::ProjectItem::setGuiCamera</a></div><div class="ttdeci">void setGuiCamera(GuiCameraQsp guiCamera)</div><div class="ttdoc">Sets the text, icon, and data corresponding to a GuiCameraQsp.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1062</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ac268d99d0639b1db932ad293d5eab819"><div class="ttname"><a href="class_isis_1_1_project_item.html#ac268d99d0639b1db932ad293d5eab819">Isis::ProjectItem::setImage</a></div><div class="ttdeci">void setImage(Image *image)</div><div class="ttdoc">Sets the text, icon, and data corresponding to an Image.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:828</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ac5ac9af93f5fc270ab3a6e05af21d605"><div class="ttname"><a href="class_isis_1_1_project_item.html#ac5ac9af93f5fc270ab3a6e05af21d605">Isis::ProjectItem::ProjectItem</a></div><div class="ttdeci">ProjectItem()</div><div class="ttdoc">Constructs an item without children, a parent, or a model.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:50</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ac5be240ae6e195d442bea3a68d275d78"><div class="ttname"><a href="class_isis_1_1_project_item.html#ac5be240ae6e195d442bea3a68d275d78">Isis::ProjectItem::setImages</a></div><div class="ttdeci">void setImages()</div><div class="ttdoc">Sets the text, icon, and data corresponding to a list of ImageList.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:859</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_acd9a2b4baeadac98468a75bead76a25e"><div class="ttname"><a href="class_isis_1_1_project_item.html#acd9a2b4baeadac98468a75bead76a25e">Isis::ProjectItem::setTemplates</a></div><div class="ttdeci">void setTemplates()</div><div class="ttdoc">Sets the text, icon, and data corresponding to a list of TemplateList.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:948</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ad103f1bb91af8523a87f9bd571008868"><div class="ttname"><a href="class_isis_1_1_project_item.html#ad103f1bb91af8523a87f9bd571008868">Isis::ProjectItem::image</a></div><div class="ttdeci">Image * image() const</div><div class="ttdoc">Returns the Image stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:476</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ad145d5459bfe18faf6ef786269c72b71"><div class="ttname"><a href="class_isis_1_1_project_item.html#ad145d5459bfe18faf6ef786269c72b71">Isis::ProjectItem::~ProjectItem</a></div><div class="ttdeci">~ProjectItem()</div><div class="ttdoc">Destructs a ProjectItem.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:438</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ad92bec987938db8d257ef660d0735a65"><div class="ttname"><a href="class_isis_1_1_project_item.html#ad92bec987938db8d257ef660d0735a65">Isis::ProjectItem::controlList</a></div><div class="ttdeci">ControlList * controlList() const</div><div class="ttdoc">Returns the ControlList stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:546</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_adea72f74cf0fc0c5e2f2d4b8746e1013"><div class="ttname"><a href="class_isis_1_1_project_item.html#adea72f74cf0fc0c5e2f2d4b8746e1013">Isis::ProjectItem::insertRow</a></div><div class="ttdeci">void insertRow(int row, ProjectItem *item)</div><div class="ttdoc">Inserts an item to the children of this item at the row.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1190</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_adecca6b9d8bcdd2b92189f0da165a333"><div class="ttname"><a href="class_isis_1_1_project_item.html#adecca6b9d8bcdd2b92189f0da165a333">Isis::ProjectItem::setImageList</a></div><div class="ttdeci">void setImageList(ImageList *imageList)</div><div class="ttdoc">Sets the text, icon, and data corresponding to an ImageList.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:842</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ae74c37d9341e8611247a403ad7b62b57"><div class="ttname"><a href="class_isis_1_1_project_item.html#ae74c37d9341e8611247a403ad7b62b57">Isis::ProjectItem::isBundleSolutionInfo</a></div><div class="ttdeci">bool isBundleSolutionInfo() const</div><div class="ttdoc">Returns true if a BundleSolutionInfo is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:635</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ae79bab8f797d90910c7a2b1005a543d2"><div class="ttname"><a href="class_isis_1_1_project_item.html#ae79bab8f797d90910c7a2b1005a543d2">Isis::ProjectItem::isImage</a></div><div class="ttdeci">bool isImage() const</div><div class="ttdoc">Returns true if an Image is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:646</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_ae7ef6efa7dfa9f6967e0b6d5f62c882e"><div class="ttname"><a href="class_isis_1_1_project_item.html#ae7ef6efa7dfa9f6967e0b6d5f62c882e">Isis::ProjectItem::setShapeList</a></div><div class="ttdeci">void setShapeList(ShapeList *shapeList)</div><div class="ttdoc">Sets the text, icon, and data corresponding to an ShapeList.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:887</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_aeb6356aeecbfd25c107d47006f12ce26"><div class="ttname"><a href="class_isis_1_1_project_item.html#aeb6356aeecbfd25c107d47006f12ce26">Isis::ProjectItem::guiCamera</a></div><div class="ttdeci">GuiCameraQsp guiCamera() const</div><div class="ttdoc">Returns the GuiCameraQsp stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:576</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_aecc14599326804736b3bb584b6ade2f9"><div class="ttname"><a href="class_isis_1_1_project_item.html#aecc14599326804736b3bb584b6ade2f9">Isis::ProjectItem::setBundleSolutionInfo</a></div><div class="ttdeci">void setBundleSolutionInfo(BundleSolutionInfo *bundleSolutionInfo)</div><div class="ttdoc">Sets the text, icon, and data corresponding to a BundleSolutionInfo.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:809</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_af1cd323d98f628d6ed2510b27b2af5a8"><div class="ttname"><a href="class_isis_1_1_project_item.html#af1cd323d98f628d6ed2510b27b2af5a8">Isis::ProjectItem::setTargetBodyList</a></div><div class="ttdeci">void setTargetBodyList()</div><div class="ttdoc">Sets the text, icon, and data corresponding to a TargetBodyList.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1127</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_af243ef3402ea1ee1f4088f1dc3989f1b"><div class="ttname"><a href="class_isis_1_1_project_item.html#af243ef3402ea1ee1f4088f1dc3989f1b">Isis::ProjectItem::child</a></div><div class="ttdeci">ProjectItem * child(int row) const</div><div class="ttdoc">Returns the child item at a given row.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1179</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_af41615aa8100538f4a78ad2b94c44827"><div class="ttname"><a href="class_isis_1_1_project_item.html#af41615aa8100538f4a78ad2b94c44827">Isis::ProjectItem::isGuiCamera</a></div><div class="ttdeci">bool isGuiCamera() const</div><div class="ttdoc">Returns true if a GuiCameraQsp is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:735</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_af551f986c217c13ce8f362cc5f561fc4"><div class="ttname"><a href="class_isis_1_1_project_item.html#af551f986c217c13ce8f362cc5f561fc4">Isis::ProjectItem::isCorrelationMatrix</a></div><div class="ttdeci">bool isCorrelationMatrix() const</div><div class="ttdoc">Returns true if a CorrelationMatrix is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:713</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_af7a89b870f445e0d9a1361c77f41cde5"><div class="ttname"><a href="class_isis_1_1_project_item.html#af7a89b870f445e0d9a1361c77f41cde5">Isis::ProjectItem::model</a></div><div class="ttdeci">ProjectItemModel * model() const</div><div class="ttdoc">Returns the ProjectItemModel associated with this item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1201</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_af846618700949084c4c9e4234eda9e3b"><div class="ttname"><a href="class_isis_1_1_project_item.html#af846618700949084c4c9e4234eda9e3b">Isis::ProjectItem::templateList</a></div><div class="ttdeci">TemplateList * templateList() const</div><div class="ttdoc">Returns the TemplateList stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:526</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_afaba183fe16f2ac7344eadcbdd25dd39"><div class="ttname"><a href="class_isis_1_1_project_item.html#afaba183fe16f2ac7344eadcbdd25dd39">Isis::ProjectItem::takeChild</a></div><div class="ttdeci">ProjectItem * takeChild(int row)</div><div class="ttdoc">Removes the child item at the given row and returns the removed item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:1235</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_html_afaff8a553bedf5f4fc160953dcb7dfca"><div class="ttname"><a href="class_isis_1_1_project_item.html#afaff8a553bedf5f4fc160953dcb7dfca">Isis::ProjectItem::isTargetBody</a></div><div class="ttdeci">bool isTargetBody() const</div><div class="ttdoc">Returns true if a TargetBodyQsp is stored in the data of the item.</div><div class="ttdef"><b>Definition:</b> ProjectItem.cpp:746</div></div>
+<div class="ttc" id="aclass_isis_1_1_project_item_model_html"><div class="ttname"><a href="class_isis_1_1_project_item_model.html">Isis::ProjectItemModel</a></div><div class="ttdoc">Provides access to data stored in a Project through Qt's model-view framework.</div><div class="ttdef"><b>Definition:</b> ProjectItemModel.h:132</div></div>
+<div class="ttc" id="aclass_isis_1_1_shape_html"><div class="ttname"><a href="class_isis_1_1_shape.html">Isis::Shape</a></div><div class="ttdoc">This represents a shape in a project-based GUI interface.</div><div class="ttdef"><b>Definition:</b> Shape.h:66</div></div>
+<div class="ttc" id="aclass_isis_1_1_shape_list_html"><div class="ttname"><a href="class_isis_1_1_shape_list.html">Isis::ShapeList</a></div><div class="ttdoc">Internalizes a list of shapes and allows for operations on the entire list.</div><div class="ttdef"><b>Definition:</b> ShapeList.h:31</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_list_html"><div class="ttname"><a href="class_isis_1_1_target_body_list.html">Isis::TargetBodyList</a></div><div class="ttdoc">List for holding TargetBodies.</div><div class="ttdef"><b>Definition:</b> TargetBodyList.h:31</div></div>
+<div class="ttc" id="aclass_isis_1_1_template_html"><div class="ttname"><a href="class_isis_1_1_template.html">Isis::Template</a></div><div class="ttdef"><b>Definition:</b> Template.h:30</div></div>
+<div class="ttc" id="aclass_isis_1_1_template_list_html"><div class="ttname"><a href="class_isis_1_1_template_list.html">Isis::TemplateList</a></div><div class="ttdef"><b>Definition:</b> TemplateList.h:35</div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="aclass_q_shared_pointer_html"><div class="ttname"><a href="class_q_shared_pointer.html">QSharedPointer&lt; BundleSettings &gt;</a></div></div>
+<div class="ttc" id="aclass_q_standard_item_html"><div class="ttname"><a href="class_q_standard_item.html">QStandardItem</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_15a877ce9c3060ee4c52b02520c838c9.html">ProjectItem</a></li><li class="navelem"><a class="el" href="_project_item_8h.html">ProjectItem.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

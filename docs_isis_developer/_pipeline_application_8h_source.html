@@ -1,0 +1,577 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Pipeline/PipelineApplication.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_pipeline_application_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">PipelineApplication.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_pipeline_application_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PipelineApplication_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define PipelineApplication_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_i_exception_8h.html">IException.h</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="keyword">class </span>Pipeline;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keyword">class </span>PipelineParameter;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html">   46</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_pipeline_application.html">PipelineApplication</a> {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;      <a class="code" href="class_isis_1_1_pipeline_application.html#a8e3e1fcf78e741dec27c78050bf09a92">PipelineApplication</a>(QString appName, <a class="code" href="class_isis_1_1_pipeline.html">Pipeline</a> *pipe);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;      <a class="code" href="class_isis_1_1_pipeline_application.html#a8e3e1fcf78e741dec27c78050bf09a92">PipelineApplication</a>(QString appName, <a class="code" href="class_isis_1_1_pipeline_application.html">PipelineApplication</a> *previous);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a55d7c30823b83d5236532f78ddadf238">   52</a></span>&#160;      <a class="code" href="class_isis_1_1_pipeline_application.html#a55d7c30823b83d5236532f78ddadf238">~PipelineApplication</a>() {};</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a21ead485b03a8c55692147a72967885d">   58</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a21ead485b03a8c55692147a72967885d">NameModifierType</a> {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="class_isis_1_1_pipeline_application.html#a21ead485b03a8c55692147a72967885da7bc8750683f3881fc0ca0c7d1d4b8bc0">ConstantStrings</a></div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a21ead485b03a8c55692147a72967885da7bc8750683f3881fc0ca0c7d1d4b8bc0">   61</a></span>&#160;      };</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">   66</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">CustomParameterValue</a> {</div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3a8009a95c73124168c1896f7d2fbaf6a1">   68</a></span>&#160;        <a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3a8009a95c73124168c1896f7d2fbaf6a1">LastOutput</a>,</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="comment">// Implies branches will be merged if this is set as an input parameter.</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3a860a7c2fb3379081157bd59979b484ad">   71</a></span>&#160;        <a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3a860a7c2fb3379081157bd59979b484ad">LastAppOutputList</a>,</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="comment">// Implies branches will NOT be merged if this is set as an input parameter.</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3a2bc853d0197b10c05781d1c865f46e67">LastAppOutputListNoMerge</a></div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3a2bc853d0197b10c05781d1c865f46e67">   75</a></span>&#160;      };</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a93e8ed56b5990d1832f9a3a5e1e97c89">   78</a></span>&#160;      <span class="keyword">const</span> QString &amp;<a class="code" href="class_isis_1_1_pipeline_application.html#a93e8ed56b5990d1832f9a3a5e1e97c89">Name</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">return</span> p_name;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      }</div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a2573e4ee4ca2563d0e5028a94c707b84">   82</a></span>&#160;      <span class="keyword">const</span> std::vector&lt;QString&gt; &amp;<a class="code" href="class_isis_1_1_pipeline_application.html#a2573e4ee4ca2563d0e5028a94c707b84">ParamString</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">return</span> p_paramString;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      }</div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#ad52ec9692d74d3290df6ac02f3ad5ddc">   86</a></span>&#160;      <span class="keyword">const</span> std::vector&lt;QString&gt; &amp;<a class="code" href="class_isis_1_1_pipeline_application.html#ad52ec9692d74d3290df6ac02f3ad5ddc">InputBranches</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordflow">return</span> p_inBranches;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      }</div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a27f5b211cae08e50e8826b21d4a6126a">   90</a></span>&#160;      <span class="keyword">const</span> std::vector&lt;QString&gt; &amp;<a class="code" href="class_isis_1_1_pipeline_application.html#a27f5b211cae08e50e8826b21d4a6126a">OutputBranches</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordflow">if</span>(!<a class="code" href="class_isis_1_1_pipeline_application.html#a4c2c7c902c1cb3d4b6d752b37a9d4700">Enabled</a>() &amp;&amp; <a class="code" href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">Previous</a>()) {</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;          <span class="keywordflow">return</span> <a class="code" href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">Previous</a>()-&gt;<a class="code" href="class_isis_1_1_pipeline_application.html#a27f5b211cae08e50e8826b21d4a6126a">OutputBranches</a>();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code" href="class_isis_1_1_pipeline_application.html#a4c2c7c902c1cb3d4b6d752b37a9d4700">Enabled</a>()) {</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;          <span class="keywordflow">return</span> p_outBranches;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        }</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;          <span class="keywordflow">return</span> p_inBranches;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#aa38d627e4923298b01d0ffb5ff83dc7c">  103</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#aa38d627e4923298b01d0ffb5ff83dc7c">Enable</a>() {</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        p_enabled = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      };</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#aaf83c344413c670d9402b03de74b7cd2">  108</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#aaf83c344413c670d9402b03de74b7cd2">Disable</a>() {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        p_enabled = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      };</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a4c2c7c902c1cb3d4b6d752b37a9d4700">  113</a></span>&#160;      <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;<a class="code" href="class_isis_1_1_pipeline_application.html#a4c2c7c902c1cb3d4b6d752b37a9d4700">Enabled</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="keywordflow">return</span> p_enabled;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      }</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#aded70f2ee3f0f1f29817bfbaa600778b">SetInputParameter</a>(<span class="keyword">const</span> QString &amp;inputParamName, <span class="keywordtype">bool</span> supportsVirtualBands);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#aded70f2ee3f0f1f29817bfbaa600778b">SetInputParameter</a>(<span class="keyword">const</span> QString &amp;inputParamName, <a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">CustomParameterValue</a> value, <span class="keywordtype">bool</span> supportsVirtualBands);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#acaa077b78a7324aa14c2bc6f0e9487fd">SetOutputParameter</a>(<span class="keyword">const</span> QString &amp;outputParamName, <span class="keyword">const</span> QString &amp;outNameModifier, <span class="keyword">const</span> QString &amp;outFileExtension = <span class="stringliteral">&quot;cub&quot;</span>);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#acaa077b78a7324aa14c2bc6f0e9487fd">SetOutputParameter</a>(<span class="keyword">const</span> QString &amp;branch, <span class="keyword">const</span> QString &amp;outputParamName,</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                              <span class="keyword">const</span> QString &amp;outNameModifier, <span class="keyword">const</span> QString &amp;outFileExtension);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a94e6a7b97a147b5ec957bb3fdb229ba6">AddBranch</a>(<span class="keyword">const</span> QString &amp;modString, <a class="code" href="class_isis_1_1_pipeline_application.html#a21ead485b03a8c55692147a72967885d">NameModifierType</a> type);</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a746c97e3a30960db6471fe14353c3a99">AddParameter</a>(<span class="keyword">const</span> QString &amp;inputParamName, <span class="keyword">const</span> QString &amp;appParamName);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a746c97e3a30960db6471fe14353c3a99">AddParameter</a>(<span class="keyword">const</span> QString &amp;branch, <span class="keyword">const</span> QString &amp;inputParamName, <span class="keyword">const</span> QString &amp;appParamName);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#abe63207c8a1566d5d31df11937caa877">AddConstParameter</a>(<span class="keyword">const</span> QString &amp;appParamName, <span class="keyword">const</span> QString &amp;appParamValue);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#abe63207c8a1566d5d31df11937caa877">AddConstParameter</a>(<span class="keyword">const</span> QString &amp;branch, <span class="keyword">const</span> QString &amp;appParamName, <span class="keyword">const</span> QString &amp;appParamValue);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a746c97e3a30960db6471fe14353c3a99">AddParameter</a>(<span class="keyword">const</span> QString &amp;appParamName, <a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">CustomParameterValue</a> value);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a746c97e3a30960db6471fe14353c3a99">AddParameter</a>(<span class="keyword">const</span> QString &amp;branch, <span class="keyword">const</span> QString &amp;appParamName, <a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">CustomParameterValue</a> value);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#ac2e3b24288d24350e275ae0b6c02ed76">  136</a></span>&#160;      QString <a class="code" href="class_isis_1_1_pipeline_application.html#ac2e3b24288d24350e275ae0b6c02ed76">OutputNameModifier</a>() {</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordflow">return</span> (!p_outputMod.isEmpty() || !<a class="code" href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">Previous</a>()) ? p_outputMod : <a class="code" href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">Previous</a>()-&gt;<a class="code" href="class_isis_1_1_pipeline_application.html#ac2e3b24288d24350e275ae0b6c02ed76">OutputNameModifier</a>();</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;      }</div>
+<div class="line"><a name="l00140"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a8f6088303952ba56990ab7152a7afdcf">  140</a></span>&#160;      QString <a class="code" href="class_isis_1_1_pipeline_application.html#a8f6088303952ba56990ab7152a7afdcf">OutputExtension</a>() {</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keywordflow">return</span> (!p_outputExtension.isEmpty() || !<a class="code" href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">Previous</a>()) ? p_outputExtension : <a class="code" href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">Previous</a>()-&gt;<a class="code" href="class_isis_1_1_pipeline_application.html#a8f6088303952ba56990ab7152a7afdcf">OutputExtension</a>();</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      }</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;      std::vector&lt;QString&gt; &amp;<a class="code" href="class_isis_1_1_pipeline_application.html#aa04bd552ae6f5dd6db41f6bb2498f267">GetOutputs</a>();</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;      std::vector&lt;QString&gt; <a class="code" href="class_isis_1_1_pipeline_application.html#acbc6e5c60bc33d084fa74e6b667cb70d">TemporaryFiles</a>();</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#ad572833dc8631d73527c9c3a31e211f3">  153</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#ad572833dc8631d73527c9c3a31e211f3">SetNext</a>(<a class="code" href="class_isis_1_1_pipeline_application.html">PipelineApplication</a> *next) {</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        p_next = next;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      }</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#ad28e2298fb9a005d4db0b91c7ef44e87">  163</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#ad28e2298fb9a005d4db0b91c7ef44e87">SetPrevious</a>(<a class="code" href="class_isis_1_1_pipeline_application.html">PipelineApplication</a> *prev) {</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        p_previous = prev;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;      }</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a79fcc083a4f1f49e16145c41c9d2c5df">BuildParamString</a>();</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#abe6d191b87bcf0397305f016d6fb8040">  170</a></span>&#160;      <a class="code" href="class_isis_1_1_pipeline_application.html">PipelineApplication</a> *<a class="code" href="class_isis_1_1_pipeline_application.html#abe6d191b87bcf0397305f016d6fb8040">Next</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordflow">if</span>(p_next == NULL) <span class="keywordflow">return</span> p_next;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keywordflow">if</span>(!p_next-&gt;<a class="code" href="class_isis_1_1_pipeline_application.html#a4c2c7c902c1cb3d4b6d752b37a9d4700">Enabled</a>()) <span class="keywordflow">return</span> p_next-&gt;<a class="code" href="class_isis_1_1_pipeline_application.html#abe6d191b87bcf0397305f016d6fb8040">Next</a>();</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keywordflow">return</span> p_next;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;      }</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">  177</a></span>&#160;      <a class="code" href="class_isis_1_1_pipeline_application.html">PipelineApplication</a> *<a class="code" href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">Previous</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordflow">if</span>(p_previous == NULL) <span class="keywordflow">return</span> p_previous;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keywordflow">if</span>(!p_previous-&gt;<a class="code" href="class_isis_1_1_pipeline_application.html#a4c2c7c902c1cb3d4b6d752b37a9d4700">Enabled</a>()) <span class="keywordflow">return</span> p_previous-&gt;<a class="code" href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">Previous</a>();</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordflow">return</span> p_previous;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;      }</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a30f99b66a99b525d50c699dcf72f6be8">  184</a></span>&#160;      <a class="code" href="class_isis_1_1_pipeline_application.html">PipelineApplication</a> *<a class="code" href="class_isis_1_1_pipeline_application.html#a30f99b66a99b525d50c699dcf72f6be8">PreviousOutputer</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <span class="keywordflow">if</span>(p_previous == NULL) <span class="keywordflow">return</span> p_previous;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keywordflow">if</span>(!p_previous-&gt;<a class="code" href="class_isis_1_1_pipeline_application.html#a4c2c7c902c1cb3d4b6d752b37a9d4700">Enabled</a>()) <span class="keywordflow">return</span> p_previous-&gt;<a class="code" href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">Previous</a>();</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="keywordflow">if</span>(p_previous-&gt;p_output.empty()) <span class="keywordflow">return</span> p_previous-&gt;<a class="code" href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">Previous</a>();</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordflow">return</span> p_previous;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;      }</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a4948354b5880e563794f68a8a4d62f55">SupportsVirtualBands</a>();</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a03cc9c56f39d4a0c7e99ed126f51fc4f">SetVirtualBands</a>(std::vector&lt;QString&gt; bands);</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;      </div>
+<div class="line"><a name="l00202"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a6b7750681c87b72d07d137d3da01c4f6">  202</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a6b7750681c87b72d07d137d3da01c4f6">EnableBranch</a>(QString branch, <span class="keywordtype">bool</span> flag) {</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=0; i&lt;(int)p_inBranches.size(); i++) {</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;          <span class="keywordflow">if</span> (p_inBranches[i].contains(branch))</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            p_enableBranch[i] = flag;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        }</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;      }</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;      </div>
+<div class="line"><a name="l00218"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a601563f7a95465db015825510bcd665d">  218</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a601563f7a95465db015825510bcd665d">BranchEnabled</a>(<span class="keywordtype">int</span> branch){</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="keywordflow">if</span> (branch &gt;= 0 &amp;&amp; branch &gt;= (<span class="keywordtype">int</span>)p_enableBranch.size())</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;          <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keywordflow">return</span> p_enableBranch[branch] ;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;      }</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;      </div>
+<div class="line"><a name="l00231"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#ab8935fe5aa2bdfa185bfc910d6cdf208">  231</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pipeline_application.html#ab8935fe5aa2bdfa185bfc910d6cdf208">SetContinue</a>(<span class="keywordtype">bool</span> pbFlag){</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        p_continue = pbFlag;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;      };</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;      </div>
+<div class="line"><a name="l00242"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_application.html#a5c7bdac32b6aed1c55e9c9f8fbe6eef2">  242</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pipeline_application.html#a5c7bdac32b6aed1c55e9c9f8fbe6eef2">Continue</a>(<span class="keywordtype">void</span>) {</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <span class="keywordflow">return</span> p_continue;</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;      };</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;      </div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;      <span class="keywordtype">bool</span> FutureOutputFileCreated();</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;      <span class="keywordtype">bool</span> LastApplicationWithOutput();</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;      <a class="code" href="class_isis_1_1_pipeline.html">Pipeline</a> *GetPipeline() {</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <span class="keywordflow">return</span> p_pipeline;</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;      }</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;      <span class="keywordtype">bool</span> Branches() {</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="keywordflow">if</span>(p_inBranches.size() &gt;= p_outBranches.size()) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;      }</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160; </div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;      <span class="keywordtype">bool</span> Merges() {</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        <span class="keywordflow">if</span>(p_inBranches.size() == 1) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="keywordflow">if</span>(p_outBranches.size() == 1) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;      }</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;      <span class="keywordtype">bool</span> StringStartsWith(QString from, QString compare) {</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">if</span>(compare.size() &gt; from.size()) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160; </div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> index = 0; index &lt; compare.size(); index++)</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;          <span class="keywordflow">if</span>(from[index] != compare[index]) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;      }</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;      QString CalculateInputFile(<span class="keywordtype">int</span> branch);</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;      QString CalculateOutputFile(<span class="keywordtype">int</span> branch);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;      QString GetRealLastOutput(<span class="keywordtype">bool</span> skipOne = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;      PipelineParameter &amp;GetInputParameter(<span class="keywordtype">int</span> branch);</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;      <span class="keywordtype">int</span> FindBranch(QString name, <span class="keywordtype">bool</span> input = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;      <span class="keywordtype">bool</span> p_continue;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;      <span class="keywordtype">bool</span> p_enabled; </div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;      <span class="keywordtype">bool</span> p_supportsVirtualBands; </div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;      QString p_name; </div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;      std::vector&lt;QString&gt; p_outputs;     </div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;      std::vector&lt;QString&gt; p_tempFiles;   </div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;      std::vector&lt;QString&gt; p_paramString; </div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;      std::vector&lt;QString&gt; p_inBranches;  </div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;      std::vector&lt;QString&gt; p_outBranches; </div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;      std::vector&lt;bool&gt;    p_enableBranch; </div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;      </div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;      std::vector&lt;PipelineParameter&gt; p_output; </div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;      QString p_outputMod; </div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;      QString p_outputExtension; </div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;      std::vector&lt;QString&gt; p_virtualBands; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;      std::vector&lt;PipelineParameter&gt; p_input; </div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;      std::vector&lt;PipelineParameter&gt; p_params; </div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;      <a class="code" href="class_isis_1_1_pipeline_application.html#a8e3e1fcf78e741dec27c78050bf09a92">PipelineApplication</a> *p_previous; </div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;      <a class="code" href="class_isis_1_1_pipeline_application.html#a8e3e1fcf78e741dec27c78050bf09a92">PipelineApplication</a> *p_next; </div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;      Pipeline *p_pipeline; </div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;  };</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160; </div>
+<div class="line"><a name="l00323"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html">  323</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_pipeline_parameter.html">PipelineParameter</a> {</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00331"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#a17a4e2a45f8c89602119446d4c7829c0">  331</a></span>&#160;      <a class="code" href="class_isis_1_1_pipeline_parameter.html#a17a4e2a45f8c89602119446d4c7829c0">PipelineParameter</a>(QString paramName) {</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        p_paramName = paramName;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        p_special = (<a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">PipelineApplication::CustomParameterValue</a>) - 1;</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        p_branch = -1;</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;      }</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160; </div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
+<div class="line"><a name="l00345"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#a5b7499f1c41380cfd1a06b95a1fa182d">  345</a></span>&#160;      <a class="code" href="class_isis_1_1_pipeline_parameter.html#a5b7499f1c41380cfd1a06b95a1fa182d">PipelineParameter</a>(QString paramName, QString value) {</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        p_paramName = paramName;</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        p_paramValue = value;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        p_special = (<a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">PipelineApplication::CustomParameterValue</a>) - 1;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        p_branch = -1;</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;      }</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160; </div>
+<div class="line"><a name="l00360"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#a22201080870a2c7a7058151ebeb0a7f5">  360</a></span>&#160;      <a class="code" href="class_isis_1_1_pipeline_parameter.html#a22201080870a2c7a7058151ebeb0a7f5">PipelineParameter</a>(<span class="keywordtype">int</span> branch, QString paramName) {</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        p_branch = branch;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        p_paramName = paramName;</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        p_special = (<a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">PipelineApplication::CustomParameterValue</a>) - 1;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;      }</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160; </div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
+<div class="line"><a name="l00375"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#a354c5896143e313d9db0b95760a2125a">  375</a></span>&#160;      <a class="code" href="class_isis_1_1_pipeline_parameter.html#a354c5896143e313d9db0b95760a2125a">PipelineParameter</a>(<span class="keywordtype">int</span> branch, QString paramName, QString paramValue) {</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        p_branch = branch;</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        p_paramValue = paramValue;</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;        p_paramName = paramName;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        p_special = (<a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">PipelineApplication::CustomParameterValue</a>) - 1;</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;      }</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160; </div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160; </div>
+<div class="line"><a name="l00390"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#a7a5d6d7d38d710b8256cdb53d8eb96e9">  390</a></span>&#160;      <a class="code" href="class_isis_1_1_pipeline_parameter.html#a7a5d6d7d38d710b8256cdb53d8eb96e9">PipelineParameter</a>(QString paramName, <a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">PipelineApplication::CustomParameterValue</a> special) {</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        p_paramName = paramName;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        p_special = special;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;        p_branch = -1;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;      }</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160; </div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160; </div>
+<div class="line"><a name="l00405"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#a12a9d5aef0fec653b1196df89288a0cc">  405</a></span>&#160;      <a class="code" href="class_isis_1_1_pipeline_parameter.html#a12a9d5aef0fec653b1196df89288a0cc">PipelineParameter</a>(<span class="keywordtype">int</span> branch, QString paramName, <a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">PipelineApplication::CustomParameterValue</a> special) {</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        p_paramName = paramName;</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        p_special = special;</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        p_branch = branch;</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;      }</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160; </div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160; </div>
+<div class="line"><a name="l00419"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#ac02e1cd2ba046fcdb319b811d3e0b3cb">  419</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pipeline_parameter.html#ac02e1cd2ba046fcdb319b811d3e0b3cb">AppliesToBranch</a>(<span class="keywordtype">int</span> branch) {</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        <span class="keywordflow">return</span> (p_branch == -1 || p_branch == branch);</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;      }</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160; </div>
+<div class="line"><a name="l00424"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#ad0e454cf24c6c71d4b0a8dd78a789ab3">  424</a></span>&#160;      QString <a class="code" href="class_isis_1_1_pipeline_parameter.html#ad0e454cf24c6c71d4b0a8dd78a789ab3">Name</a>() {</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        <span class="keywordflow">return</span> p_paramName;</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;      }</div>
+<div class="line"><a name="l00428"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#a5480f91293fa9c3f9cb3060b1c7c3f2f">  428</a></span>&#160;      QString <a class="code" href="class_isis_1_1_pipeline_parameter.html#a5480f91293fa9c3f9cb3060b1c7c3f2f">Value</a>() {</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;        <span class="keywordflow">return</span> p_paramValue;</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;      }</div>
+<div class="line"><a name="l00432"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#ab3b3734d29b2a9457e803eab3c74261e">  432</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pipeline_parameter.html#ab3b3734d29b2a9457e803eab3c74261e">IsSpecial</a>() {</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;        <span class="keywordflow">return</span> (p_special != (<a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">PipelineApplication::CustomParameterValue</a>) - 1);</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;      };</div>
+<div class="line"><a name="l00436"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#aa145d9f1cddf840a55ebd5ff4e3b37e8">  436</a></span>&#160;      <a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">PipelineApplication::CustomParameterValue</a> <a class="code" href="class_isis_1_1_pipeline_parameter.html#aa145d9f1cddf840a55ebd5ff4e3b37e8">Special</a>() {</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;        <span class="keywordflow">return</span> p_special;</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;      }</div>
+<div class="line"><a name="l00440"></a><span class="lineno"><a class="line" href="class_isis_1_1_pipeline_parameter.html#ad786aa3a63eb5bf69dc0bfea42dc6dff">  440</a></span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pipeline_parameter.html#ad786aa3a63eb5bf69dc0bfea42dc6dff">AffectsAllBranches</a>() {</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        <span class="keywordflow">return</span> p_branch == -1;</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;      }</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160; </div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;      <span class="keywordtype">int</span> p_branch; </div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;      QString p_paramName; </div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;      QString p_paramValue; </div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;      <a class="code" href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">PipelineApplication::CustomParameterValue</a> p_special; </div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;  };</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;};</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_i_exception_8h_html"><div class="ttname"><a href="_i_exception_8h.html">IException.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html">Isis::PipelineApplication</a></div><div class="ttdoc">This class represents one application in the pipeline.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:46</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a03cc9c56f39d4a0c7e99ed126f51fc4f"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a03cc9c56f39d4a0c7e99ed126f51fc4f">Isis::PipelineApplication::SetVirtualBands</a></div><div class="ttdeci">void SetVirtualBands(std::vector&lt; QString &gt; bands)</div><div class="ttdoc">Set the virtual bands that this application is to apply.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.cpp:856</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a21ead485b03a8c55692147a72967885d"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a21ead485b03a8c55692147a72967885d">Isis::PipelineApplication::NameModifierType</a></div><div class="ttdeci">NameModifierType</div><div class="ttdoc">This is used for branches.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:58</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a21ead485b03a8c55692147a72967885da7bc8750683f3881fc0ca0c7d1d4b8bc0"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a21ead485b03a8c55692147a72967885da7bc8750683f3881fc0ca0c7d1d4b8bc0">Isis::PipelineApplication::ConstantStrings</a></div><div class="ttdeci">@ ConstantStrings</div><div class="ttdoc">Known strings.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:60</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a2573e4ee4ca2563d0e5028a94c707b84"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a2573e4ee4ca2563d0e5028a94c707b84">Isis::PipelineApplication::ParamString</a></div><div class="ttdeci">const std::vector&lt; QString &gt; &amp; ParamString() const</div><div class="ttdoc">Get the parameters for running this program; one element in the vector per run.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:82</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a27f5b211cae08e50e8826b21d4a6126a"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a27f5b211cae08e50e8826b21d4a6126a">Isis::PipelineApplication::OutputBranches</a></div><div class="ttdeci">const std::vector&lt; QString &gt; &amp; OutputBranches() const</div><div class="ttdoc">Get the branches this program has as output.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:90</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a30f99b66a99b525d50c699dcf72f6be8"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a30f99b66a99b525d50c699dcf72f6be8">Isis::PipelineApplication::PreviousOutputer</a></div><div class="ttdeci">PipelineApplication * PreviousOutputer() const</div><div class="ttdoc">This returns the previous enabled pipeline application that makes output or null.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:184</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a4948354b5880e563794f68a8a4d62f55"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a4948354b5880e563794f68a8a4d62f55">Isis::PipelineApplication::SupportsVirtualBands</a></div><div class="ttdeci">bool SupportsVirtualBands()</div><div class="ttdoc">Returns true if virtual bands are supported.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.cpp:844</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a4c2c7c902c1cb3d4b6d752b37a9d4700"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a4c2c7c902c1cb3d4b6d752b37a9d4700">Isis::PipelineApplication::Enabled</a></div><div class="ttdeci">const bool &amp; Enabled() const</div><div class="ttdoc">Returns true if this program will be run.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:113</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a55d7c30823b83d5236532f78ddadf238"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a55d7c30823b83d5236532f78ddadf238">Isis::PipelineApplication::~PipelineApplication</a></div><div class="ttdeci">~PipelineApplication()</div><div class="ttdoc">This is the destructor.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:52</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a5c7bdac32b6aed1c55e9c9f8fbe6eef2"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a5c7bdac32b6aed1c55e9c9f8fbe6eef2">Isis::PipelineApplication::Continue</a></div><div class="ttdeci">bool Continue(void)</div><div class="ttdoc">Get the continue flag status.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:242</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a601563f7a95465db015825510bcd665d"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a601563f7a95465db015825510bcd665d">Isis::PipelineApplication::BranchEnabled</a></div><div class="ttdeci">bool BranchEnabled(int branch)</div><div class="ttdoc">Check whether a branch is enabled given branch index.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:218</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a6b7750681c87b72d07d137d3da01c4f6"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a6b7750681c87b72d07d137d3da01c4f6">Isis::PipelineApplication::EnableBranch</a></div><div class="ttdeci">void EnableBranch(QString branch, bool flag)</div><div class="ttdoc">Enable/Disable Branch given the branch name.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:202</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a746c97e3a30960db6471fe14353c3a99"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a746c97e3a30960db6471fe14353c3a99">Isis::PipelineApplication::AddParameter</a></div><div class="ttdeci">void AddParameter(const QString &amp;inputParamName, const QString &amp;appParamName)</div><div class="ttdoc">This method adds knowledge of a parameter to the application.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.cpp:210</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a79fcc083a4f1f49e16145c41c9d2c5df"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a79fcc083a4f1f49e16145c41c9d2c5df">Isis::PipelineApplication::BuildParamString</a></div><div class="ttdeci">void BuildParamString()</div><div class="ttdoc">This method calculates the inputs, outputs and necessary calls to this program for the pipeline.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.cpp:308</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a8595cc747a5154d08ff33599be1819c3"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3">Isis::PipelineApplication::CustomParameterValue</a></div><div class="ttdeci">CustomParameterValue</div><div class="ttdoc">This is used to set custom values that must be calculated on the fly.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:66</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a8595cc747a5154d08ff33599be1819c3a2bc853d0197b10c05781d1c865f46e67"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3a2bc853d0197b10c05781d1c865f46e67">Isis::PipelineApplication::LastAppOutputListNoMerge</a></div><div class="ttdeci">@ LastAppOutputListNoMerge</div><div class="ttdoc">A list of files from the last run application's output.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:74</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a8595cc747a5154d08ff33599be1819c3a8009a95c73124168c1896f7d2fbaf6a1"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3a8009a95c73124168c1896f7d2fbaf6a1">Isis::PipelineApplication::LastOutput</a></div><div class="ttdeci">@ LastOutput</div><div class="ttdoc">The very last output file. Do not use this for input parameters if it's not necessary,...</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:68</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a8595cc747a5154d08ff33599be1819c3a860a7c2fb3379081157bd59979b484ad"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a8595cc747a5154d08ff33599be1819c3a860a7c2fb3379081157bd59979b484ad">Isis::PipelineApplication::LastAppOutputList</a></div><div class="ttdeci">@ LastAppOutputList</div><div class="ttdoc">A list of files from the last run application's output.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:71</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a8e3e1fcf78e741dec27c78050bf09a92"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a8e3e1fcf78e741dec27c78050bf09a92">Isis::PipelineApplication::PipelineApplication</a></div><div class="ttdeci">PipelineApplication(QString appName, Pipeline *pipe)</div><div class="ttdoc">Constructs the first pipeline application.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.cpp:25</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a8f6088303952ba56990ab7152a7afdcf"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a8f6088303952ba56990ab7152a7afdcf">Isis::PipelineApplication::OutputExtension</a></div><div class="ttdeci">QString OutputExtension()</div><div class="ttdoc">This returns this application's output file name's extension.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:140</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a93e8ed56b5990d1832f9a3a5e1e97c89"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a93e8ed56b5990d1832f9a3a5e1e97c89">Isis::PipelineApplication::Name</a></div><div class="ttdeci">const QString &amp; Name() const</div><div class="ttdoc">Get the name of this pipeline application.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:78</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_a94e6a7b97a147b5ec957bb3fdb229ba6"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#a94e6a7b97a147b5ec957bb3fdb229ba6">Isis::PipelineApplication::AddBranch</a></div><div class="ttdeci">void AddBranch(const QString &amp;modString, NameModifierType type)</div><div class="ttdoc">This method adds branch to this program.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.cpp:163</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_aa04bd552ae6f5dd6db41f6bb2498f267"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#aa04bd552ae6f5dd6db41f6bb2498f267">Isis::PipelineApplication::GetOutputs</a></div><div class="ttdeci">std::vector&lt; QString &gt; &amp; GetOutputs()</div><div class="ttdoc">This returns this application's output files. Only valid after BuildParamString is called.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.cpp:861</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_aa38d627e4923298b01d0ffb5ff83dc7c"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#aa38d627e4923298b01d0ffb5ff83dc7c">Isis::PipelineApplication::Enable</a></div><div class="ttdeci">void Enable()</div><div class="ttdoc">This method enables this program to be run.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:103</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_aad8a8ad6f4bfd5d08b6c3baa4638f86a"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#aad8a8ad6f4bfd5d08b6c3baa4638f86a">Isis::PipelineApplication::Previous</a></div><div class="ttdeci">PipelineApplication * Previous() const</div><div class="ttdoc">This returns the last enabled pipeline application or null.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:177</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_aaf83c344413c670d9402b03de74b7cd2"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#aaf83c344413c670d9402b03de74b7cd2">Isis::PipelineApplication::Disable</a></div><div class="ttdeci">void Disable()</div><div class="ttdoc">This method disables this program, causing it to be ignored.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:108</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_ab8935fe5aa2bdfa185bfc910d6cdf208"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#ab8935fe5aa2bdfa185bfc910d6cdf208">Isis::PipelineApplication::SetContinue</a></div><div class="ttdeci">void SetContinue(bool pbFlag)</div><div class="ttdoc">Set the continue flag status.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:231</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_abe63207c8a1566d5d31df11937caa877"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#abe63207c8a1566d5d31df11937caa877">Isis::PipelineApplication::AddConstParameter</a></div><div class="ttdeci">void AddConstParameter(const QString &amp;appParamName, const QString &amp;appParamValue)</div><div class="ttdoc">This method adds a parameter to this application with a known value (does not get it from the user in...</div><div class="ttdef"><b>Definition:</b> PipelineApplication.cpp:244</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_abe6d191b87bcf0397305f016d6fb8040"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#abe6d191b87bcf0397305f016d6fb8040">Isis::PipelineApplication::Next</a></div><div class="ttdeci">PipelineApplication * Next() const</div><div class="ttdoc">This returns the next enabled pipeline application or null.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:170</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_ac2e3b24288d24350e275ae0b6c02ed76"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#ac2e3b24288d24350e275ae0b6c02ed76">Isis::PipelineApplication::OutputNameModifier</a></div><div class="ttdeci">QString OutputNameModifier()</div><div class="ttdoc">This returns this application's output name modifier.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:136</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_acaa077b78a7324aa14c2bc6f0e9487fd"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#acaa077b78a7324aa14c2bc6f0e9487fd">Isis::PipelineApplication::SetOutputParameter</a></div><div class="ttdeci">void SetOutputParameter(const QString &amp;outputParamName, const QString &amp;outNameModifier, const QString &amp;outFileExtension=&quot;cub&quot;)</div><div class="ttdoc">Set the output parameter for this application and it's naming convention.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.cpp:137</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_acbc6e5c60bc33d084fa74e6b667cb70d"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#acbc6e5c60bc33d084fa74e6b667cb70d">Isis::PipelineApplication::TemporaryFiles</a></div><div class="ttdeci">std::vector&lt; QString &gt; TemporaryFiles()</div><div class="ttdoc">This method returns a list of the temporary files generated by this program.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.cpp:799</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_ad28e2298fb9a005d4db0b91c7ef44e87"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#ad28e2298fb9a005d4db0b91c7ef44e87">Isis::PipelineApplication::SetPrevious</a></div><div class="ttdeci">void SetPrevious(PipelineApplication *prev)</div><div class="ttdoc">Link to the previous application in the pipeline.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:163</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_ad52ec9692d74d3290df6ac02f3ad5ddc"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#ad52ec9692d74d3290df6ac02f3ad5ddc">Isis::PipelineApplication::InputBranches</a></div><div class="ttdeci">const std::vector&lt; QString &gt; &amp; InputBranches() const</div><div class="ttdoc">Get the branches this program expects as input.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:86</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_ad572833dc8631d73527c9c3a31e211f3"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#ad572833dc8631d73527c9c3a31e211f3">Isis::PipelineApplication::SetNext</a></div><div class="ttdeci">void SetNext(PipelineApplication *next)</div><div class="ttdoc">Link to the next application in the pipeline.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:153</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_application_html_aded70f2ee3f0f1f29817bfbaa600778b"><div class="ttname"><a href="class_isis_1_1_pipeline_application.html#aded70f2ee3f0f1f29817bfbaa600778b">Isis::PipelineApplication::SetInputParameter</a></div><div class="ttdeci">void SetInputParameter(const QString &amp;inputParamName, bool supportsVirtualBands)</div><div class="ttdoc">Set the input parameter for this application and whether or not this application supports the virtual...</div><div class="ttdef"><b>Definition:</b> PipelineApplication.cpp:79</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_html"><div class="ttname"><a href="class_isis_1_1_pipeline.html">Isis::Pipeline</a></div><div class="ttdoc">This class helps to call other Isis Applications in a Pipeline.</div><div class="ttdef"><b>Definition:</b> Pipeline.h:151</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html">Isis::PipelineParameter</a></div><div class="ttdoc">This class represents a parameter of some type for the PipelineApplication.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:323</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_a12a9d5aef0fec653b1196df89288a0cc"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#a12a9d5aef0fec653b1196df89288a0cc">Isis::PipelineParameter::PipelineParameter</a></div><div class="ttdeci">PipelineParameter(int branch, QString paramName, PipelineApplication::CustomParameterValue special)</div><div class="ttdoc">Construct the parameter with a parameter name and special value; affects only the specified branch.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:405</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_a17a4e2a45f8c89602119446d4c7829c0"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#a17a4e2a45f8c89602119446d4c7829c0">Isis::PipelineParameter::PipelineParameter</a></div><div class="ttdeci">PipelineParameter(QString paramName)</div><div class="ttdoc">Construct the parameter with only a parameter name; affects all branches and is not a special value.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:331</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_a22201080870a2c7a7058151ebeb0a7f5"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#a22201080870a2c7a7058151ebeb0a7f5">Isis::PipelineParameter::PipelineParameter</a></div><div class="ttdeci">PipelineParameter(int branch, QString paramName)</div><div class="ttdoc">Construct the parameter with only a parameter name; affects only the specified branch and is not a sp...</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:360</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_a354c5896143e313d9db0b95760a2125a"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#a354c5896143e313d9db0b95760a2125a">Isis::PipelineParameter::PipelineParameter</a></div><div class="ttdeci">PipelineParameter(int branch, QString paramName, QString paramValue)</div><div class="ttdoc">Construct the parameter with a parameter name and value; affects only the specified branch and is not...</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:375</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_a5480f91293fa9c3f9cb3060b1c7c3f2f"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#a5480f91293fa9c3f9cb3060b1c7c3f2f">Isis::PipelineParameter::Value</a></div><div class="ttdeci">QString Value()</div><div class="ttdoc">Non-special value of the parameter.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:428</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_a5b7499f1c41380cfd1a06b95a1fa182d"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#a5b7499f1c41380cfd1a06b95a1fa182d">Isis::PipelineParameter::PipelineParameter</a></div><div class="ttdeci">PipelineParameter(QString paramName, QString value)</div><div class="ttdoc">Construct the parameter with a parameter name and value; affects all branches and is not special.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:345</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_a7a5d6d7d38d710b8256cdb53d8eb96e9"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#a7a5d6d7d38d710b8256cdb53d8eb96e9">Isis::PipelineParameter::PipelineParameter</a></div><div class="ttdeci">PipelineParameter(QString paramName, PipelineApplication::CustomParameterValue special)</div><div class="ttdoc">Construct the parameter with a parameter name and special value; affects all branches.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:390</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_aa145d9f1cddf840a55ebd5ff4e3b37e8"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#aa145d9f1cddf840a55ebd5ff4e3b37e8">Isis::PipelineParameter::Special</a></div><div class="ttdeci">PipelineApplication::CustomParameterValue Special()</div><div class="ttdoc">Special value of the parameter.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:436</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_ab3b3734d29b2a9457e803eab3c74261e"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#ab3b3734d29b2a9457e803eab3c74261e">Isis::PipelineParameter::IsSpecial</a></div><div class="ttdeci">bool IsSpecial()</div><div class="ttdoc">True if the parameter value is special.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:432</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_ac02e1cd2ba046fcdb319b811d3e0b3cb"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#ac02e1cd2ba046fcdb319b811d3e0b3cb">Isis::PipelineParameter::AppliesToBranch</a></div><div class="ttdeci">bool AppliesToBranch(int branch)</div><div class="ttdoc">Returns whether or not the specified branch is affected.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:419</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_ad0e454cf24c6c71d4b0a8dd78a789ab3"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#ad0e454cf24c6c71d4b0a8dd78a789ab3">Isis::PipelineParameter::Name</a></div><div class="ttdeci">QString Name()</div><div class="ttdoc">Name of the parameter.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:424</div></div>
+<div class="ttc" id="aclass_isis_1_1_pipeline_parameter_html_ad786aa3a63eb5bf69dc0bfea42dc6dff"><div class="ttname"><a href="class_isis_1_1_pipeline_parameter.html#ad786aa3a63eb5bf69dc0bfea42dc6dff">Isis::PipelineParameter::AffectsAllBranches</a></div><div class="ttdeci">bool AffectsAllBranches()</div><div class="ttdoc">True if branch-independant.</div><div class="ttdef"><b>Definition:</b> PipelineApplication.h:440</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_26793ab9abbf7c3d143b5e21c5b4279b.html">Pipeline</a></li><li class="navelem"><a class="el" href="_pipeline_application_8h.html">PipelineApplication.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

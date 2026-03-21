@@ -1,0 +1,356 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CameraGroundMap/CameraGroundMap.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_camera_ground_map_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">CameraGroundMap.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_camera_ground_map_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef CameraGroundMap_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define CameraGroundMap_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_camera_8h.html">Camera.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_camera_distortion_map_8h.html">CameraDistortionMap.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_spice_position_8h.html">SpicePosition.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_surface_point_8h.html">SurfacePoint.h</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html">   77</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_camera_ground_map.html">CameraGroundMap</a> {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <a class="code" href="class_isis_1_1_camera_ground_map.html#a1f650a5c92425d09863e95cef1e9668f">CameraGroundMap</a>(<a class="code" href="class_isis_1_1_camera.html">Camera</a> *parent);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#a86ff43c2a62e81f241ca3407dfaabb6e">   82</a></span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a86ff43c2a62e81f241ca3407dfaabb6e">~CameraGroundMap</a>() {};</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a5c871301f42e984cd4d27ea765b5787b">SetFocalPlane</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> ux, <span class="keyword">const</span> <span class="keywordtype">double</span> uy,</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                                 <span class="keyword">const</span> <span class="keywordtype">double</span> uz);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1">   91</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1">PartialType</a> {</div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a201e0ed5f879f68d4b7e5f0d250f87af">   92</a></span>&#160;        <a class="code" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a201e0ed5f879f68d4b7e5f0d250f87af">WRT_Latitude</a>,</div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a614a7d8f683bd29cc8212a671aa02ee0">   93</a></span>&#160;        <a class="code" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a614a7d8f683bd29cc8212a671aa02ee0">WRT_Longitude</a>,</div>
+<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a3d2f22e28bae3f270f6a364143edb0dd">   94</a></span>&#160;        <a class="code" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a3d2f22e28bae3f270f6a364143edb0dd">WRT_Radius</a>,</div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1ae62bd96ba938fa6a5b3094b7e9b17019">   95</a></span>&#160;        <a class="code" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1ae62bd96ba938fa6a5b3094b7e9b17019">WRT_MajorAxis</a>,</div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1ab130baaee3b92cd4292f4685a30af0ae">   96</a></span>&#160;        <a class="code" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1ab130baaee3b92cd4292f4685a30af0ae">WRT_MinorAxis</a>,</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <a class="code" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a88c363161f34c33e235bd622f9cbf9ce">WRT_PolarAxis</a></div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a88c363161f34c33e235bd622f9cbf9ce">   98</a></span>&#160;      };</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a0b73d4543025e9ad4630bc0ddad5263d">SetGround</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_latitude.html">Latitude</a> &amp;lat, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_longitude.html">Longitude</a> &amp;lon);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a0b73d4543025e9ad4630bc0ddad5263d">SetGround</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> &amp;surfacePoint);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a18256747541af50d530a0fd45cf22484">GetXY</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> &amp;spoint, <span class="keywordtype">double</span> *cudx, </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                       <span class="keywordtype">double</span> *cudy, <span class="keywordtype">bool</span> test=<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a18256747541af50d530a0fd45cf22484">GetXY</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> lat, <span class="keyword">const</span> <span class="keywordtype">double</span> lon,</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                         <span class="keyword">const</span> <span class="keywordtype">double</span> radius, <span class="keywordtype">double</span> *cudx, <span class="keywordtype">double</span> *cudy);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a65a8dad994ccfc2152886cfb673d7f66">GetdXYdPosition</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852ec">SpicePosition::PartialType</a> varType,</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                                   <span class="keywordtype">int</span> coefIndex,</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                                   <span class="keywordtype">double</span> *cudx, <span class="keywordtype">double</span> *cudy);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a93e75ecad7c6b5dd8231bf14458f8a99">GetdXYdOrientation</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_spice_rotation.html#aae350e2ec7ef6417f4324920a8db1b33">SpiceRotation::PartialType</a> varType,</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                                      <span class="keywordtype">int</span> coefIndex,</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                                      <span class="keywordtype">double</span> *cudx, <span class="keywordtype">double</span> *cudy);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a1cbd60ecc7758c7e71409c53c1d35f79">GetdXYdTOrientation</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_spice_rotation.html#aae350e2ec7ef6417f4324920a8db1b33">SpiceRotation::PartialType</a> varType,</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                                       <span class="keywordtype">int</span> coefIndex,</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                                       <span class="keywordtype">double</span> *cudx, <span class="keywordtype">double</span> *cudy);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a26aa8d0da2d8af1a90c32cf2f0a999fb">GetdXYdPoint</a>(std::vector&lt;double&gt; d_pB,</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                                <span class="keywordtype">double</span> *dx, <span class="keywordtype">double</span> *dy);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      std::vector&lt;double&gt; <a class="code" href="class_isis_1_1_camera_ground_map.html#ac50247e89aed4bc064cac5e79adacbea">PointPartial</a>(<a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> spoint, <a class="code" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1">PartialType</a> wrt);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;      std::vector&lt;double&gt; <a class="code" href="class_isis_1_1_camera_ground_map.html#aa7012658b20bc6f5eff7b1091c57cd18">EllipsoidPartial</a>(<a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> spoint, <a class="code" href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1">PartialType</a> raxis);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;      std::vector&lt;double&gt; <a class="code" href="class_isis_1_1_camera_ground_map.html#aff5fbd69aeafa166fa2b49b86580da05">MeanRadiusPartial</a>(<a class="code" href="class_isis_1_1_surface_point.html">SurfacePoint</a> spoint, <a class="code" href="class_isis_1_1_distance.html">Distance</a> meanRadius);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a36fa48d4a23d11b1fa75aef89d792663">DQuotient</a>(std::vector&lt;double&gt; &amp;look, std::vector&lt;double&gt; &amp;dlook,</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                       <span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#ad9d43ef69af6fc47254ddc63f3c97f96">  126</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#ad9d43ef69af6fc47254ddc63f3c97f96">FocalPlaneX</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a31f079edca34729a846c89ec04d666c2">p_focalPlaneX</a>;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;      };</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#ae91c6965c150b2669429ecd91104b0c7">  133</a></span>&#160;      <span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#ae91c6965c150b2669429ecd91104b0c7">FocalPlaneY</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#af3d0536d61f0f2aa750523a67e6af5c4">p_focalPlaneY</a>;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      };</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#abcc94f9e83a19907224e99ea1bfc665b">  138</a></span>&#160;      <a class="code" href="class_isis_1_1_camera.html">Camera</a> *<a class="code" href="class_isis_1_1_camera_ground_map.html#abcc94f9e83a19907224e99ea1bfc665b">p_camera</a>;     </div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#a31f079edca34729a846c89ec04d666c2">  139</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#a31f079edca34729a846c89ec04d666c2">p_focalPlaneX</a>; </div>
+<div class="line"><a name="l00140"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#af3d0536d61f0f2aa750523a67e6af5c4">  140</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#af3d0536d61f0f2aa750523a67e6af5c4">p_focalPlaneY</a>; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_camera_ground_map.html#ada7737b2a98f8ab8374908e2ef6e8aec">LookCtoFocalPlaneXY</a>();  </div>
+<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#ad73eba64b7643093aa5719a788680f6e">  144</a></span>&#160;      std::vector&lt;double&gt; <a class="code" href="class_isis_1_1_camera_ground_map.html#ad73eba64b7643093aa5719a788680f6e">m_pB</a>;</div>
+<div class="line"><a name="l00146"></a><span class="lineno"><a class="line" href="class_isis_1_1_camera_ground_map.html#a3441618fca7079bd407da2316eef682b">  146</a></span>&#160;      std::vector&lt;double&gt; <a class="code" href="class_isis_1_1_camera_ground_map.html#a3441618fca7079bd407da2316eef682b">m_lookJ</a>;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;  };</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;};</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_camera_8h_html"><div class="ttname"><a href="_camera_8h.html">Camera.h</a></div></div>
+<div class="ttc" id="a_camera_distortion_map_8h_html"><div class="ttname"><a href="_camera_distortion_map_8h.html">CameraDistortionMap.h</a></div></div>
+<div class="ttc" id="a_spice_position_8h_html"><div class="ttname"><a href="_spice_position_8h.html">SpicePosition.h</a></div></div>
+<div class="ttc" id="a_surface_point_8h_html"><div class="ttname"><a href="_surface_point_8h.html">SurfacePoint.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html">Isis::CameraGroundMap</a></div><div class="ttdoc">Convert between undistorted focal plane and ground coordinates.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:77</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a0b73d4543025e9ad4630bc0ddad5263d"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a0b73d4543025e9ad4630bc0ddad5263d">Isis::CameraGroundMap::SetGround</a></div><div class="ttdeci">virtual bool SetGround(const Latitude &amp;lat, const Longitude &amp;lon)</div><div class="ttdoc">Compute undistorted focal plane coordinate from ground position.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:76</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a0f76226bd83968640dc0cfbeb2674bc1"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1">Isis::CameraGroundMap::PartialType</a></div><div class="ttdeci">PartialType</div><div class="ttdoc">Radius axes types to use when computing partials.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:91</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a0f76226bd83968640dc0cfbeb2674bc1a201e0ed5f879f68d4b7e5f0d250f87af"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a201e0ed5f879f68d4b7e5f0d250f87af">Isis::CameraGroundMap::WRT_Latitude</a></div><div class="ttdeci">@ WRT_Latitude</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:92</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a0f76226bd83968640dc0cfbeb2674bc1a3d2f22e28bae3f270f6a364143edb0dd"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a3d2f22e28bae3f270f6a364143edb0dd">Isis::CameraGroundMap::WRT_Radius</a></div><div class="ttdeci">@ WRT_Radius</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:94</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a0f76226bd83968640dc0cfbeb2674bc1a614a7d8f683bd29cc8212a671aa02ee0"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a614a7d8f683bd29cc8212a671aa02ee0">Isis::CameraGroundMap::WRT_Longitude</a></div><div class="ttdeci">@ WRT_Longitude</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:93</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a0f76226bd83968640dc0cfbeb2674bc1a88c363161f34c33e235bd622f9cbf9ce"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1a88c363161f34c33e235bd622f9cbf9ce">Isis::CameraGroundMap::WRT_PolarAxis</a></div><div class="ttdeci">@ WRT_PolarAxis</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:97</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a0f76226bd83968640dc0cfbeb2674bc1ab130baaee3b92cd4292f4685a30af0ae"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1ab130baaee3b92cd4292f4685a30af0ae">Isis::CameraGroundMap::WRT_MinorAxis</a></div><div class="ttdeci">@ WRT_MinorAxis</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:96</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a0f76226bd83968640dc0cfbeb2674bc1ae62bd96ba938fa6a5b3094b7e9b17019"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a0f76226bd83968640dc0cfbeb2674bc1ae62bd96ba938fa6a5b3094b7e9b17019">Isis::CameraGroundMap::WRT_MajorAxis</a></div><div class="ttdeci">@ WRT_MajorAxis</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:95</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a18256747541af50d530a0fd45cf22484"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a18256747541af50d530a0fd45cf22484">Isis::CameraGroundMap::GetXY</a></div><div class="ttdeci">virtual bool GetXY(const SurfacePoint &amp;spoint, double *cudx, double *cudy, bool test=true)</div><div class="ttdoc">Compute undistorted focal plane coordinate from ground position using current Spice from SetImage cal...</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:152</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a1cbd60ecc7758c7e71409c53c1d35f79"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a1cbd60ecc7758c7e71409c53c1d35f79">Isis::CameraGroundMap::GetdXYdTOrientation</a></div><div class="ttdeci">virtual bool GetdXYdTOrientation(const SpiceRotation::PartialType varType, int coefIndex, double *cudx, double *cudy)</div><div class="ttdoc">Compute derivative of focal plane coordinate w/r to target body using current state.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:354</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a1f650a5c92425d09863e95cef1e9668f"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a1f650a5c92425d09863e95cef1e9668f">Isis::CameraGroundMap::CameraGroundMap</a></div><div class="ttdeci">CameraGroundMap(Camera *parent)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:31</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a26aa8d0da2d8af1a90c32cf2f0a999fb"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a26aa8d0da2d8af1a90c32cf2f0a999fb">Isis::CameraGroundMap::GetdXYdPoint</a></div><div class="ttdeci">virtual bool GetdXYdPoint(std::vector&lt; double &gt; d_pB, double *dx, double *dy)</div><div class="ttdoc">Compute derivative of focal plane coordinate w/r to ground point using current state.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:398</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a31f079edca34729a846c89ec04d666c2"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a31f079edca34729a846c89ec04d666c2">Isis::CameraGroundMap::p_focalPlaneX</a></div><div class="ttdeci">double p_focalPlaneX</div><div class="ttdoc">Camera's x focal plane coordinate.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:139</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a3441618fca7079bd407da2316eef682b"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a3441618fca7079bd407da2316eef682b">Isis::CameraGroundMap::m_lookJ</a></div><div class="ttdeci">std::vector&lt; double &gt; m_lookJ</div><div class="ttdoc">Look vector in J2000 calculated from ground coordinates in GetXY and used for partials.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:146</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a36fa48d4a23d11b1fa75aef89d792663"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a36fa48d4a23d11b1fa75aef89d792663">Isis::CameraGroundMap::DQuotient</a></div><div class="ttdeci">double DQuotient(std::vector&lt; double &gt; &amp;look, std::vector&lt; double &gt; &amp;dlook, int index)</div><div class="ttdoc">Convenience method for quotient rule applied to look vector.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:550</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a5c871301f42e984cd4d27ea765b5787b"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a5c871301f42e984cd4d27ea765b5787b">Isis::CameraGroundMap::SetFocalPlane</a></div><div class="ttdeci">virtual bool SetFocalPlane(const double ux, const double uy, const double uz)</div><div class="ttdoc">Compute ground position from focal plane coordinate.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:50</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a65a8dad994ccfc2152886cfb673d7f66"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a65a8dad994ccfc2152886cfb673d7f66">Isis::CameraGroundMap::GetdXYdPosition</a></div><div class="ttdeci">virtual bool GetdXYdPosition(const SpicePosition::PartialType varType, int coefIndex, double *cudx, double *cudy)</div><div class="ttdoc">Compute derivative w/r to position of focal plane coordinate from ground position using current Spice...</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:279</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a86ff43c2a62e81f241ca3407dfaabb6e"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a86ff43c2a62e81f241ca3407dfaabb6e">Isis::CameraGroundMap::~CameraGroundMap</a></div><div class="ttdeci">virtual ~CameraGroundMap()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:82</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_a93e75ecad7c6b5dd8231bf14458f8a99"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#a93e75ecad7c6b5dd8231bf14458f8a99">Isis::CameraGroundMap::GetdXYdOrientation</a></div><div class="ttdeci">virtual bool GetdXYdOrientation(const SpiceRotation::PartialType varType, int coefIndex, double *cudx, double *cudy)</div><div class="ttdoc">Compute derivative of focal plane coordinate w/r to instrument using current state from SetImage call...</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:318</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_aa7012658b20bc6f5eff7b1091c57cd18"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#aa7012658b20bc6f5eff7b1091c57cd18">Isis::CameraGroundMap::EllipsoidPartial</a></div><div class="ttdeci">std::vector&lt; double &gt; EllipsoidPartial(SurfacePoint spoint, PartialType raxis)</div><div class="ttdoc">Compute derivative of focal plane coordinate w/r to one of the ellipsoidal radii (a,...</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:436</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_abcc94f9e83a19907224e99ea1bfc665b"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#abcc94f9e83a19907224e99ea1bfc665b">Isis::CameraGroundMap::p_camera</a></div><div class="ttdeci">Camera * p_camera</div><div class="ttdoc">Camera.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:135</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_ac50247e89aed4bc064cac5e79adacbea"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#ac50247e89aed4bc064cac5e79adacbea">Isis::CameraGroundMap::PointPartial</a></div><div class="ttdeci">std::vector&lt; double &gt; PointPartial(SurfacePoint spoint, PartialType wrt)</div><div class="ttdoc">Compute derivative with respect to indicated variable of conversion function from lat/lon/rad to rect...</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:508</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_ad73eba64b7643093aa5719a788680f6e"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#ad73eba64b7643093aa5719a788680f6e">Isis::CameraGroundMap::m_pB</a></div><div class="ttdeci">std::vector&lt; double &gt; m_pB</div><div class="ttdoc">Surface point calculated from ground coordinates in GetXY and used for partials.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:144</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_ad9d43ef69af6fc47254ddc63f3c97f96"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#ad9d43ef69af6fc47254ddc63f3c97f96">Isis::CameraGroundMap::FocalPlaneX</a></div><div class="ttdeci">double FocalPlaneX() const</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:126</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_ada7737b2a98f8ab8374908e2ef6e8aec"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#ada7737b2a98f8ab8374908e2ef6e8aec">Isis::CameraGroundMap::LookCtoFocalPlaneXY</a></div><div class="ttdeci">void LookCtoFocalPlaneXY()</div><div class="ttdoc">Calculate focalplane x/y from lookvector in camera.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:106</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_ae91c6965c150b2669429ecd91104b0c7"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#ae91c6965c150b2669429ecd91104b0c7">Isis::CameraGroundMap::FocalPlaneY</a></div><div class="ttdeci">double FocalPlaneY() const</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:133</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_af3d0536d61f0f2aa750523a67e6af5c4"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#af3d0536d61f0f2aa750523a67e6af5c4">Isis::CameraGroundMap::p_focalPlaneY</a></div><div class="ttdeci">double p_focalPlaneY</div><div class="ttdoc">Camera's y focal plane coordinate.</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.h:140</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_ground_map_html_aff5fbd69aeafa166fa2b49b86580da05"><div class="ttname"><a href="class_isis_1_1_camera_ground_map.html#aff5fbd69aeafa166fa2b49b86580da05">Isis::CameraGroundMap::MeanRadiusPartial</a></div><div class="ttdeci">std::vector&lt; double &gt; MeanRadiusPartial(SurfacePoint spoint, Distance meanRadius)</div><div class="ttdoc">Compute derivative of focal plane coordinate w/r to mean of the ellipsoidal radii (a,...</div><div class="ttdef"><b>Definition:</b> CameraGroundMap.cpp:486</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_html"><div class="ttname"><a href="class_isis_1_1_camera.html">Isis::Camera</a></div><div class="ttdef"><b>Definition:</b> Camera.h:236</div></div>
+<div class="ttc" id="aclass_isis_1_1_distance_html"><div class="ttname"><a href="class_isis_1_1_distance.html">Isis::Distance</a></div><div class="ttdoc">Distance measurement, usually in meters.</div><div class="ttdef"><b>Definition:</b> Distance.h:34</div></div>
+<div class="ttc" id="aclass_isis_1_1_latitude_html"><div class="ttname"><a href="class_isis_1_1_latitude.html">Isis::Latitude</a></div><div class="ttdoc">This class is designed to encapsulate the concept of a Latitude.</div><div class="ttdef"><b>Definition:</b> Latitude.h:51</div></div>
+<div class="ttc" id="aclass_isis_1_1_longitude_html"><div class="ttname"><a href="class_isis_1_1_longitude.html">Isis::Longitude</a></div><div class="ttdoc">This class is designed to encapsulate the concept of a Longitude.</div><div class="ttdef"><b>Definition:</b> Longitude.h:40</div></div>
+<div class="ttc" id="aclass_isis_1_1_spice_position_html_a7476c820f19e5af62cbab682bfb852ec"><div class="ttname"><a href="class_isis_1_1_spice_position.html#a7476c820f19e5af62cbab682bfb852ec">Isis::SpicePosition::PartialType</a></div><div class="ttdeci">PartialType</div><div class="ttdef"><b>Definition:</b> SpicePosition.h:204</div></div>
+<div class="ttc" id="aclass_isis_1_1_spice_rotation_html_aae350e2ec7ef6417f4324920a8db1b33"><div class="ttname"><a href="class_isis_1_1_spice_rotation.html#aae350e2ec7ef6417f4324920a8db1b33">Isis::SpiceRotation::PartialType</a></div><div class="ttdeci">PartialType</div><div class="ttdoc">This enumeration indicates whether the partial derivative is taken with respect to Right Ascension,...</div><div class="ttdef"><b>Definition:</b> SpiceRotation.h:256</div></div>
+<div class="ttc" id="aclass_isis_1_1_surface_point_html"><div class="ttname"><a href="class_isis_1_1_surface_point.html">Isis::SurfacePoint</a></div><div class="ttdoc">This class defines a body-fixed surface point.</div><div class="ttdef"><b>Definition:</b> SurfacePoint.h:132</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_31283a06e18c16011d939ec605267251.html">CameraGroundMap</a></li><li class="navelem"><a class="el" href="_camera_ground_map_8h.html">CameraGroundMap.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

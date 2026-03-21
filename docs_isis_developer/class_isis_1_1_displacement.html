@@ -1,0 +1,1419 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Displacement Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_displacement.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
+<a href="class_isis_1_1_displacement-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Displacement Class Reference<div class="ingroups"><a class="el" href="group___utility.html">Utility</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="class_isis_1_1_displacement.html" title="Displacement is a signed length, usually in meters.">Displacement</a> is a signed length, usually in meters.  
+ <a href="class_isis_1_1_displacement.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_displacement_8h_source.html">Displacement.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::Displacement:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_displacement__coll__graph.png" border="0" usemap="#a_isis_1_1_displacement_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_displacement_coll__map" id="a_isis_1_1_displacement_coll__map">
+<area shape="rect" title="Displacement is a signed length, usually in meters." alt="" coords="5,5,144,279"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a93502962e5d5b13f8dc6dbc0830f7a24"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24">Units</a> { <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>
+, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24a450ed854f58f46db0b546707ee4f741e">Kilometers</a>
+, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24a2fa1520e39d6a718da4db645e58d4497">Pixels</a>
+ }</td></tr>
+<tr class="memdesc:a93502962e5d5b13f8dc6dbc0830f7a24"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a list of available units to access and store Distances in.  <a href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24">More...</a><br /></td></tr>
+<tr class="separator:a93502962e5d5b13f8dc6dbc0830f7a24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a45ea83d60c532f1665a619b42e7e12f4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a45ea83d60c532f1665a619b42e7e12f4">Displacement</a> ()</td></tr>
+<tr class="memdesc:a45ea83d60c532f1665a619b42e7e12f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">This initializes the displacement to an invalid state.  <a href="class_isis_1_1_displacement.html#a45ea83d60c532f1665a619b42e7e12f4">More...</a><br /></td></tr>
+<tr class="separator:a45ea83d60c532f1665a619b42e7e12f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0785256552d121b6acd8e2ffb4eb7c46"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a0785256552d121b6acd8e2ffb4eb7c46">Displacement</a> (double <a class="el" href="class_isis_1_1_displacement.html#aed98b6bfc71e6de4f0d86fbb8b897a18">displacement</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24">Units</a> distanceUnit)</td></tr>
+<tr class="memdesc:a0785256552d121b6acd8e2ffb4eb7c46"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the general purpose constructor for <a class="el" href="class_isis_1_1_displacement.html" title="Displacement is a signed length, usually in meters.">Displacement</a>.  <a href="class_isis_1_1_displacement.html#a0785256552d121b6acd8e2ffb4eb7c46">More...</a><br /></td></tr>
+<tr class="separator:a0785256552d121b6acd8e2ffb4eb7c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0e7bdaae96e6b67e206bd83e23e63e8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#ae0e7bdaae96e6b67e206bd83e23e63e8">Displacement</a> (double displacementInPixels, double pixelsPerMeter)</td></tr>
+<tr class="memdesc:ae0e7bdaae96e6b67e206bd83e23e63e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a constructor for <a class="el" href="class_isis_1_1_displacement.html" title="Displacement is a signed length, usually in meters.">Displacement</a> given pixels with a conversion ratio.  <a href="class_isis_1_1_displacement.html#ae0e7bdaae96e6b67e206bd83e23e63e8">More...</a><br /></td></tr>
+<tr class="separator:ae0e7bdaae96e6b67e206bd83e23e63e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a309a77e9d895c4c71aff7b0fd165aa67"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a309a77e9d895c4c71aff7b0fd165aa67">Displacement</a> (const <a class="el" href="class_isis_1_1_distance.html">Distance</a> &amp;distanceToCopy)</td></tr>
+<tr class="memdesc:a309a77e9d895c4c71aff7b0fd165aa67"><td class="mdescLeft">&#160;</td><td class="mdescRight">This creates a displacement equal to a distance.  <a href="class_isis_1_1_displacement.html#a309a77e9d895c4c71aff7b0fd165aa67">More...</a><br /></td></tr>
+<tr class="separator:a309a77e9d895c4c71aff7b0fd165aa67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a977ec2f5d079fdc20cb99d50758db0c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a977ec2f5d079fdc20cb99d50758db0c2">~Displacement</a> ()</td></tr>
+<tr class="memdesc:a977ec2f5d079fdc20cb99d50758db0c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the memory allocated by this instance of the displacement class.  <a href="class_isis_1_1_displacement.html#a977ec2f5d079fdc20cb99d50758db0c2">More...</a><br /></td></tr>
+<tr class="separator:a977ec2f5d079fdc20cb99d50758db0c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8b79000140675ce651fd67f6b3f8387"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters</a> () const</td></tr>
+<tr class="memdesc:af8b79000140675ce651fd67f6b3f8387"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the displacement in meters.  <a href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">More...</a><br /></td></tr>
+<tr class="separator:af8b79000140675ce651fd67f6b3f8387"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7920b1a422de244288976873fb7d13db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a7920b1a422de244288976873fb7d13db">setMeters</a> (double displacementInMeters)</td></tr>
+<tr class="memdesc:a7920b1a422de244288976873fb7d13db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the displacement in meters.  <a href="class_isis_1_1_displacement.html#a7920b1a422de244288976873fb7d13db">More...</a><br /></td></tr>
+<tr class="separator:a7920b1a422de244288976873fb7d13db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c89062171bb611a9c0809ea7945582a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a2c89062171bb611a9c0809ea7945582a">kilometers</a> () const</td></tr>
+<tr class="memdesc:a2c89062171bb611a9c0809ea7945582a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the displacement in kilometers.  <a href="class_isis_1_1_displacement.html#a2c89062171bb611a9c0809ea7945582a">More...</a><br /></td></tr>
+<tr class="separator:a2c89062171bb611a9c0809ea7945582a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adff0f5be860952dcfde95f76bc3c423a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#adff0f5be860952dcfde95f76bc3c423a">setKilometers</a> (double displacementInKilometers)</td></tr>
+<tr class="memdesc:adff0f5be860952dcfde95f76bc3c423a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the displacement in kilometers.  <a href="class_isis_1_1_displacement.html#adff0f5be860952dcfde95f76bc3c423a">More...</a><br /></td></tr>
+<tr class="separator:adff0f5be860952dcfde95f76bc3c423a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a086fb3f9696a9ae1c0247618238c2577"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a086fb3f9696a9ae1c0247618238c2577">pixels</a> (double pixelsPerMeter=1.0) const</td></tr>
+<tr class="memdesc:a086fb3f9696a9ae1c0247618238c2577"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the displacement in pixels using the given conversion ratio.  <a href="class_isis_1_1_displacement.html#a086fb3f9696a9ae1c0247618238c2577">More...</a><br /></td></tr>
+<tr class="separator:a086fb3f9696a9ae1c0247618238c2577"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabd8850bb909c394ced609dd5bf37306"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#aabd8850bb909c394ced609dd5bf37306">setPixels</a> (double distanceInPixels, double pixelsPerMeter=1.0)</td></tr>
+<tr class="memdesc:aabd8850bb909c394ced609dd5bf37306"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the displacement in pixels.  <a href="class_isis_1_1_displacement.html#aabd8850bb909c394ced609dd5bf37306">More...</a><br /></td></tr>
+<tr class="separator:aabd8850bb909c394ced609dd5bf37306"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e594da1f4f422f3402bd0a2824b45b1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid</a> () const</td></tr>
+<tr class="memdesc:a2e594da1f4f422f3402bd0a2824b45b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if this displacement has been initialized or not.  <a href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">More...</a><br /></td></tr>
+<tr class="separator:a2e594da1f4f422f3402bd0a2824b45b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a830d0efb028c2a229123b527463f269f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a830d0efb028c2a229123b527463f269f">operator&gt;</a> (const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;otherDisplacement) const</td></tr>
+<tr class="memdesc:a830d0efb028c2a229123b527463f269f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the displacement in meters.  <a href="class_isis_1_1_displacement.html#a830d0efb028c2a229123b527463f269f">More...</a><br /></td></tr>
+<tr class="separator:a830d0efb028c2a229123b527463f269f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8ca37c4b2d47b79247db014772289fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#ae8ca37c4b2d47b79247db014772289fe">operator&lt;</a> (const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;otherDisplacement) const</td></tr>
+<tr class="memdesc:ae8ca37c4b2d47b79247db014772289fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two displacements with the less than operator.  <a href="class_isis_1_1_displacement.html#ae8ca37c4b2d47b79247db014772289fe">More...</a><br /></td></tr>
+<tr class="separator:ae8ca37c4b2d47b79247db014772289fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74fdc91b31f80bfe4c1dd4715b3eaa06"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a74fdc91b31f80bfe4c1dd4715b3eaa06">operator&gt;=</a> (const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;otherDisplacement) const</td></tr>
+<tr class="memdesc:a74fdc91b31f80bfe4c1dd4715b3eaa06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare the distances of 2 displacements with the &gt;= operator.  <a href="class_isis_1_1_displacement.html#a74fdc91b31f80bfe4c1dd4715b3eaa06">More...</a><br /></td></tr>
+<tr class="separator:a74fdc91b31f80bfe4c1dd4715b3eaa06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19e3301c3e9ba1e4dcf27b144b4f570d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a19e3301c3e9ba1e4dcf27b144b4f570d">operator&lt;=</a> (const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;otherDisplacement) const</td></tr>
+<tr class="memdesc:a19e3301c3e9ba1e4dcf27b144b4f570d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare the lengths of 2 displacements with the &lt;= operator.  <a href="class_isis_1_1_displacement.html#a19e3301c3e9ba1e4dcf27b144b4f570d">More...</a><br /></td></tr>
+<tr class="separator:a19e3301c3e9ba1e4dcf27b144b4f570d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23ad3195b564e626bb9a745cabb2f13c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a23ad3195b564e626bb9a745cabb2f13c">operator!=</a> (const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;otherDisplacement) const</td></tr>
+<tr class="memdesc:a23ad3195b564e626bb9a745cabb2f13c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare the lengths of 2 displacements with the != operator.  <a href="class_isis_1_1_displacement.html#a23ad3195b564e626bb9a745cabb2f13c">More...</a><br /></td></tr>
+<tr class="separator:a23ad3195b564e626bb9a745cabb2f13c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a724caa888a1659b58166d2143ba75892"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a724caa888a1659b58166d2143ba75892">operator==</a> (const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;otherDisplacement) const</td></tr>
+<tr class="memdesc:a724caa888a1659b58166d2143ba75892"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare the lengths of 2 displacements with the == operator.  <a href="class_isis_1_1_displacement.html#a724caa888a1659b58166d2143ba75892">More...</a><br /></td></tr>
+<tr class="separator:a724caa888a1659b58166d2143ba75892"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1549d648aac4cb76708a33c69c3ec9aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a1549d648aac4cb76708a33c69c3ec9aa">operator+</a> (const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;displacementToAdd) const</td></tr>
+<tr class="memdesc:a1549d648aac4cb76708a33c69c3ec9aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add another displacement to this displacement (1km + 5m = 1005m)  <a href="class_isis_1_1_displacement.html#a1549d648aac4cb76708a33c69c3ec9aa">More...</a><br /></td></tr>
+<tr class="separator:a1549d648aac4cb76708a33c69c3ec9aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1205fd67d466ea630781e690ba9f9bcc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a1205fd67d466ea630781e690ba9f9bcc">operator-</a> (const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;displacementToSub) const</td></tr>
+<tr class="memdesc:a1205fd67d466ea630781e690ba9f9bcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract another displacement from this displacement (1km - 5m = 995m).  <a href="class_isis_1_1_displacement.html#a1205fd67d466ea630781e690ba9f9bcc">More...</a><br /></td></tr>
+<tr class="separator:a1205fd67d466ea630781e690ba9f9bcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af86f7ba1cb9a1c0a4593e90c5392f443"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#af86f7ba1cb9a1c0a4593e90c5392f443">operator-</a> (const <a class="el" href="class_isis_1_1_distance.html">Distance</a> &amp;distanceToSub) const</td></tr>
+<tr class="memdesc:af86f7ba1cb9a1c0a4593e90c5392f443"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract a distance from this displacement (1km - 5m = 995m).  <a href="class_isis_1_1_displacement.html#af86f7ba1cb9a1c0a4593e90c5392f443">More...</a><br /></td></tr>
+<tr class="separator:af86f7ba1cb9a1c0a4593e90c5392f443"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a508d43640c741c38a4f8bb184c0716ef"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a508d43640c741c38a4f8bb184c0716ef">operator/</a> (const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;displacementToDiv) const</td></tr>
+<tr class="memdesc:a508d43640c741c38a4f8bb184c0716ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Divide another displacement into this displacement (5m / 1m = 5).  <a href="class_isis_1_1_displacement.html#a508d43640c741c38a4f8bb184c0716ef">More...</a><br /></td></tr>
+<tr class="separator:a508d43640c741c38a4f8bb184c0716ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafd2959c8338a0a29649cf2a1cff39b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#aafd2959c8338a0a29649cf2a1cff39b8">operator/</a> (const double &amp;valueToDiv) const</td></tr>
+<tr class="memdesc:aafd2959c8338a0a29649cf2a1cff39b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Divide a value from this displacement (5m / 2 = 2.5m).  <a href="class_isis_1_1_displacement.html#aafd2959c8338a0a29649cf2a1cff39b8">More...</a><br /></td></tr>
+<tr class="separator:aafd2959c8338a0a29649cf2a1cff39b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4371cbdd8fbb371f0d1f22e92dff16a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#ac4371cbdd8fbb371f0d1f22e92dff16a">operator*</a> (const double &amp;valueToMult) const</td></tr>
+<tr class="memdesc:ac4371cbdd8fbb371f0d1f22e92dff16a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply this displacement by a value (5m * 2 = 10m).  <a href="class_isis_1_1_displacement.html#ac4371cbdd8fbb371f0d1f22e92dff16a">More...</a><br /></td></tr>
+<tr class="separator:ac4371cbdd8fbb371f0d1f22e92dff16a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcb2e054b97eb1b0d2f90355b700250e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#adcb2e054b97eb1b0d2f90355b700250e">operator+=</a> (const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;displacementToAdd)</td></tr>
+<tr class="memdesc:adcb2e054b97eb1b0d2f90355b700250e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add and assign the given displacement to ourselves.  <a href="class_isis_1_1_displacement.html#adcb2e054b97eb1b0d2f90355b700250e">More...</a><br /></td></tr>
+<tr class="separator:adcb2e054b97eb1b0d2f90355b700250e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd2348033167cd4b89530a959882bb7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#acd2348033167cd4b89530a959882bb7c">operator-=</a> (const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;displacementToSub)</td></tr>
+<tr class="memdesc:acd2348033167cd4b89530a959882bb7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract the given displacement from ourself and assign.  <a href="class_isis_1_1_displacement.html#acd2348033167cd4b89530a959882bb7c">More...</a><br /></td></tr>
+<tr class="separator:acd2348033167cd4b89530a959882bb7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57ee00d3db19a1e3b19f4be7ae790964"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a57ee00d3db19a1e3b19f4be7ae790964">operator-=</a> (const <a class="el" href="class_isis_1_1_distance.html">Distance</a> &amp;distanceToSub)</td></tr>
+<tr class="memdesc:a57ee00d3db19a1e3b19f4be7ae790964"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract the given distance from ourself and assign.  <a href="class_isis_1_1_displacement.html#a57ee00d3db19a1e3b19f4be7ae790964">More...</a><br /></td></tr>
+<tr class="separator:a57ee00d3db19a1e3b19f4be7ae790964"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2128a3d254f6a80c210cd43a79aa1a90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a2128a3d254f6a80c210cd43a79aa1a90">operator/=</a> (const double &amp;valueToDiv)</td></tr>
+<tr class="memdesc:a2128a3d254f6a80c210cd43a79aa1a90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Divide this displacement by a value and assign the result to ourself.  <a href="class_isis_1_1_displacement.html#a2128a3d254f6a80c210cd43a79aa1a90">More...</a><br /></td></tr>
+<tr class="separator:a2128a3d254f6a80c210cd43a79aa1a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb7e14188253424c8c0b8a36097ff004"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#aeb7e14188253424c8c0b8a36097ff004">operator*=</a> (const double &amp;valueToMult)</td></tr>
+<tr class="memdesc:aeb7e14188253424c8c0b8a36097ff004"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply this displacement by a value and assign the result to ourself.  <a href="class_isis_1_1_displacement.html#aeb7e14188253424c8c0b8a36097ff004">More...</a><br /></td></tr>
+<tr class="separator:aeb7e14188253424c8c0b8a36097ff004"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:aed98b6bfc71e6de4f0d86fbb8b897a18"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#aed98b6bfc71e6de4f0d86fbb8b897a18">displacement</a> (<a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24">Units</a> displacementUnit) const</td></tr>
+<tr class="memdesc:aed98b6bfc71e6de4f0d86fbb8b897a18"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a helper method to access displacements in a universal manner with uniform error checking.  <a href="class_isis_1_1_displacement.html#aed98b6bfc71e6de4f0d86fbb8b897a18">More...</a><br /></td></tr>
+<tr class="separator:aed98b6bfc71e6de4f0d86fbb8b897a18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b685699eb249c734c20640ce88c8ba2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement</a> (const double &amp;<a class="el" href="class_isis_1_1_displacement.html#aed98b6bfc71e6de4f0d86fbb8b897a18">displacement</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24">Units</a> displacementUnit)</td></tr>
+<tr class="memdesc:a0b685699eb249c734c20640ce88c8ba2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a helper method to set displacements in a universal manner with uniform error checking.  <a href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">More...</a><br /></td></tr>
+<tr class="separator:a0b685699eb249c734c20640ce88c8ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a8d480c1451695f1d4d192fbd80f45c75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_displacement.html#a8d480c1451695f1d4d192fbd80f45c75">operator*</a> (double mult, <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> <a class="el" href="class_isis_1_1_displacement.html#aed98b6bfc71e6de4f0d86fbb8b897a18">displacement</a>)</td></tr>
+<tr class="memdesc:a8d480c1451695f1d4d192fbd80f45c75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply displacement by a value (5m * 2 = 10m).  <a href="class_isis_1_1_displacement.html#a8d480c1451695f1d4d192fbd80f45c75">More...</a><br /></td></tr>
+<tr class="separator:a8d480c1451695f1d4d192fbd80f45c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="class_isis_1_1_displacement.html" title="Displacement is a signed length, usually in meters.">Displacement</a> is a signed length, usually in meters. </p>
+<p>This class is designed to encapsulate the concept of a displacement. A displacement has a distance and a sense of direction indicated by a sign (+ or -). It is typically used for vectors or coordinates, but is also available as a general purpose class. This class does accept both positive and negative values.</p>
+<dl class="section author"><dt>Author</dt><dd>2010-10-12 Steven Lambright and Debbie A. Cook </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a93502962e5d5b13f8dc6dbc0830f7a24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93502962e5d5b13f8dc6dbc0830f7a24">&#9670;&nbsp;</a></span>Units</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24">Isis::Displacement::Units</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is a list of available units to access and store Distances in. </p>
+<p>These values can be passed to the constructor to specify which unit the double you are passing in is in. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9"></a>Meters&#160;</td><td class="fielddoc"><p>The distance is being specified in meters. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a93502962e5d5b13f8dc6dbc0830f7a24a450ed854f58f46db0b546707ee4f741e"></a>Kilometers&#160;</td><td class="fielddoc"><p>The distance is being specified in kilometers. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a93502962e5d5b13f8dc6dbc0830f7a24a2fa1520e39d6a718da4db645e58d4497"></a>Pixels&#160;</td><td class="fielddoc"><p>The distance is being specified in pixels. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a45ea83d60c532f1665a619b42e7e12f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45ea83d60c532f1665a619b42e7e12f4">&#9670;&nbsp;</a></span>Displacement() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Displacement::Displacement </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This initializes the displacement to an invalid state. </p>
+<p>You must set the displacement later on with operator= or one of the Set methods. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_displacement.html#ac4371cbdd8fbb371f0d1f22e92dff16a">operator*()</a>, and <a class="el" href="class_isis_1_1_displacement.html#aafd2959c8338a0a29649cf2a1cff39b8">operator/()</a>.</p>
+
+</div>
+</div>
+<a id="a0785256552d121b6acd8e2ffb4eb7c46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0785256552d121b6acd8e2ffb4eb7c46">&#9670;&nbsp;</a></span>Displacement() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Displacement::Displacement </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>displacement</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24">Units</a>&#160;</td>
+          <td class="paramname"><em>displacementUnit</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is the general purpose constructor for <a class="el" href="class_isis_1_1_displacement.html" title="Displacement is a signed length, usually in meters.">Displacement</a>. </p>
+<p>This will initialize with the given displacement. If Pixels are supplied as the units, then a default pixels/meter = 1.0 will be used.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacement</td><td>The initial displacement; must be in units of displacementUnit </td></tr>
+    <tr><td class="paramname">displacementUnit</td><td>The unit of displacement; can be any value in displacement::Units </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#aed98b6bfc71e6de4f0d86fbb8b897a18">displacement()</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24a2fa1520e39d6a718da4db645e58d4497">Pixels</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<a id="ae0e7bdaae96e6b67e206bd83e23e63e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0e7bdaae96e6b67e206bd83e23e63e8">&#9670;&nbsp;</a></span>Displacement() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Displacement::Displacement </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>displacementInPixels</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>pixelsPerMeter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is a constructor for <a class="el" href="class_isis_1_1_displacement.html" title="Displacement is a signed length, usually in meters.">Displacement</a> given pixels with a conversion ratio. </p>
+<p>This will initialize with the pixels converted to meters.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacementInPixels</td><td>The displacement to initialize with, must be in units of pixels and should not be negative </td></tr>
+    <tr><td class="paramname">pixelsPerMeter</td><td>The pixels/meter conversion factor </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<a id="a309a77e9d895c4c71aff7b0fd165aa67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a309a77e9d895c4c71aff7b0fd165aa67">&#9670;&nbsp;</a></span>Displacement() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Displacement::Displacement </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_distance.html">Distance</a> &amp;&#160;</td>
+          <td class="paramname"><em>distanceToCopy</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This creates a displacement equal to a distance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">distanceToCopy</td><td>This is the distance we are duplicating </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, <a class="el" href="class_isis_1_1_distance.html#ae4eab0580e1b5f23b444d18b071624c2">Isis::Distance::meters()</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<a id="a977ec2f5d079fdc20cb99d50758db0c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a977ec2f5d079fdc20cb99d50758db0c2">&#9670;&nbsp;</a></span>~Displacement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Displacement::~Displacement </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Free the memory allocated by this instance of the displacement class. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aed98b6bfc71e6de4f0d86fbb8b897a18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed98b6bfc71e6de4f0d86fbb8b897a18">&#9670;&nbsp;</a></span>displacement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Displacement::displacement </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24">Units</a>&#160;</td>
+          <td class="paramname"><em>displacementUnit</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is a helper method to access displacements in a universal manner with uniform error checking. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacementUnit</td><td>Unit of the return value. If this is invalid, an exception will be thrown. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The displacement in units of displacementUnit </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24a450ed854f58f46db0b546707ee4f741e">Kilometers</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24a2fa1520e39d6a718da4db645e58d4497">Pixels</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_displacement.html#a0785256552d121b6acd8e2ffb4eb7c46">Displacement()</a>, <a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid()</a>, <a class="el" href="class_isis_1_1_displacement.html#a2c89062171bb611a9c0809ea7945582a">kilometers()</a>, <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters()</a>, <a class="el" href="class_isis_1_1_displacement.html#a086fb3f9696a9ae1c0247618238c2577">pixels()</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<a id="a2e594da1f4f422f3402bd0a2824b45b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e594da1f4f422f3402bd0a2824b45b1">&#9670;&nbsp;</a></span>isValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Displacement::isValid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Test if this displacement has been initialized or not. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if this displacement has been initialized. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#aed98b6bfc71e6de4f0d86fbb8b897a18">displacement()</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, and <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point.html#ac744bc6b400ad1ba1579283d747d6290">Isis::ControlPoint::HasAprioriCoordinates()</a>, <a class="el" href="class_isis_1_1_displacement.html#ac4371cbdd8fbb371f0d1f22e92dff16a">operator*()</a>, <a class="el" href="class_isis_1_1_displacement.html#aeb7e14188253424c8c0b8a36097ff004">operator*=()</a>, <a class="el" href="class_isis_1_1_displacement.html#adcb2e054b97eb1b0d2f90355b700250e">operator+=()</a>, <a class="el" href="class_isis_1_1_displacement.html#acd2348033167cd4b89530a959882bb7c">operator-=()</a>, <a class="el" href="class_isis_1_1_displacement.html#a508d43640c741c38a4f8bb184c0716ef">operator/()</a>, <a class="el" href="class_isis_1_1_displacement.html#a2128a3d254f6a80c210cd43a79aa1a90">operator/=()</a>, <a class="el" href="class_isis_1_1_displacement.html#ae8ca37c4b2d47b79247db014772289fe">operator&lt;()</a>, <a class="el" href="class_isis_1_1_displacement.html#a830d0efb028c2a229123b527463f269f">operator&gt;()</a>, and <a class="el" href="class_isis_1_1_area3_d.html#a84f74d172975d80461e904af5dc78a2a">Isis::Area3D::setArea()</a>.</p>
+
+</div>
+</div>
+<a id="a2c89062171bb611a9c0809ea7945582a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c89062171bb611a9c0809ea7945582a">&#9670;&nbsp;</a></span>kilometers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Displacement::kilometers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the displacement in kilometers. </p>
+<dl class="section return"><dt>Returns</dt><dd>Current displacement, in kilometers </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#aed98b6bfc71e6de4f0d86fbb8b897a18">displacement()</a>, and <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24a450ed854f58f46db0b546707ee4f741e">Kilometers</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_dem_shape.html#aad16b26b4c2958f42329789f6d83774c">Isis::DemShape::calculateDefaultNormal()</a>, <a class="el" href="class_isis_1_1_ellipsoid_shape.html#a4d5e9caf981a614afb68671b544a836e">Isis::EllipsoidShape::calculateLocalNormal()</a>, <a class="el" href="class_isis_1_1_bundle_lidar_range_constraint.html#ae2aebbd055a6523a132403f4556b5893">Isis::BundleLidarRangeConstraint::computeRange()</a>, <a class="el" href="class_isis_1_1_sensor.html#ad2107d04578384322a2129e6efe2604a">Isis::Sensor::Coordinate()</a>, <a class="el" href="class_isis_1_1_surface_point.html#abcce82bf7ad6337d24b5a12e5fb88949">Isis::SurfacePoint::DisplacementToDouble()</a>, <a class="el" href="class_isis_1_1_plane_shape.html#ace9c85c3dae35e3282305f8f36965c3f">Isis::PlaneShape::emissionAngle()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a517e713c5e3f4b09f2204da730ba33ae">Isis::BundleControlPoint::formatBundleLatitudinalOutputDetailString()</a>, <a class="el" href="class_isis_1_1_bundle_control_point.html#a3982610a839f0757222d7495398f7f5e">Isis::BundleControlPoint::formatBundleRectangularOutputDetailString()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a028a1282829eaf7e436964666f0f9f37">Isis::RadarGroundMap::GetXY()</a>, <a class="el" href="class_isis_1_1_camera_ground_map.html#a18256747541af50d530a0fd45cf22484">Isis::CameraGroundMap::GetXY()</a>, <a class="el" href="class_isis_1_1_plane_shape.html#ad1d7534de544d755ff18b138f53264e8">Isis::PlaneShape::incidenceAngle()</a>, <a class="el" href="class_isis_1_1_naif_dsk_shape.html#a632b0e23b2575ff38d8369c65f443b36">Isis::NaifDskShape::intersectSurface()</a>, <a class="el" href="class_isis_1_1_dem_shape.html#af0f28a933b26685f6d2999af8485ed89">Isis::DemShape::intersectSurface()</a>, <a class="el" href="class_isis_1_1_camera.html#ab9aa06849d48a28fdc9adaa5eac4b1b2">Isis::Camera::LocalPhotometricAngles()</a>, <a class="el" href="class_isis_1_1_plane_shape.html#a6af70a20f0be3b3b9309d9ae72b615ea">Isis::PlaneShape::localRadius()</a>, <a class="el" href="class_isis_1_1_camera_ground_map.html#aff5fbd69aeafa166fa2b49b86580da05">Isis::CameraGroundMap::MeanRadiusPartial()</a>, <a class="el" href="class_isis_1_1_c_s_m_camera.html#ad879487f22d02f8f24febe2a4503666b">Isis::CSMCamera::SlantDistance()</a>, <a class="el" href="class_isis_1_1_sensor.html#a54002c62d787f2d823596913195a6f5e">Isis::Sensor::SlantDistance()</a>, and <a class="el" href="class_isis_1_1_sensor.html#a50996aa3ed89ffd015f228bf592b63c4">Isis::Sensor::SolarDistance()</a>.</p>
+
+</div>
+</div>
+<a id="af8b79000140675ce651fd67f6b3f8387"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8b79000140675ce651fd67f6b3f8387">&#9670;&nbsp;</a></span>meters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Displacement::meters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the displacement in meters. </p>
+<dl class="section return"><dt>Returns</dt><dd>Current displacement, in meters. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#aed98b6bfc71e6de4f0d86fbb8b897a18">displacement()</a>, and <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_point_v0001.html#abf33d0876e3eeb5a630b598811488221">Isis::ControlPointV0001::ControlPointV0001()</a>, <a class="el" href="class_isis_1_1_surface_point.html#abcce82bf7ad6337d24b5a12e5fb88949">Isis::SurfacePoint::DisplacementToDouble()</a>, <a class="el" href="class_isis_1_1_adjusted_x_filter.html#a56eca71ae54b8a46bc7634bfc57851bc">Isis::AdjustedXFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_y_filter.html#a7e0af0833ae76d0e2a3a152e1ebb342b">Isis::AdjustedYFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_adjusted_z_filter.html#a4eb64d0769194207a79f20596a2a80b8">Isis::AdjustedZFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_x_filter.html#ac35b987848d5765b4c374c1329f673a3">Isis::APrioriXFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_y_filter.html#a20044db0fa5d691dda50ac60e034e625">Isis::APrioriYFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_a_priori_z_filter.html#a34dc221d3aedd738f06ffcacfd3f9c45">Isis::APrioriZFilter::evaluate()</a>, <a class="el" href="class_isis_1_1_abstract_point_item.html#a3090d3bed1f4ff3eeefbba05eb180ac4">Isis::AbstractPointItem::getData()</a>, <a class="el" href="class_isis_1_1_isis_shape.html#a5a7e3e2544dc4f1d01db3668164da5ef">Isis::IsisShape::intersect()</a>, <a class="el" href="class_isis_1_1_displacement.html#ac4371cbdd8fbb371f0d1f22e92dff16a">operator*()</a>, <a class="el" href="class_isis_1_1_displacement.html#aeb7e14188253424c8c0b8a36097ff004">operator*=()</a>, <a class="el" href="class_isis_1_1_displacement.html#adcb2e054b97eb1b0d2f90355b700250e">operator+=()</a>, <a class="el" href="class_isis_1_1_displacement.html#acd2348033167cd4b89530a959882bb7c">operator-=()</a>, <a class="el" href="class_isis_1_1_displacement.html#a508d43640c741c38a4f8bb184c0716ef">operator/()</a>, <a class="el" href="class_isis_1_1_displacement.html#a2128a3d254f6a80c210cd43a79aa1a90">operator/=()</a>, <a class="el" href="class_isis_1_1_displacement.html#ae8ca37c4b2d47b79247db014772289fe">operator&lt;()</a>, <a class="el" href="class_isis_1_1_displacement.html#a830d0efb028c2a229123b527463f269f">operator&gt;()</a>, <a class="el" href="class_isis_1_1_area3_d.html#a84f74d172975d80461e904af5dc78a2a">Isis::Area3D::setArea()</a>, <a class="el" href="class_isis_1_1_projection.html#a46481e0356e349075f373ff5947cc819">Isis::Projection::SetUpperLeftCorner()</a>, and <a class="el" href="class_isis_1_1_control_net_versioner.html#a2011c1750631993d86c4c360c47f1e1e">Isis::ControlNetVersioner::toPvl()</a>.</p>
+
+</div>
+</div>
+<a id="a23ad3195b564e626bb9a745cabb2f13c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23ad3195b564e626bb9a745cabb2f13c">&#9670;&nbsp;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Displacement::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>otherDisplacement</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compare the lengths of 2 displacements with the != operator. </p>
+<p>Two uninitialized displacements are equal to each other.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">otherDisplacement</td><td>This is the displacement we are comparing to, i.e. it is on the right-hand-side of the operator when used </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the length of this displacement is not equal to the given displacement </dd></dl>
+
+</div>
+</div>
+<a id="ac4371cbdd8fbb371f0d1f22e92dff16a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4371cbdd8fbb371f0d1f22e92dff16a">&#9670;&nbsp;</a></span>operator*()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a> Isis::Displacement::operator* </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>valueToMult</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiply this displacement by a value (5m * 2 = 10m). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">valueToMult</td><td>This is the value to multiply by </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting value </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a45ea83d60c532f1665a619b42e7e12f4">Displacement()</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid()</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, and <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters()</a>.</p>
+
+</div>
+</div>
+<a id="aeb7e14188253424c8c0b8a36097ff004"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb7e14188253424c8c0b8a36097ff004">&#9670;&nbsp;</a></span>operator*=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Displacement::operator*= </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>valueToMult</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiply this displacement by a value and assign the result to ourself. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">valueToMult</td><td>This is the value we are going to multiply by </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid()</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<a id="a1549d648aac4cb76708a33c69c3ec9aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1549d648aac4cb76708a33c69c3ec9aa">&#9670;&nbsp;</a></span>operator+()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a> Isis::Displacement::operator+ </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>displacementToAdd</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add another displacement to this displacement (1km + 5m = 1005m) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacementToAdd</td><td>This is the displacement we are adding to ourselves </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting displacement, self not modified </dd></dl>
+
+</div>
+</div>
+<a id="adcb2e054b97eb1b0d2f90355b700250e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcb2e054b97eb1b0d2f90355b700250e">&#9670;&nbsp;</a></span>operator+=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Displacement::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>displacementToAdd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add and assign the given displacement to ourselves. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacementToAdd</td><td>This is the displacement we are to add </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid()</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<a id="a1205fd67d466ea630781e690ba9f9bcc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1205fd67d466ea630781e690ba9f9bcc">&#9670;&nbsp;</a></span>operator-() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a> Isis::Displacement::operator- </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>displacementToSub</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Subtract another displacement from this displacement (1km - 5m = 995m). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacementToSub</td><td>This is the displacement we are subtracting from ourself </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting displacement, self not modified </dd></dl>
+
+</div>
+</div>
+<a id="af86f7ba1cb9a1c0a4593e90c5392f443"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af86f7ba1cb9a1c0a4593e90c5392f443">&#9670;&nbsp;</a></span>operator-() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a> Isis::Displacement::operator- </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_distance.html">Distance</a> &amp;&#160;</td>
+          <td class="paramname"><em>distanceToSub</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Subtract a distance from this displacement (1km - 5m = 995m). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">distanceToSub</td><td>This is the displacement we are subtracting from ourself </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting displacement, self not modified </dd></dl>
+
+</div>
+</div>
+<a id="acd2348033167cd4b89530a959882bb7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd2348033167cd4b89530a959882bb7c">&#9670;&nbsp;</a></span>operator-=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Displacement::operator-= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>displacementToSub</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Subtract the given displacement from ourself and assign. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacementToSub</td><td>This is the displacement we are to subtract </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid()</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<a id="a57ee00d3db19a1e3b19f4be7ae790964"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57ee00d3db19a1e3b19f4be7ae790964">&#9670;&nbsp;</a></span>operator-=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Displacement::operator-= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_distance.html">Distance</a> &amp;&#160;</td>
+          <td class="paramname"><em>distanceToSub</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Subtract the given distance from ourself and assign. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">distanceToSub</td><td>This is the distance we are to subtract </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid()</a>, <a class="el" href="class_isis_1_1_distance.html#a280f103123d557e881cb2ae01658f318">Isis::Distance::isValid()</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters()</a>, <a class="el" href="class_isis_1_1_distance.html#ae4eab0580e1b5f23b444d18b071624c2">Isis::Distance::meters()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<a id="a508d43640c741c38a4f8bb184c0716ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a508d43640c741c38a4f8bb184c0716ef">&#9670;&nbsp;</a></span>operator/() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Displacement::operator/ </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>displacementToDiv</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Divide another displacement into this displacement (5m / 1m = 5). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacementToDiv</td><td>This is the divisor displacement (denominator) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting value </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid()</a>, <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters()</a>, and <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+</div>
+</div>
+<a id="aafd2959c8338a0a29649cf2a1cff39b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafd2959c8338a0a29649cf2a1cff39b8">&#9670;&nbsp;</a></span>operator/() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a> Isis::Displacement::operator/ </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>valueToDiv</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Divide a value from this displacement (5m / 2 = 2.5m). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">valueToDiv</td><td>This is the divisor displacement (denominator) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting value </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a45ea83d60c532f1665a619b42e7e12f4">Displacement()</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid()</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, and <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters()</a>.</p>
+
+</div>
+</div>
+<a id="a2128a3d254f6a80c210cd43a79aa1a90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2128a3d254f6a80c210cd43a79aa1a90">&#9670;&nbsp;</a></span>operator/=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Displacement::operator/= </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>valueToDiv</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Divide this displacement by a value and assign the result to ourself. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">valueToDiv</td><td>This is the value we are going to divide by </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid()</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters()</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<a id="ae8ca37c4b2d47b79247db014772289fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8ca37c4b2d47b79247db014772289fe">&#9670;&nbsp;</a></span>operator&lt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Displacement::operator&lt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>otherDisplacement</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare two displacements with the less than operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">otherdisplacement</td><td>This is the displacement we're comparing to, i.e. on the right-hand-side of the operator when used </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the length of the displacement is less than the length of the given displacement </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid()</a>, <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+</div>
+</div>
+<a id="a19e3301c3e9ba1e4dcf27b144b4f570d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19e3301c3e9ba1e4dcf27b144b4f570d">&#9670;&nbsp;</a></span>operator&lt;=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Displacement::operator&lt;= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>otherDisplacement</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compare the lengths of 2 displacements with the &lt;= operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">otherDisplacement</td><td>This is the displacement we are comparing i.e. it is on the right-hand-side of the operator when used </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the length of this displacement is less than or equal to the length of the given displacement. </dd></dl>
+
+</div>
+</div>
+<a id="a724caa888a1659b58166d2143ba75892"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a724caa888a1659b58166d2143ba75892">&#9670;&nbsp;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Displacement::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>otherDisplacement</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compare the lengths of 2 displacements with the == operator. </p>
+<p>Two uninitialized displacements are equal to each other.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">otherDisplacement</td><td>This is the displacement we are comparing to, i.e. it is on the right-hand-side of the operator when used </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the length of this displacement is equal to the <br  />
+ given displacement </dd></dl>
+
+</div>
+</div>
+<a id="a830d0efb028c2a229123b527463f269f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a830d0efb028c2a229123b527463f269f">&#9670;&nbsp;</a></span>operator&gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Displacement::operator&gt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>otherDisplacement</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the displacement in meters. </p>
+<p>Compare two displacements with the greater than operator.</p>
+<p>This is equivalent to <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387" title="Get the displacement in meters.">meters()</a></p>
+<dl class="section return"><dt>Returns</dt><dd>The displacement, as a number, in units of Meters</dd></dl>
+<p>operator double() const { return <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387" title="Get the displacement in meters.">meters()</a>; }</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">otherdisplacement</td><td>This is the displacement we're comparing to, i.e. it is on the right-hand-side of the operator when used </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the length of this displacement is greater than the length of the given displacement </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_displacement.html#a2e594da1f4f422f3402bd0a2824b45b1">isValid()</a>, <a class="el" href="class_isis_1_1_displacement.html#af8b79000140675ce651fd67f6b3f8387">meters()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+</div>
+</div>
+<a id="a74fdc91b31f80bfe4c1dd4715b3eaa06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74fdc91b31f80bfe4c1dd4715b3eaa06">&#9670;&nbsp;</a></span>operator&gt;=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Displacement::operator&gt;= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_displacement.html">Displacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>otherDisplacement</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compare the distances of 2 displacements with the &gt;= operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">otherDisplacement</td><td>This is the displacement we are comparing to, i.e. it is on the right-hand-side of the operator when used </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the length (unsigned) of the displacement is greater than or equal to the length of the given displacement </dd></dl>
+
+</div>
+</div>
+<a id="a086fb3f9696a9ae1c0247618238c2577"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a086fb3f9696a9ae1c0247618238c2577">&#9670;&nbsp;</a></span>pixels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Displacement::pixels </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>pixelsPerMeter</em> = <code>1.0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the displacement in pixels using the given conversion ratio. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pixelsPerMeter</td><td>Pixels/Meters conversion ratio to use, stored data is always in meters </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Current displacement, in pixels </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#aed98b6bfc71e6de4f0d86fbb8b897a18">displacement()</a>, and <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_raw_cube_chunk.html#a9482444b315a17e9e074efec989fe222">Isis::RawCubeChunk::RawCubeChunk()</a>.</p>
+
+</div>
+</div>
+<a id="a0b685699eb249c734c20640ce88c8ba2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b685699eb249c734c20640ce88c8ba2">&#9670;&nbsp;</a></span>setDisplacement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Displacement::setDisplacement </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>displacement</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24">Units</a>&#160;</td>
+          <td class="paramname"><em>displacementUnit</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is a helper method to set displacements in a universal manner with uniform error checking. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacement</td><td>The displacement, in units of displacementUnit, to set this class to. If this is negative an exception will be thrown and the state unmodified. </td></tr>
+    <tr><td class="paramname">displacementUnit</td><td>Unit of displacement. If this is invalid, an exception will be thrown and the state left unmodified. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_displacement.html#aed98b6bfc71e6de4f0d86fbb8b897a18">displacement()</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24a450ed854f58f46db0b546707ee4f741e">Kilometers</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>, <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24a2fa1520e39d6a718da4db645e58d4497">Pixels</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_displacement.html#a45ea83d60c532f1665a619b42e7e12f4">Displacement()</a>, <a class="el" href="class_isis_1_1_displacement.html#aeb7e14188253424c8c0b8a36097ff004">operator*=()</a>, <a class="el" href="class_isis_1_1_displacement.html#adcb2e054b97eb1b0d2f90355b700250e">operator+=()</a>, <a class="el" href="class_isis_1_1_displacement.html#acd2348033167cd4b89530a959882bb7c">operator-=()</a>, <a class="el" href="class_isis_1_1_displacement.html#a2128a3d254f6a80c210cd43a79aa1a90">operator/=()</a>, <a class="el" href="class_isis_1_1_displacement.html#adff0f5be860952dcfde95f76bc3c423a">setKilometers()</a>, <a class="el" href="class_isis_1_1_displacement.html#a7920b1a422de244288976873fb7d13db">setMeters()</a>, and <a class="el" href="class_isis_1_1_displacement.html#aabd8850bb909c394ced609dd5bf37306">setPixels()</a>.</p>
+
+</div>
+</div>
+<a id="adff0f5be860952dcfde95f76bc3c423a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adff0f5be860952dcfde95f76bc3c423a">&#9670;&nbsp;</a></span>setKilometers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Displacement::setKilometers </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>displacementInKilometers</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the displacement in kilometers. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacementInKilometers</td><td>This is the value to set as the displacement, given in kilometers. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24a450ed854f58f46db0b546707ee4f741e">Kilometers</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<a id="a7920b1a422de244288976873fb7d13db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7920b1a422de244288976873fb7d13db">&#9670;&nbsp;</a></span>setMeters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Displacement::setMeters </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>displacementInMeters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the displacement in meters. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacementInMeters</td><td>This is the value to set this displacement to, given in meters. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<a id="aabd8850bb909c394ced609dd5bf37306"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabd8850bb909c394ced609dd5bf37306">&#9670;&nbsp;</a></span>setPixels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Displacement::setPixels </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>displacementInPixels</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>pixelsPerMeter</em> = <code>1.0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the displacement in pixels. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacementInPixels</td><td>This is the value to set this displacement to, given in pixels. </td></tr>
+    <tr><td class="paramname">pixelsPerMeter</td><td>Pixels/Meters conversion ratio to use, stored data is always in meters </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_displacement.html#a93502962e5d5b13f8dc6dbc0830f7a24afe17641a9c4861a3d01c276a425d1ae9">Meters</a>, and <a class="el" href="class_isis_1_1_displacement.html#a0b685699eb249c734c20640ce88c8ba2">setDisplacement()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="a8d480c1451695f1d4d192fbd80f45c75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d480c1451695f1d4d192fbd80f45c75">&#9670;&nbsp;</a></span>operator*</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a> operator* </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>mult</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a>&#160;</td>
+          <td class="paramname"><em>displacement</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Multiply displacement by a value (5m * 2 = 10m). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mult</td><td>This is the value to multiply by </td></tr>
+    <tr><td class="paramname">displacement</td><td>This is the distance to multiply into </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting value </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Displacement/<a class="el" href="_displacement_8h_source.html">Displacement.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Displacement/<a class="el" href="_displacement_8cpp.html">Displacement.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_displacement.html">Displacement</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,1608 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ShapeList Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_shape_list.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_shape_list-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ShapeList Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Internalizes a list of shapes and allows for operations on the entire list.  
+ <a href="class_isis_1_1_shape_list.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_shape_list_8h_source.html">ShapeList.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ShapeList:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_shape_list__inherit__graph.png" border="0" usemap="#a_isis_1_1_shape_list_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_shape_list_inherit__map" id="a_isis_1_1_shape_list_inherit__map">
+<area shape="rect" title="Internalizes a list of shapes and allows for operations on the entire list." alt="" coords="30,135,170,376"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="5,5,75,87"/>
+<area shape="rect" href="class_q_list.html" title=" " alt="" coords="99,5,221,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ShapeList:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_shape_list__coll__graph.png" border="0" usemap="#a_isis_1_1_shape_list_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_shape_list_coll__map" id="a_isis_1_1_shape_list_coll__map">
+<area shape="rect" title="Internalizes a list of shapes and allows for operations on the entire list." alt="" coords="30,135,170,376"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="5,5,75,87"/>
+<area shape="rect" href="class_q_list.html" title=" " alt="" coords="99,5,221,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a50ef3163ff746b91ac7b3d2723d90420"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged</a> (int newCount)</td></tr>
+<tr class="separator:a50ef3163ff746b91ac7b3d2723d90420"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a8dd2f61479d253c68e8fe00f29718d2b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a8dd2f61479d253c68e8fe00f29718d2b">ShapeList</a> (QString <a class="el" href="class_isis_1_1_shape_list.html#a73147e4401ca5ee0ab862af185020db4">name</a>, QString <a class="el" href="class_isis_1_1_shape_list.html#a69be41c0de8cdacb6271d7c0b5109684">path</a>, <a class="el" href="class_q_object.html">QObject</a> *parent=NULL)</td></tr>
+<tr class="memdesc:a8dd2f61479d253c68e8fe00f29718d2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an shape list from an shape list name and path (does not read Shapes).  <a href="class_isis_1_1_shape_list.html#a8dd2f61479d253c68e8fe00f29718d2b">More...</a><br /></td></tr>
+<tr class="separator:a8dd2f61479d253c68e8fe00f29718d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbbbd340316f85dbfc554677e25b7ce0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#afbbbd340316f85dbfc554677e25b7ce0">ShapeList</a> (<a class="el" href="class_q_object.html">QObject</a> *parent=NULL)</td></tr>
+<tr class="memdesc:afbbbd340316f85dbfc554677e25b7ce0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a blank shape list.  <a href="class_isis_1_1_shape_list.html#afbbbd340316f85dbfc554677e25b7ce0">More...</a><br /></td></tr>
+<tr class="separator:afbbbd340316f85dbfc554677e25b7ce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7a4919ccddc0db34d8e3a97201fb0b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#aa7a4919ccddc0db34d8e3a97201fb0b2">ShapeList</a> (<a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt;, <a class="el" href="class_q_object.html">QObject</a> *parent=NULL)</td></tr>
+<tr class="memdesc:aa7a4919ccddc0db34d8e3a97201fb0b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an shape list from a list of shapes.  <a href="class_isis_1_1_shape_list.html#aa7a4919ccddc0db34d8e3a97201fb0b2">More...</a><br /></td></tr>
+<tr class="separator:aa7a4919ccddc0db34d8e3a97201fb0b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0f2d62664067c8a23a02fafdd190275"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#af0f2d62664067c8a23a02fafdd190275">ShapeList</a> (QStringList &amp;)</td></tr>
+<tr class="memdesc:af0f2d62664067c8a23a02fafdd190275"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an shape list from a list of cube file names.  <a href="class_isis_1_1_shape_list.html#af0f2d62664067c8a23a02fafdd190275">More...</a><br /></td></tr>
+<tr class="separator:af0f2d62664067c8a23a02fafdd190275"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe572b109cac32f260970e9948d258b5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#afe572b109cac32f260970e9948d258b5">ShapeList</a> (const <a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp;)</td></tr>
+<tr class="memdesc:afe572b109cac32f260970e9948d258b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="class_isis_1_1_shape_list.html#afe572b109cac32f260970e9948d258b5">More...</a><br /></td></tr>
+<tr class="separator:afe572b109cac32f260970e9948d258b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aa27bd31741aaacc5d186f212e423e5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a9aa27bd31741aaacc5d186f212e423e5">~ShapeList</a> ()</td></tr>
+<tr class="memdesc:a9aa27bd31741aaacc5d186f212e423e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_shape_list.html#a9aa27bd31741aaacc5d186f212e423e5">More...</a><br /></td></tr>
+<tr class="separator:a9aa27bd31741aaacc5d186f212e423e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c870a18efafb3d15ebd78efa92bd540"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_serial_number_list.html">SerialNumberList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a2c870a18efafb3d15ebd78efa92bd540">serialNumberList</a> ()</td></tr>
+<tr class="memdesc:a2c870a18efafb3d15ebd78efa92bd540"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="class_isis_1_1_serial_number_list.html" title="Serial Number list generator.">SerialNumberList</a> from the shape list.  <a href="class_isis_1_1_shape_list.html#a2c870a18efafb3d15ebd78efa92bd540">More...</a><br /></td></tr>
+<tr class="separator:a2c870a18efafb3d15ebd78efa92bd540"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19a2b421a9730204fd9b18ca31266206"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a19a2b421a9730204fd9b18ca31266206">append</a> (<a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a19a2b421a9730204fd9b18ca31266206"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends an shape to the shape list.  <a href="class_isis_1_1_shape_list.html#a19a2b421a9730204fd9b18ca31266206">More...</a><br /></td></tr>
+<tr class="separator:a19a2b421a9730204fd9b18ca31266206"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1d80890f744c52e486de8771c20f801"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#ae1d80890f744c52e486de8771c20f801">append</a> (const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt; &amp;value)</td></tr>
+<tr class="memdesc:ae1d80890f744c52e486de8771c20f801"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a list of shapes to the shape list.  <a href="class_isis_1_1_shape_list.html#ae1d80890f744c52e486de8771c20f801">More...</a><br /></td></tr>
+<tr class="separator:ae1d80890f744c52e486de8771c20f801"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cf2c240a186ba962b85cca1930df32b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a3cf2c240a186ba962b85cca1930df32b">clear</a> ()</td></tr>
+<tr class="memdesc:a3cf2c240a186ba962b85cca1930df32b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the shape list.  <a href="class_isis_1_1_shape_list.html#a3cf2c240a186ba962b85cca1930df32b">More...</a><br /></td></tr>
+<tr class="separator:a3cf2c240a186ba962b85cca1930df32b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b546fb3c8e577a705b391a6d95a1847"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a2b546fb3c8e577a705b391a6d95a1847">erase</a> (iterator pos)</td></tr>
+<tr class="memdesc:a2b546fb3c8e577a705b391a6d95a1847"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erases a single shape from the shape list.  <a href="class_isis_1_1_shape_list.html#a2b546fb3c8e577a705b391a6d95a1847">More...</a><br /></td></tr>
+<tr class="separator:a2b546fb3c8e577a705b391a6d95a1847"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99160bfcee626802b768388b8644e7df"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a99160bfcee626802b768388b8644e7df">erase</a> (iterator begin, iterator end)</td></tr>
+<tr class="memdesc:a99160bfcee626802b768388b8644e7df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erases a range of shapes from the shape list.  <a href="class_isis_1_1_shape_list.html#a99160bfcee626802b768388b8644e7df">More...</a><br /></td></tr>
+<tr class="separator:a99160bfcee626802b768388b8644e7df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f0a8c0b5b16f08f858233dbfd5fb994"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a0f0a8c0b5b16f08f858233dbfd5fb994">insert</a> (int i, <a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a0f0a8c0b5b16f08f858233dbfd5fb994"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts an shape into the shape list at an index.  <a href="class_isis_1_1_shape_list.html#a0f0a8c0b5b16f08f858233dbfd5fb994">More...</a><br /></td></tr>
+<tr class="separator:a0f0a8c0b5b16f08f858233dbfd5fb994"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa59e0d4ade3cba91af07165c1a912744"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#aa59e0d4ade3cba91af07165c1a912744">insert</a> (iterator before, <a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;value)</td></tr>
+<tr class="memdesc:aa59e0d4ade3cba91af07165c1a912744"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts an shape into the shape list after an iterator.  <a href="class_isis_1_1_shape_list.html#aa59e0d4ade3cba91af07165c1a912744">More...</a><br /></td></tr>
+<tr class="separator:aa59e0d4ade3cba91af07165c1a912744"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a851035b467b3200f6dc5c8b5062345f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a851035b467b3200f6dc5c8b5062345f3">prepend</a> (<a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a851035b467b3200f6dc5c8b5062345f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts an shape at the beginning of the shape list.  <a href="class_isis_1_1_shape_list.html#a851035b467b3200f6dc5c8b5062345f3">More...</a><br /></td></tr>
+<tr class="separator:a851035b467b3200f6dc5c8b5062345f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a2d277b37ded0f2b9a376d85e670af0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a5a2d277b37ded0f2b9a376d85e670af0">push_back</a> (<a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a5a2d277b37ded0f2b9a376d85e670af0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends an shape to the end of the shape list.  <a href="class_isis_1_1_shape_list.html#a5a2d277b37ded0f2b9a376d85e670af0">More...</a><br /></td></tr>
+<tr class="separator:a5a2d277b37ded0f2b9a376d85e670af0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93b697e9b67b44705c5375c03e6e2835"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a93b697e9b67b44705c5375c03e6e2835">push_front</a> (<a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a93b697e9b67b44705c5375c03e6e2835"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepends an shape to the beginning of the shape list.  <a href="class_isis_1_1_shape_list.html#a93b697e9b67b44705c5375c03e6e2835">More...</a><br /></td></tr>
+<tr class="separator:a93b697e9b67b44705c5375c03e6e2835"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a704366593fd8b531cddb3f24ad3af1f4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a704366593fd8b531cddb3f24ad3af1f4">removeAll</a> (<a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a704366593fd8b531cddb3f24ad3af1f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all occurances of an shape.  <a href="class_isis_1_1_shape_list.html#a704366593fd8b531cddb3f24ad3af1f4">More...</a><br /></td></tr>
+<tr class="separator:a704366593fd8b531cddb3f24ad3af1f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20a3b0772e26dda068066337ea86fb42"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a20a3b0772e26dda068066337ea86fb42">removeAt</a> (int i)</td></tr>
+<tr class="memdesc:a20a3b0772e26dda068066337ea86fb42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the shape at an index.  <a href="class_isis_1_1_shape_list.html#a20a3b0772e26dda068066337ea86fb42">More...</a><br /></td></tr>
+<tr class="separator:a20a3b0772e26dda068066337ea86fb42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a616fea6677cfc5c26a0e0e690fa49569"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a616fea6677cfc5c26a0e0e690fa49569">removeFirst</a> ()</td></tr>
+<tr class="memdesc:a616fea6677cfc5c26a0e0e690fa49569"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the shape at the front of the shape list.  <a href="class_isis_1_1_shape_list.html#a616fea6677cfc5c26a0e0e690fa49569">More...</a><br /></td></tr>
+<tr class="separator:a616fea6677cfc5c26a0e0e690fa49569"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61f6f8ae9798a9232bd7dab585930bf7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a61f6f8ae9798a9232bd7dab585930bf7">removeLast</a> ()</td></tr>
+<tr class="memdesc:a61f6f8ae9798a9232bd7dab585930bf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the shape at the end of the shape list.  <a href="class_isis_1_1_shape_list.html#a61f6f8ae9798a9232bd7dab585930bf7">More...</a><br /></td></tr>
+<tr class="separator:a61f6f8ae9798a9232bd7dab585930bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b214aba2ccb4947c4857c3be7c5b1b0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a9b214aba2ccb4947c4857c3be7c5b1b0">removeOne</a> (<a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a9b214aba2ccb4947c4857c3be7c5b1b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the first occurance of an shape.  <a href="class_isis_1_1_shape_list.html#a9b214aba2ccb4947c4857c3be7c5b1b0">More...</a><br /></td></tr>
+<tr class="separator:a9b214aba2ccb4947c4857c3be7c5b1b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f3d4c501490de5cdb3a658c837beac8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a2f3d4c501490de5cdb3a658c837beac8">swap</a> (<a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt; &amp;other)</td></tr>
+<tr class="memdesc:a2f3d4c501490de5cdb3a658c837beac8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swaps the shape list with another list of shapes.  <a href="class_isis_1_1_shape_list.html#a2f3d4c501490de5cdb3a658c837beac8">More...</a><br /></td></tr>
+<tr class="separator:a2f3d4c501490de5cdb3a658c837beac8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a857faff23db7161a7f323df1f0953868"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a857faff23db7161a7f323df1f0953868">takeAt</a> (int i)</td></tr>
+<tr class="memdesc:a857faff23db7161a7f323df1f0953868"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the shape at an index and returns it.  <a href="class_isis_1_1_shape_list.html#a857faff23db7161a7f323df1f0953868">More...</a><br /></td></tr>
+<tr class="separator:a857faff23db7161a7f323df1f0953868"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc09905b0ea42cc2166336a99d252616"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#adc09905b0ea42cc2166336a99d252616">takeFirst</a> ()</td></tr>
+<tr class="memdesc:adc09905b0ea42cc2166336a99d252616"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes and returns the first shape.  <a href="class_isis_1_1_shape_list.html#adc09905b0ea42cc2166336a99d252616">More...</a><br /></td></tr>
+<tr class="separator:adc09905b0ea42cc2166336a99d252616"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28ecd79839d26d3f27f3904ad6b912b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a28ecd79839d26d3f27f3904ad6b912b8">takeLast</a> ()</td></tr>
+<tr class="memdesc:a28ecd79839d26d3f27f3904ad6b912b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes and returns the last shape.  <a href="class_isis_1_1_shape_list.html#a28ecd79839d26d3f27f3904ad6b912b8">More...</a><br /></td></tr>
+<tr class="separator:a28ecd79839d26d3f27f3904ad6b912b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae03ee9809e2ee3abe3d99b6ea575e4f2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#ae03ee9809e2ee3abe3d99b6ea575e4f2">operator+=</a> (const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt; &amp;other)</td></tr>
+<tr class="memdesc:ae03ee9809e2ee3abe3d99b6ea575e4f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a list of shapes to the end of the shape list.  <a href="class_isis_1_1_shape_list.html#ae03ee9809e2ee3abe3d99b6ea575e4f2">More...</a><br /></td></tr>
+<tr class="separator:ae03ee9809e2ee3abe3d99b6ea575e4f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aba6c30673939fd46ec0039049880cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a9aba6c30673939fd46ec0039049880cb">operator+=</a> (<a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;other)</td></tr>
+<tr class="memdesc:a9aba6c30673939fd46ec0039049880cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a single shape to the end of the shape list.  <a href="class_isis_1_1_shape_list.html#a9aba6c30673939fd46ec0039049880cb">More...</a><br /></td></tr>
+<tr class="separator:a9aba6c30673939fd46ec0039049880cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9597d74328606a6ca503afbc1f6ff50d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a9597d74328606a6ca503afbc1f6ff50d">operator&lt;&lt;</a> (const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt; &amp;other)</td></tr>
+<tr class="memdesc:a9597d74328606a6ca503afbc1f6ff50d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a list of shapes to the end of the shape list.  <a href="class_isis_1_1_shape_list.html#a9597d74328606a6ca503afbc1f6ff50d">More...</a><br /></td></tr>
+<tr class="separator:a9597d74328606a6ca503afbc1f6ff50d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88c35349878e562c26b524297f43a228"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a88c35349878e562c26b524297f43a228">operator&lt;&lt;</a> (<a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;other)</td></tr>
+<tr class="memdesc:a88c35349878e562c26b524297f43a228"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a single shape to the end of the shape list.  <a href="class_isis_1_1_shape_list.html#a88c35349878e562c26b524297f43a228">More...</a><br /></td></tr>
+<tr class="separator:a88c35349878e562c26b524297f43a228"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aada9fe235804acc46d8c932863c6122e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#aada9fe235804acc46d8c932863c6122e">operator=</a> (const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt; &amp;rhs)</td></tr>
+<tr class="memdesc:aada9fe235804acc46d8c932863c6122e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assigns another list of shapes to the shape list.  <a href="class_isis_1_1_shape_list.html#aada9fe235804acc46d8c932863c6122e">More...</a><br /></td></tr>
+<tr class="separator:aada9fe235804acc46d8c932863c6122e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7574375c19cde05c6cd883d90b1441b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a7574375c19cde05c6cd883d90b1441b1">operator=</a> (const <a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp;rhs)</td></tr>
+<tr class="memdesc:a7574375c19cde05c6cd883d90b1441b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator.  <a href="class_isis_1_1_shape_list.html#a7574375c19cde05c6cd883d90b1441b1">More...</a><br /></td></tr>
+<tr class="separator:a7574375c19cde05c6cd883d90b1441b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25c5de7e28b04416ee0d3e152af46fee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a25c5de7e28b04416ee0d3e152af46fee">setName</a> (QString newName)</td></tr>
+<tr class="memdesc:a25c5de7e28b04416ee0d3e152af46fee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the human-readable name of this shape list.  <a href="class_isis_1_1_shape_list.html#a25c5de7e28b04416ee0d3e152af46fee">More...</a><br /></td></tr>
+<tr class="separator:a25c5de7e28b04416ee0d3e152af46fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2d3e0da1f97b25e1a24628c9aa54049"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#ad2d3e0da1f97b25e1a24628c9aa54049">setPath</a> (QString newPath)</td></tr>
+<tr class="memdesc:ad2d3e0da1f97b25e1a24628c9aa54049"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the relative path (from the project root) to this shape list's folder.  <a href="class_isis_1_1_shape_list.html#ad2d3e0da1f97b25e1a24628c9aa54049">More...</a><br /></td></tr>
+<tr class="separator:ad2d3e0da1f97b25e1a24628c9aa54049"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73147e4401ca5ee0ab862af185020db4"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a73147e4401ca5ee0ab862af185020db4">name</a> () const</td></tr>
+<tr class="memdesc:a73147e4401ca5ee0ab862af185020db4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the human-readable name of this shape list.  <a href="class_isis_1_1_shape_list.html#a73147e4401ca5ee0ab862af185020db4">More...</a><br /></td></tr>
+<tr class="separator:a73147e4401ca5ee0ab862af185020db4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69be41c0de8cdacb6271d7c0b5109684"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a69be41c0de8cdacb6271d7c0b5109684">path</a> () const</td></tr>
+<tr class="memdesc:a69be41c0de8cdacb6271d7c0b5109684"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the path to the shapes in the shape list (relative to project root).  <a href="class_isis_1_1_shape_list.html#a69be41c0de8cdacb6271d7c0b5109684">More...</a><br /></td></tr>
+<tr class="separator:a69be41c0de8cdacb6271d7c0b5109684"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1aa6ac76a5e2ea08866ff4544ccdeee2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a1aa6ac76a5e2ea08866ff4544ccdeee2">deleteFromDisk</a> (<a class="el" href="class_isis_1_1_project.html">Project</a> *project)</td></tr>
+<tr class="memdesc:a1aa6ac76a5e2ea08866ff4544ccdeee2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete all of the contained Shapes from disk.  <a href="class_isis_1_1_shape_list.html#a1aa6ac76a5e2ea08866ff4544ccdeee2">More...</a><br /></td></tr>
+<tr class="separator:a1aa6ac76a5e2ea08866ff4544ccdeee2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a895674336177c0d744773b997c54c48a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_shape_list.html#a895674336177c0d744773b997c54c48a">save</a> (QXmlStreamWriter &amp;stream, const <a class="el" href="class_isis_1_1_project.html">Project</a> *project, <a class="el" href="class_isis_1_1_file_name.html">FileName</a> newProjectRoot) const</td></tr>
+<tr class="memdesc:a895674336177c0d744773b997c54c48a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert this shape list into XML format for saving/restoring capabilities.  <a href="class_isis_1_1_shape_list.html#a895674336177c0d744773b997c54c48a">More...</a><br /></td></tr>
+<tr class="separator:a895674336177c0d744773b997c54c48a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Internalizes a list of shapes and allows for operations on the entire list. </p>
+<p>This class reads a list of shapes from an shapes.xml file and internalizes them as aQList of shapes. It also allows for modifications to the entire list of shapes and storing the shape list as an shapes.xml file.</p>
+<dl class="section author"><dt>Author</dt><dd>2016-07-25 Tracie Sucharski </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a8dd2f61479d253c68e8fe00f29718d2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8dd2f61479d253c68e8fe00f29718d2b">&#9670;&nbsp;</a></span>ShapeList() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ShapeList::ShapeList </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates an shape list from an shape list name and path (does not read Shapes). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The <a class="el" href="class_isis_1_1_shape_list.html" title="Internalizes a list of shapes and allows for operations on the entire list.">ShapeList</a>'s name (i.e. import1, import2, ...). </td></tr>
+    <tr><td class="paramname">path</td><td>The <a class="el" href="class_isis_1_1_shape_list.html" title="Internalizes a list of shapes and allows for operations on the entire list.">ShapeList</a>'s folder name (i.e. import1, import2, ...). </td></tr>
+    <tr><td class="paramname">parent</td><td>The Qt-relationship parent. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a73147e4401ca5ee0ab862af185020db4">name()</a>, and <a class="el" href="class_isis_1_1_shape_list.html#a69be41c0de8cdacb6271d7c0b5109684">path()</a>.</p>
+
+</div>
+</div>
+<a id="afbbbd340316f85dbfc554677e25b7ce0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbbbd340316f85dbfc554677e25b7ce0">&#9670;&nbsp;</a></span>ShapeList() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ShapeList::ShapeList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>NULL</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a blank shape list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>The Qt-relationship parent. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa7a4919ccddc0db34d8e3a97201fb0b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7a4919ccddc0db34d8e3a97201fb0b2">&#9670;&nbsp;</a></span>ShapeList() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ShapeList::ShapeList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt;&#160;</td>
+          <td class="paramname"><em>shapes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates an shape list from a list of shapes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">shapes</td><td>The list of shapes. </td></tr>
+    <tr><td class="paramname">parent</td><td>The Qt-relationship parent. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a19a2b421a9730204fd9b18ca31266206">append()</a>.</p>
+
+</div>
+</div>
+<a id="af0f2d62664067c8a23a02fafdd190275"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0f2d62664067c8a23a02fafdd190275">&#9670;&nbsp;</a></span>ShapeList() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ShapeList::ShapeList </td>
+          <td>(</td>
+          <td class="paramtype">QStringList &amp;&#160;</td>
+          <td class="paramname"><em>fileNames</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates an shape list from a list of cube file names. </p>
+<p>This is slow (serial) and not recommended.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileNames</td><td>The list of cube fileNames. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a19a2b421a9730204fd9b18ca31266206">append()</a>.</p>
+
+</div>
+</div>
+<a id="afe572b109cac32f260970e9948d258b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe572b109cac32f260970e9948d258b5">&#9670;&nbsp;</a></span>ShapeList() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ShapeList::ShapeList </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The shape list to copy. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9aa27bd31741aaacc5d186f212e423e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9aa27bd31741aaacc5d186f212e423e5">&#9670;&nbsp;</a></span>~ShapeList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ShapeList::~ShapeList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+<p>This does not free the Shapes from memory. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae1d80890f744c52e486de8771c20f801"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1d80890f744c52e486de8771c20f801">&#9670;&nbsp;</a></span>append() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::append </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends a list of shapes to the shape list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>the list of shapes to be appened.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::append(). </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a19a2b421a9730204fd9b18ca31266206"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19a2b421a9730204fd9b18ca31266206">&#9670;&nbsp;</a></span>append() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::append </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends an shape to the shape list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The shape to be appended.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::append(). </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_work_order.html#a369296b9016c8a4424a08a4ff48b73f5">Isis::WorkOrder::isExecutable()</a>, <a class="el" href="class_isis_1_1_work_order.html#a5f4c29fe432406a1f524fa3857fbbfcf">Isis::WorkOrder::setData()</a>, and <a class="el" href="class_isis_1_1_shape_list.html#aa7a4919ccddc0db34d8e3a97201fb0b2">ShapeList()</a>.</p>
+
+</div>
+</div>
+<a id="a3cf2c240a186ba962b85cca1930df32b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cf2c240a186ba962b85cca1930df32b">&#9670;&nbsp;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the shape list. </p>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::clear(). </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a50ef3163ff746b91ac7b3d2723d90420"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50ef3163ff746b91ac7b3d2723d90420">&#9670;&nbsp;</a></span>countChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::countChanged </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>newCount</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_shape_list.html#a19a2b421a9730204fd9b18ca31266206">append()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a3cf2c240a186ba962b85cca1930df32b">clear()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a2b546fb3c8e577a705b391a6d95a1847">erase()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a0f0a8c0b5b16f08f858233dbfd5fb994">insert()</a>, <a class="el" href="class_isis_1_1_shape_list.html#ae03ee9809e2ee3abe3d99b6ea575e4f2">operator+=()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a9597d74328606a6ca503afbc1f6ff50d">operator&lt;&lt;()</a>, <a class="el" href="class_isis_1_1_shape_list.html#aada9fe235804acc46d8c932863c6122e">operator=()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a851035b467b3200f6dc5c8b5062345f3">prepend()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a5a2d277b37ded0f2b9a376d85e670af0">push_back()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a93b697e9b67b44705c5375c03e6e2835">push_front()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a704366593fd8b531cddb3f24ad3af1f4">removeAll()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a20a3b0772e26dda068066337ea86fb42">removeAt()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a616fea6677cfc5c26a0e0e690fa49569">removeFirst()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a61f6f8ae9798a9232bd7dab585930bf7">removeLast()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a9b214aba2ccb4947c4857c3be7c5b1b0">removeOne()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a2f3d4c501490de5cdb3a658c837beac8">swap()</a>, <a class="el" href="class_isis_1_1_shape_list.html#a857faff23db7161a7f323df1f0953868">takeAt()</a>, <a class="el" href="class_isis_1_1_shape_list.html#adc09905b0ea42cc2166336a99d252616">takeFirst()</a>, and <a class="el" href="class_isis_1_1_shape_list.html#a28ecd79839d26d3f27f3904ad6b912b8">takeLast()</a>.</p>
+
+</div>
+</div>
+<a id="a1aa6ac76a5e2ea08866ff4544ccdeee2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1aa6ac76a5e2ea08866ff4544ccdeee2">&#9670;&nbsp;</a></span>deleteFromDisk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::deleteFromDisk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Delete all of the contained Shapes from disk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">project</td><td>The project the shapes in the shape list belong to.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_shape.html#a6660cf18a2f3838d6a45f86e8fd7f93d" title="Delete the shape data from disk.">Shape::deleteFromDisk()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape.html#a6660cf18a2f3838d6a45f86e8fd7f93d">Isis::Shape::deleteFromDisk()</a>, and <a class="el" href="class_isis_1_1_project.html#a5ea6af4b322f3de5091bdead906a8d5c">Isis::Project::shapeDataRoot()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_project.html#a44a465c80f862580f4df7515ccb70179">Isis::Project::deleteAllProjectFiles()</a>, and <a class="el" href="class_isis_1_1_import_shapes_work_order.html#a7b637a75eb925f55c289f43c1c62f3b8">Isis::ImportShapesWorkOrder::undoExecution()</a>.</p>
+
+</div>
+</div>
+<a id="a99160bfcee626802b768388b8644e7df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99160bfcee626802b768388b8644e7df">&#9670;&nbsp;</a></span>erase() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt;::iterator Isis::ShapeList::erase </td>
+          <td>(</td>
+          <td class="paramtype">iterator&#160;</td>
+          <td class="paramname"><em>begin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">iterator&#160;</td>
+          <td class="paramname"><em>end</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Erases a range of shapes from the shape list. </p>
+<p>Erases all shapes from begin up to (but not including) end.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">begin</td><td>An iterator pointing to the first shape to be erased. </td></tr>
+    <tr><td class="paramname">end</td><td>An iterator pointing to the shape just after the last shape to be erased. Will be invalid after the call.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QList::iterator</b> An iterator pointing to the shape end refered to before the call.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::erase() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a2b546fb3c8e577a705b391a6d95a1847"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b546fb3c8e577a705b391a6d95a1847">&#9670;&nbsp;</a></span>erase() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt;::iterator Isis::ShapeList::erase </td>
+          <td>(</td>
+          <td class="paramtype">iterator&#160;</td>
+          <td class="paramname"><em>pos</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Erases a single shape from the shape list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pos</td><td>An iterator pointing to the shape to be erased.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QList::iterator</b> An iterator pointing to the shape after the shape that was removed.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::erase() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a0f0a8c0b5b16f08f858233dbfd5fb994"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f0a8c0b5b16f08f858233dbfd5fb994">&#9670;&nbsp;</a></span>insert() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::insert </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserts an shape into the shape list at an index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>The index at which to insert the shape. </td></tr>
+    <tr><td class="paramname">value</td><td>the shape to be inserted.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::insert() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="aa59e0d4ade3cba91af07165c1a912744"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa59e0d4ade3cba91af07165c1a912744">&#9670;&nbsp;</a></span>insert() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt;::iterator Isis::ShapeList::insert </td>
+          <td>(</td>
+          <td class="paramtype">iterator&#160;</td>
+          <td class="paramname"><em>before</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserts an shape into the shape list after an iterator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">before</td><td>An iterator pointing to the shape that value will be inserted after </td></tr>
+    <tr><td class="paramname">value</td><td>The shape to be inserted.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QList::iterator</b> An iterator pointing to the inserted shape.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::insert() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a73147e4401ca5ee0ab862af185020db4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73147e4401ca5ee0ab862af185020db4">&#9670;&nbsp;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ShapeList::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the human-readable name of this shape list. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>Qstring</b> The name of the shape list (or an empty string if anonymous). </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_project_item.html#ae7ef6efa7dfa9f6967e0b6d5f62c882e">Isis::ProjectItem::setShapeList()</a>, <a class="el" href="class_isis_1_1_project.html#a716396ef9d2cae832f3a0fbc6eccfb73">Isis::Project::shapeList()</a>, and <a class="el" href="class_isis_1_1_shape_list.html#a8dd2f61479d253c68e8fe00f29718d2b">ShapeList()</a>.</p>
+
+</div>
+</div>
+<a id="ae03ee9809e2ee3abe3d99b6ea575e4f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae03ee9809e2ee3abe3d99b6ea575e4f2">&#9670;&nbsp;</a></span>operator+=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp; Isis::ShapeList::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends a list of shapes to the end of the shape list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The list of shapes to be appended.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_shape_list.html" title="Internalizes a list of shapes and allows for operations on the entire list.">ShapeList</a></b> &amp; A reference to the shapeList.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_shape_list.html#a19a2b421a9730204fd9b18ca31266206" title="Appends an shape to the shape list.">append()</a> </dd>
+<dd>
+QList&lt;Shape *&gt;::operator+=() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a9aba6c30673939fd46ec0039049880cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9aba6c30673939fd46ec0039049880cb">&#9670;&nbsp;</a></span>operator+=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp; Isis::ShapeList::operator+= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends a single shape to the end of the shape list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The shape to be appended.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_shape_list.html" title="Internalizes a list of shapes and allows for operations on the entire list.">ShapeList</a></b> &amp; A reference to the shapeList.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_shape_list.html#a19a2b421a9730204fd9b18ca31266206" title="Appends an shape to the shape list.">append()</a> </dd>
+<dd>
+QList&lt;Shape *&gt;::operator+=() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a9597d74328606a6ca503afbc1f6ff50d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9597d74328606a6ca503afbc1f6ff50d">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp; Isis::ShapeList::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends a list of shapes to the end of the shape list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The list of shapes to be appended.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_shape_list.html" title="Internalizes a list of shapes and allows for operations on the entire list.">ShapeList</a></b> &amp; A reference to the shapeList.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_shape_list.html#a19a2b421a9730204fd9b18ca31266206" title="Appends an shape to the shape list.">append()</a> </dd>
+<dd>
+QList&lt;Shape *&gt;::operator&lt;&lt;() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>, and <a class="el" href="_angle_8cpp.html#a429e763e73672c442070910930101597">operator&lt;&lt;()</a>.</p>
+
+</div>
+</div>
+<a id="a88c35349878e562c26b524297f43a228"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88c35349878e562c26b524297f43a228">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp; Isis::ShapeList::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends a single shape to the end of the shape list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The shape to be appended.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_shape_list.html" title="Internalizes a list of shapes and allows for operations on the entire list.">ShapeList</a></b> &amp; A reference to the shapeList.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_shape_list.html#a19a2b421a9730204fd9b18ca31266206" title="Appends an shape to the shape list.">append()</a> </dd>
+<dd>
+QList&lt;Shape *&gt;::operator&lt;&lt;() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>, and <a class="el" href="_angle_8cpp.html#a429e763e73672c442070910930101597">operator&lt;&lt;()</a>.</p>
+
+</div>
+</div>
+<a id="aada9fe235804acc46d8c932863c6122e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aada9fe235804acc46d8c932863c6122e">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp; Isis::ShapeList::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Assigns another list of shapes to the shape list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rhs</td><td>The list of shapes that shapeList will become a copy of.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_shape_list.html" title="Internalizes a list of shapes and allows for operations on the entire list.">ShapeList</a></b> &amp; A reference to the shapeList.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::operator=() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a7574375c19cde05c6cd883d90b1441b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7574375c19cde05c6cd883d90b1441b1">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp; Isis::ShapeList::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a> &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Assignment operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rhs</td><td>The right hand side of the '=' operator</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_shape_list.html" title="Internalizes a list of shapes and allows for operations on the entire list.">ShapeList</a></b> &amp; This shape list. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a69be41c0de8cdacb6271d7c0b5109684"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69be41c0de8cdacb6271d7c0b5109684">&#9670;&nbsp;</a></span>path()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ShapeList::path </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the path to the shapes in the shape list (relative to project root). </p>
+<p>This only applies to an shape list from the project.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The path to the shapes in the shape list (or an empty string if unknown). </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_project_item.html#ae7ef6efa7dfa9f6967e0b6d5f62c882e">Isis::ProjectItem::setShapeList()</a>, and <a class="el" href="class_isis_1_1_shape_list.html#a8dd2f61479d253c68e8fe00f29718d2b">ShapeList()</a>.</p>
+
+</div>
+</div>
+<a id="a851035b467b3200f6dc5c8b5062345f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a851035b467b3200f6dc5c8b5062345f3">&#9670;&nbsp;</a></span>prepend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::prepend </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserts an shape at the beginning of the shape list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The shape to be inserted.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::prepend() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a5a2d277b37ded0f2b9a376d85e670af0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a2d277b37ded0f2b9a376d85e670af0">&#9670;&nbsp;</a></span>push_back()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::push_back </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends an shape to the end of the shape list. </p>
+<p>Equivalent to <a class="el" href="class_isis_1_1_shape_list.html#a19a2b421a9730204fd9b18ca31266206" title="Appends an shape to the shape list.">append()</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The shape to be appended.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::push_back() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a93b697e9b67b44705c5375c03e6e2835"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93b697e9b67b44705c5375c03e6e2835">&#9670;&nbsp;</a></span>push_front()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::push_front </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Prepends an shape to the beginning of the shape list. </p>
+<p>Equivalent to <a class="el" href="class_isis_1_1_shape_list.html#a851035b467b3200f6dc5c8b5062345f3" title="Inserts an shape at the beginning of the shape list.">prepend()</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The shape to be appended.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::push_front() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a704366593fd8b531cddb3f24ad3af1f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a704366593fd8b531cddb3f24ad3af1f4">&#9670;&nbsp;</a></span>removeAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ShapeList::removeAll </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes all occurances of an shape. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The shape to be removed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The number of occurances of the shape.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::removeAll() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a20a3b0772e26dda068066337ea86fb42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20a3b0772e26dda068066337ea86fb42">&#9670;&nbsp;</a></span>removeAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::removeAt </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the shape at an index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>The index of the shape to be removed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::removeAt() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a616fea6677cfc5c26a0e0e690fa49569"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a616fea6677cfc5c26a0e0e690fa49569">&#9670;&nbsp;</a></span>removeFirst()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::removeFirst </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the shape at the front of the shape list. </p>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::removeFirst() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a61f6f8ae9798a9232bd7dab585930bf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61f6f8ae9798a9232bd7dab585930bf7">&#9670;&nbsp;</a></span>removeLast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::removeLast </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the shape at the end of the shape list. </p>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::removeLast() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a9b214aba2ccb4947c4857c3be7c5b1b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b214aba2ccb4947c4857c3be7c5b1b0">&#9670;&nbsp;</a></span>removeOne()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ShapeList::removeOne </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_shape.html">Shape</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the first occurance of an shape. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The shape to be removed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> True if successful, otherwise false.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::removeOne() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a895674336177c0d744773b997c54c48a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a895674336177c0d744773b997c54c48a">&#9670;&nbsp;</a></span>save()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::save </td>
+          <td>(</td>
+          <td class="paramtype">QXmlStreamWriter &amp;&#160;</td>
+          <td class="paramname"><em>stream</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td>
+          <td class="paramname"><em>newProjectRoot</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert this shape list into XML format for saving/restoring capabilities. </p>
+<p>This writes: </p><pre>
+  &lt;shapeList name="..." path="..."&gt;
+</pre><p> to the given xml stream, and creates an 'shapes.xml' inside the folder with the shapes. Inside the shapes.xml, this writes:</p>
+<pre>
+  &lt;shapes&gt;
+    ...
+  &lt;/shapes&gt;
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>XmlStream to write out the document. </td></tr>
+    <tr><td class="paramname">project</td><td>The project the shape list will be saved to. </td></tr>
+    <tr><td class="paramname">newProjectRoot</td><td>The path to the root directory for the new project.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">iException::Io</td><td>"Failed to create directory" </td></tr>
+    <tr><td class="paramname">iException::Io</td><td>"Unable to save shape information because new file could not be opened for writing" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_file_name.html#a41e955594a44301f3331d01a36f7b75c">Isis::FileName::dir()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>, <a class="el" href="class_isis_1_1_file_name.html#a886e3a130c17c303779cea16d225b5f5">Isis::FileName::original()</a>, <a class="el" href="class_isis_1_1_file_name.html#a07a8f3a1d799fe6f2cde72526b252b55">Isis::FileName::path()</a>, <a class="el" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">Isis::ReadWrite</a>, <a class="el" href="class_isis_1_1_shape.html#a69682744743694a571524d071f85654e">Isis::Shape::save()</a>, <a class="el" href="class_isis_1_1_project.html#ae1703779f3e567f5440d0674ba6f1298">Isis::Project::shapeDataRoot()</a>, and <a class="el" href="class_isis_1_1_file_name.html#af6f2a42721cf85813008d027e9b98609">Isis::FileName::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a2c870a18efafb3d15ebd78efa92bd540"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c870a18efafb3d15ebd78efa92bd540">&#9670;&nbsp;</a></span>serialNumberList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_serial_number_list.html">SerialNumberList</a> Isis::ShapeList::serialNumberList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a <a class="el" href="class_isis_1_1_serial_number_list.html" title="Serial Number list generator.">SerialNumberList</a> from the shape list. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_serial_number_list.html" title="Serial Number list generator.">SerialNumberList</a></b> The list of serial numbers for the cubes in the <a class="el" href="class_isis_1_1_shape_list.html" title="Internalizes a list of shapes and allows for operations on the entire list.">ShapeList</a>. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_serial_number_list.html#a712bbd8a5df86f77d515a14f72722573">Isis::SerialNumberList::add()</a>.</p>
+
+</div>
+</div>
+<a id="a25c5de7e28b04416ee0d3e152af46fee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25c5de7e28b04416ee0d3e152af46fee">&#9670;&nbsp;</a></span>setName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::setName </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>newName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the human-readable name of this shape list. </p>
+<p>This is really only useful for project shape lists (not anonymous temporary ones).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newName</td><td>The name to give this shape list </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_project_item_model.html#a465ba875c5cda8d7e54a4fc60f29c9d6">Isis::ProjectItemModel::setData()</a>.</p>
+
+</div>
+</div>
+<a id="ad2d3e0da1f97b25e1a24628c9aa54049"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2d3e0da1f97b25e1a24628c9aa54049">&#9670;&nbsp;</a></span>setPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::setPath </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>newPath</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the relative path (from the project root) to this shape list's folder. </p>
+<p>This is really only useful for project shape lists (not anonymous temporary ones).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newPath</td><td>The path to the shapes in this shape list </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2f3d4c501490de5cdb3a658c837beac8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f3d4c501490de5cdb3a658c837beac8">&#9670;&nbsp;</a></span>swap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ShapeList::swap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_shape.html">Shape</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Swaps the shape list with another list of shapes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The list of shapes to swapped with.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::swap() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a857faff23db7161a7f323df1f0953868"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a857faff23db7161a7f323df1f0953868">&#9670;&nbsp;</a></span>takeAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_shape.html">Shape</a> * Isis::ShapeList::takeAt </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the shape at an index and returns it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>The index of the shape to be removed and returned.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a></b> * The removed shape.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::takeAt() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="adc09905b0ea42cc2166336a99d252616"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc09905b0ea42cc2166336a99d252616">&#9670;&nbsp;</a></span>takeFirst()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_shape.html">Shape</a> * Isis::ShapeList::takeFirst </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes and returns the first shape. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a></b> * The first shape.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::takeFirst() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a28ecd79839d26d3f27f3904ad6b912b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28ecd79839d26d3f27f3904ad6b912b8">&#9670;&nbsp;</a></span>takeLast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_shape.html">Shape</a> * Isis::ShapeList::takeLast </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes and returns the last shape. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_shape.html" title="This represents a shape in a project-based GUI interface.">Shape</a></b> * The last shape.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Shape *&gt;::takeLast() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_shape_list.html#a50ef3163ff746b91ac7b3d2723d90420">countChanged()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ShapeList/<a class="el" href="_shape_list_8h_source.html">ShapeList.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ShapeList/<a class="el" href="_shape_list_8cpp.html">ShapeList.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_shape_list.html">ShapeList</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,711 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Quaternion Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_quaternion.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_quaternion-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Quaternion Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Provide operations for quaternion arithmetic.  
+ <a href="class_isis_1_1_quaternion.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_quaternion_8h_source.html">Quaternion.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::Quaternion:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_quaternion__coll__graph.png" border="0" usemap="#a_isis_1_1_quaternion_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_quaternion_coll__map" id="a_isis_1_1_quaternion_coll__map">
+<area shape="rect" title="Provide operations for quaternion arithmetic." alt="" coords="5,5,131,295"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a827fbab0ca1414375ca78f4381e8797a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#a827fbab0ca1414375ca78f4381e8797a">Quaternion</a> ()</td></tr>
+<tr class="memdesc:a827fbab0ca1414375ca78f4381e8797a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an empty quaternion.  <a href="class_isis_1_1_quaternion.html#a827fbab0ca1414375ca78f4381e8797a">More...</a><br /></td></tr>
+<tr class="separator:a827fbab0ca1414375ca78f4381e8797a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1fdd0bcbf9b2a5bd87c615b1b5081d1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#ad1fdd0bcbf9b2a5bd87c615b1b5081d1">Quaternion</a> (const std::vector&lt; double &gt; matrix)</td></tr>
+<tr class="memdesc:ad1fdd0bcbf9b2a5bd87c615b1b5081d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <a class="el" href="class_isis_1_1_quaternion.html" title="Provide operations for quaternion arithmetic.">Quaternion</a> class from a matrix stored as a vector &lt; double &gt; with 9 elements or from a quaternion stored as a vector &lt; double &gt; with 4 elements.  <a href="class_isis_1_1_quaternion.html#ad1fdd0bcbf9b2a5bd87c615b1b5081d1">More...</a><br /></td></tr>
+<tr class="separator:ad1fdd0bcbf9b2a5bd87c615b1b5081d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a0928e62d3a5f0430c75af6342ad100"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#a9a0928e62d3a5f0430c75af6342ad100">~Quaternion</a> ()</td></tr>
+<tr class="memdesc:a9a0928e62d3a5f0430c75af6342ad100"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_isis_1_1_quaternion.html" title="Provide operations for quaternion arithmetic.">Quaternion</a> object.  <a href="class_isis_1_1_quaternion.html#a9a0928e62d3a5f0430c75af6342ad100">More...</a><br /></td></tr>
+<tr class="separator:a9a0928e62d3a5f0430c75af6342ad100"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3388811e13f9ab806d34fc13639ffee9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#a3388811e13f9ab806d34fc13639ffee9">ToMatrix</a> ()</td></tr>
+<tr class="memdesc:a3388811e13f9ab806d34fc13639ffee9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts quaternion to 3x3 rotational matrix.  <a href="class_isis_1_1_quaternion.html#a3388811e13f9ab806d34fc13639ffee9">More...</a><br /></td></tr>
+<tr class="separator:a3388811e13f9ab806d34fc13639ffee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a508068eea59dbe22b94d58bb43c79d6a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#a508068eea59dbe22b94d58bb43c79d6a">ToAngles</a> (int axis3, int axis2, int axis1)</td></tr>
+<tr class="memdesc:a508068eea59dbe22b94d58bb43c79d6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the camera angles (right ascension, declination, and twist) for the quaternion.  <a href="class_isis_1_1_quaternion.html#a508068eea59dbe22b94d58bb43c79d6a">More...</a><br /></td></tr>
+<tr class="separator:a508068eea59dbe22b94d58bb43c79d6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea863fadc10af56c21817d631d68856c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#aea863fadc10af56c21817d631d68856c">Set</a> (std::vector&lt; double &gt;)</td></tr>
+<tr class="memdesc:aea863fadc10af56c21817d631d68856c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the quaternion value.  <a href="class_isis_1_1_quaternion.html#aea863fadc10af56c21817d631d68856c">More...</a><br /></td></tr>
+<tr class="separator:aea863fadc10af56c21817d631d68856c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad48322f9a7ea4c138fc71da8b52d7efb"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#ad48322f9a7ea4c138fc71da8b52d7efb">GetQuaternion</a> () const</td></tr>
+<tr class="memdesc:ad48322f9a7ea4c138fc71da8b52d7efb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the quaternion as a vector.  <a href="class_isis_1_1_quaternion.html#ad48322f9a7ea4c138fc71da8b52d7efb">More...</a><br /></td></tr>
+<tr class="separator:ad48322f9a7ea4c138fc71da8b52d7efb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a131bcc36534bbfd50b5cea755c9508b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#a131bcc36534bbfd50b5cea755c9508b3">operator=</a> (const <a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> &amp;quat)</td></tr>
+<tr class="memdesc:a131bcc36534bbfd50b5cea755c9508b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign value of quaternion class to another quaternion.  <a href="class_isis_1_1_quaternion.html#a131bcc36534bbfd50b5cea755c9508b3">More...</a><br /></td></tr>
+<tr class="separator:a131bcc36534bbfd50b5cea755c9508b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb6e7deb316687d3a5cdde701440db7a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#afb6e7deb316687d3a5cdde701440db7a">operator*=</a> (const <a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> &amp;quat)</td></tr>
+<tr class="memdesc:afb6e7deb316687d3a5cdde701440db7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply current Naif quaternion by another Naif quaternion, replacing the current quaternion.  <a href="class_isis_1_1_quaternion.html#afb6e7deb316687d3a5cdde701440db7a">More...</a><br /></td></tr>
+<tr class="separator:afb6e7deb316687d3a5cdde701440db7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a958f42bde2b31360368f67712d0d34fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#a958f42bde2b31360368f67712d0d34fc">operator*</a> (const <a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> &amp;quat) const</td></tr>
+<tr class="memdesc:a958f42bde2b31360368f67712d0d34fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply two Naif quaternions to create a new quaternion.  <a href="class_isis_1_1_quaternion.html#a958f42bde2b31360368f67712d0d34fc">More...</a><br /></td></tr>
+<tr class="separator:a958f42bde2b31360368f67712d0d34fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfc5f1f55657306115be082b553722af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#abfc5f1f55657306115be082b553722af">operator*</a> (const double &amp;scalar)</td></tr>
+<tr class="memdesc:abfc5f1f55657306115be082b553722af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply a quaternion by a scalar.  <a href="class_isis_1_1_quaternion.html#abfc5f1f55657306115be082b553722af">More...</a><br /></td></tr>
+<tr class="separator:abfc5f1f55657306115be082b553722af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7de73cb67b1dedeb970f19dbaa4134fb"><td class="memItemLeft" align="right" valign="top">double &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#a7de73cb67b1dedeb970f19dbaa4134fb">operator[]</a> (int index)</td></tr>
+<tr class="memdesc:a7de73cb67b1dedeb970f19dbaa4134fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a member of a quaternion.  <a href="class_isis_1_1_quaternion.html#a7de73cb67b1dedeb970f19dbaa4134fb">More...</a><br /></td></tr>
+<tr class="separator:a7de73cb67b1dedeb970f19dbaa4134fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab01bedb6bc30de22942892f50b0659db"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#ab01bedb6bc30de22942892f50b0659db">Qxv</a> (const std::vector&lt; double &gt; &amp;vin)</td></tr>
+<tr class="memdesc:ab01bedb6bc30de22942892f50b0659db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply a vector by a quaternion (rotate the vector)  <a href="class_isis_1_1_quaternion.html#ab01bedb6bc30de22942892f50b0659db">More...</a><br /></td></tr>
+<tr class="separator:ab01bedb6bc30de22942892f50b0659db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7eff5fc3048d5c48140f96687f2b52fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_quaternion.html#a7eff5fc3048d5c48140f96687f2b52fa">Conjugate</a> ()</td></tr>
+<tr class="memdesc:a7eff5fc3048d5c48140f96687f2b52fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the conjugate of the quaternion.  <a href="class_isis_1_1_quaternion.html#a7eff5fc3048d5c48140f96687f2b52fa">More...</a><br /></td></tr>
+<tr class="separator:a7eff5fc3048d5c48140f96687f2b52fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Provide operations for quaternion arithmetic. </p>
+<p>This class provides a wrapper for existing Naif quaternion functions and also includes other operators and methods useful for working with quaternions.</p>
+<dl class="section author"><dt>Author</dt><dd>2005-12-07 Debbie A. Cook </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a827fbab0ca1414375ca78f4381e8797a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a827fbab0ca1414375ca78f4381e8797a">&#9670;&nbsp;</a></span>Quaternion() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Quaternion::Quaternion </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs an empty quaternion. </p>
+
+</div>
+</div>
+<a id="ad1fdd0bcbf9b2a5bd87c615b1b5081d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1fdd0bcbf9b2a5bd87c615b1b5081d1">&#9670;&nbsp;</a></span>Quaternion() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Quaternion::Quaternion </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt;&#160;</td>
+          <td class="paramname"><em>rotation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a <a class="el" href="class_isis_1_1_quaternion.html" title="Provide operations for quaternion arithmetic.">Quaternion</a> class from a matrix stored as a vector &lt; double &gt; with 9 elements or from a quaternion stored as a vector &lt; double &gt; with 4 elements. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rotation</td><td>rotation defined as either a matrix or another quaternion loaded as a vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_quaternion.html#aea863fadc10af56c21817d631d68856c">Set()</a>.</p>
+
+</div>
+</div>
+<a id="a9a0928e62d3a5f0430c75af6342ad100"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a0928e62d3a5f0430c75af6342ad100">&#9670;&nbsp;</a></span>~Quaternion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Quaternion::~Quaternion </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys the <a class="el" href="class_isis_1_1_quaternion.html" title="Provide operations for quaternion arithmetic.">Quaternion</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7eff5fc3048d5c48140f96687f2b52fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eff5fc3048d5c48140f96687f2b52fa">&#9670;&nbsp;</a></span>Conjugate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> Isis::Quaternion::Conjugate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the conjugate of the quaternion. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_quaternion.html#ab01bedb6bc30de22942892f50b0659db">Qxv()</a>.</p>
+
+</div>
+</div>
+<a id="ad48322f9a7ea4c138fc71da8b52d7efb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad48322f9a7ea4c138fc71da8b52d7efb">&#9670;&nbsp;</a></span>GetQuaternion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; Isis::Quaternion::GetQuaternion </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the quaternion as a vector. </p>
+
+</div>
+</div>
+<a id="abfc5f1f55657306115be082b553722af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfc5f1f55657306115be082b553722af">&#9670;&nbsp;</a></span>operator*() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> Isis::Quaternion::operator* </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>scalar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiply a quaternion by a scalar. </p>
+<p>Just multiply the rotation part and polish the resulting quaternion so it is still a unit quaternion with positive rotation. For example, </p><div class="fragment"><div class="line"><a class="code" href="class_isis_1_1_quaternion.html#a827fbab0ca1414375ca78f4381e8797a">Quaternion</a> q1(),q(2);</div>
+<div class="line"><span class="keywordtype">double</span> scalar</div>
+<div class="line">...</div>
+<div class="line">q2() = scalar*q2;</div>
+<div class="ttc" id="aclass_isis_1_1_quaternion_html_a827fbab0ca1414375ca78f4381e8797a"><div class="ttname"><a href="class_isis_1_1_quaternion.html#a827fbab0ca1414375ca78f4381e8797a">Isis::Quaternion::Quaternion</a></div><div class="ttdeci">Quaternion()</div><div class="ttdoc">Constructs an empty quaternion.</div><div class="ttdef"><b>Definition:</b> Quaternion.cpp:26</div></div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">scalar</td><td>(const double &amp;) scalar value to be multiplied times the current quaternion </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>(<a class="el" href="class_isis_1_1_quaternion.html" title="Provide operations for quaternion arithmetic.">Quaternion</a>) product of scalar and quaternion </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+</div>
+</div>
+<a id="a958f42bde2b31360368f67712d0d34fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a958f42bde2b31360368f67712d0d34fc">&#9670;&nbsp;</a></span>operator*() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> Isis::Quaternion::operator* </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> &amp;&#160;</td>
+          <td class="paramname"><em>quat</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiply two Naif quaternions to create a new quaternion. </p>
+<p>For example, </p><div class="fragment"><div class="line"><a class="code" href="class_isis_1_1_quaternion.html#a827fbab0ca1414375ca78f4381e8797a">Quaternion</a> q1(),q(2);</div>
+<div class="line">...</div>
+<div class="line">Quaternion q3() = q1*q2;</div>
+</div><!-- fragment --><p> More information is available on quaternions and the multiplication algorithm in the Naif routine qxq_c.c</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">quat</td><td>(const <a class="el" href="class_isis_1_1_quaternion.html" title="Provide operations for quaternion arithmetic.">Quaternion</a> &amp;) quaternion to multiply on the right</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>(<a class="el" href="class_isis_1_1_quaternion.html" title="Provide operations for quaternion arithmetic.">Quaternion</a>) product of quaternions </dd></dl>
+
+</div>
+</div>
+<a id="afb6e7deb316687d3a5cdde701440db7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb6e7deb316687d3a5cdde701440db7a">&#9670;&nbsp;</a></span>operator*=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> &amp; Isis::Quaternion::operator*= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> &amp;&#160;</td>
+          <td class="paramname"><em>quat</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiply current Naif quaternion by another Naif quaternion, replacing the current quaternion. </p>
+<p>For example, </p><div class="fragment"><div class="line"><a class="code" href="class_isis_1_1_quaternion.html#a827fbab0ca1414375ca78f4381e8797a">Quaternion</a> q1(),q(2);</div>
+<div class="line">...</div>
+<div class="line">Quaternion q2() *= q1;</div>
+</div><!-- fragment --><p> More information on quaternions and the multiplication algorithm is available in the Naif routine qxq_c.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">quat</td><td>(const <a class="el" href="class_isis_1_1_quaternion.html" title="Provide operations for quaternion arithmetic.">Quaternion</a> &amp;) quaternion to multiply on the right</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>(<a class="el" href="class_isis_1_1_quaternion.html" title="Provide operations for quaternion arithmetic.">Quaternion</a>) product of quaternions </dd></dl>
+
+</div>
+</div>
+<a id="a131bcc36534bbfd50b5cea755c9508b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a131bcc36534bbfd50b5cea755c9508b3">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> &amp; Isis::Quaternion::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a> &amp;&#160;</td>
+          <td class="paramname"><em>quat</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Assign value of quaternion class to another quaternion. </p>
+<p>For example, </p><div class="fragment"><div class="line"><a class="code" href="class_isis_1_1_quaternion.html#a827fbab0ca1414375ca78f4381e8797a">Quaternion</a> q1( matrix );</div>
+<div class="line"><a class="code" href="class_isis_1_1_quaternion.html#a827fbab0ca1414375ca78f4381e8797a">Quaternion</a> q2();</div>
+<div class="line">...</div>
+<div class="line">q2 = q1;</div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">quat</td><td>The <a class="el" href="class_isis_1_1_quaternion.html" title="Provide operations for quaternion arithmetic.">Quaternion</a> to copy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7de73cb67b1dedeb970f19dbaa4134fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7de73cb67b1dedeb970f19dbaa4134fb">&#9670;&nbsp;</a></span>operator[]()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double&amp; Isis::Quaternion::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return a member of a quaternion. </p>
+<p>For example, </p><div class="fragment"><div class="line"> <a class="code" href="class_isis_1_1_quaternion.html#a827fbab0ca1414375ca78f4381e8797a">Quaternion</a> q();</div>
+<div class="line">...</div>
+<div class="line"> <span class="keywordtype">double</span> angle = q[0];</div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>(const int &amp;) quaternion member to return</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>(double&amp;) value pointed to by iter </dd></dl>
+
+</div>
+</div>
+<a id="ab01bedb6bc30de22942892f50b0659db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab01bedb6bc30de22942892f50b0659db">&#9670;&nbsp;</a></span>Qxv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Isis::Quaternion::Qxv </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Multiply a vector by a quaternion (rotate the vector) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">vin</td><td>(const std::vector&lt;double&gt;(3)) Vector to be multiplied (rotated) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_quaternion.html#a7eff5fc3048d5c48140f96687f2b52fa">Conjugate()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+</div>
+</div>
+<a id="aea863fadc10af56c21817d631d68856c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea863fadc10af56c21817d631d68856c">&#9670;&nbsp;</a></span>Set()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Quaternion::Set </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; double &gt;&#160;</td>
+          <td class="paramname"><em>rotation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the quaternion value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rotation</td><td>rotation defined as either a matrix or a set of 3 angles </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_naif_status.html#af872fa8bfc3f0012f157cbaef4066d25">Isis::NaifStatus::CheckErrors()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_quaternion.html#ad1fdd0bcbf9b2a5bd87c615b1b5081d1">Quaternion()</a>.</p>
+
+</div>
+</div>
+<a id="a508068eea59dbe22b94d58bb43c79d6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a508068eea59dbe22b94d58bb43c79d6a">&#9670;&nbsp;</a></span>ToAngles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Isis::Quaternion::ToAngles </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis1</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the camera angles (right ascension, declination, and twist) for the quaternion. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_naif_status.html#af872fa8bfc3f0012f157cbaef4066d25">Isis::NaifStatus::CheckErrors()</a>, and <a class="el" href="class_isis_1_1_quaternion.html#a3388811e13f9ab806d34fc13639ffee9">ToMatrix()</a>.</p>
+
+</div>
+</div>
+<a id="a3388811e13f9ab806d34fc13639ffee9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3388811e13f9ab806d34fc13639ffee9">&#9670;&nbsp;</a></span>ToMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Isis::Quaternion::ToMatrix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts quaternion to 3x3 rotational matrix. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_spice_rotation.html#ac3de134c5a7059b4d8f7b0c378bfafa8">Isis::SpiceRotation::LoadCache()</a>, and <a class="el" href="class_isis_1_1_quaternion.html#a508068eea59dbe22b94d58bb43c79d6a">ToAngles()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Quaternion/<a class="el" href="_quaternion_8h_source.html">Quaternion.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Quaternion/<a class="el" href="_quaternion_8cpp.html">Quaternion.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_quaternion.html">Quaternion</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

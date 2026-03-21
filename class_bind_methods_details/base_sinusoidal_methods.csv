@@ -1,0 +1,14 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Sinusoidal,Map Projection,isis/src/base/objs/Sinusoidal/Sinusoidal.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Sinusoidal,isis_pybind.Sinusoidal,N,Python class symbol not found in current binding files
+Construction/Enum,Sinusoidal(),isis_pybind.Sinusoidal(),N,Constructor binding not detected in current binding files
+Public API,QString Name() const,isis_pybind.Sinusoidal.name,N,Method not found in current binding files
+Public API,QString Version() const,isis_pybind.Sinusoidal.version,N,Method not found in current binding files
+Mutation/Configuration,"bool SetGround(const double lat, const double lon)",isis_pybind.Sinusoidal.set_ground,N,Method not found in current binding files
+Mutation/Configuration,"bool SetCoordinate(const double x, const double y)",isis_pybind.Sinusoidal.set_coordinate,N,Method not found in current binding files
+Public API,"bool XYRange(double &minX, double &maxX, double &minY, double &maxY)",isis_pybind.Sinusoidal.xy_range,N,Method not found in current binding files
+Public API,PvlGroup Mapping(),isis_pybind.Sinusoidal.mapping,N,Method not found in current binding files
+Public API,PvlGroup MappingLatitudes(),isis_pybind.Sinusoidal.mapping_latitudes,N,Method not found in current binding files
+Public API,PvlGroup MappingLongitudes(),isis_pybind.Sinusoidal.mapping_longitudes,N,Method not found in current binding files

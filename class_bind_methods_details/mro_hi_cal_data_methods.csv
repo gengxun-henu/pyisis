@@ -1,0 +1,25 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+HiCalData,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/HiCalData.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,HiCalData,isis_pybind.HiCalData,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,"HiCalData() : _calimage(), _calbuffer(), _caldark(), _buffer(), _dark(), _binning(0), _tdi(0), _cpmm(0), _channelNo(0), _firstReverseLine(0), _lastReverseLine(0), _firstMaskLine(0), _lastMaskLine(0), _firstRampLine(0), _lastRampLine(0) { }",isis_pybind.HiCalData(),N,抽象基类/纯虚接口
+Construction/Enum,HiCalData(),isis_pybind.HiCalData(),N,抽象基类/纯虚接口
+Read/Write IO,void load(Cube &cube) { Progress progress,isis_pybind.HiCalData.load,N,抽象基类/纯虚接口
+Mutation/Configuration,"progress.SetText(""HiCalData"")",isis_pybind.HiCalData.set_text,N,抽象基类/纯虚接口
+Public API,"_calimage = HiBlob(cube, ""HiRISE Calibration Image"", ""Calibration"").buffer()",isis_pybind.HiCalData.hi_blob,N,抽象基类/纯虚接口
+Public API,"_calbuffer = HiBlob(cube, ""HiRISE Calibration Ancillary"", ""BufferPixels"").buffer()",isis_pybind.HiCalData.hi_blob,N,抽象基类/纯虚接口
+Public API,"_caldark = HiBlob(cube, ""HiRISE Calibration Ancillary"", ""DarkPixels"").buffer()",isis_pybind.HiCalData.hi_blob,N,抽象基类/纯虚接口
+Public API,"_buffer = HiBlob(cube, ""HiRISE Ancillary"", ""BufferPixels"").buffer()",isis_pybind.HiCalData.hi_blob,N,抽象基类/纯虚接口
+Public API,"_dark = HiBlob(cube, ""HiRISE Ancillary"", ""DarkPixels"").buffer()",isis_pybind.HiCalData.hi_blob,N,抽象基类/纯虚接口
+Public API,"PvlGroup &instrument = cube.group(""Instrument"")",isis_pybind.HiCalData.group,N,抽象基类/纯虚接口
+Public API,"HiMatrix getReverseClock() { return (cropLines(_calimage, _firstReverseLine, _lastReverseLine))",isis_pybind.HiCalData.get_reverse_clock,N,抽象基类/纯虚接口
+Public API,"HiMatrix getMask() { return (cropLines(_calimage, _firstMaskLine, _lastMaskLine))",isis_pybind.HiCalData.get_mask,N,抽象基类/纯虚接口
+Public API,"HiMatrix getRamp() { return (cropLines(_calimage, _firstRampLine, _lastRampLine))",isis_pybind.HiCalData.get_ramp,N,抽象基类/纯虚接口
+Public API,HiMatrix getDark() { return (_dark.copy()),isis_pybind.HiCalData.get_dark,N,抽象基类/纯虚接口
+Public API,HiMatrix getBuffer() { return (_buffer.copy()),isis_pybind.HiCalData.get_buffer,N,抽象基类/纯虚接口
+Public API,"HiMatrix getReverseClockExtended() { return ( appendSamples( appendSamples( cropLines(_calbuffer, _firstReverseLine, _lastReverseLine), cropLines(_calimage, _firstReverseLine, _lastReverseLine)), cropLines(_caldark, _firstReverseLine, _lastReverseLine) ) )",isis_pybind.HiCalData.get_reverse_clock_extended,N,抽象基类/纯虚接口
+Public API,"HiMatrix getMaskExtended() { return ( appendSamples( appendSamples(cropLines(_calbuffer, _firstMaskLine, _lastMaskLine), cropLines(_calimage, _firstMaskLine, _lastMaskLine)), cropLines(_caldark, _firstMaskLine, _lastMaskLine) ) )",isis_pybind.HiCalData.get_mask_extended,N,抽象基类/纯虚接口
+Public API,"HiMatrix getRampExtended() { return ( appendSamples( appendSamples(cropLines(_calbuffer, _firstRampLine, _lastRampLine), cropLines(_calimage, _firstRampLine, _lastRampLine)), cropLines(_caldark, _firstRampLine, _lastRampLine) ) )",isis_pybind.HiCalData.get_ramp_extended,N,抽象基类/纯虚接口
+Public API,"HiMatrix getDarkExtended() { return (appendLines(_caldark, _dark))",isis_pybind.HiCalData.get_dark_extended,N,抽象基类/纯虚接口
+Public API,"HiMatrix getBufferExtended() { return (appendLines(_calbuffer, _buffer))",isis_pybind.HiCalData.get_buffer_extended,N,抽象基类/纯虚接口

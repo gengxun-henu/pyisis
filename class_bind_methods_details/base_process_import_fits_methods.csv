@@ -1,0 +1,11 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ProcessImportFits,High Level Cube I/O,isis/src/base/objs/ProcessImportFits/ProcessImportFits.h,isis_pybind_standalone/src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ProcessImportFits,isis_pybind.ProcessImportFits,Y,Python class symbol is exported; 流程/回调接口较多
+Construction/Enum,ProcessImportFits(),isis_pybind.ProcessImportFits(),Y,Constructor is explicitly bound
+Public API,PvlGroup standardInstrumentGroup(PvlGroup fitsLabel) const,isis_pybind.ProcessImportFits.standard_instrument_group,Y,Current Python name
+Public API,PvlGroup extraFitsLabel(int labelNumber) const,isis_pybind.ProcessImportFits.extra_fits_label,Y,Current Python name
+Public API,PvlGroup fitsImageLabel(int labelNumber) const,isis_pybind.ProcessImportFits.fits_image_label,Y,Current Python name
+Mutation/Configuration,void setFitsFile(FileName fitsFile),isis_pybind.ProcessImportFits.set_fits_file,Y,Current Python name
+Mutation/Configuration,void setProcessFileStructure(int labelNumber),isis_pybind.ProcessImportFits.set_process_file_structure,Y,Current Python name

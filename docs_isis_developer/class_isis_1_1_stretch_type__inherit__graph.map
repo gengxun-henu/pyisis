@@ -1,0 +1,8 @@
+<map id="Isis::StretchType" name="Isis::StretchType">
+<area shape="rect" id="node1" title="This is the base class for advanced stretches." alt="" coords="280,135,429,392"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_binary_stretch_type.html" title="This handles the advanced binary stretch." alt="" coords="5,440,163,569"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_linear_stretch_type.html" title="This handles the advanced linear stretch." alt="" coords="186,440,342,569"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_manual_stretch_type.html" title="This handles arbitrary user&#45;input stretches." alt="" coords="366,440,528,569"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_sawtooth_stretch_type.html" title="This handles the advanced sawtooth stretch." alt="" coords="552,440,728,569"/>
+<area shape="rect" id="node2" href="$class_q_widget.html" title=" " alt="" coords="319,5,391,87"/>
+</map>

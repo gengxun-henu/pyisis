@@ -1,0 +1,7 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+GainTemperature,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/GainTemperature.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,GainTemperature,isis_pybind.GainTemperature,N,Python class symbol not found in current binding files
+Construction/Enum,"GainTemperature() : Module(""GainTemperature"") { }",isis_pybind.GainTemperature(),N,Constructor binding not detected in current binding files
+Construction/Enum,"GainTemperature(const HiCalConf &conf) : Module(""GainTemperature"") { init(conf)",isis_pybind.GainTemperature(),N,Constructor binding not detected in current binding files

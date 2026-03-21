@@ -1,0 +1,1122 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Database Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_database.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_database-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Database Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> database class providing generalized access to a variety of databases.  
+ <a href="class_isis_1_1_database.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_database_8h_source.html">Database.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::Database:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_database__inherit__graph.png" border="0" usemap="#a_isis_1_1_database_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_database_inherit__map" id="a_isis_1_1_database_inherit__map">
+<area shape="rect" title="Isis database class providing generalized access to a variety of databases." alt="" coords="5,135,150,536"/>
+<area shape="rect" href="class_q_sql_database.html" title=" " alt="" coords="24,5,131,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::Database:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_database__coll__graph.png" border="0" usemap="#a_isis_1_1_database_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_database_coll__map" id="a_isis_1_1_database_coll__map">
+<area shape="rect" title="Isis database class providing generalized access to a variety of databases." alt="" coords="5,135,150,536"/>
+<area shape="rect" href="class_q_sql_database.html" title=" " alt="" coords="24,5,131,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a6b6af3953a78b805a00137ab48051316"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316">Access</a> { <a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Connect</a>
+, <a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a6a7de8162405395930e118bbb89238ab">DoNotConnect</a>
+ }</td></tr>
+<tr class="memdesc:a6b6af3953a78b805a00137ab48051316"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access status for database creation.  <a href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316">More...</a><br /></td></tr>
+<tr class="separator:a6b6af3953a78b805a00137ab48051316"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a86103032b860527ee704c172d2d85cf6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a86103032b860527ee704c172d2d85cf6">Database</a> ()</td></tr>
+<tr class="memdesc:a86103032b860527ee704c172d2d85cf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default database constructor.  <a href="class_isis_1_1_database.html#a86103032b860527ee704c172d2d85cf6">More...</a><br /></td></tr>
+<tr class="separator:a86103032b860527ee704c172d2d85cf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12b65a8232c85cc401788d3b50dc73d4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a12b65a8232c85cc401788d3b50dc73d4">Database</a> (<a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316">Access</a> dbConn)</td></tr>
+<tr class="memdesc:a12b65a8232c85cc401788d3b50dc73d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construction of the unamed database with optional connection.  <a href="class_isis_1_1_database.html#a12b65a8232c85cc401788d3b50dc73d4">More...</a><br /></td></tr>
+<tr class="separator:a12b65a8232c85cc401788d3b50dc73d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a496da12c45eb1604f52e928da032e21d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a496da12c45eb1604f52e928da032e21d">Database</a> (const QString &amp;connName, const QString &amp;driverType)</td></tr>
+<tr class="memdesc:a496da12c45eb1604f52e928da032e21d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create database connection specified by name and driver type.  <a href="class_isis_1_1_database.html#a496da12c45eb1604f52e928da032e21d">More...</a><br /></td></tr>
+<tr class="separator:a496da12c45eb1604f52e928da032e21d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a3852b0fafd45f2795dbbc93de3274c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a9a3852b0fafd45f2795dbbc93de3274c">Database</a> (const QString &amp;name, <a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316">Access</a> dbConn=<a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Connect</a>)</td></tr>
+<tr class="memdesc:a9a3852b0fafd45f2795dbbc93de3274c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a named database object.  <a href="class_isis_1_1_database.html#a9a3852b0fafd45f2795dbbc93de3274c">More...</a><br /></td></tr>
+<tr class="separator:a9a3852b0fafd45f2795dbbc93de3274c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb368acf4ad60fc3364c52a31eda29c1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#adb368acf4ad60fc3364c52a31eda29c1">Database</a> (const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;profile, <a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316">Access</a> dbConn=<a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Connect</a>)</td></tr>
+<tr class="memdesc:adb368acf4ad60fc3364c52a31eda29c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create database connection using the supplied <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a>.  <a href="class_isis_1_1_database.html#adb368acf4ad60fc3364c52a31eda29c1">More...</a><br /></td></tr>
+<tr class="separator:adb368acf4ad60fc3364c52a31eda29c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08ded5d0dc483c157a83d668987b1f40"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a08ded5d0dc483c157a83d668987b1f40">~Database</a> ()</td></tr>
+<tr class="memdesc:a08ded5d0dc483c157a83d668987b1f40"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> destructor.  <a href="class_isis_1_1_database.html#a08ded5d0dc483c157a83d668987b1f40">More...</a><br /></td></tr>
+<tr class="separator:a08ded5d0dc483c157a83d668987b1f40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bf3f9a43a411f50cd54ad7029b0d107"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a4bf3f9a43a411f50cd54ad7029b0d107">Name</a> () const</td></tr>
+<tr class="memdesc:a4bf3f9a43a411f50cd54ad7029b0d107"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name of this database as specifed upon creation.  <a href="class_isis_1_1_database.html#a4bf3f9a43a411f50cd54ad7029b0d107">More...</a><br /></td></tr>
+<tr class="separator:a4bf3f9a43a411f50cd54ad7029b0d107"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afed90b46f3c234307704951c8932e1bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#afed90b46f3c234307704951c8932e1bb">makePersistant</a> ()</td></tr>
+<tr class="memdesc:afed90b46f3c234307704951c8932e1bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes this instance persistant.  <a href="class_isis_1_1_database.html#afed90b46f3c234307704951c8932e1bb">More...</a><br /></td></tr>
+<tr class="separator:afed90b46f3c234307704951c8932e1bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d1248f41434d692a5611ecd93c12644"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a2d1248f41434d692a5611ecd93c12644">isPersistant</a> () const</td></tr>
+<tr class="memdesc:a2d1248f41434d692a5611ecd93c12644"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks persistancy state of a database instantiation.  <a href="class_isis_1_1_database.html#a2d1248f41434d692a5611ecd93c12644">More...</a><br /></td></tr>
+<tr class="separator:a2d1248f41434d692a5611ecd93c12644"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6f79fdcaed8043a6b1da74d3a147617"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#ad6f79fdcaed8043a6b1da74d3a147617">setAsDefault</a> ()</td></tr>
+<tr class="memdesc:ad6f79fdcaed8043a6b1da74d3a147617"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets this database connection/profile as the default.  <a href="class_isis_1_1_database.html#ad6f79fdcaed8043a6b1da74d3a147617">More...</a><br /></td></tr>
+<tr class="separator:ad6f79fdcaed8043a6b1da74d3a147617"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a029f8b3decaf10e1bcbeef2a5a41cbbc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_database.html">Database</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a029f8b3decaf10e1bcbeef2a5a41cbbc">clone</a> (const QString &amp;name) const</td></tr>
+<tr class="memdesc:a029f8b3decaf10e1bcbeef2a5a41cbbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clones this database into another giving it another name.  <a href="class_isis_1_1_database.html#a029f8b3decaf10e1bcbeef2a5a41cbbc">More...</a><br /></td></tr>
+<tr class="separator:a029f8b3decaf10e1bcbeef2a5a41cbbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a827084a6b6e1c1d4a177ad19f1f0efd3"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a827084a6b6e1c1d4a177ad19f1f0efd3">getTables</a> () const</td></tr>
+<tr class="memdesc:a827084a6b6e1c1d4a177ad19f1f0efd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector string containing all the tables in the database.  <a href="class_isis_1_1_database.html#a827084a6b6e1c1d4a177ad19f1f0efd3">More...</a><br /></td></tr>
+<tr class="separator:a827084a6b6e1c1d4a177ad19f1f0efd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc54c01b5586509a1cad66b1ddbabf27"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#adc54c01b5586509a1cad66b1ddbabf27">getViews</a> () const</td></tr>
+<tr class="memdesc:adc54c01b5586509a1cad66b1ddbabf27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector string containing all views within the database.  <a href="class_isis_1_1_database.html#adc54c01b5586509a1cad66b1ddbabf27">More...</a><br /></td></tr>
+<tr class="separator:adc54c01b5586509a1cad66b1ddbabf27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6309fbb9d6295ade4ca8ad760bd68972"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a6309fbb9d6295ade4ca8ad760bd68972">getSystemTables</a> () const</td></tr>
+<tr class="memdesc:a6309fbb9d6295ade4ca8ad760bd68972"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns vector strings of all available system tables in the database.  <a href="class_isis_1_1_database.html#a6309fbb9d6295ade4ca8ad760bd68972">More...</a><br /></td></tr>
+<tr class="separator:a6309fbb9d6295ade4ca8ad760bd68972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a455d039da815a2a69f1fb78198376ad6"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a455d039da815a2a69f1fb78198376ad6">remove</a> (const QString &amp;name)</td></tr>
+<tr class="memdesc:a455d039da815a2a69f1fb78198376ad6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the named database from pool.  <a href="class_isis_1_1_database.html#a455d039da815a2a69f1fb78198376ad6">More...</a><br /></td></tr>
+<tr class="separator:a455d039da815a2a69f1fb78198376ad6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82c31389502c1ed20608e6dbfd09eac4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#a82c31389502c1ed20608e6dbfd09eac4">addAccessConfig</a> (const QString &amp;confFile)</td></tr>
+<tr class="memdesc:a82c31389502c1ed20608e6dbfd09eac4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a user specifed access configuration file to system.  <a href="class_isis_1_1_database.html#a82c31389502c1ed20608e6dbfd09eac4">More...</a><br /></td></tr>
+<tr class="separator:a82c31389502c1ed20608e6dbfd09eac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab45c1286fd5d77056d982c46e650aaaf"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#ab45c1286fd5d77056d982c46e650aaaf">getProfile</a> (const QString &amp;name)</td></tr>
+<tr class="memdesc:ab45c1286fd5d77056d982c46e650aaaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the named database access profile.  <a href="class_isis_1_1_database.html#ab45c1286fd5d77056d982c46e650aaaf">More...</a><br /></td></tr>
+<tr class="separator:ab45c1286fd5d77056d982c46e650aaaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ae4ec97e76c614f4206f2b9c57ff29de1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#ae4ec97e76c614f4206f2b9c57ff29de1">Database</a> (const <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> &amp;other, const QString &amp;name)</td></tr>
+<tr class="memdesc:ae4ec97e76c614f4206f2b9c57ff29de1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor creates a clone/copy from an existing one.  <a href="class_isis_1_1_database.html#ae4ec97e76c614f4206f2b9c57ff29de1">More...</a><br /></td></tr>
+<tr class="separator:ae4ec97e76c614f4206f2b9c57ff29de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecd8c91707889f2d4fd62407bbf99568"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_sql_database.html">QSqlDatabase</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#aecd8c91707889f2d4fd62407bbf99568">init</a> (const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;profile, <a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316">Access</a> dbConn=<a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Connect</a>)</td></tr>
+<tr class="memdesc:aecd8c91707889f2d4fd62407bbf99568"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create and initialize a new database connection from a <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a>.  <a href="class_isis_1_1_database.html#aecd8c91707889f2d4fd62407bbf99568">More...</a><br /></td></tr>
+<tr class="separator:aecd8c91707889f2d4fd62407bbf99568"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0abcf9960a9e689833a99534717d12f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_sql_database.html">QSqlDatabase</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#aa0abcf9960a9e689833a99534717d12f">init</a> (const QString &amp;name=&quot;&quot;, const QString &amp;driverType=&quot;&quot;)</td></tr>
+<tr class="memdesc:aa0abcf9960a9e689833a99534717d12f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a database by connection name and driver type.  <a href="class_isis_1_1_database.html#aa0abcf9960a9e689833a99534717d12f">More...</a><br /></td></tr>
+<tr class="separator:aa0abcf9960a9e689833a99534717d12f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8e5b79d235e2ab8a4af1854df552ee9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_database.html#ab8e5b79d235e2ab8a4af1854df552ee9">configureAccess</a> (<a class="el" href="class_q_sql_database.html">QSqlDatabase</a> &amp;db, const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;profile)</td></tr>
+<tr class="memdesc:ab8e5b79d235e2ab8a4af1854df552ee9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set access parameters from a database <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> access specification.  <a href="class_isis_1_1_database.html#ab8e5b79d235e2ab8a4af1854df552ee9">More...</a><br /></td></tr>
+<tr class="separator:ab8e5b79d235e2ab8a4af1854df552ee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> database class providing generalized access to a variety of databases. </p>
+<p>This class provides database connections within the <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> application programming interface (API) environment. It is based upon the <a class="el" href="class_isis_1_1_database_factory.html" title="Create database interfaces using access profiles or generic drivers.">DatabaseFactory</a> class and utilizes its features to let users control access to databases. See the documentation for that class to get a full description of generalized access methods as defined by users.</p>
+<p>This class also provides programmer derived access using either database profiles (<a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a>) containing access (<a class="el" href="class_isis_1_1_db_access.html" title="DbAccess manages programatic access to a database through profiles.">DbAccess</a>) specifications. </p><div class="fragment"><div class="line"><span class="comment">//  Use the UPC profile</span></div>
+<div class="line"> <a class="code" href="class_isis_1_1_database.html#a86103032b860527ee704c172d2d85cf6">Database</a> upc(<span class="stringliteral">&quot;upc&quot;</span>)</div>
+<div class="ttc" id="aclass_isis_1_1_database_html_a86103032b860527ee704c172d2d85cf6"><div class="ttname"><a href="class_isis_1_1_database.html#a86103032b860527ee704c172d2d85cf6">Isis::Database::Database</a></div><div class="ttdeci">Database()</div><div class="ttdoc">Default database constructor.</div><div class="ttdef"><b>Definition:</b> Database.cpp:33</div></div>
+</div><!-- fragment --><p>Connections can be made to specific databases using named drivers also provided from the <a class="el" href="class_isis_1_1_database_factory.html" title="Create database interfaces using access profiles or generic drivers.">DatabaseFactory</a> class. </p><div class="fragment"><div class="line"><span class="comment">//  Set up one for UPC directly</span></div>
+<div class="line"> <a class="code" href="class_isis_1_1_database.html#a86103032b860527ee704c172d2d85cf6">Database</a> upc1(<span class="stringliteral">&quot;upcDirect&quot;</span>, <span class="stringliteral">&quot;PostgreSQL&quot;</span>);   <span class="comment">// &quot;QPSQL&quot; also works</span></div>
+<div class="line"> upc1.setHostName(<span class="stringliteral">&quot;upcdb0.wr.usgs.gov&quot;</span>);</div>
+<div class="line"> upc1.setDatabaseName(<span class="stringliteral">&quot;upc&quot;</span>);</div>
+<div class="line"> upc1.setUserName(<span class="stringliteral">&quot;upcread&quot;</span>);</div>
+<div class="line"> upc1.setPort(3309);</div>
+<div class="line"> upc1.open();</div>
+</div><!-- fragment --><p>Since this class is derived from the Qt <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> class, it can and is intended to be used in the Qt environment directly. IMPORTANT NOTE: The <a class="el" href="class_isis_1_1_database.html#aecd8c91707889f2d4fd62407bbf99568" title="Create and initialize a new database connection from a DbProfile.">init()</a> function returns a <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> instance in all constructors which means that the class has not yet completed constructing. The implications of this are that the <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> class elements, namely data constructs, are generally off limits until after the return from <a class="el" href="class_isis_1_1_database.html#aecd8c91707889f2d4fd62407bbf99568" title="Create and initialize a new database connection from a DbProfile.">init()</a>. This is primarily the reason for some of the implimentation decisions made in this class.</p>
+<p>See also <a class="el" href="class_isis_1_1_sql_query.html" title="Construct and execute a query on a database and manage result.">SqlQuery</a> and <a class="el" href="class_isis_1_1_sql_record.html" title="Provide simplified access to resulting SQL query row.">SqlRecord</a>.</p>
+<dl class="section author"><dt>Author</dt><dd>2006-08-18 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a6b6af3953a78b805a00137ab48051316"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b6af3953a78b805a00137ab48051316">&#9670;&nbsp;</a></span>Access</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316">Isis::Database::Access</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Access status for database creation. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d"></a>Connect&#160;</td><td class="fielddoc"><p>Connect to database immediately. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a6b6af3953a78b805a00137ab48051316a6a7de8162405395930e118bbb89238ab"></a>DoNotConnect&#160;</td><td class="fielddoc"><p>Do not connect to database. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a86103032b860527ee704c172d2d85cf6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86103032b860527ee704c172d2d85cf6">&#9670;&nbsp;</a></span>Database() <span class="overload">[1/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Database::Database </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default database constructor. </p>
+<p>This constructor does not interact at all with the <a class="el" href="class_isis_1_1_database_factory.html" title="Create database interfaces using access profiles or generic drivers.">DatabaseFactory</a> class but uses the default condition for the Qt <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> state. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_database.html#a029f8b3decaf10e1bcbeef2a5a41cbbc">clone()</a>.</p>
+
+</div>
+</div>
+<a id="a12b65a8232c85cc401788d3b50dc73d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12b65a8232c85cc401788d3b50dc73d4">&#9670;&nbsp;</a></span>Database() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Database::Database </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316">Database::Access</a>&#160;</td>
+          <td class="paramname"><em>dbConn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construction of the unamed database with optional connection. </p>
+<p>This <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> constructor essentially will attempt to invoke the default profile as provided by the <a class="el" href="class_isis_1_1_database_factory.html" title="Create database interfaces using access profiles or generic drivers.">DatabaseFactory</a> class. That profile is read when the factory is created using the IsisPreferences class. If there is a <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> object there and it contains a specification of an AccessConfig profile, the contents of the profile mentioned there govern the action of this constructor.</p>
+<p>If the caller provides true to this class, it will immediately attempt a connection. Otherwise it will not attempt a connection to the database.</p>
+<p>Use the isOpen Qt method to check for the status of the connection.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dbConn</td><td>If Connect, an immediate connection is attempted, otherwise connection is deferred. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Connect</a>.</p>
+
+</div>
+</div>
+<a id="a496da12c45eb1604f52e928da032e21d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a496da12c45eb1604f52e928da032e21d">&#9670;&nbsp;</a></span>Database() <span class="overload">[3/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Database::Database </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>connName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>driverType</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create database connection specified by name and driver type. </p>
+<p>This constructor is useful for creating a named database with a specific driver type. The following example creates a PostgreSQL database named "sparky". </p><div class="fragment"><div class="line"><a class="code" href="class_isis_1_1_database.html#a86103032b860527ee704c172d2d85cf6">Database</a> db(<span class="stringliteral">&quot;sparky&quot;</span>, <span class="stringliteral">&quot;postgresql&quot;</span>);</div>
+</div><!-- fragment --><p>If you do not provide a driver (driverType = ""), then it will attempt to find an existing database connection named "sparky" and use it or it will attempt to resolve the request by searching for a <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> named "sparky".</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">connName</td><td>Name of connect to create or return </td></tr>
+    <tr><td class="paramname">driverType</td><td>Type of database to created. This is typically MySQL, PostgreSQL or SQLite. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9a3852b0fafd45f2795dbbc93de3274c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a3852b0fafd45f2795dbbc93de3274c">&#9670;&nbsp;</a></span>Database() <span class="overload">[4/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Database::Database </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316">Database::Access</a>&#160;</td>
+          <td class="paramname"><em>dbConn</em> = <code><a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Connect</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a named database object. </p>
+<p>This construction scheme assumes the named database either already exists as a persistant database connection or exists as a user specified profile in the <a class="el" href="class_isis_1_1_database_factory.html" title="Create database interfaces using access profiles or generic drivers.">DatabaseFactory</a> environment.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the desired database connection to establish </td></tr>
+    <tr><td class="paramname">dbConn</td><td>If Connect, an immediate connection is attempted, otherwise connection is deferred. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Connect</a>.</p>
+
+</div>
+</div>
+<a id="adb368acf4ad60fc3364c52a31eda29c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb368acf4ad60fc3364c52a31eda29c1">&#9670;&nbsp;</a></span>Database() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Database::Database </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;&#160;</td>
+          <td class="paramname"><em>profile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316">Database::Access</a>&#160;</td>
+          <td class="paramname"><em>dbConn</em> = <code><a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Connect</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create database connection using the supplied <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a>. </p>
+<p>This constructor accepts a <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> that contains sufficient information to create a complete database connection. The caller can optional request that the connection be established meaning that the profile contain enough information to do so. If connect = false, then upon return, the caller can further add or modify connection parameters as needed.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">profile</td><td><a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> containing a single database connection profile or one that provides enough information to determine appropriate access information. </td></tr>
+    <tr><td class="paramname">dbConn</td><td>If Connect, an immediate connection is attempted, otherwise connection is deferred. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Connect</a>.</p>
+
+</div>
+</div>
+<a id="a08ded5d0dc483c157a83d668987b1f40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08ded5d0dc483c157a83d668987b1f40">&#9670;&nbsp;</a></span>~Database()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Database::~Database </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> destructor. </p>
+<p>This will close the <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> connection if it is still open, and, if it is not marked as persistant, it is removed from the named <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> pool. It is not completely removed (from the Qt <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> pool), however. Use the <a class="el" href="class_isis_1_1_database.html#a455d039da815a2a69f1fb78198376ad6" title="Removes the named database from pool.">remove()</a> method to ensure it is completely destroyed/removed from the pool. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_database_factory.html#a18d565367c678a80cc03b0ba8d88e9ab">Isis::DatabaseFactory::getInstance()</a>, <a class="el" href="class_isis_1_1_database_factory.html#a6ad63814a912cc40086d893666a2025a">Isis::DatabaseFactory::isPersistant()</a>, and <a class="el" href="class_isis_1_1_database_factory.html#a45d7368e1a7e69b80f1ad52cdbf62c1b">Isis::DatabaseFactory::remove()</a>.</p>
+
+</div>
+</div>
+<a id="ae4ec97e76c614f4206f2b9c57ff29de1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4ec97e76c614f4206f2b9c57ff29de1">&#9670;&nbsp;</a></span>Database() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Database::Database </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>newName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor creates a clone/copy from an existing one. </p>
+<p>This constructor creates a clone or copy of an existing one. You can be sure that you can send it a <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> object as well as a Qt <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> since the <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> class inherits the QT <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> class.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td><a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> to clone from this one </td></tr>
+    <tr><td class="paramname">newName</td><td>New name of the cloned database (it can't be the same name) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a82c31389502c1ed20608e6dbfd09eac4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82c31389502c1ed20608e6dbfd09eac4">&#9670;&nbsp;</a></span>addAccessConfig()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Database::addAccessConfig </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>confFile</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds a user specifed access configuration file to system. </p>
+<p>This method accepts a file name that contains a <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> access configuration file and adds it to the database access profile system. This is actually performed by the <a class="el" href="class_isis_1_1_database_factory.html" title="Create database interfaces using access profiles or generic drivers.">DatabaseFactory</a> class.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_database_factory.html#a930905abcb9bb0c1aaeaf12bfdb25c47" title="Establishes an access profile for subsequent database connections.">DatabaseFactory::addAccessProfile()</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">confFile</td><td>Name of file to add. This can have any valid <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> or environment variable as part of the file specfication.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if successful, false if the file could not be opened or an error was found in the file. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_database_factory.html#a930905abcb9bb0c1aaeaf12bfdb25c47">Isis::DatabaseFactory::addAccessProfile()</a>, and <a class="el" href="class_isis_1_1_database_factory.html#a18d565367c678a80cc03b0ba8d88e9ab">Isis::DatabaseFactory::getInstance()</a>.</p>
+
+</div>
+</div>
+<a id="a029f8b3decaf10e1bcbeef2a5a41cbbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a029f8b3decaf10e1bcbeef2a5a41cbbc">&#9670;&nbsp;</a></span>clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_database.html">Database</a> Isis::Database::clone </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clones this database into another giving it another name. </p>
+<p>This database object is cloned into another one and names it the provided name. All access parameters are retained as initiallyt set up.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name to give the cloned database.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The cloned <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_database.html#a86103032b860527ee704c172d2d85cf6">Database()</a>.</p>
+
+</div>
+</div>
+<a id="ab8e5b79d235e2ab8a4af1854df552ee9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8e5b79d235e2ab8a4af1854df552ee9">&#9670;&nbsp;</a></span>configureAccess()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Database::configureAccess </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_sql_database.html">QSqlDatabase</a> &amp;&#160;</td>
+          <td class="paramname"><em>db</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;&#160;</td>
+          <td class="paramname"><em>profile</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set access parameters from a database <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> access specification. </p>
+<p>This method takes a database and a database access configuration setup and applies the parameters to it setting up access. This method does not intiate the connection, only sets known, common parameters. These parameters are Host, DbName, User, password, Port and Options. They follow the specifications of the Qt SQL <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> class methods.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">db</td><td>The Qt database object to set access parameters for. </td></tr>
+    <tr><td class="paramname">profile</td><td>The database access parameter source. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab252d6cc6845d833bc00143b78182416">Isis::DbProfile::exists()</a>, <a class="el" href="namespace_isis.html#a161dca47e06f74a883a05686d318e817">Isis::toInt()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_database.html#aecd8c91707889f2d4fd62407bbf99568">init()</a>.</p>
+
+</div>
+</div>
+<a id="ab45c1286fd5d77056d982c46e650aaaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab45c1286fd5d77056d982c46e650aaaf">&#9670;&nbsp;</a></span>getProfile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> Isis::Database::getProfile </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the named database access profile. </p>
+<p>This method is provided to the calling environment to retrieve any named profile. If an empty string is provided, it returns the default as determined by the <a class="el" href="class_isis_1_1_database_factory.html" title="Create database interfaces using access profiles or generic drivers.">DatabaseFactory</a> class rules.</p>
+<p>This can be used to determine the default and potentially augment its contents prior to creating a database connection.</p>
+<p>For example, here is a small code segment that retrieves the default access profile and tests for its validity. If it is not valid, chances are there is no default established.</p>
+<div class="fragment"><div class="line">DbProfile <span class="keywordflow">default</span> = <a class="code" href="class_isis_1_1_database.html#ab45c1286fd5d77056d982c46e650aaaf">Database::getProfile</a>();</div>
+<div class="line"><span class="keywordflow">if</span> (!<span class="keywordflow">default</span>.isValid()) {</div>
+<div class="line">   cerr &lt;&lt; <span class="stringliteral">&quot;No default access profile established!&quot;</span> &lt;&lt; endl;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">//  Open the database (after optional modification)</span></div>
+<div class="line"><a class="code" href="class_isis_1_1_database.html#a86103032b860527ee704c172d2d85cf6">Database</a> mydb(<span class="keywordflow">default</span>);</div>
+<div class="ttc" id="aclass_isis_1_1_database_html_ab45c1286fd5d77056d982c46e650aaaf"><div class="ttname"><a href="class_isis_1_1_database.html#ab45c1286fd5d77056d982c46e650aaaf">Isis::Database::getProfile</a></div><div class="ttdeci">static DbProfile getProfile(const QString &amp;name)</div><div class="ttdoc">Retrieves the named database access profile.</div><div class="ttdef"><b>Definition:</b> Database.cpp:312</div></div>
+</div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_database_factory.html#a4c7eed0a8642406175b51837a9f88ca4" title="Get the specified database access profile.">DatabaseFactory::getProfile()</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of profile to retrieve. An empty string will return the default profile.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> Requested profile. Test its validity using the <a class="el" href="class_isis_1_1_db_profile.html#a8e753fff66e4fa985582d0b323fb8d7a" title="Reports if this is a valid profile.">DbProfile::isValid()</a> method. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_database_factory.html#a18d565367c678a80cc03b0ba8d88e9ab">Isis::DatabaseFactory::getInstance()</a>, and <a class="el" href="class_isis_1_1_database_factory.html#a4c7eed0a8642406175b51837a9f88ca4">Isis::DatabaseFactory::getProfile()</a>.</p>
+
+</div>
+</div>
+<a id="a6309fbb9d6295ade4ca8ad760bd68972"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6309fbb9d6295ade4ca8ad760bd68972">&#9670;&nbsp;</a></span>getSystemTables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::Database::getSystemTables </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns vector strings of all available system tables in the database. </p>
+<p>This method returns a vector of strings containing a list of all system tables accessable to the user within the database.</p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;QString&gt; List of system tables with the database </dd></dl>
+
+</div>
+</div>
+<a id="a827084a6b6e1c1d4a177ad19f1f0efd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a827084a6b6e1c1d4a177ad19f1f0efd3">&#9670;&nbsp;</a></span>getTables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::Database::getTables </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a vector string containing all the tables in the database. </p>
+<p>This method returns a complete list of accessable tables within the database. It is assumed the database connections is established and open.</p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;QString&gt; List of tables in the database </dd></dl>
+
+</div>
+</div>
+<a id="adc54c01b5586509a1cad66b1ddbabf27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc54c01b5586509a1cad66b1ddbabf27">&#9670;&nbsp;</a></span>getViews()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::Database::getViews </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a vector string containing all views within the database. </p>
+<p>This method returns a vector of strings with all views accessable to the user in each element in the vector.</p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;QString&gt; List of all accessable views in the database </dd></dl>
+
+</div>
+</div>
+<a id="aecd8c91707889f2d4fd62407bbf99568"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecd8c91707889f2d4fd62407bbf99568">&#9670;&nbsp;</a></span>init() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_sql_database.html">QSqlDatabase</a> Isis::Database::init </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;&#160;</td>
+          <td class="paramname"><em>profile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316">Database::Access</a>&#160;</td>
+          <td class="paramname"><em>dbConn</em> = <code><a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Connect</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create and initialize a new database connection from a <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a>. </p>
+<p>This init method accepts a <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> database access profile that is assumed to contain sufficient information to establish a connection and open it. Note that the connection is opened only if the connect = true. Otherwise, the parameters from teh profile is set but the database is returned without initiating a connection to the database - this so the caller can adjust or provide additional parameters.</p>
+<p>NOTE: This method is implemented in such a way that it assumes it is part of the <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> initialization phase upon object construction. You will see some implementation decisions based upon this expeectation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">profile</td><td>A valid database profile specifying access parameters. </td></tr>
+    <tr><td class="paramname">dbConn</td><td>If Connect, an immediate connection is attempted, otherwise connection is deferred. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_sql_database.html">QSqlDatabase</a> A Qt database object with access parameters set </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_database.html#ab8e5b79d235e2ab8a4af1854df552ee9">configureAccess()</a>, <a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a64227d070ae5e22340adf494dc93461d">Connect</a>, <a class="el" href="class_isis_1_1_database_factory.html#a0f759f2c47ef705fe57b2950d13f3db5">Isis::DatabaseFactory::create()</a>, <a class="el" href="class_isis_1_1_database_factory.html#a18d565367c678a80cc03b0ba8d88e9ab">Isis::DatabaseFactory::getInstance()</a>, <a class="el" href="class_isis_1_1_db_profile.html#a8e753fff66e4fa985582d0b323fb8d7a">Isis::DbProfile::isValid()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab2b98e9e63815915c4e1c8369f0a53da">Isis::DbProfile::Name()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_database.html#aa0abcf9960a9e689833a99534717d12f">init()</a>.</p>
+
+</div>
+</div>
+<a id="aa0abcf9960a9e689833a99534717d12f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0abcf9960a9e689833a99534717d12f">&#9670;&nbsp;</a></span>init() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_sql_database.html">QSqlDatabase</a> Isis::Database::init </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>connName</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>driverType</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initializes a database by connection name and driver type. </p>
+<p>This method accepts (optional) connection name and driver type to establish a database connection. If both passed string parameters are empty, then either the default will be returned or a new database connection is returned using the default profile - if one is established. If neither of these conditions are met, this routine will throw an error.</p>
+<p>If only a connection name is given but no driver, then either a persistant connection or a default profile must exist.</p>
+<p>If both a name and driver is provided, then a clean database object is returned without any connection parameters set and the application programmer must set them.</p>
+<p>NOTE: This method is implemented in such a way that it assumes it is part of the <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> initialization phase upon object construction. You will see some implementation decisions based upon this expeectation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">connName</td><td>Name of the connection to create </td></tr>
+    <tr><td class="paramname">driverType</td><td>Type of driver/database to create. This is typically MySQL, PostgreSQL or SQLite.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_q_sql_database.html">QSqlDatabase</a> The created database </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_database_factory.html#a0f759f2c47ef705fe57b2950d13f3db5">Isis::DatabaseFactory::create()</a>, <a class="el" href="class_isis_1_1_database.html#a6b6af3953a78b805a00137ab48051316a6a7de8162405395930e118bbb89238ab">DoNotConnect</a>, <a class="el" href="class_isis_1_1_database_factory.html#ac90b1da0acda0877556061f90c8d8491">Isis::DatabaseFactory::getDefault()</a>, <a class="el" href="class_isis_1_1_database_factory.html#a18d565367c678a80cc03b0ba8d88e9ab">Isis::DatabaseFactory::getInstance()</a>, <a class="el" href="class_isis_1_1_database_factory.html#a4c7eed0a8642406175b51837a9f88ca4">Isis::DatabaseFactory::getProfile()</a>, <a class="el" href="class_isis_1_1_database.html#aecd8c91707889f2d4fd62407bbf99568">init()</a>, <a class="el" href="class_isis_1_1_database_factory.html#ab24f3a789242f5686b8ef42b70ce678e">Isis::DatabaseFactory::isAvailable()</a>, and <a class="el" href="class_isis_1_1_db_profile.html#a8e753fff66e4fa985582d0b323fb8d7a">Isis::DbProfile::isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a2d1248f41434d692a5611ecd93c12644"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d1248f41434d692a5611ecd93c12644">&#9670;&nbsp;</a></span>isPersistant()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Database::isPersistant </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks persistancy state of a database instantiation. </p>
+<p>This method tests to determine if this database connection is persistant so that future access can be utilized in this state.</p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if persistant, otherwise false </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_database_factory.html#a18d565367c678a80cc03b0ba8d88e9ab">Isis::DatabaseFactory::getInstance()</a>, and <a class="el" href="class_isis_1_1_database_factory.html#a6ad63814a912cc40086d893666a2025a">Isis::DatabaseFactory::isPersistant()</a>.</p>
+
+</div>
+</div>
+<a id="afed90b46f3c234307704951c8932e1bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afed90b46f3c234307704951c8932e1bb">&#9670;&nbsp;</a></span>makePersistant()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Database::makePersistant </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Makes this instance persistant. </p>
+<p><a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> persistancy in this context means the database remains in whatever state the user leaves it in, such as open, and ensures that the configuration remains available for other uses of the same connection.</p>
+<p>This feature is useful if you have a long running application that will make prepeated attempts to access the database using the same configuration parameters. It saves overhead and provides a guaranteed state of access. It can and perhaps should be closed when not used in between long accesses. This will prevent timeouts from the database.</p>
+<p>The intended usefulness of the persistant database state is so that at anytime in the life or processing point in the program, the database connection is available.</p>
+<p>Note that this uses the <a class="el" href="class_isis_1_1_database_factory.html" title="Create database interfaces using access profiles or generic drivers.">DatabaseFactory</a> class to retain its persistancy.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_database_factory.html" title="Create database interfaces using access profiles or generic drivers.">DatabaseFactory</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_database_factory.html#a51c49db3753f04d691c6e362eeeed474">Isis::DatabaseFactory::add()</a>, <a class="el" href="class_isis_1_1_database_factory.html#a18d565367c678a80cc03b0ba8d88e9ab">Isis::DatabaseFactory::getInstance()</a>, and <a class="el" href="class_isis_1_1_database_factory.html#a6ad63814a912cc40086d893666a2025a">Isis::DatabaseFactory::isPersistant()</a>.</p>
+
+</div>
+</div>
+<a id="a4bf3f9a43a411f50cd54ad7029b0d107"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bf3f9a43a411f50cd54ad7029b0d107">&#9670;&nbsp;</a></span>Name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Database::Name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the name of this database as specifed upon creation. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString The name of this database </dd></dl>
+
+</div>
+</div>
+<a id="a455d039da815a2a69f1fb78198376ad6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a455d039da815a2a69f1fb78198376ad6">&#9670;&nbsp;</a></span>remove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Database::remove </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes the named database from pool. </p>
+<p>This static method is required in order to remove a previous used <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> from the database pool. <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> configurations hang around after they are used. To completely remove them from application space, you must call this method.</p>
+<p>NOTE: The <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> destructor only ensure the connection is closed. It does not complete remove them. Persistant databases have their connect state preserved from one <a class="el" href="class_isis_1_1_database.html" title="Isis database class providing generalized access to a variety of databases.">Database</a> construction/instantiation to the next. This method is the only way to completely remove a database from global application space connectivity.</p>
+<p>WARNING: Do not attempt to remove an active Database! This will cause a spurious warning from Qt and render the database inoperative!</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of database to remove (and destroy) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_database_factory.html#a2e06599d74bfe1efae9f6027c8b915bd">Isis::DatabaseFactory::destroy()</a>, and <a class="el" href="class_isis_1_1_database_factory.html#a18d565367c678a80cc03b0ba8d88e9ab">Isis::DatabaseFactory::getInstance()</a>.</p>
+
+</div>
+</div>
+<a id="ad6f79fdcaed8043a6b1da74d3a147617"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6f79fdcaed8043a6b1da74d3a147617">&#9670;&nbsp;</a></span>setAsDefault()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Database::setAsDefault </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets this database connection/profile as the default. </p>
+<p>Calling this method sets this database instance/connection as the default connection. It is added to the list of persistant connections and can be retreived at will at any point in an application. This will be true even if this instance is released.</p>
+<p>It uses the <a class="el" href="class_isis_1_1_database_factory.html" title="Create database interfaces using access profiles or generic drivers.">DatabaseFactory</a> class to register it as the default. Note that there is only one default ever and it is designated by name. By definition it is also marked as a persistant connection.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_database_factory.html" title="Create database interfaces using access profiles or generic drivers.">DatabaseFactory</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_database_factory.html#a51c49db3753f04d691c6e362eeeed474">Isis::DatabaseFactory::add()</a>, <a class="el" href="class_isis_1_1_database_factory.html#a18d565367c678a80cc03b0ba8d88e9ab">Isis::DatabaseFactory::getInstance()</a>, <a class="el" href="class_isis_1_1_database_factory.html#a6ad63814a912cc40086d893666a2025a">Isis::DatabaseFactory::isPersistant()</a>, and <a class="el" href="class_isis_1_1_database_factory.html#af8a7a25ffb2317ecf137ebcba58e1f92">Isis::DatabaseFactory::setDefault()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/database/objs/Database/<a class="el" href="_database_8h_source.html">Database.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/database/objs/Database/<a class="el" href="_database_8cpp.html">Database.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_database.html">Database</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

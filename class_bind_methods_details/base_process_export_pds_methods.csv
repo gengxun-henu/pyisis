@@ -1,0 +1,43 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ProcessExportPds,High Level Cube I/O,isis/src/base/objs/ProcessExportPds/ProcessExportPds.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ProcessExportPds,isis_pybind.ProcessExportPds,N,Python class symbol not found in current binding files; 流程/回调接口较多
+Construction/Enum,"PdsFileType enum (Image, Qube, SpectralQube, JP2Image)",isis_pybind.ProcessExportPds.PdsFileType,N,流程/回调接口较多
+Construction/Enum,"PdsResolution enum (Meter, Kilometer)",isis_pybind.ProcessExportPds.PdsResolution,N,流程/回调接口较多
+Construction/Enum,"PdsExportType enum (Stream, Fixed)",isis_pybind.ProcessExportPds.PdsExportType,N,流程/回调接口较多
+Construction/Enum,ProcessExportPds(),isis_pybind.ProcessExportPds(),N,流程/回调接口较多
+Public API,void StandardAllMapping(Pvl &mainPvl),isis_pybind.ProcessExportPds.standard_all_mapping,N,流程/回调接口较多
+Public API,void StreamImageRoot(Pvl &mainPvl),isis_pybind.ProcessExportPds.stream_image_root,N,流程/回调接口较多
+Public API,void FixedImageRoot(Pvl &mainPvl),isis_pybind.ProcessExportPds.fixed_image_root,N,流程/回调接口较多
+Public API,void StreamJP2ImageRoot(Pvl &mainPvl),isis_pybind.ProcessExportPds.stream_jp2_image_root,N,流程/回调接口较多
+Public API,void FixedJP2ImageRoot(Pvl &mainPvl),isis_pybind.ProcessExportPds.fixed_jp2_image_root,N,流程/回调接口较多
+Public API,void StandardImageImage(Pvl &mainPvl),isis_pybind.ProcessExportPds.standard_image_image,N,流程/回调接口较多
+Public API,void StandardJP2Image(Pvl &mainPvl),isis_pybind.ProcessExportPds.standard_jp2_image,N,流程/回调接口较多
+Mutation/Configuration,void SetPdsResolution(PdsResolution resolutionUnits),isis_pybind.ProcessExportPds.set_pds_resolution,N,流程/回调接口较多
+Mutation/Configuration,void SetExportType(PdsExportType recordFormat),isis_pybind.ProcessExportPds.set_export_type,N,流程/回调接口较多
+Public API,virtual Pvl &StandardPdsLabel(ProcessExportPds::PdsFileType type),isis_pybind.ProcessExportPds.standard_pds_label,N,流程/回调接口较多
+Public API,void OutputLabel(std::ofstream &pdsFileStream),isis_pybind.ProcessExportPds.output_label,N,流程/回调接口较多
+Public API,void updateChecksumInLabel(std::ofstream &pdsFileStream),isis_pybind.ProcessExportPds.update_checksum_in_label,N,流程/回调接口较多
+Public API,void OutputDetachedLabel(),isis_pybind.ProcessExportPds.output_detached_label,N,流程/回调接口较多
+Read/Write IO,"void ExportTable(Isis::Table isisTable, QString detachedPdsTableFileName="""")",isis_pybind.ProcessExportPds.export_table,N,流程/回调接口较多
+Public API,void StartProcess(std::ofstream &fout),isis_pybind.ProcessExportPds.start_process,N,流程/回调接口较多
+Mutation/Configuration,bool Detached(),isis_pybind.ProcessExportPds.detached,N,流程/回调接口较多
+Mutation/Configuration,bool Attached(),isis_pybind.ProcessExportPds.attached,N,流程/回调接口较多
+Mutation/Configuration,void SetDetached(QString detachedLabelFile),isis_pybind.ProcessExportPds.set_detached,N,流程/回调接口较多
+Mutation/Configuration,void SetAttached(),isis_pybind.ProcessExportPds.set_attached,N,流程/回调接口较多
+Public API,void ForceBands(bool force),isis_pybind.ProcessExportPds.force_bands,N,流程/回调接口较多
+Public API,void ForceBandName(bool force),isis_pybind.ProcessExportPds.force_band_name,N,流程/回调接口较多
+Public API,void ForceCenterFilterWavelength(bool force),isis_pybind.ProcessExportPds.force_center_filter_wavelength,N,流程/回调接口较多
+Public API,void ForceBandwidth(bool force),isis_pybind.ProcessExportPds.force_bandwidth,N,流程/回调接口较多
+Public API,void ForceBandStorageType(bool force),isis_pybind.ProcessExportPds.force_band_storage_type,N,流程/回调接口较多
+Public API,void ForceOffset(bool force),isis_pybind.ProcessExportPds.force_offset,N,流程/回调接口较多
+Public API,void ForceScalingFactor(bool force),isis_pybind.ProcessExportPds.force_scaling_factor,N,流程/回调接口较多
+Public API,void ForceSampleBits(bool force),isis_pybind.ProcessExportPds.force_sample_bits,N,流程/回调接口较多
+Public API,void ForceSampleBitMask(bool force),isis_pybind.ProcessExportPds.force_sample_bit_mask,N,流程/回调接口较多
+Public API,void ForceSampleType(bool force),isis_pybind.ProcessExportPds.force_sample_type,N,流程/回调接口较多
+Public API,void ForceCoreNull(bool force),isis_pybind.ProcessExportPds.force_core_null,N,流程/回调接口较多
+Public API,void ForceCoreLrs(bool force),isis_pybind.ProcessExportPds.force_core_lrs,N,流程/回调接口较多
+Public API,void ForceCoreLis(bool force),isis_pybind.ProcessExportPds.force_core_lis,N,流程/回调接口较多
+Public API,void ForceCoreHrs(bool force),isis_pybind.ProcessExportPds.force_core_hrs,N,流程/回调接口较多
+Public API,void ForceCoreHis(bool force),isis_pybind.ProcessExportPds.force_core_his,N,流程/回调接口较多

@@ -1,0 +1,22 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_isis_1_1_projection.html" title="Base class for Map Projections." alt="" coords="5,265,114,293"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_ring_plane_projection.html" title="Base class for Map Projections of plane shapes." alt="" coords="162,57,330,85"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_t_projection.html" title="Base class for Map TProjections." alt="" coords="188,447,304,475"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_planar.html" title="Planar Map Projection." alt="" coords="443,5,530,33"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_ring_cylindrical.html" title="Ring Cylindrical Map Projection." alt="" coords="418,57,556,85"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_equirectangular.html" title="Equirectangular Map Projection." alt="" coords="417,109,557,137"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_lambert_azimuthal_equal_area.html" title="Lambert Azimuthal Equal Area Map Projection." alt="" coords="379,161,594,189"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_lambert_conformal.html" title="Lambert Conformal Map Projection." alt="" coords="408,213,565,241"/>
+<area shape="rect" id="node9" href="$class_isis_1_1_lunar_azimuthal_equal_area.html" title="Modified Lambert Azimuthal Equal&#45;Area Map Projection." alt="" coords="387,265,587,293"/>
+<area shape="rect" id="node10" href="$class_isis_1_1_mercator.html" title="Mercator Map Projection." alt="" coords="436,317,537,345"/>
+<area shape="rect" id="node11" href="$class_isis_1_1_mollweide.html" title="Mollweide Map Projection." alt="" coords="433,369,541,397"/>
+<area shape="rect" id="node12" href="$class_isis_1_1_oblique_cylindrical.html" title="Oblique Cylindrical Map Projection." alt="" coords="409,421,564,449"/>
+<area shape="rect" id="node13" href="$class_isis_1_1_orthographic.html" title="Orthographic Map Projection." alt="" coords="425,473,549,501"/>
+<area shape="rect" id="node14" href="$class_isis_1_1_point_perspective.html" title="PointPerspective Map Projection." alt="" coords="412,525,561,553"/>
+<area shape="rect" id="node15" href="$class_isis_1_1_polar_stereographic.html" title="Stereographic Map Projection for Polar Aspect." alt="" coords="407,577,567,605"/>
+<area shape="rect" id="node16" href="$class_isis_1_1_robinson.html" title="Robinson Map Projection." alt="" coords="434,629,539,657"/>
+<area shape="rect" id="node17" href="$class_isis_1_1_simple_cylindrical.html" title="Simple Cylindrical Map Projection." alt="" coords="411,681,562,709"/>
+<area shape="rect" id="node18" href="$class_isis_1_1_sinusoidal.html" title="Sinusoidal Map Projection." alt="" coords="432,733,542,761"/>
+<area shape="rect" id="node19" href="$class_isis_1_1_transverse_mercator.html" title="TransverseMercator Map Projection." alt="" coords="404,785,570,813"/>
+<area shape="rect" id="node20" href="$class_isis_1_1_upturned_ellipsoid_transverse_azimuthal.html" title="Upturned Ellipsoid Transverse Azimuthal Map Projection." alt="" coords="378,837,595,881"/>
+</map>

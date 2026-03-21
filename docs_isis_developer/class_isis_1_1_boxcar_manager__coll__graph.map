@@ -1,0 +1,5 @@
+<map id="Isis::BoxcarManager" name="Isis::BoxcarManager">
+<area shape="rect" id="node1" title="Buffer manager, for moving through a cube by boxcar." alt="" coords="8,792,150,889"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_buffer_manager.html" title="Manages a Buffer over a cube." alt="" coords="11,391,147,744"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data." alt="" coords="5,5,153,343"/>
+</map>

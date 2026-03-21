@@ -1,0 +1,1538 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::BundleObservation Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_bundle_observation.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_bundle_observation-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::BundleObservation Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Abstract base class for an observation in bundle adjustment.  
+ <a href="class_isis_1_1_bundle_observation.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_bundle_observation_8h_source.html">BundleObservation.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::BundleObservation:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bundle_observation__inherit__graph.png" border="0" usemap="#a_isis_1_1_bundle_observation_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_bundle_observation_inherit__map" id="a_isis_1_1_bundle_observation_inherit__map">
+<area shape="rect" title="Abstract base class for an observation in bundle adjustment." alt="" coords="110,135,321,536"/>
+<area shape="rect" href="class_isis_1_1_csm_bundle_observation.html" title="Class for observations that use CSM camera models in bundle adjustment." alt="" coords="5,584,205,825"/>
+<area shape="rect" href="class_isis_1_1_isis_bundle_observation.html" title="Class for observations that use ISIS camera models in bundle adjustment." alt="" coords="229,584,427,825"/>
+<area shape="rect" href="class_q_vector.html" title=" " alt="" coords="119,5,312,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::BundleObservation:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bundle_observation__coll__graph.png" border="0" usemap="#a_isis_1_1_bundle_observation_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_bundle_observation_coll__map" id="a_isis_1_1_bundle_observation_coll__map">
+<area shape="rect" title="Abstract base class for an observation in bundle adjustment." alt="" coords="418,199,621,440"/>
+<area shape="rect" href="class_q_vector.html" title=" " alt="" coords="5,5,199,87"/>
+<area shape="rect" title=" " alt="" coords="222,5,342,87"/>
+<area shape="rect" title=" " alt="" coords="403,5,468,87"/>
+<area shape="rect" title=" " alt="" coords="585,5,624,87"/>
+<area shape="rect" title=" " alt="" coords="652,5,739,87"/>
+<area shape="rect" href="class_q_map.html" title=" " alt="" coords="763,5,988,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ad5879e44bc7c468b32dab0fcc6fb87b6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#ad5879e44bc7c468b32dab0fcc6fb87b6">BundleObservation</a> ()</td></tr>
+<tr class="memdesc:ad5879e44bc7c468b32dab0fcc6fb87b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a> initialized to a default state.  <a href="class_isis_1_1_bundle_observation.html#ad5879e44bc7c468b32dab0fcc6fb87b6">More...</a><br /></td></tr>
+<tr class="separator:ad5879e44bc7c468b32dab0fcc6fb87b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01d917a59c697bb55652501d99dbd85c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a01d917a59c697bb55652501d99dbd85c">BundleObservation</a> (<a class="el" href="namespace_isis.html#aa82acde9cb85dd6b1ff8490fa8158a2f">BundleImageQsp</a> image, QString observationNumber, QString <a class="el" href="class_isis_1_1_bundle_observation.html#a649d44da23038a73f4ef407cbf60234f">instrumentId</a>, <a class="el" href="namespace_isis.html#a8ad1a208b8261d34b5ee7ced0bd2d4e9">BundleTargetBodyQsp</a> bundleTargetBody)</td></tr>
+<tr class="memdesc:a01d917a59c697bb55652501d99dbd85c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a> from an <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a>, an instrument id, an observation number to assign to this <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a>, and a target body.  <a href="class_isis_1_1_bundle_observation.html#a01d917a59c697bb55652501d99dbd85c">More...</a><br /></td></tr>
+<tr class="separator:a01d917a59c697bb55652501d99dbd85c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c7050da32a843a08f66814346c08058"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a8c7050da32a843a08f66814346c08058">BundleObservation</a> (const <a class="el" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp;src)</td></tr>
+<tr class="memdesc:a8c7050da32a843a08f66814346c08058"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a copy of another <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a>.  <a href="class_isis_1_1_bundle_observation.html#a8c7050da32a843a08f66814346c08058">More...</a><br /></td></tr>
+<tr class="separator:a8c7050da32a843a08f66814346c08058"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56f01cd50148f2ef33363412d4604bcb"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a56f01cd50148f2ef33363412d4604bcb">~BundleObservation</a> ()</td></tr>
+<tr class="memdesc:a56f01cd50148f2ef33363412d4604bcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_bundle_observation.html#a56f01cd50148f2ef33363412d4604bcb">More...</a><br /></td></tr>
+<tr class="separator:a56f01cd50148f2ef33363412d4604bcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfd3d12c3fe0b459a95dd92ff6dcdcab"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#adfd3d12c3fe0b459a95dd92ff6dcdcab">operator=</a> (const <a class="el" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp;src)</td></tr>
+<tr class="memdesc:adfd3d12c3fe0b459a95dd92ff6dcdcab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator.  <a href="class_isis_1_1_bundle_observation.html#adfd3d12c3fe0b459a95dd92ff6dcdcab">More...</a><br /></td></tr>
+<tr class="separator:adfd3d12c3fe0b459a95dd92ff6dcdcab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fe0244b4cc5ae507e3a39855139a6a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a1fe0244b4cc5ae507e3a39855139a6a6">copy</a> (const <a class="el" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp;src)</td></tr>
+<tr class="separator:a1fe0244b4cc5ae507e3a39855139a6a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a910ae8857484ef6ce97bff4c4dbcd5c3"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a910ae8857484ef6ce97bff4c4dbcd5c3">setSolveSettings</a> (<a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html">BundleObservationSolveSettings</a> <a class="el" href="class_isis_1_1_bundle_observation.html#a8d018818bc0a1a418ccaf87dbbe96cdf">solveSettings</a>)=0</td></tr>
+<tr class="separator:a910ae8857484ef6ce97bff4c4dbcd5c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f6a9251fe96b5ecde4264aefb0b2686"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a5f6a9251fe96b5ecde4264aefb0b2686">append</a> (const <a class="el" href="namespace_isis.html#aa82acde9cb85dd6b1ff8490fa8158a2f">BundleImageQsp</a> &amp;value)</td></tr>
+<tr class="memdesc:a5f6a9251fe96b5ecde4264aefb0b2686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a> shared pointer to the <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a>.  <a href="class_isis_1_1_bundle_observation.html#a5f6a9251fe96b5ecde4264aefb0b2686">More...</a><br /></td></tr>
+<tr class="separator:a5f6a9251fe96b5ecde4264aefb0b2686"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab84c7129b3ee26e9f81a24e6f25054c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#aa82acde9cb85dd6b1ff8490fa8158a2f">BundleImageQsp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#ab84c7129b3ee26e9f81a24e6f25054c3">imageByCubeSerialNumber</a> (QString cubeSerialNumber)</td></tr>
+<tr class="memdesc:ab84c7129b3ee26e9f81a24e6f25054c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a> shared pointer associated with the given serial number.  <a href="class_isis_1_1_bundle_observation.html#ab84c7129b3ee26e9f81a24e6f25054c3">More...</a><br /></td></tr>
+<tr class="separator:ab84c7129b3ee26e9f81a24e6f25054c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1efd26bfad080909c76c28ba191236b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a1efd26bfad080909c76c28ba191236b1">setIndex</a> (int n)</td></tr>
+<tr class="memdesc:a1efd26bfad080909c76c28ba191236b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the index for the observation.  <a href="class_isis_1_1_bundle_observation.html#a1efd26bfad080909c76c28ba191236b1">More...</a><br /></td></tr>
+<tr class="separator:a1efd26bfad080909c76c28ba191236b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49f9d958cae2c5d80b305c4990e62d8b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a49f9d958cae2c5d80b305c4990e62d8b">index</a> ()</td></tr>
+<tr class="memdesc:a49f9d958cae2c5d80b305c4990e62d8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the observation's index.  <a href="class_isis_1_1_bundle_observation.html#a49f9d958cae2c5d80b305c4990e62d8b">More...</a><br /></td></tr>
+<tr class="separator:a49f9d958cae2c5d80b305c4990e62d8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a649d44da23038a73f4ef407cbf60234f"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a649d44da23038a73f4ef407cbf60234f">instrumentId</a> ()</td></tr>
+<tr class="memdesc:a649d44da23038a73f4ef407cbf60234f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the instrument id.  <a href="class_isis_1_1_bundle_observation.html#a649d44da23038a73f4ef407cbf60234f">More...</a><br /></td></tr>
+<tr class="separator:a649d44da23038a73f4ef407cbf60234f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9eb9bba44385120873a4a7c818ed4e6"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#ae9eb9bba44385120873a4a7c818ed4e6">vtpv</a> ()</td></tr>
+<tr class="memdesc:ae9eb9bba44385120873a4a7c818ed4e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute vtpv, the weighted sum of squares of constrained image parameter residuals.  <a href="class_isis_1_1_bundle_observation.html#ae9eb9bba44385120873a4a7c818ed4e6">More...</a><br /></td></tr>
+<tr class="separator:ae9eb9bba44385120873a4a7c818ed4e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0afb6d12413170b8fd9f6ac6c4bdff34"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a0afb6d12413170b8fd9f6ac6c4bdff34">parameterWeights</a> ()</td></tr>
+<tr class="memdesc:a0afb6d12413170b8fd9f6ac6c4bdff34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the solve parameter weights.  <a href="class_isis_1_1_bundle_observation.html#a0afb6d12413170b8fd9f6ac6c4bdff34">More...</a><br /></td></tr>
+<tr class="separator:a0afb6d12413170b8fd9f6ac6c4bdff34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabe9bbe306beaf86be3152fb48c5b825"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#aabe9bbe306beaf86be3152fb48c5b825">parameterCorrections</a> ()</td></tr>
+<tr class="memdesc:aabe9bbe306beaf86be3152fb48c5b825"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the parameter corrections.  <a href="class_isis_1_1_bundle_observation.html#aabe9bbe306beaf86be3152fb48c5b825">More...</a><br /></td></tr>
+<tr class="separator:aabe9bbe306beaf86be3152fb48c5b825"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c621423e3326b56addfd2ea927f8dca"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a3c621423e3326b56addfd2ea927f8dca">aprioriSigmas</a> ()</td></tr>
+<tr class="memdesc:a3c621423e3326b56addfd2ea927f8dca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the a priori sigmas.  <a href="class_isis_1_1_bundle_observation.html#a3c621423e3326b56addfd2ea927f8dca">More...</a><br /></td></tr>
+<tr class="separator:a3c621423e3326b56addfd2ea927f8dca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27ed45fac38b6a876862086ec5c73cb9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a27ed45fac38b6a876862086ec5c73cb9">adjustedSigmas</a> ()</td></tr>
+<tr class="memdesc:a27ed45fac38b6a876862086ec5c73cb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accesses the adjusted sigmas.  <a href="class_isis_1_1_bundle_observation.html#a27ed45fac38b6a876862086ec5c73cb9">More...</a><br /></td></tr>
+<tr class="separator:a27ed45fac38b6a876862086ec5c73cb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d018818bc0a1a418ccaf87dbbe96cdf"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="namespace_isis.html#aa5d7fc537e3b1e59caac1059d4fdb2ae">BundleObservationSolveSettingsQsp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a8d018818bc0a1a418ccaf87dbbe96cdf">solveSettings</a> ()=0</td></tr>
+<tr class="separator:a8d018818bc0a1a418ccaf87dbbe96cdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33a43d04688693aa04153257d77c7237"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a33a43d04688693aa04153257d77c7237">numberParameters</a> ()=0</td></tr>
+<tr class="separator:a33a43d04688693aa04153257d77c7237"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fe70bae2bc0dd0f4ea6a4046c740d5a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a5fe70bae2bc0dd0f4ea6a4046c740d5a">applyParameterCorrections</a> (<a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> corrections)=0</td></tr>
+<tr class="separator:a5fe70bae2bc0dd0f4ea6a4046c740d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af31b59c974381897708151b43f9c8bdc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#af31b59c974381897708151b43f9c8bdc">bundleOutputString</a> (std::ostream &amp;fpOut, bool errorPropagation)=0</td></tr>
+<tr class="separator:af31b59c974381897708151b43f9c8bdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81d8e3e8a674bc4ea0321e6d86280fac"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a81d8e3e8a674bc4ea0321e6d86280fac">bundleOutputCSV</a> (bool errorPropagation)=0</td></tr>
+<tr class="separator:a81d8e3e8a674bc4ea0321e6d86280fac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac922b410d95c12fe8227a2da462f84c9"><td class="memItemLeft" align="right" valign="top">virtual QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#ac922b410d95c12fe8227a2da462f84c9">parameterList</a> ()=0</td></tr>
+<tr class="separator:ac922b410d95c12fe8227a2da462f84c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82c5fa11a165e8e32aeac288ae234927"><td class="memItemLeft" align="right" valign="top">virtual QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a82c5fa11a165e8e32aeac288ae234927">imageNames</a> ()</td></tr>
+<tr class="memdesc:a82c5fa11a165e8e32aeac288ae234927"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access to image names for <a class="el" href="class_isis_1_1_correlation_matrix.html" title="This is a container for the correlation matrix that comes from a bundle adjust.">CorrelationMatrix</a> to use.  <a href="class_isis_1_1_bundle_observation.html#a82c5fa11a165e8e32aeac288ae234927">More...</a><br /></td></tr>
+<tr class="separator:a82c5fa11a165e8e32aeac288ae234927"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adafa32f6ca93e7a222319abb5db5e559"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#adafa32f6ca93e7a222319abb5db5e559">computeTargetPartials</a> (<a class="el" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">LinearAlgebra::Matrix</a> &amp;coeffTarget, <a class="el" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;measure, <a class="el" href="namespace_isis.html#a2a8ce6eaf289ace3131997657b683c9c">BundleSettingsQsp</a> &amp;bundleSettings, <a class="el" href="namespace_isis.html#a8ad1a208b8261d34b5ee7ced0bd2d4e9">BundleTargetBodyQsp</a> &amp;bundleTargetBody)=0</td></tr>
+<tr class="separator:adafa32f6ca93e7a222319abb5db5e559"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6752612da5a6c7df63ecd05e885d900e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a6752612da5a6c7df63ecd05e885d900e">computeImagePartials</a> (<a class="el" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">LinearAlgebra::Matrix</a> &amp;coeffImage, <a class="el" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;measure)=0</td></tr>
+<tr class="separator:a6752612da5a6c7df63ecd05e885d900e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6845474757d8c04ca2aeecbf6557ea7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#ac6845474757d8c04ca2aeecbf6557ea7">computePoint3DPartials</a> (<a class="el" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">LinearAlgebra::Matrix</a> &amp;coeffPoint3D, <a class="el" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;measure, <a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a> coordType=<a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223aff75c0a79b627c5f3926eb325e582139">SurfacePoint::Rectangular</a>)=0</td></tr>
+<tr class="separator:ac6845474757d8c04ca2aeecbf6557ea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d38346921f0f47a491e2c4b4250540b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a7d38346921f0f47a491e2c4b4250540b">computeRHSPartials</a> (<a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;coeffRHS, <a class="el" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;measure)=0</td></tr>
+<tr class="separator:a7d38346921f0f47a491e2c4b4250540b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0644f9ba4117030ad853d430b961235e"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a0644f9ba4117030ad853d430b961235e">computeObservationValue</a> (<a class="el" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;measure, double deltaVal)=0</td></tr>
+<tr class="separator:a0644f9ba4117030ad853d430b961235e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a376c9875ec246de01a175a7bc4c8bae5"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a376c9875ec246de01a175a7bc4c8bae5">m_observationNumber</a></td></tr>
+<tr class="memdesc:a376c9875ec246de01a175a7bc4c8bae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The shared portion of the serial numbers of all images in the observation.  <a href="class_isis_1_1_bundle_observation.html#a376c9875ec246de01a175a7bc4c8bae5">More...</a><br /></td></tr>
+<tr class="separator:a376c9875ec246de01a175a7bc4c8bae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74df11a74339c982e0161c96b81b0771"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a74df11a74339c982e0161c96b81b0771">m_index</a></td></tr>
+<tr class="memdesc:a74df11a74339c982e0161c96b81b0771"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of this observation in the set of observations. Map between cube serial number and <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a> pointers.  <a href="class_isis_1_1_bundle_observation.html#a74df11a74339c982e0161c96b81b0771">More...</a><br /></td></tr>
+<tr class="separator:a74df11a74339c982e0161c96b81b0771"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac950cb1cbd139622f5b0f6778ffee106"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_map.html">QMap</a>&lt; QString, <a class="el" href="namespace_isis.html#aa82acde9cb85dd6b1ff8490fa8158a2f">BundleImageQsp</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#ac950cb1cbd139622f5b0f6778ffee106">m_cubeSerialNumberToBundleImageMap</a></td></tr>
+<tr class="separator:ac950cb1cbd139622f5b0f6778ffee106"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55720ade56a7b67b71b14ec97b256f41"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a55720ade56a7b67b71b14ec97b256f41">m_serialNumbers</a></td></tr>
+<tr class="memdesc:a55720ade56a7b67b71b14ec97b256f41"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of all cube serial numbers in observation.  <a href="class_isis_1_1_bundle_observation.html#a55720ade56a7b67b71b14ec97b256f41">More...</a><br /></td></tr>
+<tr class="separator:a55720ade56a7b67b71b14ec97b256f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f0a74ab8b043b0b6916959c741fc112"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a7f0a74ab8b043b0b6916959c741fc112">m_imageNames</a></td></tr>
+<tr class="memdesc:a7f0a74ab8b043b0b6916959c741fc112"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of all cube names.  <a href="class_isis_1_1_bundle_observation.html#a7f0a74ab8b043b0b6916959c741fc112">More...</a><br /></td></tr>
+<tr class="separator:a7f0a74ab8b043b0b6916959c741fc112"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ced0285d38f9182d5c818ccf6248bb5"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a4ced0285d38f9182d5c818ccf6248bb5">m_instrumentId</a></td></tr>
+<tr class="memdesc:a4ced0285d38f9182d5c818ccf6248bb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spacecraft instrument id.  <a href="class_isis_1_1_bundle_observation.html#a4ced0285d38f9182d5c818ccf6248bb5">More...</a><br /></td></tr>
+<tr class="separator:a4ced0285d38f9182d5c818ccf6248bb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac812a71040c7232c79771d7e62e4d19c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#ac812a71040c7232c79771d7e62e4d19c">m_weights</a></td></tr>
+<tr class="memdesc:ac812a71040c7232c79771d7e62e4d19c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameter weights. Cumulative parameter correction vector.  <a href="class_isis_1_1_bundle_observation.html#ac812a71040c7232c79771d7e62e4d19c">More...</a><br /></td></tr>
+<tr class="separator:ac812a71040c7232c79771d7e62e4d19c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bd6919f2640c8f23b2146734e492ecc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a5bd6919f2640c8f23b2146734e492ecc">m_corrections</a></td></tr>
+<tr class="separator:a5bd6919f2640c8f23b2146734e492ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76d129f68316a41e40176638d092b169"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a76d129f68316a41e40176638d092b169">m_aprioriSigmas</a></td></tr>
+<tr class="memdesc:a76d129f68316a41e40176638d092b169"><td class="mdescLeft">&#160;</td><td class="mdescRight">A posteriori (adjusted) parameter sigmas.  <a href="class_isis_1_1_bundle_observation.html#a76d129f68316a41e40176638d092b169">More...</a><br /></td></tr>
+<tr class="separator:a76d129f68316a41e40176638d092b169"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84b15413946e9ee703931eb02473ace6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bundle_observation.html#a84b15413946e9ee703931eb02473ace6">m_adjustedSigmas</a></td></tr>
+<tr class="memdesc:a84b15413946e9ee703931eb02473ace6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A posteriori (adjusted) parameter sigmas.  <a href="class_isis_1_1_bundle_observation.html#a84b15413946e9ee703931eb02473ace6">More...</a><br /></td></tr>
+<tr class="separator:a84b15413946e9ee703931eb02473ace6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Abstract base class for an observation in bundle adjustment. </p>
+<p>This class is the abstract base class that represents an observation in bundle adjustment. It handles operations related to the images in the observation, parameter corrections, and parameter uncertainties. It defines the interface for choosing observation parameters via <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html" title="This class is used to modify and manage solve settings for 1 to many BundleObservations.">BundleObservationSolveSettings</a>. The partial computation apis required by the bundle adjustment are also defined but must be implemented by sub-classes. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad5879e44bc7c468b32dab0fcc6fb87b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5879e44bc7c468b32dab0fcc6fb87b6">&#9670;&nbsp;</a></span>BundleObservation() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleObservation::BundleObservation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a> initialized to a default state. </p>
+
+</div>
+</div>
+<a id="a01d917a59c697bb55652501d99dbd85c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01d917a59c697bb55652501d99dbd85c">&#9670;&nbsp;</a></span>BundleObservation() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleObservation::BundleObservation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#aa82acde9cb85dd6b1ff8490fa8158a2f">BundleImageQsp</a>&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>observationNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>instrumentId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#a8ad1a208b8261d34b5ee7ced0bd2d4e9">BundleTargetBodyQsp</a>&#160;</td>
+          <td class="paramname"><em>bundleTargetBody</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a> from an <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a>, an instrument id, an observation number to assign to this <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a>, and a target body. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td><a class="el" href="class_q_shared_pointer.html">QSharedPointer</a> to the primary image in the observation </td></tr>
+    <tr><td class="paramname">observationNumber</td><td>Observation number of the observation </td></tr>
+    <tr><td class="paramname">instrumentId</td><td>Id of the instrument for the observation </td></tr>
+    <tr><td class="paramname">bundleTargetBody</td><td><a class="el" href="class_q_shared_pointer.html">QSharedPointer</a> to the target body of the observation </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8c7050da32a843a08f66814346c08058"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c7050da32a843a08f66814346c08058">&#9670;&nbsp;</a></span>BundleObservation() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleObservation::BundleObservation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a copy of another <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>Reference to the <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a> to copy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_observation.html#ac950cb1cbd139622f5b0f6778ffee106">m_cubeSerialNumberToBundleImageMap</a>, <a class="el" href="class_isis_1_1_bundle_observation.html#a74df11a74339c982e0161c96b81b0771">m_index</a>, <a class="el" href="class_isis_1_1_bundle_observation.html#a4ced0285d38f9182d5c818ccf6248bb5">m_instrumentId</a>, <a class="el" href="class_isis_1_1_bundle_observation.html#a376c9875ec246de01a175a7bc4c8bae5">m_observationNumber</a>, and <a class="el" href="class_isis_1_1_bundle_observation.html#a55720ade56a7b67b71b14ec97b256f41">m_serialNumbers</a>.</p>
+
+</div>
+</div>
+<a id="a56f01cd50148f2ef33363412d4604bcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56f01cd50148f2ef33363412d4604bcb">&#9670;&nbsp;</a></span>~BundleObservation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BundleObservation::~BundleObservation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+<p>Contained BundleImages will remain until all shared pointers are deleted. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a27ed45fac38b6a876862086ec5c73cb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27ed45fac38b6a876862086ec5c73cb9">&#9670;&nbsp;</a></span>adjustedSigmas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp; Isis::BundleObservation::adjustedSigmas </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the adjusted sigmas. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a" title="Definition for an Isis::LinearAlgebra::Vector of doubles.">LinearAlgebra::Vector</a></b> Returns the adjusted sigmas </dd></dl>
+
+</div>
+</div>
+<a id="a5f6a9251fe96b5ecde4264aefb0b2686"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f6a9251fe96b5ecde4264aefb0b2686">&#9670;&nbsp;</a></span>append()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleObservation::append </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#aa82acde9cb85dd6b1ff8490fa8158a2f">BundleImageQsp</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Appends a <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a> shared pointer to the <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a>. </p>
+<p>If the pointer is valid, then the <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a> and its serial number will be inserted into the serial number to <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a> map.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a> to be appended.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QVector::append() </dd></dl>
+
+</div>
+</div>
+<a id="a5fe70bae2bc0dd0f4ea6a4046c740d5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fe70bae2bc0dd0f4ea6a4046c740d5a">&#9670;&nbsp;</a></span>applyParameterCorrections()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Isis::BundleObservation::applyParameterCorrections </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a>&#160;</td>
+          <td class="paramname"><em>corrections</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a5494e34e47c2af265b3aab44e5407b86">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#aa2fc5ac4e381b9dda382474c8c86e1ac">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="a3c621423e3326b56addfd2ea927f8dca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c621423e3326b56addfd2ea927f8dca">&#9670;&nbsp;</a></span>aprioriSigmas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp; Isis::BundleObservation::aprioriSigmas </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the a priori sigmas. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a" title="Definition for an Isis::LinearAlgebra::Vector of doubles.">LinearAlgebra::Vector</a></b> Returns the a priori sigmas </dd></dl>
+
+</div>
+</div>
+<a id="a81d8e3e8a674bc4ea0321e6d86280fac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81d8e3e8a674bc4ea0321e6d86280fac">&#9670;&nbsp;</a></span>bundleOutputCSV()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QString Isis::BundleObservation::bundleOutputCSV </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>errorPropagation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a2d9ce3fef2ed6ff00a95f9a291d59519">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a40f8c71ea728287008ee72f2ea72b9b5">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="af31b59c974381897708151b43f9c8bdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af31b59c974381897708151b43f9c8bdc">&#9670;&nbsp;</a></span>bundleOutputString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::BundleObservation::bundleOutputString </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>fpOut</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>errorPropagation</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#aaa61f08a424ba94525ea6d79ebe33fff">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#ab7086846c2d0dd3d9f41b55c80321380">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="a6752612da5a6c7df63ecd05e885d900e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6752612da5a6c7df63ecd05e885d900e">&#9670;&nbsp;</a></span>computeImagePartials()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Isis::BundleObservation::computeImagePartials </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">LinearAlgebra::Matrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>coeffImage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;&#160;</td>
+          <td class="paramname"><em>measure</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a4faf068f9daec8d701fade4d35cfb380">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a4e751e1e48d4c1945dd8c9e83f6f71a5">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="a0644f9ba4117030ad853d430b961235e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0644f9ba4117030ad853d430b961235e">&#9670;&nbsp;</a></span>computeObservationValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double Isis::BundleObservation::computeObservationValue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;&#160;</td>
+          <td class="paramname"><em>measure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>deltaVal</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#ad74bbc39515287222b74243b8c7b641c">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a878e5f9dbde1c95901ff2274e640f330">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="ac6845474757d8c04ca2aeecbf6557ea7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6845474757d8c04ca2aeecbf6557ea7">&#9670;&nbsp;</a></span>computePoint3DPartials()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Isis::BundleObservation::computePoint3DPartials </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">LinearAlgebra::Matrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>coeffPoint3D</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;&#160;</td>
+          <td class="paramname"><em>measure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a>&#160;</td>
+          <td class="paramname"><em>coordType</em> = <code><a class="el" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223aff75c0a79b627c5f3926eb325e582139">SurfacePoint::Rectangular</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#ab150eda0eccd7abbf9dbc45b54213273">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#ab77fb3497def055e436c301031e02568">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="a7d38346921f0f47a491e2c4b4250540b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d38346921f0f47a491e2c4b4250540b">&#9670;&nbsp;</a></span>computeRHSPartials()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Isis::BundleObservation::computeRHSPartials </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>coeffRHS</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;&#160;</td>
+          <td class="paramname"><em>measure</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a1e9f7fb10bb959480177cdc87e9fc14c">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a8b91240a38568b0ab9aad6af07012685">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="adafa32f6ca93e7a222319abb5db5e559"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adafa32f6ca93e7a222319abb5db5e559">&#9670;&nbsp;</a></span>computeTargetPartials()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Isis::BundleObservation::computeTargetPartials </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">LinearAlgebra::Matrix</a> &amp;&#160;</td>
+          <td class="paramname"><em>coeffTarget</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_bundle_measure.html">BundleMeasure</a> &amp;&#160;</td>
+          <td class="paramname"><em>measure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#a2a8ce6eaf289ace3131997657b683c9c">BundleSettingsQsp</a> &amp;&#160;</td>
+          <td class="paramname"><em>bundleSettings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_isis.html#a8ad1a208b8261d34b5ee7ced0bd2d4e9">BundleTargetBodyQsp</a> &amp;&#160;</td>
+          <td class="paramname"><em>bundleTargetBody</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a450b190bb7aeb637a64fc8834e0a4f51">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#ae8111581fc9b02ee1b549798bf802b43">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="a1fe0244b4cc5ae507e3a39855139a6a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fe0244b4cc5ae507e3a39855139a6a6">&#9670;&nbsp;</a></span>copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleObservation::copy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab84c7129b3ee26e9f81a24e6f25054c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab84c7129b3ee26e9f81a24e6f25054c3">&#9670;&nbsp;</a></span>imageByCubeSerialNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#aa82acde9cb85dd6b1ff8490fa8158a2f">BundleImageQsp</a> Isis::BundleObservation::imageByCubeSerialNumber </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>cubeSerialNumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a> shared pointer associated with the given serial number. </p>
+<p>If no <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a> with that serial number is contained a NULL pointer is returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cubeSerialNumber</td><td>The serial number of the cube to be returned.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>BundleImageQsp</b> A shared pointer to the <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a> (NULL if not found). </dd></dl>
+
+</div>
+</div>
+<a id="a82c5fa11a165e8e32aeac288ae234927"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82c5fa11a165e8e32aeac288ae234927">&#9670;&nbsp;</a></span>imageNames()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::BundleObservation::imageNames </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Access to image names for <a class="el" href="class_isis_1_1_correlation_matrix.html" title="This is a container for the correlation matrix that comes from a bundle adjust.">CorrelationMatrix</a> to use. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>QStringList</b> Returns a QStringList of the image names </dd></dl>
+
+</div>
+</div>
+<a id="a49f9d958cae2c5d80b305c4990e62d8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49f9d958cae2c5d80b305c4990e62d8b">&#9670;&nbsp;</a></span>index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BundleObservation::index </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Accesses the observation's index. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> Returns the observation's index </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#aa2fc5ac4e381b9dda382474c8c86e1ac">Isis::IsisBundleObservation::applyParameterCorrections()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a4e751e1e48d4c1945dd8c9e83f6f71a5">Isis::IsisBundleObservation::computeImagePartials()</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#ae8111581fc9b02ee1b549798bf802b43">Isis::IsisBundleObservation::computeTargetPartials()</a>.</p>
+
+</div>
+</div>
+<a id="a649d44da23038a73f4ef407cbf60234f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a649d44da23038a73f4ef407cbf60234f">&#9670;&nbsp;</a></span>instrumentId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleObservation::instrumentId </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Accesses the instrument id. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> Returns the instrument id of the observation </dd></dl>
+
+</div>
+</div>
+<a id="a33a43d04688693aa04153257d77c7237"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33a43d04688693aa04153257d77c7237">&#9670;&nbsp;</a></span>numberParameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int Isis::BundleObservation::numberParameters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a28884dab0726777e9163104398392352">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a120fe1eebc1577a58d272cb1b7b42d05">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="adfd3d12c3fe0b459a95dd92ff6dcdcab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfd3d12c3fe0b459a95dd92ff6dcdcab">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp; Isis::BundleObservation::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_bundle_observation.html">BundleObservation</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Assignment operator. </p>
+<p>Assigns the state of the source <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a> to this <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a></td><td>Reference to the source <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a> to assign from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a>&amp;</b> Reference to this <a class="el" href="class_isis_1_1_bundle_observation.html" title="Abstract base class for an observation in bundle adjustment.">BundleObservation</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bundle_observation.html#ac950cb1cbd139622f5b0f6778ffee106">m_cubeSerialNumberToBundleImageMap</a>, <a class="el" href="class_isis_1_1_bundle_observation.html#a4ced0285d38f9182d5c818ccf6248bb5">m_instrumentId</a>, <a class="el" href="class_isis_1_1_bundle_observation.html#a376c9875ec246de01a175a7bc4c8bae5">m_observationNumber</a>, and <a class="el" href="class_isis_1_1_bundle_observation.html#a55720ade56a7b67b71b14ec97b256f41">m_serialNumbers</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#ab67ff78ee7cc168821017c9bb6a3a938">Isis::IsisBundleObservation::operator=()</a>.</p>
+
+</div>
+</div>
+<a id="aabe9bbe306beaf86be3152fb48c5b825"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabe9bbe306beaf86be3152fb48c5b825">&#9670;&nbsp;</a></span>parameterCorrections()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp; Isis::BundleObservation::parameterCorrections </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the parameter corrections. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a" title="Definition for an Isis::LinearAlgebra::Vector of doubles.">LinearAlgebra::Vector</a></b> Returns the parameter corrections </dd></dl>
+
+</div>
+</div>
+<a id="ac922b410d95c12fe8227a2da462f84c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac922b410d95c12fe8227a2da462f84c9">&#9670;&nbsp;</a></span>parameterList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QStringList Isis::BundleObservation::parameterList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a9c616f2c4b7ed24b069b9e3cef4a8138">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a3c74460d66f8c40d87ccb0ce051a6846">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="a0afb6d12413170b8fd9f6ac6c4bdff34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0afb6d12413170b8fd9f6ac6c4bdff34">&#9670;&nbsp;</a></span>parameterWeights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp; Isis::BundleObservation::parameterWeights </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accesses the solve parameter weights. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a" title="Definition for an Isis::LinearAlgebra::Vector of doubles.">LinearAlgebra::Vector</a></b> Returns the parameter weights for solving </dd></dl>
+
+</div>
+</div>
+<a id="a1efd26bfad080909c76c28ba191236b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1efd26bfad080909c76c28ba191236b1">&#9670;&nbsp;</a></span>setIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BundleObservation::setIndex </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the index for the observation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Value to set the index of the observation to </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a910ae8857484ef6ce97bff4c4dbcd5c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a910ae8857484ef6ce97bff4c4dbcd5c3">&#9670;&nbsp;</a></span>setSolveSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Isis::BundleObservation::setSolveSettings </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html">BundleObservationSolveSettings</a>&#160;</td>
+          <td class="paramname"><em>solveSettings</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#ac3ea68bd1398c7e863fe2f4e1eff95ad">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#aa7230fd095ef4cc58c8d94b1262599c5">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="a8d018818bc0a1a418ccaf87dbbe96cdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d018818bc0a1a418ccaf87dbbe96cdf">&#9670;&nbsp;</a></span>solveSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const <a class="el" href="namespace_isis.html#aa5d7fc537e3b1e59caac1059d4fdb2ae">BundleObservationSolveSettingsQsp</a> Isis::BundleObservation::solveSettings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a629f920aa675e1e19b0309a4d03c73f0">Isis::CsmBundleObservation</a>, and <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a088e709e0cba349be1dbaff8aa4cd425">Isis::IsisBundleObservation</a>.</p>
+
+</div>
+</div>
+<a id="ae9eb9bba44385120873a4a7c818ed4e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9eb9bba44385120873a4a7c818ed4e6">&#9670;&nbsp;</a></span>vtpv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::BundleObservation::vtpv </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute vtpv, the weighted sum of squares of constrained image parameter residuals. </p>
+<dl class="section return"><dt>Returns</dt><dd>double Weighted sum of squares of constrained image parameter residuals. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a84b15413946e9ee703931eb02473ace6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84b15413946e9ee703931eb02473ace6">&#9670;&nbsp;</a></span>m_adjustedSigmas</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> Isis::BundleObservation::m_adjustedSigmas</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A posteriori (adjusted) parameter sigmas. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a40f8c71ea728287008ee72f2ea72b9b5">Isis::IsisBundleObservation::bundleOutputCSV()</a>, <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a2d9ce3fef2ed6ff00a95f9a291d59519">Isis::CsmBundleObservation::bundleOutputCSV()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#ab7086846c2d0dd3d9f41b55c80321380">Isis::IsisBundleObservation::bundleOutputString()</a>, <a class="el" href="class_isis_1_1_csm_bundle_observation.html#aaa61f08a424ba94525ea6d79ebe33fff">Isis::CsmBundleObservation::bundleOutputString()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#aa7230fd095ef4cc58c8d94b1262599c5">Isis::IsisBundleObservation::setSolveSettings()</a>, and <a class="el" href="class_isis_1_1_csm_bundle_observation.html#ac3ea68bd1398c7e863fe2f4e1eff95ad">Isis::CsmBundleObservation::setSolveSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a76d129f68316a41e40176638d092b169"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76d129f68316a41e40176638d092b169">&#9670;&nbsp;</a></span>m_aprioriSigmas</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> Isis::BundleObservation::m_aprioriSigmas</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A posteriori (adjusted) parameter sigmas. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a40f8c71ea728287008ee72f2ea72b9b5">Isis::IsisBundleObservation::bundleOutputCSV()</a>, <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a2d9ce3fef2ed6ff00a95f9a291d59519">Isis::CsmBundleObservation::bundleOutputCSV()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#ab7086846c2d0dd3d9f41b55c80321380">Isis::IsisBundleObservation::bundleOutputString()</a>, <a class="el" href="class_isis_1_1_csm_bundle_observation.html#aaa61f08a424ba94525ea6d79ebe33fff">Isis::CsmBundleObservation::bundleOutputString()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#aa7230fd095ef4cc58c8d94b1262599c5">Isis::IsisBundleObservation::setSolveSettings()</a>, and <a class="el" href="class_isis_1_1_csm_bundle_observation.html#ac3ea68bd1398c7e863fe2f4e1eff95ad">Isis::CsmBundleObservation::setSolveSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a5bd6919f2640c8f23b2146734e492ecc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bd6919f2640c8f23b2146734e492ecc">&#9670;&nbsp;</a></span>m_corrections</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> Isis::BundleObservation::m_corrections</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#aa2fc5ac4e381b9dda382474c8c86e1ac">Isis::IsisBundleObservation::applyParameterCorrections()</a>, <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a5494e34e47c2af265b3aab44e5407b86">Isis::CsmBundleObservation::applyParameterCorrections()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a40f8c71ea728287008ee72f2ea72b9b5">Isis::IsisBundleObservation::bundleOutputCSV()</a>, <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a2d9ce3fef2ed6ff00a95f9a291d59519">Isis::CsmBundleObservation::bundleOutputCSV()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#ab7086846c2d0dd3d9f41b55c80321380">Isis::IsisBundleObservation::bundleOutputString()</a>, <a class="el" href="class_isis_1_1_csm_bundle_observation.html#aaa61f08a424ba94525ea6d79ebe33fff">Isis::CsmBundleObservation::bundleOutputString()</a>, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#aa7230fd095ef4cc58c8d94b1262599c5">Isis::IsisBundleObservation::setSolveSettings()</a>, and <a class="el" href="class_isis_1_1_csm_bundle_observation.html#ac3ea68bd1398c7e863fe2f4e1eff95ad">Isis::CsmBundleObservation::setSolveSettings()</a>.</p>
+
+</div>
+</div>
+<a id="ac950cb1cbd139622f5b0f6778ffee106"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac950cb1cbd139622f5b0f6778ffee106">&#9670;&nbsp;</a></span>m_cubeSerialNumberToBundleImageMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_map.html">QMap</a>&lt;QString, <a class="el" href="namespace_isis.html#aa82acde9cb85dd6b1ff8490fa8158a2f">BundleImageQsp</a>&gt; Isis::BundleObservation::m_cubeSerialNumberToBundleImageMap</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_observation.html#a8c7050da32a843a08f66814346c08058">BundleObservation()</a>, and <a class="el" href="class_isis_1_1_bundle_observation.html#adfd3d12c3fe0b459a95dd92ff6dcdcab">operator=()</a>.</p>
+
+</div>
+</div>
+<a id="a7f0a74ab8b043b0b6916959c741fc112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f0a74ab8b043b0b6916959c741fc112">&#9670;&nbsp;</a></span>m_imageNames</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::BundleObservation::m_imageNames</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>List of all cube names. </p>
+
+</div>
+</div>
+<a id="a74df11a74339c982e0161c96b81b0771"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74df11a74339c982e0161c96b81b0771">&#9670;&nbsp;</a></span>m_index</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BundleObservation::m_index</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Index of this observation in the set of observations. Map between cube serial number and <a class="el" href="class_isis_1_1_bundle_image.html" title="This class hold image information that BundleAdjust needs to run correctly.Definition for a BundleIma...">BundleImage</a> pointers. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_observation.html#a8c7050da32a843a08f66814346c08058">BundleObservation()</a>.</p>
+
+</div>
+</div>
+<a id="a4ced0285d38f9182d5c818ccf6248bb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ced0285d38f9182d5c818ccf6248bb5">&#9670;&nbsp;</a></span>m_instrumentId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleObservation::m_instrumentId</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Spacecraft instrument id. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_observation.html#a8c7050da32a843a08f66814346c08058">BundleObservation()</a>, and <a class="el" href="class_isis_1_1_bundle_observation.html#adfd3d12c3fe0b459a95dd92ff6dcdcab">operator=()</a>.</p>
+
+</div>
+</div>
+<a id="a376c9875ec246de01a175a7bc4c8bae5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a376c9875ec246de01a175a7bc4c8bae5">&#9670;&nbsp;</a></span>m_observationNumber</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BundleObservation::m_observationNumber</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The shared portion of the serial numbers of all images in the observation. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_observation.html#a8c7050da32a843a08f66814346c08058">BundleObservation()</a>, and <a class="el" href="class_isis_1_1_bundle_observation.html#adfd3d12c3fe0b459a95dd92ff6dcdcab">operator=()</a>.</p>
+
+</div>
+</div>
+<a id="a55720ade56a7b67b71b14ec97b256f41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55720ade56a7b67b71b14ec97b256f41">&#9670;&nbsp;</a></span>m_serialNumbers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::BundleObservation::m_serialNumbers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>List of all cube serial numbers in observation. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_bundle_observation.html#a8c7050da32a843a08f66814346c08058">BundleObservation()</a>, and <a class="el" href="class_isis_1_1_bundle_observation.html#adfd3d12c3fe0b459a95dd92ff6dcdcab">operator=()</a>.</p>
+
+</div>
+</div>
+<a id="ac812a71040c7232c79771d7e62e4d19c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac812a71040c7232c79771d7e62e4d19c">&#9670;&nbsp;</a></span>m_weights</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> Isis::BundleObservation::m_weights</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Parameter weights. Cumulative parameter correction vector. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_isis_bundle_observation.html#aa7230fd095ef4cc58c8d94b1262599c5">Isis::IsisBundleObservation::setSolveSettings()</a>, and <a class="el" href="class_isis_1_1_csm_bundle_observation.html#ac3ea68bd1398c7e863fe2f4e1eff95ad">Isis::CsmBundleObservation::setSolveSettings()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleUtilities/<a class="el" href="_bundle_observation_8h_source.html">BundleObservation.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleUtilities/<a class="el" href="_bundle_observation_8cpp.html">BundleObservation.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_bundle_observation.html">BundleObservation</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

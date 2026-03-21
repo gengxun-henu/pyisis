@@ -1,0 +1,7 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+RadarCamera,"Spice, Instruments, and Cameras",isis/src/base/objs/RadarCamera/RadarCamera.h,isis_pybind_standalone/src/bind_camera_hierarchy.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,相机模型/Spice 依赖；后续建议补真实数据单测
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,RadarCamera,isis_pybind.RadarCamera,Y,Python class symbol is exported; constructor exposure may be limited; 相机模型/Spice 依赖；后续建议补真实数据单测
+Construction/Enum,RadarCamera(),isis_pybind.RadarCamera(),N,相机模型/Spice 依赖；后续建议补真实数据单测
+Public API,virtual CameraType GetCameraType() const { return Radar,isis_pybind.RadarCamera.get_camera_type,N,相机模型/Spice 依赖；后续建议补真实数据单测

@@ -1,0 +1,38 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+BundleMeasure,Control Networks,isis/src/control/objs/BundleUtilities/BundleMeasure.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,BundleMeasure,isis_pybind.BundleMeasure,N,Python class symbol not found in current binding files; Qt 类型/信号槽较多
+Construction/Enum,BundleMeasure(),isis_pybind.BundleMeasure(),N,Qt 类型/信号槽较多
+Mutation/Configuration,void setParentObservation(QSharedPointer<BundleObservation> observation),isis_pybind.BundleMeasure.set_parent_observation,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setParentImage(QSharedPointer<BundleImage> image),isis_pybind.BundleMeasure.set_parent_image,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setRejected(bool reject),isis_pybind.BundleMeasure.set_rejected,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setImage(),isis_pybind.BundleMeasure.set_image,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setNormalsPositionBlockIndex(int index),isis_pybind.BundleMeasure.set_normals_position_block_index,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setNormalsPointingBlockIndex(int index),isis_pybind.BundleMeasure.set_normals_pointing_block_index,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setFocalPlaneResidualsMillimeters(),isis_pybind.BundleMeasure.set_focal_plane_residuals_millimeters,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setSigma(double sigma),isis_pybind.BundleMeasure.set_sigma,N,Qt 类型/信号槽较多
+Query,bool isRejected() const,isis_pybind.BundleMeasure.is_rejected,N,Qt 类型/信号槽较多
+Public API,Camera *camera() const,isis_pybind.BundleMeasure.camera,N,Qt 类型/信号槽较多
+Public API,BundleControlPoint *parentControlPoint(),isis_pybind.BundleMeasure.parent_control_point,N,Qt 类型/信号槽较多
+Public API,QSharedPointer<BundleImage> parentBundleImage(),isis_pybind.BundleMeasure.parent_bundle_image,N,Qt 类型/信号槽较多
+Public API,QSharedPointer<BundleObservation> parentBundleObservation(),isis_pybind.BundleMeasure.parent_bundle_observation,N,Qt 类型/信号槽较多
+Public API,const QSharedPointer<BundleObservationSolveSettings> observationSolveSettings(),isis_pybind.BundleMeasure.observation_solve_settings,N,Qt 类型/信号槽较多
+Public API,double sample() const,isis_pybind.BundleMeasure.sample,N,Qt 类型/信号槽较多
+Public API,double sampleResidual() const,isis_pybind.BundleMeasure.sample_residual,N,Qt 类型/信号槽较多
+Public API,double line() const,isis_pybind.BundleMeasure.line,N,Qt 类型/信号槽较多
+Public API,double lineResidual() const,isis_pybind.BundleMeasure.line_residual,N,Qt 类型/信号槽较多
+Public API,double sigma() const,isis_pybind.BundleMeasure.sigma,N,Qt 类型/信号槽较多
+Public API,double weight() const,isis_pybind.BundleMeasure.weight,N,Qt 类型/信号槽较多
+Public API,double weightSqrt() const,isis_pybind.BundleMeasure.weight_sqrt,N,Qt 类型/信号槽较多
+Public API,double residualMagnitude() const,isis_pybind.BundleMeasure.residual_magnitude,N,Qt 类型/信号槽较多
+Public API,double xFocalPlaneResidual() const,isis_pybind.BundleMeasure.x_focal_plane_residual,N,Qt 类型/信号槽较多
+Public API,double yFocalPlaneResidual() const,isis_pybind.BundleMeasure.y_focal_plane_residual,N,Qt 类型/信号槽较多
+Public API,QString cubeSerialNumber() const,isis_pybind.BundleMeasure.cube_serial_number,N,Qt 类型/信号槽较多
+Public API,double focalPlaneComputedX() const,isis_pybind.BundleMeasure.focal_plane_computed_x,N,Qt 类型/信号槽较多
+Public API,double focalPlaneComputedY() const,isis_pybind.BundleMeasure.focal_plane_computed_y,N,Qt 类型/信号槽较多
+Public API,double focalPlaneMeasuredX() const,isis_pybind.BundleMeasure.focal_plane_measured_x,N,Qt 类型/信号槽较多
+Public API,double focalPlaneMeasuredY() const,isis_pybind.BundleMeasure.focal_plane_measured_y,N,Qt 类型/信号槽较多
+Public API,int observationIndex() const,isis_pybind.BundleMeasure.observation_index,N,Qt 类型/信号槽较多
+Public API,int positionNormalsBlockIndex() const,isis_pybind.BundleMeasure.position_normals_block_index,N,Qt 类型/信号槽较多
+Public API,int pointingNormalsBlockIndex() const,isis_pybind.BundleMeasure.pointing_normals_block_index,N,Qt 类型/信号槽较多

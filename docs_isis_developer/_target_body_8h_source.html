@@ -1,0 +1,423 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/TargetBody/TargetBody.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_target_body_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">TargetBody.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_target_body_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef TargetBody_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define TargetBody_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QList&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;QObject&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;QSharedPointer&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;SpiceUsr.h&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;SpiceZfc.h&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;SpiceZmc.h&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_angle_8h.html">Angle.h</a>&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">//#include &quot;BundleTargetBody.h&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_distance_8h.html">Distance.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_target_8h.html">Target.h</a>&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">class </span>QDataStream;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">class </span>QUuid;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">class </span>QXmlStreamWriter;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <span class="comment">//class Distance;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keyword">class </span>FileName;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keyword">class </span>Project;  <span class="comment">// TODO: does xml stuff need project???</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keyword">class </span>PvlObject;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <span class="keyword">class </span>TargetBodyDisplayProperties;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="class_isis_1_1_target_body.html">   63</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_target_body.html">TargetBody</a> : <span class="keyword">public</span> <a class="code" href="class_q_object.html">QObject</a> {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    Q_OBJECT</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      <a class="code" href="class_isis_1_1_target_body.html#a15ea90bc4589cbb38a9d009fc86a4c12">TargetBody</a>(<a class="code" href="class_isis_1_1_target.html">Target</a> *target, <a class="code" href="class_q_object.html">QObject</a> *parent = 0);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <a class="code" href="class_isis_1_1_target_body.html#a97c7b14a40aa8db89683802ce4bb07b9">~TargetBody</a>();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_target_body.html#a79117e30bbfb942d8c9f88df78026901">operator==</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_target_body.html">TargetBody</a> &amp;src) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      <a class="code" href="class_isis_1_1_target_body_display_properties.html">TargetBodyDisplayProperties</a> *<a class="code" href="class_isis_1_1_target_body.html#a0b8672ac3b7142a52faf7ac7f6d1b024">displayProperties</a>();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_target_body_display_properties.html">TargetBodyDisplayProperties</a> *<a class="code" href="class_isis_1_1_target_body.html#a0b8672ac3b7142a52faf7ac7f6d1b024">displayProperties</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      QString <a class="code" href="class_isis_1_1_target_body.html#a644720f98a0ad8fab6ecfc5b161e6530">id</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      QString <a class="code" href="class_isis_1_1_target_body.html#aff1034b165e12684e81dc038cbee4ad2">targetName</a>();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">//    void deleteFromDisk();</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_target_body.html#a5655c9807e3813481f58df53bbb5f187">frameType</a>();</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;      std::vector&lt;Angle&gt; <a class="code" href="class_isis_1_1_target_body.html#a96c6079a28749f3798515b65256bc935">poleRaCoefs</a>();</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;      std::vector&lt;Angle&gt; <a class="code" href="class_isis_1_1_target_body.html#a45a5e0655443a319e569e6e1806e4af6">poleDecCoefs</a>();</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      std::vector&lt;Angle&gt; <a class="code" href="class_isis_1_1_target_body.html#a0584afe527fcf2a42a45c6093f222836">pmCoefs</a>();</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      std::vector&lt;double&gt; <a class="code" href="class_isis_1_1_target_body.html#ade2bb7991b816d647b41fcb74bdb96cf">poleRaNutPrecCoefs</a>();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      std::vector&lt;double&gt; <a class="code" href="class_isis_1_1_target_body.html#a496ed1197919563ae08e55862da795a7">poleDecNutPrecCoefs</a>();</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      std::vector&lt;double&gt; <a class="code" href="class_isis_1_1_target_body.html#a5081dc91aeba465221ea9683619f5201">pmNutPrecCoefs</a>();</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      std::vector&lt;Angle&gt; <a class="code" href="class_isis_1_1_target_body.html#aca9ba04c1722c81a1b58d54480b0b242">sysNutPrecConstants</a>();</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      std::vector&lt;Angle&gt; <a class="code" href="class_isis_1_1_target_body.html#a4e8c9a2c2ccb4ac38947ee574e74a08a">sysNutPrecCoefs</a>();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      SpiceInt <a class="code" href="class_isis_1_1_target_body.html#a20d6a6ae8b3e07347dc45b6df9a6897b">naifBodyCode</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;      SpiceInt <a class="code" href="class_isis_1_1_target_body.html#af5a5770cfb4d76af997e1b19822c55f1">naifPlanetSystemCode</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      QString <a class="code" href="class_isis_1_1_target_body.html#abb32fee96615b4ef6d824d44220a783f">naifPlanetSystemName</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;      <a class="code" href="class_isis_1_1_distance.html">Distance</a> <a class="code" href="class_isis_1_1_target_body.html#ad1c51dacb1497bc47ac6c3da4364d14a">radiusA</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      <a class="code" href="class_isis_1_1_distance.html">Distance</a> <a class="code" href="class_isis_1_1_target_body.html#a0d023297ea012aa98b7327faa1996a8c">radiusB</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      <a class="code" href="class_isis_1_1_distance.html">Distance</a> <a class="code" href="class_isis_1_1_target_body.html#acb77f8039d6881a5ad05b7872bf9540b">radiusC</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      <a class="code" href="class_isis_1_1_distance.html">Distance</a> <a class="code" href="class_isis_1_1_target_body.html#a7237597bc73b733837bdcc7c559d503a">meanRadius</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <a class="code" href="class_isis_1_1_distance.html">Distance</a> <a class="code" href="class_isis_1_1_target_body.html#af3e3f38d94c4786ba080bfcb29734fab">sigmaRadiusA</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      <a class="code" href="class_isis_1_1_distance.html">Distance</a> <a class="code" href="class_isis_1_1_target_body.html#a7eb0a37c1fa900f9d67623c7a7915949">sigmaRadiusB</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <a class="code" href="class_isis_1_1_distance.html">Distance</a> <a class="code" href="class_isis_1_1_target_body.html#a30fd7becc3694a0364c95cb3e72cd34c">sigmaRadiusC</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <a class="code" href="class_isis_1_1_distance.html">Distance</a> <a class="code" href="class_isis_1_1_target_body.html#a9c70ff0568febc626eea280673a7d091">sigmaMeanRadius</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">//      void save(QXmlStreamWriter &amp;stream, const Project *project, FileName newProjectRoot) const;</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">//      TODO: does xml stuff need project and newRoot???</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">//      void save(QXmlStreamWriter &amp;stream, const Project *project) const;</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment">//      TODO: does xml stuff need project???</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment">//      QDataStream &amp;write(QDataStream &amp;stream) const;</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment">//      QDataStream &amp;read(QDataStream &amp;stream);</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      <a class="code" href="class_isis_1_1_target_body.html#a15ea90bc4589cbb38a9d009fc86a4c12">TargetBody</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_target_body.html">TargetBody</a> &amp;other);          <span class="comment">// NOTE: copy constructor &amp; assignment operators</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      <a class="code" href="class_isis_1_1_target_body.html">TargetBody</a> &amp;operator=(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_target_body.html">TargetBody</a> &amp;rhs); <span class="comment">// are private so compiler will generate error</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                                                    <span class="comment">// if trying to use them (because parent is</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                                                    <span class="comment">// QObject which uses Q_DISABLE_COPY macro</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;      <span class="comment">//testing</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      <a class="code" href="class_q_shared_pointer.html">TargetQsp</a> m_isisTarget;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      QUuid *m_id;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;      QString m_targetName;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;      SpiceInt *m_bodyCode;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;      SpiceInt *m_systemCode;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;      QString m_systemName;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;      std::vector&lt;Distance&gt; m_radii;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;      std::vector&lt;Distance&gt; m_sigmaRadii;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      <a class="code" href="class_isis_1_1_target_body_display_properties.html">TargetBodyDisplayProperties</a> *m_displayProperties;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;      <span class="keywordtype">int</span> m_frametype;  </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;      <span class="comment">// The next three vectors will have length 3 (for a quadratic polynomial) if used.</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;      std::vector&lt;Angle&gt; m_raPole;      </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;      std::vector&lt;Angle&gt; m_decPole;     </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;      std::vector&lt;Angle&gt; m_pm ;         </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;      <span class="comment">//</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;      <span class="comment">// Currently multiples (terms with periods matching other terms but varying amplitudes)</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;      <span class="comment">// are handled as additional terms added to the end of the vector as Naif does (see</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;      <span class="comment">// comments in any of the standard Naif PCK.</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;      std::vector&lt;double&gt; m_raNutPrec;   </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;      std::vector&lt;double&gt; m_decNutPrec;  </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      std::vector&lt;double&gt; m_pmNutPrec;   </div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;      <span class="comment">// The periods of bodies in the same system are modeled with a linear equation</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;      std::vector&lt;Angle&gt; m_sysNutPrec0; </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;      std::vector&lt;Angle&gt; m_sysNutPrec1; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;  };</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno"><a class="line" href="namespace_isis.html#a1e50f83cfbcc0114ee4321a135c0f45e">  184</a></span>&#160;  <span class="keyword">typedef</span> <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;TargetBody&gt;</a> <a class="code" href="namespace_isis.html#a1e50f83cfbcc0114ee4321a135c0f45e">TargetBodyQsp</a>;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;  <span class="comment">//</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;  <span class="comment">// operators to read/write TargetBody to/from binary data</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno"><a class="line" href="namespace_isis.html#a066cd9e14843101711248853b2c956cf">  189</a></span>&#160;  QDataStream &amp;<a class="code" href="namespace_isis.html#ae89a575c21f490200c6fba70c9127263">operator&lt;&lt;</a>(QDataStream &amp;stream, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_target_body.html">TargetBody</a> &amp;<a class="code" href="class_isis_1_1_target_body.html">TargetBody</a>);</div>
+<div class="line"><a name="l00190"></a><span class="lineno"><a class="line" href="namespace_isis.html#a899846bf2084ffa6457b43bee80c43be">  190</a></span>&#160;  QDataStream &amp;<a class="code" href="namespace_isis.html#a9c059e8aa35e451a4a02a0aa3c4e6254">operator&gt;&gt;</a>(QDataStream &amp;stream, <a class="code" href="class_isis_1_1_target_body.html">TargetBody</a> &amp;<a class="code" href="class_isis_1_1_target_body.html">TargetBody</a>);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;};</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
+<div class="line"><a name="l00193"></a><span class="lineno"><a class="line" href="_target_body_8h.html#a36c35ab34615bddb2c1df04d52e42b82">  193</a></span>&#160;<a class="code" href="_target_body_8h.html#a36c35ab34615bddb2c1df04d52e42b82">Q_DECLARE_METATYPE</a>(<a class="code" href="class_q_shared_pointer.html">Isis::TargetBodyQsp</a>);</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="preprocessor">#endif </span><span class="comment">// TargetBody_h</span></div>
+<div class="ttc" id="a_angle_8h_html"><div class="ttname"><a href="_angle_8h.html">Angle.h</a></div></div>
+<div class="ttc" id="a_distance_8h_html"><div class="ttname"><a href="_distance_8h.html">Distance.h</a></div></div>
+<div class="ttc" id="a_target_8h_html"><div class="ttname"><a href="_target_8h.html">Target.h</a></div></div>
+<div class="ttc" id="a_target_body_8h_html_a36c35ab34615bddb2c1df04d52e42b82"><div class="ttname"><a href="_target_body_8h.html#a36c35ab34615bddb2c1df04d52e42b82">Q_DECLARE_METATYPE</a></div><div class="ttdeci">Q_DECLARE_METATYPE(Isis::TargetBodyQsp)</div></div>
+<div class="ttc" id="aclass_isis_1_1_distance_html"><div class="ttname"><a href="class_isis_1_1_distance.html">Isis::Distance</a></div><div class="ttdoc">Distance measurement, usually in meters.</div><div class="ttdef"><b>Definition:</b> Distance.h:34</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_display_properties_html"><div class="ttname"><a href="class_isis_1_1_target_body_display_properties.html">Isis::TargetBodyDisplayProperties</a></div><div class="ttdoc">This is the GUI communication mechanism for target body objects.</div><div class="ttdef"><b>Definition:</b> TargetBodyDisplayProperties.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html"><div class="ttname"><a href="class_isis_1_1_target_body.html">Isis::TargetBody</a></div><div class="ttdoc">Container class for TargetBody.</div><div class="ttdef"><b>Definition:</b> TargetBody.h:63</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a0584afe527fcf2a42a45c6093f222836"><div class="ttname"><a href="class_isis_1_1_target_body.html#a0584afe527fcf2a42a45c6093f222836">Isis::TargetBody::pmCoefs</a></div><div class="ttdeci">std::vector&lt; Angle &gt; pmCoefs()</div><div class="ttdoc">Returns coefficients of a quadratic polynomial fitting pole pm.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:240</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a0b8672ac3b7142a52faf7ac7f6d1b024"><div class="ttname"><a href="class_isis_1_1_target_body.html#a0b8672ac3b7142a52faf7ac7f6d1b024">Isis::TargetBody::displayProperties</a></div><div class="ttdeci">TargetBodyDisplayProperties * displayProperties()</div><div class="ttdoc">Gets TargetBodyDisplayProperties.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:185</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a0d023297ea012aa98b7327faa1996a8c"><div class="ttname"><a href="class_isis_1_1_target_body.html#a0d023297ea012aa98b7327faa1996a8c">Isis::TargetBody::radiusB</a></div><div class="ttdeci">Distance radiusB() const</div><div class="ttdoc">Returns &quot;b&quot; radius.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:347</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a15ea90bc4589cbb38a9d009fc86a4c12"><div class="ttname"><a href="class_isis_1_1_target_body.html#a15ea90bc4589cbb38a9d009fc86a4c12">Isis::TargetBody::TargetBody</a></div><div class="ttdeci">TargetBody(Target *target, QObject *parent=0)</div><div class="ttdoc">The first constructor for this class.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:22</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a20d6a6ae8b3e07347dc45b6df9a6897b"><div class="ttname"><a href="class_isis_1_1_target_body.html#a20d6a6ae8b3e07347dc45b6df9a6897b">Isis::TargetBody::naifBodyCode</a></div><div class="ttdeci">SpiceInt naifBodyCode() const</div><div class="ttdoc">This returns the NAIF body code of the target.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:295</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a30fd7becc3694a0364c95cb3e72cd34c"><div class="ttname"><a href="class_isis_1_1_target_body.html#a30fd7becc3694a0364c95cb3e72cd34c">Isis::TargetBody::sigmaRadiusC</a></div><div class="ttdeci">Distance sigmaRadiusC() const</div><div class="ttdoc">Returns the &quot;c&quot; radius sigma.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:377</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a45a5e0655443a319e569e6e1806e4af6"><div class="ttname"><a href="class_isis_1_1_target_body.html#a45a5e0655443a319e569e6e1806e4af6">Isis::TargetBody::poleDecCoefs</a></div><div class="ttdeci">std::vector&lt; Angle &gt; poleDecCoefs()</div><div class="ttdoc">Returns coefficients of a quadratic polynomial fitting pole dec.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:231</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a496ed1197919563ae08e55862da795a7"><div class="ttname"><a href="class_isis_1_1_target_body.html#a496ed1197919563ae08e55862da795a7">Isis::TargetBody::poleDecNutPrecCoefs</a></div><div class="ttdeci">std::vector&lt; double &gt; poleDecNutPrecCoefs()</div><div class="ttdoc">TargetBody::poleDecNutPrecCoefs.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:258</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a4e8c9a2c2ccb4ac38947ee574e74a08a"><div class="ttname"><a href="class_isis_1_1_target_body.html#a4e8c9a2c2ccb4ac38947ee574e74a08a">Isis::TargetBody::sysNutPrecCoefs</a></div><div class="ttdeci">std::vector&lt; Angle &gt; sysNutPrecCoefs()</div><div class="ttdoc">Returns Linear terms of planetary system nut/prec periods.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:284</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a5081dc91aeba465221ea9683619f5201"><div class="ttname"><a href="class_isis_1_1_target_body.html#a5081dc91aeba465221ea9683619f5201">Isis::TargetBody::pmNutPrecCoefs</a></div><div class="ttdeci">std::vector&lt; double &gt; pmNutPrecCoefs()</div><div class="ttdoc">Returns coefficients of the prime meridian nut/prec terms.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:267</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a5655c9807e3813481f58df53bbb5f187"><div class="ttname"><a href="class_isis_1_1_target_body.html#a5655c9807e3813481f58df53bbb5f187">Isis::TargetBody::frameType</a></div><div class="ttdeci">int frameType()</div><div class="ttdoc">Returns the frame type.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:213</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a644720f98a0ad8fab6ecfc5b161e6530"><div class="ttname"><a href="class_isis_1_1_target_body.html#a644720f98a0ad8fab6ecfc5b161e6530">Isis::TargetBody::id</a></div><div class="ttdeci">QString id() const</div><div class="ttdoc">Get a unique, identifying string associated with this TargetBody object.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:415</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a7237597bc73b733837bdcc7c559d503a"><div class="ttname"><a href="class_isis_1_1_target_body.html#a7237597bc73b733837bdcc7c559d503a">Isis::TargetBody::meanRadius</a></div><div class="ttdeci">Distance meanRadius() const</div><div class="ttdoc">Returns the mean radius.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:387</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a79117e30bbfb942d8c9f88df78026901"><div class="ttname"><a href="class_isis_1_1_target_body.html#a79117e30bbfb942d8c9f88df78026901">Isis::TargetBody::operator==</a></div><div class="ttdeci">bool operator==(const TargetBody &amp;src) const</div><div class="ttdoc">Compares two Target Body objects to see if they are equal.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:163</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a7eb0a37c1fa900f9d67623c7a7915949"><div class="ttname"><a href="class_isis_1_1_target_body.html#a7eb0a37c1fa900f9d67623c7a7915949">Isis::TargetBody::sigmaRadiusB</a></div><div class="ttdeci">Distance sigmaRadiusB() const</div><div class="ttdoc">Returns &quot;b&quot; radius sigma.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:357</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a96c6079a28749f3798515b65256bc935"><div class="ttname"><a href="class_isis_1_1_target_body.html#a96c6079a28749f3798515b65256bc935">Isis::TargetBody::poleRaCoefs</a></div><div class="ttdeci">std::vector&lt; Angle &gt; poleRaCoefs()</div><div class="ttdoc">TargetBody::poleRaCoefs.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:222</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a97c7b14a40aa8db89683802ce4bb07b9"><div class="ttname"><a href="class_isis_1_1_target_body.html#a97c7b14a40aa8db89683802ce4bb07b9">Isis::TargetBody::~TargetBody</a></div><div class="ttdeci">~TargetBody()</div><div class="ttdoc">The second constructor for this class.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:131</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_a9c70ff0568febc626eea280673a7d091"><div class="ttname"><a href="class_isis_1_1_target_body.html#a9c70ff0568febc626eea280673a7d091">Isis::TargetBody::sigmaMeanRadius</a></div><div class="ttdeci">Distance sigmaMeanRadius() const</div><div class="ttdoc">Returns the mean radius sigma.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:401</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_abb32fee96615b4ef6d824d44220a783f"><div class="ttname"><a href="class_isis_1_1_target_body.html#abb32fee96615b4ef6d824d44220a783f">Isis::TargetBody::naifPlanetSystemName</a></div><div class="ttdeci">QString naifPlanetSystemName() const</div><div class="ttdoc">This returns the body name of the target's planet system.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:317</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_aca9ba04c1722c81a1b58d54480b0b242"><div class="ttname"><a href="class_isis_1_1_target_body.html#aca9ba04c1722c81a1b58d54480b0b242">Isis::TargetBody::sysNutPrecConstants</a></div><div class="ttdeci">std::vector&lt; Angle &gt; sysNutPrecConstants()</div><div class="ttdoc">Returns constants of planetary system nut/prec periods.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:276</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_acb77f8039d6881a5ad05b7872bf9540b"><div class="ttname"><a href="class_isis_1_1_target_body.html#acb77f8039d6881a5ad05b7872bf9540b">Isis::TargetBody::radiusC</a></div><div class="ttdeci">Distance radiusC() const</div><div class="ttdoc">Returns the &quot;c&quot; radius.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:367</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_ad1c51dacb1497bc47ac6c3da4364d14a"><div class="ttname"><a href="class_isis_1_1_target_body.html#ad1c51dacb1497bc47ac6c3da4364d14a">Isis::TargetBody::radiusA</a></div><div class="ttdeci">Distance radiusA() const</div><div class="ttdoc">Returns &quot;a&quot; radius.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:327</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_ade2bb7991b816d647b41fcb74bdb96cf"><div class="ttname"><a href="class_isis_1_1_target_body.html#ade2bb7991b816d647b41fcb74bdb96cf">Isis::TargetBody::poleRaNutPrecCoefs</a></div><div class="ttdeci">std::vector&lt; double &gt; poleRaNutPrecCoefs()</div><div class="ttdoc">Returns coefficients of pole right ascension nut/prec terms.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:249</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_af3e3f38d94c4786ba080bfcb29734fab"><div class="ttname"><a href="class_isis_1_1_target_body.html#af3e3f38d94c4786ba080bfcb29734fab">Isis::TargetBody::sigmaRadiusA</a></div><div class="ttdeci">Distance sigmaRadiusA() const</div><div class="ttdoc">Returns &quot;a&quot; radius sigma.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:337</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_af5a5770cfb4d76af997e1b19822c55f1"><div class="ttname"><a href="class_isis_1_1_target_body.html#af5a5770cfb4d76af997e1b19822c55f1">Isis::TargetBody::naifPlanetSystemCode</a></div><div class="ttdeci">SpiceInt naifPlanetSystemCode() const</div><div class="ttdoc">This returns the NAIF body code of the target's planet system.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:306</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_body_html_aff1034b165e12684e81dc038cbee4ad2"><div class="ttname"><a href="class_isis_1_1_target_body.html#aff1034b165e12684e81dc038cbee4ad2">Isis::TargetBody::targetName</a></div><div class="ttdeci">QString targetName()</div><div class="ttdoc">Returns the value stored at TargetName in the original pvl label.</div><div class="ttdef"><b>Definition:</b> TargetBody.cpp:204</div></div>
+<div class="ttc" id="aclass_isis_1_1_target_html"><div class="ttname"><a href="class_isis_1_1_target.html">Isis::Target</a></div><div class="ttdoc">This class is used to create and store valid Isis targets.</div><div class="ttdef"><b>Definition:</b> Target.h:63</div></div>
+<div class="ttc" id="aclass_q_object_html"><div class="ttname"><a href="class_q_object.html">QObject</a></div></div>
+<div class="ttc" id="aclass_q_shared_pointer_html"><div class="ttname"><a href="class_q_shared_pointer.html">QSharedPointer&lt; Target &gt;</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a1e50f83cfbcc0114ee4321a135c0f45e"><div class="ttname"><a href="namespace_isis.html#a1e50f83cfbcc0114ee4321a135c0f45e">Isis::TargetBodyQsp</a></div><div class="ttdeci">QSharedPointer&lt; TargetBody &gt; TargetBodyQsp</div><div class="ttdoc">Defines A smart pointer to a TargetBody obj.</div><div class="ttdef"><b>Definition:</b> TargetBody.h:184</div></div>
+<div class="ttc" id="anamespace_isis_html_a9c059e8aa35e451a4a02a0aa3c4e6254"><div class="ttname"><a href="namespace_isis.html#a9c059e8aa35e451a4a02a0aa3c4e6254">Isis::operator&gt;&gt;</a></div><div class="ttdeci">std::istream &amp; operator&gt;&gt;(std::istream &amp;is, CSVReader &amp;csv)</div><div class="ttdoc">Input read operator for input stream sources.</div><div class="ttdef"><b>Definition:</b> CSVReader.cpp:447</div></div>
+<div class="ttc" id="anamespace_isis_html_ae89a575c21f490200c6fba70c9127263"><div class="ttname"><a href="namespace_isis.html#ae89a575c21f490200c6fba70c9127263">Isis::operator&lt;&lt;</a></div><div class="ttdeci">QDebug operator&lt;&lt;(QDebug debug, const Hillshade &amp;hillshade)</div><div class="ttdoc">Print this class out to a QDebug object.</div><div class="ttdef"><b>Definition:</b> Hillshade.cpp:313</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_36eeeebf99f207391eb32c640f3cb9e5.html">TargetBody</a></li><li class="navelem"><a class="el" href="_target_body_8h.html">TargetBody.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,59 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+BundleSettings,Control Networks,isis/src/control/objs/BundleSettings/BundleSettings.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,BundleSettings,isis_pybind.BundleSettings,Y,Bound in src/control/bind_control_core.cpp; remaining gaps are observation settings / target body / XML IO
+Construction/Enum,"ConvergenceCriteria enum (Sigma0, ParameterCorrections)",isis_pybind.BundleSettings.ConvergenceCriteria,Y,Bound in src/control/bind_control_core.cpp
+Construction/Enum,"MaximumLikelihoodModel enum (NoMaximumLikelihoodEstimator, Huber, ModifiedHuber, Welsch, Chen)",isis_pybind.BundleSettings.MaximumLikelihoodModel,Y,Bound in src/control/bind_control_core.cpp
+Construction/Enum,BundleSettings(),isis_pybind.BundleSettings(),Y,Default and copy constructors bound in src/control/bind_control_core.cpp
+Mutation/Configuration,void setValidateNetwork(bool validate),isis_pybind.BundleSettings.set_validate_network,Y,Bound in src/control/bind_control_core.cpp
+Query,bool validateNetwork() const,isis_pybind.BundleSettings.validate_network,Y,Bound in src/control/bind_control_core.cpp
+Mutation/Configuration,"void setSolveOptions(bool solveObservationMode = false, bool updateCubeLabel = false, bool errorPropagation = false, bool solveRadius = false, SurfacePoint::CoordinateType coordTypeBundle = SurfacePoint::Latitudinal, SurfacePoint::CoordinateType coordTypeReports = SurfacePoint::Latitudinal, double globalPointCoord1AprioriSigma = Isis::Null, double globalPointCoord2AprioriSigma = Isis::Null, double globalPointCoord3AprioriSigma = Isis::Null)",isis_pybind.BundleSettings.set_solve_options,Y,Bound in src/control/bind_control_core.cpp
+Mutation/Configuration,"void setOutlierRejection(bool outlierRejection, double multiplier = 1.0)",isis_pybind.BundleSettings.set_outlier_rejection,Y,Bound in src/control/bind_control_core.cpp
+Mutation/Configuration,void setObservationSolveOptions(QList<BundleObservationSolveSettings> obsSolveSettingsList),isis_pybind.BundleSettings.set_observation_solve_options,Y,Bound via Python list adapter in src/control/bind_control_core.cpp
+Mutation/Configuration,void setCreateInverseMatrix(bool createMatrix),isis_pybind.BundleSettings.set_create_inverse_matrix,Y,Bound in src/control/bind_control_core.cpp
+Public API,SurfacePoint::CoordinateType controlPointCoordTypeReports() const,isis_pybind.BundleSettings.control_point_coord_type_reports,Y,Bound in src/control/bind_control_core.cpp
+Public API,SurfacePoint::CoordinateType controlPointCoordTypeBundle() const,isis_pybind.BundleSettings.control_point_coord_type_bundle,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool createInverseMatrix() const,isis_pybind.BundleSettings.create_inverse_matrix,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solveObservationMode() const,isis_pybind.BundleSettings.solve_observation_mode,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solveRadius() const,isis_pybind.BundleSettings.solve_radius,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool updateCubeLabel() const,isis_pybind.BundleSettings.update_cube_label,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool errorPropagation() const,isis_pybind.BundleSettings.error_propagation,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool outlierRejection() const,isis_pybind.BundleSettings.outlier_rejection,Y,Bound in src/control/bind_control_core.cpp
+Public API,double outlierRejectionMultiplier() const,isis_pybind.BundleSettings.outlier_rejection_multiplier,Y,Bound in src/control/bind_control_core.cpp
+Public API,double globalPointCoord1AprioriSigma() const,isis_pybind.BundleSettings.global_point_coord1_apriori_sigma,Y,Bound in src/control/bind_control_core.cpp
+Public API,double globalPointCoord2AprioriSigma() const,isis_pybind.BundleSettings.global_point_coord2_apriori_sigma,Y,Bound in src/control/bind_control_core.cpp
+Public API,double globalPointCoord3AprioriSigma() const,isis_pybind.BundleSettings.global_point_coord3_apriori_sigma,Y,Bound in src/control/bind_control_core.cpp
+Public API,int numberSolveSettings() const,isis_pybind.BundleSettings.number_solve_settings,Y,Bound in src/control/bind_control_core.cpp
+Public API,BundleObservationSolveSettings observationSolveSettings(QString instrumentId) const,isis_pybind.BundleSettings.observation_solve_settings,Y,Bound overload returning matching observation settings by observation number/instrument lookup path
+Public API,BundleObservationSolveSettings observationSolveSettings(int n) const,isis_pybind.BundleSettings.observation_solve_settings,Y,Bound overload by index
+Public API,QList<BundleObservationSolveSettings> observationSolveSettings() const,isis_pybind.BundleSettings.observation_solve_settings,Y,Bound overload returning Python list
+Static/Factory,static ConvergenceCriteria stringToConvergenceCriteria(QString criteria),isis_pybind.BundleSettings.string_to_convergence_criteria,Y,Bound in src/control/bind_control_core.cpp
+Static/Factory,static QString convergenceCriteriaToString(ConvergenceCriteria criteria),isis_pybind.BundleSettings.convergence_criteria_to_string,Y,Bound in src/control/bind_control_core.cpp
+Mutation/Configuration,"void setConvergenceCriteria(ConvergenceCriteria criteria, double threshold, int maximumIterations)",isis_pybind.BundleSettings.set_convergence_criteria,Y,Bound in src/control/bind_control_core.cpp
+Public API,ConvergenceCriteria convergenceCriteria() const,isis_pybind.BundleSettings.convergence_criteria,Y,Bound in src/control/bind_control_core.cpp
+Public API,double convergenceCriteriaThreshold() const,isis_pybind.BundleSettings.convergence_criteria_threshold,Y,Bound in src/control/bind_control_core.cpp
+Public API,int convergenceCriteriaMaximumIterations() const,isis_pybind.BundleSettings.convergence_criteria_maximum_iterations,Y,Bound in src/control/bind_control_core.cpp
+Mutation/Configuration,"void addMaximumLikelihoodEstimatorModel(MaximumLikelihoodWFunctions::Model model, double cQuantile)",isis_pybind.BundleSettings.add_maximum_likelihood_estimator_model,Y,Bound via BundleSettings.MaximumLikelihoodModel adapter in src/control/bind_control_core.cpp
+Public API,"QList< QPair< MaximumLikelihoodWFunctions::Model, double > > maximumLikelihoodEstimatorModels() const",isis_pybind.BundleSettings.maximum_likelihood_estimator_models,Y,Returned as Python list of `(MaximumLikelihoodModel, quantile)` tuples
+Mutation/Configuration,void setBundleTargetBody(BundleTargetBodyQsp bundleTargetBody),isis_pybind.BundleSettings.set_bundle_target_body,Y,Python wrapper copies a BundleTargetBody into an internal QSharedPointer
+Public API,BundleTargetBodyQsp bundleTargetBody() const,isis_pybind.BundleSettings.bundle_target_body,Y,Python wrapper returns `None` or a copied BundleTargetBody value
+Public API,int numberTargetBodyParameters() const,isis_pybind.BundleSettings.number_target_body_parameters,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solveTargetBody() const,isis_pybind.BundleSettings.solve_target_body,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solvePoleRA() const,isis_pybind.BundleSettings.solve_pole_ra,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solvePoleRAVelocity() const,isis_pybind.BundleSettings.solve_pole_ra_velocity,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solvePoleDec() const,isis_pybind.BundleSettings.solve_pole_dec,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solvePoleDecVelocity() const,isis_pybind.BundleSettings.solve_pole_dec_velocity,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solvePM() const,isis_pybind.BundleSettings.solve_pm,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solvePMVelocity() const,isis_pybind.BundleSettings.solve_pm_velocity,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solvePMAcceleration() const,isis_pybind.BundleSettings.solve_pm_acceleration,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solveTriaxialRadii() const,isis_pybind.BundleSettings.solve_triaxial_radii,Y,Bound in src/control/bind_control_core.cpp
+Public API,bool solveMeanRadius() const,isis_pybind.BundleSettings.solve_mean_radius,Y,Bound in src/control/bind_control_core.cpp
+Mutation/Configuration,void setOutputFilePrefix(QString outputFilePrefix),isis_pybind.BundleSettings.set_output_file_prefix,Y,Bound in src/control/bind_control_core.cpp
+Mutation/Configuration,void setSCPVLFilename(QString SCParamFilename),isis_pybind.BundleSettings.set_scpvl_filename,N,Qt 类型/信号槽较多
+Public API,QString outputFilePrefix() const,isis_pybind.BundleSettings.output_file_prefix,Y,Bound in src/control/bind_control_core.cpp
+Mutation/Configuration,void setCubeList(QString fileName),isis_pybind.BundleSettings.set_cube_list,Y,Bound in src/control/bind_control_core.cpp
+Public API,QString cubeList() const,isis_pybind.BundleSettings.cube_list,Y,Bound in src/control/bind_control_core.cpp
+Public API,QString SCPVLFilename() const,isis_pybind.BundleSettings.scpvl_filename,N,Skipped for now: declaration present in header inventory but implementation was not found in the linked ISIS build
+Read/Write IO,"void save(QXmlStreamWriter &stream, const Project *project) const",isis_pybind.BundleSettings.save,N,Qt 类型/信号槽较多
+Read/Write IO,void readBundleSettings(QXmlStreamReader *xmlReader),isis_pybind.BundleSettings.read_bundle_settings,N,Qt 类型/信号槽较多

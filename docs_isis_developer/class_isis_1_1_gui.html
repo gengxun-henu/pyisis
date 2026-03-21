@@ -1,0 +1,651 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Gui Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_gui.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_gui-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Gui Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="class_isis_1_1_gui.html" title="Gui for Isis Applications.">Gui</a> for <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> Applications.  
+ <a href="class_isis_1_1_gui.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_gui_8h_source.html">Gui.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::Gui:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_gui__inherit__graph.png" border="0" usemap="#a_isis_1_1_gui_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_gui_inherit__map" id="a_isis_1_1_gui_inherit__map">
+<area shape="rect" title="Gui for Isis Applications." alt="" coords="5,135,136,408"/>
+<area shape="rect" href="class_q_main_window.html" title=" " alt="" coords="17,5,124,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::Gui:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_gui__coll__graph.png" border="0" usemap="#a_isis_1_1_gui_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_gui_coll__map" id="a_isis_1_1_gui_coll__map">
+<area shape="rect" title="Gui for Isis Applications." alt="" coords="5,135,136,408"/>
+<area shape="rect" href="class_q_main_window.html" title=" " alt="" coords="17,5,124,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a1e677be3aa91fe026f838cf483bb3ff3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#a1e677be3aa91fe026f838cf483bb3ff3">ProgressText</a> (const QString &amp;text)</td></tr>
+<tr class="memdesc:a1e677be3aa91fe026f838cf483bb3ff3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change progress text.  <a href="class_isis_1_1_gui.html#a1e677be3aa91fe026f838cf483bb3ff3">More...</a><br /></td></tr>
+<tr class="separator:a1e677be3aa91fe026f838cf483bb3ff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8466879b5fa13373235b14e87d57018f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#a8466879b5fa13373235b14e87d57018f">Progress</a> (int percent)</td></tr>
+<tr class="memdesc:a8466879b5fa13373235b14e87d57018f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the progress bar.  <a href="class_isis_1_1_gui.html#a8466879b5fa13373235b14e87d57018f">More...</a><br /></td></tr>
+<tr class="separator:a8466879b5fa13373235b14e87d57018f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12f50eefa075eb6697e3836c6cdea220"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#a12f50eefa075eb6697e3836c6cdea220">Exec</a> (void(*funct)())</td></tr>
+<tr class="memdesc:a12f50eefa075eb6697e3836c6cdea220"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the <a class="el" href="class_isis_1_1_gui.html" title="Gui for Isis Applications.">Gui</a> and enter the main loop This routine only returns when the program is ready to exit.  <a href="class_isis_1_1_gui.html#a12f50eefa075eb6697e3836c6cdea220">More...</a><br /></td></tr>
+<tr class="separator:a12f50eefa075eb6697e3836c6cdea220"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5f9df88198574357d8c41bc8b161df9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#ad5f9df88198574357d8c41bc8b161df9">ProcessEvents</a> ()</td></tr>
+<tr class="memdesc:ad5f9df88198574357d8c41bc8b161df9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Let the event loop have some time to see if we need to cancel.  <a href="class_isis_1_1_gui.html#ad5f9df88198574357d8c41bc8b161df9">More...</a><br /></td></tr>
+<tr class="separator:ad5f9df88198574357d8c41bc8b161df9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98a89bbe964142fddbd93823b730c986"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#a98a89bbe964142fddbd93823b730c986">LoadMessage</a> (const QString &amp;message)</td></tr>
+<tr class="memdesc:a98a89bbe964142fddbd93823b730c986"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add more information to the error message.  <a href="class_isis_1_1_gui.html#a98a89bbe964142fddbd93823b730c986">More...</a><br /></td></tr>
+<tr class="separator:a98a89bbe964142fddbd93823b730c986"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ebc28383c6263fa2a06411072b4a847"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#a2ebc28383c6263fa2a06411072b4a847">ShowWarning</a> ()</td></tr>
+<tr class="memdesc:a2ebc28383c6263fa2a06411072b4a847"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show an error message and return if the user wants to continue/abort.  <a href="class_isis_1_1_gui.html#a2ebc28383c6263fa2a06411072b4a847">More...</a><br /></td></tr>
+<tr class="separator:a2ebc28383c6263fa2a06411072b4a847"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3fd08e54ef0815a08adc697660c45aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#af3fd08e54ef0815a08adc697660c45aa">ShowLog</a> ()</td></tr>
+<tr class="separator:af3fd08e54ef0815a08adc697660c45aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15c5012c9574f342da6406c015435a33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#a15c5012c9574f342da6406c015435a33">Log</a> (const QString &amp;text)</td></tr>
+<tr class="memdesc:a15c5012c9574f342da6406c015435a33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write text to the gui log.  <a href="class_isis_1_1_gui.html#a15c5012c9574f342da6406c015435a33">More...</a><br /></td></tr>
+<tr class="separator:a15c5012c9574f342da6406c015435a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5ee6d1c9ec09d0789143f5d95fa06d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#ab5ee6d1c9ec09d0789143f5d95fa06d0">Gui</a> (<a class="el" href="class_isis_1_1_user_interface.html">Isis::UserInterface</a> &amp;ui)</td></tr>
+<tr class="memdesc:ab5ee6d1c9ec09d0789143f5d95fa06d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_isis_1_1_gui.html#ab5ee6d1c9ec09d0789143f5d95fa06d0">More...</a><br /></td></tr>
+<tr class="separator:ab5ee6d1c9ec09d0789143f5d95fa06d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08a5f6e4a12ee5ef655436a32c6a668f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#a08a5f6e4a12ee5ef655436a32c6a668f">~Gui</a> ()</td></tr>
+<tr class="memdesc:a08a5f6e4a12ee5ef655436a32c6a668f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_gui.html#a08a5f6e4a12ee5ef655436a32c6a668f">More...</a><br /></td></tr>
+<tr class="separator:a08a5f6e4a12ee5ef655436a32c6a668f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5b3b9cec3bed2bca4594234463fef88"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#ab5b3b9cec3bed2bca4594234463fef88">eventFilter</a> (<a class="el" href="class_q_object.html">QObject</a> *o, QEvent *e)</td></tr>
+<tr class="memdesc:ab5b3b9cec3bed2bca4594234463fef88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the <a class="el" href="class_isis_1_1_progress.html" title="Program progress reporter.">Progress</a> bar when the user moves the mouse onto the toolbar.  <a href="class_isis_1_1_gui.html#ab5b3b9cec3bed2bca4594234463fef88">More...</a><br /></td></tr>
+<tr class="separator:ab5b3b9cec3bed2bca4594234463fef88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:af5b35b50c022c6a59cbf1bfee879e337"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#af5b35b50c022c6a59cbf1bfee879e337">checkX11</a> ()</td></tr>
+<tr class="memdesc:af5b35b50c022c6a59cbf1bfee879e337"><td class="mdescLeft">&#160;</td><td class="mdescRight">check to see if X is available  <a href="class_isis_1_1_gui.html#af5b35b50c022c6a59cbf1bfee879e337">More...</a><br /></td></tr>
+<tr class="separator:af5b35b50c022c6a59cbf1bfee879e337"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81ca3492b2881b6a3cd0c67ed2628f9e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_gui.html">Gui</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui.html#a81ca3492b2881b6a3cd0c67ed2628f9e">Create</a> (<a class="el" href="class_isis_1_1_user_interface.html">Isis::UserInterface</a> &amp;ui, int &amp;argc, char *argv[])</td></tr>
+<tr class="separator:a81ca3492b2881b6a3cd0c67ed2628f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="class_isis_1_1_gui.html" title="Gui for Isis Applications.">Gui</a> for <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> Applications. </p>
+<p>This is the main GUI for all <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> Applications.</p>
+<dl class="section author"><dt>Author</dt><dd>2003-01-01 Stuart Sides </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ab5ee6d1c9ec09d0789143f5d95fa06d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5ee6d1c9ec09d0789143f5d95fa06d0">&#9670;&nbsp;</a></span>Gui()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Gui::Gui </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_user_interface.html">Isis::UserInterface</a> &amp;&#160;</td>
+          <td class="paramname"><em>ui</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+
+<p class="reference">References <a class="el" href="class_isis_aml.html#a435e21b43badbccc3ff172071e6a97df">IsisAml::NumGroups()</a>, <a class="el" href="class_isis_aml.html#a7fff6aab62f643e5af41a1a98a86c9de">IsisAml::NumParams()</a>, and <a class="el" href="class_isis_1_1_gui_parameter.html#a18f18722a8d6c7654bc283dac78d0740">Isis::GuiParameter::Update()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gui.html#a81ca3492b2881b6a3cd0c67ed2628f9e">Create()</a>.</p>
+
+</div>
+</div>
+<a id="a08a5f6e4a12ee5ef655436a32c6a668f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08a5f6e4a12ee5ef655436a32c6a668f">&#9670;&nbsp;</a></span>~Gui()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Gui::~Gui </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af5b35b50c022c6a59cbf1bfee879e337"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5b35b50c022c6a59cbf1bfee879e337">&#9670;&nbsp;</a></span>checkX11()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Gui::checkX11 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>check to see if X is available </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_user_interface.html#a6f98eaf62c412fed541c479b6207b501">Isis::UserInterface::UserInterface()</a>.</p>
+
+</div>
+</div>
+<a id="a81ca3492b2881b6a3cd0c67ed2628f9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81ca3492b2881b6a3cd0c67ed2628f9e">&#9670;&nbsp;</a></span>Create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gui.html">Gui</a> * Isis::Gui::Create </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_user_interface.html">Isis::UserInterface</a> &amp;&#160;</td>
+          <td class="paramname"><em>ui</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>argv</em>[]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">Isis::PvlObject::findGroup()</a>, <a class="el" href="class_isis_1_1_gui.html#ab5ee6d1c9ec09d0789143f5d95fa06d0">Gui()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>, and <a class="el" href="class_isis_1_1_preference.html#adf0ccf180777271a0f82d80f157b62e5">Isis::Preference::Preferences()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_user_interface.html#a6f98eaf62c412fed541c479b6207b501">Isis::UserInterface::UserInterface()</a>.</p>
+
+</div>
+</div>
+<a id="ab5b3b9cec3bed2bca4594234463fef88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5b3b9cec3bed2bca4594234463fef88">&#9670;&nbsp;</a></span>eventFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Gui::eventFilter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>o</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QEvent *&#160;</td>
+          <td class="paramname"><em>e</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reset the <a class="el" href="class_isis_1_1_progress.html" title="Program progress reporter.">Progress</a> bar when the user moves the mouse onto the toolbar. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gui.html#a8466879b5fa13373235b14e87d57018f">Progress()</a>, and <a class="el" href="class_isis_1_1_gui.html#a1e677be3aa91fe026f838cf483bb3ff3">ProgressText()</a>.</p>
+
+</div>
+</div>
+<a id="a12f50eefa075eb6697e3836c6cdea220"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12f50eefa075eb6697e3836c6cdea220">&#9670;&nbsp;</a></span>Exec()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Gui::Exec </td>
+          <td>(</td>
+          <td class="paramtype">void(*)()&#160;</td>
+          <td class="paramname"><em>funct</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Start the <a class="el" href="class_isis_1_1_gui.html" title="Gui for Isis Applications.">Gui</a> and enter the main loop This routine only returns when the program is ready to exit. </p>
+
+</div>
+</div>
+<a id="a98a89bbe964142fddbd93823b730c986"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98a89bbe964142fddbd93823b730c986">&#9670;&nbsp;</a></span>LoadMessage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Gui::LoadMessage </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>message</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add more information to the error message. </p>
+
+</div>
+</div>
+<a id="a15c5012c9574f342da6406c015435a33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15c5012c9574f342da6406c015435a33">&#9670;&nbsp;</a></span>Log()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Gui::Log </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write text to the gui log. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gui_log.html#a88974cdb2f6be61d4fb092d997f514a7">Isis::GuiLog::Write()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_application.html#a435f860f5a9fad758053bd35bf3abd25">Isis::Application::GuiLog()</a>, and <a class="el" href="class_isis_1_1_application.html#a278ebcc6efc59125b40a8f45b4dea8d2">Isis::Application::Log()</a>.</p>
+
+</div>
+</div>
+<a id="ad5f9df88198574357d8c41bc8b161df9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5f9df88198574357d8c41bc8b161df9">&#9670;&nbsp;</a></span>ProcessEvents()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Gui::ProcessEvents </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Let the event loop have some time to see if we need to cancel. </p>
+<p>This is normally called by the <a class="el" href="class_isis_1_1_progress.html" title="Program progress reporter.">Isis::Progress</a> class. </p>
+
+</div>
+</div>
+<a id="a8466879b5fa13373235b14e87d57018f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8466879b5fa13373235b14e87d57018f">&#9670;&nbsp;</a></span>Progress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Gui::Progress </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>percent</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Update the progress bar. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gui.html#ab5b3b9cec3bed2bca4594234463fef88">eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="a1e677be3aa91fe026f838cf483bb3ff3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e677be3aa91fe026f838cf483bb3ff3">&#9670;&nbsp;</a></span>ProgressText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Gui::ProgressText </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Change progress text. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gui.html#ab5b3b9cec3bed2bca4594234463fef88">eventFilter()</a>.</p>
+
+</div>
+</div>
+<a id="af3fd08e54ef0815a08adc697660c45aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3fd08e54ef0815a08adc697660c45aa">&#9670;&nbsp;</a></span>ShowLog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Gui::ShowLog </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_application.html#a435f860f5a9fad758053bd35bf3abd25">Isis::Application::GuiLog()</a>, and <a class="el" href="class_isis_1_1_application.html#a278ebcc6efc59125b40a8f45b4dea8d2">Isis::Application::Log()</a>.</p>
+
+</div>
+</div>
+<a id="a2ebc28383c6263fa2a06411072b4a847"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ebc28383c6263fa2a06411072b4a847">&#9670;&nbsp;</a></span>ShowWarning()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Gui::ShowWarning </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Show an error message and return if the user wants to continue/abort. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_application.html#ac0c595328979a4ae951eb0df4d82b727">Isis::Application::GetUserInterface()</a>, <a class="el" href="namespace_isis.html#a3bc340cc5b7917a414f93589545c25f1">Isis::iApp</a>, and <a class="el" href="class_isis_aml.html#ac558df1fd489e342f18290c4893db8c0">IsisAml::ProgramName()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Gui/<a class="el" href="_gui_8h_source.html">Gui.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Gui/<a class="el" href="_gui_8cpp.html">Gui.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_gui.html">Gui</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

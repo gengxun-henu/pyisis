@@ -1,0 +1,5 @@
+<map id="Isis::NewHorizonsMvicTdiCamera" name="Isis::NewHorizonsMvicTdiCamera">
+<area shape="rect" id="node1" title="New Horizons Mvic Camera, Tdi mode." alt="" coords="5,584,226,745"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_line_scan_camera.html" title="Generic class for Line Scan Cameras." alt="" coords="40,391,191,536"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="6,5,225,343"/>
+</map>

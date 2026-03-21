@@ -1,0 +1,10 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+LineScanCamera,"Spice, Instruments, and Cameras",isis/src/base/objs/LineScanCamera/LineScanCamera.h,isis_pybind_standalone/src/bind_camera_hierarchy.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,相机模型/Spice 依赖；后续建议补真实数据单测
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,LineScanCamera,isis_pybind.LineScanCamera,Y,Python class symbol is exported; constructor exposure may be limited; 相机模型/Spice 依赖；后续建议补真实数据单测
+Construction/Enum,LineScanCamera(),isis_pybind.LineScanCamera(),N,相机模型/Spice 依赖；后续建议补真实数据单测
+Public API,virtual CameraType GetCameraType() const { return LineScan,isis_pybind.LineScanCamera.get_camera_type,N,相机模型/Spice 依赖；后续建议补真实数据单测
+Public API,LineScanCameraGroundMap *GroundMap() { return (LineScanCameraGroundMap *)Camera::GroundMap(),isis_pybind.LineScanCamera.ground_map,Y,Current Python name
+Public API,LineScanCameraSkyMap *SkyMap() { return (LineScanCameraSkyMap *)Camera::SkyMap(),isis_pybind.LineScanCamera.sky_map,Y,Current Python name
+Public API,LineScanCameraDetectorMap *DetectorMap() { return (LineScanCameraDetectorMap *)Camera::DetectorMap(),isis_pybind.LineScanCamera.detector_map,Y,Current Python name

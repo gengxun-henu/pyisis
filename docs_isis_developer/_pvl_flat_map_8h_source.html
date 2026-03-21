@@ -1,0 +1,406 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/PvlFlatMap/PvlFlatMap.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_pvl_flat_map_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">PvlFlatMap.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_pvl_flat_map_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef PvlFlatMap_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define PvlFlatMap_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// Qt library</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;QMap&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QStringList&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// PvlConstraints type</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_keyword_8h.html">PvlKeyword.h</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="keyword">class </span>FileName;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <span class="keyword">class </span>PvlContainer;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <span class="keyword">class </span>PvlGroup;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keyword">class </span>PvlObject;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_constraints.html">  150</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> {</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;      <a class="code" href="class_isis_1_1_pvl_constraints.html#af17e0ab86f27fe6c5ae851984ee0a104">PvlConstraints</a>();</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;      <a class="code" href="class_isis_1_1_pvl_constraints.html#af17e0ab86f27fe6c5ae851984ee0a104">PvlConstraints</a>(<span class="keyword">const</span> QString &amp;keyListFile);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#ae0c01339ab5a0db4b89c16c992b81f0b">~PvlConstraints</a>();</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#aa4b36b135d162012e53dc1f26e97a77d">excludeSize</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#ac33eb572fa06eb37d645f55071ef261f">includeSize</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#aab93015f341e67efeba3e7b64ac58a4e">keyListSize</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#a8f5ddc8a8cef011326a6ab1efb593244">addExclude</a>(<span class="keyword">const</span> QString &amp;name);</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#a51b1f84a645032f7587268a10f510678">addInclude</a>(<span class="keyword">const</span> QString &amp;name);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#ada95cfc6852a32d364fec5fa5a688291">addKeyToList</a>(<span class="keyword">const</span> QString &amp;name);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  </div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#a8f5ddc8a8cef011326a6ab1efb593244">addExclude</a>(<span class="keyword">const</span> QStringList &amp;other);</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#a51b1f84a645032f7587268a10f510678">addInclude</a>(<span class="keyword">const</span> QStringList &amp;other);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#ada95cfc6852a32d364fec5fa5a688291">addKeyToList</a>(<span class="keyword">const</span> QStringList &amp;other);</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#ada95cfc6852a32d364fec5fa5a688291">addKeyToList</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_file_name.html">FileName</a> &amp;fileName);</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#af356571ddc1dec2bb860394abf1beae7">isExcluded</a>(<span class="keyword">const</span> QString &amp;name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#a89b614ce21e53efcc5d826285a47d4c2">isIncluded</a>(<span class="keyword">const</span> QString &amp;name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pvl_constraints.html#a4411b50851e3db1e1339f00674fbe7c3">isKeyInList</a>(<span class="keyword">const</span> QString &amp;name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;  </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;      <span class="keyword">const</span> QStringList &amp;<a class="code" href="class_isis_1_1_pvl_constraints.html#a648a01511e121316af554951f3cce847">excludes</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;      <span class="keyword">const</span> QStringList &amp;<a class="code" href="class_isis_1_1_pvl_constraints.html#a0d104797afa0240aa0b28b9c3a4e3a4c">includes</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;      <span class="keyword">const</span> QStringList &amp;<a class="code" href="class_isis_1_1_pvl_constraints.html#a744a49cea8856596e285d606591aebcb">keyList</a>()  <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      </div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> <a class="code" href="class_isis_1_1_pvl_constraints.html#acaf31f6a7196973e7f642c1b2238afb9">withExcludes</a>(<span class="keyword">const</span> QStringList &amp;<a class="code" href="class_isis_1_1_pvl_constraints.html#a648a01511e121316af554951f3cce847">excludes</a>);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> <a class="code" href="class_isis_1_1_pvl_constraints.html#ad178b36e20e703f7faffc1fe04c7f9bc">withIncludes</a>(<span class="keyword">const</span> QStringList &amp;<a class="code" href="class_isis_1_1_pvl_constraints.html#a0d104797afa0240aa0b28b9c3a4e3a4c">includes</a>);</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;  </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;      <span class="keywordtype">void</span> readKeyListFile(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_file_name.html">FileName</a> &amp;fname);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;      QStringList m_excludes; </div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;      QStringList m_includes; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;      QStringList m_keylist;  </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;  </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;  };</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00218"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_flat_map.html">  218</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> : <span class="keyword">public</span> <a class="code" href="class_q_map.html">QMap</a>&lt;QString, PvlKeyword&gt; {</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;  </div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00222"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_flat_map.html#aae403feff0a4a4152dbbb1b5b562ece4">  222</a></span>&#160;      <span class="keyword">typedef</span> <a class="code" href="class_q_map.html">QMap&lt;QString,PvlKeyword&gt;::const_iterator</a> <a class="code" href="class_isis_1_1_pvl_flat_map.html#aae403feff0a4a4152dbbb1b5b562ece4">ConstPvlFlatMapIterator</a>;</div>
+<div class="line"><a name="l00224"></a><span class="lineno"><a class="line" href="class_isis_1_1_pvl_flat_map.html#ad56e4a48fba2ebcf1561375018033c76">  224</a></span>&#160;      <span class="keyword">typedef</span> <a class="code" href="class_q_map.html">QMap&lt;QString,PvlKeyword&gt;::iterator</a>       <a class="code" href="class_isis_1_1_pvl_flat_map.html#ad56e4a48fba2ebcf1561375018033c76">PvlFlatMapIterator</a>;</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;  </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;      <a class="code" href="class_isis_1_1_pvl_flat_map.html#ab461ef30bbfe63b10c23e75d6b275c2f">PvlFlatMap</a>();</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;      <a class="code" href="class_isis_1_1_pvl_flat_map.html#ab461ef30bbfe63b10c23e75d6b275c2f">PvlFlatMap</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;other);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;      <a class="code" href="class_isis_1_1_pvl_flat_map.html#ab461ef30bbfe63b10c23e75d6b275c2f">PvlFlatMap</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;pmap1, </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                 <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;pmap2);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;      <a class="code" href="class_isis_1_1_pvl_flat_map.html#ab461ef30bbfe63b10c23e75d6b275c2f">PvlFlatMap</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;pvl, </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                 <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> &amp;constraints = <a class="code" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a>());</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;      <a class="code" href="class_isis_1_1_pvl_flat_map.html#ab461ef30bbfe63b10c23e75d6b275c2f">PvlFlatMap</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_container.html">PvlContainer</a> &amp;pvl, </div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                 <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> &amp;constraints = <a class="code" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a>());</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html#a8b53ae892a2f9c09fc46c912d4642306">~PvlFlatMap</a>();</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;  </div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html#a7570ee99bc1528ae19d623ffdb380940">exists</a>(<span class="keyword">const</span> QString &amp;key) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;      <span class="keywordtype">int</span>  <a class="code" href="class_isis_1_1_pvl_flat_map.html#a549724ff0c6502a3f866e024979bdc3b">count</a>(<span class="keyword">const</span> QString &amp;key) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html#ab8587d9db595cc92f20bdcdc28535092">isNull</a>(<span class="keyword">const</span> QString &amp;key, </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                  <span class="keyword">const</span> <span class="keywordtype">int</span> index = 0) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html#a279bc8f74233f3959f594db82c1b1ac9">add</a>(<span class="keyword">const</span> QString &amp;key, </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;               <span class="keyword">const</span> QString &amp;value);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html#a279bc8f74233f3959f594db82c1b1ac9">add</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &amp;<a class="code" href="class_isis_1_1_pvl_flat_map.html#a20403df8dee578677691d7ef44cf9e19">keyword</a>);</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;  </div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html#a0a0084cf4f3293f0f541ad85eee41478">append</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &amp;key);</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html#a0a0084cf4f3293f0f541ad85eee41478">append</a>(<span class="keyword">const</span> QString &amp;key, </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                  <span class="keyword">const</span> QString &amp;value);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;  </div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html#a62394503d5abc8081e87765bc37336a2">erase</a>(<span class="keyword">const</span> QString &amp;key);</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;  </div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;      QString <a class="code" href="class_isis_1_1_pvl_flat_map.html#a5b673c39c9b468e1aee6fd5042c64bc8">get</a>(<span class="keyword">const</span> QString &amp;key, </div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                  <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;index = 0) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;      QString <a class="code" href="class_isis_1_1_pvl_flat_map.html#a5b673c39c9b468e1aee6fd5042c64bc8">get</a>(<span class="keyword">const</span> QString &amp;key, </div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                  <span class="keyword">const</span> QString &amp;defValue, </div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                  <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;index = 0) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;  </div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;      <span class="comment">// QString value(const QString &amp;key) const;</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;      QString <a class="code" href="class_isis_1_1_pvl_flat_map.html#a37ec7d1f888c804269ace66e6ddf3345">operator()</a>(<span class="keyword">const</span> QString &amp;name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;      QStringList <a class="code" href="class_isis_1_1_pvl_flat_map.html#a41b996cd22893d4b4c0fa6b4386b9ee7">allValues</a>(<span class="keyword">const</span> QString &amp;key) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;  </div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;      <a class="code" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> <a class="code" href="class_isis_1_1_pvl_flat_map.html#a20403df8dee578677691d7ef44cf9e19">keyword</a>(<span class="keyword">const</span> QString &amp;key) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;  </div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html#a61a2775f5ce357ffe7ee3dfb8499c23d">merge</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_flat_map.html">PvlFlatMap</a> &amp;other);</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;      </div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;      <span class="keyword">static</span> QStringList <a class="code" href="class_isis_1_1_pvl_flat_map.html#acded2faf645b74d05cddf72e7148ee47">keywordValues</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a> &amp;<a class="code" href="class_isis_1_1_pvl_flat_map.html#a20403df8dee578677691d7ef44cf9e19">keyword</a>);</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;  </div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;      <span class="keywordtype">int</span> loadObject(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<span class="keywordtype">object</span>, </div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                     <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> &amp;constraints);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;      <span class="keywordtype">int</span> loadGroups(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_object.html">PvlObject</a> &amp;<span class="keywordtype">object</span>, </div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;                     <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> &amp;constraints);</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;      <span class="keywordtype">int</span> loadGroup(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;group, </div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;                    <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> &amp;constraints);</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;      <span class="keywordtype">int</span> loadKeywords(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_container.html">PvlContainer</a> &amp;pvl, </div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                       <span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_constraints.html">PvlConstraints</a> &amp;constraints);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;  };</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;} <span class="comment">// Namespace Isis</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_pvl_keyword_8h_html"><div class="ttname"><a href="_pvl_keyword_8h.html">PvlKeyword.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_file_name_html"><div class="ttname"><a href="class_isis_1_1_file_name.html">Isis::FileName</a></div><div class="ttdoc">File name manipulation and expansion.</div><div class="ttdef"><b>Definition:</b> FileName.h:100</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html">Isis::PvlConstraints</a></div><div class="ttdoc">This class can be used to define import/export behavior of Pvl structures when used in the PvlFlatMap...</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.h:150</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_a0d104797afa0240aa0b28b9c3a4e3a4c"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#a0d104797afa0240aa0b28b9c3a4e3a4c">Isis::PvlConstraints::includes</a></div><div class="ttdeci">const QStringList &amp; includes() const</div><div class="ttdoc">Returns the PvlObject/PvlGroup inclusion constraints.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:277</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_a4411b50851e3db1e1339f00674fbe7c3"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#a4411b50851e3db1e1339f00674fbe7c3">Isis::PvlConstraints::isKeyInList</a></div><div class="ttdeci">bool isKeyInList(const QString &amp;name) const</div><div class="ttdoc">Determines if a PvlKeyword is included.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:248</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_a51b1f84a645032f7587268a10f510678"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#a51b1f84a645032f7587268a10f510678">Isis::PvlConstraints::addInclude</a></div><div class="ttdeci">void addInclude(const QString &amp;name)</div><div class="ttdoc">Adds a PvlObject/PvlGroup inclusion constraint.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:150</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_a648a01511e121316af554951f3cce847"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#a648a01511e121316af554951f3cce847">Isis::PvlConstraints::excludes</a></div><div class="ttdeci">const QStringList &amp; excludes() const</div><div class="ttdoc">Returns the PvlObject/PvlGroup exclusion constraints.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:262</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_a744a49cea8856596e285d606591aebcb"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#a744a49cea8856596e285d606591aebcb">Isis::PvlConstraints::keyList</a></div><div class="ttdeci">const QStringList &amp; keyList() const</div><div class="ttdoc">Returns the PvlKeyword inclusion constraints.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:291</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_a89b614ce21e53efcc5d826285a47d4c2"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#a89b614ce21e53efcc5d826285a47d4c2">Isis::PvlConstraints::isIncluded</a></div><div class="ttdeci">bool isIncluded(const QString &amp;name) const</div><div class="ttdoc">Determines if a PvlObject or PvlGroup is included.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:234</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_a8f5ddc8a8cef011326a6ab1efb593244"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#a8f5ddc8a8cef011326a6ab1efb593244">Isis::PvlConstraints::addExclude</a></div><div class="ttdeci">void addExclude(const QString &amp;name)</div><div class="ttdoc">Adds a PvlObject/PvlGroup exclusion constraint.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:134</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_aa4b36b135d162012e53dc1f26e97a77d"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#aa4b36b135d162012e53dc1f26e97a77d">Isis::PvlConstraints::excludeSize</a></div><div class="ttdeci">int excludeSize() const</div><div class="ttdoc">Returns the number of PvlObjects and PvlGroups to exclude.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:91</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_aab93015f341e67efeba3e7b64ac58a4e"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#aab93015f341e67efeba3e7b64ac58a4e">Isis::PvlConstraints::keyListSize</a></div><div class="ttdeci">int keyListSize() const</div><div class="ttdoc">Returns the number of PvlKeywords to include.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:117</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_ac33eb572fa06eb37d645f55071ef261f"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#ac33eb572fa06eb37d645f55071ef261f">Isis::PvlConstraints::includeSize</a></div><div class="ttdeci">int includeSize() const</div><div class="ttdoc">Returns the number of PvlObjects and PvlGroups to include.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:103</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_acaf31f6a7196973e7f642c1b2238afb9"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#acaf31f6a7196973e7f642c1b2238afb9">Isis::PvlConstraints::withExcludes</a></div><div class="ttdeci">static PvlConstraints withExcludes(const QStringList &amp;excludes)</div><div class="ttdoc">Static method to construct a PvlConstraints object from a list of names for the PvlObjects and PvlGro...</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:54</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_ad178b36e20e703f7faffc1fe04c7f9bc"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#ad178b36e20e703f7faffc1fe04c7f9bc">Isis::PvlConstraints::withIncludes</a></div><div class="ttdeci">static PvlConstraints withIncludes(const QStringList &amp;includes)</div><div class="ttdoc">Static method to construct a PvlConstraints object from a list of names for the PvlObjects and PvlGro...</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:70</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_ada95cfc6852a32d364fec5fa5a688291"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#ada95cfc6852a32d364fec5fa5a688291">Isis::PvlConstraints::addKeyToList</a></div><div class="ttdeci">void addKeyToList(const QString &amp;name)</div><div class="ttdoc">Adds a PvlKeyword inclusion constraint.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:163</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_ae0c01339ab5a0db4b89c16c992b81f0b"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#ae0c01339ab5a0db4b89c16c992b81f0b">Isis::PvlConstraints::~PvlConstraints</a></div><div class="ttdeci">virtual ~PvlConstraints()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:80</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_af17e0ab86f27fe6c5ae851984ee0a104"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#af17e0ab86f27fe6c5ae851984ee0a104">Isis::PvlConstraints::PvlConstraints</a></div><div class="ttdeci">PvlConstraints()</div><div class="ttdoc">Default constructor for an empty PvlConstraints object.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:29</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_constraints_html_af356571ddc1dec2bb860394abf1beae7"><div class="ttname"><a href="class_isis_1_1_pvl_constraints.html#af356571ddc1dec2bb860394abf1beae7">Isis::PvlConstraints::isExcluded</a></div><div class="ttdeci">bool isExcluded(const QString &amp;name) const</div><div class="ttdoc">Determines if a PvlObject or PvlGroup is excluded.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:219</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_container_html"><div class="ttname"><a href="class_isis_1_1_pvl_container.html">Isis::PvlContainer</a></div><div class="ttdoc">Contains more than one keyword-value pair.</div><div class="ttdef"><b>Definition:</b> PvlContainer.h:49</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html">Isis::PvlFlatMap</a></div><div class="ttdoc">Provides a flat map of PvlKeywords.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.h:218</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_a0a0084cf4f3293f0f541ad85eee41478"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#a0a0084cf4f3293f0f541ad85eee41478">Isis::PvlFlatMap::append</a></div><div class="ttdeci">void append(const PvlKeyword &amp;key)</div><div class="ttdoc">Appends the given PvlKeyword's values to the PvlFlatMap.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:529</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_a20403df8dee578677691d7ef44cf9e19"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#a20403df8dee578677691d7ef44cf9e19">Isis::PvlFlatMap::keyword</a></div><div class="ttdeci">PvlKeyword keyword(const QString &amp;key) const</div><div class="ttdoc">Finds a keyword in the PvlFlatMap.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:660</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_a279bc8f74233f3959f594db82c1b1ac9"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#a279bc8f74233f3959f594db82c1b1ac9">Isis::PvlFlatMap::add</a></div><div class="ttdeci">void add(const QString &amp;key, const QString &amp;value)</div><div class="ttdoc">Adds PvlKeyword with the given name and value to the PvlFlatMap.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:488</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_a37ec7d1f888c804269ace66e6ddf3345"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#a37ec7d1f888c804269ace66e6ddf3345">Isis::PvlFlatMap::operator()</a></div><div class="ttdeci">QString operator()(const QString &amp;name) const</div><div class="ttdoc">Gets the first value of a keyword in the PvlFlatMap.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:627</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_a41b996cd22893d4b4c0fa6b4386b9ee7"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#a41b996cd22893d4b4c0fa6b4386b9ee7">Isis::PvlFlatMap::allValues</a></div><div class="ttdeci">QStringList allValues(const QString &amp;key) const</div><div class="ttdoc">Gets all the values associated with a keyword in the PvlFlatMap.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:641</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_a549724ff0c6502a3f866e024979bdc3b"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#a549724ff0c6502a3f866e024979bdc3b">Isis::PvlFlatMap::count</a></div><div class="ttdeci">int count(const QString &amp;key) const</div><div class="ttdoc">Returns the number of values associated with a given keyword.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:450</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_a5b673c39c9b468e1aee6fd5042c64bc8"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#a5b673c39c9b468e1aee6fd5042c64bc8">Isis::PvlFlatMap::get</a></div><div class="ttdeci">QString get(const QString &amp;key, const int &amp;index=0) const</div><div class="ttdoc">Gets the value of a keyword in the PvlFlatMap.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:576</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_a61a2775f5ce357ffe7ee3dfb8499c23d"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#a61a2775f5ce357ffe7ee3dfb8499c23d">Isis::PvlFlatMap::merge</a></div><div class="ttdeci">int merge(const PvlFlatMap &amp;other)</div><div class="ttdoc">Adds the keywords from another PvlFlatMap.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:680</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_a62394503d5abc8081e87765bc37336a2"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#a62394503d5abc8081e87765bc37336a2">Isis::PvlFlatMap::erase</a></div><div class="ttdeci">bool erase(const QString &amp;key)</div><div class="ttdoc">Erases a keyword from the PvlFlatMap.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:557</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_a7570ee99bc1528ae19d623ffdb380940"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#a7570ee99bc1528ae19d623ffdb380940">Isis::PvlFlatMap::exists</a></div><div class="ttdeci">bool exists(const QString &amp;key) const</div><div class="ttdoc">Determines whether a given keyword exists in the PvlFlatMap.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:436</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_a8b53ae892a2f9c09fc46c912d4642306"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#a8b53ae892a2f9c09fc46c912d4642306">Isis::PvlFlatMap::~PvlFlatMap</a></div><div class="ttdeci">virtual ~PvlFlatMap()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:425</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_aae403feff0a4a4152dbbb1b5b562ece4"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#aae403feff0a4a4152dbbb1b5b562ece4">Isis::PvlFlatMap::ConstPvlFlatMapIterator</a></div><div class="ttdeci">QMap&lt; QString, PvlKeyword &gt;::const_iterator ConstPvlFlatMapIterator</div><div class="ttdoc">A const iterator for the underling QMap that PvlFlatMap is built on.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.h:222</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_ab461ef30bbfe63b10c23e75d6b275c2f"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#ab461ef30bbfe63b10c23e75d6b275c2f">Isis::PvlFlatMap::PvlFlatMap</a></div><div class="ttdeci">PvlFlatMap()</div><div class="ttdoc">Default constructor.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:343</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_ab8587d9db595cc92f20bdcdc28535092"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#ab8587d9db595cc92f20bdcdc28535092">Isis::PvlFlatMap::isNull</a></div><div class="ttdeci">bool isNull(const QString &amp;key, const int index=0) const</div><div class="ttdoc">Determines if the value of a keyword is Null.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:470</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_acded2faf645b74d05cddf72e7148ee47"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#acded2faf645b74d05cddf72e7148ee47">Isis::PvlFlatMap::keywordValues</a></div><div class="ttdeci">static QStringList keywordValues(const PvlKeyword &amp;keyword)</div><div class="ttdoc">Gets all of a PvlKeyword's values.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.cpp:702</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_flat_map_html_ad56e4a48fba2ebcf1561375018033c76"><div class="ttname"><a href="class_isis_1_1_pvl_flat_map.html#ad56e4a48fba2ebcf1561375018033c76">Isis::PvlFlatMap::PvlFlatMapIterator</a></div><div class="ttdeci">QMap&lt; QString, PvlKeyword &gt;::iterator PvlFlatMapIterator</div><div class="ttdoc">An iterator for the underlying QMap that PvlFlatMap is built on.</div><div class="ttdef"><b>Definition:</b> PvlFlatMap.h:224</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_group_html"><div class="ttname"><a href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a></div><div class="ttdoc">Contains multiple PvlContainers.</div><div class="ttdef"><b>Definition:</b> PvlGroup.h:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_keyword_html"><div class="ttname"><a href="class_isis_1_1_pvl_keyword.html">Isis::PvlKeyword</a></div><div class="ttdoc">A single keyword-value pair.</div><div class="ttdef"><b>Definition:</b> PvlKeyword.h:87</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_object_html"><div class="ttname"><a href="class_isis_1_1_pvl_object.html">Isis::PvlObject</a></div><div class="ttdoc">Contains Pvl Groups and Pvl Objects.</div><div class="ttdef"><b>Definition:</b> PvlObject.h:61</div></div>
+<div class="ttc" id="aclass_q_map_html"><div class="ttname"><a href="class_q_map.html">QMap</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> CubeIoHandler.h:22</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_c9c65dfb16ed866d6e459062412babbb.html">PvlFlatMap</a></li><li class="navelem"><a class="el" href="_pvl_flat_map_8h.html">PvlFlatMap.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

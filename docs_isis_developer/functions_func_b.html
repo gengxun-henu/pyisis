@@ -1,0 +1,664 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Class Members - Functions</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('functions_func_b.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="contents">
+&#160;
+
+<h3><a id="index_b"></a>- b -</h3><ul>
+<li>BackwardFirstDifference()
+: <a class="el" href="class_isis_1_1_numerical_approximation.html#a75e3d09509d70804b9312e2b73a213b7">Isis::NumericalApproximation</a>
+</li>
+<li>BackwardSecondDifference()
+: <a class="el" href="class_isis_1_1_numerical_approximation.html#ace0600e0e02d1fd8383c3a279600cce6">Isis::NumericalApproximation</a>
+</li>
+<li>badCorrelationColor()
+: <a class="el" href="class_isis_1_1_matrix_options.html#a0075fccfcf9f057c5e6d1347c0771bf4">Isis::MatrixOptions</a>
+</li>
+<li>badElements()
+: <a class="el" href="class_isis_1_1_matrix_options.html#ac501586eb8cb7c2f51847c109bca1766">Isis::MatrixOptions</a>
+</li>
+<li>Band()
+: <a class="el" href="class_isis_1_1_buffer.html#aad9cf749cd23a69c8ca13d60265735d1">Isis::Buffer</a>
+, <a class="el" href="class_isis_1_1_camera.html#a995b9942eba7367e058538b5025c1ca2">Isis::Camera</a>
+</li>
+<li>band()
+: <a class="el" href="class_isis_1_1_pixel.html#aca92f4ef39c14eb7dc4063e787b1b1fe">Isis::Pixel</a>
+</li>
+<li>BandBinKeys()
+: <a class="el" href="class_isis_1_1_band_spin_box.html#ad0b1a678cc6c26871f2d8b6a8e3b4bb3">Isis::BandSpinBox</a>
+</li>
+<li>BandChange()
+: <a class="el" href="class_isis_1_1_process_rubber_sheet.html#aaa40ec8a8974f789ab1ab48f482bf744">Isis::ProcessRubberSheet</a>
+</li>
+<li>bandCount()
+: <a class="el" href="class_isis_1_1_cube.html#aecaf95737562904d53d319ba500e3465">Isis::Cube</a>
+, <a class="el" href="class_isis_1_1_cube_io_handler.html#a29702a0358012e3806226697d7176b90">Isis::CubeIoHandler</a>
+, <a class="el" href="class_isis_1_1_raw_cube_chunk.html#a6ab1408a964750927dc4947a056c716a">Isis::RawCubeChunk</a>
+, <a class="el" href="class_isis_1_1_spectral_definition.html#aba464c9f6c9ba447b57c6eb029e66f59">Isis::SpectralDefinition</a>
+</li>
+<li>BandDimension()
+: <a class="el" href="class_isis_1_1_buffer.html#ab1ac3dce55dc5e6a7408b5166886bb74">Isis::Buffer</a>
+</li>
+<li>BandEphemerisTimeOffset()
+: <a class="el" href="class_isis_1_1_themis_vis_camera.html#a49081715a1ee1322dfe3d0455f610127">Isis::ThemisVisCamera</a>
+</li>
+<li>BandInfo()
+: <a class="el" href="class_isis_1_1_cube_viewport_1_1_band_info.html#a02a8ab7d2eeac4a9dbd401c93c9f065d">Isis::CubeViewport::BandInfo</a>
+</li>
+<li>bandingComplete()
+: <a class="el" href="class_isis_1_1_rubber_band_tool.html#a6aa2014d7f56414852ac4072e4a7d079">Isis::RubberBandTool</a>
+</li>
+<li>BandManager()
+: <a class="el" href="class_isis_1_1_band_manager.html#af2d106c8efa89c3affc444025b204db0">Isis::BandManager</a>
+</li>
+<li>bandMarkersVisible()
+: <a class="el" href="class_isis_1_1_spectral_plot_window.html#a9252325699b5ce7471292f4c177c59c0">Isis::SpectralPlotWindow</a>
+</li>
+<li>Bands()
+: <a class="el" href="class_isis_1_1_apollo.html#aa05311559c286ed6ac1bc38a3071a3be">Isis::Apollo</a>
+, <a class="el" href="class_isis_1_1_camera.html#afce14a982e09d511ebdfb3ad1bfbeac1">Isis::Camera</a>
+</li>
+<li>bands()
+: <a class="el" href="class_isis_1_1_cube_attribute_input.html#aeab6d577937cbff276b252844fcea450">Isis::CubeAttributeInput</a>
+, <a class="el" href="class_isis_1_1_image_exporter.html#a06578801083a0091b3f8e09f941516c1">Isis::ImageExporter</a>
+, <a class="el" href="class_isis_1_1_image_importer.html#a02566383cb3db25c62b487ddc9e46fab">Isis::ImageImporter</a>
+</li>
+<li>Bands()
+: <a class="el" href="class_isis_1_1_overlap_statistics.html#a32752881e230b3d0acaa7277b2300326">Isis::OverlapStatistics</a>
+, <a class="el" href="class_isis_1_1_process_import.html#adc0f90b710a2e65d3438cbc71fad1589">Isis::ProcessImport</a>
+</li>
+<li>BandSpinBox()
+: <a class="el" href="class_isis_1_1_band_spin_box.html#a7ad6f2fc40a3f4bb23d6b8687ff93384">Isis::BandSpinBox</a>
+</li>
+<li>bandsString()
+: <a class="el" href="class_isis_1_1_cube_attribute_input.html#a47c6d10ece021d1dbddf69877be9cf2f">Isis::CubeAttributeInput</a>
+</li>
+<li>BandStatistics()
+: <a class="el" href="class_isis_1_1_process.html#a99030aa7075af26a93c7aaca593ff481">Isis::Process</a>
+</li>
+<li>BandTool()
+: <a class="el" href="class_isis_1_1_band_tool.html#ad69d9a1885c59cef89b77a252fd2b7f0">Isis::BandTool</a>
+</li>
+<li>base()
+: <a class="el" href="class_isis_1_1_cube.html#a6c58866e4c4cd735386bd2e8f476f28d">Isis::Cube</a>
+</li>
+<li>baseLat()
+: <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a7ee17714fa7de230043bde59ef4217e8">Isis::MosaicGridTool</a>
+</li>
+<li>baseline()
+: <a class="el" href="class_isis_1_1_histogram_item.html#abf7a40693bab3237a89928fce5af48a0">Isis::HistogramItem</a>
+</li>
+<li>baseLon()
+: <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a957bc12fcfb61740da97ef2d9bacbd53">Isis::MosaicGridTool</a>
+</li>
+<li>baseName()
+: <a class="el" href="class_isis_1_1_file_name.html#a5596aba89aab7d88ff1b67c1637145a3">Isis::FileName</a>
+</li>
+<li>BasicMapping()
+: <a class="el" href="class_isis_1_1_camera.html#a7e0af21a39a23b4d1e35a666dd09d38e">Isis::Camera</a>
+</li>
+<li>basicRingMapping()
+: <a class="el" href="class_isis_1_1_camera.html#adc2d280c3f5d83f7d16dea9feb3156ba">Isis::Camera</a>
+</li>
+<li>Basis1VariableFunction()
+: <a class="el" href="class_isis_1_1_basis1_variable_function.html#ae3ff1bd37aac7211e835a9df26d3b490">Isis::Basis1VariableFunction</a>
+</li>
+<li>BasisFunction()
+: <a class="el" href="class_isis_1_1_basis_function.html#a6ac1e351729ccad6852fd60006f865bb">Isis::BasisFunction</a>
+</li>
+<li>BatchListSize()
+: <a class="el" href="class_isis_1_1_user_interface.html#ab2a04d90e98f0582366d6eab324ca05f">Isis::UserInterface</a>
+</li>
+<li>begin()
+: <a class="el" href="class_isis_1_1_buffer_manager.html#a2c3e68ed0e090ac9b64ee15197e5b1b3">Isis::BufferManager</a>
+, <a class="el" href="class_isis_1_1_collector_map.html#ab4cae358f4844e61e7aa3c094c80782f">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;</a>
+, <a class="el" href="class_isis_1_1_pvl_container.html#a676040b7d08e97e2806b432db00588f8">Isis::PvlContainer</a>
+</li>
+<li>beginGroup()
+: <a class="el" href="class_isis_1_1_pvl_object.html#a104ace5831925cd02bb8829c484ec77e">Isis::PvlObject</a>
+</li>
+<li>beginObject()
+: <a class="el" href="class_isis_1_1_pvl_object.html#a0549cb2da1910398021a3e14e987b412">Isis::PvlObject</a>
+</li>
+<li>BelowRange()
+: <a class="el" href="class_isis_1_1_statistics.html#ae53af5b76d2cbf0f3dddaba8b0180ab0">Isis::Statistics</a>
+</li>
+<li>bestFitEllipse()
+: <a class="el" href="class_isis_1_1_selection.html#a1ae6418364987fa7987c131e9efdb6fa">Isis::Selection</a>
+</li>
+<li>BestMaximum()
+: <a class="el" href="class_isis_1_1_statistics.html#ab03778b2abb0b1076f4e748409439774">Isis::Statistics</a>
+</li>
+<li>BestMinimum()
+: <a class="el" href="class_isis_1_1_statistics.html#a6166be8cbf10eefb8c463f1cbb1cbcb4">Isis::Statistics</a>
+</li>
+<li>bestText()
+: <a class="el" href="class_isis_1_1_work_order.html#ae11df4c7c474603dbe297b91a0acf20e">Isis::WorkOrder</a>
+</li>
+<li>BetaLine()
+: <a class="el" href="class_isis_1_1_alpha_cube.html#a66ec3757417e247f5899bc62d89f7bef">Isis::AlphaCube</a>
+</li>
+<li>BetaLines()
+: <a class="el" href="class_isis_1_1_alpha_cube.html#a796bca95be06131da229a57e14a46d7c">Isis::AlphaCube</a>
+</li>
+<li>BetaSample()
+: <a class="el" href="class_isis_1_1_alpha_cube.html#af7d5b8060ee99aa7f937b0b1eb65565c">Isis::AlphaCube</a>
+</li>
+<li>BetaSamples()
+: <a class="el" href="class_isis_1_1_alpha_cube.html#adf1a9daccb029309e217bfd943f0a65f">Isis::AlphaCube</a>
+</li>
+<li>BiasStripMean()
+: <a class="el" href="class_isis_1_1_ciss_labels.html#a57f1c7a3edab7df3809b0228e30d5600">Isis::CissLabels</a>
+</li>
+<li>BinaryStretchType()
+: <a class="el" href="class_isis_1_1_binary_stretch_type.html#a199094b93380e7074da56b360449f41c">Isis::BinaryStretchType</a>
+</li>
+<li>BinCount()
+: <a class="el" href="class_isis_1_1_histogram.html#a28cbcda6d3ff339aede5a2d37736f316">Isis::Histogram</a>
+</li>
+<li>binCount()
+: <a class="el" href="class_isis_1_1_scatter_plot_data.html#a6c3e7e89e99d573a2d302568432ed5a3">Isis::ScatterPlotData</a>
+</li>
+<li>BinMiddle()
+: <a class="el" href="class_isis_1_1_histogram.html#a583af7cfa15f8f80448c5b9573f58e90">Isis::Histogram</a>
+</li>
+<li>BinRange()
+: <a class="el" href="class_isis_1_1_histogram.html#afb7c01039ecff16d4692e6a994a9dc10">Isis::Histogram</a>
+, <a class="el" href="class_isis_1_1_image_histogram.html#ab0a49517f49afb48678d1a47a4d500bd">Isis::ImageHistogram</a>
+</li>
+<li>BinRangeEnd()
+: <a class="el" href="class_isis_1_1_histogram.html#aad8c7d5546f52e30075341e19ab91800">Isis::Histogram</a>
+</li>
+<li>BinRangeStart()
+: <a class="el" href="class_isis_1_1_histogram.html#a54c814716fc10a4a0457869dd50e1d5d">Isis::Histogram</a>
+</li>
+<li>Bins()
+: <a class="el" href="class_isis_1_1_histogram.html#a7a9f2983968ebe1cbb59e4044c654ecb">Isis::Histogram</a>
+</li>
+<li>BinSize()
+: <a class="el" href="class_isis_1_1_histogram.html#a1f3c04356f20d37b3d335c2b56c1f943">Isis::Histogram</a>
+</li>
+<li>binXY()
+: <a class="el" href="class_isis_1_1_scatter_plot_data.html#ab659e508e820bb10b19ff3588e8f047b">Isis::ScatterPlotData</a>
+</li>
+<li>BitReverse()
+: <a class="el" href="class_isis_1_1_fourier_transform.html#a9cc4007ea2c76f41e2a45498dddc3b88">Isis::FourierTransform</a>
+</li>
+<li>BlinkTool()
+: <a class="el" href="class_isis_1_1_blink_tool.html#ace48842cbb401b7b309ed353a47efd83">Isis::BlinkTool</a>
+</li>
+<li>Blob()
+: <a class="el" href="class_isis_1_1_blob.html#a268754688b00d6f70263251b82e38d70">Isis::Blob</a>
+</li>
+<li>Blobber()
+: <a class="el" href="class_isis_1_1_blobber.html#aa801c9aa106f49099ca7a30e83f2c487">Isis::Blobber</a>
+</li>
+<li>blockSelectionChange()
+: <a class="el" href="class_isis_1_1_mosaic_scene_widget.html#a0ad95b01ac32790a37f31f524e3f8665">Isis::MosaicSceneWidget</a>
+</li>
+<li>blueBand()
+: <a class="el" href="class_isis_1_1_cube_viewport.html#ae8edde2f0c4ac9662edd059a555b336d">Isis::CubeViewport</a>
+</li>
+<li>blueBuffer()
+: <a class="el" href="class_isis_1_1_cube_viewport.html#a9389257dd9264e678daae526e5223cf8">Isis::CubeViewport</a>
+</li>
+<li>bluePixel()
+: <a class="el" href="class_isis_1_1_cube_viewport.html#a063b27905ef178c35488538bb2b19248">Isis::CubeViewport</a>
+</li>
+<li>blueStretch()
+: <a class="el" href="class_isis_1_1_cube_viewport.html#af6a6ebbc87d40f64b608d3943393ec46">Isis::CubeViewport</a>
+</li>
+<li>body()
+: <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#ad1c87d5d4f5d59395e9633b4cf63f574">Isis::BulletClosestRayCallback</a>
+, <a class="el" href="class_isis_1_1_bullet_target_shape.html#a80a9ef776f7cbce4b81d7bf737a6287c">Isis::BulletTargetShape</a>
+</li>
+<li>bodyRotation()
+: <a class="el" href="class_isis_1_1_c_s_m_camera.html#acc9cbcd570c5654b24765fcfbc371e53">Isis::CSMCamera</a>
+, <a class="el" href="class_isis_1_1_spice.html#a592b641ffe8f80cdb4d7280b4845ef87">Isis::Spice</a>
+</li>
+<li>BoolesRule()
+: <a class="el" href="class_isis_1_1_numerical_approximation.html#ad6e3677cd26c6ede187146cd4cfc4fec">Isis::NumericalApproximation</a>
+</li>
+<li>boundingRect()
+: <a class="el" href="class_isis_1_1_control_net_graphics_item.html#a76a2621fcd59cecc95e8524a3e912b2a">Isis::ControlNetGraphicsItem</a>
+, <a class="el" href="class_isis_1_1_grid_graphics_item.html#aa0fb1491885bf6dc0f35bb1cf31f5752">Isis::GridGraphicsItem</a>
+, <a class="el" href="class_isis_1_1_histogram_item.html#ab58d52948430f84538caea34ea46f2c5">Isis::HistogramItem</a>
+, <a class="el" href="class_isis_1_1_mosaic_scene_item.html#a1c8bae5bf547d66dac571a0545506252">Isis::MosaicSceneItem</a>
+</li>
+<li>boundingRectChanged()
+: <a class="el" href="class_isis_1_1_mosaic_grid_tool.html#a8f5ea93b3c8fe5f3a3c6ba002ffcdc0e">Isis::MosaicGridTool</a>
+</li>
+<li>BoxcarCachingAlgorithm()
+: <a class="el" href="class_isis_1_1_boxcar_caching_algorithm.html#a03fc0b2ec5d6290108040c196ee828a8">Isis::BoxcarCachingAlgorithm</a>
+</li>
+<li>BoxcarManager()
+: <a class="el" href="class_isis_1_1_boxcar_manager.html#a2f30ba5b318276e3533abe337d320d80">Isis::BoxcarManager</a>
+</li>
+<li>BranchEnabled()
+: <a class="el" href="class_isis_1_1_pipeline_application.html#a601563f7a95465db015825510bcd665d">Isis::PipelineApplication</a>
+</li>
+<li>brentminimizer()
+: <a class="el" href="class_isis_1_1_photometry.html#a2ffa4f7af7c22bf24d2356f9da664dac">Isis::Photometry</a>
+</li>
+<li>brentsolver()
+: <a class="el" href="class_isis_1_1_photometry.html#aa67b64bd3c5f3ba25daa913bcddff7e3">Isis::Photometry</a>
+</li>
+<li>brentsRootFinder()
+: <a class="el" href="class_isis_1_1_function_tools.html#a1f2d2feeeaea99b36018b461503f542a">Isis::FunctionTools</a>
+</li>
+<li>Brick()
+: <a class="el" href="class_isis_1_1_brick.html#ad2e4aeb71918cad24c6e25e6c0ed3df5">Isis::Brick</a>
+</li>
+<li>BrickChanged()
+: <a class="el" href="class_isis_1_1_cube_data_thread.html#a212aa2e00b4166d8e823b006935a37da">Isis::CubeDataThread</a>
+, <a class="el" href="class_isis_1_1_cube_data_thread_tester.html#ad79eb252d22af6626a04412741bdda4f">Isis::CubeDataThreadTester</a>
+</li>
+<li>Bricks()
+: <a class="el" href="class_isis_1_1_brick.html#accee4c70e1b1bf27713c8b673f3e895c">Isis::Brick</a>
+</li>
+<li>BricksInMemory()
+: <a class="el" href="class_isis_1_1_cube_data_thread.html#a0f2d31c0011ac508786d7f12a771ba23">Isis::CubeDataThread</a>
+</li>
+<li>Brief()
+: <a class="el" href="class_isis_aml.html#a99cd5c5aa3a461c3ef42f1cab191d035">IsisAml</a>
+</li>
+<li>bringToFront()
+: <a class="el" href="class_isis_1_1_image_list_action_work_order.html#a8610783d8498c3d41b44b48de932116b">Isis::ImageListActionWorkOrder</a>
+</li>
+<li>browse()
+: <a class="el" href="class_isis_1_1_file_tool.html#aeebf476c5741415a5475d86ff81f65ac">Isis::FileTool</a>
+</li>
+<li>BrowseDialog()
+: <a class="el" href="class_isis_1_1_browse_dialog.html#afc3c47a3b2ec5486a38753d0887df3e7">Isis::BrowseDialog</a>
+</li>
+<li>Buffer()
+: <a class="el" href="class_isis_1_1_buffer.html#ae461c0c56c37b45d203c5bf451cf4d2a">Isis::Buffer</a>
+</li>
+<li>buffer()
+: <a class="el" href="class_isis_1_1_gis_geometry.html#ad06c910653989471ed4063f6e323f0bd">Isis::GisGeometry</a>
+, <a class="el" href="class_isis_1_1_hi_blob.html#ad83a541a1364a7b612d16a41cca8f7ca">Isis::HiBlob</a>
+</li>
+<li>BufferManager()
+: <a class="el" href="class_isis_1_1_buffer_manager.html#a6ee27e6bdff6059c235c447699ac066c">Isis::BufferManager</a>
+</li>
+<li>bufferUpdated()
+: <a class="el" href="class_isis_1_1_cube_viewport.html#afd617191ab784cba8183365ed86c2925">Isis::CubeViewport</a>
+</li>
+<li>bufferXYRect()
+: <a class="el" href="class_isis_1_1_viewport_buffer.html#aa8001598c5e0c36ae20e9b01673a0a22">Isis::ViewportBuffer</a>
+</li>
+<li>buildChildren()
+: <a class="el" href="class_isis_1_1_control_net_graphics_item.html#a3da88674cdd0582819841388949c96ee">Isis::ControlNetGraphicsItem</a>
+</li>
+<li>BuildNewCommandLineFromPvl()
+: <a class="el" href="class_isis_1_1_user_interface.html#a9d907489d3955585edc896d760ed266a">Isis::UserInterface</a>
+</li>
+<li>BuildParamString()
+: <a class="el" href="class_isis_1_1_pipeline_application.html#a79fcc083a4f1f49e16145c41c9d2c5df">Isis::PipelineApplication</a>
+</li>
+<li>BulletAllHitsRayCallback()
+: <a class="el" href="class_isis_1_1_bullet_all_hits_ray_callback.html#ad5a8c2f47ea1a5bac90697aeb0dbccb1">Isis::BulletAllHitsRayCallback</a>
+</li>
+<li>BulletClosestRayCallback()
+: <a class="el" href="class_isis_1_1_bullet_closest_ray_callback.html#accb2a934f26e8f5d8487fcf634144be1">Isis::BulletClosestRayCallback</a>
+</li>
+<li>BulletDskShape()
+: <a class="el" href="class_isis_1_1_bullet_dsk_shape.html#adbdfbb4e44a73c8b2981d8d8b7187b8c">Isis::BulletDskShape</a>
+</li>
+<li>BulletShapeModel()
+: <a class="el" href="class_isis_1_1_bullet_shape_model.html#a3ad97187b109bbe354fc80f9dbb62038">Isis::BulletShapeModel</a>
+</li>
+<li>BulletTargetShape()
+: <a class="el" href="class_isis_1_1_bullet_target_shape.html#ae11616f2d9e9aa20398af2804e3baad5">Isis::BulletTargetShape</a>
+</li>
+<li>BulletWorldManager()
+: <a class="el" href="class_isis_1_1_bullet_world_manager.html#a9a358d0e4bca3ab386aabf9d0a3f018d">Isis::BulletWorldManager</a>
+</li>
+<li>BundleAdjust()
+: <a class="el" href="class_isis_1_1_bundle_adjust.html#ac3092d8700c50143ed0bd309e02a8915">Isis::BundleAdjust</a>
+</li>
+<li>BundleControlPoint()
+: <a class="el" href="class_isis_1_1_bundle_control_point.html#a4033f1b83f3e5f04e051fef670e6a642">Isis::BundleControlPoint</a>
+</li>
+<li>bundleControlPoints()
+: <a class="el" href="class_isis_1_1_bundle_results.html#a6393b6007b61cc5da61203461711ff28">Isis::BundleResults</a>
+</li>
+<li>bundleFinished()
+: <a class="el" href="class_isis_1_1_jigsaw_run_widget.html#af71621d5fc0e661b842bf7465e6b45cb">Isis::JigsawRunWidget</a>
+</li>
+<li>BundleImage()
+: <a class="el" href="class_isis_1_1_bundle_image.html#a7fe318be013c27ea5584cf059281d224">Isis::BundleImage</a>
+</li>
+<li>BundleLidarControlPoint()
+: <a class="el" href="class_isis_1_1_bundle_lidar_control_point.html#a22010abf6e336467578497077de00ea1">Isis::BundleLidarControlPoint</a>
+</li>
+<li>bundleLidarControlPoints()
+: <a class="el" href="class_isis_1_1_bundle_results.html#a6a15c9d49a7ed95231c15b81eba96fed">Isis::BundleResults</a>
+</li>
+<li>BundleLidarPointVector()
+: <a class="el" href="class_isis_1_1_bundle_lidar_point_vector.html#a5656262d2f992a75e7053de956e19ad3">Isis::BundleLidarPointVector</a>
+</li>
+<li>BundleLidarRangeConstraint()
+: <a class="el" href="class_isis_1_1_bundle_lidar_range_constraint.html#a1f18ac73ea9e82e7460467dbef5eaf36">Isis::BundleLidarRangeConstraint</a>
+</li>
+<li>BundleMeasure()
+: <a class="el" href="class_isis_1_1_bundle_measure.html#af4890aa0349457a210ee673a6bdd8f9b">Isis::BundleMeasure</a>
+</li>
+<li>BundleObservation()
+: <a class="el" href="class_isis_1_1_bundle_observation.html#ad5879e44bc7c468b32dab0fcc6fb87b6">Isis::BundleObservation</a>
+</li>
+<li>BundleObservationSolveSettings()
+: <a class="el" href="class_isis_1_1_bundle_observation_solve_settings.html#a6e383245ecb2835d4db3420feb2f2197">Isis::BundleObservationSolveSettings</a>
+</li>
+<li>BundleObservationVector()
+: <a class="el" href="class_isis_1_1_bundle_observation_vector.html#afd3016360fe49c4ab2e8def223454fdb">Isis::BundleObservationVector</a>
+</li>
+<li>BundleObservationView()
+: <a class="el" href="class_isis_1_1_bundle_observation_view.html#a6cfb6a54d8c75d89584d1d6fc186af97">Isis::BundleObservationView</a>
+</li>
+<li>bundleObservationViews()
+: <a class="el" href="class_isis_1_1_directory.html#a4d95ea6ed3f145a69d76d8e645430e46">Isis::Directory</a>
+</li>
+<li>BundleObservationViewWorkOrder()
+: <a class="el" href="class_isis_1_1_bundle_observation_view_work_order.html#ac15a7f36076502ac035b1902b13368f5">Isis::BundleObservationViewWorkOrder</a>
+</li>
+<li>bundleOutputCSV()
+: <a class="el" href="class_isis_1_1_bundle_observation.html#a81d8e3e8a674bc4ea0321e6d86280fac">Isis::BundleObservation</a>
+, <a class="el" href="class_isis_1_1_csm_bundle_observation.html#a2d9ce3fef2ed6ff00a95f9a291d59519">Isis::CsmBundleObservation</a>
+, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a40f8c71ea728287008ee72f2ea72b9b5">Isis::IsisBundleObservation</a>
+</li>
+<li>bundleOutputFetchData()
+: <a class="el" href="class_isis_1_1_isis_bundle_observation.html#a6ad4f708c7da8be627b7bb1c56b69eca">Isis::IsisBundleObservation</a>
+</li>
+<li>bundleOutputString()
+: <a class="el" href="class_isis_1_1_bundle_observation.html#af31b59c974381897708151b43f9c8bdc">Isis::BundleObservation</a>
+, <a class="el" href="class_isis_1_1_csm_bundle_observation.html#aaa61f08a424ba94525ea6d79ebe33fff">Isis::CsmBundleObservation</a>
+, <a class="el" href="class_isis_1_1_isis_bundle_observation.html#ab7086846c2d0dd3d9f41b55c80321380">Isis::IsisBundleObservation</a>
+</li>
+<li>BundleResults()
+: <a class="el" href="class_isis_1_1_bundle_results.html#a17036632fba0fd7b2aeb10f128365e66">Isis::BundleResults</a>
+</li>
+<li>bundleResults()
+: <a class="el" href="class_isis_1_1_bundle_solution_info.html#a90e731a79060dc3764e9ae6791fb95b8">Isis::BundleSolutionInfo</a>
+, <a class="el" href="class_isis_1_1_project_item.html#a75ce6fd0b38e768027d207a5388de376">Isis::ProjectItem</a>
+</li>
+<li>BundleSettings()
+: <a class="el" href="class_isis_1_1_bundle_settings.html#a1e1da9716b12e1feae7882a4c1676cbd">Isis::BundleSettings</a>
+</li>
+<li>bundleSettings()
+: <a class="el" href="class_isis_1_1_bundle_solution_info.html#a48f8b746e34bc9ad3593b0bb93a684ad">Isis::BundleSolutionInfo</a>
+, <a class="el" href="class_isis_1_1_jigsaw_setup_dialog.html#adb44cfe4b58d344ca3d2c21ae5dc6e65">Isis::JigsawSetupDialog</a>
+, <a class="el" href="class_isis_1_1_project.html#ab33c386948c310610e3fab5a1cfb9e30">Isis::Project</a>
+, <a class="el" href="class_isis_1_1_project_item.html#a3bb2c552775abf6812cd62d1136ea5ff">Isis::ProjectItem</a>
+</li>
+<li>BundleSolutionInfo()
+: <a class="el" href="class_isis_1_1_bundle_solution_info.html#a66342f6dfddb3573c3f8a444e8a72b7c">Isis::BundleSolutionInfo</a>
+</li>
+<li>bundleSolutionInfo()
+: <a class="el" href="class_isis_1_1_project.html#ab5d3f5e43dd470d90138e808b1f69abb">Isis::Project</a>
+, <a class="el" href="class_isis_1_1_project_item.html#a2fbfd80307cead420949085376d221c4">Isis::ProjectItem</a>
+</li>
+<li>bundleSolutionInfoAdded()
+: <a class="el" href="class_isis_1_1_project.html#a2965b041ffad963a4a7bf698026721aa">Isis::Project</a>
+</li>
+<li>bundleSolutionInfoRoot()
+: <a class="el" href="class_isis_1_1_project.html#a41bb51787480d8b3ea4eb881e0393b70">Isis::Project</a>
+</li>
+<li>bundleTargetBody()
+: <a class="el" href="class_isis_1_1_bundle_settings.html#a3bb3e2c98c70d57fadd73de76af8d986">Isis::BundleSettings</a>
+</li>
+<li>BundleTargetBody()
+: <a class="el" href="class_isis_1_1_bundle_target_body.html#ab07515cbf7eb78aaf4b363f34f13b5dc">Isis::BundleTargetBody</a>
+</li>
+<li>BusyLeafItem()
+: <a class="el" href="class_isis_1_1_busy_leaf_item.html#a8ad35b008d3706b47b8f554107f698c9">Isis::BusyLeafItem</a>
+</li>
+<li>byteOrder()
+: <a class="el" href="class_isis_1_1_cube.html#a8cce2891a8473e8a4224664d4839bf77">Isis::Cube</a>
+, <a class="el" href="class_isis_1_1_cube_attribute_output.html#a0bb9458fb5a0b1120aad8822f56259a5">Isis::CubeAttributeOutput</a>
+</li>
+<li>ByteOrder()
+: <a class="el" href="class_isis_1_1_process_import.html#a79d41a4ec7a5686036364cabf3617b56">Isis::ProcessImport</a>
+</li>
+<li>byteOrderString()
+: <a class="el" href="class_isis_1_1_cube_attribute_output.html#a8ff5d0fd847e541c164f2cd4b21863f4">Isis::CubeAttributeOutput</a>
+</li>
+<li>bytes()
+: <a class="el" href="class_isis_1_1_table_field.html#ad444e14b6f9084916379911a2b675cf9">Isis::TableField</a>
+</li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

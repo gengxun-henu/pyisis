@@ -1,0 +1,49 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Pixel,Utility,isis/src/base/objs/Pixel/Pixel.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Pixel,isis_pybind.Pixel,N,Python class symbol not found in current binding files
+Construction/Enum,Pixel(),isis_pybind.Pixel(),N,Constructor binding not detected in current binding files
+Public API,int line() const,isis_pybind.Pixel.line,N,Method not found in current binding files
+Public API,int sample() const,isis_pybind.Pixel.sample,N,Method not found in current binding files
+Public API,int band() const,isis_pybind.Pixel.band,N,Method not found in current binding files
+Public API,double DN() const,isis_pybind.Pixel.dn,N,Method not found in current binding files
+Static/Factory,static unsigned char To8Bit(const double d),isis_pybind.Pixel.to8_bit,N,Method not found in current binding files
+Public API,unsigned char To8Bit(),isis_pybind.Pixel.to8_bit,N,Method not found in current binding files
+Static/Factory,static short int To16Bit(const double d),isis_pybind.Pixel.to16_bit,N,Method not found in current binding files
+Public API,short int To16Bit(),isis_pybind.Pixel.to16_bit,N,Method not found in current binding files
+Static/Factory,static short unsigned int To16UBit(const double d),isis_pybind.Pixel.to16_u_bit,N,Method not found in current binding files
+Public API,short unsigned int To16Ubit(),isis_pybind.Pixel.to16_ubit,N,Method not found in current binding files
+Static/Factory,static float To32Bit(const double d),isis_pybind.Pixel.to32_bit,N,Method not found in current binding files
+Public API,float To32Bit(),isis_pybind.Pixel.to32_bit,N,Method not found in current binding files
+Static/Factory,static double ToDouble(const unsigned char t),isis_pybind.Pixel.to_double,N,Method not found in current binding files
+Static/Factory,static double ToDouble(const short int t),isis_pybind.Pixel.to_double,N,Method not found in current binding files
+Static/Factory,static double ToDouble(const short unsigned int t),isis_pybind.Pixel.to_double,N,Method not found in current binding files
+Static/Factory,static double ToDouble(const float t),isis_pybind.Pixel.to_double,N,Method not found in current binding files
+Public API,double ToDouble(),isis_pybind.Pixel.to_double,N,Method not found in current binding files
+Static/Factory,static float ToFloat(const unsigned char d),isis_pybind.Pixel.to_float,N,Method not found in current binding files
+Static/Factory,static float ToFloat(const short int d),isis_pybind.Pixel.to_float,N,Method not found in current binding files
+Static/Factory,static float ToFloat(const short unsigned int d),isis_pybind.Pixel.to_float,N,Method not found in current binding files
+Static/Factory,static float ToFloat(const double d),isis_pybind.Pixel.to_float,N,Method not found in current binding files
+Public API,float ToFloat(),isis_pybind.Pixel.to_float,N,Method not found in current binding files
+Static/Factory,static std::string ToString(double d),isis_pybind.Pixel.to_string,N,Method not found in current binding files
+Public API,std::string ToString(),isis_pybind.Pixel.to_string,N,Method not found in current binding files
+Static/Factory,static inline bool IsSpecial(const double d) { return(d < VALID_MIN8),isis_pybind.Pixel.is_special,N,Method not found in current binding files
+Query,bool IsSpecial() { return IsSpecial(m_DN),isis_pybind.Pixel.is_special,N,Method not found in current binding files
+Static/Factory,static inline bool IsSpecial(const float f) { return(f < VALID_MIN4),isis_pybind.Pixel.is_special,N,Method not found in current binding files
+Static/Factory,static inline bool IsValid(const double d) { return(d >= VALID_MIN8),isis_pybind.Pixel.is_valid,N,Method not found in current binding files
+Query,bool IsValid() { return IsValid(m_DN),isis_pybind.Pixel.is_valid,N,Method not found in current binding files
+Static/Factory,static inline bool IsNull(const double d) { return(d == NULL8),isis_pybind.Pixel.is_null,N,Method not found in current binding files
+Query,bool IsNull() { return IsNull(m_DN),isis_pybind.Pixel.is_null,N,Method not found in current binding files
+Static/Factory,static inline bool IsHigh(const double d) { return(d == HIGH_REPR_SAT8) || (d == HIGH_INSTR_SAT8),isis_pybind.Pixel.is_high,N,Method not found in current binding files
+Query,bool IsHigh() { return IsHigh(m_DN),isis_pybind.Pixel.is_high,N,Method not found in current binding files
+Static/Factory,static inline bool IsLow(const double d) { return(d == LOW_REPR_SAT8) || (d == LOW_INSTR_SAT8),isis_pybind.Pixel.is_low,N,Method not found in current binding files
+Query,bool IsLow() { return IsLow(m_DN),isis_pybind.Pixel.is_low,N,Method not found in current binding files
+Static/Factory,static inline bool IsHrs(const double d) { return(d == HIGH_REPR_SAT8),isis_pybind.Pixel.is_hrs,N,Method not found in current binding files
+Query,bool IsHrs() { return IsHrs(m_DN),isis_pybind.Pixel.is_hrs,N,Method not found in current binding files
+Static/Factory,static inline bool IsHis(const double d) { return(d == HIGH_INSTR_SAT8),isis_pybind.Pixel.is_his,N,Method not found in current binding files
+Query,bool IsHis() { return IsHis(m_DN),isis_pybind.Pixel.is_his,N,Method not found in current binding files
+Static/Factory,static inline bool IsLis(const double d) { return(d == LOW_INSTR_SAT8),isis_pybind.Pixel.is_lis,N,Method not found in current binding files
+Query,bool IsLis() { return IsLis(m_DN),isis_pybind.Pixel.is_lis,N,Method not found in current binding files
+Static/Factory,static inline bool IsLrs(const double d) { return(d == LOW_REPR_SAT8),isis_pybind.Pixel.is_lrs,N,Method not found in current binding files
+Query,bool IsLrs() { return IsLrs(m_DN),isis_pybind.Pixel.is_lrs,N,Method not found in current binding files

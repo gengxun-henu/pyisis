@@ -1,0 +1,11 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+SpacecraftPosition,"Spice, Instruments, and Cameras",isis/src/base/objs/Spice/SpacecraftPosition.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,SpacecraftPosition,isis_pybind.SpacecraftPosition,N,Python class symbol not found in current binding files
+Public API,double getRadiusLightTime() const,isis_pybind.SpacecraftPosition.get_radius_light_time,N,Method not found in current binding files
+Static/Factory,static double getDistanceLightTime(const Distance &distance),isis_pybind.SpacecraftPosition.get_distance_light_time,N,Method not found in current binding files
+Mutation/Configuration,virtual void SetAberrationCorrection(const QString &correction),isis_pybind.SpacecraftPosition.set_aberration_correction,N,Method not found in current binding files
+Public API,virtual QString GetAberrationCorrection() const,isis_pybind.SpacecraftPosition.get_aberration_correction,N,Method not found in current binding files
+Mutation/Configuration,virtual void SetEphemerisTimeSpice(),isis_pybind.SpacecraftPosition.set_ephemeris_time_spice,N,Method not found in current binding files
+Public API,const LightTimeCorrectionState &getLightTimeState() const,isis_pybind.SpacecraftPosition.get_light_time_state,N,Method not found in current binding files

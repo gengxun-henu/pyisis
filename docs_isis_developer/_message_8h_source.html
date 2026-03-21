@@ -1,0 +1,326 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Message/Message.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_message_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">Message.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_message_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef Message_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define Message_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  <span class="comment">/* Documentation for this namespace is in:</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">  *    isis/src/docsys/Object/build/isisDoxyDefs.doxydef</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">  * @internal</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">  *   @history 2016-08-28 Kelvin Rodriguez - Moved &#39;using namespace&#39; to be properly defined</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">  *                           after the includes for every cpp file in the message folder.</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">  *                           Part of porting to OS X 10.11.</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">  */</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="namespace_isis_1_1_message.html">   20</a></span>&#160;  <span class="keyword">namespace </span>Message {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a3e3db179a224517c3d1db5281d67c23e">ArraySubscriptNotInRange</a>(<span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a1c40323c7f50bb4f713bfa39e95c1cd5">KeywordAmbiguous</a>(<span class="keyword">const</span> QString &amp;key);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a11464b68ddd63a1d0bc04db72686d952">KeywordUnrecognized</a>(<span class="keyword">const</span> QString &amp;key);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#afe3288cd60c1d7d4d3a736e076fccbaa">KeywordDuplicated</a>(<span class="keyword">const</span> QString &amp;key);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#add71d86a525223c3eaf16fd79e5cad18">KeywordNotArray</a>(<span class="keyword">const</span> QString &amp;key);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a81ec7fa1fe0ae5bcc1bd0946a85b35a3">KeywordNotFound</a>(<span class="keyword">const</span> QString &amp;key);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#ae535ec14ebc6b81561e318432bfacfd0">KeywordBlockInvalid</a>(<span class="keyword">const</span> QString &amp;block);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a086808c512cb0ba2f7e4af41b436a992">KeywordBlockStartMissing</a>(<span class="keyword">const</span> QString &amp;block, <span class="keyword">const</span> QString &amp;found);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a35149089d1dcdd5583a3c28b9e6c202c">KeywordBlockEndMissing</a>(<span class="keyword">const</span> QString &amp;block, <span class="keyword">const</span> QString &amp;found);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a7a69de37cc02ac13dbf0f78432ca1433">KeywordValueBad</a>(<span class="keyword">const</span> QString &amp;key);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a7a69de37cc02ac13dbf0f78432ca1433">KeywordValueBad</a>(<span class="keyword">const</span> QString &amp;key, <span class="keyword">const</span> QString &amp;value);</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a062a36dbcca47f25890a713a0b0b01de">KeywordValueExpected</a>(<span class="keyword">const</span> QString &amp;key);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a39466bc3cefb12119e8bc2cfba415e6a">KeywordValueNotInRange</a>(<span class="keyword">const</span> QString &amp;key, <span class="keyword">const</span> QString &amp;value,</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                                  <span class="keyword">const</span> QString &amp;range);</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00180"></a><span class="lineno"><a class="line" href="namespace_isis_1_1_message.html#a6cf9a02a3a1427b2dd183aee863c2706">  180</a></span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a6cf9a02a3a1427b2dd183aee863c2706">KeywordValueNotInList</a>(<span class="keyword">const</span> QString &amp;key, <span class="keyword">const</span> QString &amp;value,</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                                  <span class="keyword">const</span> std::vector&lt;QString&gt; &amp;list);</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a74180ce7352f1e2143f2e29d4e9adf7a">MissingDelimiter</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> delimiter);</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a74180ce7352f1e2143f2e29d4e9adf7a">MissingDelimiter</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> delimiter, <span class="keyword">const</span> QString &amp;near);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a41ec635b0f5e412c360455c48c2e79cb">FileOpen</a>(<span class="keyword">const</span> QString &amp;filename);</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a8461e0416f3ebb896989280496234e43">FileCreate</a>(<span class="keyword">const</span> QString &amp;filename);</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#ab15f477d96f8c7a9460c1d7e7c2dd8d4">FileRead</a>(<span class="keyword">const</span> QString &amp;filename);</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#a0876cd5c70ce3efd4b14d1cd12c6d512">FileWrite</a>(<span class="keyword">const</span> QString &amp;filename);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    QString <a class="code" href="namespace_isis_1_1_message.html#ae0f312e6dae4d74c883394a27051d65a">MemoryAllocationFailed</a>();</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;  }</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;}</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160; </div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a062a36dbcca47f25890a713a0b0b01de"><div class="ttname"><a href="namespace_isis_1_1_message.html#a062a36dbcca47f25890a713a0b0b01de">Isis::Message::KeywordValueExpected</a></div><div class="ttdeci">QString KeywordValueExpected(const QString &amp;key)</div><div class="ttdoc">This error should be used when the value of a supplied keyword was expected but not present.</div><div class="ttdef"><b>Definition:</b> KeywordValueExpected.cpp:12</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a086808c512cb0ba2f7e4af41b436a992"><div class="ttname"><a href="namespace_isis_1_1_message.html#a086808c512cb0ba2f7e4af41b436a992">Isis::Message::KeywordBlockStartMissing</a></div><div class="ttdeci">QString KeywordBlockStartMissing(const QString &amp;block, const QString &amp;found)</div><div class="ttdoc">This error has been deprecated and should not be used in new code.</div><div class="ttdef"><b>Definition:</b> KeywordBlockStartMissing.cpp:12</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a0876cd5c70ce3efd4b14d1cd12c6d512"><div class="ttname"><a href="namespace_isis_1_1_message.html#a0876cd5c70ce3efd4b14d1cd12c6d512">Isis::Message::FileWrite</a></div><div class="ttdeci">QString FileWrite(const QString &amp;filename)</div><div class="ttdoc">This error should be used when an error accrues during a write to a file.</div><div class="ttdef"><b>Definition:</b> FileWrite.cpp:11</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a11464b68ddd63a1d0bc04db72686d952"><div class="ttname"><a href="namespace_isis_1_1_message.html#a11464b68ddd63a1d0bc04db72686d952">Isis::Message::KeywordUnrecognized</a></div><div class="ttdeci">QString KeywordUnrecognized(const QString &amp;key)</div><div class="ttdoc">This error should be used when a supplied keyword for an Isis application parameter does not match an...</div><div class="ttdef"><b>Definition:</b> KeywordUnrecognized.cpp:12</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a1c40323c7f50bb4f713bfa39e95c1cd5"><div class="ttname"><a href="namespace_isis_1_1_message.html#a1c40323c7f50bb4f713bfa39e95c1cd5">Isis::Message::KeywordAmbiguous</a></div><div class="ttdeci">QString KeywordAmbiguous(const QString &amp;key)</div><div class="ttdoc">This error should be used when a supplied keyword for an Isis application parameter does not contain ...</div><div class="ttdef"><b>Definition:</b> KeywordAmbiguous.cpp:11</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a35149089d1dcdd5583a3c28b9e6c202c"><div class="ttname"><a href="namespace_isis_1_1_message.html#a35149089d1dcdd5583a3c28b9e6c202c">Isis::Message::KeywordBlockEndMissing</a></div><div class="ttdeci">QString KeywordBlockEndMissing(const QString &amp;block, const QString &amp;found)</div><div class="ttdoc">This error has been deprecated and should not be used in new code.</div><div class="ttdef"><b>Definition:</b> KeywordBlockEndMissing.cpp:11</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a39466bc3cefb12119e8bc2cfba415e6a"><div class="ttname"><a href="namespace_isis_1_1_message.html#a39466bc3cefb12119e8bc2cfba415e6a">Isis::Message::KeywordValueNotInRange</a></div><div class="ttdeci">QString KeywordValueNotInRange(const QString &amp;key, const QString &amp;value, const QString &amp;range)</div><div class="ttdoc">This error should be used when the value of a supplied keyword is not within a specific range.</div><div class="ttdef"><b>Definition:</b> KeywordValueNotInRange.cpp:12</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a3e3db179a224517c3d1db5281d67c23e"><div class="ttname"><a href="namespace_isis_1_1_message.html#a3e3db179a224517c3d1db5281d67c23e">Isis::Message::ArraySubscriptNotInRange</a></div><div class="ttdeci">QString ArraySubscriptNotInRange(int index)</div><div class="ttdoc">This error should be used when an Isis object or application is checking array bounds and the legal r...</div><div class="ttdef"><b>Definition:</b> ArraySubscriptNotInRange.cpp:31</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a41ec635b0f5e412c360455c48c2e79cb"><div class="ttname"><a href="namespace_isis_1_1_message.html#a41ec635b0f5e412c360455c48c2e79cb">Isis::Message::FileOpen</a></div><div class="ttdeci">QString FileOpen(const QString &amp;filename)</div><div class="ttdoc">This error should be used when a file could not be opened.</div><div class="ttdef"><b>Definition:</b> FileOpen.cpp:11</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a6cf9a02a3a1427b2dd183aee863c2706"><div class="ttname"><a href="namespace_isis_1_1_message.html#a6cf9a02a3a1427b2dd183aee863c2706">Isis::Message::KeywordValueNotInList</a></div><div class="ttdeci">QString KeywordValueNotInList(const QString &amp;key, const QString &amp;value, const std::vector&lt; QString &gt; &amp;list)</div><div class="ttdoc">This error should be used when the value of a supplied keyword is not one of a specific list of possi...</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a74180ce7352f1e2143f2e29d4e9adf7a"><div class="ttname"><a href="namespace_isis_1_1_message.html#a74180ce7352f1e2143f2e29d4e9adf7a">Isis::Message::MissingDelimiter</a></div><div class="ttdeci">QString MissingDelimiter(const char delimiter)</div><div class="ttdoc">This error should be used when a delimiter is missing.</div><div class="ttdef"><b>Definition:</b> MissingDelimiter.cpp:15</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a7a69de37cc02ac13dbf0f78432ca1433"><div class="ttname"><a href="namespace_isis_1_1_message.html#a7a69de37cc02ac13dbf0f78432ca1433">Isis::Message::KeywordValueBad</a></div><div class="ttdeci">QString KeywordValueBad(const QString &amp;key)</div><div class="ttdoc">This error should be used when a supplied keyword does not appear in the list (e.g....</div><div class="ttdef"><b>Definition:</b> KeywordValueBad.cpp:11</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a81ec7fa1fe0ae5bcc1bd0946a85b35a3"><div class="ttname"><a href="namespace_isis_1_1_message.html#a81ec7fa1fe0ae5bcc1bd0946a85b35a3">Isis::Message::KeywordNotFound</a></div><div class="ttdeci">QString KeywordNotFound(const QString &amp;key)</div><div class="ttdoc">This error should be used when a supplied keyword is not defined in the application.</div><div class="ttdef"><b>Definition:</b> KeywordNotFound.cpp:12</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_a8461e0416f3ebb896989280496234e43"><div class="ttname"><a href="namespace_isis_1_1_message.html#a8461e0416f3ebb896989280496234e43">Isis::Message::FileCreate</a></div><div class="ttdeci">QString FileCreate(const QString &amp;filename)</div><div class="ttdoc">This error should be used when a file could not be created.</div><div class="ttdef"><b>Definition:</b> FileCreate.cpp:12</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_ab15f477d96f8c7a9460c1d7e7c2dd8d4"><div class="ttname"><a href="namespace_isis_1_1_message.html#ab15f477d96f8c7a9460c1d7e7c2dd8d4">Isis::Message::FileRead</a></div><div class="ttdeci">QString FileRead(const QString &amp;filename)</div><div class="ttdoc">This error should be used when an error accrues during a read of a file.</div><div class="ttdef"><b>Definition:</b> FileRead.cpp:12</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_add71d86a525223c3eaf16fd79e5cad18"><div class="ttname"><a href="namespace_isis_1_1_message.html#add71d86a525223c3eaf16fd79e5cad18">Isis::Message::KeywordNotArray</a></div><div class="ttdeci">QString KeywordNotArray(const QString &amp;key)</div><div class="ttdoc">This error should be used when a supplied keyword is being used as an array (i.e.,...</div><div class="ttdef"><b>Definition:</b> KeywordNotArray.cpp:12</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_ae0f312e6dae4d74c883394a27051d65a"><div class="ttname"><a href="namespace_isis_1_1_message.html#ae0f312e6dae4d74c883394a27051d65a">Isis::Message::MemoryAllocationFailed</a></div><div class="ttdeci">QString MemoryAllocationFailed()</div><div class="ttdoc">This error should be used when an error accrues during a memory allocation such as &quot;new&quot;.</div><div class="ttdef"><b>Definition:</b> MemoryAllocationFailed.cpp:12</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_ae535ec14ebc6b81561e318432bfacfd0"><div class="ttname"><a href="namespace_isis_1_1_message.html#ae535ec14ebc6b81561e318432bfacfd0">Isis::Message::KeywordBlockInvalid</a></div><div class="ttdeci">QString KeywordBlockInvalid(const QString &amp;block)</div><div class="ttdoc">This error has been deprecated and should not be used in new code.</div><div class="ttdef"><b>Definition:</b> KeywordBlockInvalid.cpp:12</div></div>
+<div class="ttc" id="anamespace_isis_1_1_message_html_afe3288cd60c1d7d4d3a736e076fccbaa"><div class="ttname"><a href="namespace_isis_1_1_message.html#afe3288cd60c1d7d4d3a736e076fccbaa">Isis::Message::KeywordDuplicated</a></div><div class="ttdeci">QString KeywordDuplicated(const QString &amp;key)</div><div class="ttdoc">This error should be used when a supplied keyword for an Isis application parameter is the same as on...</div><div class="ttdef"><b>Definition:</b> KeywordDuplicated.cpp:12</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_e16f78b7facbf2e926442d7cde29052f.html">Message</a></li><li class="navelem"><a class="el" href="_message_8h.html">Message.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

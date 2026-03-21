@@ -1,0 +1,5 @@
+<map id="Isis::VimsCamera" name="Isis::VimsCamera">
+<area shape="rect" id="node1" title="Cassini Vims camera model." alt="" coords="46,824,183,1001"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_camera.html" title=" " alt="" coords="5,311,224,776"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_sensor.html" title="Class for computing sensor ground coordinates." alt="" coords="5,5,224,263"/>
+</map>

@@ -1,0 +1,22 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Table,Low Level Cube I/O,isis/src/base/objs/Table/Table.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,需注意内存生命周期与数据视图映射
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Table,isis_pybind.Table,Y,Python class symbol is exported; 需注意内存生命周期与数据视图映射
+Construction/Enum,"Association enum (None, Samples, Lines, Bands)",isis_pybind.Table.Association,N,需注意内存生命周期与数据视图映射
+Construction/Enum,Table(),isis_pybind.Table(),Y,Constructor is explicitly bound
+Read/Write IO,void Write(const QString &file),isis_pybind.Table.write,N,需注意内存生命周期与数据视图映射
+Public API,QString Name() const,isis_pybind.Table.name,N,需注意内存生命周期与数据视图映射
+Public API,PvlObject &Label(),isis_pybind.Table.label,N,需注意内存生命周期与数据视图映射
+Mutation/Configuration,void SetAssociation(const Table::Association assoc),isis_pybind.Table.set_association,N,需注意内存生命周期与数据视图映射
+Query,bool IsSampleAssociated(),isis_pybind.Table.is_sample_associated,N,需注意内存生命周期与数据视图映射
+Query,bool IsLineAssociated(),isis_pybind.Table.is_line_associated,N,需注意内存生命周期与数据视图映射
+Query,bool IsBandAssociated(),isis_pybind.Table.is_band_associated,N,需注意内存生命周期与数据视图映射
+Public API,int Records() const,isis_pybind.Table.records,N,需注意内存生命周期与数据视图映射
+Public API,int RecordFields() const,isis_pybind.Table.record_fields,N,需注意内存生命周期与数据视图映射
+Public API,int RecordSize() const,isis_pybind.Table.record_size,N,需注意内存生命周期与数据视图映射
+Public API,"void Update(const TableRecord &rec, const int index)",isis_pybind.Table.update,N,需注意内存生命周期与数据视图映射
+Mutation/Configuration,void Delete(const int index),isis_pybind.Table.delete,N,需注意内存生命周期与数据视图映射
+Mutation/Configuration,void Clear(),isis_pybind.Table.clear,N,需注意内存生命周期与数据视图映射
+Public API,Blob toBlob() const,isis_pybind.Table.to_blob,N,需注意内存生命周期与数据视图映射
+Static/Factory,"static QString toString(Table table, QString fieldDelimiter="","")",isis_pybind.Table.to_string,N,需注意内存生命周期与数据视图映射

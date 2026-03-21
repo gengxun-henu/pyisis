@@ -1,0 +1,11 @@
+<map id="IsisParameterData" name="IsisParameterData">
+<area shape="rect" id="node1" title=" " alt="" coords="512,777,670,939"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,392,174,473"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_cube_attribute_output.html" title="Manipulate and parse attributes of output cube filenames." alt="" coords="197,312,406,553"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_cube_attribute.html" title=" " alt="" coords="219,5,384,263"/>
+<area shape="rect" id="node5" title=" " alt="" coords="430,392,619,473"/>
+<area shape="rect" id="node6" title=" " alt="" coords="644,392,709,473"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_cube_attribute_input.html" title="Manipulate and parse attributes of input cube filenames." alt="" coords="733,352,892,513"/>
+<area shape="rect" id="node8" href="$class_isis_1_1_cube_attribute.html" title=" " alt="" coords="735,5,889,263"/>
+<area shape="rect" id="node9" title=" " alt="" coords="916,392,1042,473"/>
+</map>

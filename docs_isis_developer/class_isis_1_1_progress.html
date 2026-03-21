@@ -1,0 +1,567 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Progress Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_progress.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_progress-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Progress Class Reference<div class="ingroups"><a class="el" href="group___application_interface.html">Application Interface</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Program progress reporter.  
+ <a href="class_isis_1_1_progress.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_progress_8h_source.html">Progress.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::Progress:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_progress__coll__graph.png" border="0" usemap="#a_isis_1_1_progress_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_progress_coll__map" id="a_isis_1_1_progress_coll__map">
+<area shape="rect" title="Program progress reporter." alt="" coords="5,5,194,231"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a7f4e685e0c76766b4705545c06896d91"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_progress.html#a7f4e685e0c76766b4705545c06896d91">Progress</a> ()</td></tr>
+<tr class="memdesc:a7f4e685e0c76766b4705545c06896d91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_progress.html" title="Program progress reporter.">Progress</a> object.  <a href="class_isis_1_1_progress.html#a7f4e685e0c76766b4705545c06896d91">More...</a><br /></td></tr>
+<tr class="separator:a7f4e685e0c76766b4705545c06896d91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e34c9ebe75d40fb06f88f5efa5c2006"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_progress.html#a6e34c9ebe75d40fb06f88f5efa5c2006">~Progress</a> ()</td></tr>
+<tr class="memdesc:a6e34c9ebe75d40fb06f88f5efa5c2006"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_isis_1_1_progress.html" title="Program progress reporter.">Progress</a> object.  <a href="class_isis_1_1_progress.html#a6e34c9ebe75d40fb06f88f5efa5c2006">More...</a><br /></td></tr>
+<tr class="separator:a6e34c9ebe75d40fb06f88f5efa5c2006"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ad047499caadad1e09cf75dadb2a939"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_progress.html#a9ad047499caadad1e09cf75dadb2a939">SetText</a> (const QString &amp;text)</td></tr>
+<tr class="memdesc:a9ad047499caadad1e09cf75dadb2a939"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the value of the text string reported just before 0% processed.  <a href="class_isis_1_1_progress.html#a9ad047499caadad1e09cf75dadb2a939">More...</a><br /></td></tr>
+<tr class="separator:a9ad047499caadad1e09cf75dadb2a939"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2a2bd353c138db8c7f5b3e7d08a1c34"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_progress.html#ad2a2bd353c138db8c7f5b3e7d08a1c34">Text</a> () const</td></tr>
+<tr class="memdesc:ad2a2bd353c138db8c7f5b3e7d08a1c34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the text to output.  <a href="class_isis_1_1_progress.html#ad2a2bd353c138db8c7f5b3e7d08a1c34">More...</a><br /></td></tr>
+<tr class="separator:ad2a2bd353c138db8c7f5b3e7d08a1c34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92481afe73aa26bbe32967d80426b446"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_progress.html#a92481afe73aa26bbe32967d80426b446">SetMaximumSteps</a> (const int steps)</td></tr>
+<tr class="memdesc:a92481afe73aa26bbe32967d80426b446"><td class="mdescLeft">&#160;</td><td class="mdescRight">This sets the maximum number of steps in the process.  <a href="class_isis_1_1_progress.html#a92481afe73aa26bbe32967d80426b446">More...</a><br /></td></tr>
+<tr class="separator:a92481afe73aa26bbe32967d80426b446"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3af617a61efa731205b9adc52d611811"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_progress.html#a3af617a61efa731205b9adc52d611811">AddSteps</a> (const int steps)</td></tr>
+<tr class="memdesc:a3af617a61efa731205b9adc52d611811"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the initial step size was a guess, it can be modified using this method.  <a href="class_isis_1_1_progress.html#a3af617a61efa731205b9adc52d611811">More...</a><br /></td></tr>
+<tr class="separator:a3af617a61efa731205b9adc52d611811"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec4f8e7686cc25be05c8fccc78743ce6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_progress.html#aec4f8e7686cc25be05c8fccc78743ce6">CheckStatus</a> ()</td></tr>
+<tr class="memdesc:aec4f8e7686cc25be05c8fccc78743ce6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks and updates the status.  <a href="class_isis_1_1_progress.html#aec4f8e7686cc25be05c8fccc78743ce6">More...</a><br /></td></tr>
+<tr class="separator:aec4f8e7686cc25be05c8fccc78743ce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa16861ae5dcc011caec28a98d2745c54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_progress.html#aa16861ae5dcc011caec28a98d2745c54">DisableAutomaticDisplay</a> ()</td></tr>
+<tr class="memdesc:aa16861ae5dcc011caec28a98d2745c54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns off updating the <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> <a class="el" href="class_isis_1_1_gui.html" title="Gui for Isis Applications.">Gui</a> when <a class="el" href="class_isis_1_1_progress.html#aec4f8e7686cc25be05c8fccc78743ce6" title="Checks and updates the status.">CheckStatus()</a> is called.  <a href="class_isis_1_1_progress.html#aa16861ae5dcc011caec28a98d2745c54">More...</a><br /></td></tr>
+<tr class="separator:aa16861ae5dcc011caec28a98d2745c54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bbe31814bb46da3718e0c2419c18698"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_progress.html#a7bbe31814bb46da3718e0c2419c18698">MaximumSteps</a> () const</td></tr>
+<tr class="memdesc:a7bbe31814bb46da3718e0c2419c18698"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum number of steps of the progress.  <a href="class_isis_1_1_progress.html#a7bbe31814bb46da3718e0c2419c18698">More...</a><br /></td></tr>
+<tr class="separator:a7bbe31814bb46da3718e0c2419c18698"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedeb549a0ad063c9100c46b639d8299b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_progress.html#aedeb549a0ad063c9100c46b639d8299b">CurrentStep</a> () const</td></tr>
+<tr class="memdesc:aedeb549a0ad063c9100c46b639d8299b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current step of the progress.  <a href="class_isis_1_1_progress.html#aedeb549a0ad063c9100c46b639d8299b">More...</a><br /></td></tr>
+<tr class="separator:aedeb549a0ad063c9100c46b639d8299b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Program progress reporter. </p>
+<p>This class is used to output the percent completion for programs in either the command line mode or the graphical user interface. Generally, this object is created within a <a class="el" href="class_isis_1_1_process.html" title="Base class for all cube processing derivatives.">Process</a> derived class. Therefore you should only use this object if you are developing such a class.</p>
+<dl class="section author"><dt>Author</dt><dd>2002-05-22 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a7f4e685e0c76766b4705545c06896d91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f4e685e0c76766b4705545c06896d91">&#9670;&nbsp;</a></span>Progress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Progress::Progress </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_progress.html" title="Program progress reporter.">Progress</a> object. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::User</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">Isis::PvlObject::findGroup()</a>, and <a class="el" href="class_isis_1_1_preference.html#adf0ccf180777271a0f82d80f157b62e5">Isis::Preference::Preferences()</a>.</p>
+
+</div>
+</div>
+<a id="a6e34c9ebe75d40fb06f88f5efa5c2006"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e34c9ebe75d40fb06f88f5efa5c2006">&#9670;&nbsp;</a></span>~Progress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Progress::~Progress </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys the <a class="el" href="class_isis_1_1_progress.html" title="Program progress reporter.">Progress</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3af617a61efa731205b9adc52d611811"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3af617a61efa731205b9adc52d611811">&#9670;&nbsp;</a></span>AddSteps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Progress::AddSteps </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>steps</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If the initial step size was a guess, it can be modified using this method. </p>
+<p>For example, if you SetMaximumSteps(11) then call AddSteps(1) then the new MaximumSteps is 12. The progress bar will not go backwards (it will not drop from 10% to 5%). "steps" can be negative to remove steps.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">steps</td><td>Amount to adjust the MaximumSteps by </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_overlap_set.html#a1fbfce4b2fbb5732e81de7c851086738">Isis::ImageOverlapSet::FindAllOverlaps()</a>, and <a class="el" href="class_isis_1_1_overlap_statistics.html#a934767f7973826f8c93bf85d7acea085">Isis::OverlapStatistics::OverlapStatistics()</a>.</p>
+
+</div>
+</div>
+<a id="aec4f8e7686cc25be05c8fccc78743ce6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec4f8e7686cc25be05c8fccc78743ce6">&#9670;&nbsp;</a></span>CheckStatus()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Progress::CheckStatus </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks and updates the status. </p>
+<p>The first time this is invoked, it outputs the text from SetText and 0% processed. It should then be invoked for each step, for example, a step could be considered processing a line for NL lines in the image. If you do not call this enough times you will not reached 100% processed.</p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>Step exceeds maximumSteps </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#a3bc340cc5b7917a414f93589545c25f1">Isis::iApp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_process.html#ab88ff5f5f018293e5cbda0b63e164fd9">Isis::Process::CalculateStatistics()</a>, <a class="el" href="class_isis_1_1_ground_grid.html#aeedd06a92ce0ceb1146e528ac95d8465">Isis::GroundGrid::CreateGrid()</a>, <a class="el" href="class_isis_1_1_image_overlap_set.html#a1fbfce4b2fbb5732e81de7c851086738">Isis::ImageOverlapSet::FindAllOverlaps()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, <a class="el" href="class_isis_1_1_control_net_statistics.html#acd99f93f2ce89dda684348a9e184c287">Isis::ControlNetStatistics::GenerateImageStats()</a>, <a class="el" href="class_isis_1_1_control_net_statistics.html#ae1d96381693c71d6687af01128e8cc8f">Isis::ControlNetStatistics::GeneratePointStats()</a>, <a class="el" href="class_isis_1_1_cube.html#a0e3d72d18bf88bd339fcda48bbbf9dfb">Isis::Cube::histogram()</a>, <a class="el" href="class_isis_1_1_image_histogram.html#ab30707570c740ce27e383caeae6ff26d">Isis::ImageHistogram::ImageHistogram()</a>, <a class="el" href="class_isis_1_1_overlap_statistics.html#a934767f7973826f8c93bf85d7acea085">Isis::OverlapStatistics::OverlapStatistics()</a>, <a class="el" href="class_isis_1_1_process_import.html#abefdcac3bfe57f63d7b35da530d2fe42">Isis::ProcessImport::ProcessBil()</a>, <a class="el" href="class_isis_1_1_process_import.html#a678737c1f1c474913a878bb195b75877">Isis::ProcessImport::ProcessBip()</a>, <a class="el" href="class_isis_1_1_process_import.html#acc81f9f1c5ef5689353bfe4e03b0c59e">Isis::ProcessImport::ProcessBsq()</a>, <a class="el" href="class_isis_1_1_process_export.html#a70746f732c7afcaede2bc9bce6ee486b">Isis::ProcessExport::ProcessCubes()</a>, <a class="el" href="class_isis_1_1_process_import.html#a80eaaaa267290118495e549f479a36d6">Isis::ProcessImport::ProcessJp2()</a>, <a class="el" href="class_isis_1_1_control_net.html#a3e4c639e8f2f839bd15652a2144f4988">Isis::ControlNet::ReadControl()</a>, <a class="el" href="class_isis_1_1_pipeline.html#a0993d1de8234090e65998fdfff71beaf">Isis::Pipeline::Run()</a>, <a class="el" href="class_isis_1_1_serial_number_list.html#a7c980594419c6fcc70b911390d6f7a07">Isis::SerialNumberList::SerialNumberList()</a>, <a class="el" href="class_isis_1_1_lidar_data.html#a66d7bd20a4ff5c9275ea65603b4660aa">Isis::LidarData::SetImages()</a>, <a class="el" href="class_isis_1_1_control_net.html#a64311223a6bcad08b30b2dfde920fd8c">Isis::ControlNet::SetImages()</a>, <a class="el" href="class_isis_1_1_process_export.html#aa86c084ff4f8ae00c3684fbdc4131096">Isis::ProcessExport::StartProcess()</a>, <a class="el" href="class_isis_1_1_process_by_quick_filter.html#a0bf1c0a36089cd733325efbfdb129ca1">Isis::ProcessByQuickFilter::StartProcess()</a>, and <a class="el" href="class_isis_1_1_cube.html#a5f9009bc9b325c019adac91edf2c4424">Isis::Cube::statistics()</a>.</p>
+
+</div>
+</div>
+<a id="aedeb549a0ad063c9100c46b639d8299b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedeb549a0ad063c9100c46b639d8299b">&#9670;&nbsp;</a></span>CurrentStep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Progress::CurrentStep </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the current step of the progress. </p>
+<p>This value should always be in the range of: [0, <a class="el" href="class_isis_1_1_progress.html#a7bbe31814bb46da3718e0c2419c18698" title="Returns the maximum number of steps of the progress.">MaximumSteps()</a>]. <a class="el" href="class_isis_1_1_progress.html#aec4f8e7686cc25be05c8fccc78743ce6" title="Checks and updates the status.">CheckStatus()</a> increments the current step.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_progress.html#aec4f8e7686cc25be05c8fccc78743ce6" title="Checks and updates the status.">CheckStatus()</a></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The current step of the progress </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_import_control_net_work_order.html#a1b0f8704a007f63ee3784ce18302b1c1">Isis::ImportControlNetWorkOrder::execute()</a>.</p>
+
+</div>
+</div>
+<a id="aa16861ae5dcc011caec28a98d2745c54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa16861ae5dcc011caec28a98d2745c54">&#9670;&nbsp;</a></span>DisableAutomaticDisplay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Progress::DisableAutomaticDisplay </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Turns off updating the <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> <a class="el" href="class_isis_1_1_gui.html" title="Gui for Isis Applications.">Gui</a> when <a class="el" href="class_isis_1_1_progress.html#aec4f8e7686cc25be05c8fccc78743ce6" title="Checks and updates the status.">CheckStatus()</a> is called. </p>
+<p>You must use RedrawProgress() to visually update the current progress. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_import_control_net_work_order.html#a1b0f8704a007f63ee3784ce18302b1c1">Isis::ImportControlNetWorkOrder::execute()</a>.</p>
+
+</div>
+</div>
+<a id="a7bbe31814bb46da3718e0c2419c18698"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bbe31814bb46da3718e0c2419c18698">&#9670;&nbsp;</a></span>MaximumSteps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Progress::MaximumSteps </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the maximum number of steps of the progress. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_progress.html#a92481afe73aa26bbe32967d80426b446" title="This sets the maximum number of steps in the process.">SetMaximumSteps()</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The maximum number of steps of the progress. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_import_control_net_work_order.html#a1b0f8704a007f63ee3784ce18302b1c1">Isis::ImportControlNetWorkOrder::execute()</a>.</p>
+
+</div>
+</div>
+<a id="a92481afe73aa26bbe32967d80426b446"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92481afe73aa26bbe32967d80426b446">&#9670;&nbsp;</a></span>SetMaximumSteps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Progress::SetMaximumSteps </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>steps</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This sets the maximum number of steps in the process. </p>
+<p>Whenever this is invoked it also resets the counters to their initial states. This allows for programs which have multiple steps.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">steps</td><td>Maximum number of steps</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>Invalid value for step (must be &gt;0) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_process.html#ab88ff5f5f018293e5cbda0b63e164fd9">Isis::Process::CalculateStatistics()</a>, <a class="el" href="class_isis_1_1_ground_grid.html#aeedd06a92ce0ceb1146e528ac95d8465">Isis::GroundGrid::CreateGrid()</a>, <a class="el" href="class_isis_1_1_image_overlap_set.html#a1fbfce4b2fbb5732e81de7c851086738">Isis::ImageOverlapSet::FindAllOverlaps()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, <a class="el" href="class_isis_1_1_control_net_statistics.html#acd99f93f2ce89dda684348a9e184c287">Isis::ControlNetStatistics::GenerateImageStats()</a>, <a class="el" href="class_isis_1_1_control_net_statistics.html#ae1d96381693c71d6687af01128e8cc8f">Isis::ControlNetStatistics::GeneratePointStats()</a>, <a class="el" href="class_isis_1_1_cube.html#a0e3d72d18bf88bd339fcda48bbbf9dfb">Isis::Cube::histogram()</a>, <a class="el" href="class_isis_1_1_image_histogram.html#ab30707570c740ce27e383caeae6ff26d">Isis::ImageHistogram::ImageHistogram()</a>, <a class="el" href="class_isis_1_1_overlap_statistics.html#a934767f7973826f8c93bf85d7acea085">Isis::OverlapStatistics::OverlapStatistics()</a>, <a class="el" href="class_isis_1_1_process_import.html#abefdcac3bfe57f63d7b35da530d2fe42">Isis::ProcessImport::ProcessBil()</a>, <a class="el" href="class_isis_1_1_process_import.html#a678737c1f1c474913a878bb195b75877">Isis::ProcessImport::ProcessBip()</a>, <a class="el" href="class_isis_1_1_process_import.html#acc81f9f1c5ef5689353bfe4e03b0c59e">Isis::ProcessImport::ProcessBsq()</a>, <a class="el" href="class_isis_1_1_process_import.html#a80eaaaa267290118495e549f479a36d6">Isis::ProcessImport::ProcessJp2()</a>, <a class="el" href="class_isis_1_1_control_net.html#a3e4c639e8f2f839bd15652a2144f4988">Isis::ControlNet::ReadControl()</a>, <a class="el" href="class_isis_1_1_pipeline.html#a0993d1de8234090e65998fdfff71beaf">Isis::Pipeline::Run()</a>, <a class="el" href="class_isis_1_1_serial_number_list.html#a7c980594419c6fcc70b911390d6f7a07">Isis::SerialNumberList::SerialNumberList()</a>, <a class="el" href="class_isis_1_1_lidar_data.html#a66d7bd20a4ff5c9275ea65603b4660aa">Isis::LidarData::SetImages()</a>, <a class="el" href="class_isis_1_1_control_net.html#a64311223a6bcad08b30b2dfde920fd8c">Isis::ControlNet::SetImages()</a>, <a class="el" href="class_isis_1_1_process_by_quick_filter.html#a0bf1c0a36089cd733325efbfdb129ca1">Isis::ProcessByQuickFilter::StartProcess()</a>, and <a class="el" href="class_isis_1_1_cube.html#a5f9009bc9b325c019adac91edf2c4424">Isis::Cube::statistics()</a>.</p>
+
+</div>
+</div>
+<a id="a9ad047499caadad1e09cf75dadb2a939"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ad047499caadad1e09cf75dadb2a939">&#9670;&nbsp;</a></span>SetText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Progress::SetText </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Changes the value of the text string reported just before 0% processed. </p>
+<p>This text is only output under the following condition. After SetMaximumSteps is called, the first call to CheckStatus will immediately output the text. By default this is set to "Working".</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">text</td><td>Text to output. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_equalization.html#a4d71e4fa1bf1b36b9424c25a8a88c3a9">Isis::Equalization::applyCorrection()</a>, <a class="el" href="class_isis_1_1_equalization.html#a012d79d566ff7aa8d981db3fa9ba9782">Isis::Equalization::calculateBandStatistics()</a>, <a class="el" href="class_isis_1_1_process.html#ab88ff5f5f018293e5cbda0b63e164fd9">Isis::Process::CalculateStatistics()</a>, <a class="el" href="class_isis_1_1_hi_equalization.html#a6cc97d8cd3a9752f03c69cbed1522f4e">Isis::HiEqualization::calculateStatistics()</a>, <a class="el" href="class_isis_1_1_image_overlap_set.html#a1fbfce4b2fbb5732e81de7c851086738">Isis::ImageOverlapSet::FindAllOverlaps()</a>, <a class="el" href="class_isis_1_1_interest_operator.html#a97a5875b4bbad3b2a17ceb787f09caf9">Isis::InterestOperator::FindCnetRef()</a>, <a class="el" href="class_isis_1_1_control_net_statistics.html#acd99f93f2ce89dda684348a9e184c287">Isis::ControlNetStatistics::GenerateImageStats()</a>, <a class="el" href="class_isis_1_1_control_net_statistics.html#ae1d96381693c71d6687af01128e8cc8f">Isis::ControlNetStatistics::GeneratePointStats()</a>, <a class="el" href="class_isis_1_1_cube.html#a0e3d72d18bf88bd339fcda48bbbf9dfb">Isis::Cube::histogram()</a>, <a class="el" href="class_isis_1_1_image_histogram.html#ab30707570c740ce27e383caeae6ff26d">Isis::ImageHistogram::ImageHistogram()</a>, <a class="el" href="class_isis_1_1_hi_cal_data.html#a8b240dc1321486fa2b8601f1ae2611e0">Isis::HiCalData::load()</a>, <a class="el" href="class_isis_1_1_overlap_statistics.html#a934767f7973826f8c93bf85d7acea085">Isis::OverlapStatistics::OverlapStatistics()</a>, <a class="el" href="class_isis_1_1_process_export.html#ac0cacaf73c35a5008d880f8860c2f688">Isis::ProcessExport::ProcessExport()</a>, <a class="el" href="class_isis_1_1_process_import.html#a2eb2b6158628a5a51962e21d7fc697e1">Isis::ProcessImport::ProcessImport()</a>, <a class="el" href="class_isis_1_1_control_net.html#a3e4c639e8f2f839bd15652a2144f4988">Isis::ControlNet::ReadControl()</a>, <a class="el" href="class_isis_1_1_process_map_mosaic.html#a1c4438e131dcf36a90e74b4d5243406f">Isis::ProcessMapMosaic::RingsSetOutputCube()</a>, <a class="el" href="class_isis_1_1_pipeline.html#a0993d1de8234090e65998fdfff71beaf">Isis::Pipeline::Run()</a>, <a class="el" href="class_isis_1_1_serial_number_list.html#a7c980594419c6fcc70b911390d6f7a07">Isis::SerialNumberList::SerialNumberList()</a>, <a class="el" href="class_isis_1_1_lidar_data.html#a66d7bd20a4ff5c9275ea65603b4660aa">Isis::LidarData::SetImages()</a>, <a class="el" href="class_isis_1_1_control_net.html#a64311223a6bcad08b30b2dfde920fd8c">Isis::ControlNet::SetImages()</a>, <a class="el" href="class_isis_1_1_process_map_mosaic.html#af1ecb0af50d768c969bdf0194765f2ad">Isis::ProcessMapMosaic::SetOutputCube()</a>, <a class="el" href="class_isis_1_1_spectral_definition2_d.html#a34f0ab3a6463a8812b53fa9f5e3616c2">Isis::SpectralDefinition2D::SpectralDefinition2D()</a>, <a class="el" href="class_isis_1_1_process_map_mosaic.html#a563612b295d62206b3e322900252f3ef">Isis::ProcessMapMosaic::StartProcess()</a>, and <a class="el" href="class_isis_1_1_cube.html#a5f9009bc9b325c019adac91edf2c4424">Isis::Cube::statistics()</a>.</p>
+
+</div>
+</div>
+<a id="ad2a2bd353c138db8c7f5b3e7d08a1c34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2a2bd353c138db8c7f5b3e7d08a1c34">&#9670;&nbsp;</a></span>Text()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Progress::Text </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the text to output. </p>
+<p>Generally, this in not needed except rare circumstances where an application has multiple steps and the text string needs to be saved and restored.</p>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Progress/<a class="el" href="_progress_8h_source.html">Progress.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Progress/<a class="el" href="_progress_8cpp.html">Progress.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_progress.html">Progress</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

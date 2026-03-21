@@ -1,0 +1,12 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+SplineFill,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/SplineFill.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,SplineFill,isis_pybind.SplineFill,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,"SplineFill() : Module(""SplineFill""), _filled(0) { }",isis_pybind.SplineFill(),N,抽象基类/纯虚接口
+Construction/Enum,"SplineFill(const Module &c) : Module(""SplineFill"", c), _filled(0) { fill(c.ref())",isis_pybind.SplineFill(),N,抽象基类/纯虚接口
+Construction/Enum,"SplineFill(const HiVector &v) : Module(""SplineFill""), _filled(0) { fill(v)",isis_pybind.SplineFill(),N,抽象基类/纯虚接口
+Construction/Enum,"SplineFill(const HiVector &v, const HiHistory &h) : Module(""SplineFill"", h), _filled(0) { fill(v)",isis_pybind.SplineFill(),N,抽象基类/纯虚接口
+Public API,void Process(const HiVector &v) { fill(v),isis_pybind.SplineFill.process,N,抽象基类/纯虚接口
+Mutation/Configuration,_history.clear(),isis_pybind.SplineFill.clear,N,抽象基类/纯虚接口
+Public API,inline int Filled() const { return (_filled); },isis_pybind.SplineFill.filled,N,抽象基类/纯虚接口

@@ -1,0 +1,25 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+NonLinearLSQ,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/NonLinearLSQ.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,NonLinearLSQ,isis_pybind.NonLinearLSQ,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Construction/Enum,"NonLinearLSQ() : _fitParms(), _uncert(), _nIters(0), _maxIters(50), _status(0), _userTerminated(false), _userMessage() {}",isis_pybind.NonLinearLSQ(),N,抽象基类/纯虚接口
+Public API,virtual int nSize() const = 0,isis_pybind.NonLinearLSQ.n_size,N,抽象基类/纯虚接口
+Public API,virtual int nParms() const = 0,isis_pybind.NonLinearLSQ.n_parms,N,抽象基类/纯虚接口
+Mutation/Configuration,void setMaxIters(int m) { _maxIters = m; },isis_pybind.NonLinearLSQ.set_max_iters,N,抽象基类/纯虚接口
+Public API,int maxIters() const { return (_maxIters); },isis_pybind.NonLinearLSQ.max_iters,N,抽象基类/纯虚接口
+Public API,virtual NLVector guess() = 0,isis_pybind.NonLinearLSQ.guess,N,抽象基类/纯虚接口
+Public API,virtual NLVector f_x(const NLVector &x) = 0,isis_pybind.NonLinearLSQ.f_x,N,抽象基类/纯虚接口
+Public API,virtual NLMatrix df_x(const NLVector &x) = 0,isis_pybind.NonLinearLSQ.df_x,N,抽象基类/纯虚接口
+Public API,virtual double absErr() const { return (1.0E-4); },isis_pybind.NonLinearLSQ.abs_err,N,抽象基类/纯虚接口
+Public API,virtual double relErr() const { return (1.0E-4); },isis_pybind.NonLinearLSQ.rel_err,N,抽象基类/纯虚接口
+Public API,int curvefit(),isis_pybind.NonLinearLSQ.curvefit,N,抽象基类/纯虚接口
+Public API,inline int status() const { return (_status); },isis_pybind.NonLinearLSQ.status,N,抽象基类/纯虚接口
+Public API,inline bool success() const { return (_status == GSL_SUCCESS); },isis_pybind.NonLinearLSQ.success,N,抽象基类/纯虚接口
+Public API,inline bool success(int status) const { return (status == GSL_SUCCESS); },isis_pybind.NonLinearLSQ.success,N,抽象基类/纯虚接口
+Public API,inline std::string statusstr() const { return (std::string(gsl_strerror(_status))),isis_pybind.NonLinearLSQ.statusstr,N,抽象基类/纯虚接口
+Public API,inline std::string statusstr(int status) const { return (std::string(gsl_strerror(status))),isis_pybind.NonLinearLSQ.statusstr,N,抽象基类/纯虚接口
+Public API,"virtual int checkIteration(const int Iter, const NLVector &fitcoefs, const NLVector &uncerts, double cplxconj, int Istatus) { return (Istatus)",isis_pybind.NonLinearLSQ.check_iteration,N,抽象基类/纯虚接口
+Public API,inline NLVector coefs() const { return (_fitParms); },isis_pybind.NonLinearLSQ.coefs,N,抽象基类/纯虚接口
+Public API,inline NLVector uncert() const { return (_uncert); },isis_pybind.NonLinearLSQ.uncert,N,抽象基类/纯虚接口
+Public API,inline int nIterations() const { return (_nIters); },isis_pybind.NonLinearLSQ.n_iterations,N,抽象基类/纯虚接口

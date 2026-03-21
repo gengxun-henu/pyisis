@@ -1,0 +1,547 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::SurfaceModel Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_surface_model.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_surface_model-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::SurfaceModel Class Reference<div class="ingroups"><a class="el" href="group___math.html">Math</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Model a 3-D surface.  
+ <a href="class_isis_1_1_surface_model.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_surface_model_8h_source.html">SurfaceModel.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::SurfaceModel:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_surface_model__coll__graph.png" border="0" usemap="#a_isis_1_1_surface_model_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_surface_model_coll__map" id="a_isis_1_1_surface_model_coll__map">
+<area shape="rect" title="Model a 3&#45;D surface." alt="" coords="5,5,136,199"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a2db439a771a20ab4e032e7e22b9d7602"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_surface_model.html#a2db439a771a20ab4e032e7e22b9d7602">SurfaceModel</a> ()</td></tr>
+<tr class="memdesc:a2db439a771a20ab4e032e7e22b9d7602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_isis_1_1_surface_model.html#a2db439a771a20ab4e032e7e22b9d7602">More...</a><br /></td></tr>
+<tr class="separator:a2db439a771a20ab4e032e7e22b9d7602"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a299fd7df98814c60c84cdec6d77f8452"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_surface_model.html#a299fd7df98814c60c84cdec6d77f8452">~SurfaceModel</a> ()</td></tr>
+<tr class="memdesc:a299fd7df98814c60c84cdec6d77f8452"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_surface_model.html#a299fd7df98814c60c84cdec6d77f8452">More...</a><br /></td></tr>
+<tr class="separator:a299fd7df98814c60c84cdec6d77f8452"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23bbc2ab50e8ad8604a69b635b541c0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_surface_model.html#a23bbc2ab50e8ad8604a69b635b541c0d">AddTriplet</a> (const double x, const double y, const double z)</td></tr>
+<tr class="memdesc:a23bbc2ab50e8ad8604a69b635b541c0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a single (x,y,z) triplet to the list of knowns. After all knowns are added invoke the Solve method.  <a href="class_isis_1_1_surface_model.html#a23bbc2ab50e8ad8604a69b635b541c0d">More...</a><br /></td></tr>
+<tr class="separator:a23bbc2ab50e8ad8604a69b635b541c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab64b417405cdcc6a4625091ecd146d09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_surface_model.html#ab64b417405cdcc6a4625091ecd146d09">AddTriplets</a> (const double *x, const double *y, const double *z, const int n)</td></tr>
+<tr class="memdesc:ab64b417405cdcc6a4625091ecd146d09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an array of (x,y,z) triplet to the list of knowns After all knowns are added invoke the Solve method.  <a href="class_isis_1_1_surface_model.html#ab64b417405cdcc6a4625091ecd146d09">More...</a><br /></td></tr>
+<tr class="separator:ab64b417405cdcc6a4625091ecd146d09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a596d9028b5956def37cde6aedd4d23ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_surface_model.html#a596d9028b5956def37cde6aedd4d23ed">AddTriplets</a> (const std::vector&lt; double &gt; &amp;x, const std::vector&lt; double &gt; &amp;y, const std::vector&lt; double &gt; &amp;z)</td></tr>
+<tr class="memdesc:a596d9028b5956def37cde6aedd4d23ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an array of (x,y,z) triplet to the list of knowns After all knowns are added invoke the Solve method.  <a href="class_isis_1_1_surface_model.html#a596d9028b5956def37cde6aedd4d23ed">More...</a><br /></td></tr>
+<tr class="separator:a596d9028b5956def37cde6aedd4d23ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ebbdbdc7b5fc4aded0c07f421a92b6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_surface_model.html#a8ebbdbdc7b5fc4aded0c07f421a92b6b">Solve</a> ()</td></tr>
+<tr class="memdesc:a8ebbdbdc7b5fc4aded0c07f421a92b6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fit a surface to the input triplets.  <a href="class_isis_1_1_surface_model.html#a8ebbdbdc7b5fc4aded0c07f421a92b6b">More...</a><br /></td></tr>
+<tr class="separator:a8ebbdbdc7b5fc4aded0c07f421a92b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae679afaa99872b5ae591dd119ed1d639"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_surface_model.html#ae679afaa99872b5ae591dd119ed1d639">Evaluate</a> (const double x, const double y)</td></tr>
+<tr class="memdesc:ae679afaa99872b5ae591dd119ed1d639"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate at x,y to compute z. This is available after the Solve method is invoked.  <a href="class_isis_1_1_surface_model.html#ae679afaa99872b5ae591dd119ed1d639">More...</a><br /></td></tr>
+<tr class="separator:ae679afaa99872b5ae591dd119ed1d639"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fc17f2b543556efc6a3bdbc4619b48d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_surface_model.html#a5fc17f2b543556efc6a3bdbc4619b48d">MinMax</a> (double &amp;x, double &amp;y)</td></tr>
+<tr class="memdesc:a5fc17f2b543556efc6a3bdbc4619b48d"><td class="mdescLeft">&#160;</td><td class="mdescRight">After invoking Solve, a coordinate (x,y) at a local minimum (or maximum) of the surface model can be computed using this method.  <a href="class_isis_1_1_surface_model.html#a5fc17f2b543556efc6a3bdbc4619b48d">More...</a><br /></td></tr>
+<tr class="separator:a5fc17f2b543556efc6a3bdbc4619b48d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Model a 3-D surface. </p>
+<p>Given a set of (x,y,z) triplets, this class will model the surface that best fits the points. The equation to be modelled is:</p>
+<p class="formulaDsp">
+\[ z = a + b*x + c*y + d*x^2 + e*x*y + f*y^2 \]
+</p>
+<dl class="section author"><dt>Author</dt><dd>2005-05-09 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a2db439a771a20ab4e032e7e22b9d7602"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2db439a771a20ab4e032e7e22b9d7602">&#9670;&nbsp;</a></span>SurfaceModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SurfaceModel::SurfaceModel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+
+</div>
+</div>
+<a id="a299fd7df98814c60c84cdec6d77f8452"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a299fd7df98814c60c84cdec6d77f8452">&#9670;&nbsp;</a></span>~SurfaceModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SurfaceModel::~SurfaceModel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a23bbc2ab50e8ad8604a69b635b541c0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23bbc2ab50e8ad8604a69b635b541c0d">&#9670;&nbsp;</a></span>AddTriplet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SurfaceModel::AddTriplet </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>z</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add a single (x,y,z) triplet to the list of knowns. After all knowns are added invoke the Solve method. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_least_squares.html#adebcd2ef3d6a18bcf59224560a796d86">Isis::LeastSquares::AddKnown()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_surface_model.html#ab64b417405cdcc6a4625091ecd146d09">AddTriplets()</a>.</p>
+
+</div>
+</div>
+<a id="ab64b417405cdcc6a4625091ecd146d09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab64b417405cdcc6a4625091ecd146d09">&#9670;&nbsp;</a></span>AddTriplets() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SurfaceModel::AddTriplets </td>
+          <td>(</td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add an array of (x,y,z) triplet to the list of knowns After all knowns are added invoke the Solve method. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_surface_model.html#a23bbc2ab50e8ad8604a69b635b541c0d">AddTriplet()</a>.</p>
+
+</div>
+</div>
+<a id="a596d9028b5956def37cde6aedd4d23ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a596d9028b5956def37cde6aedd4d23ed">&#9670;&nbsp;</a></span>AddTriplets() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SurfaceModel::AddTriplets </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>z</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add an array of (x,y,z) triplet to the list of knowns After all knowns are added invoke the Solve method. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_surface_model.html#a23bbc2ab50e8ad8604a69b635b541c0d">AddTriplet()</a>.</p>
+
+</div>
+</div>
+<a id="ae679afaa99872b5ae591dd119ed1d639"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae679afaa99872b5ae591dd119ed1d639">&#9670;&nbsp;</a></span>Evaluate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::SurfaceModel::Evaluate </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Evaluate at x,y to compute z. This is available after the Solve method is invoked. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_least_squares.html#a998dae9754f534d537ddaa3e9e62b08a">Isis::LeastSquares::Evaluate()</a>.</p>
+
+</div>
+</div>
+<a id="a5fc17f2b543556efc6a3bdbc4619b48d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fc17f2b543556efc6a3bdbc4619b48d">&#9670;&nbsp;</a></span>MinMax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::SurfaceModel::MinMax </td>
+          <td>(</td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>After invoking Solve, a coordinate (x,y) at a local minimum (or maximum) of the surface model can be computed using this method. </p>
+<dl class="section return"><dt>Returns</dt><dd>A zero if successful, otherwise, the surface is a plane and has no min/max </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_basis_function.html#a88a87e2fee6295031c9fa5148d40f00d">Isis::BasisFunction::Coefficient()</a>.</p>
+
+</div>
+</div>
+<a id="a8ebbdbdc7b5fc4aded0c07f421a92b6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ebbdbdc7b5fc4aded0c07f421a92b6b">&#9670;&nbsp;</a></span>Solve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::SurfaceModel::Solve </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Fit a surface to the input triplets. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_least_squares.html#aa6d220932140932c25b7799ba67a0bc8">Isis::LeastSquares::Solve()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/SurfaceModel/<a class="el" href="_surface_model_8h_source.html">SurfaceModel.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/SurfaceModel/<a class="el" href="_surface_model_8cpp.html">SurfaceModel.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_surface_model.html">SurfaceModel</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

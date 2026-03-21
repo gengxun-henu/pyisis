@@ -1,0 +1,335 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/mro/objs/HiCal/LoadCSV.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_load_c_s_v_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">LoadCSV.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_load_c_s_v_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef LoadCSV_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define LoadCSV_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;cmath&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_i_string_8h.html">IString.h</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_hi_cal_types_8h.html">HiCalTypes.h</a>&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_hi_cal_util_8h.html">HiCalUtil.h</a>&quot;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_hi_cal_conf_8h.html">HiCalConf.h</a>&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_c_s_v_reader_8h.html">CSVReader.h</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keyword">class </span>iException;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="class_isis_1_1_load_c_s_v.html">   52</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_load_c_s_v.html">LoadCSV</a> {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;      <span class="comment">//  Constructors and Destructor</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <a class="code" href="class_isis_1_1_load_c_s_v.html#aa22520b004a74d04dc3570c5153ddded">LoadCSV</a>();</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;      <a class="code" href="class_isis_1_1_load_c_s_v.html#aa22520b004a74d04dc3570c5153ddded">LoadCSV</a>(<span class="keyword">const</span> QString &amp;base, <span class="keyword">const</span> HiCalConf &amp;conf,</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;              <span class="keyword">const</span> <a class="code" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;profile);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="class_isis_1_1_load_c_s_v.html#a3b490cfe896976f0072ec4c3bd3e8c8c">   61</a></span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_load_c_s_v.html#a3b490cfe896976f0072ec4c3bd3e8c8c">~LoadCSV</a>() { }</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_load_c_s_v.html#aba0350879e90225ee08fad1321270675">load</a>(<span class="keyword">const</span> QString &amp;base, <span class="keyword">const</span> HiCalConf &amp;conf,</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;               <span class="keyword">const</span> <a class="code" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;profile);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;      QString <a class="code" href="class_isis_1_1_load_c_s_v.html#a39ba4b0373e606ce309400b532af8dfd">filename</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_load_c_s_v.html#a41f7466c47ea62c6d2f9558fb04decc4">size</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_load_c_s_v.html#ab30b901fff2a2add840ec8d05746940f">validateSize</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> &amp;expected,</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                        <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;throw_on_error = <span class="keyword">false</span>)</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                        <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      <a class="code" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> <a class="code" href="class_isis_1_1_load_c_s_v.html#aee29bda63993024c0615c74db4838cd9">getVector</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <a class="code" href="namespace_isis.html#a62fc9c73b6f1c50de9cd715ac68df3e2">HiMatrix</a> <a class="code" href="class_isis_1_1_load_c_s_v.html#ab7acd7c985e7b59871557333bae6da33">getMatrix</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_load_c_s_v.html#acf85d596ef21c2344b169843b128ce8b">History</a>(<a class="code" href="class_isis_1_1_hi_history.html">HiHistory</a> &amp;history) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      QString              _base;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <a class="code" href="class_isis_1_1_db_profile.html">DbProfile</a>                _csvSpecs;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      <a class="code" href="namespace_isis.html#a62fc9c73b6f1c50de9cd715ac68df3e2">HiMatrix</a>                 _data;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;      std::vector&lt;QString&gt; _history;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      <span class="keywordtype">void</span> init(<span class="keyword">const</span> QString &amp;base,  <span class="keyword">const</span> HiCalConf &amp;conf,</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                <span class="keyword">const</span> <a class="code" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;profile);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      <span class="keywordtype">void</span> addHistory(<span class="keyword">const</span> QString &amp;element, <span class="keyword">const</span> QString &amp;desc);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      <span class="keywordtype">void</span> getKeyList(<span class="keyword">const</span> QString &amp;base, std::vector&lt;QString&gt; &amp;keys)</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                      <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      <a class="code" href="class_isis_1_1_db_profile.html">DbProfile</a> ResolveKeys(<span class="keyword">const</span> QString &amp;base, <span class="keyword">const</span> HiCalConf &amp;conf,</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                            <span class="keyword">const</span> <a class="code" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;prof) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      QString ParsedKey(<span class="keyword">const</span> QString &amp;key, <span class="keyword">const</span> HiCalConf &amp;conf,</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                            <span class="keyword">const</span> <a class="code" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;prof) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      QString makeKey(<span class="keyword">const</span> QString &amp;ksuffix = <span class="stringliteral">&quot;&quot;</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      QString getValue(<span class="keyword">const</span> QString &amp;ksuffix = <span class="stringliteral">&quot;&quot;</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;      <a class="code" href="namespace_isis.html#a62fc9c73b6f1c50de9cd715ac68df3e2">HiMatrix</a> extract (<span class="keyword">const</span> <a class="code" href="class_isis_1_1_c_s_v_reader.html">CSVReader</a> &amp;csv);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      <span class="keywordtype">int</span> getAxisIndex(<span class="keyword">const</span> QString &amp;name,</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                       <span class="keyword">const</span> <a class="code" href="class_isis_1_1_c_s_v_reader.html#aab5c22d312c57d449fab46e82e36d048">CSVReader::CSVAxis</a> &amp;header) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  };</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;}     <span class="comment">// namespace Isis</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_c_s_v_reader_8h_html"><div class="ttname"><a href="_c_s_v_reader_8h.html">CSVReader.h</a></div></div>
+<div class="ttc" id="a_hi_cal_conf_8h_html"><div class="ttname"><a href="_hi_cal_conf_8h.html">HiCalConf.h</a></div></div>
+<div class="ttc" id="a_hi_cal_types_8h_html"><div class="ttname"><a href="_hi_cal_types_8h.html">HiCalTypes.h</a></div></div>
+<div class="ttc" id="a_hi_cal_util_8h_html"><div class="ttname"><a href="_hi_cal_util_8h.html">HiCalUtil.h</a></div></div>
+<div class="ttc" id="a_i_string_8h_html"><div class="ttname"><a href="_i_string_8h.html">IString.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_c_s_v_reader_html"><div class="ttname"><a href="class_isis_1_1_c_s_v_reader.html">Isis::CSVReader</a></div><div class="ttdoc">Reads strings and parses them into tokens separated by a delimiter character.</div><div class="ttdef"><b>Definition:</b> CSVReader.h:239</div></div>
+<div class="ttc" id="aclass_isis_1_1_c_s_v_reader_html_aab5c22d312c57d449fab46e82e36d048"><div class="ttname"><a href="class_isis_1_1_c_s_v_reader.html#aab5c22d312c57d449fab46e82e36d048">Isis::CSVReader::CSVAxis</a></div><div class="ttdeci">Parser::TokenList CSVAxis</div><div class="ttdoc">Row/Column token list.</div><div class="ttdef"><b>Definition:</b> CSVReader.h:247</div></div>
+<div class="ttc" id="aclass_isis_1_1_db_profile_html"><div class="ttname"><a href="class_isis_1_1_db_profile.html">Isis::DbProfile</a></div><div class="ttdoc">A DbProfile is a container for access parameters to a database.</div><div class="ttdef"><b>Definition:</b> DbProfile.h:51</div></div>
+<div class="ttc" id="aclass_isis_1_1_hi_history_html"><div class="ttname"><a href="class_isis_1_1_hi_history.html">Isis::HiHistory</a></div><div class="ttdef"><b>Definition:</b> HiCalTypes.h:30</div></div>
+<div class="ttc" id="aclass_isis_1_1_load_c_s_v_html"><div class="ttname"><a href="class_isis_1_1_load_c_s_v.html">Isis::LoadCSV</a></div><div class="ttdoc">Provides generalized access to HiRISE calibration CSV files.</div><div class="ttdef"><b>Definition:</b> LoadCSV.h:52</div></div>
+<div class="ttc" id="aclass_isis_1_1_load_c_s_v_html_a39ba4b0373e606ce309400b532af8dfd"><div class="ttname"><a href="class_isis_1_1_load_c_s_v.html#a39ba4b0373e606ce309400b532af8dfd">Isis::LoadCSV::filename</a></div><div class="ttdeci">QString filename() const</div><div class="ttdef"><b>Definition:</b> LoadCSV.cpp:176</div></div>
+<div class="ttc" id="aclass_isis_1_1_load_c_s_v_html_a3b490cfe896976f0072ec4c3bd3e8c8c"><div class="ttname"><a href="class_isis_1_1_load_c_s_v.html#a3b490cfe896976f0072ec4c3bd3e8c8c">Isis::LoadCSV::~LoadCSV</a></div><div class="ttdeci">virtual ~LoadCSV()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> LoadCSV.h:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_load_c_s_v_html_a41f7466c47ea62c6d2f9558fb04decc4"><div class="ttname"><a href="class_isis_1_1_load_c_s_v.html#a41f7466c47ea62c6d2f9558fb04decc4">Isis::LoadCSV::size</a></div><div class="ttdeci">int size() const</div><div class="ttdef"><b>Definition:</b> LoadCSV.cpp:180</div></div>
+<div class="ttc" id="aclass_isis_1_1_load_c_s_v_html_aa22520b004a74d04dc3570c5153ddded"><div class="ttname"><a href="class_isis_1_1_load_c_s_v.html#aa22520b004a74d04dc3570c5153ddded">Isis::LoadCSV::LoadCSV</a></div><div class="ttdeci">LoadCSV()</div><div class="ttdef"><b>Definition:</b> LoadCSV.cpp:24</div></div>
+<div class="ttc" id="aclass_isis_1_1_load_c_s_v_html_ab30b901fff2a2add840ec8d05746940f"><div class="ttname"><a href="class_isis_1_1_load_c_s_v.html#ab30b901fff2a2add840ec8d05746940f">Isis::LoadCSV::validateSize</a></div><div class="ttdeci">bool validateSize(const int &amp;expected, const bool &amp;throw_on_error=false) const</div><div class="ttdef"><b>Definition:</b> LoadCSV.cpp:184</div></div>
+<div class="ttc" id="aclass_isis_1_1_load_c_s_v_html_ab7acd7c985e7b59871557333bae6da33"><div class="ttname"><a href="class_isis_1_1_load_c_s_v.html#ab7acd7c985e7b59871557333bae6da33">Isis::LoadCSV::getMatrix</a></div><div class="ttdeci">HiMatrix getMatrix() const</div><div class="ttdef"><b>Definition:</b> LoadCSV.cpp:201</div></div>
+<div class="ttc" id="aclass_isis_1_1_load_c_s_v_html_aba0350879e90225ee08fad1321270675"><div class="ttname"><a href="class_isis_1_1_load_c_s_v.html#aba0350879e90225ee08fad1321270675">Isis::LoadCSV::load</a></div><div class="ttdeci">void load(const QString &amp;base, const HiCalConf &amp;conf, const DbProfile &amp;profile)</div><div class="ttdef"><b>Definition:</b> LoadCSV.cpp:32</div></div>
+<div class="ttc" id="aclass_isis_1_1_load_c_s_v_html_acf85d596ef21c2344b169843b128ce8b"><div class="ttname"><a href="class_isis_1_1_load_c_s_v.html#acf85d596ef21c2344b169843b128ce8b">Isis::LoadCSV::History</a></div><div class="ttdeci">void History(HiHistory &amp;history) const</div><div class="ttdef"><b>Definition:</b> LoadCSV.cpp:206</div></div>
+<div class="ttc" id="aclass_isis_1_1_load_c_s_v_html_aee29bda63993024c0615c74db4838cd9"><div class="ttname"><a href="class_isis_1_1_load_c_s_v.html#aee29bda63993024c0615c74db4838cd9">Isis::LoadCSV::getVector</a></div><div class="ttdeci">HiVector getVector() const</div><div class="ttdef"><b>Definition:</b> LoadCSV.cpp:196</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a62fc9c73b6f1c50de9cd715ac68df3e2"><div class="ttname"><a href="namespace_isis.html#a62fc9c73b6f1c50de9cd715ac68df3e2">Isis::HiMatrix</a></div><div class="ttdeci">TNT::Array2D&lt; double &gt; HiMatrix</div><div class="ttdoc">2-D buffer</div><div class="ttdef"><b>Definition:</b> HiCalTypes.h:28</div></div>
+<div class="ttc" id="anamespace_isis_html_ab439ccdced5cec003c9a480caa581607"><div class="ttname"><a href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">Isis::HiVector</a></div><div class="ttdeci">TNT::Array1D&lt; double &gt; HiVector</div><div class="ttdoc">1-D Buffer</div><div class="ttdef"><b>Definition:</b> HiCalTypes.h:27</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f0cea154c6acbbb4617d44e8fbc4b14c.html">mro</a></li><li class="navelem"><a class="el" href="dir_8558c8faa9d4f59ba81a7aac57824cfb.html">objs</a></li><li class="navelem"><a class="el" href="dir_643d0d465a5c19f5a6bcaf18bf2e4675.html">HiCal</a></li><li class="navelem"><a class="el" href="_load_c_s_v_8h.html">LoadCSV.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

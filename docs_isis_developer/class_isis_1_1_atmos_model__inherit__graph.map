@@ -1,0 +1,9 @@
+<map id="Isis::AtmosModel" name="Isis::AtmosModel">
+<area shape="rect" id="node1" title="Isotropic atmos scattering model." alt="" coords="464,5,674,631"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_anisotropic1.html" title=" " alt="" coords="5,679,173,792"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_anisotropic2.html" title=" " alt="" coords="197,679,365,792"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_hapke_atm1.html" title="Implements the Hapke Atmospheric Model." alt="" coords="389,679,557,792"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_hapke_atm2.html" title=" " alt="" coords="581,679,749,792"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_isotropic1.html" title=" " alt="" coords="773,679,941,792"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_isotropic2.html" title=" " alt="" coords="965,679,1133,792"/>
+</map>

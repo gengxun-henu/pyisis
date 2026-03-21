@@ -1,0 +1,430 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/LinearAlgebra/LinearAlgebra.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_linear_algebra_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">LinearAlgebra.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_linear_algebra_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef LinearAlgebra_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define LinearAlgebra_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// std library</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// boost library</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;boost/numeric/ublas/matrix.hpp&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;boost/numeric/ublas/vector.hpp&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;boost/numeric/ublas/vector_sparse.hpp&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;boost/numeric/ublas/io.hpp&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// Qt Library</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;QDebug&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;QPair&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// Prevent Boost from outputing debug information to</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// standard error when throwing exceptions.</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="_linear_algebra_8h.html#ac00dbe7daf83cba3df9ed5a704761390">   24</a></span>&#160;<span class="preprocessor">#define BOOST_UBLAS_NO_STD_CERR</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keyword">class </span>Angle;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">class </span>Distance;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">class </span>Latitude;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">class </span>Longitude;</div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="class_isis_1_1_linear_algebra.html">   91</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_linear_algebra.html">LinearAlgebra</a> {</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">  102</a></span>&#160;      <span class="keyword">typedef</span> boost::numeric::ublas::matrix&lt;double&gt; <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a>;</div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="class_isis_1_1_linear_algebra.html#a7c785fe03ac69823f9af034b80146ffe">  112</a></span>&#160;      <span class="keyword">typedef</span> boost::numeric::ublas::symmetric_matrix&lt;double, boost::numeric::ublas::upper&gt; <a class="code" href="class_isis_1_1_linear_algebra.html#a7c785fe03ac69823f9af034b80146ffe">SymmetricMatrix</a>;</div>
+<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="class_isis_1_1_linear_algebra.html#aeebbc4478f51cd0dd412967e688577cf">  122</a></span>&#160;      <span class="keyword">typedef</span> boost::numeric::ublas::symmetric_matrix&lt;double, boost::numeric::ublas::upper&gt; <a class="code" href="class_isis_1_1_linear_algebra.html#aeebbc4478f51cd0dd412967e688577cf">MatrixUpperTriangular</a>;</div>
+<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">  132</a></span>&#160;      <span class="keyword">typedef</span> boost::numeric::ublas::vector&lt;double&gt; <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a>;</div>
+<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="class_isis_1_1_linear_algebra.html#a1fb29d9abe918737c7559914271956fd">  142</a></span>&#160;       <span class="keyword">typedef</span> boost::numeric::ublas::compressed_vector&lt;double&gt; <a class="code" href="class_isis_1_1_linear_algebra.html#a1fb29d9abe918737c7559914271956fd">VectorCompressed</a>;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;      <span class="comment">// define AxisAngle and EulerAngle</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno"><a class="line" href="class_isis_1_1_linear_algebra.html#a816807372cc3a7391b21609d93bf75ec">  151</a></span>&#160;<span class="comment"></span>      <span class="keyword">typedef</span> <a class="code" href="struct_q_pair.html">QPair&lt;Vector, Angle&gt;</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a816807372cc3a7391b21609d93bf75ec">AxisAngle</a>;</div>
+<div class="line"><a name="l00158"></a><span class="lineno"><a class="line" href="class_isis_1_1_linear_algebra.html#ad4eb94d301ba2ff9f9d0668eaac4d06d">  158</a></span>&#160;      <span class="keyword">typedef</span> <a class="code" href="struct_q_pair.html">QPair&lt;Angle, int&gt;</a> <a class="code" href="class_isis_1_1_linear_algebra.html#ad4eb94d301ba2ff9f9d0668eaac4d06d">EulerAngle</a>;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;      <span class="comment">// check type of matrix/vector</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aab21d3093e2fca63d891e10ee6239209">isIdentity</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_linear_algebra.html#ae1947c88491eb06d1603b0327ffae105">isOrthogonal</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_linear_algebra.html#affcea6270b8ce6a166a346a5e056af82">isRotationMatrix</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix);</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_linear_algebra.html#ac3667b66afeb75744fa920c28e29f4eb">isZero</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix);</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_linear_algebra.html#ac3667b66afeb75744fa920c28e29f4eb">isZero</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;<a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_linear_algebra.html#a4d5fce972b19608c9d5dcb4c0bd0c2de">isEmpty</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;<a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>);</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_linear_algebra.html#a4b085626b6f44c4eb02df486be94da2f">isUnit</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;<a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>);</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;      <span class="comment">// create special matrices</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a106b1e5b98c681bf16d0854aaaf8c924">identity</a>(<span class="keywordtype">int</span> size);</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#afac29eb05bebfcb48e0a84a78d80eabc">transpose</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix);</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#aa239d5ca86c0e18b0721a844f6f985c1">inverse</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix);</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a8c60afbfc7d00badc4a8f4102485d82b">pseudoinverse</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix);</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a6e5b1b7de21df41d5b601cfe4e3e5913">zeroMatrix</a>(<span class="keywordtype">int</span> rows, <span class="keywordtype">int</span> columns);</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a1ab80e56a25cb69df92fa41b76e8acc5">zeroVector</a>(<span class="keywordtype">int</span> size);</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      <span class="comment">//</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_linear_algebra.html#a968271942d7edaaf9831070be3791d4e">determinant</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;      <span class="comment">// magnitude/norm based calculations</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#aff156efa237b28f4d6ec3ce8029d3350">normalize</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;<a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>);</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_linear_algebra.html#a831e4e851b273ae307488f259253b4b7">magnitude</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;<a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aefe47950901e619449c92781dc51feb7">absoluteMaximum</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;<a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;      <span class="comment">// arithmetic operations</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a62576352991c6bc8d3d19d2bfe7976f7">multiply</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix1, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix2);</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a62576352991c6bc8d3d19d2bfe7976f7">multiply</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;<a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>);</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a62576352991c6bc8d3d19d2bfe7976f7">multiply</a>(<span class="keywordtype">double</span> scalar, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;<a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>);</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a62576352991c6bc8d3d19d2bfe7976f7">multiply</a>(<span class="keywordtype">double</span> scalar, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a40f7d4a28c516bc0ea65b424025f810d">add</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector1, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector2);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a17063bcd58adfad7337d812fa4be55dc">subtract</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector1, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector2);</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;      <span class="comment">// vector products</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a192add111f2c0c3fbdb6ad2bc461357f">crossProduct</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector1, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector2);</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a79fd58a520d737c3394f5e89c8704bc7">normalizedCrossProduct</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector1, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector2);</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#ad904a505a81ce28b4c4323ace4f17343">outerProduct</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector1, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector2);</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_linear_algebra.html#afc582729e25f8757b4693dc6a33bbeb7">dotProduct</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector1, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector2);</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_linear_algebra.html#a6e572b9c56b9c066b7b37efddbb5cdb3">innerProduct</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector1, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector2);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;      <span class="comment">// vector movements (projections, rotations)</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a4e73d16a9500c6cc8a1d2ff21ea8aee6">project</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector1, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector2);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a80cec9ff7d6422af64c13e198921eb29">rotate</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;<a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;axis, <a class="code" href="class_isis_1_1_angle.html">Angle</a> angle);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;      <span class="comment">//</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a8516a20464d8379d39264c3d8069e548">perpendicular</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector1, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;vector2);</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;      <span class="comment">// converters</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;      <span class="keyword">static</span> <a class="code" href="struct_q_pair.html">AxisAngle</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a0876aef6438bea53f3a1d909dbcfd1a2">toAxisAngle</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;rotationMatrix);<span class="comment">//raxisa</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a4affe74a1269c7f061ef25fb0a6c7bad">toMatrix</a>(<span class="keyword">const</span> <a class="code" href="struct_q_pair.html">AxisAngle</a> &amp;axisAngle); <span class="comment">// axisar</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a4affe74a1269c7f061ef25fb0a6c7bad">toMatrix</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;axis, <a class="code" href="class_isis_1_1_angle.html">Angle</a> angle); <span class="comment">// axisar</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_q_list.html">QList&lt;EulerAngle&gt;</a> <a class="code" href="class_isis_1_1_linear_algebra.html#afe3e81b264d0d39a8b396e646e5678fd">toEulerAngles</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;rotationMatrix, <span class="keyword">const</span> <a class="code" href="class_q_list.html">QList&lt;int&gt;</a> axes);<span class="comment">// m2eul</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a4affe74a1269c7f061ef25fb0a6c7bad">toMatrix</a>(<span class="keyword">const</span> <a class="code" href="class_q_list.html">QList&lt;EulerAngle&gt;</a> &amp;eulerAngles); <span class="comment">// eul2m</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a4affe74a1269c7f061ef25fb0a6c7bad">toMatrix</a>(<span class="keyword">const</span> <a class="code" href="struct_q_pair.html">EulerAngle</a> &amp;angle3, <span class="keyword">const</span> <a class="code" href="struct_q_pair.html">EulerAngle</a> &amp;angle2, <span class="keyword">const</span> <a class="code" href="struct_q_pair.html">EulerAngle</a> &amp;angle1); <span class="comment">// eul2m</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#af794d88ef367cacf481d4b787897fb1e">toQuaternion</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;rotationMatrix);<span class="comment">// m2q</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a4affe74a1269c7f061ef25fb0a6c7bad">toMatrix</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;quaternion);<span class="comment">// q2m</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;      <span class="comment">//Matrix row/col to vector and vector to row/columns</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_linear_algebra.html#a527e73562f360f3c621997566c6a7699">setRow</a>(<a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;<a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>, <span class="keywordtype">int</span> rowIndex);</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_linear_algebra.html#a54157a65b0e898e79a56b17e53d1e58e">setColumn</a>(<a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;<a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>, <span class="keywordtype">int</span> columnIndex);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a410ee4a196c5b9a6a0b5c53b771c2d1b">row</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix, <span class="keywordtype">int</span> rowIndex);</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a4b6cf1059e015a4918a5f09ba8b112be">column</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Matrix</a> &amp;matrix, <span class="keywordtype">int</span> columnIndex);</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_linear_algebra.html#ab315cb2dfa5929eb07086f877414ed28">setVec3</a>(<a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> *v, <span class="keywordtype">double</span> v0, <span class="keywordtype">double</span> v1, <span class="keywordtype">double</span> v2);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;      <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_linear_algebra.html#a5ee3e19d21f57236434c4082bdf56dc7">setVec4</a>(<a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> *v, <span class="keywordtype">double</span> v0, <span class="keywordtype">double</span> v1, <span class="keywordtype">double</span> v2, <span class="keywordtype">double</span> v3);</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>(<span class="keywordtype">double</span> v0, <span class="keywordtype">double</span> v1, <span class="keywordtype">double</span> v2);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">vector</a>(<span class="keywordtype">double</span> v0, <span class="keywordtype">double</span> v1, <span class="keywordtype">double</span> v2, <span class="keywordtype">double</span> v3);</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> <a class="code" href="class_isis_1_1_linear_algebra.html#a46e95f96d116c26a799fdfeb936d99a5">subVector</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Vector</a> &amp;v, <span class="keywordtype">int</span> start, <span class="keywordtype">int</span> size);</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;      <span class="comment">// No need to implement the std::cout operator&lt;&lt; since this is already</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;      <span class="comment">// done in boost/numeric/ublas/io.hpp, which is included above</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;      <span class="comment">// The print format for a size 3 vector is</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;      <span class="comment">// [3] (1, 2, 3)</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;      <span class="comment">//</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;      <span class="comment">// friend ostream &amp;operator&lt;&lt;(ostream &amp;os, LinearAlgebra::Vector &amp;vector);</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;      <a class="code" href="class_isis_1_1_linear_algebra.html#a218d682672ed0764d3602bdfa29e0955">LinearAlgebra</a>();</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;      <a class="code" href="class_isis_1_1_linear_algebra.html#a141c789f88eaffaf69689b880c933367">~LinearAlgebra</a>();</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;  };</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;  <span class="comment">// these must be declared outside of the class (at the end since they must be</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;  <span class="comment">// declared after the typedefs)</span></div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;  QDebug <a class="code" href="namespace_isis.html#ae89a575c21f490200c6fba70c9127263">operator&lt;&lt;</a>(QDebug dbg, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;vector);</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;  QDebug <a class="code" href="namespace_isis.html#ae89a575c21f490200c6fba70c9127263">operator&lt;&lt;</a>(QDebug dbg, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">LinearAlgebra::Matrix</a> &amp;matrix);</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;  QString <a class="code" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">toString</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">LinearAlgebra::Vector</a> &amp;vector, <span class="keywordtype">int</span> precision=15);</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;};</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclass_isis_1_1_angle_html"><div class="ttname"><a href="class_isis_1_1_angle.html">Isis::Angle</a></div><div class="ttdoc">Defines an angle and provides unit conversions.</div><div class="ttdef"><b>Definition:</b> Angle.h:45</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html">Isis::LinearAlgebra</a></div><div class="ttdoc">This class holds all static methods to perform linear algebra operations on vectors and matrices.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.h:91</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a0876aef6438bea53f3a1d909dbcfd1a2"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a0876aef6438bea53f3a1d909dbcfd1a2">Isis::LinearAlgebra::toAxisAngle</a></div><div class="ttdeci">static AxisAngle toAxisAngle(const Matrix &amp;rotationMatrix)</div><div class="ttdoc">Converts a rotation's representation from a matrix to a axis of rotation and its corresponding rotati...</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:973</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a106b1e5b98c681bf16d0854aaaf8c924"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a106b1e5b98c681bf16d0854aaaf8c924">Isis::LinearAlgebra::identity</a></div><div class="ttdeci">static Matrix identity(int size)</div><div class="ttdoc">Returns the identity matrix of size NxN.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:384</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a141c789f88eaffaf69689b880c933367"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a141c789f88eaffaf69689b880c933367">Isis::LinearAlgebra::~LinearAlgebra</a></div><div class="ttdeci">~LinearAlgebra()</div><div class="ttdoc">Destructor for a LinearAlgebra object.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:46</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a17063bcd58adfad7337d812fa4be55dc"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a17063bcd58adfad7337d812fa4be55dc">Isis::LinearAlgebra::subtract</a></div><div class="ttdeci">static Vector subtract(const Vector &amp;vector1, const Vector &amp;vector2)</div><div class="ttdoc">Subtracts the right vector from the left vector.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:660</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a192add111f2c0c3fbdb6ad2bc461357f"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a192add111f2c0c3fbdb6ad2bc461357f">Isis::LinearAlgebra::crossProduct</a></div><div class="ttdeci">static Vector crossProduct(const Vector &amp;vector1, const Vector &amp;vector2)</div><div class="ttdoc">Returns the cross product of two vectors.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:688</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a1ab80e56a25cb69df92fa41b76e8acc5"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a1ab80e56a25cb69df92fa41b76e8acc5">Isis::LinearAlgebra::zeroVector</a></div><div class="ttdeci">static Vector zeroVector(int size)</div><div class="ttdoc">Returns a vector of given length that is filled with zeroes.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:421</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a1fb29d9abe918737c7559914271956fd"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a1fb29d9abe918737c7559914271956fd">Isis::LinearAlgebra::VectorCompressed</a></div><div class="ttdeci">boost::numeric::ublas::compressed_vector&lt; double &gt; VectorCompressed</div><div class="ttdoc">Definition for an Isis::LinearAlgebra::VectorCompressed of doubles.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.h:142</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a1fc20f653dbda46fc34ad29b3ee54111"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a1fc20f653dbda46fc34ad29b3ee54111">Isis::LinearAlgebra::vector</a></div><div class="ttdeci">static Vector vector(double v0, double v1, double v2)</div><div class="ttdoc">Constructs a 3 dimensional vector with the given component values.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:1714</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a218d682672ed0764d3602bdfa29e0955"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a218d682672ed0764d3602bdfa29e0955">Isis::LinearAlgebra::LinearAlgebra</a></div><div class="ttdeci">LinearAlgebra()</div><div class="ttdoc">Default constructor for a LinearAlgebra object.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:39</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a40f7d4a28c516bc0ea65b424025f810d"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a40f7d4a28c516bc0ea65b424025f810d">Isis::LinearAlgebra::add</a></div><div class="ttdeci">static Vector add(const Vector &amp;vector1, const Vector &amp;vector2)</div><div class="ttdoc">Adds the two given vectors.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:634</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a410ee4a196c5b9a6a0b5c53b771c2d1b"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a410ee4a196c5b9a6a0b5c53b771c2d1b">Isis::LinearAlgebra::row</a></div><div class="ttdeci">static Vector row(const Matrix &amp;matrix, int rowIndex)</div><div class="ttdoc">Returns a vector whose components match those of the given matrix row.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:1670</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a46e95f96d116c26a799fdfeb936d99a5"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a46e95f96d116c26a799fdfeb936d99a5">Isis::LinearAlgebra::subVector</a></div><div class="ttdeci">static Vector subVector(const Vector &amp;v, int start, int size)</div><div class="ttdoc">Constructs a vector of given size using the given vector and starting index.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:1789</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a4affe74a1269c7f061ef25fb0a6c7bad"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a4affe74a1269c7f061ef25fb0a6c7bad">Isis::LinearAlgebra::toMatrix</a></div><div class="ttdeci">static Matrix toMatrix(const AxisAngle &amp;axisAngle)</div><div class="ttdoc">Converts a rotation's representation from an axis of rotation and its corresponding rotation angle to...</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:1442</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a4b085626b6f44c4eb02df486be94da2f"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a4b085626b6f44c4eb02df486be94da2f">Isis::LinearAlgebra::isUnit</a></div><div class="ttdeci">static bool isUnit(const Vector &amp;vector)</div><div class="ttdoc">Determines whether the given vector is a unit vector.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:262</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a4b6cf1059e015a4918a5f09ba8b112be"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a4b6cf1059e015a4918a5f09ba8b112be">Isis::LinearAlgebra::column</a></div><div class="ttdeci">static Vector column(const Matrix &amp;matrix, int columnIndex)</div><div class="ttdoc">Returns a vector whose components match those of the given matrix column.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:1693</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a4d5fce972b19608c9d5dcb4c0bd0c2de"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a4d5fce972b19608c9d5dcb4c0bd0c2de">Isis::LinearAlgebra::isEmpty</a></div><div class="ttdeci">static bool isEmpty(const Vector &amp;vector)</div><div class="ttdoc">Determines whether the given vector is empty (i.e.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:250</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a4e73d16a9500c6cc8a1d2ff21ea8aee6"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a4e73d16a9500c6cc8a1d2ff21ea8aee6">Isis::LinearAlgebra::project</a></div><div class="ttdeci">static Vector project(const Vector &amp;vector1, const Vector &amp;vector2)</div><div class="ttdoc">Compute the vector projection of vector1 onto vector2.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:833</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a527e73562f360f3c621997566c6a7699"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a527e73562f360f3c621997566c6a7699">Isis::LinearAlgebra::setRow</a></div><div class="ttdeci">static void setRow(Matrix &amp;matrix, const Vector &amp;vector, int rowIndex)</div><div class="ttdoc">Sets the row of the given matrix to the values of the given vector.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:1626</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a54157a65b0e898e79a56b17e53d1e58e"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a54157a65b0e898e79a56b17e53d1e58e">Isis::LinearAlgebra::setColumn</a></div><div class="ttdeci">static void setColumn(Matrix &amp;matrix, const Vector &amp;vector, int columnIndex)</div><div class="ttdoc">Sets the column of the given matrix to the values of the given vector.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:1647</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a5ee3e19d21f57236434c4082bdf56dc7"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a5ee3e19d21f57236434c4082bdf56dc7">Isis::LinearAlgebra::setVec4</a></div><div class="ttdeci">static void setVec4(Vector *v, double v0, double v1, double v2, double v3)</div><div class="ttdoc">Fills the first four elements of the given vector with the given values.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:1768</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a62576352991c6bc8d3d19d2bfe7976f7"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a62576352991c6bc8d3d19d2bfe7976f7">Isis::LinearAlgebra::multiply</a></div><div class="ttdeci">static Matrix multiply(const Matrix &amp;matrix1, const Matrix &amp;matrix2)</div><div class="ttdoc">Returns the product of two matrices.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:549</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a6e572b9c56b9c066b7b37efddbb5cdb3"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a6e572b9c56b9c066b7b37efddbb5cdb3">Isis::LinearAlgebra::innerProduct</a></div><div class="ttdeci">static double innerProduct(const Vector &amp;vector1, const Vector &amp;vector2)</div><div class="ttdoc">Computes the inner product of the given vectors.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:801</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a6e5b1b7de21df41d5b601cfe4e3e5913"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a6e5b1b7de21df41d5b601cfe4e3e5913">Isis::LinearAlgebra::zeroMatrix</a></div><div class="ttdeci">static Matrix zeroMatrix(int rows, int columns)</div><div class="ttdoc">Returns a matrix with given dimensions that is filled with zeroes.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:408</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a79fd58a520d737c3394f5e89c8704bc7"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a79fd58a520d737c3394f5e89c8704bc7">Isis::LinearAlgebra::normalizedCrossProduct</a></div><div class="ttdeci">static Vector normalizedCrossProduct(const Vector &amp;vector1, const Vector &amp;vector2)</div><div class="ttdoc">Divides each vector by its corresponding absolute maximum, computes the cross product of the new vect...</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:721</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a7c785fe03ac69823f9af034b80146ffe"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a7c785fe03ac69823f9af034b80146ffe">Isis::LinearAlgebra::SymmetricMatrix</a></div><div class="ttdeci">boost::numeric::ublas::symmetric_matrix&lt; double, boost::numeric::ublas::upper &gt; SymmetricMatrix</div><div class="ttdoc">Definition for an Isis::LinearAlgebra::SymmetrixMatrix of doubles with an upper configuration.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.h:112</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a80cec9ff7d6422af64c13e198921eb29"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a80cec9ff7d6422af64c13e198921eb29">Isis::LinearAlgebra::rotate</a></div><div class="ttdeci">static Vector rotate(const Vector &amp;vector, const Vector &amp;axis, Angle angle)</div><div class="ttdoc">Rotates a vector about an axis vector given a specified angle.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:872</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a816807372cc3a7391b21609d93bf75ec"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a816807372cc3a7391b21609d93bf75ec">Isis::LinearAlgebra::AxisAngle</a></div><div class="ttdeci">QPair&lt; Vector, Angle &gt; AxisAngle</div><div class="ttdoc">Definition for an Axis-Angle pair.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.h:151</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a831e4e851b273ae307488f259253b4b7"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a831e4e851b273ae307488f259253b4b7">Isis::LinearAlgebra::magnitude</a></div><div class="ttdeci">static double magnitude(const Vector &amp;vector)</div><div class="ttdoc">Computes the magnitude (i.e., the length) of the given vector using the Euclidean norm (L2 norm).</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:504</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a8516a20464d8379d39264c3d8069e548"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a8516a20464d8379d39264c3d8069e548">Isis::LinearAlgebra::perpendicular</a></div><div class="ttdeci">static Vector perpendicular(const Vector &amp;vector1, const Vector &amp;vector2)</div><div class="ttdoc">Finds the unique vector P such that A = V + P, V is parallel to B and P is perpendicular to B,...</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:932</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a8c60afbfc7d00badc4a8f4102485d82b"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a8c60afbfc7d00badc4a8f4102485d82b">Isis::LinearAlgebra::pseudoinverse</a></div><div class="ttdeci">static Matrix pseudoinverse(const Matrix &amp;matrix)</div><div class="ttdoc">Returns the pseudoinverse of a matrix.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:339</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_a968271942d7edaaf9831070be3791d4e"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#a968271942d7edaaf9831070be3791d4e">Isis::LinearAlgebra::determinant</a></div><div class="ttdeci">static double determinant(const Matrix &amp;matrix)</div><div class="ttdoc">Returns the determinant of the given 3x3 matrix.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:440</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_aa239d5ca86c0e18b0721a844f6f985c1"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#aa239d5ca86c0e18b0721a844f6f985c1">Isis::LinearAlgebra::inverse</a></div><div class="ttdeci">static Matrix inverse(const Matrix &amp;matrix)</div><div class="ttdoc">Returns the inverse of a 2x2 or 3x3 matrix.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:282</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_aa7ba18358ac6636bb34d9efc9484d54a"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#aa7ba18358ac6636bb34d9efc9484d54a">Isis::LinearAlgebra::Vector</a></div><div class="ttdeci">boost::numeric::ublas::vector&lt; double &gt; Vector</div><div class="ttdoc">Definition for an Isis::LinearAlgebra::Vector of doubles.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.h:132</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_aab21d3093e2fca63d891e10ee6239209"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#aab21d3093e2fca63d891e10ee6239209">Isis::LinearAlgebra::isIdentity</a></div><div class="ttdeci">static bool isIdentity(const Matrix &amp;matrix)</div><div class="ttdoc">Determines whether the given matrix is the identity.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:61</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_ab315cb2dfa5929eb07086f877414ed28"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#ab315cb2dfa5929eb07086f877414ed28">Isis::LinearAlgebra::setVec3</a></div><div class="ttdeci">static void setVec3(Vector *v, double v0, double v1, double v2)</div><div class="ttdoc">Fills the first three elements of the given vector with the given values.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:1752</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_ac3667b66afeb75744fa920c28e29f4eb"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#ac3667b66afeb75744fa920c28e29f4eb">Isis::LinearAlgebra::isZero</a></div><div class="ttdeci">static bool isZero(const Matrix &amp;matrix)</div><div class="ttdoc">Determines whether the given matrix is filled with zereos.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:211</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_ad4eb94d301ba2ff9f9d0668eaac4d06d"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#ad4eb94d301ba2ff9f9d0668eaac4d06d">Isis::LinearAlgebra::EulerAngle</a></div><div class="ttdeci">QPair&lt; Angle, int &gt; EulerAngle</div><div class="ttdoc">Definition for an EulerAngle pair.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.h:158</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_ad904a505a81ce28b4c4323ace4f17343"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#ad904a505a81ce28b4c4323ace4f17343">Isis::LinearAlgebra::outerProduct</a></div><div class="ttdeci">static Matrix outerProduct(const Vector &amp;vector1, const Vector &amp;vector2)</div><div class="ttdoc">Computes the outer product of the given vectors.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:757</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_add4b4c7e71647477557284ab470498e5"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#add4b4c7e71647477557284ab470498e5">Isis::LinearAlgebra::Matrix</a></div><div class="ttdeci">boost::numeric::ublas::matrix&lt; double &gt; Matrix</div><div class="ttdoc">Definition for an Isis::LinearAlgebra::Matrix of doubles.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.h:102</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_ae1947c88491eb06d1603b0327ffae105"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#ae1947c88491eb06d1603b0327ffae105">Isis::LinearAlgebra::isOrthogonal</a></div><div class="ttdeci">static bool isOrthogonal(const Matrix &amp;matrix)</div><div class="ttdoc">Determines whether the given matrix is orthogonal by verifying that the matrix and its tranpose are i...</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:89</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_aeebbc4478f51cd0dd412967e688577cf"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#aeebbc4478f51cd0dd412967e688577cf">Isis::LinearAlgebra::MatrixUpperTriangular</a></div><div class="ttdeci">boost::numeric::ublas::symmetric_matrix&lt; double, boost::numeric::ublas::upper &gt; MatrixUpperTriangular</div><div class="ttdoc">Definition for an Isis::LinearAlgebra::MatrixUpperTriangular of doubles with an upper configuration.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.h:122</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_aefe47950901e619449c92781dc51feb7"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#aefe47950901e619449c92781dc51feb7">Isis::LinearAlgebra::absoluteMaximum</a></div><div class="ttdeci">static double absoluteMaximum(const Vector &amp;vector)</div><div class="ttdoc">Returns the maximum norm (L-infinity norm) for the given vector.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:531</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_af794d88ef367cacf481d4b787897fb1e"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#af794d88ef367cacf481d4b787897fb1e">Isis::LinearAlgebra::toQuaternion</a></div><div class="ttdeci">static Vector toQuaternion(const Matrix &amp;rotationMatrix)</div><div class="ttdoc">Converts a rotation's representation from a matrix to a unit quaternion.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:1211</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_afac29eb05bebfcb48e0a84a78d80eabc"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#afac29eb05bebfcb48e0a84a78d80eabc">Isis::LinearAlgebra::transpose</a></div><div class="ttdeci">static Matrix transpose(const Matrix &amp;matrix)</div><div class="ttdoc">Returns the transpose of the given matrix.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:369</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_afc582729e25f8757b4693dc6a33bbeb7"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#afc582729e25f8757b4693dc6a33bbeb7">Isis::LinearAlgebra::dotProduct</a></div><div class="ttdeci">static double dotProduct(const Vector &amp;vector1, const Vector &amp;vector2)</div><div class="ttdoc">Computes the dot product of the given vectors.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:781</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_afe3e81b264d0d39a8b396e646e5678fd"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#afe3e81b264d0d39a8b396e646e5678fd">Isis::LinearAlgebra::toEulerAngles</a></div><div class="ttdeci">static QList&lt; EulerAngle &gt; toEulerAngles(const Matrix &amp;rotationMatrix, const QList&lt; int &gt; axes)</div><div class="ttdoc">Converts a rotation's representation from a matrix to a set of Euler angles with corresponding axes.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:1051</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_aff156efa237b28f4d6ec3ce8029d3350"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#aff156efa237b28f4d6ec3ce8029d3350">Isis::LinearAlgebra::normalize</a></div><div class="ttdeci">static Vector normalize(const Vector &amp;vector)</div><div class="ttdoc">Returns a unit vector that is codirectional with the given vector by dividing each component of the v...</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:477</div></div>
+<div class="ttc" id="aclass_isis_1_1_linear_algebra_html_affcea6270b8ce6a166a346a5e056af82"><div class="ttname"><a href="class_isis_1_1_linear_algebra.html#affcea6270b8ce6a166a346a5e056af82">Isis::LinearAlgebra::isRotationMatrix</a></div><div class="ttdeci">static bool isRotationMatrix(const Matrix &amp;matrix)</div><div class="ttdoc">Determines whether the given matrix is a rotation matrix.</div><div class="ttdef"><b>Definition:</b> LinearAlgebra.cpp:113</div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a0f2ba9939e73885ee6dcfca6a76815b2"><div class="ttname"><a href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString</a></div><div class="ttdeci">QString toString(bool boolToConvert)</div><div class="ttdoc">Global function to convert a boolean to a string.</div><div class="ttdef"><b>Definition:</b> IString.cpp:211</div></div>
+<div class="ttc" id="anamespace_isis_html_ae89a575c21f490200c6fba70c9127263"><div class="ttname"><a href="namespace_isis.html#ae89a575c21f490200c6fba70c9127263">Isis::operator&lt;&lt;</a></div><div class="ttdeci">QDebug operator&lt;&lt;(QDebug debug, const Hillshade &amp;hillshade)</div><div class="ttdoc">Print this class out to a QDebug object.</div><div class="ttdef"><b>Definition:</b> Hillshade.cpp:313</div></div>
+<div class="ttc" id="astruct_q_pair_html"><div class="ttname"><a href="struct_q_pair.html">QPair</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> CubeIoHandler.h:23</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_185c59cdc55ab01cd5ef5ebbd87c306e.html">LinearAlgebra</a></li><li class="navelem"><a class="el" href="_linear_algebra_8h.html">LinearAlgebra.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

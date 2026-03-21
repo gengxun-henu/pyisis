@@ -1,0 +1,348 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/CubeManager/CubeManager.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_cube_manager_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">CubeManager.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_cube_manager_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef CubeManager_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define CubeManager_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_i_exception_8h.html">IException.h</a>&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QMap&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QQueue&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespacestd.html">std</a>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> *   Unless noted otherwise, the portions of Isis written by the</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> *   USGS are public domain. See individual third-party library</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> *   and package descriptions for intellectual property</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> *   information,user agreements, and related information.</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"> *   Although Isis has been used by the USGS, no warranty, expressed or implied,</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment"> *   is made by the USGS as to the accuracy and functioning of such software</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment"> *   and related material nor shall the fact of distribution constitute any such</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> *   warranty, and no responsibility is assumed by the USGS in connection</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> *   therewith.</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"> *   For additional information, launch</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> *   $ISISROOT/doc//documents/Disclaimers/Disclaimers.html in a browser or see</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment"> *   the Privacy &amp;amp; Disclaimers page on the Isis website,</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment"> *   http://isis.astrogeology.usgs.gov, and the USGS privacy and disclaimers on</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"> *   http://www.usgs.gov/privacy.html.</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keyword">class </span>Cube;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="class_isis_1_1_cube_manager.html">   70</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_cube_manager.html">CubeManager</a>  {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <a class="code" href="class_isis_1_1_cube_manager.html">CubeManager</a>();</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      ~<a class="code" href="class_isis_1_1_cube_manager.html">CubeManager</a>();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="class_isis_1_1_cube_manager.html#af10bb6166690d9e12adf2c893e717d80">   84</a></span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_cube.html">Cube</a> *<a class="code" href="class_isis_1_1_cube_manager.html#af10bb6166690d9e12adf2c893e717d80">Open</a>(<span class="keyword">const</span> QString &amp;cubeFileName) {</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">if</span> (!p_instance) {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;          p_instance = <span class="keyword">new</span> <a class="code" href="class_isis_1_1_cube_manager.html">CubeManager</a>();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">return</span> p_instance-&gt;OpenCube(cubeFileName);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      }</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="class_isis_1_1_cube_manager.html#a92fb440f6f99ccfaccaaa0a6b4f8a823">  102</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cube_manager.html#a92fb440f6f99ccfaccaaa0a6b4f8a823">SetNumOpenCubes</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> numCubes) {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="comment">// check to see if numCubes exceeds the number of open files limitations</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordflow">if</span> (numCubes &gt; p_maxOpenFiles) {</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;          p_currentLimit = p_maxOpenFiles;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        p_currentLimit = numCubes;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      }</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno"><a class="line" href="class_isis_1_1_cube_manager.html#a024fba207e068cfe7dc1d3e787ff42ba">  120</a></span>&#160;      <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cube_manager.html#a024fba207e068cfe7dc1d3e787ff42ba">CleanUp</a>(<span class="keyword">const</span> QString &amp;cubeFileName) {</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        p_instance-&gt;CleanCubes(cubeFileName);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;      }</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="class_isis_1_1_cube_manager.html#a985cf415046af7765a917f17997a9bc4">  130</a></span>&#160;      <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cube_manager.html#a985cf415046af7765a917f17997a9bc4">CleanUp</a>() {</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keyword">delete</span> p_instance;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        p_instance = 0;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;      };</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      <span class="keywordtype">void</span> CleanCubes(<span class="keyword">const</span> QString &amp;cubeFileName);</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      <span class="keywordtype">void</span> CleanCubes();</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      <a class="code" href="class_isis_1_1_cube.html">Cube</a> *OpenCube(<span class="keyword">const</span> QString &amp;cubeFileName);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="class_isis_1_1_cube_manager.html#a1968ffdecea75cdb94bd8d37ce71221f">  142</a></span>&#160;      <span class="keyword">static</span> <a class="code" href="class_isis_1_1_cube_manager.html">CubeManager</a> *<a class="code" href="class_isis_1_1_cube_manager.html#a1968ffdecea75cdb94bd8d37ce71221f">p_instance</a>;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="class_isis_1_1_cube_manager.html#a3121bed66579cf56a383e52f9da686e3">  145</a></span>&#160;      <a class="code" href="class_q_map.html">QMap&lt;QString, Cube *&gt;</a> <a class="code" href="class_isis_1_1_cube_manager.html#a3121bed66579cf56a383e52f9da686e3">p_cubes</a>;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno"><a class="line" href="class_isis_1_1_cube_manager.html#a7462fd5703b06e0a520ae7bcba5901c3">  148</a></span>&#160;      <a class="code" href="class_q_queue.html">QQueue&lt;QString&gt;</a> <a class="code" href="class_isis_1_1_cube_manager.html#a7462fd5703b06e0a520ae7bcba5901c3">p_opened</a>;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00151"></a><span class="lineno"><a class="line" href="class_isis_1_1_cube_manager.html#a9b1b2e71190cf2cc286a0fa8f7ab177d">  151</a></span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_cube_manager.html#a9b1b2e71190cf2cc286a0fa8f7ab177d">p_currentLimit</a>;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno"><a class="line" href="class_isis_1_1_cube_manager.html#a068ffe193a31df09e7663597ee87722d">  154</a></span>&#160;      <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_cube_manager.html#a068ffe193a31df09e7663597ee87722d">p_maxOpenFiles</a>;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  };</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;}</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_i_exception_8h_html"><div class="ttname"><a href="_i_exception_8h.html">IException.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_html"><div class="ttname"><a href="class_isis_1_1_cube.html">Isis::Cube</a></div><div class="ttdoc">IO Handler for Isis Cubes.</div><div class="ttdef"><b>Definition:</b> Cube.h:168</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_manager_html"><div class="ttname"><a href="class_isis_1_1_cube_manager.html">Isis::CubeManager</a></div><div class="ttdoc">Class for quick re-accessing of cubes based on file name.</div><div class="ttdef"><b>Definition:</b> CubeManager.h:70</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_manager_html_a024fba207e068cfe7dc1d3e787ff42ba"><div class="ttname"><a href="class_isis_1_1_cube_manager.html#a024fba207e068cfe7dc1d3e787ff42ba">Isis::CubeManager::CleanUp</a></div><div class="ttdeci">static void CleanUp(const QString &amp;cubeFileName)</div><div class="ttdoc">This method calls CleanCubes(const QString &amp;cubeFileName) on the static instance.</div><div class="ttdef"><b>Definition:</b> CubeManager.h:120</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_manager_html_a068ffe193a31df09e7663597ee87722d"><div class="ttname"><a href="class_isis_1_1_cube_manager.html#a068ffe193a31df09e7663597ee87722d">Isis::CubeManager::p_maxOpenFiles</a></div><div class="ttdeci">unsigned int p_maxOpenFiles</div><div class="ttdoc">60% of the maximum number of open files allowed by system resources</div><div class="ttdef"><b>Definition:</b> CubeManager.h:154</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_manager_html_a1968ffdecea75cdb94bd8d37ce71221f"><div class="ttname"><a href="class_isis_1_1_cube_manager.html#a1968ffdecea75cdb94bd8d37ce71221f">Isis::CubeManager::p_instance</a></div><div class="ttdeci">static CubeManager * p_instance</div><div class="ttdoc">There is always at least one instance of CubeManager around.</div><div class="ttdef"><b>Definition:</b> CubeManager.h:142</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_manager_html_a3121bed66579cf56a383e52f9da686e3"><div class="ttname"><a href="class_isis_1_1_cube_manager.html#a3121bed66579cf56a383e52f9da686e3">Isis::CubeManager::p_cubes</a></div><div class="ttdeci">QMap&lt; QString, Cube * &gt; p_cubes</div><div class="ttdoc">This keeps track of the open cubes.</div><div class="ttdef"><b>Definition:</b> CubeManager.h:145</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_manager_html_a7462fd5703b06e0a520ae7bcba5901c3"><div class="ttname"><a href="class_isis_1_1_cube_manager.html#a7462fd5703b06e0a520ae7bcba5901c3">Isis::CubeManager::p_opened</a></div><div class="ttdeci">QQueue&lt; QString &gt; p_opened</div><div class="ttdoc">This keeps track of cubes that have been opened.</div><div class="ttdef"><b>Definition:</b> CubeManager.h:148</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_manager_html_a92fb440f6f99ccfaccaaa0a6b4f8a823"><div class="ttname"><a href="class_isis_1_1_cube_manager.html#a92fb440f6f99ccfaccaaa0a6b4f8a823">Isis::CubeManager::SetNumOpenCubes</a></div><div class="ttdeci">void SetNumOpenCubes(unsigned int numCubes)</div><div class="ttdoc">This sets the maximum number of opened cubes for this instance of CubeManager.</div><div class="ttdef"><b>Definition:</b> CubeManager.h:102</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_manager_html_a985cf415046af7765a917f17997a9bc4"><div class="ttname"><a href="class_isis_1_1_cube_manager.html#a985cf415046af7765a917f17997a9bc4">Isis::CubeManager::CleanUp</a></div><div class="ttdeci">static void CleanUp()</div><div class="ttdoc">This method calls CleanCubes() on the static instance.</div><div class="ttdef"><b>Definition:</b> CubeManager.h:130</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_manager_html_a9b1b2e71190cf2cc286a0fa8f7ab177d"><div class="ttname"><a href="class_isis_1_1_cube_manager.html#a9b1b2e71190cf2cc286a0fa8f7ab177d">Isis::CubeManager::p_currentLimit</a></div><div class="ttdeci">unsigned int p_currentLimit</div><div class="ttdoc">The current limit regarding number of open files allowed.</div><div class="ttdef"><b>Definition:</b> CubeManager.h:151</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_manager_html_af10bb6166690d9e12adf2c893e717d80"><div class="ttname"><a href="class_isis_1_1_cube_manager.html#af10bb6166690d9e12adf2c893e717d80">Isis::CubeManager::Open</a></div><div class="ttdeci">static Cube * Open(const QString &amp;cubeFileName)</div><div class="ttdoc">This method calls the method OpenCube() on the static instance.</div><div class="ttdef"><b>Definition:</b> CubeManager.h:84</div></div>
+<div class="ttc" id="aclass_q_map_html"><div class="ttname"><a href="class_q_map.html">QMap</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> CubeIoHandler.h:22</div></div>
+<div class="ttc" id="aclass_q_queue_html"><div class="ttname"><a href="class_q_queue.html">QQueue&lt; QString &gt;</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespacestd_html"><div class="ttname"><a href="namespacestd.html">std</a></div><div class="ttdoc">Namespace for the standard library.</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_5cf950b503a3b42a45a7c39cd3fc2c65.html">CubeManager</a></li><li class="navelem"><a class="el" href="_cube_manager_8h.html">CubeManager.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

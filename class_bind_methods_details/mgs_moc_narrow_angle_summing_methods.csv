@@ -1,0 +1,8 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+MocNarrowAngleSumming,Mars Global Surveyor,isis/src/mgs/objs/MocNarrowAngleSumming/MocNarrowAngleSumming.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类"
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,MocNarrowAngleSumming,isis_pybind.MocNarrowAngleSumming,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类"
+Construction/Enum,MocNarrowAngleSumming(),isis_pybind.MocNarrowAngleSumming(),N,"亦属 Spice, Instruments, and Cameras 相关类"
+Public API,inline double Detector(double sample) const { return (sample - 1.0) * (double) p_csum + p_ss,isis_pybind.MocNarrowAngleSumming.detector,N,"亦属 Spice, Instruments, and Cameras 相关类"
+Public API,inline double Sample(double detector) const { return (detector - p_ss) / ((double) p_csum) + 1.0,isis_pybind.MocNarrowAngleSumming.sample,N,"亦属 Spice, Instruments, and Cameras 相关类"

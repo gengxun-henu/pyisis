@@ -1,0 +1,823 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ImageOverlapSet Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_image_overlap_set.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_image_overlap_set-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ImageOverlapSet Class Reference<div class="ingroups"><a class="el" href="group___pattern_matching.html">Pattern Matching</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>This class is used to find the overlaps between all the images in a list of serial numbers.  
+ <a href="class_isis_1_1_image_overlap_set.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_image_overlap_set_8h_source.html">ImageOverlapSet.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ImageOverlapSet:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_image_overlap_set__inherit__graph.png" border="0" usemap="#a_isis_1_1_image_overlap_set_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_image_overlap_set_inherit__map" id="a_isis_1_1_image_overlap_set_inherit__map">
+<area shape="rect" title="This class is used to find the overlaps between all the images in a list of serial numbers." alt="" coords="5,135,166,408"/>
+<area shape="rect" href="class_q_thread.html" title=" " alt="" coords="50,5,121,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ImageOverlapSet:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_image_overlap_set__coll__graph.png" border="0" usemap="#a_isis_1_1_image_overlap_set_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_image_overlap_set_coll__map" id="a_isis_1_1_image_overlap_set_coll__map">
+<area shape="rect" title="This class is used to find the overlaps between all the images in a list of serial numbers." alt="" coords="32,151,192,424"/>
+<area shape="rect" href="class_q_thread.html" title=" " alt="" coords="5,5,77,87"/>
+<area shape="rect" title=" " alt="" coords="100,5,265,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a7dee8d217bafbdc500e612a88f62a180"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#a7dee8d217bafbdc500e612a88f62a180">ImageOverlapSet</a> (bool continueOnError=false, bool useThread=true)</td></tr>
+<tr class="memdesc:a7dee8d217bafbdc500e612a88f62a180"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create FindImageOverlaps object.  <a href="class_isis_1_1_image_overlap_set.html#a7dee8d217bafbdc500e612a88f62a180">More...</a><br /></td></tr>
+<tr class="separator:a7dee8d217bafbdc500e612a88f62a180"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a538ca6332995807a60226bdcac5fee8c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#a538ca6332995807a60226bdcac5fee8c">~ImageOverlapSet</a> ()</td></tr>
+<tr class="memdesc:a538ca6332995807a60226bdcac5fee8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete this object.  <a href="class_isis_1_1_image_overlap_set.html#a538ca6332995807a60226bdcac5fee8c">More...</a><br /></td></tr>
+<tr class="separator:a538ca6332995807a60226bdcac5fee8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbb9ce55b9fc90fa8eaafad9dc013596"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#acbb9ce55b9fc90fa8eaafad9dc013596">FindImageOverlaps</a> (<a class="el" href="class_isis_1_1_serial_number_list.html">SerialNumberList</a> &amp;boundaries)</td></tr>
+<tr class="memdesc:acbb9ce55b9fc90fa8eaafad9dc013596"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create polygons of overlap from the images specified in the serial number list.  <a href="class_isis_1_1_image_overlap_set.html#acbb9ce55b9fc90fa8eaafad9dc013596">More...</a><br /></td></tr>
+<tr class="separator:acbb9ce55b9fc90fa8eaafad9dc013596"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d4ca6ac5b8750a06598d94cfdd09c8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#a2d4ca6ac5b8750a06598d94cfdd09c8a">FindImageOverlaps</a> (std::vector&lt; QString &gt; sns, std::vector&lt; geos::geom::MultiPolygon * &gt; polygons)</td></tr>
+<tr class="memdesc:a2d4ca6ac5b8750a06598d94cfdd09c8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a strict pthread implementation of this class' multi-threading!  <a href="class_isis_1_1_image_overlap_set.html#a2d4ca6ac5b8750a06598d94cfdd09c8a">More...</a><br /></td></tr>
+<tr class="separator:a2d4ca6ac5b8750a06598d94cfdd09c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c9b715829a377eff6078b18066e6deb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#a2c9b715829a377eff6078b18066e6deb">FindImageOverlaps</a> (<a class="el" href="class_isis_1_1_serial_number_list.html">SerialNumberList</a> &amp;boundaries, QString outputFile)</td></tr>
+<tr class="memdesc:a2c9b715829a377eff6078b18066e6deb"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method calculates image overlaps given a <a class="el" href="class_isis_1_1_serial_number_list.html" title="Serial Number list generator.">SerialNumberList</a> and writes it to the filename specified by outputFile.  <a href="class_isis_1_1_image_overlap_set.html#a2c9b715829a377eff6078b18066e6deb">More...</a><br /></td></tr>
+<tr class="separator:a2c9b715829a377eff6078b18066e6deb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a149072643dce9bd5f7e7128f8bb8eab4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#a149072643dce9bd5f7e7128f8bb8eab4">ReadImageOverlaps</a> (const QString &amp;filename)</td></tr>
+<tr class="memdesc:a149072643dce9bd5f7e7128f8bb8eab4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create polygons of overlap from the file specified.  <a href="class_isis_1_1_image_overlap_set.html#a149072643dce9bd5f7e7128f8bb8eab4">More...</a><br /></td></tr>
+<tr class="separator:a149072643dce9bd5f7e7128f8bb8eab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9ebccb1fa41629c53b514b15860b052"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#ae9ebccb1fa41629c53b514b15860b052">WriteImageOverlaps</a> (const QString &amp;filename)</td></tr>
+<tr class="memdesc:ae9ebccb1fa41629c53b514b15860b052"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write polygons of overlap to the file specified.  <a href="class_isis_1_1_image_overlap_set.html#ae9ebccb1fa41629c53b514b15860b052">More...</a><br /></td></tr>
+<tr class="separator:ae9ebccb1fa41629c53b514b15860b052"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acedccaa20b11fc795429aa2a70bd28ec"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#acedccaa20b11fc795429aa2a70bd28ec">Size</a> ()</td></tr>
+<tr class="memdesc:acedccaa20b11fc795429aa2a70bd28ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total number of latitude and longitude overlaps.  <a href="class_isis_1_1_image_overlap_set.html#acedccaa20b11fc795429aa2a70bd28ec">More...</a><br /></td></tr>
+<tr class="separator:acedccaa20b11fc795429aa2a70bd28ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fca017e1775a9f7154c2260c4ead1d6"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_image_overlap.html">ImageOverlap</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#a3fca017e1775a9f7154c2260c4ead1d6">operator[]</a> (int index)</td></tr>
+<tr class="memdesc:a3fca017e1775a9f7154c2260c4ead1d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the images which overlap at a given loverlap.  <a href="class_isis_1_1_image_overlap_set.html#a3fca017e1775a9f7154c2260c4ead1d6">More...</a><br /></td></tr>
+<tr class="separator:a3fca017e1775a9f7154c2260c4ead1d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93177f25b9bd32dd5c302484669cd958"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_isis_1_1_image_overlap.html">ImageOverlap</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#a93177f25b9bd32dd5c302484669cd958">operator[]</a> (QString serialNumber)</td></tr>
+<tr class="memdesc:a93177f25b9bd32dd5c302484669cd958"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the overlaps that have a specific serial number.  <a href="class_isis_1_1_image_overlap_set.html#a93177f25b9bd32dd5c302484669cd958">More...</a><br /></td></tr>
+<tr class="separator:a93177f25b9bd32dd5c302484669cd958"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6f353d85032f93d3f24c6df65461a6a"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#ac6f353d85032f93d3f24c6df65461a6a">Errors</a> ()</td></tr>
+<tr class="memdesc:ac6f353d85032f93d3f24c6df65461a6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the a list of errors encountered.  <a href="class_isis_1_1_image_overlap_set.html#ac6f353d85032f93d3f24c6df65461a6a">More...</a><br /></td></tr>
+<tr class="separator:ac6f353d85032f93d3f24c6df65461a6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a1fbfce4b2fbb5732e81de7c851086738"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#a1fbfce4b2fbb5732e81de7c851086738">FindAllOverlaps</a> (<a class="el" href="class_isis_1_1_serial_number_list.html">SerialNumberList</a> *snlist=NULL)</td></tr>
+<tr class="memdesc:a1fbfce4b2fbb5732e81de7c851086738"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the overlaps between all the existing <a class="el" href="class_isis_1_1_image_overlap.html" title="Individual overlap container.">ImageOverlap</a> Objects.  <a href="class_isis_1_1_image_overlap_set.html#a1fbfce4b2fbb5732e81de7c851086738">More...</a><br /></td></tr>
+<tr class="separator:a1fbfce4b2fbb5732e81de7c851086738"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76158f7cae8d4ca2df6837e0b4a05234"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#a76158f7cae8d4ca2df6837e0b4a05234">AddSerialNumbers</a> (<a class="el" href="class_isis_1_1_image_overlap.html">ImageOverlap</a> *to, <a class="el" href="class_isis_1_1_image_overlap.html">ImageOverlap</a> *from)</td></tr>
+<tr class="memdesc:a76158f7cae8d4ca2df6837e0b4a05234"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add the serial numbers from the second overlap to the first.  <a href="class_isis_1_1_image_overlap_set.html#a76158f7cae8d4ca2df6837e0b4a05234">More...</a><br /></td></tr>
+<tr class="separator:a76158f7cae8d4ca2df6837e0b4a05234"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a32e7b39eea8a66f2313bee055944cd66"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_image_overlap_set.html#a32e7b39eea8a66f2313bee055944cd66">p_errorLog</a></td></tr>
+<tr class="memdesc:a32e7b39eea8a66f2313bee055944cd66"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a list of detailed* errors including all known information.  <a href="class_isis_1_1_image_overlap_set.html#a32e7b39eea8a66f2313bee055944cd66">More...</a><br /></td></tr>
+<tr class="separator:a32e7b39eea8a66f2313bee055944cd66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class is used to find the overlaps between all the images in a list of serial numbers. </p>
+<p>The overlaps are created in (Lon,Lat) coordinates of geos::geom::MultiPolygons. Each overlap has an associated list of serial numbers which are contained in that overlap.</p>
+<dl class="section author"><dt>Author</dt><dd>2006-01-20 Stuart Sides </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a7dee8d217bafbdc500e612a88f62a180"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dee8d217bafbdc500e612a88f62a180">&#9670;&nbsp;</a></span>ImageOverlapSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ImageOverlapSet::ImageOverlapSet </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>continueOnError</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>useThread</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create FindImageOverlaps object. </p>
+<p>Create an empty FindImageOverlaps object.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">continueOnError</td><td>Whether or not this class throws exceptions in addition to logging errors. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>automaticRegistration.doc </dd></dl>
+
+</div>
+</div>
+<a id="a538ca6332995807a60226bdcac5fee8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a538ca6332995807a60226bdcac5fee8c">&#9670;&nbsp;</a></span>~ImageOverlapSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ImageOverlapSet::~ImageOverlapSet </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Delete this object. </p>
+<p>Delete the FindImageOverlaps object. The stored ImageOverlaps will be deleted as well. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a76158f7cae8d4ca2df6837e0b4a05234"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76158f7cae8d4ca2df6837e0b4a05234">&#9670;&nbsp;</a></span>AddSerialNumbers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageOverlapSet::AddSerialNumbers </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_overlap.html">ImageOverlap</a> *&#160;</td>
+          <td class="paramname"><em>to</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_image_overlap.html">ImageOverlap</a> *&#160;</td>
+          <td class="paramname"><em>from</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add the serial numbers from the second overlap to the first. </p>
+<p>Note: Need to check for existence of a SN before adding it</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">to</td><td>The object to receive the new serial numbers </td></tr>
+    <tr><td class="paramname">from</td><td>The object to copy the serial numbers from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_overlap.html#aabc9523561f5f5fd24eac026bec510f2">Isis::ImageOverlap::Add()</a>, and <a class="el" href="class_isis_1_1_image_overlap.html#a5f619330c8adad9b247fd88370099eb2">Isis::ImageOverlap::Size()</a>.</p>
+
+</div>
+</div>
+<a id="ac6f353d85032f93d3f24c6df65461a6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6f353d85032f93d3f24c6df65461a6a">&#9670;&nbsp;</a></span>Errors()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt;<a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a>&gt;&amp; Isis::ImageOverlapSet::Errors </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the a list of errors encountered. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_image_overlap_set.html#a32e7b39eea8a66f2313bee055944cd66">p_errorLog</a>.</p>
+
+</div>
+</div>
+<a id="a1fbfce4b2fbb5732e81de7c851086738"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fbfce4b2fbb5732e81de7c851086738">&#9670;&nbsp;</a></span>FindAllOverlaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageOverlapSet::FindAllOverlaps </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_serial_number_list.html">SerialNumberList</a> *&#160;</td>
+          <td class="paramname"><em>snlist</em> = <code>NULL</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Find the overlaps between all the existing <a class="el" href="class_isis_1_1_image_overlap.html" title="Individual overlap container.">ImageOverlap</a> Objects. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">snlist</td><td>The serialnumber list relating to the overlaps described by the current known <a class="el" href="class_isis_1_1_image_overlap.html" title="Individual overlap container.">ImageOverlap</a> objects or NULL </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_progress.html#a3af617a61efa731205b9adc52d611811">Isis::Progress::AddSteps()</a>, <a class="el" href="class_isis_1_1_progress.html#aec4f8e7686cc25be05c8fccc78743ce6">Isis::Progress::CheckStatus()</a>, <a class="el" href="namespace_isis.html#aef83e85d1e0a3305840ff186215957a7">Isis::globalFactory</a>, <a class="el" href="class_isis_1_1_progress.html#a92481afe73aa26bbe32967d80426b446">Isis::Progress::SetMaximumSteps()</a>, <a class="el" href="class_isis_1_1_progress.html#a9ad047499caadad1e09cf75dadb2a939">Isis::Progress::SetText()</a>, and <a class="el" href="class_isis_1_1_serial_number_list.html#aa7aa24b0457122880ca53a3421535bc6">Isis::SerialNumberList::size()</a>.</p>
+
+</div>
+</div>
+<a id="acbb9ce55b9fc90fa8eaafad9dc013596"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbb9ce55b9fc90fa8eaafad9dc013596">&#9670;&nbsp;</a></span>FindImageOverlaps() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageOverlapSet::FindImageOverlaps </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_serial_number_list.html">SerialNumberList</a> &amp;&#160;</td>
+          <td class="paramname"><em>sns</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create polygons of overlap from the images specified in the serial number list. </p>
+<p>All polygons created by this class will be deleted when it is destroyed, so callers should not delete the polygons returned by various members.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sns</td><td>The serial number list to use when finding overlaps </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_cube.html#ad68e8c24c766750e95aaf7dff8bffd97">Isis::Cube::close()</a>, <a class="el" href="class_isis_1_1_serial_number_list.html#af7d1086bc9acf5f3b9f7bdd9ba200ee3">Isis::SerialNumberList::fileName()</a>, <a class="el" href="class_isis_1_1_cube.html#aa05a4870a3d19b9a5b57f12ede21ca86">Isis::Cube::open()</a>, <a class="el" href="class_isis_1_1_image_polygon.html#a1567a049a3c42b458cd2dadf01386045">Isis::ImagePolygon::Polys()</a>, <a class="el" href="class_isis_1_1_cube.html#a128f5c5f30bbd1224c1d31c5f137f91f">Isis::Cube::readFootprint()</a>, <a class="el" href="class_isis_1_1_serial_number_list.html#a6984e4efe390c3774c0bccd484cb3ffd">Isis::SerialNumberList::serialNumber()</a>, and <a class="el" href="class_isis_1_1_serial_number_list.html#aa7aa24b0457122880ca53a3421535bc6">Isis::SerialNumberList::size()</a>.</p>
+
+</div>
+</div>
+<a id="a2c9b715829a377eff6078b18066e6deb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c9b715829a377eff6078b18066e6deb">&#9670;&nbsp;</a></span>FindImageOverlaps() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageOverlapSet::FindImageOverlaps </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_serial_number_list.html">SerialNumberList</a> &amp;&#160;</td>
+          <td class="paramname"><em>boundaries</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>outputFile</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method calculates image overlaps given a <a class="el" href="class_isis_1_1_serial_number_list.html" title="Serial Number list generator.">SerialNumberList</a> and writes it to the filename specified by outputFile. </p>
+<p>This method is internally optimized and multi-threaded: the overlaps will NOT persist in memory after this method is called. This object will be reset to its initial state when this is called, and it is invalid to call this method if you have called other methods first.</p>
+<p>This method is internally multi-threaded and more efficient than the others for calculating overlaps.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">boundaries</td><td>The files to find overlaps between </td></tr>
+    <tr><td class="paramname">outputFile</td><td>The output <a class="el" href="class_isis_1_1_image_overlap_set.html" title="This class is used to find the overlaps between all the images in a list of serial numbers.">ImageOverlapSet</a> file </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a2d4ca6ac5b8750a06598d94cfdd09c8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d4ca6ac5b8750a06598d94cfdd09c8a">&#9670;&nbsp;</a></span>FindImageOverlaps() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageOverlapSet::FindImageOverlaps </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; QString &gt;&#160;</td>
+          <td class="paramname"><em>sns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; geos::geom::MultiPolygon * &gt;&#160;</td>
+          <td class="paramname"><em>polygons</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is a strict pthread implementation of this class' multi-threading! </p>
+<p>void <a class="el" href="class_isis_1_1_image_overlap_set.html#a2c9b715829a377eff6078b18066e6deb" title="This method calculates image overlaps given a SerialNumberList and writes it to the filename specifie...">ImageOverlapSet::FindImageOverlaps(SerialNumberList &amp;boundaries, QString outputFile)</a> {</p>
+<p>Do a common sense programmer check, this should be empty before we start if (!p_lonLatOverlaps.empty()) { string msg = "FindImageOverlaps(SerialNumberList&amp;,QString) may not be called on an ImageOverlapSet " \ "which already contains overlaps."; throw iException::Message(iException::Programmer, msg, <em>FILEINFO</em>); }</p>
+<p>p_writtenSoFar = 0; p_calculatedSoFar = -1;</p>
+<p>This will enable using mutexes in the method calls where necessary. p_threadedCalculate = true;</p>
+<p>We need to pass a this pointer to the thread AND the serial number list in order to have it calculate properly. Build the void* to pass in. void *data[] = {this, &amp;boundaries};</p>
+<p>This is the thread that will be calculating the overlaps. Our current thread will be the one writing to the output file so synchronization at exit is not an issue. pthread_t calculateThread;</p>
+<p>Enter the initialization phase: don't try to write until the other thread says initialization is done by unlocking this mutex. pthread_mutex_lock(&amp;initDataMutex);</p>
+<p>Create the other thread - it will initialize variables (the <a class="el" href="class_isis_1_1_image_overlap.html" title="Individual overlap container.">ImageOverlap</a> list), unlock the initDataMutex, and proceed to calculate. After each polygon is calculated the calculating mutex will also be unlocked in order to allow I/O if possible. When done calculatedSoFar == p_lonLatOverlaps.size() and the calculating mutex is unlocked. pthread_create(&amp;calculateThread, NULL, FindImageOverlapsThreadStart, &amp;data);</p>
+<p>this will let us pass when initialization is done pthread_mutex_lock(&amp;initDataMutex);</p>
+<p>Final unlock of the initialization mutex - we locked it to get into this code pthread_mutex_unlock(&amp;initDataMutex);</p>
+<p>While our exit condition is not true, call WriteImageOverlaps with the filename. The WriteImageOverlaps call will block if it is waiting on calculations. while(p_calculatedSoFar != (int)p_lonLatOverlaps.size()) { WriteImageOverlaps(outputFile); }</p>
+<p>Wait for the calculation thread to actually exit, this has more than likely already occurred. void *result; pthread_join(calculateThread, &amp;result);</p>
+<p>re-initialize object to original state p_lonLatOverlaps.clear(); p_writtenSoFar = 0; p_calculatedSoFar = -1; p_threadedCalculate = false; } This is the method that is called when a thread is spawned by FindImageOverlaps(...). It simply calls FindImageOverlaps with a <a class="el" href="class_isis_1_1_serial_number_list.html" title="Serial Number list generator.">SerialNumberList</a> and exits.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>An array of the form {ImageOverlapSet* instance, <a class="el" href="class_isis_1_1_serial_number_list.html" title="Serial Number list generator.">SerialNumberList</a> *snlist)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>void* Returns null</dd></dl>
+<p>void *ImageOverlapSet::FindImageOverlapsThreadStart(void *data) { <a class="el" href="class_isis_1_1_image_overlap_set.html" title="This class is used to find the overlaps between all the images in a list of serial numbers.">ImageOverlapSet</a> *instance = (<a class="el" href="class_isis_1_1_image_overlap_set.html" title="This class is used to find the overlaps between all the images in a list of serial numbers.">ImageOverlapSet</a> *) ((void**)data)[0]; <a class="el" href="class_isis_1_1_serial_number_list.html" title="Serial Number list generator.">SerialNumberList</a> *snlist = (<a class="el" href="class_isis_1_1_serial_number_list.html" title="Serial Number list generator.">SerialNumberList</a> *)((void**)data)[1]; instance-&gt;FindImageOverlaps( *snlist ); pthread_exit(NULL); } Create polygons of overlap from the polygons specified. The serial numbers and the polygons are assumed to be parallel arrays. The original polygons passed as arguments are copied, so the ownership of the originals remains with the caller.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sns</td><td>The serial number list to use when finding overlaps </td></tr>
+    <tr><td class="paramname">polygons</td><td>The polygons which are to be used when finding overlaps</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>automaticRegistration.doc </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a3fca017e1775a9f7154c2260c4ead1d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fca017e1775a9f7154c2260c4ead1d6">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_image_overlap.html">ImageOverlap</a>* Isis::ImageOverlapSet::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the images which overlap at a given loverlap. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the overlap</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>const ImageOverlap* The polygon and serial numbers which define the indexed overlap. </dd></dl>
+
+</div>
+</div>
+<a id="a93177f25b9bd32dd5c302484669cd958"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93177f25b9bd32dd5c302484669cd958">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="class_isis_1_1_image_overlap.html">ImageOverlap</a> * &gt; Isis::ImageOverlapSet::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>serialNumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the overlaps that have a specific serial number. </p>
+<p>Search the existing <a class="el" href="class_isis_1_1_image_overlap.html" title="Individual overlap container.">ImageOverlap</a> objects for all that have the serial numbers associated with them. Note: This could be costly when many overlaps exist.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">serialNumber</td><td>The serial number to be search for in all existing ImageOverlaps</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>List of related <a class="el" href="class_isis_1_1_image_overlap.html" title="Individual overlap container.">ImageOverlap</a> objects, ownership is retained by ImageOverlapSet* </dd></dl>
+
+</div>
+</div>
+<a id="a149072643dce9bd5f7e7128f8bb8eab4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a149072643dce9bd5f7e7128f8bb8eab4">&#9670;&nbsp;</a></span>ReadImageOverlaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageOverlapSet::ReadImageOverlaps </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create polygons of overlap from the file specified. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>The file to read the image overlaps from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_interest_operator.html#aa0fb830cfc482ad6b4d28de599204e55">Isis::InterestOperator::Operate()</a>.</p>
+
+</div>
+</div>
+<a id="acedccaa20b11fc795429aa2a70bd28ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acedccaa20b11fc795429aa2a70bd28ec">&#9670;&nbsp;</a></span>Size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ImageOverlapSet::Size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the total number of latitude and longitude overlaps. </p>
+<dl class="section return"><dt>Returns</dt><dd>int The number of lat/lon overlaps </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_interest_operator.html#a07587ceeb00befbcb0ccbbbd54d47c9f">Isis::InterestOperator::FindOverlap()</a>.</p>
+
+</div>
+</div>
+<a id="ae9ebccb1fa41629c53b514b15860b052"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9ebccb1fa41629c53b514b15860b052">&#9670;&nbsp;</a></span>WriteImageOverlaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImageOverlapSet::WriteImageOverlaps </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write polygons of overlap to the file specified. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>The file to write the image overlaps to </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a32e7b39eea8a66f2313bee055944cd66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32e7b39eea8a66f2313bee055944cd66">&#9670;&nbsp;</a></span>p_errorLog</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a>&gt; Isis::ImageOverlapSet::p_errorLog</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is a list of detailed* errors including all known information. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_image_overlap_set.html#ac6f353d85032f93d3f24c6df65461a6a">Errors()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/ImageOverlapSet/<a class="el" href="_image_overlap_set_8h_source.html">ImageOverlapSet.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/ImageOverlapSet/<a class="el" href="_image_overlap_set_8cpp.html">ImageOverlapSet.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_image_overlap_set.html">ImageOverlapSet</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

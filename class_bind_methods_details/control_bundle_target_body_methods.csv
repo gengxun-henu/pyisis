@@ -1,0 +1,50 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+BundleTargetBody,Control Networks,isis/src/control/objs/BundleUtilities/BundleTargetBody.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,BundleTargetBody,isis_pybind.BundleTargetBody,Y,Minimal readonly/configuration subset validated in `bind_control_core.cpp`; PVL/formatting/vector APIs remain deferred
+Construction/Enum,"TargetRadiiSolveMethod enum (None, Mean, All)",isis_pybind.BundleTargetBody.TargetRadiiSolveMethod,Y,Bound as nested enum
+Construction/Enum,"TargetSolveCodes enum (PoleRA, VelocityPoleRA, AccelerationPoleRA, PoleDec, VelocityPoleDec, AccelerationPoleDec, PM, VelocityPM, AccelerationPM, TriaxialRadiusA)",isis_pybind.BundleTargetBody.TargetSolveCodes,Y,Bound as nested enum; remaining values also exposed
+Construction/Enum,BundleTargetBody(),isis_pybind.BundleTargetBody(),Y,Default constructor bound; copy constructor also bound
+Mutation/Configuration,"void setSolveSettings(std::set<int> targetParameterSolveCodes, Angle aprioriPoleRA, Angle sigmaPoleRA, Angle aprioriVelocityPoleRA, Angle sigmaVelocityPoleRA, Angle aprioriPoleDec, Angle sigmaPoleDec, Angle aprioriVelocityPoleDec, Angle sigmaVelocityPoleDec, Angle aprioriPM, Angle sigmaPM, Angle aprioriVelocityPM, Angle sigmaVelocityPM, TargetRadiiSolveMethod solveRadiiMethod, Distance aprioriRadiusA, Distance sigmaRadiusA, Distance aprioriRadiusB, Distance sigmaRadiusB, Distance aprioriRadiusC, Distance sigmaRadiusC, Distance aprioriMeanRadius, Distance sigmaMeanRadius)",isis_pybind.BundleTargetBody.set_solve_settings,Y,Python wrapper accepts enum list and Angle/Distance objects
+Static/Factory,static TargetRadiiSolveMethod stringToTargetRadiiOption(QString option),isis_pybind.BundleTargetBody.string_to_target_radii_option,Y,Bound
+Static/Factory,static QString targetRadiiOptionToString(TargetRadiiSolveMethod targetRadiiSolveMethod),isis_pybind.BundleTargetBody.target_radii_option_to_string,Y,Bound
+Read/Write IO,bool readFromPvl(PvlObject &tbPvlObject),isis_pybind.BundleTargetBody.read_from_pvl,N,Qt 类型/信号槽较多
+Public API,LinearAlgebra::Vector &parameterWeights(),isis_pybind.BundleTargetBody.parameter_weights,N,Qt 类型/信号槽较多
+Public API,LinearAlgebra::Vector &parameterCorrections(),isis_pybind.BundleTargetBody.parameter_corrections,N,Qt 类型/信号槽较多
+Public API,LinearAlgebra::Vector &parameterSolution(),isis_pybind.BundleTargetBody.parameter_solution,N,Qt 类型/信号槽较多
+Public API,LinearAlgebra::Vector &aprioriSigmas(),isis_pybind.BundleTargetBody.apriori_sigmas,N,Qt 类型/信号槽较多
+Public API,LinearAlgebra::Vector &adjustedSigmas(),isis_pybind.BundleTargetBody.adjusted_sigmas,N,Qt 类型/信号槽较多
+Public API,std::vector<Angle> poleRaCoefs(),isis_pybind.BundleTargetBody.pole_ra_coefs,Y,Bound readonly accessor
+Public API,std::vector<Angle> poleDecCoefs(),isis_pybind.BundleTargetBody.pole_dec_coefs,Y,Bound readonly accessor
+Public API,std::vector<Angle> pmCoefs(),isis_pybind.BundleTargetBody.pm_coefs,Y,Bound readonly accessor
+Public API,std::vector<Distance> radii(),isis_pybind.BundleTargetBody.radii,Y,Bound readonly accessor
+Public API,Distance meanRadius(),isis_pybind.BundleTargetBody.mean_radius,Y,Bound readonly accessor
+Public API,QString formatBundleOutputString(bool errorPropagation),isis_pybind.BundleTargetBody.format_bundle_output_string,Y,Bound as Python string formatter
+Public API,QStringList parameterList(),isis_pybind.BundleTargetBody.parameter_list,Y,Bound as Python list of strings; intended after format_bundle_output_string()
+Public API,"QString formatValue(double value, int fieldWidth, int precision) const",isis_pybind.BundleTargetBody.format_value,N,Qt 类型/信号槽较多
+Public API,"QString formatAprioriSigmaString(int type, int fieldWidth, int precision) const",isis_pybind.BundleTargetBody.format_apriori_sigma_string,N,Qt 类型/信号槽较多
+Public API,"QString formatPolePositionAprioriSigmaString(int fieldWidth, int precision) const",isis_pybind.BundleTargetBody.format_pole_position_apriori_sigma_string,N,Qt 类型/信号槽较多
+Public API,"QString formatW0AprioriSigmaString(int fieldWidth, int precision) const",isis_pybind.BundleTargetBody.format_w0_apriori_sigma_string,N,Qt 类型/信号槽较多
+Public API,"QString formatWDotAprioriSigmaString(int fieldWidth, int precision) const",isis_pybind.BundleTargetBody.format_w_dot_apriori_sigma_string,N,Qt 类型/信号槽较多
+Public API,"QString formatRadiusAprioriSigmaString(int fieldWidth, int precision) const",isis_pybind.BundleTargetBody.format_radius_apriori_sigma_string,N,Qt 类型/信号槽较多
+Public API,"QString formatPolePositionAdjustedSigmaString(int fieldWidth, int precision) const",isis_pybind.BundleTargetBody.format_pole_position_adjusted_sigma_string,N,Qt 类型/信号槽较多
+Public API,"QString formatW0AdjustedSigmaString(int fieldWidth, int precision) const",isis_pybind.BundleTargetBody.format_w0_adjusted_sigma_string,N,Qt 类型/信号槽较多
+Public API,"QString formatWDotAdjustedSigmaString(int fieldWidth, int precision) const",isis_pybind.BundleTargetBody.format_w_dot_adjusted_sigma_string,N,Qt 类型/信号槽较多
+Public API,"QString formatRadiusAdjustedSigmaString(int fieldWidth, int precision) const",isis_pybind.BundleTargetBody.format_radius_adjusted_sigma_string,N,Qt 类型/信号槽较多
+Public API,virtual bool solvePoleRA(),isis_pybind.BundleTargetBody.solve_pole_ra,Y,Bound
+Public API,virtual bool solvePoleRAVelocity(),isis_pybind.BundleTargetBody.solve_pole_ra_velocity,Y,Bound
+Public API,virtual bool solvePoleRAAcceleration(),isis_pybind.BundleTargetBody.solve_pole_ra_acceleration,Y,Bound
+Public API,virtual bool solvePoleDec(),isis_pybind.BundleTargetBody.solve_pole_dec,Y,Bound
+Public API,virtual bool solvePoleDecVelocity(),isis_pybind.BundleTargetBody.solve_pole_dec_velocity,Y,Bound
+Public API,virtual bool solvePoleDecAcceleration(),isis_pybind.BundleTargetBody.solve_pole_dec_acceleration,Y,Bound
+Public API,virtual bool solvePM(),isis_pybind.BundleTargetBody.solve_pm,Y,Bound
+Public API,virtual bool solvePMVelocity(),isis_pybind.BundleTargetBody.solve_pm_velocity,Y,Bound
+Public API,virtual bool solvePMAcceleration(),isis_pybind.BundleTargetBody.solve_pm_acceleration,Y,Bound
+Public API,virtual bool solveTriaxialRadii(),isis_pybind.BundleTargetBody.solve_triaxial_radii,Y,Bound
+Public API,virtual bool solveMeanRadius(),isis_pybind.BundleTargetBody.solve_mean_radius,Y,Bound
+Public API,int numberRadiusParameters(),isis_pybind.BundleTargetBody.number_radius_parameters,Y,Bound
+Public API,virtual int numberParameters(),isis_pybind.BundleTargetBody.number_parameters,Y,Bound
+Public API,void applyParameterCorrections(LinearAlgebra::Vector corrections),isis_pybind.BundleTargetBody.apply_parameter_corrections,N,Qt 类型/信号槽较多
+Public API,double vtpv(),isis_pybind.BundleTargetBody.vtpv,Y,Bound
+Public API,"Distance localRadius(const Latitude &lat, const Longitude &lon)",isis_pybind.BundleTargetBody.local_radius,Y,Bound

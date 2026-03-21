@@ -1,0 +1,516 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ExportDescription::ChannelDescription Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_export_description_1_1_channel_description.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_export_description_1_1_channel_description-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ExportDescription::ChannelDescription Class Reference<div class="ingroups"><a class="el" href="group___high_level_cube_i_o.html">High Level Cube I/O</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Describes how a cube as a single color channel to be exported.  
+ <a href="class_isis_1_1_export_description_1_1_channel_description.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_export_description_8h_source.html">ExportDescription.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::ExportDescription::ChannelDescription:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_export_description_1_1_channel_description__coll__graph.png" border="0" usemap="#a_isis_1_1_export_description_1_1_channel_description_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_export_description_1_1_channel_description_coll__map" id="a_isis_1_1_export_description_1_1_channel_description_coll__map">
+<area shape="rect" title="Describes how a cube as a single color channel to be exported." alt="" coords="5,5,169,215"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a9cf4e5f7a31f92f56400124679819365"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html#a9cf4e5f7a31f92f56400124679819365">ChannelDescription</a> (<a class="el" href="class_isis_1_1_file_name.html">FileName</a> &amp;<a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html#aafd1f6fe94d4981faed33c151470d85b">filename</a>, <a class="el" href="class_isis_1_1_cube_attribute_input.html">CubeAttributeInput</a> &amp;att)</td></tr>
+<tr class="memdesc:a9cf4e5f7a31f92f56400124679819365"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct the channel description with the given input name and attributes.  <a href="class_isis_1_1_export_description_1_1_channel_description.html#a9cf4e5f7a31f92f56400124679819365">More...</a><br /></td></tr>
+<tr class="separator:a9cf4e5f7a31f92f56400124679819365"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8e5629e3163faac4d4af286b0134dac"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html#ac8e5629e3163faac4d4af286b0134dac">~ChannelDescription</a> ()</td></tr>
+<tr class="memdesc:ac8e5629e3163faac4d4af286b0134dac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destruct the export description.  <a href="class_isis_1_1_export_description_1_1_channel_description.html#ac8e5629e3163faac4d4af286b0134dac">More...</a><br /></td></tr>
+<tr class="separator:ac8e5629e3163faac4d4af286b0134dac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafd1f6fe94d4981faed33c151470d85b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html#aafd1f6fe94d4981faed33c151470d85b">filename</a> () const</td></tr>
+<tr class="memdesc:aafd1f6fe94d4981faed33c151470d85b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the filename associated with this channel.  <a href="class_isis_1_1_export_description_1_1_channel_description.html#aafd1f6fe94d4981faed33c151470d85b">More...</a><br /></td></tr>
+<tr class="separator:aafd1f6fe94d4981faed33c151470d85b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae246e48aeba06ea59967bb7cc276f1a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_cube_attribute_input.html">CubeAttributeInput</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html#ae246e48aeba06ea59967bb7cc276f1a9">attributes</a> () const</td></tr>
+<tr class="memdesc:ae246e48aeba06ea59967bb7cc276f1a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the input attributes associated with this channel.  <a href="class_isis_1_1_export_description_1_1_channel_description.html#ae246e48aeba06ea59967bb7cc276f1a9">More...</a><br /></td></tr>
+<tr class="separator:ae246e48aeba06ea59967bb7cc276f1a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27404f634844b1e946e48ef68893548e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html#a27404f634844b1e946e48ef68893548e">setInputRange</a> (double min, double max)</td></tr>
+<tr class="memdesc:a27404f634844b1e946e48ef68893548e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the input range for this channel.  <a href="class_isis_1_1_export_description_1_1_channel_description.html#a27404f634844b1e946e48ef68893548e">More...</a><br /></td></tr>
+<tr class="separator:a27404f634844b1e946e48ef68893548e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0320fde675cc1f30452c1d103ebcbcf4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html#a0320fde675cc1f30452c1d103ebcbcf4">inputMinimum</a> () const</td></tr>
+<tr class="memdesc:a0320fde675cc1f30452c1d103ebcbcf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the input minimum for this channel.  <a href="class_isis_1_1_export_description_1_1_channel_description.html#a0320fde675cc1f30452c1d103ebcbcf4">More...</a><br /></td></tr>
+<tr class="separator:a0320fde675cc1f30452c1d103ebcbcf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e533f5c06ad7a41b13e2d7f69d72fe0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html#a6e533f5c06ad7a41b13e2d7f69d72fe0">inputMaximum</a> () const</td></tr>
+<tr class="memdesc:a6e533f5c06ad7a41b13e2d7f69d72fe0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the input maximum for this channel.  <a href="class_isis_1_1_export_description_1_1_channel_description.html#a6e533f5c06ad7a41b13e2d7f69d72fe0">More...</a><br /></td></tr>
+<tr class="separator:a6e533f5c06ad7a41b13e2d7f69d72fe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2a7bf1e9d7d1fe37f97306dbf75357b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html#aa2a7bf1e9d7d1fe37f97306dbf75357b">hasCustomRange</a> () const</td></tr>
+<tr class="memdesc:aa2a7bf1e9d7d1fe37f97306dbf75357b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the user of this instance has set a custom input range for this channel.  <a href="class_isis_1_1_export_description_1_1_channel_description.html#aa2a7bf1e9d7d1fe37f97306dbf75357b">More...</a><br /></td></tr>
+<tr class="separator:aa2a7bf1e9d7d1fe37f97306dbf75357b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Describes how a cube as a single color channel to be exported. </p>
+<p>Specifies the filename, attributes, and input DN range of a cube to be exported as a color channel in a standard image.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-04-03 Travis Addair </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a9cf4e5f7a31f92f56400124679819365"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cf4e5f7a31f92f56400124679819365">&#9670;&nbsp;</a></span>ChannelDescription()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ExportDescription::ChannelDescription::ChannelDescription </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a> &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube_attribute_input.html">CubeAttributeInput</a> &amp;&#160;</td>
+          <td class="paramname"><em>att</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct the channel description with the given input name and attributes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>The name of the cube </td></tr>
+    <tr><td class="paramname">att</td><td>The cube attributes such as band number </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html#aafd1f6fe94d4981faed33c151470d85b">filename()</a>.</p>
+
+</div>
+</div>
+<a id="ac8e5629e3163faac4d4af286b0134dac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8e5629e3163faac4d4af286b0134dac">&#9670;&nbsp;</a></span>~ChannelDescription()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::ExportDescription::ChannelDescription::~ChannelDescription </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destruct the export description. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae246e48aeba06ea59967bb7cc276f1a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae246e48aeba06ea59967bb7cc276f1a9">&#9670;&nbsp;</a></span>attributes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_cube_attribute_input.html">CubeAttributeInput</a> Isis::ExportDescription::ChannelDescription::attributes </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a copy of the input attributes associated with this channel. </p>
+<dl class="section return"><dt>Returns</dt><dd>The cube attributes such as band number </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_export_description.html#afde7f73f413c0cc63328acc36a83d5c6">Isis::ExportDescription::ExportDescription()</a>, and <a class="el" href="class_isis_1_1_export_description.html#ad898384db165e849791fde280963ec8b">Isis::ExportDescription::operator=()</a>.</p>
+
+</div>
+</div>
+<a id="aafd1f6fe94d4981faed33c151470d85b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafd1f6fe94d4981faed33c151470d85b">&#9670;&nbsp;</a></span>filename()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_file_name.html">FileName</a> Isis::ExportDescription::ChannelDescription::filename </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a copy of the filename associated with this channel. </p>
+<dl class="section return"><dt>Returns</dt><dd>The name of the cube </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html#a9cf4e5f7a31f92f56400124679819365">ChannelDescription()</a>, <a class="el" href="class_isis_1_1_export_description.html#afde7f73f413c0cc63328acc36a83d5c6">Isis::ExportDescription::ExportDescription()</a>, and <a class="el" href="class_isis_1_1_export_description.html#ad898384db165e849791fde280963ec8b">Isis::ExportDescription::operator=()</a>.</p>
+
+</div>
+</div>
+<a id="aa2a7bf1e9d7d1fe37f97306dbf75357b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2a7bf1e9d7d1fe37f97306dbf75357b">&#9670;&nbsp;</a></span>hasCustomRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ExportDescription::ChannelDescription::hasCustomRange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if the user of this instance has set a custom input range for this channel. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if a custom range has been set, false otherwise </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_export_description.html#afde7f73f413c0cc63328acc36a83d5c6">Isis::ExportDescription::ExportDescription()</a>, and <a class="el" href="class_isis_1_1_export_description.html#ad898384db165e849791fde280963ec8b">Isis::ExportDescription::operator=()</a>.</p>
+
+</div>
+</div>
+<a id="a6e533f5c06ad7a41b13e2d7f69d72fe0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e533f5c06ad7a41b13e2d7f69d72fe0">&#9670;&nbsp;</a></span>inputMaximum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ExportDescription::ChannelDescription::inputMaximum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the input maximum for this channel. </p>
+<p>Any value of max in the input cube will be mapped to the output max of the output channel.</p>
+<dl class="section return"><dt>Returns</dt><dd>The maximum DN in the input mapped to the maximum of the output </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_export_description.html#afde7f73f413c0cc63328acc36a83d5c6">Isis::ExportDescription::ExportDescription()</a>, and <a class="el" href="class_isis_1_1_export_description.html#ad898384db165e849791fde280963ec8b">Isis::ExportDescription::operator=()</a>.</p>
+
+</div>
+</div>
+<a id="a0320fde675cc1f30452c1d103ebcbcf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0320fde675cc1f30452c1d103ebcbcf4">&#9670;&nbsp;</a></span>inputMinimum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ExportDescription::ChannelDescription::inputMinimum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the input minimum for this channel. </p>
+<p>Any value of min in the input cube will be mapped to the output min of the output channel.</p>
+<dl class="section return"><dt>Returns</dt><dd>The minimum DN in the input mapped to the minimum of the output </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_export_description.html#afde7f73f413c0cc63328acc36a83d5c6">Isis::ExportDescription::ExportDescription()</a>, and <a class="el" href="class_isis_1_1_export_description.html#ad898384db165e849791fde280963ec8b">Isis::ExportDescription::operator=()</a>.</p>
+
+</div>
+</div>
+<a id="a27404f634844b1e946e48ef68893548e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27404f634844b1e946e48ef68893548e">&#9670;&nbsp;</a></span>setInputRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ExportDescription::ChannelDescription::setInputRange </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>min</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>max</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the input range for this channel. </p>
+<p>Any value of min in the input cube will be mapped to the output min of the output channel. Similar for the max.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">min</td><td>The minimum DN in the input mapped to the minimum of the output </td></tr>
+    <tr><td class="paramname">max</td><td>The maximum DN in the input mapped to the maximum of the output </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_export_description.html#a12105e88886a165597bc9002f6f53c37">Isis::ExportDescription::addChannel()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/ExportDescription/<a class="el" href="_export_description_8h_source.html">ExportDescription.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/ExportDescription/<a class="el" href="_export_description_8cpp.html">ExportDescription.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_export_description.html">ExportDescription</a></li><li class="navelem"><a class="el" href="class_isis_1_1_export_description_1_1_channel_description.html">ChannelDescription</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

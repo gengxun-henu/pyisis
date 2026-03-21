@@ -1,0 +1,587 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/ControlNet/ControlNet.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_control_net_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">ControlNet.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_control_net_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef ControlNet_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define ControlNet_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// This is needed for the QVariant macro</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QMetaType&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QObject&gt;</span> <span class="comment">// parent class</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;QSharedPointer&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_surface_point_8h.html">SurfacePoint.h</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;QMap&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;QVariant&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;QVector&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;QVariant&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// Boost includes</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;boost/graph/graph_traits.hpp&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;boost/graph/adjacency_list.hpp&gt;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;boost/graph/connected_components.hpp&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_control_measure_8h.html">ControlMeasure.h</a>&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_control_point_8h.html">ControlPoint.h</a>&quot;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="class_q_hash.html">   32</a></span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">typename</span> A, <span class="keyword">typename</span> B &gt; <span class="keyword">class </span><a class="code" href="class_q_hash.html">QHash</a>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">typename</span> T &gt; <span class="keyword">class </span><a class="code" href="class_q_list.html">QList</a>;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">typename</span> A, <span class="keyword">typename</span> B &gt; <span class="keyword">struct </span><a class="code" href="struct_q_pair.html">QPair</a>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">typename</span> T &gt; <span class="keyword">class </span><a class="code" href="class_q_set.html">QSet</a>;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">class </span>QMutex;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">class </span>QString;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  <span class="keyword">class </span>Camera;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keyword">class </span>ControlMeasure;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <span class="keyword">class </span>ControlPoint;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <span class="keyword">class </span>Distance;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  <span class="keyword">class </span>Progress;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="keyword">class </span>Pvl;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <span class="keyword">class </span>SerialNumberList;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00258"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html">  258</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> : <span class="keyword">public</span> <a class="code" href="class_q_object.html">QObject</a> {</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
+<div class="line"><a name="l00261"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#a3dfa27b49e13f3c96fca98f101b47118">  261</a></span>&#160;      <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a>;</div>
+<div class="line"><a name="l00262"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#a74c9a2f2af5cc478715170a2650481e4">  262</a></span>&#160;      <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a>;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160; </div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
+<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#aa87dbf04264d84ab5706df2c69678964">  275</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_control_net.html#aa87dbf04264d84ab5706df2c69678964">ModType</a> {</div>
+<div class="line"><a name="l00276"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#aa87dbf04264d84ab5706df2c69678964a661413526fa529c273a2b8b63f1bd3f6">  276</a></span>&#160;        <a class="code" href="class_isis_1_1_control_net.html#aa87dbf04264d84ab5706df2c69678964a661413526fa529c273a2b8b63f1bd3f6">Swapped</a>,</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <a class="code" href="class_isis_1_1_control_net.html#aa87dbf04264d84ab5706df2c69678964a83e179d12cf3aefdbb91d9ab3642fad6">GraphModified</a></div>
+<div class="line"><a name="l00278"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#aa87dbf04264d84ab5706df2c69678964a83e179d12cf3aefdbb91d9ab3642fad6">  278</a></span>&#160;      };</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;      <a class="code" href="class_isis_1_1_control_net.html#a109991c44a8526e9fc008004f5ca0d03">ControlNet</a>(<a class="code" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a> = <a class="code" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223a256c8dadbfa862853fc27317f7a17978">SurfacePoint::Latitudinal</a>);</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;      <a class="code" href="class_isis_1_1_control_net.html#a109991c44a8526e9fc008004f5ca0d03">ControlNet</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> &amp;other);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;      <a class="code" href="class_isis_1_1_control_net.html#a109991c44a8526e9fc008004f5ca0d03">ControlNet</a>(<span class="keyword">const</span> QString &amp;filename, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress = 0,</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                 <a class="code" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a> = <a class="code" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223a256c8dadbfa862853fc27317f7a17978">SurfacePoint::Latitudinal</a>);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;      <a class="code" href="class_isis_1_1_control_net.html#aacc8131f169072b3c6dd50e6f5b7e996">~ControlNet</a>();</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#aa7c260d5a7ed326da839e94a62a62220">clear</a>();</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; ControlPoint * &gt;</a> <a class="code" href="class_isis_1_1_control_net.html#afc1a148cb5c4c2bdce88d6e598405ece">take</a>();</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a3e4c639e8f2f839bd15652a2144f4988">ReadControl</a>(<span class="keyword">const</span> QString &amp;filename, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress = 0);</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a7305911fbf990cc1a05cebaad59b7d59">Write</a>(<span class="keyword">const</span> QString &amp;filename, <span class="keywordtype">bool</span> pvl = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a208402da386de817064f50ff0a4791fc">AddPoint</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point);</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#adaa64fa184ce44b370660226f177a56d">DeletePoint</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point);</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#adaa64fa184ce44b370660226f177a56d">DeletePoint</a>(QString pointId);</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#adaa64fa184ce44b370660226f177a56d">DeletePoint</a>(<span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_control_net.html#aa75cb53161a2a8dcf493d49dbf2bdce2">ContainsPoint</a>(QString pointId) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; QString &gt;</a> <a class="code" href="class_isis_1_1_control_net.html#ae07d72d19611ee35af8987fe8959414c">GetCubeSerials</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net.html#a1cac64cb4c9319b8a0ea5ed1e758dae7">GraphToString</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; QList&lt; QString &gt;</a> &gt; <a class="code" href="class_isis_1_1_control_net.html#a21e7d8ff74b131ce0d72eb20bf0bd242">GetSerialConnections</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#a1002eaf21173405832daec8f4440cf9d">getEdgeCount</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; QString &gt;</a> <a class="code" href="class_isis_1_1_control_net.html#a32d14ab05ba77519c7831397d089f603">getAdjacentImages</a>(QString serialNumber) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; ControlMeasure * &gt;</a> <a class="code" href="class_isis_1_1_control_net.html#ab1556ef525e16324c21d44d0b5e8afdc">GetMeasuresInCube</a>(QString serialNumber);</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; ControlMeasure * &gt;</a> <a class="code" href="class_isis_1_1_control_net.html#aede559d78dddef97ee6fac98bd1dc79f">GetValidMeasuresInCube</a>(QString serialNumber);</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; ControlMeasure * &gt;</a> <a class="code" href="class_isis_1_1_control_net.html#a5b7c4e56e681ad0f6a02301e34931af7">sortedMeasureList</a>(<span class="keywordtype">double</span>(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a>::*statFunc)() <span class="keyword">const</span>,</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;                                                  <span class="keywordtype">double</span> min,<span class="keywordtype">double</span> max);</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#ad1e52361c1ad81e51c1b526e18a2bed2">ComputeResiduals</a>();</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a525b48e57578f940811c5870434f28c1">ComputeApriori</a>();</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *<a class="code" href="class_isis_1_1_control_net.html#a1893c76a19ad64e3e9502b01bbd6bca6">GetPoint</a>(QString pointId) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;      <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *<a class="code" href="class_isis_1_1_control_net.html#a1893c76a19ad64e3e9502b01bbd6bca6">GetPoint</a>(QString pointId);</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *<a class="code" href="class_isis_1_1_control_net.html#a1893c76a19ad64e3e9502b01bbd6bca6">GetPoint</a>(<span class="keywordtype">int</span> index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;      <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *<a class="code" href="class_isis_1_1_control_net.html#a1893c76a19ad64e3e9502b01bbd6bca6">GetPoint</a>(<span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160; </div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_control_net.html#aa2597df0943511549f7301a85f7d066c">AverageResidual</a>();</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;      <a class="code" href="class_isis_1_1_camera.html">Isis::Camera</a> *<a class="code" href="class_isis_1_1_control_net.html#aafb7a3b91f476a54cab971f0026aa4b0">Camera</a>(<span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;      <a class="code" href="class_isis_1_1_camera.html">Isis::Camera</a> *<a class="code" href="class_isis_1_1_control_net.html#aafb7a3b91f476a54cab971f0026aa4b0">Camera</a>(QString serialNumber);                                                                       </div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net.html#a52e59717cdcc02263d446f79e2378b23">CreatedDate</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net.html#a06d9f3f92701078499dbf4aa84c2d22d">Description</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;      <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *<a class="code" href="class_isis_1_1_control_net.html#a96f8d394e5d88b95be042d3682db2d24">FindClosest</a>(QString serialNumber,</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;          <span class="keywordtype">double</span> sample, <span class="keywordtype">double</span> line);</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;      <span class="comment">//bool IsValid() const;</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_control_net.html#a2ff309f6a135359618770b1869d95bbb">GetMaximumResidual</a>();</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net.html#a376cd8aa32a9ac23d0e5c5ea35b1e73b">GetNetworkId</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#af7176865bfd22bbaf5ae41444f9a0021">GetNumEditLockMeasures</a>();</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#a05d61769a1498955f3a656fb72d536b4">GetNumEditLockPoints</a>();</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#a8fedaff911b53b407d922e292f9ef010">GetNumIgnoredMeasures</a>();</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#a6975a467753e734ced536794ca4c80ce">GetNumberOfValidMeasuresInImage</a>(<span class="keyword">const</span> QString &amp;serialNumber);</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#a71532286620fe83ac952d30069ec2560">GetNumberOfJigsawRejectedMeasuresInImage</a>(<span class="keyword">const</span> QString &amp;serialNumber);</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#ab9b2b0aeb4800d9c31b19b8d1d071bc0">ClearJigsawRejected</a>();</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#af68ebe666f953bdc45e2df307a3048d3">IncrementNumberOfRejectedMeasuresInImage</a>(<span class="keyword">const</span> QString &amp;serialNumber);</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a5ab1df962a40b1eb37d2add92d73e771">DecrementNumberOfRejectedMeasuresInImage</a>(<span class="keyword">const</span> QString &amp;serialNumber);</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#a0624cc280d89197c155efe44480f1a6b">GetNumMeasures</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#a41a4e6eb7f0861800c444c6124e79992">GetNumPoints</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#a789affcc8adad2f133f89fc800a12cad">GetNumValidMeasures</a>();</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_control_net.html#a7c295b63cd786df92987277f7b5799e4">GetNumValidPoints</a>();</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net.html#aa1c8306e7eab6829c15179e11d677067">GetTarget</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net.html#a6818f0c96b9eeaf0ce0f012efbb98da6">GetUserName</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;      QString <a class="code" href="class_isis_1_1_control_net.html#a26d287eb4371dd6c16488d82b95678af">GetLastModified</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; ControlPoint * &gt;</a> <a class="code" href="class_isis_1_1_control_net.html#ab833355567c4c21c32d8b127198a486d">GetPoints</a>();</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;      <a class="code" href="class_q_list.html">QList&lt; QString &gt;</a> <a class="code" href="class_isis_1_1_control_net.html#a8b4a51914ed96a877d87d5d60e0dd3a8">GetPointIds</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;      <a class="code" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a> <a class="code" href="class_isis_1_1_control_net.html#a52bf8d1c6518292aa7f8f56f59361fd3">GetCoordType</a>();</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160; </div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a9a93335b657c9e4cd46361d396be9918">SetCreatedDate</a>(<span class="keyword">const</span> QString &amp;date);</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a3f50cd23d4cfe51405446f3c185d0a3b">SetDescription</a>(<span class="keyword">const</span> QString &amp;newDescription);</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a6497f285976b554ee888904e18157e87">SetImages</a>(<span class="keyword">const</span> QString &amp;imageListFile);</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a6497f285976b554ee888904e18157e87">SetImages</a>(<a class="code" href="class_isis_1_1_serial_number_list.html">SerialNumberList</a> &amp;list, <a class="code" href="class_isis_1_1_progress.html">Progress</a> *progress = 0);</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160; </div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#aebe8d541b4cbabfe1583aa328ec1abcf">SetModifiedDate</a>(<span class="keyword">const</span> QString &amp;date);</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#abb7ffccb9c3bb41872294500bc86cc3a">SetMutex</a>(QMutex *mutex);</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#ae0ceb0bb88748535a7f23927266be8e8">SetNetworkId</a>(<span class="keyword">const</span> QString &amp;<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#af72571b7f41cc1f7cf264255f225f298">SetTarget</a>(<span class="keyword">const</span> QString &amp;target);</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#af72571b7f41cc1f7cf264255f225f298">SetTarget</a>(<a class="code" href="class_isis_1_1_pvl.html">Pvl</a> label);</div>
+<div class="line"><a name="l00356"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#a8f17e9b4bb31f6137b296059597154f2">  356</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a8f17e9b4bb31f6137b296059597154f2">SetTarget</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> &amp;other);</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#ab61d380dc133bee1a90ce333b887a47a">SetUserName</a>(<span class="keyword">const</span> QString &amp;name);</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a75360c16991b02d7efd0f4f337e0abe8">SetCoordType</a>(<a class="code" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a> coordType);</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160; </div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#adbb079a712323ee7f2b6d31b97d821ca">swap</a>(<a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> &amp;other);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;      <a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> &amp;<a class="code" href="class_isis_1_1_control_net.html#a3614675a08f661f59c70bf42083c8eca">operator=</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> &amp;other);</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *<a class="code" href="class_isis_1_1_control_net.html#a9da413d43a573bd215cca939b304aec7">operator[]</a>(QString <span class="keywordtype">id</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;      <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *<a class="code" href="class_isis_1_1_control_net.html#a9da413d43a573bd215cca939b304aec7">operator[]</a>(QString <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;      <span class="keyword">const</span> <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *<a class="code" href="class_isis_1_1_control_net.html#a9da413d43a573bd215cca939b304aec7">operator[]</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;      <a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *<a class="code" href="class_isis_1_1_control_net.html#a9da413d43a573bd215cca939b304aec7">operator[]</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160; </div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    signals:</div>
+<div class="line"><a name="l00370"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#ada1344a3f79f08a2bf3e91013b0803b5">  370</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#ada1344a3f79f08a2bf3e91013b0803b5">networkStructureModified</a>();</div>
+<div class="line"><a name="l00371"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#a3065aec338cf31f8ae0ec6ed7262070f">  371</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a3065aec338cf31f8ae0ec6ed7262070f">networkModified</a>(<a class="code" href="class_isis_1_1_control_net.html#aa87dbf04264d84ab5706df2c69678964">ControlNet::ModType</a> type);</div>
+<div class="line"><a name="l00372"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#a0d5a4a741ebc6f06a7eb878b4253de94">  372</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a0d5a4a741ebc6f06a7eb878b4253de94">pointModified</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point, <a class="code" href="class_isis_1_1_control_point.html#a3b7060c3795249fbb3cc331e55609f8a">ControlPoint::ModType</a> type, QVariant oldValue, QVariant newValue);</div>
+<div class="line"><a name="l00373"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#a26ac408385ea4853383d18a2d97b5563">  373</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a26ac408385ea4853383d18a2d97b5563">measureModified</a>(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *measure, <a class="code" href="class_isis_1_1_control_measure.html#ad5c774bb13c935327b0d80e359898c8d">ControlMeasure::ModType</a> type, QVariant oldValue, QVariant newValue);</div>
+<div class="line"><a name="l00374"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#a69c49c603b6bb56ca3b71e67261a4b71">  374</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a69c49c603b6bb56ca3b71e67261a4b71">pointDeleted</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point);</div>
+<div class="line"><a name="l00375"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#a3bb6fc4bcfa5a06d2243ca24b02cb9a4">  375</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#a3bb6fc4bcfa5a06d2243ca24b02cb9a4">newPoint</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *);</div>
+<div class="line"><a name="l00376"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#aec5850d0f3d221c8a309f1114f0c2679">  376</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#aec5850d0f3d221c8a309f1114f0c2679">newMeasure</a>(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *);</div>
+<div class="line"><a name="l00377"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net.html#aed7de2e4a6f490ae65595bff4f57e4f5">  377</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net.html#aed7de2e4a6f490ae65595bff4f57e4f5">measureRemoved</a>(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *);</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160; </div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160; </div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160; </div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;      <span class="keywordtype">void</span> nullify();</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;      <span class="keywordtype">bool</span> ValidateSerialNumber(QString serialNumber) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;      <span class="keywordtype">void</span> measureAdded(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *measure);</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;      <span class="keywordtype">void</span> measureDeleted(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *measure);</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;      <span class="keywordtype">void</span> measureIgnored(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *measure);</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;      <span class="keywordtype">void</span> measureUnIgnored(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *measure);</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;      <span class="keywordtype">void</span> pointIgnored(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point);</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;      <span class="keywordtype">void</span> pointUnIgnored(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point);</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;      <span class="keywordtype">void</span> UpdatePointReference(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point, QString oldId);</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;      <span class="keywordtype">void</span> emitNetworkStructureModified();</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;      <span class="keywordtype">void</span> emitMeasureModified(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a> *measure, <a class="code" href="class_isis_1_1_control_measure.html#ad5c774bb13c935327b0d80e359898c8d">ControlMeasure::ModType</a> type, QVariant oldValue, QVariant newValue);</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;      <span class="keywordtype">void</span> emitPointModified(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point, <a class="code" href="class_isis_1_1_control_point.html#a3b7060c3795249fbb3cc331e55609f8a">ControlPoint::ModType</a> type, QVariant oldValue, QVariant newValue);</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;      <span class="keywordtype">void</span> pointAdded(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *point);</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;      <span class="keywordtype">bool</span> addEdge(QString sourceSerial, QString targetSerial);</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;      <span class="keywordtype">bool</span> removeEdge(QString sourceSerial, QString targetSerial);</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160; </div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    <span class="keyword">private</span>: <span class="comment">// graphing functions</span></div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;<span class="comment"></span>      <span class="keyword">class </span>ControlMeasureLessThanFunctor :</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;          <span class="keyword">public</span> std::function&lt;bool(ControlMeasure* const &amp;,</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;          ControlMeasure * const &amp;)&gt; {</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;          ControlMeasureLessThanFunctor(<span class="keywordtype">double</span>(<a class="code" href="class_isis_1_1_control_measure.html">ControlMeasure</a>::*accessorMethod)() <span class="keyword">const</span>) {</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;            m_accessor = accessorMethod;</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;          }</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;          ControlMeasureLessThanFunctor(ControlMeasureLessThanFunctor <span class="keyword">const</span> &amp;other) {</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;            this-&gt;m_accessor = other.m_accessor;</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;          }</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;          ~ControlMeasureLessThanFunctor() {}</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160; </div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;          <span class="keywordtype">bool</span> operator()(<a class="code" href="class_isis_1_1_control_net.html#a3dfa27b49e13f3c96fca98f101b47118">ControlMeasure</a>* <span class="keyword">const</span> &amp;, <a class="code" href="class_isis_1_1_control_net.html#a3dfa27b49e13f3c96fca98f101b47118">ControlMeasure</a>* <span class="keyword">const</span> &amp;);</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;          ControlMeasureLessThanFunctor &amp; <a class="code" href="class_isis_1_1_control_net.html#a3614675a08f661f59c70bf42083c8eca">operator=</a>(ControlMeasureLessThanFunctor <span class="keyword">const</span> &amp;other);</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160; </div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;          double(<a class="code" href="class_isis_1_1_control_net.html#a3dfa27b49e13f3c96fca98f101b47118">ControlMeasure</a>::*m_accessor)() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;      };</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160; </div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    <span class="keyword">private</span>: <span class="comment">// data</span></div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;<span class="comment"></span>      <a class="code" href="class_q_hash.html">QHash&lt; QString, ControlPoint * &gt;</a> * points;</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160; </div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;      <span class="keyword">struct </span>Image {</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;        QString serial; </div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;        <a class="code" href="class_q_hash.html">QHash&lt; ControlPoint *, ControlMeasure * &gt;</a> measures;</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;      };</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160; </div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;      <span class="keyword">struct </span>Connection {</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;        Connection() : strength(0) {}</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;        <span class="keywordtype">int</span> strength;</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;      };</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160; </div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;      <span class="keyword">typedef</span> boost::adjacency_list&lt;boost::setS,</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;                                    boost::listS,</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;                                    boost::undirectedS,</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;                                    Image,</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;                                    Connection&gt; Network;</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160; </div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;      <span class="keyword">typedef</span> Network::vertex_descriptor ImageVertex; </div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;      <span class="keyword">typedef</span> Network::edge_descriptor ImageConnection; </div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160; </div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;      <span class="keyword">typedef</span> std::map&lt;ImageVertex, size_t&gt; VertexIndexMap;</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160; </div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;      <span class="keyword">typedef</span> boost::associative_property_map&lt;VertexIndexMap&gt; VertexIndexMapAdaptor;</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160; </div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;      <span class="keyword">typedef</span> boost::graph_traits&lt;Network&gt;::adjacency_iterator AdjacencyIterator;</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;      <span class="keyword">typedef</span> boost::graph_traits&lt;Network&gt;::vertex_iterator VertexIterator;</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160; </div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;      <a class="code" href="class_q_hash.html">QHash&lt;QString, ImageVertex&gt;</a> m_vertexMap; </div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;      Network m_controlGraph; </div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;      QStringList *pointIds;</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;      QMutex *m_mutex;</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160; </div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;      QString p_targetName;            </div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;      QString p_networkId;             </div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;      QString p_created;               </div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;      QString p_modified;              </div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;      QString p_description;           </div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;      QString p_userName;              </div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;      <a class="code" href="class_q_map.html">QMap&lt;QString, Isis::Camera *&gt;</a> p_cameraMap; </div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;      <a class="code" href="class_q_map.html">QMap&lt;QString, int&gt;</a> p_cameraValidMeasuresMap; </div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;      <a class="code" href="class_q_map.html">QMap&lt;QString, int&gt;</a> p_cameraRejectedMeasuresMap; </div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;      <a class="code" href="class_q_vector.html">QVector&lt;Isis::Camera *&gt;</a> p_cameraList; </div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160; </div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;      <span class="keywordtype">bool</span> m_ownPoints; </div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;      <a class="code" href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">SurfacePoint::CoordinateType</a> m_coordType; </div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;  };</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160; </div>
+<div class="line"><a name="l00485"></a><span class="lineno"><a class="line" href="namespace_isis.html#a6c5d908598eeb56b5f475752cdc4fb18">  485</a></span>&#160;  <span class="keyword">typedef</span> <a class="code" href="class_q_shared_pointer.html">QSharedPointer&lt;ControlNet&gt;</a> <a class="code" href="namespace_isis.html#a6c5d908598eeb56b5f475752cdc4fb18">ControlNetQsp</a>;</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;}</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160; </div>
+<div class="line"><a name="l00489"></a><span class="lineno"><a class="line" href="_control_net_8h.html#af3442879452ddaef34b29279dc586d28">  489</a></span>&#160;<a class="code" href="_control_net_8h.html#af3442879452ddaef34b29279dc586d28">Q_DECLARE_METATYPE</a>(<a class="code" href="class_isis_1_1_control_net.html">Isis::ControlNet</a> *);</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160; </div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_control_measure_8h_html"><div class="ttname"><a href="_control_measure_8h.html">ControlMeasure.h</a></div></div>
+<div class="ttc" id="a_control_net_8h_html_af3442879452ddaef34b29279dc586d28"><div class="ttname"><a href="_control_net_8h.html#af3442879452ddaef34b29279dc586d28">Q_DECLARE_METATYPE</a></div><div class="ttdeci">Q_DECLARE_METATYPE(Isis::ControlNet *)</div><div class="ttdoc">This allows ControlNet *'s to be stored in a QVariant.</div></div>
+<div class="ttc" id="a_control_point_8h_html"><div class="ttname"><a href="_control_point_8h.html">ControlPoint.h</a></div></div>
+<div class="ttc" id="a_surface_point_8h_html"><div class="ttname"><a href="_surface_point_8h.html">SurfacePoint.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_html"><div class="ttname"><a href="class_isis_1_1_camera.html">Isis::Camera</a></div><div class="ttdef"><b>Definition:</b> Camera.h:236</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_measure_html"><div class="ttname"><a href="class_isis_1_1_control_measure.html">Isis::ControlMeasure</a></div><div class="ttdoc">a control measurement</div><div class="ttdef"><b>Definition:</b> ControlMeasure.h:175</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_measure_html_ad5c774bb13c935327b0d80e359898c8d"><div class="ttname"><a href="class_isis_1_1_control_measure.html#ad5c774bb13c935327b0d80e359898c8d">Isis::ControlMeasure::ModType</a></div><div class="ttdeci">ModType</div><div class="ttdoc">Control Measure Modification Types.</div><div class="ttdef"><b>Definition:</b> ControlMeasure.h:232</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html"><div class="ttname"><a href="class_isis_1_1_control_net.html">Isis::ControlNet</a></div><div class="ttdoc">a control network</div><div class="ttdef"><b>Definition:</b> ControlNet.h:258</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a05d61769a1498955f3a656fb72d536b4"><div class="ttname"><a href="class_isis_1_1_control_net.html#a05d61769a1498955f3a656fb72d536b4">Isis::ControlNet::GetNumEditLockPoints</a></div><div class="ttdeci">int GetNumEditLockPoints()</div><div class="ttdoc">Returns the number of edit locked control points.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1372</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a0624cc280d89197c155efe44480f1a6b"><div class="ttname"><a href="class_isis_1_1_control_net.html#a0624cc280d89197c155efe44480f1a6b">Isis::ControlNet::GetNumMeasures</a></div><div class="ttdeci">int GetNumMeasures() const</div><div class="ttdoc">Returns the total number of measures for all control points in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1462</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a06d9f3f92701078499dbf4aa84c2d22d"><div class="ttname"><a href="class_isis_1_1_control_net.html#a06d9f3f92701078499dbf4aa84c2d22d">Isis::ControlNet::Description</a></div><div class="ttdeci">QString Description() const</div><div class="ttdoc">Return the description of the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1262</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a0d5a4a741ebc6f06a7eb878b4253de94"><div class="ttname"><a href="class_isis_1_1_control_net.html#a0d5a4a741ebc6f06a7eb878b4253de94">Isis::ControlNet::pointModified</a></div><div class="ttdeci">void pointModified(ControlPoint *point, ControlPoint::ModType type, QVariant oldValue, QVariant newValue)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a1002eaf21173405832daec8f4440cf9d"><div class="ttname"><a href="class_isis_1_1_control_net.html#a1002eaf21173405832daec8f4440cf9d">Isis::ControlNet::getEdgeCount</a></div><div class="ttdeci">int getEdgeCount() const</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:999</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a109991c44a8526e9fc008004f5ca0d03"><div class="ttname"><a href="class_isis_1_1_control_net.html#a109991c44a8526e9fc008004f5ca0d03">Isis::ControlNet::ControlNet</a></div><div class="ttdeci">ControlNet(SurfacePoint::CoordinateType=SurfacePoint::Latitudinal)</div><div class="ttdoc">Creates an empty ControlNet object.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:58</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a1893c76a19ad64e3e9502b01bbd6bca6"><div class="ttname"><a href="class_isis_1_1_control_net.html#a1893c76a19ad64e3e9502b01bbd6bca6">Isis::ControlNet::GetPoint</a></div><div class="ttdeci">const ControlPoint * GetPoint(QString pointId) const</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1823</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a1cac64cb4c9319b8a0ea5ed1e758dae7"><div class="ttname"><a href="class_isis_1_1_control_net.html#a1cac64cb4c9319b8a0ea5ed1e758dae7">Isis::ControlNet::GraphToString</a></div><div class="ttdeci">QString GraphToString() const</div><div class="ttdoc">Used for verifying graph intergrity.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:495</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a208402da386de817064f50ff0a4791fc"><div class="ttname"><a href="class_isis_1_1_control_net.html#a208402da386de817064f50ff0a4791fc">Isis::ControlNet::AddPoint</a></div><div class="ttdeci">void AddPoint(ControlPoint *point)</div><div class="ttdoc">Adds a ControlPoint to the ControlNet.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:350</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a21e7d8ff74b131ce0d72eb20bf0bd242"><div class="ttname"><a href="class_isis_1_1_control_net.html#a21e7d8ff74b131ce0d72eb20bf0bd242">Isis::ControlNet::GetSerialConnections</a></div><div class="ttdeci">QList&lt; QList&lt; QString &gt; &gt; GetSerialConnections() const</div><div class="ttdoc">This method searches through all the cube serial numbers in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:963</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a26ac408385ea4853383d18a2d97b5563"><div class="ttname"><a href="class_isis_1_1_control_net.html#a26ac408385ea4853383d18a2d97b5563">Isis::ControlNet::measureModified</a></div><div class="ttdeci">void measureModified(ControlMeasure *measure, ControlMeasure::ModType type, QVariant oldValue, QVariant newValue)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a26d287eb4371dd6c16488d82b95678af"><div class="ttname"><a href="class_isis_1_1_control_net.html#a26d287eb4371dd6c16488d82b95678af">Isis::ControlNet::GetLastModified</a></div><div class="ttdeci">QString GetLastModified() const</div><div class="ttdoc">Return the last modified date.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1526</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a2ff309f6a135359618770b1869d95bbb"><div class="ttname"><a href="class_isis_1_1_control_net.html#a2ff309f6a135359618770b1869d95bbb">Isis::ControlNet::GetMaximumResidual</a></div><div class="ttdeci">double GetMaximumResidual()</div><div class="ttdoc">Determine the maximum error of all points in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1331</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a3065aec338cf31f8ae0ec6ed7262070f"><div class="ttname"><a href="class_isis_1_1_control_net.html#a3065aec338cf31f8ae0ec6ed7262070f">Isis::ControlNet::networkModified</a></div><div class="ttdeci">void networkModified(ControlNet::ModType type)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a32d14ab05ba77519c7831397d089f603"><div class="ttname"><a href="class_isis_1_1_control_net.html#a32d14ab05ba77519c7831397d089f603">Isis::ControlNet::getAdjacentImages</a></div><div class="ttdeci">QList&lt; QString &gt; getAdjacentImages(QString serialNumber) const</div><div class="ttdoc">Get all images connected to a given image by common control points.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1037</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a3614675a08f661f59c70bf42083c8eca"><div class="ttname"><a href="class_isis_1_1_control_net.html#a3614675a08f661f59c70bf42083c8eca">Isis::ControlNet::operator=</a></div><div class="ttdeci">ControlNet &amp; operator=(const ControlNet &amp;other)</div><div class="ttdoc">Assign other to this.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1811</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a376cd8aa32a9ac23d0e5c5ea35b1e73b"><div class="ttname"><a href="class_isis_1_1_control_net.html#a376cd8aa32a9ac23d0e5c5ea35b1e73b">Isis::ControlNet::GetNetworkId</a></div><div class="ttdeci">QString GetNetworkId() const</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1346</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a3bb6fc4bcfa5a06d2243ca24b02cb9a4"><div class="ttname"><a href="class_isis_1_1_control_net.html#a3bb6fc4bcfa5a06d2243ca24b02cb9a4">Isis::ControlNet::newPoint</a></div><div class="ttdeci">void newPoint(ControlPoint *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a3dfa27b49e13f3c96fca98f101b47118"><div class="ttname"><a href="class_isis_1_1_control_net.html#a3dfa27b49e13f3c96fca98f101b47118">Isis::ControlNet::ControlMeasure</a></div><div class="ttdeci">friend class ControlMeasure</div><div class="ttdef"><b>Definition:</b> ControlNet.h:261</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a3e4c639e8f2f839bd15652a2144f4988"><div class="ttname"><a href="class_isis_1_1_control_net.html#a3e4c639e8f2f839bd15652a2144f4988">Isis::ControlNet::ReadControl</a></div><div class="ttdeci">void ReadControl(const QString &amp;filename, Progress *progress=0)</div><div class="ttdoc">Reads in the control points from the given file.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:269</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a3f50cd23d4cfe51405446f3c185d0a3b"><div class="ttname"><a href="class_isis_1_1_control_net.html#a3f50cd23d4cfe51405446f3c185d0a3b">Isis::ControlNet::SetDescription</a></div><div class="ttdeci">void SetDescription(const QString &amp;newDescription)</div><div class="ttdoc">Set the description of the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1564</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a41a4e6eb7f0861800c444c6124e79992"><div class="ttname"><a href="class_isis_1_1_control_net.html#a41a4e6eb7f0861800c444c6124e79992">Isis::ControlNet::GetNumPoints</a></div><div class="ttdeci">int GetNumPoints() const</div><div class="ttdoc">Return the number of control points in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1473</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a525b48e57578f940811c5870434f28c1"><div class="ttname"><a href="class_isis_1_1_control_net.html#a525b48e57578f940811c5870434f28c1">Isis::ControlNet::ComputeApriori</a></div><div class="ttdeci">void ComputeApriori()</div><div class="ttdoc">Compute aprior values for each point in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1181</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a52bf8d1c6518292aa7f8f56f59361fd3"><div class="ttname"><a href="class_isis_1_1_control_net.html#a52bf8d1c6518292aa7f8f56f59361fd3">Isis::ControlNet::GetCoordType</a></div><div class="ttdeci">SurfacePoint::CoordinateType GetCoordType()</div><div class="ttdoc">Get the control point coordinate type (see the available types in SurfacePoint.h).</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1870</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a52e59717cdcc02263d446f79e2378b23"><div class="ttname"><a href="class_isis_1_1_control_net.html#a52e59717cdcc02263d446f79e2378b23">Isis::ControlNet::CreatedDate</a></div><div class="ttdeci">QString CreatedDate() const</div><div class="ttdoc">Return the Created Date.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1252</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a5ab1df962a40b1eb37d2add92d73e771"><div class="ttname"><a href="class_isis_1_1_control_net.html#a5ab1df962a40b1eb37d2add92d73e771">Isis::ControlNet::DecrementNumberOfRejectedMeasuresInImage</a></div><div class="ttdeci">void DecrementNumberOfRejectedMeasuresInImage(const QString &amp;serialNumber)</div><div class="ttdoc">Decrement number of jigsaw rejected measures in image specified by serialNumber.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1451</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a5b7c4e56e681ad0f6a02301e34931af7"><div class="ttname"><a href="class_isis_1_1_control_net.html#a5b7c4e56e681ad0f6a02301e34931af7">Isis::ControlNet::sortedMeasureList</a></div><div class="ttdeci">QList&lt; ControlMeasure * &gt; sortedMeasureList(double(ControlMeasure::*statFunc)() const, double min, double max)</div><div class="ttdoc">Get a sorted list of all the measures that have values in a given ragen.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1129</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a6497f285976b554ee888904e18157e87"><div class="ttname"><a href="class_isis_1_1_control_net.html#a6497f285976b554ee888904e18157e87">Isis::ControlNet::SetImages</a></div><div class="ttdeci">void SetImages(const QString &amp;imageListFile)</div><div class="ttdoc">Creates the ControlNet's image cameras based on an input file.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1574</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a6818f0c96b9eeaf0ce0f012efbb98da6"><div class="ttname"><a href="class_isis_1_1_control_net.html#a6818f0c96b9eeaf0ce0f012efbb98da6">Isis::ControlNet::GetUserName</a></div><div class="ttdeci">QString GetUserName() const</div><div class="ttdoc">Return the user name.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1521</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a6975a467753e734ced536794ca4c80ce"><div class="ttname"><a href="class_isis_1_1_control_net.html#a6975a467753e734ced536794ca4c80ce">Isis::ControlNet::GetNumberOfValidMeasuresInImage</a></div><div class="ttdeci">int GetNumberOfValidMeasuresInImage(const QString &amp;serialNumber)</div><div class="ttdoc">Return the number of measures in image specified by serialNumber.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1407</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a69c49c603b6bb56ca3b71e67261a4b71"><div class="ttname"><a href="class_isis_1_1_control_net.html#a69c49c603b6bb56ca3b71e67261a4b71">Isis::ControlNet::pointDeleted</a></div><div class="ttdeci">void pointDeleted(ControlPoint *point)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a71532286620fe83ac952d30069ec2560"><div class="ttname"><a href="class_isis_1_1_control_net.html#a71532286620fe83ac952d30069ec2560">Isis::ControlNet::GetNumberOfJigsawRejectedMeasuresInImage</a></div><div class="ttdeci">int GetNumberOfJigsawRejectedMeasuresInImage(const QString &amp;serialNumber)</div><div class="ttdoc">Return the number of jigsaw rejected measures in image specified by serialNumber.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1421</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a7305911fbf990cc1a05cebaad59b7d59"><div class="ttname"><a href="class_isis_1_1_control_net.html#a7305911fbf990cc1a05cebaad59b7d59">Isis::ControlNet::Write</a></div><div class="ttdeci">void Write(const QString &amp;filename, bool pvl=false)</div><div class="ttdoc">Writes out the control network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:309</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a75360c16991b02d7efd0f4f337e0abe8"><div class="ttname"><a href="class_isis_1_1_control_net.html#a75360c16991b02d7efd0f4f337e0abe8">Isis::ControlNet::SetCoordType</a></div><div class="ttdeci">void SetCoordType(SurfacePoint::CoordinateType coordType)</div><div class="ttdoc">Sets the control point coordinate type.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:857</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a789affcc8adad2f133f89fc800a12cad"><div class="ttname"><a href="class_isis_1_1_control_net.html#a789affcc8adad2f133f89fc800a12cad">Isis::ControlNet::GetNumValidMeasures</a></div><div class="ttdeci">int GetNumValidMeasures()</div><div class="ttdoc">Return the number of valid (non-ignored) measures for all control points in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1487</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a7c295b63cd786df92987277f7b5799e4"><div class="ttname"><a href="class_isis_1_1_control_net.html#a7c295b63cd786df92987277f7b5799e4">Isis::ControlNet::GetNumValidPoints</a></div><div class="ttdeci">int GetNumValidPoints()</div><div class="ttdoc">Returns the number of non-ignored control points.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1503</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a8b4a51914ed96a877d87d5d60e0dd3a8"><div class="ttname"><a href="class_isis_1_1_control_net.html#a8b4a51914ed96a877d87d5d60e0dd3a8">Isis::ControlNet::GetPointIds</a></div><div class="ttdeci">QList&lt; QString &gt; GetPointIds() const</div><div class="ttdoc">Return QList of ControlPoint Ids used in hash, in order of addition.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1544</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a8f17e9b4bb31f6137b296059597154f2"><div class="ttname"><a href="class_isis_1_1_control_net.html#a8f17e9b4bb31f6137b296059597154f2">Isis::ControlNet::SetTarget</a></div><div class="ttdeci">void SetTarget(const ControlNet &amp;other)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a8fedaff911b53b407d922e292f9ef010"><div class="ttname"><a href="class_isis_1_1_control_net.html#a8fedaff911b53b407d922e292f9ef010">Isis::ControlNet::GetNumIgnoredMeasures</a></div><div class="ttdeci">int GetNumIgnoredMeasures()</div><div class="ttdoc">Return the total number of ignored measures for all control points in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1389</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a96f8d394e5d88b95be042d3682db2d24"><div class="ttname"><a href="class_isis_1_1_control_net.html#a96f8d394e5d88b95be042d3682db2d24">Isis::ControlNet::FindClosest</a></div><div class="ttdeci">ControlPoint * FindClosest(QString serialNumber, double sample, double line)</div><div class="ttdoc">Finds and returns a pointer to the closest ControlPoint to the ControlMeasure with the given serial n...</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1279</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a9a93335b657c9e4cd46361d396be9918"><div class="ttname"><a href="class_isis_1_1_control_net.html#a9a93335b657c9e4cd46361d396be9918">Isis::ControlNet::SetCreatedDate</a></div><div class="ttdeci">void SetCreatedDate(const QString &amp;date)</div><div class="ttdoc">Set the creation time.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1554</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_a9da413d43a573bd215cca939b304aec7"><div class="ttname"><a href="class_isis_1_1_control_net.html#a9da413d43a573bd215cca939b304aec7">Isis::ControlNet::operator[]</a></div><div class="ttdeci">const ControlPoint * operator[](QString id) const</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1874</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aa1c8306e7eab6829c15179e11d677067"><div class="ttname"><a href="class_isis_1_1_control_net.html#aa1c8306e7eab6829c15179e11d677067">Isis::ControlNet::GetTarget</a></div><div class="ttdeci">QString GetTarget() const</div><div class="ttdoc">Return the target name.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1515</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aa2597df0943511549f7301a85f7d066c"><div class="ttname"><a href="class_isis_1_1_control_net.html#aa2597df0943511549f7301a85f7d066c">Isis::ControlNet::AverageResidual</a></div><div class="ttdeci">double AverageResidual()</div><div class="ttdoc">Compute the average error of all points in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1199</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aa75cb53161a2a8dcf493d49dbf2bdce2"><div class="ttname"><a href="class_isis_1_1_control_net.html#aa75cb53161a2a8dcf493d49dbf2bdce2">Isis::ControlNet::ContainsPoint</a></div><div class="ttdeci">bool ContainsPoint(QString pointId) const</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:947</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aa7c260d5a7ed326da839e94a62a62220"><div class="ttname"><a href="class_isis_1_1_control_net.html#aa7c260d5a7ed326da839e94a62a62220">Isis::ControlNet::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdoc">Clear the contents of this object.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:178</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aa87dbf04264d84ab5706df2c69678964"><div class="ttname"><a href="class_isis_1_1_control_net.html#aa87dbf04264d84ab5706df2c69678964">Isis::ControlNet::ModType</a></div><div class="ttdeci">ModType</div><div class="ttdoc">Control Point Modification Types.</div><div class="ttdef"><b>Definition:</b> ControlNet.h:275</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aa87dbf04264d84ab5706df2c69678964a661413526fa529c273a2b8b63f1bd3f6"><div class="ttname"><a href="class_isis_1_1_control_net.html#aa87dbf04264d84ab5706df2c69678964a661413526fa529c273a2b8b63f1bd3f6">Isis::ControlNet::Swapped</a></div><div class="ttdeci">@ Swapped</div><div class="ttdef"><b>Definition:</b> ControlNet.h:276</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aa87dbf04264d84ab5706df2c69678964a83e179d12cf3aefdbb91d9ab3642fad6"><div class="ttname"><a href="class_isis_1_1_control_net.html#aa87dbf04264d84ab5706df2c69678964a83e179d12cf3aefdbb91d9ab3642fad6">Isis::ControlNet::GraphModified</a></div><div class="ttdeci">@ GraphModified</div><div class="ttdef"><b>Definition:</b> ControlNet.h:277</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aacc8131f169072b3c6dd50e6f5b7e996"><div class="ttname"><a href="class_isis_1_1_control_net.html#aacc8131f169072b3c6dd50e6f5b7e996">Isis::ControlNet::~ControlNet</a></div><div class="ttdeci">~ControlNet()</div><div class="ttdoc">Destructor removes allocated memory.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:131</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aafb7a3b91f476a54cab971f0026aa4b0"><div class="ttname"><a href="class_isis_1_1_control_net.html#aafb7a3b91f476a54cab971f0026aa4b0">Isis::ControlNet::Camera</a></div><div class="ttdeci">Isis::Camera * Camera(int index)</div><div class="ttdoc">Returns the camera list from the given image number.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1228</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_ab1556ef525e16324c21d44d0b5e8afdc"><div class="ttname"><a href="class_isis_1_1_control_net.html#ab1556ef525e16324c21d44d0b5e8afdc">Isis::ControlNet::GetMeasuresInCube</a></div><div class="ttdeci">QList&lt; ControlMeasure * &gt; GetMeasuresInCube(QString serialNumber)</div><div class="ttdoc">Get all the measures pertaining to a given cube serial number.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1061</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_ab61d380dc133bee1a90ce333b887a47a"><div class="ttname"><a href="class_isis_1_1_control_net.html#ab61d380dc133bee1a90ce333b887a47a">Isis::ControlNet::SetUserName</a></div><div class="ttdeci">void SetUserName(const QString &amp;name)</div><div class="ttdoc">Set the user name of the control network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1738</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_ab833355567c4c21c32d8b127198a486d"><div class="ttname"><a href="class_isis_1_1_control_net.html#ab833355567c4c21c32d8b127198a486d">Isis::ControlNet::GetPoints</a></div><div class="ttdeci">QList&lt; ControlPoint * &gt; GetPoints()</div><div class="ttdoc">Return QList of all the ControlPoints in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1532</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_ab9b2b0aeb4800d9c31b19b8d1d071bc0"><div class="ttname"><a href="class_isis_1_1_control_net.html#ab9b2b0aeb4800d9c31b19b8d1d071bc0">Isis::ControlNet::ClearJigsawRejected</a></div><div class="ttdeci">void ClearJigsawRejected()</div><div class="ttdoc">Sets jigsaw rejected flag to false for all points and measures.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1431</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_abb7ffccb9c3bb41872294500bc86cc3a"><div class="ttname"><a href="class_isis_1_1_control_net.html#abb7ffccb9c3bb41872294500bc86cc3a">Isis::ControlNet::SetMutex</a></div><div class="ttdeci">void SetMutex(QMutex *mutex)</div><div class="ttdoc">Set mutex to lock for making Naif calls.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1674</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_ad1e52361c1ad81e51c1b526e18a2bed2"><div class="ttname"><a href="class_isis_1_1_control_net.html#ad1e52361c1ad81e51c1b526e18a2bed2">Isis::ControlNet::ComputeResiduals</a></div><div class="ttdeci">void ComputeResiduals()</div><div class="ttdoc">Compute error for each point in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1165</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_ada1344a3f79f08a2bf3e91013b0803b5"><div class="ttname"><a href="class_isis_1_1_control_net.html#ada1344a3f79f08a2bf3e91013b0803b5">Isis::ControlNet::networkStructureModified</a></div><div class="ttdeci">void networkStructureModified()</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_adaa64fa184ce44b370660226f177a56d"><div class="ttname"><a href="class_isis_1_1_control_net.html#adaa64fa184ce44b370660226f177a56d">Isis::ControlNet::DeletePoint</a></div><div class="ttdeci">int DeletePoint(ControlPoint *point)</div><div class="ttdoc">Delete a ControlPoint from the network by the point's address.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:875</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_adbb079a712323ee7f2b6d31b97d821ca"><div class="ttname"><a href="class_isis_1_1_control_net.html#adbb079a712323ee7f2b6d31b97d821ca">Isis::ControlNet::swap</a></div><div class="ttdeci">void swap(ControlNet &amp;other)</div><div class="ttdoc">Swaps the member data with the given control net.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1757</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_ae07d72d19611ee35af8987fe8959414c"><div class="ttname"><a href="class_isis_1_1_control_net.html#ae07d72d19611ee35af8987fe8959414c">Isis::ControlNet::GetCubeSerials</a></div><div class="ttdeci">QList&lt; QString &gt; GetCubeSerials() const</div><div class="ttdoc">Use this method to get a complete list of all the cube serial numbers in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1012</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_ae0ceb0bb88748535a7f23927266be8e8"><div class="ttname"><a href="class_isis_1_1_control_net.html#ae0ceb0bb88748535a7f23927266be8e8">Isis::ControlNet::SetNetworkId</a></div><div class="ttdeci">void SetNetworkId(const QString &amp;id)</div><div class="ttdoc">Set the network id.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1684</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aebe8d541b4cbabfe1583aa328ec1abcf"><div class="ttname"><a href="class_isis_1_1_control_net.html#aebe8d541b4cbabfe1583aa328ec1abcf">Isis::ControlNet::SetModifiedDate</a></div><div class="ttdeci">void SetModifiedDate(const QString &amp;date)</div><div class="ttdoc">Set the last modified date.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1662</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aec5850d0f3d221c8a309f1114f0c2679"><div class="ttname"><a href="class_isis_1_1_control_net.html#aec5850d0f3d221c8a309f1114f0c2679">Isis::ControlNet::newMeasure</a></div><div class="ttdeci">void newMeasure(ControlMeasure *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aed7de2e4a6f490ae65595bff4f57e4f5"><div class="ttname"><a href="class_isis_1_1_control_net.html#aed7de2e4a6f490ae65595bff4f57e4f5">Isis::ControlNet::measureRemoved</a></div><div class="ttdeci">void measureRemoved(ControlMeasure *)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_aede559d78dddef97ee6fac98bd1dc79f"><div class="ttname"><a href="class_isis_1_1_control_net.html#aede559d78dddef97ee6fac98bd1dc79f">Isis::ControlNet::GetValidMeasuresInCube</a></div><div class="ttdeci">QList&lt; ControlMeasure * &gt; GetValidMeasuresInCube(QString serialNumber)</div><div class="ttdoc">Get all the valid measures pertaining to a given cube serial number.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1077</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_af68ebe666f953bdc45e2df307a3048d3"><div class="ttname"><a href="class_isis_1_1_control_net.html#af68ebe666f953bdc45e2df307a3048d3">Isis::ControlNet::IncrementNumberOfRejectedMeasuresInImage</a></div><div class="ttdeci">void IncrementNumberOfRejectedMeasuresInImage(const QString &amp;serialNumber)</div><div class="ttdoc">Increment number of jigsaw rejected measures in image specified by serialNumber.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1442</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_af7176865bfd22bbaf5ae41444f9a0021"><div class="ttname"><a href="class_isis_1_1_control_net.html#af7176865bfd22bbaf5ae41444f9a0021">Isis::ControlNet::GetNumEditLockMeasures</a></div><div class="ttdeci">int GetNumEditLockMeasures()</div><div class="ttdoc">Return the total number of edit locked measures for all control points in the network.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1357</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_af72571b7f41cc1f7cf264255f225f298"><div class="ttname"><a href="class_isis_1_1_control_net.html#af72571b7f41cc1f7cf264255f225f298">Isis::ControlNet::SetTarget</a></div><div class="ttdeci">void SetTarget(const QString &amp;target)</div><div class="ttdoc">Sets the target name and target radii, if available.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:1700</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html_afc1a148cb5c4c2bdce88d6e598405ece"><div class="ttname"><a href="class_isis_1_1_control_net.html#afc1a148cb5c4c2bdce88d6e598405ece">Isis::ControlNet::take</a></div><div class="ttdeci">QList&lt; ControlPoint * &gt; take()</div><div class="ttdoc">Transfer ownership of all points to caller.</div><div class="ttdef"><b>Definition:</b> ControlNet.cpp:224</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_html"><div class="ttname"><a href="class_isis_1_1_control_point.html">Isis::ControlPoint</a></div><div class="ttdoc">A single control point.</div><div class="ttdef"><b>Definition:</b> ControlPoint.h:356</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_html_a3b7060c3795249fbb3cc331e55609f8a"><div class="ttname"><a href="class_isis_1_1_control_point.html#a3b7060c3795249fbb3cc331e55609f8a">Isis::ControlPoint::ModType</a></div><div class="ttdeci">ModType</div><div class="ttdoc">Control Point Modification Types.</div><div class="ttdef"><b>Definition:</b> ControlPoint.h:433</div></div>
+<div class="ttc" id="aclass_isis_1_1_progress_html"><div class="ttname"><a href="class_isis_1_1_progress.html">Isis::Progress</a></div><div class="ttdoc">Program progress reporter.</div><div class="ttdef"><b>Definition:</b> Progress.h:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_html"><div class="ttname"><a href="class_isis_1_1_pvl.html">Isis::Pvl</a></div><div class="ttdoc">Container for cube-like labels.</div><div class="ttdef"><b>Definition:</b> Pvl.h:119</div></div>
+<div class="ttc" id="aclass_isis_1_1_serial_number_list_html"><div class="ttname"><a href="class_isis_1_1_serial_number_list.html">Isis::SerialNumberList</a></div><div class="ttdoc">Serial Number list generator.</div><div class="ttdef"><b>Definition:</b> SerialNumberList.h:64</div></div>
+<div class="ttc" id="aclass_isis_1_1_surface_point_html_a01c0bdeea31281dc1eac1589adbab223"><div class="ttname"><a href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223">Isis::SurfacePoint::CoordinateType</a></div><div class="ttdeci">CoordinateType</div><div class="ttdoc">Defines the coordinate typ, units, and coordinate index for some of the output methods.</div><div class="ttdef"><b>Definition:</b> SurfacePoint.h:139</div></div>
+<div class="ttc" id="aclass_isis_1_1_surface_point_html_a01c0bdeea31281dc1eac1589adbab223a256c8dadbfa862853fc27317f7a17978"><div class="ttname"><a href="class_isis_1_1_surface_point.html#a01c0bdeea31281dc1eac1589adbab223a256c8dadbfa862853fc27317f7a17978">Isis::SurfacePoint::Latitudinal</a></div><div class="ttdeci">@ Latitudinal</div><div class="ttdoc">Planetocentric latitudinal (lat/lon/rad) coordinates.</div><div class="ttdef"><b>Definition:</b> SurfacePoint.h:140</div></div>
+<div class="ttc" id="aclass_q_hash_html"><div class="ttname"><a href="class_q_hash.html">QHash</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> ControlNet.h:32</div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="aclass_q_map_html"><div class="ttname"><a href="class_q_map.html">QMap&lt; QString, Isis::Camera * &gt;</a></div></div>
+<div class="ttc" id="aclass_q_object_html"><div class="ttname"><a href="class_q_object.html">QObject</a></div></div>
+<div class="ttc" id="aclass_q_set_html"><div class="ttname"><a href="class_q_set.html">QSet</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Process.h:16</div></div>
+<div class="ttc" id="aclass_q_shared_pointer_html"><div class="ttname"><a href="class_q_shared_pointer.html">QSharedPointer&lt; ControlNet &gt;</a></div></div>
+<div class="ttc" id="aclass_q_vector_html"><div class="ttname"><a href="class_q_vector.html">QVector&lt; Isis::Camera * &gt;</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a6c5d908598eeb56b5f475752cdc4fb18"><div class="ttname"><a href="namespace_isis.html#a6c5d908598eeb56b5f475752cdc4fb18">Isis::ControlNetQsp</a></div><div class="ttdeci">QSharedPointer&lt; ControlNet &gt; ControlNetQsp</div><div class="ttdoc">Typedef for QSharedPointer to control network. This typedef is for future implementation of target bo...</div><div class="ttdef"><b>Definition:</b> ControlNet.h:485</div></div>
+<div class="ttc" id="astruct_q_pair_html"><div class="ttname"><a href="struct_q_pair.html">QPair</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> CubeIoHandler.h:23</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_a576af9f1f3bb26b082d16585a91e73c.html">control</a></li><li class="navelem"><a class="el" href="dir_8e87adfb2431123dc47fe3f2bd06feca.html">objs</a></li><li class="navelem"><a class="el" href="dir_ce8dcfee16e565f5be95077cba4e4961.html">ControlNet</a></li><li class="navelem"><a class="el" href="_control_net_8h.html">ControlNet.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

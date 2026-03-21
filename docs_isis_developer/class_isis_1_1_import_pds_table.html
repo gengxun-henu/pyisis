@@ -1,0 +1,1331 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ImportPdsTable Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_import_pds_table.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_import_pds_table-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ImportPdsTable Class Reference<div class="ingroups"><a class="el" href="group___utility.html">Utility</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Import a PDS table file with a label description.  
+ <a href="class_isis_1_1_import_pds_table.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_import_pds_table_8h_source.html">ImportPdsTable.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::ImportPdsTable:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_import_pds_table__coll__graph.png" border="0" usemap="#a_isis_1_1_import_pds_table_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_import_pds_table_coll__map" id="a_isis_1_1_import_pds_table_coll__map">
+<area shape="rect" title="Import a PDS table file with a label description." alt="" coords="5,5,169,359"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ad6d00a4efc9a112cbfa476a8e92ab58c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#ad6d00a4efc9a112cbfa476a8e92ab58c">ImportPdsTable</a> ()</td></tr>
+<tr class="memdesc:ad6d00a4efc9a112cbfa476a8e92ab58c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="class_isis_1_1_import_pds_table.html#ad6d00a4efc9a112cbfa476a8e92ab58c">More...</a><br /></td></tr>
+<tr class="separator:ad6d00a4efc9a112cbfa476a8e92ab58c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a026a227b75cae7f9c5d9f423d95d2a8f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a026a227b75cae7f9c5d9f423d95d2a8f">ImportPdsTable</a> (const QString &amp;pdsLabFile, const QString &amp;pdsTabFile=&quot;&quot;, const QString &amp;pdsTableName=&quot;TABLE&quot;)</td></tr>
+<tr class="memdesc:a026a227b75cae7f9c5d9f423d95d2a8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This constructor automatically loads the given label and table files.  <a href="class_isis_1_1_import_pds_table.html#a026a227b75cae7f9c5d9f423d95d2a8f">More...</a><br /></td></tr>
+<tr class="separator:a026a227b75cae7f9c5d9f423d95d2a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadf6a22457d447f5b2ae45c53ed17dae"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#aadf6a22457d447f5b2ae45c53ed17dae">~ImportPdsTable</a> ()</td></tr>
+<tr class="memdesc:aadf6a22457d447f5b2ae45c53ed17dae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructs the <a class="el" href="class_isis_1_1_import_pds_table.html" title="Import a PDS table file with a label description.">ImportPdsTable</a> object.  <a href="class_isis_1_1_import_pds_table.html#aadf6a22457d447f5b2ae45c53ed17dae">More...</a><br /></td></tr>
+<tr class="separator:aadf6a22457d447f5b2ae45c53ed17dae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a155f46574770d009db6bc0eaafe499a9"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a155f46574770d009db6bc0eaafe499a9">name</a> () const</td></tr>
+<tr class="memdesc:a155f46574770d009db6bc0eaafe499a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name of the PDS table.  <a href="class_isis_1_1_import_pds_table.html#a155f46574770d009db6bc0eaafe499a9">More...</a><br /></td></tr>
+<tr class="separator:a155f46574770d009db6bc0eaafe499a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fe752e86e0196b5c85657fed2c99b74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a0fe752e86e0196b5c85657fed2c99b74">setName</a> (const QString &amp;<a class="el" href="class_isis_1_1_import_pds_table.html#a155f46574770d009db6bc0eaafe499a9">name</a>=&quot;TABLE&quot;)</td></tr>
+<tr class="memdesc:a0fe752e86e0196b5c85657fed2c99b74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the name of the PDS table object.  <a href="class_isis_1_1_import_pds_table.html#a0fe752e86e0196b5c85657fed2c99b74">More...</a><br /></td></tr>
+<tr class="separator:a0fe752e86e0196b5c85657fed2c99b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af35a54b6ad4794fb54240c45e69bd8b1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#af35a54b6ad4794fb54240c45e69bd8b1">columns</a> () const</td></tr>
+<tr class="memdesc:af35a54b6ad4794fb54240c45e69bd8b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of columns in the table.  <a href="class_isis_1_1_import_pds_table.html#af35a54b6ad4794fb54240c45e69bd8b1">More...</a><br /></td></tr>
+<tr class="separator:af35a54b6ad4794fb54240c45e69bd8b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d62ae392cc51641cd3977c3ebac9b87"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a1d62ae392cc51641cd3977c3ebac9b87">rows</a> () const</td></tr>
+<tr class="memdesc:a1d62ae392cc51641cd3977c3ebac9b87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of rows in the table.  <a href="class_isis_1_1_import_pds_table.html#a1d62ae392cc51641cd3977c3ebac9b87">More...</a><br /></td></tr>
+<tr class="separator:a1d62ae392cc51641cd3977c3ebac9b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a8eea6f15571dfc7c98fe2e2b351099"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a4a8eea6f15571dfc7c98fe2e2b351099">load</a> (const QString &amp;pdsLabFile, const QString &amp;pdsTabFile=&quot;&quot;, const QString &amp;pdsTableName=&quot;TABLE&quot;)</td></tr>
+<tr class="memdesc:a4a8eea6f15571dfc7c98fe2e2b351099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a PDS table label and (optional) data file.  <a href="class_isis_1_1_import_pds_table.html#a4a8eea6f15571dfc7c98fe2e2b351099">More...</a><br /></td></tr>
+<tr class="separator:a4a8eea6f15571dfc7c98fe2e2b351099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae54ef197918e3ca5884fa2dfe2a9de14"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#ae54ef197918e3ca5884fa2dfe2a9de14">hasColumn</a> (const QString &amp;colName) const</td></tr>
+<tr class="memdesc:ae54ef197918e3ca5884fa2dfe2a9de14"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method determines whether the PDS table has a column with the given name.  <a href="class_isis_1_1_import_pds_table.html#ae54ef197918e3ca5884fa2dfe2a9de14">More...</a><br /></td></tr>
+<tr class="separator:ae54ef197918e3ca5884fa2dfe2a9de14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed7287cfca69e50c7fdf6ccd5172eb13"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#aed7287cfca69e50c7fdf6ccd5172eb13">getColumnName</a> (const unsigned int &amp;index=0, const bool &amp;formatted=true) const</td></tr>
+<tr class="memdesc:aed7287cfca69e50c7fdf6ccd5172eb13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the specifed column.  <a href="class_isis_1_1_import_pds_table.html#aed7287cfca69e50c7fdf6ccd5172eb13">More...</a><br /></td></tr>
+<tr class="separator:aed7287cfca69e50c7fdf6ccd5172eb13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebe90ad98cea76afd6aeb208172b732e"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#aebe90ad98cea76afd6aeb208172b732e">getColumnNames</a> (const bool &amp;formatted=true) const</td></tr>
+<tr class="memdesc:aebe90ad98cea76afd6aeb208172b732e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the names of all the columns.  <a href="class_isis_1_1_import_pds_table.html#aebe90ad98cea76afd6aeb208172b732e">More...</a><br /></td></tr>
+<tr class="separator:aebe90ad98cea76afd6aeb208172b732e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1974103d9c24e05e004136eb40675c71"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a1974103d9c24e05e004136eb40675c71">getFormattedName</a> (const QString &amp;colname) const</td></tr>
+<tr class="memdesc:a1974103d9c24e05e004136eb40675c71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a column name to a camel-case after it has been cleansed.  <a href="class_isis_1_1_import_pds_table.html#a1974103d9c24e05e004136eb40675c71">More...</a><br /></td></tr>
+<tr class="separator:a1974103d9c24e05e004136eb40675c71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3be1c76b3370503c6dfdc5e7fe9bebe"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#ae3be1c76b3370503c6dfdc5e7fe9bebe">getType</a> (const QString &amp;colName) const</td></tr>
+<tr class="memdesc:ae3be1c76b3370503c6dfdc5e7fe9bebe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the type associated with the specified column.  <a href="class_isis_1_1_import_pds_table.html#ae3be1c76b3370503c6dfdc5e7fe9bebe">More...</a><br /></td></tr>
+<tr class="separator:ae3be1c76b3370503c6dfdc5e7fe9bebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc48f1e51f68a0328e7a007f4b4146d0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#abc48f1e51f68a0328e7a007f4b4146d0">setType</a> (const QString &amp;colName, const QString &amp;dataType)</td></tr>
+<tr class="memdesc:abc48f1e51f68a0328e7a007f4b4146d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the datatype for a column.  <a href="class_isis_1_1_import_pds_table.html#abc48f1e51f68a0328e7a007f4b4146d0">More...</a><br /></td></tr>
+<tr class="separator:abc48f1e51f68a0328e7a007f4b4146d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b1c922152dae002f02c7a26da609ea1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table.html">Table</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a3b1c922152dae002f02c7a26da609ea1">importTable</a> (const QString &amp;isisTableName)</td></tr>
+<tr class="memdesc:a3b1c922152dae002f02c7a26da609ea1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Populate a <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object with the PDS table and return it.  <a href="class_isis_1_1_import_pds_table.html#a3b1c922152dae002f02c7a26da609ea1">More...</a><br /></td></tr>
+<tr class="separator:a3b1c922152dae002f02c7a26da609ea1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade84df313ae1ea07b9dd493c73f6ae7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table.html">Table</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#ade84df313ae1ea07b9dd493c73f6ae7c">importTable</a> (const QString &amp;colNames, const QString &amp;isisTableName)</td></tr>
+<tr class="memdesc:ade84df313ae1ea07b9dd493c73f6ae7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Populate ISIS <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> with specified column(s) from ASCII table.  <a href="class_isis_1_1_import_pds_table.html#ade84df313ae1ea07b9dd493c73f6ae7c">More...</a><br /></td></tr>
+<tr class="separator:ade84df313ae1ea07b9dd493c73f6ae7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5be2a95dcada8d89787be41f4e3e492"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_table.html">Table</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#ad5be2a95dcada8d89787be41f4e3e492">importTable</a> (const QStringList &amp;colNames, const QString &amp;isisTableName)</td></tr>
+<tr class="memdesc:ad5be2a95dcada8d89787be41f4e3e492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Populate ISIS <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> with specific columns from ASCII table.  <a href="class_isis_1_1_import_pds_table.html#ad5be2a95dcada8d89787be41f4e3e492">More...</a><br /></td></tr>
+<tr class="separator:ad5be2a95dcada8d89787be41f4e3e492"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:a97d70921221fb945bfeb3b0c7ffd04b5"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a97d70921221fb945bfeb3b0c7ffd04b5">ColumnTypes</a></td></tr>
+<tr class="separator:a97d70921221fb945bfeb3b0c7ffd04b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab474f0d7282cd589315b3cb89287e211"><td class="memItemLeft" align="right" valign="top">typedef QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#ab474f0d7282cd589315b3cb89287e211">Columns</a></td></tr>
+<tr class="separator:ab474f0d7282cd589315b3cb89287e211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc789eb499588dd647c68220dcb938e3"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_import_pds_table.html#ab474f0d7282cd589315b3cb89287e211">Columns</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#abc789eb499588dd647c68220dcb938e3">Rows</a></td></tr>
+<tr class="separator:abc789eb499588dd647c68220dcb938e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a225ade7ff6b8c609f605392d1ba65371"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a225ade7ff6b8c609f605392d1ba65371">getColumnDescriptor</a> (const int &amp;nth) const</td></tr>
+<tr class="memdesc:a225ade7ff6b8c609f605392d1ba65371"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a column description by index.  <a href="class_isis_1_1_import_pds_table.html#a225ade7ff6b8c609f605392d1ba65371">More...</a><br /></td></tr>
+<tr class="separator:a225ade7ff6b8c609f605392d1ba65371"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07f56e659c4e4f90ef0e2f82a3d4c50f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a07f56e659c4e4f90ef0e2f82a3d4c50f">findColumn</a> (const QString &amp;colName)</td></tr>
+<tr class="memdesc:a07f56e659c4e4f90ef0e2f82a3d4c50f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches internal column descriptors for a named column.  <a href="class_isis_1_1_import_pds_table.html#a07f56e659c4e4f90ef0e2f82a3d4c50f">More...</a><br /></td></tr>
+<tr class="separator:a07f56e659c4e4f90ef0e2f82a3d4c50f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a016ccb2e9c0208ee846e1f11a809232b"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a016ccb2e9c0208ee846e1f11a809232b">findColumn</a> (const QString &amp;colName) const</td></tr>
+<tr class="memdesc:a016ccb2e9c0208ee846e1f11a809232b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches internal column descriptors for a named column.  <a href="class_isis_1_1_import_pds_table.html#a016ccb2e9c0208ee846e1f11a809232b">More...</a><br /></td></tr>
+<tr class="separator:a016ccb2e9c0208ee846e1f11a809232b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a409c51f24644dbf3ded539a965ed813c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a409c51f24644dbf3ded539a965ed813c">getColumnValue</a> (const QString &amp;tline, const <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &amp;cdesc, const QString &amp;delimiter=&quot;&quot;) const</td></tr>
+<tr class="memdesc:a409c51f24644dbf3ded539a965ed813c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts a column from a QString based upon a description.  <a href="class_isis_1_1_import_pds_table.html#a409c51f24644dbf3ded539a965ed813c">More...</a><br /></td></tr>
+<tr class="separator:a409c51f24644dbf3ded539a965ed813c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd456c5a47a7d7eb166d2b6bde24f9cc"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#afd456c5a47a7d7eb166d2b6bde24f9cc">getColumnFields</a> (const QString &amp;tline, const <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &amp;cdesc, const QString &amp;delimiter=&quot;&quot;) const</td></tr>
+<tr class="memdesc:afd456c5a47a7d7eb166d2b6bde24f9cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts column fields from a QString based upon a description.  <a href="class_isis_1_1_import_pds_table.html#afd456c5a47a7d7eb166d2b6bde24f9cc">More...</a><br /></td></tr>
+<tr class="separator:afd456c5a47a7d7eb166d2b6bde24f9cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc06433dd8ac84046fe3a9e3b708a129"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#acc06433dd8ac84046fe3a9e3b708a129">getGenericType</a> (const QString &amp;ttype) const</td></tr>
+<tr class="memdesc:acc06433dd8ac84046fe3a9e3b708a129"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine generic data type of a column.  <a href="class_isis_1_1_import_pds_table.html#acc06433dd8ac84046fe3a9e3b708a129">More...</a><br /></td></tr>
+<tr class="separator:acc06433dd8ac84046fe3a9e3b708a129"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bfb8e7863a78e99a59610df8bf5d639"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_import_pds_table.html#a0bfb8e7863a78e99a59610df8bf5d639">processRow</a> (const int &amp;row, const QString &amp;rowdata)</td></tr>
+<tr class="memdesc:a0bfb8e7863a78e99a59610df8bf5d639"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_process.html" title="Base class for all cube processing derivatives.">Process</a> a freshly read PDS table line of data.  <a href="class_isis_1_1_import_pds_table.html#a0bfb8e7863a78e99a59610df8bf5d639">More...</a><br /></td></tr>
+<tr class="separator:a0bfb8e7863a78e99a59610df8bf5d639"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Import a PDS table file with a label description. </p>
+<p>This class ingests a PDS table and converts it to an ISIS <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object. This class can handle importing PDS tables whose data is BINARY or ASCII format.</p>
+<p>The PDS label file should completely define the contents of a PDS table with ASCII data or BINARY data. The location of the table data is determined from a label keyword, ^TABLE (or ^NAME_TABLE). This keyword will indicate the name of the file containing the table data and the start record value where the table data begins. If the keyword only gives the start record, the table is attached to the file that contains the label. If the keyword only gives a file name, that file only contains the data for the indicated table. PDS table files have the extension *.TAB if the table data is ASCII format and *.DAT if the data is BINARY. When constructing an <a class="el" href="class_isis_1_1_import_pds_table.html" title="Import a PDS table file with a label description.">ImportPdsTable</a> object, programmers can provide a different name for the PDS table file.</p>
+<p><b>NOTE:</b> Depending on the INTERCHANGE_FORMAT value, programmers should choose the appropriate methods from this class.</p>
+<p>Example of PDS ASCII table import. Construct the <a class="el" href="class_isis_1_1_import_pds_table.html" title="Import a PDS table file with a label description.">ImportPdsTable</a> object with a label name, set the data type for the specified PDS columns, and import the PDS table to an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> table with the comma separtated column names. <code> <a class="el" href="class_isis_1_1_import_pds_table.html" title="Import a PDS table file with a label description.">ImportPdsTable</a> pdsTable(labelFileName, tableFileName); pdsTable.setType("ScetTimeClock", "CHARACTER"); pdsTable.setType("ShutterStatus", "CHARACTER"); pdsTable.setType("MirrorSin", "DOUBLE"); pdsTable.setType("MirrorCos", "DOUBLE"); <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> isisTable = pdsTable.importTable("ScetTimeClock,ShutterStatus,MirrorSin,MirrorCos", "VIRHouseKeeping"); </code> Example of PDS BINARY table import. If the default constructor is used, the load method must be called to pass in the label file name. The PDS table can then be imported and an <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object is returned. <code> <a class="el" href="class_isis_1_1_import_pds_table.html" title="Import a PDS table file with a label description.">ImportPdsTable</a> pdsTable; load(labelFileName, "", pdsTableName); <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> isisTable = pdsTable.importTable(isisTableName); </code> </p>
+<dl class="section author"><dt>Author</dt><dd>2011-07-20 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ab474f0d7282cd589315b3cb89287e211"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab474f0d7282cd589315b3cb89287e211">&#9670;&nbsp;</a></span>Columns</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef QStringList <a class="el" href="class_isis_1_1_import_pds_table.html#ab474f0d7282cd589315b3cb89287e211">Isis::ImportPdsTable::Columns</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a97d70921221fb945bfeb3b0c7ffd04b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97d70921221fb945bfeb3b0c7ffd04b5">&#9670;&nbsp;</a></span>ColumnTypes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="class_q_list.html">QList</a>&lt;<a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a>&gt; <a class="el" href="class_isis_1_1_import_pds_table.html#a97d70921221fb945bfeb3b0c7ffd04b5">Isis::ImportPdsTable::ColumnTypes</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abc789eb499588dd647c68220dcb938e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc789eb499588dd647c68220dcb938e3">&#9670;&nbsp;</a></span>Rows</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="class_q_list.html">QList</a>&lt;<a class="el" href="class_isis_1_1_import_pds_table.html#ab474f0d7282cd589315b3cb89287e211">Columns</a>&gt; <a class="el" href="class_isis_1_1_import_pds_table.html#abc789eb499588dd647c68220dcb938e3">Isis::ImportPdsTable::Rows</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad6d00a4efc9a112cbfa476a8e92ab58c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6d00a4efc9a112cbfa476a8e92ab58c">&#9670;&nbsp;</a></span>ImportPdsTable() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ImportPdsTable::ImportPdsTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default constructor. </p>
+<p>This constructor initializes the PDS table name to TABLE.</p>
+<p>If this constructor is used, the <a class="el" href="class_isis_1_1_import_pds_table.html#a4a8eea6f15571dfc7c98fe2e2b351099" title="Loads a PDS table label and (optional) data file.">load()</a> method will need to be called to set the PDS label file.</p>
+<p>This constructor may be used for ASCII or BINARY PDS tables. </p>
+
+</div>
+</div>
+<a id="a026a227b75cae7f9c5d9f423d95d2a8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a026a227b75cae7f9c5d9f423d95d2a8f">&#9670;&nbsp;</a></span>ImportPdsTable() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ImportPdsTable::ImportPdsTable </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>pdsLabFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>pdsTableFile</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>pdsTableName</em> = <code>&quot;TABLE&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This constructor automatically loads the given label and table files. </p>
+<p>This constructor takes the name of the label file describing the PDS table, the table data file name, and the name of the PDS table object. It will extract the description of the columns and read the contents of the table data file.</p>
+<p>If no table file is given or an empty QString is given for the table file, the table location will be read from the label file.</p>
+<p>If no table name is given, the default name for the object is TABLE.</p>
+<p>This constructor may be used for ASCII or BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pdsLabFile</td><td>Name of table label file </td></tr>
+    <tr><td class="paramname">pdsTableFile</td><td>Name of table data file </td></tr>
+    <tr><td class="paramname">pdsTableName</td><td>The name of the table object in the PDS file. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aadf6a22457d447f5b2ae45c53ed17dae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadf6a22457d447f5b2ae45c53ed17dae">&#9670;&nbsp;</a></span>~ImportPdsTable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ImportPdsTable::~ImportPdsTable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructs the <a class="el" href="class_isis_1_1_import_pds_table.html" title="Import a PDS table file with a label description.">ImportPdsTable</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af35a54b6ad4794fb54240c45e69bd8b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af35a54b6ad4794fb54240c45e69bd8b1">&#9670;&nbsp;</a></span>columns()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ImportPdsTable::columns </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of columns in the table. </p>
+<p>This method can be called for ASCII or BINARY PDS tables.</p>
+<dl class="section return"><dt>Returns</dt><dd>int The number of columns. </dd></dl>
+
+</div>
+</div>
+<a id="a07f56e659c4e4f90ef0e2f82a3d4c50f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07f56e659c4e4f90ef0e2f82a3d4c50f">&#9670;&nbsp;</a></span>findColumn() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ImportPdsTable::ColumnDescr</a> * Isis::ImportPdsTable::findColumn </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>colName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Searches internal column descriptors for a named column. </p>
+<p>This method converts the column names to a formatted name for consistency and then checks for the given name - with case insensitivity. If found, a pointer to the column description is returned, otherwise NULL.</p>
+<p>This method can be called for ASCII or BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">colName</td><td>Name of column to find</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ImportPdsTable::ColumnDescr</a>* Pointer to column description is returned if found otherwise, NULL is returned. </dd></dl>
+
+</div>
+</div>
+<a id="a016ccb2e9c0208ee846e1f11a809232b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a016ccb2e9c0208ee846e1f11a809232b">&#9670;&nbsp;</a></span>findColumn() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ImportPdsTable::ColumnDescr</a> * Isis::ImportPdsTable::findColumn </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>colName</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Searches internal column descriptors for a named column. </p>
+<p>This method converts the column names to a formatted name for consistency and then checks for the given name - with case insensitivity. If found, a pointer to the column description is returned, otherwise NULL.</p>
+<p>This method can be called for ASCII or BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">colName</td><td>Name of column to find</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ImportPdsTable::ColumnDescr</a>* Const pointer to column description is returned if found otherwise, NULL is returned. </dd></dl>
+
+</div>
+</div>
+<a id="a225ade7ff6b8c609f605392d1ba65371"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a225ade7ff6b8c609f605392d1ba65371">&#9670;&nbsp;</a></span>getColumnDescriptor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ImportPdsTable::ColumnDescr</a> &amp; Isis::ImportPdsTable::getColumnDescriptor </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>nth</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve a column description by index. </p>
+<dl class="section author"><dt>Author</dt><dd>2015-07-17 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nth</td><td>Index of column description to retrieve, starting at 0</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ImportPdsTable::ColumnDescr</a>&amp; Reference to requested column description</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"Index ([nth]) into Columns invalid (max: [columns])" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="afd456c5a47a7d7eb166d2b6bde24f9cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd456c5a47a7d7eb166d2b6bde24f9cc">&#9670;&nbsp;</a></span>getColumnFields()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::ImportPdsTable::getColumnFields </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>tline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &amp;&#160;</td>
+          <td class="paramname"><em>cdesc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>delimiter</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Extracts column fields from a QString based upon a description. </p>
+<p>This method should not be called for BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tline</td><td>Row from table data </td></tr>
+    <tr><td class="paramname">cdesc</td><td><a class="el" href="class_isis_1_1_column.html" title="Format ascii tables.">Column</a> description </td></tr>
+    <tr><td class="paramname">delimiter</td><td>Delimiter used to delimit column fields (optional)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QStringList Returns the extracted column fields as a QStringList </dd></dl>
+
+<p class="reference">References <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a980484e67a484ae8f006cb3dce1150f4">Isis::ImportPdsTable::ColumnDescr::m_itemBytes</a>, and <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a9c1198785280b61542ff17853e2eea8c">Isis::ImportPdsTable::ColumnDescr::m_items</a>.</p>
+
+</div>
+</div>
+<a id="aed7287cfca69e50c7fdf6ccd5172eb13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed7287cfca69e50c7fdf6ccd5172eb13">&#9670;&nbsp;</a></span>getColumnName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ImportPdsTable::getColumnName </td>
+          <td>(</td>
+          <td class="paramtype">const unsigned int &amp;&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool &amp;&#160;</td>
+          <td class="paramname"><em>formatted</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the name of the specifed column. </p>
+<p>This method will return the name of a specified column by index. It also has the option to format the column name to Camel-Case. This will remove all left and right parens, convert white space to spaces, compress consecutive spaces to only one space. It then removes the spaces converting the next character to uppercase.</p>
+<p>This method can be called for ASCII or BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Index of colunm name to get. </td></tr>
+    <tr><td class="paramname">formatted</td><td>Specifies to convert the name to Camel-Case if true, otherwise leave as is in the PDS table.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString Returns the column name as requested</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"Unable to import the binary PDS table into Isis. The
+                                requested column index exceeds the last column index." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+</div>
+</div>
+<a id="aebe90ad98cea76afd6aeb208172b732e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebe90ad98cea76afd6aeb208172b732e">&#9670;&nbsp;</a></span>getColumnNames()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Isis::ImportPdsTable::getColumnNames </td>
+          <td>(</td>
+          <td class="paramtype">const bool &amp;&#160;</td>
+          <td class="paramname"><em>formatted</em> = <code>true</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the names of all the columns. </p>
+<p>This method will return the names of all columns. It also has the option to format the column name to Camel-Case. This will remove all left and right parens, convert white space to spaces, compress consecutive spaces to only one space. It then removes the spaces converting the next character to uppercase.</p>
+<p>This method can be called for ASCII or BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">formatted</td><td>Specifies to convert the name to Camel-Case if true, otherwise leave as is in the PDS table.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QStringList List of all column names. </dd></dl>
+
+</div>
+</div>
+<a id="a409c51f24644dbf3ded539a965ed813c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a409c51f24644dbf3ded539a965ed813c">&#9670;&nbsp;</a></span>getColumnValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ImportPdsTable::getColumnValue </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>tline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html">ColumnDescr</a> &amp;&#160;</td>
+          <td class="paramname"><em>cdesc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>delimiter</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Extracts a column from a QString based upon a description. </p>
+<p>This method should not be called for BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tline</td><td>Row from table data </td></tr>
+    <tr><td class="paramname">cdesc</td><td><a class="el" href="class_isis_1_1_column.html" title="Format ascii tables.">Column</a> description</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString Returns the extracted column as a QString </dd></dl>
+
+<p class="reference">References <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a861059d5870de2c23ac9cc0e831d29fe">Isis::ImportPdsTable::ColumnDescr::m_numBytes</a>, and <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a684b28e18baa9fe12796af86fe89bd44">Isis::ImportPdsTable::ColumnDescr::m_startByte</a>.</p>
+
+</div>
+</div>
+<a id="a1974103d9c24e05e004136eb40675c71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1974103d9c24e05e004136eb40675c71">&#9670;&nbsp;</a></span>getFormattedName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ImportPdsTable::getFormattedName </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>colname</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a column name to a camel-case after it has been cleansed. </p>
+<p>This method will convert a column name to camel-case after some character cleaning is performed. All white space characters as defined by the <a class="el" href="class_isis_1_1_i_string.html" title="Adds specific functionality to C++ strings.">IString</a> class are converted to spaces. Spaces are then compressed to one space. Any left/right parens are removed. Then the conversion to camel-case is performed.</p>
+<p>Camel case always converts the first character in a QString to uppercase. Any space or '_' character are removed and the following character is converted to uppercase. All other characters are converted to lowercase.</p>
+<p>This method can be called for ASCII or BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">colname</td><td><a class="el" href="class_isis_1_1_column.html" title="Format ascii tables.">Column</a> name to converty</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString Returns the formatted keyword </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_process_import_pds.html#ab9b549c6572460c4e4bad3f4b46dc301">Isis::ProcessImportPds::ImportTable()</a>.</p>
+
+</div>
+</div>
+<a id="acc06433dd8ac84046fe3a9e3b708a129"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc06433dd8ac84046fe3a9e3b708a129">&#9670;&nbsp;</a></span>getGenericType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ImportPdsTable::getGenericType </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>ttype</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determine generic data type of a column. </p>
+<p>This method will determine the generic type of a column. In general, PDS table descriptions contain types that have some prepended qualifiers to column data types. This routine removes those qualifiers and only returns the generic type.</p>
+<p>For example, if the incoming type is MSB_INTEGER, only INTEGER will be returned.</p>
+<p>This method is used for ASCII or BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ttype</td><td>PDS data type to convert</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString Generic type found in the data type. </dd></dl>
+
+</div>
+</div>
+<a id="ae3be1c76b3370503c6dfdc5e7fe9bebe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3be1c76b3370503c6dfdc5e7fe9bebe">&#9670;&nbsp;</a></span>getType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ImportPdsTable::getType </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>colName</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the type associated with the specified column. </p>
+<p>This method returns the datatype associated with the specfied column. If the column does not exist, an empty QString is returned.</p>
+<p>This method can be called for ASCII or BINARY PDS tables.</p>
+<dl class="section author"><dt>Author</dt><dd>2011-06-27 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">colName</td><td>Name of column to get type for.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString Returns the type of the column. If the column does not exist, an empty QString is returned. </dd></dl>
+
+<p class="reference">References <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a95d2df56385e2564c04ea665f0d0ffe3">Isis::ImportPdsTable::ColumnDescr::m_dataType</a>.</p>
+
+</div>
+</div>
+<a id="ae54ef197918e3ca5884fa2dfe2a9de14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae54ef197918e3ca5884fa2dfe2a9de14">&#9670;&nbsp;</a></span>hasColumn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ImportPdsTable::hasColumn </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>colName</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This method determines whether the PDS table has a column with the given name. </p>
+<p>This method can be called for ASCII or BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">colName</td><td>A QString containing the column name.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Indicates whether the table has the given column. </dd></dl>
+
+</div>
+</div>
+<a id="ade84df313ae1ea07b9dd493c73f6ae7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade84df313ae1ea07b9dd493c73f6ae7c">&#9670;&nbsp;</a></span>importTable() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table.html">Table</a> Isis::ImportPdsTable::importTable </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>colnames</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>isisTableName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Populate ISIS <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> with specified column(s) from ASCII table. </p>
+<p>This method extracts columns specified by the caller in a QString. It is typically used for a single column, but any number of columns can be provided. colnames is a comma delimited QString that contains the name of the columns that will be exported in the table.</p>
+<p>This method should only be called for ASCII PDS tables. If needed for BINARY tables, implementation should be added and tested.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">colNames</td><td>String containing comma delimited column names to export </td></tr>
+    <tr><td class="paramname">isisTableName</td><td>Name of table to create</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> containing the specified columns </dd></dl>
+
+</div>
+</div>
+<a id="a3b1c922152dae002f02c7a26da609ea1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b1c922152dae002f02c7a26da609ea1">&#9670;&nbsp;</a></span>importTable() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table.html">Table</a> Isis::ImportPdsTable::importTable </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>isisTableName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Populate a <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> object with the PDS table and return it. </p>
+<p>This method converts PDS table data to an ISIS table.</p>
+<p>This method can be called to import ASCII or BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">isisTableName</td><td>Name of table</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> containing PDS table data</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78" title="A type of error that cannot be classified as any of the other error types.">IException::Unknown</a></td><td>"Unable to import the PDS table from the PDS file into Isis." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_process_import_pds.html#ab9b549c6572460c4e4bad3f4b46dc301">Isis::ProcessImportPds::ImportTable()</a>.</p>
+
+</div>
+</div>
+<a id="ad5be2a95dcada8d89787be41f4e3e492"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5be2a95dcada8d89787be41f4e3e492">&#9670;&nbsp;</a></span>importTable() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_table.html">Table</a> Isis::ImportPdsTable::importTable </td>
+          <td>(</td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>colnames</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>isisTableName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Populate ISIS <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> with specific columns from ASCII table. </p>
+<p>This method extracts columns specified by the caller. If the requested column does not exist, an exception is thrown.</p>
+<p>This method should only be called for ASCII PDS tables. If needed for BINARY tables, implementation should be added and tested.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">colNames</td><td>QStringList of column names to convert to a table. </td></tr>
+    <tr><td class="paramname">isisTableName</td><td>Name of the table to create.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> <a class="el" href="class_isis_1_1_table.html" title="Class for storing Table blobs information.">Table</a> containing the specified columns</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"Unable to import the PDS table into Isis. The requested
+                                column name does not exist in table." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="a4a8eea6f15571dfc7c98fe2e2b351099"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a8eea6f15571dfc7c98fe2e2b351099">&#9670;&nbsp;</a></span>load()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImportPdsTable::load </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>pdsLabFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>pdsTableFile</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>pdsTableName</em> = <code>&quot;TABLE&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Loads a PDS table label and (optional) data file. </p>
+<p>This method will load a PDS table dataset using a label file describing the contents of the table data. The caller can provide the table data file, otherwise, the location of the table data is extracted from the ^TABLE_NAME keyword in the provided labels. The table data is then loaded.</p>
+<p>This method needs to be called if the default constructor is used. Otherwise, it is invoked in the constructor that takes the label, table file, and table name. This method may be used to overwrite the label and table file used. When it is invoked, the current contents of the object are discarded.</p>
+<p>This method is used for ASCII or BINARY PDS tables.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pdsLabFile</td><td>Name of PDS table label file </td></tr>
+    <tr><td class="paramname">pdsTableFile</td><td>Name of PDS table data file to be imported into <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> (optional) </td></tr>
+    <tr><td class="paramname">pdsTableName</td><td>Name of the table object in the PDS file (optional)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a63d99146784c22c4bb7d83a3d5bd4a78" title="A type of error that cannot be classified as any of the other error types.">IException::Unknown</a></td><td>"Unable to import PDS table. Neither of the possible
+                             table values were found." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_file_name.html#a5596aba89aab7d88ff1b67c1637145a3">Isis::FileName::baseName()</a>, <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>, <a class="el" href="class_isis_1_1_file_name.html#a4aa9747da045728a69b21b7dfa8048a1">Isis::FileName::fileExists()</a>, <a class="el" href="class_isis_1_1_file_name.html#a5ac7c4ccd0692dc427e117a5c9a2df79">Isis::FileName::name()</a>, <a class="el" href="class_isis_1_1_file_name.html#a07a8f3a1d799fe6f2cde72526b252b55">Isis::FileName::path()</a>, and <a class="el" href="namespace_isis.html#a161dca47e06f74a883a05686d318e817">Isis::toInt()</a>.</p>
+
+</div>
+</div>
+<a id="a155f46574770d009db6bc0eaafe499a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a155f46574770d009db6bc0eaafe499a9">&#9670;&nbsp;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ImportPdsTable::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the name of the PDS table. </p>
+
+</div>
+</div>
+<a id="a0bfb8e7863a78e99a59610df8bf5d639"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bfb8e7863a78e99a59610df8bf5d639">&#9670;&nbsp;</a></span>processRow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ImportPdsTable::processRow </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>rowdata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_process.html" title="Base class for all cube processing derivatives.">Process</a> a freshly read PDS table line of data. </p>
+<dl class="section author"><dt>Author</dt><dd>2015-07-17 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">row</td><td>Row number being processed </td></tr>
+    <tr><td class="paramname">rowdata</td><td>Character line of data</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if succssful, false if error </dd></dl>
+
+</div>
+</div>
+<a id="a1d62ae392cc51641cd3977c3ebac9b87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d62ae392cc51641cd3977c3ebac9b87">&#9670;&nbsp;</a></span>rows()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ImportPdsTable::rows </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of rows in the table. </p>
+<p>This method can be called for ASCII or BINARY PDS tables.</p>
+<dl class="section return"><dt>Returns</dt><dd>int The number of rows. </dd></dl>
+
+</div>
+</div>
+<a id="a0fe752e86e0196b5c85657fed2c99b74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fe752e86e0196b5c85657fed2c99b74">&#9670;&nbsp;</a></span>setName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ImportPdsTable::setName </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em> = <code>&quot;TABLE&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the name of the PDS table object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>New name for the PDS table object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abc48f1e51f68a0328e7a007f4b4146d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc48f1e51f68a0328e7a007f4b4146d0">&#9670;&nbsp;</a></span>setType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ImportPdsTable::setType </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>colName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>dataType</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Change the datatype for a column. </p>
+<p>This method changes the data type the specified column. If the column can not be found, false is returned (indicating an unsuccessful change).</p>
+<p>This method can be called for ASCII or BINARY PDS tables.</p>
+<dl class="section author"><dt>Author</dt><dd>2011-06-27 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">colName</td><td>Name of column to change. </td></tr>
+    <tr><td class="paramname">dtype</td><td>New type of column. Support types are DOUBLE, REAL, INTEGER and CHARACTER. Unsupported/unknown types are treated as CHARACTER.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Indicates if the change was successful. </dd></dl>
+
+<p class="reference">References <a class="el" href="struct_isis_1_1_import_pds_table_1_1_column_descr.html#a95d2df56385e2564c04ea665f0d0ffe3">Isis::ImportPdsTable::ColumnDescr::m_dataType</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/ImportPdsTable/<a class="el" href="_import_pds_table_8h_source.html">ImportPdsTable.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/ImportPdsTable/<a class="el" href="_import_pds_table_8cpp.html">ImportPdsTable.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_import_pds_table.html">ImportPdsTable</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

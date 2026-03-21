@@ -1,0 +1,697 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::GuiEditFile Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_gui_edit_file.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-slots">Public Slots</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_gui_edit_file-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::GuiEditFile Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Opens a window in <a class="el" href="class_isis_1_1_gui.html" title="Gui for Isis Applications.">Gui</a> <a class="el" href="class_isis_1_1_application.html">Application</a> to be able to edit, save and create text files.  
+ <a href="class_isis_1_1_gui_edit_file.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_gui_edit_file_8h_source.html">GuiEditFile.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::GuiEditFile:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_gui_edit_file__inherit__graph.png" border="0" usemap="#a_isis_1_1_gui_edit_file_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_gui_edit_file_inherit__map" id="a_isis_1_1_gui_edit_file_inherit__map">
+<area shape="rect" title="Opens a window in Gui Application to be able to edit, save and create text files." alt="" coords="5,135,142,392"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="39,5,108,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::GuiEditFile:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_gui_edit_file__coll__graph.png" border="0" usemap="#a_isis_1_1_gui_edit_file_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_gui_edit_file_coll__map" id="a_isis_1_1_gui_edit_file_coll__map">
+<area shape="rect" title="Opens a window in Gui Application to be able to edit, save and create text files." alt="" coords="5,135,142,392"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="39,5,108,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
+Public Slots</h2></td></tr>
+<tr class="memitem:aed12035a54032f80e79d96828f9a394a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#aed12035a54032f80e79d96828f9a394a">open</a> ()</td></tr>
+<tr class="memdesc:aed12035a54032f80e79d96828f9a394a"><td class="mdescLeft">&#160;</td><td class="mdescRight">For action File-&gt;Open.  <a href="class_isis_1_1_gui_edit_file.html#aed12035a54032f80e79d96828f9a394a">More...</a><br /></td></tr>
+<tr class="separator:aed12035a54032f80e79d96828f9a394a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a708444c731188d16d15fdfbb3274cd20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#a708444c731188d16d15fdfbb3274cd20">OpenFile</a> (QString)</td></tr>
+<tr class="memdesc:a708444c731188d16d15fdfbb3274cd20"><td class="mdescLeft">&#160;</td><td class="mdescRight">To display the contents of an opened file.  <a href="class_isis_1_1_gui_edit_file.html#a708444c731188d16d15fdfbb3274cd20">More...</a><br /></td></tr>
+<tr class="separator:a708444c731188d16d15fdfbb3274cd20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e9d34ffaf0e9187c18202a5fac69d20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#a7e9d34ffaf0e9187c18202a5fac69d20">setTextChanged</a> ()</td></tr>
+<tr class="memdesc:a7e9d34ffaf0e9187c18202a5fac69d20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicator that the text has changed.  <a href="class_isis_1_1_gui_edit_file.html#a7e9d34ffaf0e9187c18202a5fac69d20">More...</a><br /></td></tr>
+<tr class="separator:a7e9d34ffaf0e9187c18202a5fac69d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a667998d9590b24eb9701085b709a835a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#a667998d9590b24eb9701085b709a835a">saveAs</a> ()</td></tr>
+<tr class="memdesc:a667998d9590b24eb9701085b709a835a"><td class="mdescLeft">&#160;</td><td class="mdescRight">For action File-&gt;Save As.  <a href="class_isis_1_1_gui_edit_file.html#a667998d9590b24eb9701085b709a835a">More...</a><br /></td></tr>
+<tr class="separator:a667998d9590b24eb9701085b709a835a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d0c37976155ca9268dd9a8f5848bdd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#a0d0c37976155ca9268dd9a8f5848bdd8">saveAsFile</a> (QString)</td></tr>
+<tr class="memdesc:a0d0c37976155ca9268dd9a8f5848bdd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the contents of text editor to another file.  <a href="class_isis_1_1_gui_edit_file.html#a0d0c37976155ca9268dd9a8f5848bdd8">More...</a><br /></td></tr>
+<tr class="separator:a0d0c37976155ca9268dd9a8f5848bdd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae930429e51d4fc18aa56353700fc72e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#ae930429e51d4fc18aa56353700fc72e0">saveFile</a> ()</td></tr>
+<tr class="memdesc:ae930429e51d4fc18aa56353700fc72e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">For action File-&gt;Save.  <a href="class_isis_1_1_gui_edit_file.html#ae930429e51d4fc18aa56353700fc72e0">More...</a><br /></td></tr>
+<tr class="separator:ae930429e51d4fc18aa56353700fc72e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab406b4061d0af3eb0391e86373b15bf7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#ab406b4061d0af3eb0391e86373b15bf7">closeFile</a> ()</td></tr>
+<tr class="memdesc:ab406b4061d0af3eb0391e86373b15bf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">For action File-&gt;Close.  <a href="class_isis_1_1_gui_edit_file.html#ab406b4061d0af3eb0391e86373b15bf7">More...</a><br /></td></tr>
+<tr class="separator:ab406b4061d0af3eb0391e86373b15bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adddc6b006e4e605c4449106dcb8e2f75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#adddc6b006e4e605c4449106dcb8e2f75">closeWin</a> ()</td></tr>
+<tr class="memdesc:adddc6b006e4e605c4449106dcb8e2f75"><td class="mdescLeft">&#160;</td><td class="mdescRight">For action Exit (close the window)  <a href="class_isis_1_1_gui_edit_file.html#adddc6b006e4e605c4449106dcb8e2f75">More...</a><br /></td></tr>
+<tr class="separator:adddc6b006e4e605c4449106dcb8e2f75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a17ea42201cdd1efb3e7dfe8bdde7cda2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#a17ea42201cdd1efb3e7dfe8bdde7cda2">showWindow</a> (QString psFile=&quot;&quot;)</td></tr>
+<tr class="memdesc:a17ea42201cdd1efb3e7dfe8bdde7cda2"><td class="mdescLeft">&#160;</td><td class="mdescRight">If there is already an instance of this object, then display the window.  <a href="class_isis_1_1_gui_edit_file.html#a17ea42201cdd1efb3e7dfe8bdde7cda2">More...</a><br /></td></tr>
+<tr class="separator:a17ea42201cdd1efb3e7dfe8bdde7cda2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac239abce2ba0ea1c265633273e419d73"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#ac239abce2ba0ea1c265633273e419d73">~GuiEditFile</a> ()</td></tr>
+<tr class="memdesc:ac239abce2ba0ea1c265633273e419d73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_gui_edit_file.html#ac239abce2ba0ea1c265633273e419d73">More...</a><br /></td></tr>
+<tr class="separator:ac239abce2ba0ea1c265633273e419d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b8f4723f62ead1c2cbccb07a9918e65"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#a6b8f4723f62ead1c2cbccb07a9918e65">clearFile</a> ()</td></tr>
+<tr class="memdesc:a6b8f4723f62ead1c2cbccb07a9918e65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete the contents of a file.  <a href="class_isis_1_1_gui_edit_file.html#a6b8f4723f62ead1c2cbccb07a9918e65">More...</a><br /></td></tr>
+<tr class="separator:a6b8f4723f62ead1c2cbccb07a9918e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a0c62e0534debf959bbe1010c12994bf9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gui_edit_file.html#a0c62e0534debf959bbe1010c12994bf9">EditFile</a> (<a class="el" href="class_isis_1_1_user_interface.html">UserInterface</a> &amp;pUI, QString psFile=&quot;&quot;)</td></tr>
+<tr class="memdesc:a0c62e0534debf959bbe1010c12994bf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a single instance of the <a class="el" href="class_isis_1_1_gui_edit_file.html" title="Opens a window in Gui Application to be able to edit, save and create text files.">GuiEditFile</a>.  <a href="class_isis_1_1_gui_edit_file.html#a0c62e0534debf959bbe1010c12994bf9">More...</a><br /></td></tr>
+<tr class="separator:a0c62e0534debf959bbe1010c12994bf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Opens a window in <a class="el" href="class_isis_1_1_gui.html" title="Gui for Isis Applications.">Gui</a> <a class="el" href="class_isis_1_1_application.html">Application</a> to be able to edit, save and create text files. </p>
+<p>Creates a <b>singleton</b> window to edit files.</p>
+<p>Example can be used to edit DefFiles in control net applications. Refer to cnetedit <a class="el" href="class_isis_1_1_application.html">Application</a></p>
+<dl class="section author"><dt>Author</dt><dd>2011-05-21 Sharmila Prasad </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ac239abce2ba0ea1c265633273e419d73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac239abce2ba0ea1c265633273e419d73">&#9670;&nbsp;</a></span>~GuiEditFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::GuiEditFile::~GuiEditFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/20/2011) </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6b8f4723f62ead1c2cbccb07a9918e65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b8f4723f62ead1c2cbccb07a9918e65">&#9670;&nbsp;</a></span>clearFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GuiEditFile::clearFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Delete the contents of a file. </p>
+<p>Delete the contents of the current file - especially if changes are made and they are not to be saved.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/23/2011) </dd></dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">Isis::ReadWrite</a>.</p>
+
+</div>
+</div>
+<a id="ab406b4061d0af3eb0391e86373b15bf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab406b4061d0af3eb0391e86373b15bf7">&#9670;&nbsp;</a></span>closeFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GuiEditFile::closeFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>For action File-&gt;Close. </p>
+<p>Action File-&gt;close, close the opened file.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/20/2011) </dd></dl>
+
+</div>
+</div>
+<a id="adddc6b006e4e605c4449106dcb8e2f75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adddc6b006e4e605c4449106dcb8e2f75">&#9670;&nbsp;</a></span>closeWin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GuiEditFile::closeWin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>For action Exit (close the window) </p>
+<p>Action Exit - Close window and clear text editor.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/23/2011) </dd></dl>
+
+</div>
+</div>
+<a id="a0c62e0534debf959bbe1010c12994bf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c62e0534debf959bbe1010c12994bf9">&#9670;&nbsp;</a></span>EditFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GuiEditFile::EditFile </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_user_interface.html">UserInterface</a> &amp;&#160;</td>
+          <td class="paramname"><em>pUI</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>psFile</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a single instance of the <a class="el" href="class_isis_1_1_gui_edit_file.html" title="Opens a window in Gui Application to be able to edit, save and create text files.">GuiEditFile</a>. </p>
+<p>If already an instance, display the object</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/20/2011)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pUI</td><td>- User Interface of parent app </td></tr>
+    <tr><td class="paramname">psFile</td><td>- File to edit </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aed12035a54032f80e79d96828f9a394a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed12035a54032f80e79d96828f9a394a">&#9670;&nbsp;</a></span>open</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GuiEditFile::open </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>For action File-&gt;Open. </p>
+<p>Action File-&gt;Open.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/20/2011) </dd></dl>
+
+</div>
+</div>
+<a id="a708444c731188d16d15fdfbb3274cd20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a708444c731188d16d15fdfbb3274cd20">&#9670;&nbsp;</a></span>OpenFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GuiEditFile::OpenFile </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>psOutFile</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>To display the contents of an opened file. </p>
+<p>Display the selected file.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/20/2011)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">psOutFile</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">Isis::ReadWrite</a>.</p>
+
+</div>
+</div>
+<a id="a667998d9590b24eb9701085b709a835a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a667998d9590b24eb9701085b709a835a">&#9670;&nbsp;</a></span>saveAs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GuiEditFile::saveAs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>For action File-&gt;Save As. </p>
+<p>Action File-&gt;Save As.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/23/2011) </dd></dl>
+
+</div>
+</div>
+<a id="a0d0c37976155ca9268dd9a8f5848bdd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d0c37976155ca9268dd9a8f5848bdd8">&#9670;&nbsp;</a></span>saveAsFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GuiEditFile::saveAsFile </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>psNewFile</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Save the contents of text editor to another file. </p>
+<p>Copy the current file into user selected file.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/23/2011)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">psNewFile</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">Isis::ReadWrite</a>.</p>
+
+</div>
+</div>
+<a id="ae930429e51d4fc18aa56353700fc72e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae930429e51d4fc18aa56353700fc72e0">&#9670;&nbsp;</a></span>saveFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GuiEditFile::saveFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>For action File-&gt;Save. </p>
+<p>Action File-&gt;Save.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/20/2011) </dd></dl>
+
+</div>
+</div>
+<a id="a7e9d34ffaf0e9187c18202a5fac69d20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e9d34ffaf0e9187c18202a5fac69d20">&#9670;&nbsp;</a></span>setTextChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GuiEditFile::setTextChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Indicator that the text has changed. </p>
+<p>Flag to indicate text has changed.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/20/2011) </dd></dl>
+
+</div>
+</div>
+<a id="a17ea42201cdd1efb3e7dfe8bdde7cda2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17ea42201cdd1efb3e7dfe8bdde7cda2">&#9670;&nbsp;</a></span>showWindow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GuiEditFile::showWindow </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>psFile</em> = <code>&quot;&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If there is already an instance of this object, then display the window. </p>
+<p>Display the window if there is already an instance of this object.</p>
+<dl class="section author"><dt>Author</dt><dd>Sharmila Prasad (5/23/2011)</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">psFile</td><td>- File to edit </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Gui/<a class="el" href="_gui_edit_file_8h_source.html">GuiEditFile.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Gui/<a class="el" href="_gui_edit_file_8cpp.html">GuiEditFile.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_gui_edit_file.html">GuiEditFile</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+IdealCamera,"Spice, Instruments, and Cameras",isis/src/base/objs/IdealCamera/IdealCamera.h,isis_pybind_standalone/src/bind_camera_hierarchy.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,相机模型/Spice 依赖
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,IdealCamera,isis_pybind.IdealCamera,Y,Python class symbol is exported; constructor exposure may be limited; 相机模型/Spice 依赖
+Construction/Enum,IdealCamera(),isis_pybind.IdealCamera(),N,相机模型/Spice 依赖
+Public API,virtual CameraType GetCameraType() const { if(p_framing) return Framing,isis_pybind.IdealCamera.get_camera_type,N,相机模型/Spice 依赖
+Public API,virtual int CkFrameId() const,isis_pybind.IdealCamera.ck_frame_id,N,相机模型/Spice 依赖
+Public API,virtual int CkReferenceId() const,isis_pybind.IdealCamera.ck_reference_id,N,相机模型/Spice 依赖
+Public API,virtual int SpkTargetId() const,isis_pybind.IdealCamera.spk_target_id,N,相机模型/Spice 依赖
+Public API,virtual int SpkCenterId() const,isis_pybind.IdealCamera.spk_center_id,N,相机模型/Spice 依赖
+Public API,virtual int SpkReferenceId() const,isis_pybind.IdealCamera.spk_reference_id,N,相机模型/Spice 依赖
+Public API,virtual QString instrumentNameLong() const,isis_pybind.IdealCamera.instrument_name_long,N,相机模型/Spice 依赖
+Public API,virtual QString instrumentNameShort() const,isis_pybind.IdealCamera.instrument_name_short,N,相机模型/Spice 依赖
+Public API,virtual QString spacecraftNameLong() const,isis_pybind.IdealCamera.spacecraft_name_long,N,相机模型/Spice 依赖
+Public API,virtual QString spacecraftNameShort() const,isis_pybind.IdealCamera.spacecraft_name_short,N,相机模型/Spice 依赖

@@ -1,0 +1,1649 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ControlList Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_control_list.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#signals">Signals</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_control_list-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ControlList Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Maintains a list of Controls so that control nets can easily be copied from one <a class="el" href="class_isis_1_1_project.html" title="The main project for ipce.">Project</a> to another, saved to disk, or deleted from disk.  
+ <a href="class_isis_1_1_control_list.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_control_list_8h_source.html">ControlList.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ControlList:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_control_list__inherit__graph.png" border="0" usemap="#a_isis_1_1_control_list_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_control_list_inherit__map" id="a_isis_1_1_control_list_inherit__map">
+<area shape="rect" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,..." alt="" coords="45,135,158,376"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="5,5,75,87"/>
+<area shape="rect" href="class_q_list.html" title=" " alt="" coords="99,5,226,87"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ControlList:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_control_list__coll__graph.png" border="0" usemap="#a_isis_1_1_control_list_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_control_list_coll__map" id="a_isis_1_1_control_list_coll__map">
+<area shape="rect" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,..." alt="" coords="45,135,158,376"/>
+<area shape="rect" href="class_q_object.html" title=" " alt="" coords="5,5,75,87"/>
+<area shape="rect" href="class_q_list.html" title=" " alt="" coords="99,5,226,87"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
+Signals</h2></td></tr>
+<tr class="memitem:a456566cce248f0265e9425a17e44deaa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged</a> (int newCount)</td></tr>
+<tr class="separator:a456566cce248f0265e9425a17e44deaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d610278686b97be617e14b564c57f17"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a4d610278686b97be617e14b564c57f17">deletingList</a> (<a class="el" href="class_isis_1_1_control_list.html">ControlList</a> *list)</td></tr>
+<tr class="separator:a4d610278686b97be617e14b564c57f17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aec26917f7071aecf1ac7c6daa243870f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#aec26917f7071aecf1ac7c6daa243870f">ControlList</a> (QString <a class="el" href="class_isis_1_1_control_list.html#a452f984cd0de496ca87708d6e58cfaca">name</a>, QString <a class="el" href="class_isis_1_1_control_list.html#a3a0fb476dfdb952b675adbfb763e6b70">path</a>, <a class="el" href="class_q_object.html">QObject</a> *parent=NULL)</td></tr>
+<tr class="memdesc:aec26917f7071aecf1ac7c6daa243870f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an control list from a control list name and path (does not read Controls).  <a href="class_isis_1_1_control_list.html#aec26917f7071aecf1ac7c6daa243870f">More...</a><br /></td></tr>
+<tr class="separator:aec26917f7071aecf1ac7c6daa243870f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab93d16ba7925e87ef63a2aa13caaeeb2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#ab93d16ba7925e87ef63a2aa13caaeeb2">ControlList</a> (<a class="el" href="class_q_object.html">QObject</a> *parent=NULL)</td></tr>
+<tr class="memdesc:ab93d16ba7925e87ef63a2aa13caaeeb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a blank control list.  <a href="class_isis_1_1_control_list.html#ab93d16ba7925e87ef63a2aa13caaeeb2">More...</a><br /></td></tr>
+<tr class="separator:ab93d16ba7925e87ef63a2aa13caaeeb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2f3309db32cc5046511b0f0adf8f28d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#ae2f3309db32cc5046511b0f0adf8f28d">ControlList</a> (<a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt;, <a class="el" href="class_q_object.html">QObject</a> *parent=NULL)</td></tr>
+<tr class="memdesc:ae2f3309db32cc5046511b0f0adf8f28d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an control list from a list of controls.  <a href="class_isis_1_1_control_list.html#ae2f3309db32cc5046511b0f0adf8f28d">More...</a><br /></td></tr>
+<tr class="separator:ae2f3309db32cc5046511b0f0adf8f28d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1384ca2c4a92dce3f467345f947be4f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#ad1384ca2c4a92dce3f467345f947be4f">ControlList</a> (QStringList &amp;)</td></tr>
+<tr class="memdesc:ad1384ca2c4a92dce3f467345f947be4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an control list from a list of control net file names.  <a href="class_isis_1_1_control_list.html#ad1384ca2c4a92dce3f467345f947be4f">More...</a><br /></td></tr>
+<tr class="separator:ad1384ca2c4a92dce3f467345f947be4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76f1caff9d2d737591e06502ce3b808a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a76f1caff9d2d737591e06502ce3b808a">ControlList</a> (const <a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp;)</td></tr>
+<tr class="memdesc:a76f1caff9d2d737591e06502ce3b808a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="class_isis_1_1_control_list.html#a76f1caff9d2d737591e06502ce3b808a">More...</a><br /></td></tr>
+<tr class="separator:a76f1caff9d2d737591e06502ce3b808a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24dbd6592b955e04935e63021918ef57"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a24dbd6592b955e04935e63021918ef57">~ControlList</a> ()</td></tr>
+<tr class="memdesc:a24dbd6592b955e04935e63021918ef57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_control_list.html#a24dbd6592b955e04935e63021918ef57">More...</a><br /></td></tr>
+<tr class="separator:a24dbd6592b955e04935e63021918ef57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f80d4ed5b4e3f1837d6dd81b1d56fd0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a1f80d4ed5b4e3f1837d6dd81b1d56fd0">append</a> (<a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a1f80d4ed5b4e3f1837d6dd81b1d56fd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a control pointer to the control list.  <a href="class_isis_1_1_control_list.html#a1f80d4ed5b4e3f1837d6dd81b1d56fd0">More...</a><br /></td></tr>
+<tr class="separator:a1f80d4ed5b4e3f1837d6dd81b1d56fd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42e02be05d3d116c7fad0a16c235ba48"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a42e02be05d3d116c7fad0a16c235ba48">append</a> (const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt; &amp;value)</td></tr>
+<tr class="memdesc:a42e02be05d3d116c7fad0a16c235ba48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a list of control pointers to the control list.  <a href="class_isis_1_1_control_list.html#a42e02be05d3d116c7fad0a16c235ba48">More...</a><br /></td></tr>
+<tr class="separator:a42e02be05d3d116c7fad0a16c235ba48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2be2e76e17984475ba2f520005e632a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#ad2be2e76e17984475ba2f520005e632a">clear</a> ()</td></tr>
+<tr class="memdesc:ad2be2e76e17984475ba2f520005e632a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the control list.  <a href="class_isis_1_1_control_list.html#ad2be2e76e17984475ba2f520005e632a">More...</a><br /></td></tr>
+<tr class="separator:ad2be2e76e17984475ba2f520005e632a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15f60bbab23d68e73a8a6726cfe448ff"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a15f60bbab23d68e73a8a6726cfe448ff">erase</a> (iterator pos)</td></tr>
+<tr class="memdesc:a15f60bbab23d68e73a8a6726cfe448ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erases a control pointer from the control list at the specified position.  <a href="class_isis_1_1_control_list.html#a15f60bbab23d68e73a8a6726cfe448ff">More...</a><br /></td></tr>
+<tr class="separator:a15f60bbab23d68e73a8a6726cfe448ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aede32a126ed27504c79eaec1026fc97e"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#aede32a126ed27504c79eaec1026fc97e">erase</a> (iterator begin, iterator end)</td></tr>
+<tr class="memdesc:aede32a126ed27504c79eaec1026fc97e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erases all control pointers starting at "begin" up to (but not including) end.  <a href="class_isis_1_1_control_list.html#aede32a126ed27504c79eaec1026fc97e">More...</a><br /></td></tr>
+<tr class="separator:aede32a126ed27504c79eaec1026fc97e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37c27e0a17f41f9247f23dd230e79229"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a37c27e0a17f41f9247f23dd230e79229">insert</a> (int i, <a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a37c27e0a17f41f9247f23dd230e79229"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts a control pointer at the specified position in the control list.  <a href="class_isis_1_1_control_list.html#a37c27e0a17f41f9247f23dd230e79229">More...</a><br /></td></tr>
+<tr class="separator:a37c27e0a17f41f9247f23dd230e79229"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b5f6b0747d377851f2fca5aa1405906"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a9b5f6b0747d377851f2fca5aa1405906">insert</a> (iterator before, <a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a9b5f6b0747d377851f2fca5aa1405906"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts a control pointer before the specified iterator position.  <a href="class_isis_1_1_control_list.html#a9b5f6b0747d377851f2fca5aa1405906">More...</a><br /></td></tr>
+<tr class="separator:a9b5f6b0747d377851f2fca5aa1405906"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3f8aa9ea02b7017f8b4bf20b0e86191"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#aa3f8aa9ea02b7017f8b4bf20b0e86191">prepend</a> (<a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;value)</td></tr>
+<tr class="memdesc:aa3f8aa9ea02b7017f8b4bf20b0e86191"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepends a control pointer to the control list.  <a href="class_isis_1_1_control_list.html#aa3f8aa9ea02b7017f8b4bf20b0e86191">More...</a><br /></td></tr>
+<tr class="separator:aa3f8aa9ea02b7017f8b4bf20b0e86191"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ea1ed2438e92ad6529d0da82a804d92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a2ea1ed2438e92ad6529d0da82a804d92">push_back</a> (<a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a2ea1ed2438e92ad6529d0da82a804d92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equivalent to append(value)  <a href="class_isis_1_1_control_list.html#a2ea1ed2438e92ad6529d0da82a804d92">More...</a><br /></td></tr>
+<tr class="separator:a2ea1ed2438e92ad6529d0da82a804d92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b19b3abb46d5034db84c26cb58adcf7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a6b19b3abb46d5034db84c26cb58adcf7">push_front</a> (<a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a6b19b3abb46d5034db84c26cb58adcf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equivalent to prepend(value)  <a href="class_isis_1_1_control_list.html#a6b19b3abb46d5034db84c26cb58adcf7">More...</a><br /></td></tr>
+<tr class="separator:a6b19b3abb46d5034db84c26cb58adcf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99ec8b79796026bd00f5a16a0049a282"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a99ec8b79796026bd00f5a16a0049a282">removeAll</a> (<a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a99ec8b79796026bd00f5a16a0049a282"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all occurences of the control pointer in the control list.  <a href="class_isis_1_1_control_list.html#a99ec8b79796026bd00f5a16a0049a282">More...</a><br /></td></tr>
+<tr class="separator:a99ec8b79796026bd00f5a16a0049a282"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bf88301869748e0a659130539dda8ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a4bf88301869748e0a659130539dda8ba">removeAt</a> (int i)</td></tr>
+<tr class="memdesc:a4bf88301869748e0a659130539dda8ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the control pointer at the specified index.  <a href="class_isis_1_1_control_list.html#a4bf88301869748e0a659130539dda8ba">More...</a><br /></td></tr>
+<tr class="separator:a4bf88301869748e0a659130539dda8ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae79fb88b7cf980dd0dd298d714a8ebce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#ae79fb88b7cf980dd0dd298d714a8ebce">removeFirst</a> ()</td></tr>
+<tr class="memdesc:ae79fb88b7cf980dd0dd298d714a8ebce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the first control pointer from the control list.  <a href="class_isis_1_1_control_list.html#ae79fb88b7cf980dd0dd298d714a8ebce">More...</a><br /></td></tr>
+<tr class="separator:ae79fb88b7cf980dd0dd298d714a8ebce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a156b19daecc5bab66f72091655d1ed9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a156b19daecc5bab66f72091655d1ed9f">removeLast</a> ()</td></tr>
+<tr class="memdesc:a156b19daecc5bab66f72091655d1ed9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the last control pointer from the control list.  <a href="class_isis_1_1_control_list.html#a156b19daecc5bab66f72091655d1ed9f">More...</a><br /></td></tr>
+<tr class="separator:a156b19daecc5bab66f72091655d1ed9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ffd3619d317958535cf5b50e8d0603d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a4ffd3619d317958535cf5b50e8d0603d">removeOne</a> (<a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;value)</td></tr>
+<tr class="memdesc:a4ffd3619d317958535cf5b50e8d0603d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the first occurence of the control pointer from the control list.  <a href="class_isis_1_1_control_list.html#a4ffd3619d317958535cf5b50e8d0603d">More...</a><br /></td></tr>
+<tr class="separator:a4ffd3619d317958535cf5b50e8d0603d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad22e389d0dd0a247c038e26063511244"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#ad22e389d0dd0a247c038e26063511244">swap</a> (<a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt; &amp;other)</td></tr>
+<tr class="memdesc:ad22e389d0dd0a247c038e26063511244"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swaps this control list's control pointers with the other list of control pointers.  <a href="class_isis_1_1_control_list.html#ad22e389d0dd0a247c038e26063511244">More...</a><br /></td></tr>
+<tr class="separator:ad22e389d0dd0a247c038e26063511244"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7699196a028a67f5a99091d98271225b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a7699196a028a67f5a99091d98271225b">takeAt</a> (int i)</td></tr>
+<tr class="memdesc:a7699196a028a67f5a99091d98271225b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove the control pointer at the specified index and returns it.  <a href="class_isis_1_1_control_list.html#a7699196a028a67f5a99091d98271225b">More...</a><br /></td></tr>
+<tr class="separator:a7699196a028a67f5a99091d98271225b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dfb0a349ac8ffdd6a1dfb7181e62bc0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a7dfb0a349ac8ffdd6a1dfb7181e62bc0">takeFirst</a> ()</td></tr>
+<tr class="memdesc:a7dfb0a349ac8ffdd6a1dfb7181e62bc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the first control pointer from the control list and returns it.  <a href="class_isis_1_1_control_list.html#a7dfb0a349ac8ffdd6a1dfb7181e62bc0">More...</a><br /></td></tr>
+<tr class="separator:a7dfb0a349ac8ffdd6a1dfb7181e62bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae40bd68f33c75c40ad3e7964d9f890bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control.html">Control</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#ae40bd68f33c75c40ad3e7964d9f890bb">takeLast</a> ()</td></tr>
+<tr class="memdesc:ae40bd68f33c75c40ad3e7964d9f890bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the last control pointer from the control list and returns it.  <a href="class_isis_1_1_control_list.html#ae40bd68f33c75c40ad3e7964d9f890bb">More...</a><br /></td></tr>
+<tr class="separator:ae40bd68f33c75c40ad3e7964d9f890bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30e2cd9550dc94109a70bbf3b0b54f04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a30e2cd9550dc94109a70bbf3b0b54f04">operator+=</a> (const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt; &amp;other)</td></tr>
+<tr class="memdesc:a30e2cd9550dc94109a70bbf3b0b54f04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends control pointers from the other list to this control list.  <a href="class_isis_1_1_control_list.html#a30e2cd9550dc94109a70bbf3b0b54f04">More...</a><br /></td></tr>
+<tr class="separator:a30e2cd9550dc94109a70bbf3b0b54f04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c88d031a5548d923a6c90ed2fced349"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a5c88d031a5548d923a6c90ed2fced349">operator+=</a> (<a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;other)</td></tr>
+<tr class="memdesc:a5c88d031a5548d923a6c90ed2fced349"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a control pointer to this control list.  <a href="class_isis_1_1_control_list.html#a5c88d031a5548d923a6c90ed2fced349">More...</a><br /></td></tr>
+<tr class="separator:a5c88d031a5548d923a6c90ed2fced349"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab95218edadfda312903fd5108ea83d14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#ab95218edadfda312903fd5108ea83d14">operator&lt;&lt;</a> (const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt; &amp;other)</td></tr>
+<tr class="memdesc:ab95218edadfda312903fd5108ea83d14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a list of other control pointers to this control list.  <a href="class_isis_1_1_control_list.html#ab95218edadfda312903fd5108ea83d14">More...</a><br /></td></tr>
+<tr class="separator:ab95218edadfda312903fd5108ea83d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1433f663710258dded8b1630bc0ab19e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a1433f663710258dded8b1630bc0ab19e">operator&lt;&lt;</a> (<a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;other)</td></tr>
+<tr class="memdesc:a1433f663710258dded8b1630bc0ab19e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a control pointer to this control list.  <a href="class_isis_1_1_control_list.html#a1433f663710258dded8b1630bc0ab19e">More...</a><br /></td></tr>
+<tr class="separator:a1433f663710258dded8b1630bc0ab19e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86357fbe6c552bee5f36dd8f55edb304"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a86357fbe6c552bee5f36dd8f55edb304">operator=</a> (const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt; &amp;rhs)</td></tr>
+<tr class="memdesc:a86357fbe6c552bee5f36dd8f55edb304"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assigns another list of control pointers to this control list.  <a href="class_isis_1_1_control_list.html#a86357fbe6c552bee5f36dd8f55edb304">More...</a><br /></td></tr>
+<tr class="separator:a86357fbe6c552bee5f36dd8f55edb304"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0755eb224b5988d170f7b26c2a5051e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#ad0755eb224b5988d170f7b26c2a5051e">operator=</a> (const <a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp;rhs)</td></tr>
+<tr class="memdesc:ad0755eb224b5988d170f7b26c2a5051e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator.  <a href="class_isis_1_1_control_list.html#ad0755eb224b5988d170f7b26c2a5051e">More...</a><br /></td></tr>
+<tr class="separator:ad0755eb224b5988d170f7b26c2a5051e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad171e7a1139e9461815b34e0c922e4d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_q_action.html">QAction</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#ad171e7a1139e9461815b34e0c922e4d0">supportedActions</a> (<a class="el" href="class_isis_1_1_project.html">Project</a> *project=NULL)</td></tr>
+<tr class="separator:ad171e7a1139e9461815b34e0c922e4d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaaf4f10e86b53ce1404e3577190c0763"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#aaaf4f10e86b53ce1404e3577190c0763">allSupport</a> (<a class="el" href="class_isis_1_1_control_display_properties.html#aacb0eeae55025ec8f6c0cacc115008da">ControlDisplayProperties::Property</a> prop)</td></tr>
+<tr class="separator:aaaf4f10e86b53ce1404e3577190c0763"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bb9762ddda2b3aa02fd62560e790691"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a4bb9762ddda2b3aa02fd62560e790691">setName</a> (QString newName)</td></tr>
+<tr class="memdesc:a4bb9762ddda2b3aa02fd62560e790691"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the human-readable name of this control list.  <a href="class_isis_1_1_control_list.html#a4bb9762ddda2b3aa02fd62560e790691">More...</a><br /></td></tr>
+<tr class="separator:a4bb9762ddda2b3aa02fd62560e790691"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ee067c269b19cbc446b71a19541ec9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a9ee067c269b19cbc446b71a19541ec9e">setPath</a> (QString newPath)</td></tr>
+<tr class="memdesc:a9ee067c269b19cbc446b71a19541ec9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the relative path (from the project root) to this control list's folder.  <a href="class_isis_1_1_control_list.html#a9ee067c269b19cbc446b71a19541ec9e">More...</a><br /></td></tr>
+<tr class="separator:a9ee067c269b19cbc446b71a19541ec9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a452f984cd0de496ca87708d6e58cfaca"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a452f984cd0de496ca87708d6e58cfaca">name</a> () const</td></tr>
+<tr class="memdesc:a452f984cd0de496ca87708d6e58cfaca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the human-readable name of this control list.  <a href="class_isis_1_1_control_list.html#a452f984cd0de496ca87708d6e58cfaca">More...</a><br /></td></tr>
+<tr class="separator:a452f984cd0de496ca87708d6e58cfaca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a0fb476dfdb952b675adbfb763e6b70"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a3a0fb476dfdb952b675adbfb763e6b70">path</a> () const</td></tr>
+<tr class="memdesc:a3a0fb476dfdb952b675adbfb763e6b70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the path to these controls in the control list (relative to project root).  <a href="class_isis_1_1_control_list.html#a3a0fb476dfdb952b675adbfb763e6b70">More...</a><br /></td></tr>
+<tr class="separator:a3a0fb476dfdb952b675adbfb763e6b70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0caa104828d85b01ecef0702de2ea676"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a0caa104828d85b01ecef0702de2ea676">deleteFromDisk</a> (<a class="el" href="class_isis_1_1_project.html">Project</a> *project)</td></tr>
+<tr class="memdesc:a0caa104828d85b01ecef0702de2ea676"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete all of the contained Controls from disk.  <a href="class_isis_1_1_control_list.html#a0caa104828d85b01ecef0702de2ea676">More...</a><br /></td></tr>
+<tr class="separator:a0caa104828d85b01ecef0702de2ea676"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99f763268d87d0320ae60491805898a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_control_list.html#a99f763268d87d0320ae60491805898a0">save</a> (QXmlStreamWriter &amp;stream, const <a class="el" href="class_isis_1_1_project.html">Project</a> *project, <a class="el" href="class_isis_1_1_file_name.html">FileName</a> newProjectRoot) const</td></tr>
+<tr class="memdesc:a99f763268d87d0320ae60491805898a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert this control list into XML format for saving/restoring capabilities.  <a href="class_isis_1_1_control_list.html#a99f763268d87d0320ae60491805898a0">More...</a><br /></td></tr>
+<tr class="separator:a99f763268d87d0320ae60491805898a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Maintains a list of Controls so that control nets can easily be copied from one <a class="el" href="class_isis_1_1_project.html" title="The main project for ipce.">Project</a> to another, saved to disk, or deleted from disk. </p>
+<p>Overrides several common <a class="el" href="class_q_list.html" title="This is free and unencumbered software released into the public domain.">QList</a> methods for managing a list of Controls as well. Adapted from <a class="el" href="class_isis_1_1_image_list.html" title="Internalizes a list of images and allows for operations on the entire list.">ImageList</a></p>
+<dl class="section author"><dt>Author</dt><dd>2012-09-01 Tracie Sucharski </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aec26917f7071aecf1ac7c6daa243870f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec26917f7071aecf1ac7c6daa243870f">&#9670;&nbsp;</a></span>ControlList() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlList::ControlList </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create an control list from a control list name and path (does not read Controls). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The <a class="el" href="class_isis_1_1_control_list.html" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,...">ControlList</a>'s name (i.e. import1, import2, ...) </td></tr>
+    <tr><td class="paramname">path</td><td>The <a class="el" href="class_isis_1_1_control_list.html" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,...">ControlList</a>'s folder name (i.e. import1, import2, ...) </td></tr>
+    <tr><td class="paramname">parent</td><td>The Qt-relationship parent </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a452f984cd0de496ca87708d6e58cfaca">name()</a>, and <a class="el" href="class_isis_1_1_control_list.html#a3a0fb476dfdb952b675adbfb763e6b70">path()</a>.</p>
+
+</div>
+</div>
+<a id="ab93d16ba7925e87ef63a2aa13caaeeb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab93d16ba7925e87ef63a2aa13caaeeb2">&#9670;&nbsp;</a></span>ControlList() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlList::ControlList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>NULL</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a blank control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>The Qt-relationship parent </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae2f3309db32cc5046511b0f0adf8f28d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2f3309db32cc5046511b0f0adf8f28d">&#9670;&nbsp;</a></span>ControlList() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlList::ControlList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt;&#160;</td>
+          <td class="paramname"><em>controls</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_q_object.html">QObject</a> *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create an control list from a list of controls. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">controls</td><td>The list of controls </td></tr>
+    <tr><td class="paramname">parent</td><td>The Qt-relationship parent </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a1f80d4ed5b4e3f1837d6dd81b1d56fd0">append()</a>.</p>
+
+</div>
+</div>
+<a id="ad1384ca2c4a92dce3f467345f947be4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1384ca2c4a92dce3f467345f947be4f">&#9670;&nbsp;</a></span>ControlList() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlList::ControlList </td>
+          <td>(</td>
+          <td class="paramtype">QStringList &amp;&#160;</td>
+          <td class="paramname"><em>fileNames</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create an control list from a list of control net file names. </p>
+<p>This is slow (serial) and not recommended.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileNames</td><td><a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a> net file names </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a1f80d4ed5b4e3f1837d6dd81b1d56fd0">append()</a>.</p>
+
+</div>
+</div>
+<a id="a76f1caff9d2d737591e06502ce3b808a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76f1caff9d2d737591e06502ce3b808a">&#9670;&nbsp;</a></span>ControlList() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlList::ControlList </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The <a class="el" href="class_isis_1_1_control_list.html" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,...">ControlList</a> to copy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a24dbd6592b955e04935e63021918ef57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24dbd6592b955e04935e63021918ef57">&#9670;&nbsp;</a></span>~ControlList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ControlList::~ControlList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+<p>This does not free the Controls from memory. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a4d610278686b97be617e14b564c57f17">deletingList()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aaaf4f10e86b53ce1404e3577190c0763"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaaf4f10e86b53ce1404e3577190c0763">&#9670;&nbsp;</a></span>allSupport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlList::allSupport </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_display_properties.html#aacb0eeae55025ec8f6c0cacc115008da">ControlDisplayProperties::Property</a>&#160;</td>
+          <td class="paramname"><em>prop</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a42e02be05d3d116c7fad0a16c235ba48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42e02be05d3d116c7fad0a16c235ba48">&#9670;&nbsp;</a></span>append() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::append </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends a list of control pointers to the control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The list of control pointers to append</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::append() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a1f80d4ed5b4e3f1837d6dd81b1d56fd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f80d4ed5b4e3f1837d6dd81b1d56fd0">&#9670;&nbsp;</a></span>append() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::append </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends a control pointer to the control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The control pointer to append</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::append() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_project.html#a342559187935386bd55650cbd45d4afa">Isis::Project::addControl()</a>, and <a class="el" href="class_isis_1_1_control_list.html#ae2f3309db32cc5046511b0f0adf8f28d">ControlList()</a>.</p>
+
+</div>
+</div>
+<a id="ad2be2e76e17984475ba2f520005e632a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2be2e76e17984475ba2f520005e632a">&#9670;&nbsp;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the control list. </p>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::clear() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a456566cce248f0265e9425a17e44deaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a456566cce248f0265e9425a17e44deaa">&#9670;&nbsp;</a></span>countChanged</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::countChanged </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>newCount</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_list.html#a1f80d4ed5b4e3f1837d6dd81b1d56fd0">append()</a>, <a class="el" href="class_isis_1_1_control_list.html#ad2be2e76e17984475ba2f520005e632a">clear()</a>, <a class="el" href="class_isis_1_1_control_list.html#a15f60bbab23d68e73a8a6726cfe448ff">erase()</a>, <a class="el" href="class_isis_1_1_control_list.html#a37c27e0a17f41f9247f23dd230e79229">insert()</a>, <a class="el" href="class_isis_1_1_control_list.html#a30e2cd9550dc94109a70bbf3b0b54f04">operator+=()</a>, <a class="el" href="class_isis_1_1_control_list.html#ab95218edadfda312903fd5108ea83d14">operator&lt;&lt;()</a>, <a class="el" href="class_isis_1_1_control_list.html#a86357fbe6c552bee5f36dd8f55edb304">operator=()</a>, <a class="el" href="class_isis_1_1_control_list.html#aa3f8aa9ea02b7017f8b4bf20b0e86191">prepend()</a>, <a class="el" href="class_isis_1_1_control_list.html#a2ea1ed2438e92ad6529d0da82a804d92">push_back()</a>, <a class="el" href="class_isis_1_1_control_list.html#a6b19b3abb46d5034db84c26cb58adcf7">push_front()</a>, <a class="el" href="class_isis_1_1_control_list.html#a99ec8b79796026bd00f5a16a0049a282">removeAll()</a>, <a class="el" href="class_isis_1_1_control_list.html#a4bf88301869748e0a659130539dda8ba">removeAt()</a>, <a class="el" href="class_isis_1_1_control_list.html#ae79fb88b7cf980dd0dd298d714a8ebce">removeFirst()</a>, <a class="el" href="class_isis_1_1_control_list.html#a156b19daecc5bab66f72091655d1ed9f">removeLast()</a>, <a class="el" href="class_isis_1_1_control_list.html#a4ffd3619d317958535cf5b50e8d0603d">removeOne()</a>, <a class="el" href="class_isis_1_1_control_list.html#ad22e389d0dd0a247c038e26063511244">swap()</a>, <a class="el" href="class_isis_1_1_control_list.html#a7699196a028a67f5a99091d98271225b">takeAt()</a>, <a class="el" href="class_isis_1_1_control_list.html#a7dfb0a349ac8ffdd6a1dfb7181e62bc0">takeFirst()</a>, and <a class="el" href="class_isis_1_1_control_list.html#ae40bd68f33c75c40ad3e7964d9f890bb">takeLast()</a>.</p>
+
+</div>
+</div>
+<a id="a0caa104828d85b01ecef0702de2ea676"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0caa104828d85b01ecef0702de2ea676">&#9670;&nbsp;</a></span>deleteFromDisk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::deleteFromDisk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Delete all of the contained Controls from disk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">project</td><td><a class="el" href="class_isis_1_1_project.html" title="The main project for ipce.">Project</a> to delete controls from</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control.html#a21cd563138c07d067ef46ad03ab9ec54" title="Delete the control net from disk.">Control::deleteFromDisk()</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_project.html#a0d7a19ec536fd7fa2dd667c79c273a1d">Isis::Project::cnetRoot()</a>, and <a class="el" href="class_isis_1_1_control.html#a21cd563138c07d067ef46ad03ab9ec54">Isis::Control::deleteFromDisk()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_project.html#a44a465c80f862580f4df7515ccb70179">Isis::Project::deleteAllProjectFiles()</a>.</p>
+
+</div>
+</div>
+<a id="a4d610278686b97be617e14b564c57f17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d610278686b97be617e14b564c57f17">&#9670;&nbsp;</a></span>deletingList</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::deletingList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> *&#160;</td>
+          <td class="paramname"><em>list</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_list.html#a24dbd6592b955e04935e63021918ef57">~ControlList()</a>.</p>
+
+</div>
+</div>
+<a id="aede32a126ed27504c79eaec1026fc97e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aede32a126ed27504c79eaec1026fc97e">&#9670;&nbsp;</a></span>erase() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt;::iterator Isis::ControlList::erase </td>
+          <td>(</td>
+          <td class="paramtype">iterator&#160;</td>
+          <td class="paramname"><em>begin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">iterator&#160;</td>
+          <td class="paramname"><em>end</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Erases all control pointers starting at "begin" up to (but not including) end. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">begin</td><td>Iterator to the first control pointer to erase from the list </td></tr>
+    <tr><td class="paramname">end</td><td>Iterator to the end control pointer (which will not be erased)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QList&lt;Control *&gt;::iterator</b> Iterator to the end control pointer</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::erase() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a15f60bbab23d68e73a8a6726cfe448ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15f60bbab23d68e73a8a6726cfe448ff">&#9670;&nbsp;</a></span>erase() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt;::iterator Isis::ControlList::erase </td>
+          <td>(</td>
+          <td class="paramtype">iterator&#160;</td>
+          <td class="paramname"><em>pos</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Erases a control pointer from the control list at the specified position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pos</td><td>The position to erase at</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QList&lt;Control *&gt;::iterator</b> Iterator to the next item in the list</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::erase() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a37c27e0a17f41f9247f23dd230e79229"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37c27e0a17f41f9247f23dd230e79229">&#9670;&nbsp;</a></span>insert() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::insert </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserts a control pointer at the specified position in the control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>The index to insert at </td></tr>
+    <tr><td class="paramname">value</td><td>The control pointer to insert</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::insert() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a9b5f6b0747d377851f2fca5aa1405906"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b5f6b0747d377851f2fca5aa1405906">&#9670;&nbsp;</a></span>insert() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt;::iterator Isis::ControlList::insert </td>
+          <td>(</td>
+          <td class="paramtype">iterator&#160;</td>
+          <td class="paramname"><em>before</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserts a control pointer before the specified iterator position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">before</td><td>Iterator to the item to insert the control pointer before </td></tr>
+    <tr><td class="paramname">value</td><td>The control pointer to insert</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QList&lt;Control *&gt;::iterator</b> Iterator to the inserted control pointer</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::insert() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a452f984cd0de496ca87708d6e58cfaca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a452f984cd0de496ca87708d6e58cfaca">&#9670;&nbsp;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ControlList::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the human-readable name of this control list. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The name of the control list (or an empty string if anonymous). </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_project.html#afdee4319a4a7f733c16ce7e14cbde446">Isis::Project::controlList()</a>, <a class="el" href="class_isis_1_1_control_list.html#aec26917f7071aecf1ac7c6daa243870f">ControlList()</a>, <a class="el" href="class_isis_1_1_project_item.html#a89684db259704512f6d48c4bc96fc32d">Isis::ProjectItem::setControlList()</a>, and <a class="el" href="class_isis_1_1_export_control_net_work_order.html#a2b70459d7ee22ff703790893af34d6f5">Isis::ExportControlNetWorkOrder::setupExecution()</a>.</p>
+
+</div>
+</div>
+<a id="a30e2cd9550dc94109a70bbf3b0b54f04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30e2cd9550dc94109a70bbf3b0b54f04">&#9670;&nbsp;</a></span>operator+=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp; Isis::ControlList::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends control pointers from the other list to this control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">The</td><td>list of other control pointers to append</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_control_list.html" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,...">ControlList</a></b> &amp; Reference to this control list</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::operator+=() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a5c88d031a5548d923a6c90ed2fced349"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c88d031a5548d923a6c90ed2fced349">&#9670;&nbsp;</a></span>operator+=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp; Isis::ControlList::operator+= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends a control pointer to this control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The control pointer to append</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_control_list.html" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,...">ControlList</a></b> &amp; Reference to this control list</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::operator+=() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="ab95218edadfda312903fd5108ea83d14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab95218edadfda312903fd5108ea83d14">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp; Isis::ControlList::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends a list of other control pointers to this control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The list of other control pointers to append</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_control_list.html" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,...">ControlList</a></b> &amp; Reference to this control list</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::operator&lt;&lt;() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>, and <a class="el" href="_angle_8cpp.html#a429e763e73672c442070910930101597">operator&lt;&lt;()</a>.</p>
+
+</div>
+</div>
+<a id="a1433f663710258dded8b1630bc0ab19e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1433f663710258dded8b1630bc0ab19e">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp; Isis::ControlList::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Appends a control pointer to this control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The control pointer to append</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_control_list.html" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,...">ControlList</a></b> &amp; Reference to this control list</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::operator&lt;&lt;() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>, and <a class="el" href="_angle_8cpp.html#a429e763e73672c442070910930101597">operator&lt;&lt;()</a>.</p>
+
+</div>
+</div>
+<a id="ad0755eb224b5988d170f7b26c2a5051e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0755eb224b5988d170f7b26c2a5051e">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp; Isis::ControlList::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Assignment operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rhs</td><td>The right hand side of the '=' operator</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_control_list.html" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,...">ControlList</a></b> &amp; Reference to this <a class="el" href="class_isis_1_1_control_list.html" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,...">ControlList</a></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_list.html#a86357fbe6c552bee5f36dd8f55edb304" title="Assigns another list of control pointers to this control list.">ControlList::operator=(const QList&lt;Control *&gt; &amp;rhs)</a> </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a86357fbe6c552bee5f36dd8f55edb304"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86357fbe6c552bee5f36dd8f55edb304">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a> &amp; Isis::ControlList::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Assigns another list of control pointers to this control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rhs</td><td>The other list of control pointers to assign</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_control_list.html" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,...">ControlList</a></b> &amp; Reference to this control list</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::operator=() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a3a0fb476dfdb952b675adbfb763e6b70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a0fb476dfdb952b675adbfb763e6b70">&#9670;&nbsp;</a></span>path()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::ControlList::path </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the path to these controls in the control list (relative to project root). </p>
+<p>This only applies to a control list from the project.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The path to the controls in the control list (or an empty string if unknown). </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_control_list.html#aec26917f7071aecf1ac7c6daa243870f">ControlList()</a>.</p>
+
+</div>
+</div>
+<a id="aa3f8aa9ea02b7017f8b4bf20b0e86191"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3f8aa9ea02b7017f8b4bf20b0e86191">&#9670;&nbsp;</a></span>prepend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::prepend </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Prepends a control pointer to the control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The control pointer to prepend to the control list</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::prepend() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a2ea1ed2438e92ad6529d0da82a804d92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ea1ed2438e92ad6529d0da82a804d92">&#9670;&nbsp;</a></span>push_back()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::push_back </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Equivalent to append(value) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The control pointer to append to the control list</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_list.html#a1f80d4ed5b4e3f1837d6dd81b1d56fd0" title="Appends a control pointer to the control list.">ControlList::append(Control * const &amp;value)</a> </dd>
+<dd>
+QList&lt;Control *&gt;::push_back() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a6b19b3abb46d5034db84c26cb58adcf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b19b3abb46d5034db84c26cb58adcf7">&#9670;&nbsp;</a></span>push_front()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::push_front </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Equivalent to prepend(value) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The control pointer to prepend to the control list</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_control_list.html#aa3f8aa9ea02b7017f8b4bf20b0e86191" title="Prepends a control pointer to the control list.">ControlList::prepend(Control * const &amp;value)</a> </dd>
+<dd>
+QList&lt;Control *&gt;::push_front() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a99ec8b79796026bd00f5a16a0049a282"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99ec8b79796026bd00f5a16a0049a282">&#9670;&nbsp;</a></span>removeAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ControlList::removeAll </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes all occurences of the control pointer in the control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The control pointer value to remove</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The number of control pointers removed</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::removeAll() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a4bf88301869748e0a659130539dda8ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bf88301869748e0a659130539dda8ba">&#9670;&nbsp;</a></span>removeAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::removeAt </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the control pointer at the specified index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>The index of the control pointer to remove</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::removeAt() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="ae79fb88b7cf980dd0dd298d714a8ebce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae79fb88b7cf980dd0dd298d714a8ebce">&#9670;&nbsp;</a></span>removeFirst()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::removeFirst </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the first control pointer from the control list. </p>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::removeFirst() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a156b19daecc5bab66f72091655d1ed9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a156b19daecc5bab66f72091655d1ed9f">&#9670;&nbsp;</a></span>removeLast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::removeLast </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the last control pointer from the control list. </p>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::removeLast() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a4ffd3619d317958535cf5b50e8d0603d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ffd3619d317958535cf5b50e8d0603d">&#9670;&nbsp;</a></span>removeOne()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::ControlList::removeOne </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_control.html">Control</a> *const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the first occurence of the control pointer from the control list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The control pointer to remove</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> True if a control pointer was removed; otherwise false</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::removeOne() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a99f763268d87d0320ae60491805898a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99f763268d87d0320ae60491805898a0">&#9670;&nbsp;</a></span>save()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::save </td>
+          <td>(</td>
+          <td class="paramtype">QXmlStreamWriter &amp;&#160;</td>
+          <td class="paramname"><em>stream</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_file_name.html">FileName</a>&#160;</td>
+          <td class="paramname"><em>newProjectRoot</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert this control list into XML format for saving/restoring capabilities. </p>
+<p>This writes: </p><pre>
+  &lt;controlList name="..." path="..."&gt;
+</pre><p> to the given xml stream, and creates an 'controls.xml' inside the folder with the controls. Inside the controlNetworks.xml, this writes:</p>
+<pre>
+  &lt;controls&gt;
+    ...
+  &lt;/controls&gt;
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>XML stream that contains the control list data </td></tr>
+    <tr><td class="paramname">project</td><td><a class="el" href="class_isis_1_1_project.html" title="The main project for ipce.">Project</a> to save control list from </td></tr>
+    <tr><td class="paramname">newProjectRoot</td><td>Filename root to save control list to</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5" title="A type of error that occurred when performing an actual I/O operation.">IException::Io</a></td><td>"Unable Failed to create directory" </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5" title="A type of error that occurred when performing an actual I/O operation.">IException::Io</a></td><td>"Unable to save control information, could not be opened for writing" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_project.html#aa570766c896c4f770bc09950b1d73031">Isis::Project::cnetRoot()</a>, <a class="el" href="class_isis_1_1_file_name.html#a41e955594a44301f3331d01a36f7b75c">Isis::FileName::dir()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5">Isis::IException::Io</a>, <a class="el" href="class_isis_1_1_project.html#a458efb35f230a07f622251e1a27f49db">Isis::Project::newProjectRoot()</a>, <a class="el" href="class_isis_1_1_file_name.html#a886e3a130c17c303779cea16d225b5f5">Isis::FileName::original()</a>, <a class="el" href="class_isis_1_1_file_name.html#a07a8f3a1d799fe6f2cde72526b252b55">Isis::FileName::path()</a>, <a class="el" href="class_isis_1_1_project.html#aba1b984ed2a68ecbf03f612f68e6072c">Isis::Project::projectRoot()</a>, <a class="el" href="namespace_isis.html#a599ab93f2f4db6855baf4ce67fbb6831">Isis::ReadWrite</a>, <a class="el" href="class_isis_1_1_control.html#aa3f9c2159360c02ace42b36c6fc895c1">Isis::Control::save()</a>, and <a class="el" href="class_isis_1_1_file_name.html#af6f2a42721cf85813008d027e9b98609">Isis::FileName::toString()</a>.</p>
+
+</div>
+</div>
+<a id="a4bb9762ddda2b3aa02fd62560e790691"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bb9762ddda2b3aa02fd62560e790691">&#9670;&nbsp;</a></span>setName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::setName </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>newName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the human-readable name of this control list. </p>
+<p>This is really only useful for project control lists (not anonymous temporary ones).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newName</td><td>The name to give this control list </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_project_item_model.html#a465ba875c5cda8d7e54a4fc60f29c9d6">Isis::ProjectItemModel::setData()</a>.</p>
+
+</div>
+</div>
+<a id="a9ee067c269b19cbc446b71a19541ec9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ee067c269b19cbc446b71a19541ec9e">&#9670;&nbsp;</a></span>setPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::setPath </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>newPath</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the relative path (from the project root) to this control list's folder. </p>
+<p>This is really only useful for project control lists (not anonymous temporary ones).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">newPath</td><td>The path to the controls in this control list </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad171e7a1139e9461815b34e0c922e4d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad171e7a1139e9461815b34e0c922e4d0">&#9670;&nbsp;</a></span>supportedActions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_list.html">QList</a>&lt;<a class="el" href="class_q_action.html">QAction</a> *&gt; Isis::ControlList::supportedActions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_project.html">Project</a> *&#160;</td>
+          <td class="paramname"><em>project</em> = <code>NULL</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad22e389d0dd0a247c038e26063511244"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad22e389d0dd0a247c038e26063511244">&#9670;&nbsp;</a></span>swap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ControlList::swap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_list.html">QList</a>&lt; <a class="el" href="class_isis_1_1_control.html">Control</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Swaps this control list's control pointers with the other list of control pointers. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The list of control pointers to swap</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::swap() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a7699196a028a67f5a99091d98271225b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7699196a028a67f5a99091d98271225b">&#9670;&nbsp;</a></span>takeAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control.html">Control</a> * Isis::ControlList::takeAt </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Remove the control pointer at the specified index and returns it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>The index of the control pointer to take</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>Contol</b> * The removed control pointer</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::takeAt() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="a7dfb0a349ac8ffdd6a1dfb7181e62bc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dfb0a349ac8ffdd6a1dfb7181e62bc0">&#9670;&nbsp;</a></span>takeFirst()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control.html">Control</a> * Isis::ControlList::takeFirst </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the first control pointer from the control list and returns it. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a></b> * The first control pointer in the control list</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::takeFirst() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<a id="ae40bd68f33c75c40ad3e7964d9f890bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae40bd68f33c75c40ad3e7964d9f890bb">&#9670;&nbsp;</a></span>takeLast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_control.html">Control</a> * Isis::ControlList::takeLast </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the last control pointer from the control list and returns it. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1_control.html" title="This represents an ISIS control net in a project-based GUI interface.">Control</a></b> * The last control pointer in the control list</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>QList&lt;Control *&gt;::takeLast() </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_control_list.html#a456566cce248f0265e9425a17e44deaa">countChanged()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ControlList/<a class="el" href="_control_list_8h_source.html">ControlList.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ControlList/<a class="el" href="_control_list_8cpp.html">ControlList.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_control_list.html">ControlList</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

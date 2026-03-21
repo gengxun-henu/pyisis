@@ -1,0 +1,411 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Statistics/Statistics.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_statistics_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">Statistics.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_statistics_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef Statistics_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define Statistics_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;QObject&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_constants_8h.html">Constants.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_group_8h.html">PvlGroup.h</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_special_pixel_8h.html">SpecialPixel.h</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">class </span>QDataStream;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">class </span>QUuid;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">class </span>QXmlStreamWriter;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">class </span>QXmlStreamReader;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keyword">class </span>Project;<span class="comment">// ??? does xml stuff need project???</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="class_isis_1_1_statistics.html">   93</a></span>&#160;<span class="comment"></span>  <span class="keyword">class </span><a class="code" href="class_isis_1_1_statistics.html">Statistics</a> : <span class="keyword">public</span> <a class="code" href="class_q_object.html">QObject</a> {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    Q_OBJECT</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      <a class="code" href="class_isis_1_1_statistics.html#af52d50a42a4fa9c486784bb2fa214f6a">Statistics</a>(<a class="code" href="class_q_object.html">QObject</a> *parent = 0);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;      <a class="code" href="class_isis_1_1_statistics.html#af52d50a42a4fa9c486784bb2fa214f6a">Statistics</a>(QXmlStreamReader *xmlReader, <a class="code" href="class_q_object.html">QObject</a> *parent = 0);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_statistics.html#a9a97f1d39fa8d88f77ef679ee978d9c2">readStatistics</a>(QXmlStreamReader *xmlReader);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      <a class="code" href="class_isis_1_1_statistics.html#af52d50a42a4fa9c486784bb2fa214f6a">Statistics</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;inStats, <a class="code" href="class_q_object.html">QObject</a> *parent = 0);</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      <span class="comment">// TODO: does xml read/write stuff need Project input???</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <a class="code" href="class_isis_1_1_statistics.html#af52d50a42a4fa9c486784bb2fa214f6a">Statistics</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_statistics.html">Statistics</a> &amp;other);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_statistics.html#a3daa54972e330a15422ce94f87f17eb5">~Statistics</a>();</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <a class="code" href="class_isis_1_1_statistics.html">Statistics</a> &amp;<a class="code" href="class_isis_1_1_statistics.html#addda299c8e19f84214911ae7dbe18d74">operator=</a>(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_statistics.html">Statistics</a> &amp;other);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_statistics.html#af53edc41f7c11082980fb5fdfebc7496">Reset</a>();</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_statistics.html#aa34678b074b1697cc12414d44ff2b9b9">AddData</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> *data, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> count);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_statistics.html#aa34678b074b1697cc12414d44ff2b9b9">AddData</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> data);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_statistics.html#ac2e8c7e86682ab01f01249b2bdd327c8">RemoveData</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> *data, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> count);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_statistics.html#ac2e8c7e86682ab01f01249b2bdd327c8">RemoveData</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> data);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_statistics.html#a355a125cec26ea5ef2bacc2f7e52ecc7">SetValidRange</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> minimum = <a class="code" href="namespace_isis.html#a8adedea0235fd6d17b552822149f6c4b">Isis::ValidMinimum</a>,</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                         <span class="keyword">const</span> <span class="keywordtype">double</span> maximum = <a class="code" href="namespace_isis.html#a1f2cfeb70c3c8098bac256b6d608b13a">Isis::ValidMaximum</a>);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#a66006b54523657d4d361ae13efe1ac78">ValidMinimum</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#a74243fb0c3e6f6b36048bf8589fc3d8b">ValidMaximum</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_statistics.html#afffa753ef5d4fb6e3e3000e7616a1500">InRange</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> value);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_statistics.html#a9b9d623ee82a6ea33ac9783847c50b1d">AboveRange</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> value);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_statistics.html#ae53af5b76d2cbf0f3dddaba8b0180ab0">BelowRange</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> value);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#a28f531f8a2800b24b0c659a2fa16da4c">Average</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#ace7e19396e3bcd8c5260c0b3b073ea7e">StandardDeviation</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#ad883dc2ccb4f2fc416ba30c9a0c51bb7">Variance</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#a19593de0c393e67130e3ba2a3f2e4a25">Sum</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#a8eee359d32c8eead260f77df9ab43ca1">SumSquare</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#aaf24089d39f2f2fc49027a21f05d59f4">Rms</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#a3e226e99ea91f7b22e2a79e73284a036">Minimum</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#ab34bdfb77c28baaacc9776d49de76123">Maximum</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#a1777803b46a88eb863b9c9ecb9761c75">ChebyshevMinimum</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> percent = 99.5) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#a8059ea918ff69c9244766a83e389c871">ChebyshevMaximum</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> percent = 99.5) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#a6166be8cbf10eefb8c463f1cbb1cbcb4">BestMinimum</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> percent = 99.5) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#ab03778b2abb0b1076f4e748409439774">BestMaximum</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> percent = 99.5) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_statistics.html#a8080fd8233f316cad121375e3b517c20">ZScore</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> value) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_statistics.html#a9487d0da3ac382942a4796ebc738ba8f">TotalPixels</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_statistics.html#a6b7294833d95a880392938edd5bda155">ValidPixels</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_statistics.html#a120ed390e45d9aa04ae21db0121e5761">OverRangePixels</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_statistics.html#a202fa1f0c7c67950242330cf34bf893d">UnderRangePixels</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_statistics.html#a0467bf0f07a195cd0de1d1fbc229cf13">NullPixels</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_statistics.html#a3ca27f85f770a23a92e5e79135b5e332">LisPixels</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_statistics.html#aba16ac100b13aaefc34e69623b7f5fe4">LrsPixels</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_statistics.html#a43c30223dd6698b0195b772ced174e61">HisPixels</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_statistics.html#a437db55f45ec47921ffd35940b4ce687">HrsPixels</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> <a class="code" href="class_isis_1_1_statistics.html#a63562e1e7d3d1b47b2856e6cb77e1dfc">OutOfRangePixels</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_statistics.html#a62cca7c7dc2e731de3718aca9b49178f">RemovedData</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;      <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> <a class="code" href="class_isis_1_1_statistics.html#a9ca3fc42e2087e3fa849acf3a7674901">toPvl</a>(QString name = <span class="stringliteral">&quot;Statistics&quot;</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_statistics.html#aea190d16f2dc2f4e64a9168b101b6908">save</a>(QXmlStreamWriter &amp;stream, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_project.html">Project</a> *project) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;      <span class="comment">// TODO: does xml stuff need project???</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;      QDataStream &amp;<a class="code" href="class_isis_1_1_statistics.html#a97f58c581e8f8b2f085e1ab67a8d6eaa">write</a>(QDataStream &amp;stream) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      QDataStream &amp;<a class="code" href="class_isis_1_1_statistics.html#a413131db53d9186da4c0069d3f0e7d23">read</a>(QDataStream &amp;stream);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;      <span class="keywordtype">void</span> fromPvl(<span class="keyword">const</span> <a class="code" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;inStats);</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;      </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="comment">//      QUuid *m_id; /**&lt; A unique ID for this object (useful for others to reference</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="comment">//                        this object when saving to disk).*/</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      <span class="keywordtype">double</span> m_sum;              </div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;      <span class="keywordtype">double</span> m_sumsum;           </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;      <span class="keywordtype">double</span> m_minimum;          </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;      <span class="keywordtype">double</span> m_maximum;          </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;      <span class="keywordtype">double</span> m_validMinimum;     </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;      <span class="keywordtype">double</span> m_validMaximum;     </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> m_totalPixels;      </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> m_validPixels;      </div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> m_nullPixels;       </div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> m_lrsPixels;        </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> m_lisPixels;        </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> m_hrsPixels;        </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> m_hisPixels;        </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> m_underRangePixels; </div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;      <a class="code" href="namespace_isis.html#a840d3fb673563756fc704318d9528188">BigInt</a> m_overRangePixels;  </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;      <span class="keywordtype">bool</span>   m_removedData;      </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;  };</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;  <span class="comment">// operators to read/write Statistics to/from binary data</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;  QDataStream &amp;<a class="code" href="namespace_isis.html#ae89a575c21f490200c6fba70c9127263">operator&lt;&lt;</a>(QDataStream &amp;stream, <span class="keyword">const</span> <a class="code" href="class_isis_1_1_statistics.html">Statistics</a> &amp;statistics);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;  QDataStream &amp;<a class="code" href="namespace_isis.html#a9c059e8aa35e451a4a02a0aa3c4e6254">operator&gt;&gt;</a>(QDataStream &amp;stream, <a class="code" href="class_isis_1_1_statistics.html">Statistics</a> &amp;statistics);</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;} <span class="comment">// end namespace isis</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_constants_8h_html"><div class="ttname"><a href="_constants_8h.html">Constants.h</a></div></div>
+<div class="ttc" id="a_pvl_group_8h_html"><div class="ttname"><a href="_pvl_group_8h.html">PvlGroup.h</a></div></div>
+<div class="ttc" id="a_special_pixel_8h_html"><div class="ttname"><a href="_special_pixel_8h.html">SpecialPixel.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_project_html"><div class="ttname"><a href="class_isis_1_1_project.html">Isis::Project</a></div><div class="ttdoc">The main project for ipce.</div><div class="ttdef"><b>Definition:</b> Project.h:287</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_group_html"><div class="ttname"><a href="class_isis_1_1_pvl_group.html">Isis::PvlGroup</a></div><div class="ttdoc">Contains multiple PvlContainers.</div><div class="ttdef"><b>Definition:</b> PvlGroup.h:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html"><div class="ttname"><a href="class_isis_1_1_statistics.html">Isis::Statistics</a></div><div class="ttdoc">This class is used to accumulate statistics on double arrays.</div><div class="ttdef"><b>Definition:</b> Statistics.h:93</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a0467bf0f07a195cd0de1d1fbc229cf13"><div class="ttname"><a href="class_isis_1_1_statistics.html#a0467bf0f07a195cd0de1d1fbc229cf13">Isis::Statistics::NullPixels</a></div><div class="ttdeci">BigInt NullPixels() const</div><div class="ttdoc">Returns the total number of NULL pixels encountered.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:616</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a120ed390e45d9aa04ae21db0121e5761"><div class="ttname"><a href="class_isis_1_1_statistics.html#a120ed390e45d9aa04ae21db0121e5761">Isis::Statistics::OverRangePixels</a></div><div class="ttdeci">BigInt OverRangePixels() const</div><div class="ttdoc">Returns the total number of pixels over the valid range encountered.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:595</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a1777803b46a88eb863b9c9ecb9761c75"><div class="ttname"><a href="class_isis_1_1_statistics.html#a1777803b46a88eb863b9c9ecb9761c75">Isis::Statistics::ChebyshevMinimum</a></div><div class="ttdeci">double ChebyshevMinimum(const double percent=99.5) const</div><div class="ttdoc">This method returns a minimum such that X percent of the data will fall with K standard deviations of...</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:696</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a19593de0c393e67130e3ba2a3f2e4a25"><div class="ttname"><a href="class_isis_1_1_statistics.html#a19593de0c393e67130e3ba2a3f2e4a25">Isis::Statistics::Sum</a></div><div class="ttdeci">double Sum() const</div><div class="ttdoc">Returns the sum of all the data.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:492</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a202fa1f0c7c67950242330cf34bf893d"><div class="ttname"><a href="class_isis_1_1_statistics.html#a202fa1f0c7c67950242330cf34bf893d">Isis::Statistics::UnderRangePixels</a></div><div class="ttdeci">BigInt UnderRangePixels() const</div><div class="ttdoc">Returns the total number of pixels under the valid range encountered.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:606</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a28f531f8a2800b24b0c659a2fa16da4c"><div class="ttname"><a href="class_isis_1_1_statistics.html#a28f531f8a2800b24b0c659a2fa16da4c">Isis::Statistics::Average</a></div><div class="ttdeci">double Average() const</div><div class="ttdoc">Computes and returns the average.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:451</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a355a125cec26ea5ef2bacc2f7e52ecc7"><div class="ttname"><a href="class_isis_1_1_statistics.html#a355a125cec26ea5ef2bacc2f7e52ecc7">Isis::Statistics::SetValidRange</a></div><div class="ttdeci">void SetValidRange(const double minimum=Isis::ValidMinimum, const double maximum=Isis::ValidMaximum)</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:406</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a3ca27f85f770a23a92e5e79135b5e332"><div class="ttname"><a href="class_isis_1_1_statistics.html#a3ca27f85f770a23a92e5e79135b5e332">Isis::Statistics::LisPixels</a></div><div class="ttdeci">BigInt LisPixels() const</div><div class="ttdoc">Returns the total number of low instrument saturation (LIS) pixels encountered.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:627</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a3daa54972e330a15422ce94f87f17eb5"><div class="ttname"><a href="class_isis_1_1_statistics.html#a3daa54972e330a15422ce94f87f17eb5">Isis::Statistics::~Statistics</a></div><div class="ttdeci">virtual ~Statistics()</div><div class="ttdoc">Destroys the IsisStats object.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:228</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a3e226e99ea91f7b22e2a79e73284a036"><div class="ttname"><a href="class_isis_1_1_statistics.html#a3e226e99ea91f7b22e2a79e73284a036">Isis::Statistics::Minimum</a></div><div class="ttdeci">double Minimum() const</div><div class="ttdoc">Returns the absolute minimum double found in all data passed through the AddData method.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:533</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a413131db53d9186da4c0069d3f0e7d23"><div class="ttname"><a href="class_isis_1_1_statistics.html#a413131db53d9186da4c0069d3f0e7d23">Isis::Statistics::read</a></div><div class="ttdeci">QDataStream &amp; read(QDataStream &amp;stream)</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:937</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a437db55f45ec47921ffd35940b4ce687"><div class="ttname"><a href="class_isis_1_1_statistics.html#a437db55f45ec47921ffd35940b4ce687">Isis::Statistics::HrsPixels</a></div><div class="ttdeci">BigInt HrsPixels() const</div><div class="ttdoc">Returns the total number of high representation saturation (HRS) pixels encountered.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:660</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a43c30223dd6698b0195b772ced174e61"><div class="ttname"><a href="class_isis_1_1_statistics.html#a43c30223dd6698b0195b772ced174e61">Isis::Statistics::HisPixels</a></div><div class="ttdeci">BigInt HisPixels() const</div><div class="ttdoc">Returns the total number of high instrument saturation (HIS) pixels encountered.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:649</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a6166be8cbf10eefb8c463f1cbb1cbcb4"><div class="ttname"><a href="class_isis_1_1_statistics.html#a6166be8cbf10eefb8c463f1cbb1cbcb4">Isis::Statistics::BestMinimum</a></div><div class="ttdeci">double BestMinimum(const double percent=99.5) const</div><div class="ttdoc">This method returns the better of the absolute minimum or the Chebyshev minimum.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:749</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a62cca7c7dc2e731de3718aca9b49178f"><div class="ttname"><a href="class_isis_1_1_statistics.html#a62cca7c7dc2e731de3718aca9b49178f">Isis::Statistics::RemovedData</a></div><div class="ttdeci">bool RemovedData() const</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:676</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a63562e1e7d3d1b47b2856e6cb77e1dfc"><div class="ttname"><a href="class_isis_1_1_statistics.html#a63562e1e7d3d1b47b2856e6cb77e1dfc">Isis::Statistics::OutOfRangePixels</a></div><div class="ttdeci">BigInt OutOfRangePixels() const</div><div class="ttdoc">Returns the total number of pixels outside of the valid range encountered.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:671</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a66006b54523657d4d361ae13efe1ac78"><div class="ttname"><a href="class_isis_1_1_statistics.html#a66006b54523657d4d361ae13efe1ac78">Isis::Statistics::ValidMinimum</a></div><div class="ttdeci">double ValidMinimum() const</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:420</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a6b7294833d95a880392938edd5bda155"><div class="ttname"><a href="class_isis_1_1_statistics.html#a6b7294833d95a880392938edd5bda155">Isis::Statistics::ValidPixels</a></div><div class="ttdeci">BigInt ValidPixels() const</div><div class="ttdoc">Returns the total number of valid pixels processed.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:584</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a74243fb0c3e6f6b36048bf8589fc3d8b"><div class="ttname"><a href="class_isis_1_1_statistics.html#a74243fb0c3e6f6b36048bf8589fc3d8b">Isis::Statistics::ValidMaximum</a></div><div class="ttdeci">double ValidMaximum() const</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:425</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a8059ea918ff69c9244766a83e389c871"><div class="ttname"><a href="class_isis_1_1_statistics.html#a8059ea918ff69c9244766a83e389c871">Isis::Statistics::ChebyshevMaximum</a></div><div class="ttdeci">double ChebyshevMaximum(const double percent=99.5) const</div><div class="ttdoc">This method returns a maximum such that X percent of the data will fall with K standard deviations of...</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:723</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a8080fd8233f316cad121375e3b517c20"><div class="ttname"><a href="class_isis_1_1_statistics.html#a8080fd8233f316cad121375e3b517c20">Isis::Statistics::ZScore</a></div><div class="ttdeci">double ZScore(const double value) const</div><div class="ttdoc">This method returns the better of the z-score of the given value.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:800</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a8eee359d32c8eead260f77df9ab43ca1"><div class="ttname"><a href="class_isis_1_1_statistics.html#a8eee359d32c8eead260f77df9ab43ca1">Isis::Statistics::SumSquare</a></div><div class="ttdeci">double SumSquare() const</div><div class="ttdoc">Returns the sum of all the squared data.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:502</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a9487d0da3ac382942a4796ebc738ba8f"><div class="ttname"><a href="class_isis_1_1_statistics.html#a9487d0da3ac382942a4796ebc738ba8f">Isis::Statistics::TotalPixels</a></div><div class="ttdeci">BigInt TotalPixels() const</div><div class="ttdoc">Returns the total number of pixels processed (valid and invalid).</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:571</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a97f58c581e8f8b2f085e1ab67a8d6eaa"><div class="ttname"><a href="class_isis_1_1_statistics.html#a97f58c581e8f8b2f085e1ab67a8d6eaa">Isis::Statistics::write</a></div><div class="ttdeci">QDataStream &amp; write(QDataStream &amp;stream) const</div><div class="ttdoc">Order saved must match the offsets in the static compoundH5DataType() method.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:914</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a9a97f1d39fa8d88f77ef679ee978d9c2"><div class="ttname"><a href="class_isis_1_1_statistics.html#a9a97f1d39fa8d88f77ef679ee978d9c2">Isis::Statistics::readStatistics</a></div><div class="ttdeci">void readStatistics(QXmlStreamReader *xmlReader)</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a9b9d623ee82a6ea33ac9783847c50b1d"><div class="ttname"><a href="class_isis_1_1_statistics.html#a9b9d623ee82a6ea33ac9783847c50b1d">Isis::Statistics::AboveRange</a></div><div class="ttdeci">bool AboveRange(const double value)</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:435</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_a9ca3fc42e2087e3fa849acf3a7674901"><div class="ttname"><a href="class_isis_1_1_statistics.html#a9ca3fc42e2087e3fa849acf3a7674901">Isis::Statistics::toPvl</a></div><div class="ttdeci">PvlGroup toPvl(QString name=&quot;Statistics&quot;) const</div><div class="ttdoc">Serialize statistics as a pvl group.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:846</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_aa34678b074b1697cc12414d44ff2b9b9"><div class="ttname"><a href="class_isis_1_1_statistics.html#aa34678b074b1697cc12414d44ff2b9b9">Isis::Statistics::AddData</a></div><div class="ttdeci">void AddData(const double *data, const unsigned int count)</div><div class="ttdoc">Add an array of doubles to the accumulators and counters.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:292</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_aaf24089d39f2f2fc49027a21f05d59f4"><div class="ttname"><a href="class_isis_1_1_statistics.html#aaf24089d39f2f2fc49027a21f05d59f4">Isis::Statistics::Rms</a></div><div class="ttdeci">double Rms() const</div><div class="ttdoc">Computes and returns the rms.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:516</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_ab03778b2abb0b1076f4e748409439774"><div class="ttname"><a href="class_isis_1_1_statistics.html#ab03778b2abb0b1076f4e748409439774">Isis::Statistics::BestMaximum</a></div><div class="ttdeci">double BestMaximum(const double percent=99.5) const</div><div class="ttdoc">This method returns the better of the absolute maximum or the Chebyshev maximum.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:776</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_ab34bdfb77c28baaacc9776d49de76123"><div class="ttname"><a href="class_isis_1_1_statistics.html#ab34bdfb77c28baaacc9776d49de76123">Isis::Statistics::Maximum</a></div><div class="ttdeci">double Maximum() const</div><div class="ttdoc">Returns the absolute maximum double found in all data passed through the AddData method.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:554</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_aba16ac100b13aaefc34e69623b7f5fe4"><div class="ttname"><a href="class_isis_1_1_statistics.html#aba16ac100b13aaefc34e69623b7f5fe4">Isis::Statistics::LrsPixels</a></div><div class="ttdeci">BigInt LrsPixels() const</div><div class="ttdoc">Returns the total number of low representation saturation (LRS) pixels encountered.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:638</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_ac2e8c7e86682ab01f01249b2bdd327c8"><div class="ttname"><a href="class_isis_1_1_statistics.html#ac2e8c7e86682ab01f01249b2bdd327c8">Isis::Statistics::RemoveData</a></div><div class="ttdeci">void RemoveData(const double *data, const unsigned int count)</div><div class="ttdoc">Remove an array of doubles from the accumulators and counters.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:357</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_ace7e19396e3bcd8c5260c0b3b073ea7e"><div class="ttname"><a href="class_isis_1_1_statistics.html#ace7e19396e3bcd8c5260c0b3b073ea7e">Isis::Statistics::StandardDeviation</a></div><div class="ttdeci">double StandardDeviation() const</div><div class="ttdoc">Computes and returns the standard deviation.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:463</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_ad883dc2ccb4f2fc416ba30c9a0c51bb7"><div class="ttname"><a href="class_isis_1_1_statistics.html#ad883dc2ccb4f2fc416ba30c9a0c51bb7">Isis::Statistics::Variance</a></div><div class="ttdeci">double Variance() const</div><div class="ttdoc">Computes and returns the variance.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:479</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_addda299c8e19f84214911ae7dbe18d74"><div class="ttname"><a href="class_isis_1_1_statistics.html#addda299c8e19f84214911ae7dbe18d74">Isis::Statistics::operator=</a></div><div class="ttdeci">Statistics &amp; operator=(const Statistics &amp;other)</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:234</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_ae53af5b76d2cbf0f3dddaba8b0180ab0"><div class="ttname"><a href="class_isis_1_1_statistics.html#ae53af5b76d2cbf0f3dddaba8b0180ab0">Isis::Statistics::BelowRange</a></div><div class="ttdeci">bool BelowRange(const double value)</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:440</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_aea190d16f2dc2f4e64a9168b101b6908"><div class="ttname"><a href="class_isis_1_1_statistics.html#aea190d16f2dc2f4e64a9168b101b6908">Isis::Statistics::save</a></div><div class="ttdeci">void save(QXmlStreamWriter &amp;stream, const Project *project) const</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:877</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_af52d50a42a4fa9c486784bb2fa214f6a"><div class="ttname"><a href="class_isis_1_1_statistics.html#af52d50a42a4fa9c486784bb2fa214f6a">Isis::Statistics::Statistics</a></div><div class="ttdeci">Statistics(QObject *parent=0)</div><div class="ttdoc">Constructs an IsisStats object with accumulators and counters set to zero.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:28</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_af53edc41f7c11082980fb5fdfebc7496"><div class="ttname"><a href="class_isis_1_1_statistics.html#af53edc41f7c11082980fb5fdfebc7496">Isis::Statistics::Reset</a></div><div class="ttdeci">void Reset()</div><div class="ttdoc">Reset all accumulators and counters to zero.</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:264</div></div>
+<div class="ttc" id="aclass_isis_1_1_statistics_html_afffa753ef5d4fb6e3e3000e7616a1500"><div class="ttname"><a href="class_isis_1_1_statistics.html#afffa753ef5d4fb6e3e3000e7616a1500">Isis::Statistics::InRange</a></div><div class="ttdeci">bool InRange(const double value)</div><div class="ttdef"><b>Definition:</b> Statistics.cpp:430</div></div>
+<div class="ttc" id="aclass_q_object_html"><div class="ttname"><a href="class_q_object.html">QObject</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+<div class="ttc" id="anamespace_isis_html_a1f2cfeb70c3c8098bac256b6d608b13a"><div class="ttname"><a href="namespace_isis.html#a1f2cfeb70c3c8098bac256b6d608b13a">Isis::ValidMaximum</a></div><div class="ttdeci">const double ValidMaximum</div><div class="ttdoc">The maximum valid double value for Isis pixels.</div><div class="ttdef"><b>Definition:</b> SpecialPixel.h:122</div></div>
+<div class="ttc" id="anamespace_isis_html_a840d3fb673563756fc704318d9528188"><div class="ttname"><a href="namespace_isis.html#a840d3fb673563756fc704318d9528188">Isis::BigInt</a></div><div class="ttdeci">long long int BigInt</div><div class="ttdoc">Big int.</div><div class="ttdef"><b>Definition:</b> Constants.h:49</div></div>
+<div class="ttc" id="anamespace_isis_html_a8adedea0235fd6d17b552822149f6c4b"><div class="ttname"><a href="namespace_isis.html#a8adedea0235fd6d17b552822149f6c4b">Isis::ValidMinimum</a></div><div class="ttdeci">const double ValidMinimum</div><div class="ttdoc">The minimum valid double value for Isis pixels.</div><div class="ttdef"><b>Definition:</b> SpecialPixel.h:87</div></div>
+<div class="ttc" id="anamespace_isis_html_a9c059e8aa35e451a4a02a0aa3c4e6254"><div class="ttname"><a href="namespace_isis.html#a9c059e8aa35e451a4a02a0aa3c4e6254">Isis::operator&gt;&gt;</a></div><div class="ttdeci">std::istream &amp; operator&gt;&gt;(std::istream &amp;is, CSVReader &amp;csv)</div><div class="ttdoc">Input read operator for input stream sources.</div><div class="ttdef"><b>Definition:</b> CSVReader.cpp:447</div></div>
+<div class="ttc" id="anamespace_isis_html_ae89a575c21f490200c6fba70c9127263"><div class="ttname"><a href="namespace_isis.html#ae89a575c21f490200c6fba70c9127263">Isis::operator&lt;&lt;</a></div><div class="ttdeci">QDebug operator&lt;&lt;(QDebug debug, const Hillshade &amp;hillshade)</div><div class="ttdoc">Print this class out to a QDebug object.</div><div class="ttdef"><b>Definition:</b> Hillshade.cpp:313</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_c7d3e1a3d22b49d0891a3e3952310327.html">Statistics</a></li><li class="navelem"><a class="el" href="_statistics_8h.html">Statistics.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

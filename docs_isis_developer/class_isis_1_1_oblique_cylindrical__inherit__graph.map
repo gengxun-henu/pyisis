@@ -1,0 +1,5 @@
+<map id="Isis::ObliqueCylindrical" name="Isis::ObliqueCylindrical">
+<area shape="rect" id="node1" title="Oblique Cylindrical Map Projection." alt="" coords="9,1288,165,1577"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_t_projection.html" title="Base class for Map TProjections." alt="" coords="5,567,169,1240"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_projection.html" title="Base class for Map Projections." alt="" coords="8,5,166,519"/>
+</map>

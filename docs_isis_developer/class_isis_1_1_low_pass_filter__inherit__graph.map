@@ -1,0 +1,4 @@
+<map id="Isis::LowPassFilter" name="Isis::LowPassFilter">
+<area shape="rect" id="node1" title="Compute a low pass filter from a Module class content." alt="" coords="5,407,139,584"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources." alt="" coords="16,5,128,359"/>
+</map>

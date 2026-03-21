@@ -1,0 +1,478 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/CnetEditorWidget/CnetEditorWidget.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_cnet_editor_widget_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">CnetEditorWidget.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_cnet_editor_widget_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef CnetEditorWidget_H</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define CnetEditorWidget_H</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_action.html">QAction</a>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">class </span>QBoxLayout;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">class </span>QGroupBox;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">template</span>&lt; <span class="keyword">typename</span> T &gt; <span class="keyword">class </span><a class="code" href="class_q_list.html">QList</a>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_menu.html">QMenu</a>;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">class </span>QScrollArea;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">class </span>QSplitter;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">class </span>QString;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_tool_bar.html">QToolBar</a>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">class </span>QXmlStreamWriter;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">class </span>QXmlAttributes;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">class </span>AbstractTableModel;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">class </span>AbstractTreeItem;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <span class="keyword">class </span>Control;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keyword">class </span>ControlNet;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  <span class="keyword">class </span>ControlPoint;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <span class="keyword">class </span>Directory;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keyword">class </span>FileName;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keyword">class </span>Image;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keyword">class </span>MosaicGraphicsView;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <span class="keyword">class </span>MosaicSceneItem;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <span class="keyword">class </span>MosaicTool;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keyword">class </span>ProgressBar;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  <span class="keyword">class </span>Projection;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keyword">class </span>Project;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <span class="keyword">class </span>PvlGroup;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <span class="keyword">class </span>PvlObject;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  <span class="keyword">class </span>ToolPad;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="keyword">class </span>FilterWidget;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <span class="keyword">class </span>ImageImageTreeModel;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  <span class="keyword">class </span>ImagePointTreeModel;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <span class="keyword">class </span>MeasureTableModel;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  <span class="keyword">class </span>PointMeasureTreeModel;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="keyword">class </span>PointTableModel;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  <span class="keyword">class </span>TableView;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  <span class="keyword">class </span>TreeView;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  <span class="keyword">class </span>CnetEditorSortConfigDialog;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="class_isis_1_1_cnet_editor_widget.html">  116</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_cnet_editor_widget.html">CnetEditorWidget</a> : <span class="keyword">public</span> <a class="code" href="class_q_widget.html">QWidget</a> {</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00120"></a><span class="lineno"><a class="line" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ece">  120</a></span>&#160;      <span class="keyword">enum</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ece">View</a> {</div>
+<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112eceaf3db9aed1421a369ba5112cd987eed55">  121</a></span>&#160;        <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112eceaf3db9aed1421a369ba5112cd987eed55">PointView</a>,</div>
+<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ecea179ef42cc2c51a590320c71431feeea4">  122</a></span>&#160;        <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ecea179ef42cc2c51a590320c71431feeea4">ImageView</a>,</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ecea27ea52445ea4b2147f915c2d032b273a">ConnectionView</a></div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ecea27ea52445ea4b2147f915c2d032b273a">  124</a></span>&#160;      };</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a644008f82747ede81485fa1b7690e928">CnetEditorWidget</a>(<a class="code" href="class_isis_1_1_control.html">Control</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#a61f77d19dfab13905accbb3f63822139">control</a>, QString pathForSettings);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a14724bcd5a188f102c127fc86865dde5">~CnetEditorWidget</a>();</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a8575e8af60ed09bb6d2c072a53e5136c">readSettings</a>();</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a801541199bc0e1a60327fb8cc7f31979">writeSettings</a>();</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#ad28af2eefd0209bb032df0617b666879">pointTreeView</a>();</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#ad06c6471f35d30610dec85a71f21b88f">serialTreeView</a>();</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#a631c10dc8bc8cfa197abb3b66b0032d0">connectionTreeView</a>();</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#aefd029e5ee5f216932726cedeabb59cf">pointFilterWidget</a>();</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#a4ad3df692be5ec1b3770691dc36c458b">serialFilterWidget</a>();</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#a79688ba958a8d90199f4fc2383169e44">connectionFilterWidget</a>();</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;      <a class="code" href="class_isis_1_1_table_view.html">TableView</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#aba473cc7ce302eecbdfa7fd3bc4a635a">pointTableView</a>();</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;      <a class="code" href="class_isis_1_1_table_view.html">TableView</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#ac5dfabf71f1fed559b5c0a500a84a9f7">measureTableView</a>();</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;      <a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#a61f77d19dfab13905accbb3f63822139">control</a>();</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;      <a class="code" href="class_isis_1_1_abstract_table_model.html">AbstractTableModel</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#a518ec479b0d68cf000d09bfc58cf615c">measureTableModel</a>();</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;      <a class="code" href="class_isis_1_1_abstract_table_model.html">AbstractTableModel</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#a750bb48ddcc33fcda594eeebd86539d4">pointTableModel</a>();</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;      <a class="code" href="class_q_map.html">QMap&lt; QAction *, QList&lt; QString &gt;</a> &gt; <a class="code" href="class_isis_1_1_cnet_editor_widget.html#ac00d7a61da82a6e20c8495ca03ba2f7a">menuActions</a>();</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;      <a class="code" href="class_q_map.html">QMap&lt; QString, QList&lt; QAction * &gt;</a> &gt; <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a5fd51656b711d2c02c3b7feb0e75dc79">toolBarActions</a>();</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;      <a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> *<a class="code" href="class_isis_1_1_cnet_editor_widget.html#a7956b2a5be7856276ef82355bcc3fb45">filteredNetwork</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#ae4d9bd1ae6bf09347307738895df7516">measureTableSortingEnabled</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#aa666bdd2aaa069f2645690431881870e">measureTableSortLimit</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#ae932b14ed1133b32ba985f08643ec54d">pointTableSortingEnabled</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a19a6d3d4b90cdd43de98094db998afac">pointTableSortLimit</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#ad068d703fe36d8feab7b1168e464b725">setMeasureTableSortingEnabled</a>(<span class="keywordtype">bool</span> enabled);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a523a33856671a986fd33f3542ea241e2">setMeasureTableSortLimit</a>(<span class="keywordtype">int</span> limit);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#aac3178e926f05abe753c3985a9624e60">setPointTableSortingEnabled</a>(<span class="keywordtype">bool</span> enabled);</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a2ce46f9d6ca5514f43ddb93feb1da444">setPointTableSortLimit</a>(<span class="keywordtype">int</span> limit);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#ae5d4fa0bf2e180d9ec67a510d267b012">configSorting</a>();</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#ad4ba05347c74e97a8fe8525290abbbdf">setLatLonRadiusCoordinateDisplay</a>();</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a9f4ae29629965da5cabc1048929213cb">setXYZCoordinateDisplay</a>();</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a81579be2af40806bd175042360fa1e89">setTablesFrozen</a>(<span class="keywordtype">bool</span>);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a5e5f8f903e6ec3f1426a02a9401c7cc8">rebuildModels</a>();</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    signals:</div>
+<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="class_isis_1_1_cnet_editor_widget.html#acf575477dc7f87070c7f58b75579d4e7">  170</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#acf575477dc7f87070c7f58b75579d4e7">cnetModified</a>();</div>
+<div class="line"><a name="l00171"></a><span class="lineno"><a class="line" href="class_isis_1_1_cnet_editor_widget.html#af31fc097cc9022a92ab02ba296360cd0">  171</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#af31fc097cc9022a92ab02ba296360cd0">editControlPoint</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *controlPoint, QString serialNumber);</div>
+<div class="line"><a name="l00172"></a><span class="lineno"><a class="line" href="class_isis_1_1_cnet_editor_widget.html#a9d52863baca3bf2f58f1e3d5c2a07d3e">  172</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a9d52863baca3bf2f58f1e3d5c2a07d3e">coordinateDisplayTypeChanged</a>();</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keyword">private</span> slots:</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_cnet_editor_widget.html#a5e5f8f903e6ec3f1426a02a9401c7cc8">rebuildModels</a>(<a class="code" href="class_q_list.html">QList&lt; AbstractTreeItem * &gt;</a> itemsToDelete);</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;      <span class="keywordtype">void</span> pointColToggled();</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;      <span class="keywordtype">void</span> measureColToggled();</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;      <span class="keywordtype">void</span> handlePointTableFilterCountsChanged(<span class="keywordtype">int</span> visibleRows, <span class="keywordtype">int</span> totalRows);</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;      <span class="keywordtype">void</span> handleMeasureTableFilterCountsChanged(<span class="keywordtype">int</span> visibleRows,</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;          <span class="keywordtype">int</span> totalRows);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;      <span class="keywordtype">void</span> setCnetModified();</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;      <span class="comment">//methods</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;      <span class="keywordtype">void</span> nullify();</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;      QBoxLayout *createMainLayout();</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;      <span class="keywordtype">void</span> createActions();</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;      <span class="keywordtype">void</span> createPointTreeView();</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;      <span class="keywordtype">void</span> createSerialTreeView();</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;      <span class="keywordtype">void</span> createConnectionTreeView();</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;      <span class="keywordtype">void</span> createFilterArea();</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;      <span class="keywordtype">void</span> createPointTableView();</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;      <span class="keywordtype">void</span> createMeasureTableView();</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;      <span class="keywordtype">void</span> upgradeVersion();</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;      <span class="keywordtype">void</span> handleTableFilterCountsChanged(<span class="keywordtype">int</span> visibleRows, <span class="keywordtype">int</span> totalRows,</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                                          QGroupBox *box, QString initialText);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;      <span class="comment">// data</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;      <span class="keywordtype">bool</span> m_updatingSelection;                                </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;      <a class="code" href="class_isis_1_1_control.html">Control</a> *m_control;                                      </div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;      QString *m_workingVersion;                               </div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;      <span class="keyword">static</span> <span class="keyword">const</span> QString VERSION;                            </div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;      <span class="comment">//widgets</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;      <a class="code" href="class_isis_1_1_tree_view.html">TreeView</a> *m_pointTreeView;                               </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;      <a class="code" href="class_isis_1_1_tree_view.html">TreeView</a> *m_imageTreeView;                               </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;      <a class="code" href="class_isis_1_1_tree_view.html">TreeView</a> *m_connectionTreeView;                          </div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;      <a class="code" href="class_isis_1_1_table_view.html">TableView</a> *m_pointTableView;                             </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;      <a class="code" href="class_isis_1_1_table_view.html">TableView</a> *m_measureTableView;                           </div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;      QGroupBox *m_pointTableBox;                              </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;      QGroupBox *m_measureTableBox;                            </div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;      QScrollArea *m_filterArea;                               </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *m_pointFilterWidget;                            </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *m_serialFilterWidget;                           </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;      <a class="code" href="class_q_widget.html">QWidget</a> *m_connectionFilterWidget;                       </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;      <a class="code" href="class_isis_1_1_point_measure_tree_model.html">PointMeasureTreeModel</a> *m_pointModel;                     </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;      <a class="code" href="class_isis_1_1_image_point_tree_model.html">ImagePointTreeModel</a> *m_imageModel;                       </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;      <a class="code" href="class_isis_1_1_image_image_tree_model.html">ImageImageTreeModel</a> *m_connectionModel;                  </div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;      <a class="code" href="class_isis_1_1_point_table_model.html">PointTableModel</a> *m_pointTableModel;                      </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;      <a class="code" href="class_isis_1_1_measure_table_model.html">MeasureTableModel</a> *m_measureTableModel;                  </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;      QSplitter *m_mainSplitter;                               </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;      <a class="code" href="class_q_map.html">QMap&lt; QAction *, QList&lt; QString &gt;</a> &gt; * m_menuActions;     </div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;      <a class="code" href="class_q_map.html">QMap&lt; QString, QList&lt; QAction * &gt;</a> &gt; * m_toolBarActions;  </div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;      QString *m_settingsPath; </div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;      <a class="code" href="class_isis_1_1_cnet_editor_sort_config_dialog.html">CnetEditorSortConfigDialog</a> *m_sortDialog; </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;  };</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;}</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclass_isis_1_1_abstract_table_model_html"><div class="ttname"><a href="class_isis_1_1_abstract_table_model.html">Isis::AbstractTableModel</a></div><div class="ttdoc">Translates the tree model into a table model.</div><div class="ttdef"><b>Definition:</b> AbstractTableModel.h:48</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_sort_config_dialog_html"><div class="ttname"><a href="class_isis_1_1_cnet_editor_sort_config_dialog.html">Isis::CnetEditorSortConfigDialog</a></div><div class="ttdoc">Configure user's sorting settings for the cneteditor widget.</div><div class="ttdef"><b>Definition:</b> CnetEditorSortConfigDialog.h:37</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html">Isis::CnetEditorWidget</a></div><div class="ttdoc">This widget provides full editing, filtering and viewing capabilities for the raw data in a control n...</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.h:116</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a03062b3c558d990079feff7722112ece"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ece">Isis::CnetEditorWidget::View</a></div><div class="ttdeci">View</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.h:120</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a03062b3c558d990079feff7722112ecea179ef42cc2c51a590320c71431feeea4"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ecea179ef42cc2c51a590320c71431feeea4">Isis::CnetEditorWidget::ImageView</a></div><div class="ttdeci">@ ImageView</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.h:122</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a03062b3c558d990079feff7722112ecea27ea52445ea4b2147f915c2d032b273a"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112ecea27ea52445ea4b2147f915c2d032b273a">Isis::CnetEditorWidget::ConnectionView</a></div><div class="ttdeci">@ ConnectionView</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.h:123</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a03062b3c558d990079feff7722112eceaf3db9aed1421a369ba5112cd987eed55"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a03062b3c558d990079feff7722112eceaf3db9aed1421a369ba5112cd987eed55">Isis::CnetEditorWidget::PointView</a></div><div class="ttdeci">@ PointView</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.h:121</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a14724bcd5a188f102c127fc86865dde5"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a14724bcd5a188f102c127fc86865dde5">Isis::CnetEditorWidget::~CnetEditorWidget</a></div><div class="ttdeci">virtual ~CnetEditorWidget()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:108</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a19a6d3d4b90cdd43de98094db998afac"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a19a6d3d4b90cdd43de98094db998afac">Isis::CnetEditorWidget::pointTableSortLimit</a></div><div class="ttdeci">int pointTableSortLimit() const</div><div class="ttdoc">Returns the sorting limit for the point table.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:1014</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a2ce46f9d6ca5514f43ddb93feb1da444"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a2ce46f9d6ca5514f43ddb93feb1da444">Isis::CnetEditorWidget::setPointTableSortLimit</a></div><div class="ttdeci">void setPointTableSortLimit(int limit)</div><div class="ttdoc">Sets the point table sorting limit.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:1054</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a4ad3df692be5ec1b3770691dc36c458b"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a4ad3df692be5ec1b3770691dc36c458b">Isis::CnetEditorWidget::serialFilterWidget</a></div><div class="ttdeci">QWidget * serialFilterWidget()</div><div class="ttdoc">Returns the serial filter widget.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:794</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a518ec479b0d68cf000d09bfc58cf615c"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a518ec479b0d68cf000d09bfc58cf615c">Isis::CnetEditorWidget::measureTableModel</a></div><div class="ttdeci">AbstractTableModel * measureTableModel()</div><div class="ttdoc">Returns the measure table model.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:834</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a523a33856671a986fd33f3542ea241e2"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a523a33856671a986fd33f3542ea241e2">Isis::CnetEditorWidget::setMeasureTableSortLimit</a></div><div class="ttdeci">void setMeasureTableSortLimit(int limit)</div><div class="ttdoc">Sets the measure table sorting limit.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:1034</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a5e5f8f903e6ec3f1426a02a9401c7cc8"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a5e5f8f903e6ec3f1426a02a9401c7cc8">Isis::CnetEditorWidget::rebuildModels</a></div><div class="ttdeci">void rebuildModels()</div><div class="ttdoc">Rebuilds the models.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:568</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a5fd51656b711d2c02c3b7feb0e75dc79"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a5fd51656b711d2c02c3b7feb0e75dc79">Isis::CnetEditorWidget::toolBarActions</a></div><div class="ttdeci">QMap&lt; QString, QList&lt; QAction * &gt; &gt; toolBarActions()</div><div class="ttdoc">Returns the tool bar actions.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:874</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a61f77d19dfab13905accbb3f63822139"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a61f77d19dfab13905accbb3f63822139">Isis::CnetEditorWidget::control</a></div><div class="ttdeci">ControlNet * control()</div><div class="ttdoc">Returns the control network.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:854</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a631c10dc8bc8cfa197abb3b66b0032d0"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a631c10dc8bc8cfa197abb3b66b0032d0">Isis::CnetEditorWidget::connectionTreeView</a></div><div class="ttdeci">QWidget * connectionTreeView()</div><div class="ttdoc">Returns the connection tree view.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:774</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a644008f82747ede81485fa1b7690e928"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a644008f82747ede81485fa1b7690e928">Isis::CnetEditorWidget::CnetEditorWidget</a></div><div class="ttdeci">CnetEditorWidget(Control *control, QString pathForSettings)</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:74</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a750bb48ddcc33fcda594eeebd86539d4"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a750bb48ddcc33fcda594eeebd86539d4">Isis::CnetEditorWidget::pointTableModel</a></div><div class="ttdeci">AbstractTableModel * pointTableModel()</div><div class="ttdoc">Returns the point table model.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:844</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a7956b2a5be7856276ef82355bcc3fb45"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a7956b2a5be7856276ef82355bcc3fb45">Isis::CnetEditorWidget::filteredNetwork</a></div><div class="ttdeci">ControlNet * filteredNetwork() const</div><div class="ttdoc">Returns the filtered control net.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:884</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a79688ba958a8d90199f4fc2383169e44"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a79688ba958a8d90199f4fc2383169e44">Isis::CnetEditorWidget::connectionFilterWidget</a></div><div class="ttdeci">QWidget * connectionFilterWidget()</div><div class="ttdoc">Returns the connection filter widget.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:804</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a801541199bc0e1a60327fb8cc7f31979"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a801541199bc0e1a60327fb8cc7f31979">Isis::CnetEditorWidget::writeSettings</a></div><div class="ttdeci">void writeSettings()</div><div class="ttdoc">Writes the configuration settings used.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:712</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a81579be2af40806bd175042360fa1e89"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a81579be2af40806bd175042360fa1e89">Isis::CnetEditorWidget::setTablesFrozen</a></div><div class="ttdeci">void setTablesFrozen(bool)</div><div class="ttdoc">Sets if the tables are frozen.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:1112</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a8575e8af60ed09bb6d2c072a53e5136c"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a8575e8af60ed09bb6d2c072a53e5136c">Isis::CnetEditorWidget::readSettings</a></div><div class="ttdeci">void readSettings()</div><div class="ttdoc">Reads the working version settings stored at the settings path.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:671</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a9d52863baca3bf2f58f1e3d5c2a07d3e"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a9d52863baca3bf2f58f1e3d5c2a07d3e">Isis::CnetEditorWidget::coordinateDisplayTypeChanged</a></div><div class="ttdeci">void coordinateDisplayTypeChanged()</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_a9f4ae29629965da5cabc1048929213cb"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#a9f4ae29629965da5cabc1048929213cb">Isis::CnetEditorWidget::setXYZCoordinateDisplay</a></div><div class="ttdeci">void setXYZCoordinateDisplay()</div><div class="ttdoc">Set control point coordinate display type to X,Y,Z.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:1094</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_aa666bdd2aaa069f2645690431881870e"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#aa666bdd2aaa069f2645690431881870e">Isis::CnetEditorWidget::measureTableSortLimit</a></div><div class="ttdeci">int measureTableSortLimit() const</div><div class="ttdoc">Returns the sorting limit for the measure table.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:994</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_aac3178e926f05abe753c3985a9624e60"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#aac3178e926f05abe753c3985a9624e60">Isis::CnetEditorWidget::setPointTableSortingEnabled</a></div><div class="ttdeci">void setPointTableSortingEnabled(bool enabled)</div><div class="ttdoc">Sets if the point table can be sorted.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:1044</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_aba473cc7ce302eecbdfa7fd3bc4a635a"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#aba473cc7ce302eecbdfa7fd3bc4a635a">Isis::CnetEditorWidget::pointTableView</a></div><div class="ttdeci">TableView * pointTableView()</div><div class="ttdoc">Returns the point table view.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:814</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_ac00d7a61da82a6e20c8495ca03ba2f7a"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#ac00d7a61da82a6e20c8495ca03ba2f7a">Isis::CnetEditorWidget::menuActions</a></div><div class="ttdeci">QMap&lt; QAction *, QList&lt; QString &gt; &gt; menuActions()</div><div class="ttdoc">Returns the menu actions.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:864</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_ac5dfabf71f1fed559b5c0a500a84a9f7"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#ac5dfabf71f1fed559b5c0a500a84a9f7">Isis::CnetEditorWidget::measureTableView</a></div><div class="ttdeci">TableView * measureTableView()</div><div class="ttdoc">Returns the measure table view.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:824</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_acf575477dc7f87070c7f58b75579d4e7"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#acf575477dc7f87070c7f58b75579d4e7">Isis::CnetEditorWidget::cnetModified</a></div><div class="ttdeci">void cnetModified()</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_ad068d703fe36d8feab7b1168e464b725"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#ad068d703fe36d8feab7b1168e464b725">Isis::CnetEditorWidget::setMeasureTableSortingEnabled</a></div><div class="ttdeci">void setMeasureTableSortingEnabled(bool enabled)</div><div class="ttdoc">Sets if the measure table can be sorted.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:1024</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_ad06c6471f35d30610dec85a71f21b88f"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#ad06c6471f35d30610dec85a71f21b88f">Isis::CnetEditorWidget::serialTreeView</a></div><div class="ttdeci">QWidget * serialTreeView()</div><div class="ttdoc">Returns the serial tree view.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:764</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_ad28af2eefd0209bb032df0617b666879"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#ad28af2eefd0209bb032df0617b666879">Isis::CnetEditorWidget::pointTreeView</a></div><div class="ttdeci">QWidget * pointTreeView()</div><div class="ttdoc">Returns the point tree view.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:754</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_ad4ba05347c74e97a8fe8525290abbbdf"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#ad4ba05347c74e97a8fe8525290abbbdf">Isis::CnetEditorWidget::setLatLonRadiusCoordinateDisplay</a></div><div class="ttdeci">void setLatLonRadiusCoordinateDisplay()</div><div class="ttdoc">Set control point coordinate display type to latitude, longitude, radius.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:1076</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_ae4d9bd1ae6bf09347307738895df7516"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#ae4d9bd1ae6bf09347307738895df7516">Isis::CnetEditorWidget::measureTableSortingEnabled</a></div><div class="ttdeci">bool measureTableSortingEnabled() const</div><div class="ttdoc">Returns true if the measure table can be sorted.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:984</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_ae5d4fa0bf2e180d9ec67a510d267b012"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#ae5d4fa0bf2e180d9ec67a510d267b012">Isis::CnetEditorWidget::configSorting</a></div><div class="ttdeci">void configSorting()</div><div class="ttdoc">Configures the sorting dialog.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:1063</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_ae932b14ed1133b32ba985f08643ec54d"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#ae932b14ed1133b32ba985f08643ec54d">Isis::CnetEditorWidget::pointTableSortingEnabled</a></div><div class="ttdeci">bool pointTableSortingEnabled() const</div><div class="ttdoc">Returns true if the point table can be sorted.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:1004</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_aefd029e5ee5f216932726cedeabb59cf"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#aefd029e5ee5f216932726cedeabb59cf">Isis::CnetEditorWidget::pointFilterWidget</a></div><div class="ttdeci">QWidget * pointFilterWidget()</div><div class="ttdoc">Returns the point filter widget.</div><div class="ttdef"><b>Definition:</b> CnetEditorWidget.cpp:784</div></div>
+<div class="ttc" id="aclass_isis_1_1_cnet_editor_widget_html_af31fc097cc9022a92ab02ba296360cd0"><div class="ttname"><a href="class_isis_1_1_cnet_editor_widget.html#af31fc097cc9022a92ab02ba296360cd0">Isis::CnetEditorWidget::editControlPoint</a></div><div class="ttdeci">void editControlPoint(ControlPoint *controlPoint, QString serialNumber)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_html"><div class="ttname"><a href="class_isis_1_1_control.html">Isis::Control</a></div><div class="ttdoc">This represents an ISIS control net in a project-based GUI interface.</div><div class="ttdef"><b>Definition:</b> Control.h:65</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html"><div class="ttname"><a href="class_isis_1_1_control_net.html">Isis::ControlNet</a></div><div class="ttdoc">a control network</div><div class="ttdef"><b>Definition:</b> ControlNet.h:258</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_html"><div class="ttname"><a href="class_isis_1_1_control_point.html">Isis::ControlPoint</a></div><div class="ttdoc">A single control point.</div><div class="ttdef"><b>Definition:</b> ControlPoint.h:356</div></div>
+<div class="ttc" id="aclass_isis_1_1_image_image_tree_model_html"><div class="ttname"><a href="class_isis_1_1_image_image_tree_model.html">Isis::ImageImageTreeModel</a></div><div class="ttdoc">Tree model for images and images.</div><div class="ttdef"><b>Definition:</b> ImageImageTreeModel.h:48</div></div>
+<div class="ttc" id="aclass_isis_1_1_image_point_tree_model_html"><div class="ttname"><a href="class_isis_1_1_image_point_tree_model.html">Isis::ImagePointTreeModel</a></div><div class="ttdoc">Tree model for images and control points.</div><div class="ttdef"><b>Definition:</b> ImagePointTreeModel.h:48</div></div>
+<div class="ttc" id="aclass_isis_1_1_measure_table_model_html"><div class="ttname"><a href="class_isis_1_1_measure_table_model.html">Isis::MeasureTableModel</a></div><div class="ttdoc">Table model for control measures.</div><div class="ttdef"><b>Definition:</b> MeasureTableModel.h:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_point_measure_tree_model_html"><div class="ttname"><a href="class_isis_1_1_point_measure_tree_model.html">Isis::PointMeasureTreeModel</a></div><div class="ttdoc">Tree model for control points and control measures.</div><div class="ttdef"><b>Definition:</b> PointMeasureTreeModel.h:49</div></div>
+<div class="ttc" id="aclass_isis_1_1_point_table_model_html"><div class="ttname"><a href="class_isis_1_1_point_table_model.html">Isis::PointTableModel</a></div><div class="ttdoc">Table model for control points.</div><div class="ttdef"><b>Definition:</b> PointTableModel.h:48</div></div>
+<div class="ttc" id="aclass_isis_1_1_table_view_html"><div class="ttname"><a href="class_isis_1_1_table_view.html">Isis::TableView</a></div><div class="ttdef"><b>Definition:</b> TableView.h:43</div></div>
+<div class="ttc" id="aclass_isis_1_1_tree_view_html"><div class="ttname"><a href="class_isis_1_1_tree_view.html">Isis::TreeView</a></div><div class="ttdef"><b>Definition:</b> TreeView.h:31</div></div>
+<div class="ttc" id="aclass_q_action_html"><div class="ttname"><a href="class_q_action.html">QAction</a></div></div>
+<div class="ttc" id="aclass_q_list_html"><div class="ttname"><a href="class_q_list.html">QList</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> BoxcarCachingAlgorithm.h:13</div></div>
+<div class="ttc" id="aclass_q_map_html"><div class="ttname"><a href="class_q_map.html">QMap</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> CubeIoHandler.h:22</div></div>
+<div class="ttc" id="aclass_q_menu_html"><div class="ttname"><a href="class_q_menu.html">QMenu</a></div></div>
+<div class="ttc" id="aclass_q_tool_bar_html"><div class="ttname"><a href="class_q_tool_bar.html">QToolBar</a></div></div>
+<div class="ttc" id="aclass_q_widget_html"><div class="ttname"><a href="class_q_widget.html">QWidget</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_3f601bdaa340111a9df8f226ba246f6e.html">CnetEditorWidget</a></li><li class="navelem"><a class="el" href="_cnet_editor_widget_8h.html">CnetEditorWidget.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

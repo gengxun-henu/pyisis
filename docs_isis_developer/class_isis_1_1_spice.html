@@ -1,0 +1,2228 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::Spice Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_spice.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_spice-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::Spice Class Reference<div class="ingroups"><a class="el" href="group___spice_instruments_and_cameras.html">Spice, Instruments, and Cameras</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Obtain SPICE information for a spacecraft.  
+ <a href="class_isis_1_1_spice.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_spice_8h_source.html">Spice.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::Spice:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_spice__inherit__graph.png" border="0" usemap="#a_isis_1_1_spice_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_spice_inherit__map" id="a_isis_1_1_spice_inherit__map">
+<area shape="rect" title="Obtain SPICE information for a spacecraft." alt="" coords="9,5,220,407"/>
+<area shape="rect" href="class_isis_1_1_sensor.html" title="Class for computing sensor ground coordinates." alt="" coords="5,455,224,712"/>
+<area shape="rect" href="class_isis_1_1_camera.html" title=" " alt="" coords="5,760,224,1225"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::Spice:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_spice__coll__graph.png" border="0" usemap="#a_isis_1_1_spice_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_spice_coll__map" id="a_isis_1_1_spice_coll__map">
+<area shape="rect" title="Obtain SPICE information for a spacecraft." alt="" coords="243,697,454,1035"/>
+<area shape="rect" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string." alt="" coords="5,328,150,601"/>
+<area shape="rect" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude." alt="" coords="173,312,310,617"/>
+<area shape="rect" href="class_isis_1_1_angle.html" title="Defines an angle and provides unit conversions." alt="" coords="188,5,295,263"/>
+<area shape="rect" href="class_isis_1_1_target.html" title="This class is used to create and store valid Isis targets." alt="" coords="334,320,509,609"/>
+<area shape="rect" title=" " alt="" coords="534,424,629,505"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a2e034c6f0d4a0628f43e47e8bcc9fe2e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a2e034c6f0d4a0628f43e47e8bcc9fe2e">Spice</a> (<a class="el" href="class_isis_1_1_cube.html">Cube</a> &amp;cube)</td></tr>
+<tr class="memdesc:a2e034c6f0d4a0628f43e47e8bcc9fe2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a> object and loads SPICE kernels using information from the label object.  <a href="class_isis_1_1_spice.html#a2e034c6f0d4a0628f43e47e8bcc9fe2e">More...</a><br /></td></tr>
+<tr class="separator:a2e034c6f0d4a0628f43e47e8bcc9fe2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed754b26177f064690086daefb29f151"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#aed754b26177f064690086daefb29f151">Spice</a> (<a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab, <a class="el" href="_xml_to_json_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">nlohmann::json</a>)</td></tr>
+<tr class="memdesc:aed754b26177f064690086daefb29f151"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a> Object.  <a href="class_isis_1_1_spice.html#aed754b26177f064690086daefb29f151">More...</a><br /></td></tr>
+<tr class="separator:aed754b26177f064690086daefb29f151"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c71127f6b2233f4e233fc70d645915d"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a6c71127f6b2233f4e233fc70d645915d">~Spice</a> ()</td></tr>
+<tr class="memdesc:a6c71127f6b2233f4e233fc70d645915d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a> object.  <a href="class_isis_1_1_spice.html#a6c71127f6b2233f4e233fc70d645915d">More...</a><br /></td></tr>
+<tr class="separator:a6c71127f6b2233f4e233fc70d645915d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03c9f95754aa3316be17605a93ebfb3e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a03c9f95754aa3316be17605a93ebfb3e">setTime</a> (const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;<a class="el" href="class_isis_1_1_spice.html#aa29e0f5a538a4d3ebc6932245514dcb4">time</a>)</td></tr>
+<tr class="memdesc:a03c9f95754aa3316be17605a93ebfb3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the ephemeris time and reads the spacecraft and sun position from the kernels at that instant in time.  <a href="class_isis_1_1_spice.html#a03c9f95754aa3316be17605a93ebfb3e">More...</a><br /></td></tr>
+<tr class="separator:a03c9f95754aa3316be17605a93ebfb3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86463596fe7e85ce62a8931cbb2231f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a86463596fe7e85ce62a8931cbb2231f9">instrumentPosition</a> (double p[3]) const</td></tr>
+<tr class="memdesc:a86463596fe7e85ce62a8931cbb2231f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the spacecraft position in body-fixed frame km units.  <a href="class_isis_1_1_spice.html#a86463596fe7e85ce62a8931cbb2231f9">More...</a><br /></td></tr>
+<tr class="separator:a86463596fe7e85ce62a8931cbb2231f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a912c8ceffca6eea665e090320af01faa"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a912c8ceffca6eea665e090320af01faa">instrumentBodyFixedPosition</a> (double p[3]) const</td></tr>
+<tr class="memdesc:a912c8ceffca6eea665e090320af01faa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the spacecraft position in body-fixed frame km units.  <a href="class_isis_1_1_spice.html#a912c8ceffca6eea665e090320af01faa">More...</a><br /></td></tr>
+<tr class="separator:a912c8ceffca6eea665e090320af01faa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6ea81a91ac36e550e09666ffa6867b3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ac6ea81a91ac36e550e09666ffa6867b3">sunPosition</a> (double p[3]) const</td></tr>
+<tr class="memdesc:ac6ea81a91ac36e550e09666ffa6867b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills the input vector with sun position information, in either body-fixed or J2000 reference frame and km units.  <a href="class_isis_1_1_spice.html#ac6ea81a91ac36e550e09666ffa6867b3">More...</a><br /></td></tr>
+<tr class="separator:ac6ea81a91ac36e550e09666ffa6867b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5939e730d6025a5a6df3c5311108bc28"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a5939e730d6025a5a6df3c5311108bc28">targetCenterDistance</a> () const</td></tr>
+<tr class="memdesc:a5939e730d6025a5a6df3c5311108bc28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates and returns the distance from the spacecraft to the target center.  <a href="class_isis_1_1_spice.html#a5939e730d6025a5a6df3c5311108bc28">More...</a><br /></td></tr>
+<tr class="separator:a5939e730d6025a5a6df3c5311108bc28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a885899597963bd20c1b03feaf840c52c"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a885899597963bd20c1b03feaf840c52c">sunToBodyDist</a> () const</td></tr>
+<tr class="separator:a885899597963bd20c1b03feaf840c52c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d05fd998854f69854ecdbb28ce33bfa"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_longitude.html">Longitude</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a2d05fd998854f69854ecdbb28ce33bfa">solarLongitude</a> ()</td></tr>
+<tr class="memdesc:a2d05fd998854f69854ecdbb28ce33bfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the solar longitude.  <a href="class_isis_1_1_spice.html#a2d05fd998854f69854ecdbb28ce33bfa">More...</a><br /></td></tr>
+<tr class="separator:a2d05fd998854f69854ecdbb28ce33bfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a332aa8c446dd4a67d321337c8ec95cac"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a332aa8c446dd4a67d321337c8ec95cac">instrumentBodyFixedVelocity</a> (double v[3]) const</td></tr>
+<tr class="memdesc:a332aa8c446dd4a67d321337c8ec95cac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the spacecraft velocity in body-fixed frame km/sec units.  <a href="class_isis_1_1_spice.html#a332aa8c446dd4a67d321337c8ec95cac">More...</a><br /></td></tr>
+<tr class="separator:a332aa8c446dd4a67d321337c8ec95cac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa29e0f5a538a4d3ebc6932245514dcb4"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#aa29e0f5a538a4d3ebc6932245514dcb4">time</a> () const</td></tr>
+<tr class="memdesc:aa29e0f5a538a4d3ebc6932245514dcb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ephemeris time in seconds which was used to obtain the spacecraft and sun positions.  <a href="class_isis_1_1_spice.html#aa29e0f5a538a4d3ebc6932245514dcb4">More...</a><br /></td></tr>
+<tr class="separator:aa29e0f5a538a4d3ebc6932245514dcb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d3f485541487d4e407b0a289cfdf2a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a7d3f485541487d4e407b0a289cfdf2a5">radii</a> (<a class="el" href="class_isis_1_1_distance.html">Distance</a> r[3]) const</td></tr>
+<tr class="memdesc:a7d3f485541487d4e407b0a289cfdf2a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the radii of the body in km.  <a href="class_isis_1_1_spice.html#a7d3f485541487d4e407b0a289cfdf2a5">More...</a><br /></td></tr>
+<tr class="separator:a7d3f485541487d4e407b0a289cfdf2a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5de3ec960830a28a88a682115fa0a750"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a5de3ec960830a28a88a682115fa0a750">createCache</a> (<a class="el" href="class_isis_1_1i_time.html">iTime</a> startTime, <a class="el" href="class_isis_1_1i_time.html">iTime</a> endTime, const int size, double tol)</td></tr>
+<tr class="memdesc:a5de3ec960830a28a88a682115fa0a750"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method creates an internal cache of spacecraft and sun positions over a specified time range.  <a href="class_isis_1_1_spice.html#a5de3ec960830a28a88a682115fa0a750">More...</a><br /></td></tr>
+<tr class="separator:a5de3ec960830a28a88a682115fa0a750"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3ceb51b22d2b7798ed9675fb7322e78"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ad3ceb51b22d2b7798ed9675fb7322e78">cacheStartTime</a> () const</td></tr>
+<tr class="memdesc:ad3ceb51b22d2b7798ed9675fb7322e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor method for the cache start time.  <a href="class_isis_1_1_spice.html#ad3ceb51b22d2b7798ed9675fb7322e78">More...</a><br /></td></tr>
+<tr class="separator:ad3ceb51b22d2b7798ed9675fb7322e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a625ee8a592c16c7f92f2fa95d3b9e1c6"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a625ee8a592c16c7f92f2fa95d3b9e1c6">cacheEndTime</a> () const</td></tr>
+<tr class="memdesc:a625ee8a592c16c7f92f2fa95d3b9e1c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor method for the cache end time.  <a href="class_isis_1_1_spice.html#a625ee8a592c16c7f92f2fa95d3b9e1c6">More...</a><br /></td></tr>
+<tr class="separator:a625ee8a592c16c7f92f2fa95d3b9e1c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5ddc30d236cccf6faf7cfc7996f7c73"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#af5ddc30d236cccf6faf7cfc7996f7c73">subSpacecraftPoint</a> (double &amp;lat, double &amp;lon)</td></tr>
+<tr class="memdesc:af5ddc30d236cccf6faf7cfc7996f7c73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the sub-spacecraft latitude/longitude in universal coordinates (0-360 positive east, ocentric)  <a href="class_isis_1_1_spice.html#af5ddc30d236cccf6faf7cfc7996f7c73">More...</a><br /></td></tr>
+<tr class="separator:af5ddc30d236cccf6faf7cfc7996f7c73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5990d7408d8c8465fac2df8d2cfbb258"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a5990d7408d8c8465fac2df8d2cfbb258">subSolarPoint</a> (double &amp;lat, double &amp;lon)</td></tr>
+<tr class="memdesc:a5990d7408d8c8465fac2df8d2cfbb258"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the sub-solar latitude/longitude in universal coordinates (0-360 positive east, ocentric)  <a href="class_isis_1_1_spice.html#a5990d7408d8c8465fac2df8d2cfbb258">More...</a><br /></td></tr>
+<tr class="separator:a5990d7408d8c8465fac2df8d2cfbb258"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94627376dab709513c54e22689f71ff9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_target.html">Target</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a94627376dab709513c54e22689f71ff9">target</a> () const</td></tr>
+<tr class="memdesc:a94627376dab709513c54e22689f71ff9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the target object.  <a href="class_isis_1_1_spice.html#a94627376dab709513c54e22689f71ff9">More...</a><br /></td></tr>
+<tr class="separator:a94627376dab709513c54e22689f71ff9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7bde6a47af90049984f1d3c1d54698a"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ac7bde6a47af90049984f1d3c1d54698a">targetName</a> () const</td></tr>
+<tr class="memdesc:ac7bde6a47af90049984f1d3c1d54698a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the QString name of the target.  <a href="class_isis_1_1_spice.html#ac7bde6a47af90049984f1d3c1d54698a">More...</a><br /></td></tr>
+<tr class="separator:ac7bde6a47af90049984f1d3c1d54698a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09373ee0cb0927e85dfece7637b177e8"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a09373ee0cb0927e85dfece7637b177e8">getClockTime</a> (QString clockValue, int sclkCode=-1, bool clockTicks=false)</td></tr>
+<tr class="memdesc:a09373ee0cb0927e85dfece7637b177e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This converts the spacecraft clock ticks value (clockValue) to an <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a>.  <a href="class_isis_1_1_spice.html#a09373ee0cb0927e85dfece7637b177e8">More...</a><br /></td></tr>
+<tr class="separator:a09373ee0cb0927e85dfece7637b177e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6918abb58def3bac419f51a3b19c702"><td class="memItemLeft" align="right" valign="top">SpiceDouble&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ae6918abb58def3bac419f51a3b19c702">getDouble</a> (const QString &amp;key, int index=0)</td></tr>
+<tr class="memdesc:ae6918abb58def3bac419f51a3b19c702"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns a value from the NAIF text pool.  <a href="class_isis_1_1_spice.html#ae6918abb58def3bac419f51a3b19c702">More...</a><br /></td></tr>
+<tr class="separator:ae6918abb58def3bac419f51a3b19c702"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5805875ed2e77b810fdd1f7512f24a4"><td class="memItemLeft" align="right" valign="top">SpiceInt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#af5805875ed2e77b810fdd1f7512f24a4">getInteger</a> (const QString &amp;key, int index=0)</td></tr>
+<tr class="memdesc:af5805875ed2e77b810fdd1f7512f24a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns a value from the NAIF text pool.  <a href="class_isis_1_1_spice.html#af5805875ed2e77b810fdd1f7512f24a4">More...</a><br /></td></tr>
+<tr class="separator:af5805875ed2e77b810fdd1f7512f24a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08fee3f52ca8a77f675d200d5909bd18"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a08fee3f52ca8a77f675d200d5909bd18">getString</a> (const QString &amp;key, int index=0)</td></tr>
+<tr class="memdesc:a08fee3f52ca8a77f675d200d5909bd18"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns a value from the NAIF text pool.  <a href="class_isis_1_1_spice.html#a08fee3f52ca8a77f675d200d5909bd18">More...</a><br /></td></tr>
+<tr class="separator:a08fee3f52ca8a77f675d200d5909bd18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae36732bda8698999d9a4082e8d39228f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_spice_position.html">SpicePosition</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ae36732bda8698999d9a4082e8d39228f">sunPosition</a> () const</td></tr>
+<tr class="memdesc:ae36732bda8698999d9a4082e8d39228f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor method for the sun position.  <a href="class_isis_1_1_spice.html#ae36732bda8698999d9a4082e8d39228f">More...</a><br /></td></tr>
+<tr class="separator:ae36732bda8698999d9a4082e8d39228f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac31a3341915b4572cd640a64513372a1"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_spice_position.html">SpicePosition</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ac31a3341915b4572cd640a64513372a1">instrumentPosition</a> () const</td></tr>
+<tr class="memdesc:ac31a3341915b4572cd640a64513372a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor method for the instrument position.  <a href="class_isis_1_1_spice.html#ac31a3341915b4572cd640a64513372a1">More...</a><br /></td></tr>
+<tr class="separator:ac31a3341915b4572cd640a64513372a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a592b641ffe8f80cdb4d7280b4845ef87"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_spice_rotation.html">SpiceRotation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a592b641ffe8f80cdb4d7280b4845ef87">bodyRotation</a> () const</td></tr>
+<tr class="memdesc:a592b641ffe8f80cdb4d7280b4845ef87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor method for the body rotation.  <a href="class_isis_1_1_spice.html#a592b641ffe8f80cdb4d7280b4845ef87">More...</a><br /></td></tr>
+<tr class="separator:a592b641ffe8f80cdb4d7280b4845ef87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab08a19d8145a49682ec30f5d7120d145"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_isis_1_1_spice_rotation.html">SpiceRotation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ab08a19d8145a49682ec30f5d7120d145">instrumentRotation</a> () const</td></tr>
+<tr class="memdesc:ab08a19d8145a49682ec30f5d7120d145"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor method for the instrument rotation.  <a href="class_isis_1_1_spice.html#ab08a19d8145a49682ec30f5d7120d145">More...</a><br /></td></tr>
+<tr class="separator:ab08a19d8145a49682ec30f5d7120d145"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a821ed5b533dc3fcacfc8da4774de70ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a821ed5b533dc3fcacfc8da4774de70ec">isUsingAle</a> ()</td></tr>
+<tr class="separator:a821ed5b533dc3fcacfc8da4774de70ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadb2485486dd0ea7aeb4e043b5e1cb1c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#aadb2485486dd0ea7aeb4e043b5e1cb1c">hasKernels</a> (<a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;lab)</td></tr>
+<tr class="memdesc:aadb2485486dd0ea7aeb4e043b5e1cb1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the kernel group has kernel files.  <a href="class_isis_1_1_spice.html#aadb2485486dd0ea7aeb4e043b5e1cb1c">More...</a><br /></td></tr>
+<tr class="separator:aadb2485486dd0ea7aeb4e043b5e1cb1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9fd1a896a1fba1f7ce85afff8cfa029"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ad9fd1a896a1fba1f7ce85afff8cfa029">isTimeSet</a> ()</td></tr>
+<tr class="memdesc:ad9fd1a896a1fba1f7ce85afff8cfa029"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if time has been initialized.  <a href="class_isis_1_1_spice.html#ad9fd1a896a1fba1f7ce85afff8cfa029">More...</a><br /></td></tr>
+<tr class="separator:ad9fd1a896a1fba1f7ce85afff8cfa029"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a855813c0d663ced00e85147aab03296d"><td class="memItemLeft" align="right" valign="top">SpiceInt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a855813c0d663ced00e85147aab03296d">naifBodyCode</a> () const</td></tr>
+<tr class="memdesc:a855813c0d663ced00e85147aab03296d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns the NAIF body code of the target indicated in the labels.  <a href="class_isis_1_1_spice.html#a855813c0d663ced00e85147aab03296d">More...</a><br /></td></tr>
+<tr class="separator:a855813c0d663ced00e85147aab03296d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ce1d16de72f106b821f2f4e77738b9c"><td class="memItemLeft" align="right" valign="top">SpiceInt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a8ce1d16de72f106b821f2f4e77738b9c">naifSpkCode</a> () const</td></tr>
+<tr class="memdesc:a8ce1d16de72f106b821f2f4e77738b9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns the NAIF SPK code to use when reading from SPK kernels.  <a href="class_isis_1_1_spice.html#a8ce1d16de72f106b821f2f4e77738b9c">More...</a><br /></td></tr>
+<tr class="separator:a8ce1d16de72f106b821f2f4e77738b9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a945a0cb52ad617be4fa2fc9b95d43f23"><td class="memItemLeft" align="right" valign="top">SpiceInt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a945a0cb52ad617be4fa2fc9b95d43f23">naifCkCode</a> () const</td></tr>
+<tr class="memdesc:a945a0cb52ad617be4fa2fc9b95d43f23"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns the NAIF CK code to use when reading from CK kernels.  <a href="class_isis_1_1_spice.html#a945a0cb52ad617be4fa2fc9b95d43f23">More...</a><br /></td></tr>
+<tr class="separator:a945a0cb52ad617be4fa2fc9b95d43f23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac450d453ce0e6837124d69b84a8c6b9b"><td class="memItemLeft" align="right" valign="top">SpiceInt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ac450d453ce0e6837124d69b84a8c6b9b">naifIkCode</a> () const</td></tr>
+<tr class="memdesc:ac450d453ce0e6837124d69b84a8c6b9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns the NAIF IK code to use when reading from instrument kernels.  <a href="class_isis_1_1_spice.html#ac450d453ce0e6837124d69b84a8c6b9b">More...</a><br /></td></tr>
+<tr class="separator:ac450d453ce0e6837124d69b84a8c6b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac526dae921a54ac890ddff41f26e3717"><td class="memItemLeft" align="right" valign="top">SpiceInt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ac526dae921a54ac890ddff41f26e3717">naifSclkCode</a> () const</td></tr>
+<tr class="memdesc:ac526dae921a54ac890ddff41f26e3717"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns the NAIF SCLK code to use when reading from instrument kernels.  <a href="class_isis_1_1_spice.html#ac526dae921a54ac890ddff41f26e3717">More...</a><br /></td></tr>
+<tr class="separator:ac526dae921a54ac890ddff41f26e3717"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbfbd4f345c2096edf98e6016c721ca5"><td class="memItemLeft" align="right" valign="top">SpiceInt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#acbfbd4f345c2096edf98e6016c721ca5">naifBodyFrameCode</a> () const</td></tr>
+<tr class="memdesc:acbfbd4f345c2096edf98e6016c721ca5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns the NAIF body frame code.  <a href="class_isis_1_1_spice.html#acbfbd4f345c2096edf98e6016c721ca5">More...</a><br /></td></tr>
+<tr class="separator:acbfbd4f345c2096edf98e6016c721ca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a918ebd43c1341553742120023bf268ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a918ebd43c1341553742120023bf268ae">getStoredNaifKeywords</a> () const</td></tr>
+<tr class="memdesc:a918ebd43c1341553742120023bf268ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">This returns the <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> that stores all of the requested Naif data and can be a replacement for furnishing text kernels.  <a href="class_isis_1_1_spice.html#a918ebd43c1341553742120023bf268ae">More...</a><br /></td></tr>
+<tr class="separator:a918ebd43c1341553742120023bf268ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb6221ad55c4bfeb8f99198addfa2df8"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#afb6221ad55c4bfeb8f99198addfa2df8">resolution</a> ()</td></tr>
+<tr class="memdesc:afb6221ad55c4bfeb8f99198addfa2df8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual method that returns the pixel resolution of the sensor in meters/pix.  <a href="class_isis_1_1_spice.html#afb6221ad55c4bfeb8f99198addfa2df8">More...</a><br /></td></tr>
+<tr class="separator:afb6221ad55c4bfeb8f99198addfa2df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:a7ef5f0ab5680b4ce8910a4126687e9d5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">SpiceValueType</a> { <a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5adfcd8aa64d9089453860bf4e63e6cb93">SpiceDoubleType</a>
+, <a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5ac45401b6bdafac1b81b5ba4a7a421e5e">SpiceStringType</a>
+, <a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5aa725d4a3465758bbeb1f0b1ea97b122e">SpiceIntType</a>
+, <a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5a8020d4665a73b768d419f72fc6b830a1">SpiceByteCodeType</a>
+ }</td></tr>
+<tr class="memdesc:a7ef5f0ab5680b4ce8910a4126687e9d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">NAIF value primitive type.  <a href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">More...</a><br /></td></tr>
+<tr class="separator:a7ef5f0ab5680b4ce8910a4126687e9d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a14f4291cd993d7ab2689dc7ee0f2a515"><td class="memItemLeft" align="right" valign="top">QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a14f4291cd993d7ab2689dc7ee0f2a515">readValue</a> (QString key, <a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">SpiceValueType</a> type, int index=0)</td></tr>
+<tr class="memdesc:a14f4291cd993d7ab2689dc7ee0f2a515"><td class="mdescLeft">&#160;</td><td class="mdescRight">This should be used for reading ALL text naif kernel values.  <a href="class_isis_1_1_spice.html#a14f4291cd993d7ab2689dc7ee0f2a515">More...</a><br /></td></tr>
+<tr class="separator:a14f4291cd993d7ab2689dc7ee0f2a515"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadb769dd674a3c871d915d5d4a3efe68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#aadb769dd674a3c871d915d5d4a3efe68">storeResult</a> (QString name, <a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">SpiceValueType</a> type, QVariant value)</td></tr>
+<tr class="separator:aadb769dd674a3c871d915d5d4a3efe68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0bae1697c456c7c3fe86f8e2de5c307"><td class="memItemLeft" align="right" valign="top">QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ae0bae1697c456c7c3fe86f8e2de5c307">getStoredResult</a> (QString name, <a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">SpiceValueType</a> type)</td></tr>
+<tr class="separator:ae0bae1697c456c7c3fe86f8e2de5c307"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0dfe9458789d9ef0ccd4ae1ac7623ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ab0dfe9458789d9ef0ccd4ae1ac7623ff">storeValue</a> (QString key, int index, <a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">SpiceValueType</a> type, QVariant value)</td></tr>
+<tr class="separator:ab0dfe9458789d9ef0ccd4ae1ac7623ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a164c0572b914f415bde10909e9d5d990"><td class="memItemLeft" align="right" valign="top">QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a164c0572b914f415bde10909e9d5d990">readStoredValue</a> (QString key, <a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">SpiceValueType</a> type, int index)</td></tr>
+<tr class="separator:a164c0572b914f415bde10909e9d5d990"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4566eff137aaadd65210250838f6ba15"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a4566eff137aaadd65210250838f6ba15">computeSolarLongitude</a> (<a class="el" href="class_isis_1_1i_time.html">iTime</a> et)</td></tr>
+<tr class="memdesc:a4566eff137aaadd65210250838f6ba15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the solar longitude for the given ephemeris time.  <a href="class_isis_1_1_spice.html#a4566eff137aaadd65210250838f6ba15">More...</a><br /></td></tr>
+<tr class="separator:a4566eff137aaadd65210250838f6ba15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:acf71400239ea30e67c9ea81b16a2dda1"><td class="memItemLeft" align="right" valign="top">SpiceDouble&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#acf71400239ea30e67c9ea81b16a2dda1">m_uB</a> [3]</td></tr>
+<tr class="memdesc:acf71400239ea30e67c9ea81b16a2dda1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This contains the sun position (u) in the bodyfixed reference frame (B).  <a href="class_isis_1_1_spice.html#acf71400239ea30e67c9ea81b16a2dda1">More...</a><br /></td></tr>
+<tr class="separator:acf71400239ea30e67c9ea81b16a2dda1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a083adc2f18b75712cf113e5bd699b8b9"><td class="memItemLeft" align="right" valign="top">SpiceDouble&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a083adc2f18b75712cf113e5bd699b8b9">m_BJ</a> [3][3]</td></tr>
+<tr class="memdesc:a083adc2f18b75712cf113e5bd699b8b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This contains the transformation matrix from J2000 (J) to Body fixed (B).  <a href="class_isis_1_1_spice.html#a083adc2f18b75712cf113e5bd699b8b9">More...</a><br /></td></tr>
+<tr class="separator:a083adc2f18b75712cf113e5bd699b8b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a130a339cb5dbbf75235a3a6b4d615e7b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_target.html">Target</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a130a339cb5dbbf75235a3a6b4d615e7b">m_target</a></td></tr>
+<tr class="memdesc:a130a339cb5dbbf75235a3a6b4d615e7b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_isis_1_1_target.html" title="This class is used to create and store valid Isis targets.">Target</a> of the observation.  <a href="class_isis_1_1_spice.html#a130a339cb5dbbf75235a3a6b4d615e7b">More...</a><br /></td></tr>
+<tr class="separator:a130a339cb5dbbf75235a3a6b4d615e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9c1f00606e8dc55da927dcfb04a047f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1i_time.html">iTime</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#ad9c1f00606e8dc55da927dcfb04a047f">m_et</a></td></tr>
+<tr class="memdesc:ad9c1f00606e8dc55da927dcfb04a047f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ephemeris time (read NAIF documentation for a detailed description)  <a href="class_isis_1_1_spice.html#ad9c1f00606e8dc55da927dcfb04a047f">More...</a><br /></td></tr>
+<tr class="separator:ad9c1f00606e8dc55da927dcfb04a047f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b9f3fec795dbb7189765b9f45eb4906"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_spice.html#a1b9f3fec795dbb7189765b9f45eb4906">m_solarLongitude</a></td></tr>
+<tr class="memdesc:a1b9f3fec795dbb7189765b9f45eb4906"><td class="mdescLeft">&#160;</td><td class="mdescRight">Body rotation solar longitude value.  <a href="class_isis_1_1_spice.html#a1b9f3fec795dbb7189765b9f45eb4906">More...</a><br /></td></tr>
+<tr class="separator:a1b9f3fec795dbb7189765b9f45eb4906"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Obtain SPICE information for a spacecraft. </p>
+<p>This class initializes standard NAIF SPICE kernels in order to allow queries of a spacecraft's position and attitude at a given time. It also allows for access to the position of the sun and transformation matrices from J2000 to a body-fixed reference frame for a given target (e.g., Mars). The constructor for this class expects a PVL object with the following minimum information: </p><div class="fragment"><div class="line">Group = Instrument</div>
+<div class="line">  TargetName = Mars</div>
+<div class="line">EndGroup</div>
+<div class="line">Group = Kernels</div>
+<div class="line">  NaifFrameCode       = -94030</div>
+<div class="line">  LeapSecond          = naif0007.tls</div>
+<div class="line">  TargetAttitudeShape = pck00006.tpc</div>
+<div class="line">  TargetPosition      = de405.bsp</div>
+<div class="line">  InstrumentPointing  = (mgs_sc_ab1.bc,</div>
+<div class="line">  Instrument          = moc13.ti</div>
+<div class="line">  SpacecraftClock     = MGS_SCLKSCET.00045.tsc</div>
+<div class="line">  InstrumentPosition  = mgs_ab1.bsp</div>
+<div class="line">  InstrumentAddendum  = mocAddendum.ti</div>
+<div class="line">EndGroup</div>
+</div><!-- fragment --><p> This group is typically found in the image labels after it has been run through the program "spiceinit" It is recommended you read NAIF documentation to obtain a better understanding about the various types of SPICE kernels. The NAIF toolkit accesses information from kernels on a last-in-first-out (LIFO) basis. This means that the creation of a second object can cause problems with the first object. To alleviate this problem we have supplied the CreateCache method which should be invoked immediately after the object is constructed. This caches information (spacecraft position, pointing, etc) internally in the object and unloads all NAIF kernels.</p>
+<dl class="section author"><dt>Author</dt><dd>2003-03-13 Jeff Anderson </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a7ef5f0ab5680b4ce8910a4126687e9d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ef5f0ab5680b4ce8910a4126687e9d5">&#9670;&nbsp;</a></span>SpiceValueType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">Isis::Spice::SpiceValueType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>NAIF value primitive type. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7ef5f0ab5680b4ce8910a4126687e9d5adfcd8aa64d9089453860bf4e63e6cb93"></a>SpiceDoubleType&#160;</td><td class="fielddoc"><p>SpiceDouble type. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7ef5f0ab5680b4ce8910a4126687e9d5ac45401b6bdafac1b81b5ba4a7a421e5e"></a>SpiceStringType&#160;</td><td class="fielddoc"><p>SpiceString type. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7ef5f0ab5680b4ce8910a4126687e9d5aa725d4a3465758bbeb1f0b1ea97b122e"></a>SpiceIntType&#160;</td><td class="fielddoc"><p>SpiceInt type. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7ef5f0ab5680b4ce8910a4126687e9d5a8020d4665a73b768d419f72fc6b830a1"></a>SpiceByteCodeType&#160;</td><td class="fielddoc"><p>SpiceByteCode type. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a2e034c6f0d4a0628f43e47e8bcc9fe2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e034c6f0d4a0628f43e47e8bcc9fe2e">&#9670;&nbsp;</a></span>Spice() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Spice::Spice </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> &amp;&#160;</td>
+          <td class="paramname"><em>cube</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a> object and loads SPICE kernels using information from the label object. </p>
+<p>The constructor expects an Instrument and <a class="el" href="class_isis_1_1_kernels.html" title="Determine SPICE kernels defined in an ISIS file.">Kernels</a> group to be in the labels.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lab</td><td>Label containing Instrument and <a class="el" href="class_isis_1_1_kernels.html" title="Determine SPICE kernels defined in an ISIS file.">Kernels</a> groups. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">Isis::PvlObject::findGroup()</a>, <a class="el" href="class_isis_1_1_cube.html#a852a4360a2cfe4ab5f76ccddc9b01fae">Isis::Cube::hasBlob()</a>, and <a class="el" href="class_isis_1_1_cube.html#aed7cb063ce8a14d742b468eec69c21b7">Isis::Cube::label()</a>.</p>
+
+</div>
+</div>
+<a id="aed754b26177f064690086daefb29f151"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed754b26177f064690086daefb29f151">&#9670;&nbsp;</a></span>Spice() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Spice::Spice </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;&#160;</td>
+          <td class="paramname"><em>lab</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="_xml_to_json_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d">nlohmann::json</a>&#160;</td>
+          <td class="paramname"><em>isd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a> Object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lab</td><td><a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> Lavel </td></tr>
+    <tr><td class="paramname">isd</td><td>ALE Json ISD </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6c71127f6b2233f4e233fc70d645915d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c71127f6b2233f4e233fc70d645915d">&#9670;&nbsp;</a></span>~Spice()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::Spice::~Spice </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destroys the <a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a> object. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a592b641ffe8f80cdb4d7280b4845ef87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a592b641ffe8f80cdb4d7280b4845ef87">&#9670;&nbsp;</a></span>bodyRotation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_spice_rotation.html">SpiceRotation</a> * Isis::Spice::bodyRotation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accessor method for the body rotation. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a></b> Body rotation for the image. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Steven Lambright </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_c_s_m_camera.html#acc9cbcd570c5654b24765fcfbc371e53">Isis::CSMCamera</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d88bec371a50983975212fdda989255">Isis::Cube::attachSpiceFromIsd()</a>, <a class="el" href="class_isis_1_1_sensor.html#ade260091f00408d26f1b9fd472181f3a">Isis::Sensor::EmissionAngle()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a35422f54f9b7760ce06aebed41ab6e30">Isis::RadarGroundMap::GetdXYdPosition()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a028a1282829eaf7e436964666f0f9f37">Isis::RadarGroundMap::GetXY()</a>, <a class="el" href="class_isis_1_1_sensor.html#aa0cceaac87f1aca51ca99221b7f50d3c">Isis::Sensor::lookDirectionJ2000()</a>, <a class="el" href="class_isis_1_1_mini_r_f.html#abfbbad9e21bfe48dade11108298f9a80">Isis::MiniRF::MiniRF()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a33b95960691f7858717a48e9c6f97d55">Isis::RadarGroundMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a50f20e842f09ad9370d200b598e9f8bd">Isis::RadarGroundMap::SetGround()</a>, <a class="el" href="class_isis_1_1_sensor.html#a92656fb1524de2e86367c1d84bd3d151">Isis::Sensor::SetGround()</a>, <a class="el" href="class_isis_1_1_sensor.html#ae3f0c97b9a7e1c90c6da6d0351fbdd1d">Isis::Sensor::SetLookDirection()</a>, and <a class="el" href="class_isis_1_1_sensor.html#a1bb289fabb0b25b71837ad6affbf3627">Isis::Sensor::SetUniversalGround()</a>.</p>
+
+</div>
+</div>
+<a id="a625ee8a592c16c7f92f2fa95d3b9e1c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a625ee8a592c16c7f92f2fa95d3b9e1c6">&#9670;&nbsp;</a></span>cacheEndTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1i_time.html">iTime</a> Isis::Spice::cacheEndTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accessor method for the cache end time. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a></b> End time for the image. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Steven Lambright </dd></dl>
+
+</div>
+</div>
+<a id="ad3ceb51b22d2b7798ed9675fb7322e78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3ceb51b22d2b7798ed9675fb7322e78">&#9670;&nbsp;</a></span>cacheStartTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1i_time.html">iTime</a> Isis::Spice::cacheStartTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accessor method for the cache start time. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a></b> Start time for the image. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Steven Lambright </dd></dl>
+
+</div>
+</div>
+<a id="a4566eff137aaadd65210250838f6ba15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4566eff137aaadd65210250838f6ba15">&#9670;&nbsp;</a></span>computeSolarLongitude()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::computeSolarLongitude </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td>
+          <td class="paramname"><em>et</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the solar longitude for the given ephemeris time. </p>
+<p>If the target is sky, the longitude is set to -999.0.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">et</td><td>Ephemeris time </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_c_s_m_camera.html#a03c7c50e01bd836976dadf40cc5b80f4">Isis::CSMCamera</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1i_time.html#a4c6a5003750470e995c04af9c8b60927">Isis::iTime::Et()</a>, and <a class="el" href="class_isis_1_1_longitude.html#a896b32e21f37e69dd074cb1229555873">Isis::Longitude::force360Domain()</a>.</p>
+
+</div>
+</div>
+<a id="a5de3ec960830a28a88a682115fa0a750"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5de3ec960830a28a88a682115fa0a750">&#9670;&nbsp;</a></span>createCache()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::createCache </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td>
+          <td class="paramname"><em>startTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1i_time.html">iTime</a>&#160;</td>
+          <td class="paramname"><em>endTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tol</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method creates an internal cache of spacecraft and sun positions over a specified time range. </p>
+<p>The SPICE kernels are then immediately unloaded. This allows multiple instances of the <a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a> object to be created as the NAIF toolkit can clash if multiple sets of SPICE kernels are loaded. Note that the cache size is specified as an argument. Therefore, times requested via <a class="el" href="class_isis_1_1_spice.html#a03c9f95754aa3316be17605a93ebfb3e" title="Sets the ephemeris time and reads the spacecraft and sun position from the kernels at that instant in...">setTime()</a> which are not directly loaded in the cache will be interpolated. If the instrument position is not cached and cacheSize is greater than 3, the tolerance is passed to the <a class="el" href="class_isis_1_1_spice_position.html" title="Obtain SPICE position information for a body.">SpicePosition</a> Memcache2HermiteCache() method.</p>
+<p><b>Note:</b> Before this method is called, the private variables m_cacheSize, m_startTime and m_endTime must be set. This is done in the <a class="el" href="class_isis_1_1_camera.html">Camera</a> classes using the methods SetCacheSize() and SetStartEndEphemerisTime().</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">startTime</td><td>Starting ephemeris time to cache </td></tr>
+    <tr><td class="paramname">endTime</td><td>Ending ephemeris time to cache </td></tr>
+    <tr><td class="paramname">size</td><td>Size of the cache. </td></tr>
+    <tr><td class="paramname">tol</td><td>Tolerance.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">Isis::IException::Programmer</a></td><td>- "Argument cacheSize must be greater
+       than zero" </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">Isis::IException::Programmer</a></td><td>- "Argument startTime must be less than
+       or equal to endTime" </td></tr>
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b" title="A type of error that could only have occurred due to a mistake on the user&#39;s part (e....">Isis::IException::User</a></td><td>- "This instrument does not support time
+            padding" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1i_time.html#a4c6a5003750470e995c04af9c8b60927">Isis::iTime::Et()</a>, and <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_crism_camera.html#a140a2397a1035544a59f584df5228ea6">Isis::CrismCamera::CrismCamera()</a>, <a class="el" href="class_isis_1_1_camera.html#aa64212bc046ea5976587846c1e914de8">Isis::Camera::LoadCache()</a>, and <a class="el" href="class_isis_1_1_mini_r_f.html#abfbbad9e21bfe48dade11108298f9a80">Isis::MiniRF::MiniRF()</a>.</p>
+
+</div>
+</div>
+<a id="a09373ee0cb0927e85dfece7637b177e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09373ee0cb0927e85dfece7637b177e8">&#9670;&nbsp;</a></span>getClockTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1i_time.html">iTime</a> Isis::Spice::getClockTime </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>clockValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>sclkCode</em> = <code>-1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>clockTicks</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This converts the spacecraft clock ticks value (clockValue) to an <a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a>. </p>
+<p>If the clock ticks value is provided directly, rather than the spacecraft clock string, set clockTicks=true.</p>
+<p>Use this when possible because naif calls (such as scs2e_c) cannot be called when not using naif. </p>
+
+<p class="reference">References <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="group___mars_reconnaissance_orbiter.html#gaa2961a0d1b22ff4c863afb9186ff0338">Isis::Chandrayaan1M3Camera::Chandrayaan1M3Camera()</a>, <a class="el" href="class_isis_1_1_c_t_x_camera.html#a57b1a9eb8d72daab7e1d22000ce818a0">Isis::CTXCamera::CTXCamera()</a>, <a class="el" href="class_isis_1_1_dawn_fc_camera.html#a681968ed3697a89997d9ce3742f56fcc">Isis::DawnFcCamera::DawnFcCamera()</a>, <a class="el" href="class_isis_1_1_hayabusa_amica_camera.html#a04767056208d853ece3b9a1ad5190994">Isis::HayabusaAmicaCamera::HayabusaAmicaCamera()</a>, <a class="el" href="class_isis_1_1_hayabusa_nirs_camera.html#a074fba3928bebaeede27e39667998111">Isis::HayabusaNirsCamera::HayabusaNirsCamera()</a>, <a class="el" href="class_isis_1_1_hirise_camera.html#a034da3530dce257d36fa71c34ee6605e">Isis::HiriseCamera::HiriseCamera()</a>, <a class="el" href="class_isis_1_1_hyb2_onc_camera.html#aecaf7a055b24f62b49f47b9a55dfc0fd">Isis::Hyb2OncCamera::Hyb2OncCamera()</a>, <a class="el" href="class_isis_1_1_vims_ground_map.html#acba916653b591fe5acee66bb46c53cd9">Isis::VimsGroundMap::Init()</a>, <a class="el" href="class_isis_1_1_vims_sky_map.html#a5f4b97d3a1a0a5912f1219bc74a17d5e">Isis::VimsSkyMap::Init()</a>, <a class="el" href="class_isis_1_1_juno_camera.html#a96ed76797e1ab321f76904fcdf0ab3be">Isis::JunoCamera::JunoCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_tc_camera.html#aa3a277ae3b92dd76f39e3afcb2259ad0">Isis::KaguyaTcCamera::KaguyaTcCamera()</a>, <a class="el" href="class_isis_1_1_lro_narrow_angle_camera.html#a7e310784f7229b84c9e5cdaa8a7487dd">Isis::LroNarrowAngleCamera::LroNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera.html#acce0f513400fbbb2adcb751f7a320d79">Isis::LroWideAngleCamera::LroWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_marci_camera.html#ab1c614622a0615f3e54eaad3e99e818e">Isis::MarciCamera::MarciCamera()</a>, <a class="el" href="class_isis_1_1_mdis_camera.html#a331991f68a867ffff37b127416143d44">Isis::MdisCamera::MdisCamera()</a>, <a class="el" href="class_isis_1_1_moc_narrow_angle_camera.html#afd8e7c069fbe9162dfae5f5cc0389124">Isis::MocNarrowAngleCamera::MocNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_moc_wide_angle_camera.html#a03c12a9dfe9b300937e1944311955351">Isis::MocWideAngleCamera::MocWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_msi_camera.html#a26cd32f4b430371dac263ae065a336ea">Isis::MsiCamera::MsiCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a1f6437c5488c941495cea26ae543ffb5">Isis::NewHorizonsLeisaCamera::NewHorizonsLeisaCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_lorri_camera.html#a7c9ad07352411bdec6111ffb87088528">Isis::NewHorizonsLorriCamera::NewHorizonsLorriCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_frame_camera.html#aa48c3e21156c83a7d54963f0240b501a">Isis::NewHorizonsMvicFrameCamera::NewHorizonsMvicFrameCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_tdi_camera.html#acd1c6614f017d336ba407044aa76526f">Isis::NewHorizonsMvicTdiCamera::NewHorizonsMvicTdiCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_camera.html#a04a1d8ee6e5f7a0b894bea4c632c723a">Isis::OsirisRexOcamsCamera::OsirisRexOcamsCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_tagcams_camera.html#abfe161a325a14b8ee463f4bf36f2e8fd">Isis::OsirisRexTagcamsCamera::OsirisRexTagcamsCamera()</a>, <a class="el" href="class_isis_1_1_rosetta_osiris_camera.html#a07c6aefe99418ce646206f2e97b6ee30">Isis::RosettaOsirisCamera::RosettaOsirisCamera()</a>, <a class="el" href="class_isis_1_1_themis_ir_camera.html#ad6d3d29693ab5150652d6b7431e6cf94">Isis::ThemisIrCamera::ThemisIrCamera()</a>, <a class="el" href="class_isis_1_1_themis_vis_camera.html#abadb84893241b18757bec392b81d63c4">Isis::ThemisVisCamera::ThemisVisCamera()</a>, and <a class="el" href="class_isis_1_1_viking_camera.html#a2a1a860e2ca961eb38e8f08361708875">Isis::VikingCamera::VikingCamera()</a>.</p>
+
+</div>
+</div>
+<a id="ae6918abb58def3bac419f51a3b19c702"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6918abb58def3bac419f51a3b19c702">&#9670;&nbsp;</a></span>getDouble()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpiceDouble Isis::Spice::getDouble </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns a value from the NAIF text pool. </p>
+<p>It is a static convience method</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>Name of NAIF keyword to obtain from the pool </td></tr>
+    <tr><td class="paramname">index</td><td>If the keyword is an array, the element to obtain. Defaults to 0</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>SpiceDouble</b> <a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a> double from NAIF text pool</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Io</td><td>- "Can not find key in instrument kernels." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_lro_wide_angle_camera_distortion_map.html#ac5c68fbb6c0d303f166349742f54bf8a">Isis::LroWideAngleCameraDistortionMap::addFilter()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera_focal_plane_map.html#a7511c04e4308a7abb3025ad88707dc78">Isis::LroWideAngleCameraFocalPlaneMap::addFilter()</a>, <a class="el" href="class_isis_1_1_apollo_metric_camera.html#a992e6c71d34b6d66c7b3243bcec5891c">Isis::ApolloMetricCamera::ApolloMetricCamera()</a>, <a class="el" href="class_isis_1_1_apollo_panoramic_camera.html#a52fb369695f66297180758c198b71413">Isis::ApolloPanoramicCamera::ApolloPanoramicCamera()</a>, <a class="el" href="group___mars_reconnaissance_orbiter.html#gaa2961a0d1b22ff4c863afb9186ff0338">Isis::Chandrayaan1M3Camera::Chandrayaan1M3Camera()</a>, <a class="el" href="class_isis_1_1_clipper_push_broom_camera.html#a25a29b46174884c9df0f635f780eb0e1">Isis::ClipperPushBroomCamera::ClipperPushBroomCamera()</a>, <a class="el" href="class_isis_1_1_crism_camera.html#a140a2397a1035544a59f584df5228ea6">Isis::CrismCamera::CrismCamera()</a>, <a class="el" href="class_isis_1_1_c_t_x_camera.html#a57b1a9eb8d72daab7e1d22000ce818a0">Isis::CTXCamera::CTXCamera()</a>, <a class="el" href="class_isis_1_1_dawn_fc_camera.html#a681968ed3697a89997d9ce3742f56fcc">Isis::DawnFcCamera::DawnFcCamera()</a>, <a class="el" href="class_isis_1_1_dawn_vir_camera.html#ae0948d667521b2d159056ffb8a0133bc">Isis::DawnVirCamera::DawnVirCamera()</a>, <a class="el" href="class_isis_1_1_hayabusa_amica_camera.html#a04767056208d853ece3b9a1ad5190994">Isis::HayabusaAmicaCamera::HayabusaAmicaCamera()</a>, <a class="el" href="class_isis_1_1_hayabusa_nirs_camera.html#a074fba3928bebaeede27e39667998111">Isis::HayabusaNirsCamera::HayabusaNirsCamera()</a>, <a class="el" href="class_isis_1_1_hires_camera.html#a180c7e99246c852d64b1841e720d8259">Isis::HiresCamera::HiresCamera()</a>, <a class="el" href="class_isis_1_1_hrsc_camera.html#a1cf946326322a023facb7584c9fa9a7d">Isis::HrscCamera::HrscCamera()</a>, <a class="el" href="class_isis_1_1_hyb2_onc_camera.html#aecaf7a055b24f62b49f47b9a55dfc0fd">Isis::Hyb2OncCamera::Hyb2OncCamera()</a>, <a class="el" href="class_isis_1_1_rosetta_osiris_camera.html#a1557ebcdfca254f8cc953b2a8c463bc4">Isis::RosettaOsirisCamera::initDistortion()</a>, <a class="el" href="class_isis_1_1_iss_n_a_camera.html#ae1379469ffc23988311c1f281c6a4be4">Isis::IssNACamera::IssNACamera()</a>, <a class="el" href="class_isis_1_1_iss_w_a_camera.html#a40939367de14f4ceab92e63cbac5483f">Isis::IssWACamera::IssWACamera()</a>, <a class="el" href="class_isis_1_1_juno_camera.html#a96ed76797e1ab321f76904fcdf0ab3be">Isis::JunoCamera::JunoCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_mi_camera.html#aff13b02798fc8d4ada958ec542d8c832">Isis::KaguyaMiCamera::KaguyaMiCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_tc_camera.html#aa3a277ae3b92dd76f39e3afcb2259ad0">Isis::KaguyaTcCamera::KaguyaTcCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_tc_camera_distortion_map.html#a9555ab77d2f09755c89c72a49870f327">Isis::KaguyaTcCameraDistortionMap::KaguyaTcCameraDistortionMap()</a>, <a class="el" href="class_isis_1_1_lro_narrow_angle_camera.html#a7e310784f7229b84c9e5cdaa8a7487dd">Isis::LroNarrowAngleCamera::LroNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera.html#acce0f513400fbbb2adcb751f7a320d79">Isis::LroWideAngleCamera::LroWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_lwir_camera.html#a3de974cfebf81e9d0e8418af30ca0dae">Isis::LwirCamera::LwirCamera()</a>, <a class="el" href="class_isis_1_1_marci_camera.html#ab1c614622a0615f3e54eaad3e99e818e">Isis::MarciCamera::MarciCamera()</a>, <a class="el" href="class_isis_1_1_marci_distortion_map.html#a3c6462e6077e9d7a83896ba75e99e618">Isis::MarciDistortionMap::MarciDistortionMap()</a>, <a class="el" href="class_isis_1_1_mariner10_camera.html#a95bd2fc9a70874bd764329b0e5df5a73">Isis::Mariner10Camera::Mariner10Camera()</a>, <a class="el" href="class_isis_1_1_mdis_camera.html#a331991f68a867ffff37b127416143d44">Isis::MdisCamera::MdisCamera()</a>, <a class="el" href="class_isis_1_1_mex_hrsc_src_camera.html#a9af85539cb0e18ac9d840bc902b10559">Isis::MexHrscSrcCamera::MexHrscSrcCamera()</a>, <a class="el" href="class_isis_1_1_msi_camera.html#a26cd32f4b430371dac263ae065a336ea">Isis::MsiCamera::MsiCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_lorri_camera.html#a7c9ad07352411bdec6111ffb87088528">Isis::NewHorizonsLorriCamera::NewHorizonsLorriCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_frame_camera.html#aa48c3e21156c83a7d54963f0240b501a">Isis::NewHorizonsMvicFrameCamera::NewHorizonsMvicFrameCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_tdi_camera.html#acd1c6614f017d336ba407044aa76526f">Isis::NewHorizonsMvicTdiCamera::NewHorizonsMvicTdiCamera()</a>, <a class="el" href="class_isis_1_1_nir_camera.html#ab4115fe38276b4964d91c60b20765efe">Isis::NirCamera::NirCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_camera.html#a04a1d8ee6e5f7a0b894bea4c632c723a">Isis::OsirisRexOcamsCamera::OsirisRexOcamsCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_tagcams_camera.html#abfe161a325a14b8ee463f4bf36f2e8fd">Isis::OsirisRexTagcamsCamera::OsirisRexTagcamsCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_tagcams_distortion_map.html#a87601dd94a64fb8990b52db96caf70aa">Isis::OsirisRexTagcamsDistortionMap::OsirisRexTagcamsDistortionMap()</a>, <a class="el" href="class_isis_1_1_rosetta_osiris_camera.html#a07c6aefe99418ce646206f2e97b6ee30">Isis::RosettaOsirisCamera::RosettaOsirisCamera()</a>, <a class="el" href="class_isis_1_1_rosetta_virtis_camera.html#a454546ac29834b333a4e361bf4a1ac03">Isis::RosettaVirtisCamera::RosettaVirtisCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_mi_camera_distortion_map.html#a4ead1b1040e3b312a6c9a2d6393680c4">Isis::KaguyaMiCameraDistortionMap::SetDistortion()</a>, <a class="el" href="class_isis_1_1_lro_narrow_angle_distortion_map.html#ac1f27926c2536dcb4080e04986c63e49">Isis::LroNarrowAngleDistortionMap::SetDistortion()</a>, <a class="el" href="class_isis_1_1_taylor_camera_distortion_map.html#a887d1ca2858d56dbfa28e8dce32f5c2e">Isis::TaylorCameraDistortionMap::SetDistortion()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_distortion_map.html#ad71d59438282cd4ffe4993b8c5616930">Isis::OsirisRexOcamsDistortionMap::SetDistortion()</a>, <a class="el" href="class_isis_1_1_camera.html#a91326d8e669ffedb917d627958c8f6b2">Isis::Camera::SetFocalLength()</a>, <a class="el" href="class_isis_1_1_camera.html#a97bdce993a2fb4008ed1edd41c5cd898">Isis::Camera::SetPixelPitch()</a>, <a class="el" href="class_isis_1_1_ssi_camera.html#a9dcb28e566215656e1983c90bf316651">Isis::SsiCamera::SsiCamera()</a>, <a class="el" href="class_isis_1_1_tgo_cassis_camera.html#a940ab5649ac6aa069be36821efa52409">Isis::TgoCassisCamera::TgoCassisCamera()</a>, <a class="el" href="class_isis_1_1_tgo_cassis_distortion_map.html#a2aef754f81b0d25c5398b47de3f417ed">Isis::TgoCassisDistortionMap::TgoCassisDistortionMap()</a>, and <a class="el" href="class_isis_1_1_uvvis_camera.html#aad2dd78ca84967f7d8817576805ad2ea">Isis::UvvisCamera::UvvisCamera()</a>.</p>
+
+</div>
+</div>
+<a id="af5805875ed2e77b810fdd1f7512f24a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5805875ed2e77b810fdd1f7512f24a4">&#9670;&nbsp;</a></span>getInteger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpiceInt Isis::Spice::getInteger </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns a value from the NAIF text pool. </p>
+<p>It is a static convience</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>Name of NAIF keyword to obtain from the pool </td></tr>
+    <tr><td class="paramname">index</td><td>If the keyword is an array, the element to obtain. Defaults to 0</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>SpiceInt</b> <a class="el" href="class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft.">Spice</a> integer from NAIF text pool</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Io</td><td>- "Can not find key in instrument kernels </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_iss_n_a_camera.html#ae1379469ffc23988311c1f281c6a4be4">Isis::IssNACamera::IssNACamera()</a>, <a class="el" href="class_isis_1_1_iss_w_a_camera.html#a40939367de14f4ceab92e63cbac5483f">Isis::IssWACamera::IssWACamera()</a>, and <a class="el" href="class_isis_1_1_lro_wide_angle_camera.html#acce0f513400fbbb2adcb751f7a320d79">Isis::LroWideAngleCamera::LroWideAngleCamera()</a>.</p>
+
+</div>
+</div>
+<a id="a918ebd43c1341553742120023bf268ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a918ebd43c1341553742120023bf268ae">&#9670;&nbsp;</a></span>getStoredNaifKeywords()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_pvl_object.html">PvlObject</a> Isis::Spice::getStoredNaifKeywords </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns the <a class="el" href="class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects.">PvlObject</a> that stores all of the requested Naif data and can be a replacement for furnishing text kernels. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d88bec371a50983975212fdda989255">Isis::Cube::attachSpiceFromIsd()</a>.</p>
+
+</div>
+</div>
+<a id="ae0bae1697c456c7c3fe86f8e2de5c307"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0bae1697c456c7c3fe86f8e2de5c307">&#9670;&nbsp;</a></span>getStoredResult()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariant Isis::Spice::getStoredResult </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">SpiceValueType</a>&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_endian_swapper.html#a4c3a520a3df7659634da93019f04de62">Isis::EndianSwapper::Double()</a>.</p>
+
+</div>
+</div>
+<a id="a08fee3f52ca8a77f675d200d5909bd18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08fee3f52ca8a77f675d200d5909bd18">&#9670;&nbsp;</a></span>getString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Spice::getString </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns a value from the NAIF text pool. </p>
+<p>It is a static convience method</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>Name of NAIF keyword to obtain from the pool </td></tr>
+    <tr><td class="paramname">index</td><td>If the keyword is an array, the element to obtain. Defaults to 0</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> Value from the NAIF text pool</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ac9ed77f00e45687c341c09262a6a77c5" title="A type of error that occurred when performing an actual I/O operation.">Isis::IException::Io</a></td><td>- "Can not find key in instrument kernels." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_light_time_correction_state.html#a8494c6ca3f986a89374a5dc72ed5f173">Isis::LightTimeCorrectionState::checkAberrationCorrection()</a>, <a class="el" href="class_isis_1_1_light_time_correction_state.html#a7b18572d4bbdfe4c10b0f8012c474881">Isis::LightTimeCorrectionState::checkLightTimeToSurfaceCorrect()</a>, <a class="el" href="class_isis_1_1_light_time_correction_state.html#a31946119e71524afe49ec1b36f980d5f">Isis::LightTimeCorrectionState::checkObserverTargetSwap()</a>, <a class="el" href="class_isis_1_1_mdis_camera.html#a331991f68a867ffff37b127416143d44">Isis::MdisCamera::MdisCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_lorri_camera.html#a7c9ad07352411bdec6111ffb87088528">Isis::NewHorizonsLorriCamera::NewHorizonsLorriCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_tagcams_camera.html#abfe161a325a14b8ee463f4bf36f2e8fd">Isis::OsirisRexTagcamsCamera::OsirisRexTagcamsCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_tagcams_distortion_map.html#a87601dd94a64fb8990b52db96caf70aa">Isis::OsirisRexTagcamsDistortionMap::OsirisRexTagcamsDistortionMap()</a>, and <a class="el" href="class_isis_1_1_osiris_rex_ocams_distortion_map.html#ad71d59438282cd4ffe4993b8c5616930">Isis::OsirisRexOcamsDistortionMap::SetDistortion()</a>.</p>
+
+</div>
+</div>
+<a id="aadb2485486dd0ea7aeb4e043b5e1cb1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadb2485486dd0ea7aeb4e043b5e1cb1c">&#9670;&nbsp;</a></span>hasKernels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Spice::hasKernels </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl.html">Pvl</a> &amp;&#160;</td>
+          <td class="paramname"><em>lab</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if the kernel group has kernel files. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lab</td><td>Label containing Instrument and <a class="el" href="class_isis_1_1_kernels.html" title="Determine SPICE kernels defined in an ISIS file.">Kernels</a> groups.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> status of kernel files in the kernel group </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_pvl_object.html#adb78b47b7518c15cbdc02fe95a350a38">Isis::PvlObject::findGroup()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a1b5704b2eef84a9a0dea1384193dd9c1">Isis::PvlContainer::hasKeyword()</a>, and <a class="el" href="class_isis_1_1_pvl_keyword.html#a2c88473ba977e24be39e95a3ac4f29c8">Isis::PvlKeyword::size()</a>.</p>
+
+</div>
+</div>
+<a id="a912c8ceffca6eea665e090320af01faa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a912c8ceffca6eea665e090320af01faa">&#9670;&nbsp;</a></span>instrumentBodyFixedPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::instrumentBodyFixedPosition </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>p</em>[3]</td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the spacecraft position in body-fixed frame km units. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p[]</td><td>Spacecraft position</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_spice.html#a03c9f95754aa3316be17605a93ebfb3e" title="Sets the ephemeris time and reads the spacecraft and sun position from the kernels at that instant in...">setTime()</a></dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- "You must call SetTime first" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_c_s_m_camera.html#ac5f9c3cad95c82331ba2b4ea0ece5f56">Isis::CSMCamera</a>.</p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera.html#ab9aa06849d48a28fdc9adaa5eac4b1b2">Isis::Camera::LocalPhotometricAngles()</a>, <a class="el" href="class_isis_1_1_sensor.html#aaa46000d977d325137b229be2644e1b2">Isis::Sensor::PhaseAngle()</a>, and <a class="el" href="class_isis_1_1_sensor.html#a54002c62d787f2d823596913195a6f5e">Isis::Sensor::SlantDistance()</a>.</p>
+
+</div>
+</div>
+<a id="a332aa8c446dd4a67d321337c8ec95cac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a332aa8c446dd4a67d321337c8ec95cac">&#9670;&nbsp;</a></span>instrumentBodyFixedVelocity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::instrumentBodyFixedVelocity </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>v</em>[3]</td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the spacecraft velocity in body-fixed frame km/sec units. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v[]</td><td>Spacecraft velocity </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+</div>
+</div>
+<a id="ac31a3341915b4572cd640a64513372a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac31a3341915b4572cd640a64513372a1">&#9670;&nbsp;</a></span>instrumentPosition() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_spice_position.html">SpicePosition</a> * Isis::Spice::instrumentPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accessor method for the instrument position. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a></b> Instrument position for the image. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Steven Lambright </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_c_s_m_camera.html#a9277b4be8db36da7048932138d4f4630">Isis::CSMCamera</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_clipper_push_broom_camera.html#a25a29b46174884c9df0f635f780eb0e1">Isis::ClipperPushBroomCamera::ClipperPushBroomCamera()</a>, <a class="el" href="class_isis_1_1_camera.html#a2aefe9ca121477e01d0857036b66e06e">Isis::Camera::DetectorResolution()</a>, <a class="el" href="class_isis_1_1_sensor.html#ade260091f00408d26f1b9fd472181f3a">Isis::Sensor::EmissionAngle()</a>, <a class="el" href="class_isis_1_1_lo_high_camera.html#a5d1c553aa0747b7e8278fe7c04710368">Isis::LoHighCamera::LoHighCamera()</a>, <a class="el" href="class_isis_1_1_lo_medium_camera.html#a867c099f83e4b758eedc59e08208c573">Isis::LoMediumCamera::LoMediumCamera()</a>, <a class="el" href="class_isis_1_1_mariner10_camera.html#a95bd2fc9a70874bd764329b0e5df5a73">Isis::Mariner10Camera::Mariner10Camera()</a>, <a class="el" href="class_isis_1_1_mini_r_f.html#abfbbad9e21bfe48dade11108298f9a80">Isis::MiniRF::MiniRF()</a>, <a class="el" href="class_isis_1_1_camera.html#a8be8324bf8b97821bbda905abbc77322">Isis::Camera::OffNadirAngle()</a>, <a class="el" href="class_isis_1_1_sensor.html#a92656fb1524de2e86367c1d84bd3d151">Isis::Sensor::SetGround()</a>, <a class="el" href="class_isis_1_1_sensor.html#ae3f0c97b9a7e1c90c6da6d0351fbdd1d">Isis::Sensor::SetLookDirection()</a>, <a class="el" href="class_isis_1_1_sensor.html#a1bb289fabb0b25b71837ad6affbf3627">Isis::Sensor::SetUniversalGround()</a>, and <a class="el" href="class_isis_1_1_sensor.html#a7f0abba2619d226efa17e81737c3929e">Isis::Sensor::SpacecraftAltitude()</a>.</p>
+
+</div>
+</div>
+<a id="a86463596fe7e85ce62a8931cbb2231f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86463596fe7e85ce62a8931cbb2231f9">&#9670;&nbsp;</a></span>instrumentPosition() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::instrumentPosition </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>p</em>[3]</td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the spacecraft position in body-fixed frame km units. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p[]</td><td>Spacecraft position</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_spice.html#a03c9f95754aa3316be17605a93ebfb3e" title="Sets the ephemeris time and reads the spacecraft and sun position from the kernels at that instant in...">setTime()</a></dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Isis::iException::Programmer</td><td>- "You must call SetTime first" </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d88bec371a50983975212fdda989255">Isis::Cube::attachSpiceFromIsd()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a35422f54f9b7760ce06aebed41ab6e30">Isis::RadarGroundMap::GetdXYdPosition()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a028a1282829eaf7e436964666f0f9f37">Isis::RadarGroundMap::GetXY()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a33b95960691f7858717a48e9c6f97d55">Isis::RadarGroundMap::SetFocalPlane()</a>, and <a class="el" href="class_isis_1_1_radar_ground_map.html#a50f20e842f09ad9370d200b598e9f8bd">Isis::RadarGroundMap::SetGround()</a>.</p>
+
+</div>
+</div>
+<a id="ab08a19d8145a49682ec30f5d7120d145"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab08a19d8145a49682ec30f5d7120d145">&#9670;&nbsp;</a></span>instrumentRotation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_spice_rotation.html">SpiceRotation</a> * Isis::Spice::instrumentRotation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accessor method for the instrument rotation. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a></b> Instrument rotation for the image. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Steven Lambright </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_c_s_m_camera.html#ac62d719a598f32033dcd69d1d736bdd8">Isis::CSMCamera</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d88bec371a50983975212fdda989255">Isis::Cube::attachSpiceFromIsd()</a>, <a class="el" href="class_isis_1_1_dawn_vir_camera.html#ae0948d667521b2d159056ffb8a0133bc">Isis::DawnVirCamera::DawnVirCamera()</a>, <a class="el" href="class_isis_1_1_hirise_camera.html#a034da3530dce257d36fa71c34ee6605e">Isis::HiriseCamera::HiriseCamera()</a>, <a class="el" href="class_isis_1_1_hrsc_camera.html#a1cf946326322a023facb7584c9fa9a7d">Isis::HrscCamera::HrscCamera()</a>, <a class="el" href="class_isis_1_1_iss_n_a_camera.html#ae1379469ffc23988311c1f281c6a4be4">Isis::IssNACamera::IssNACamera()</a>, <a class="el" href="class_isis_1_1_iss_w_a_camera.html#a40939367de14f4ceab92e63cbac5483f">Isis::IssWACamera::IssWACamera()</a>, <a class="el" href="class_isis_1_1_juno_camera.html#a96ed76797e1ab321f76904fcdf0ab3be">Isis::JunoCamera::JunoCamera()</a>, <a class="el" href="class_isis_1_1_sensor.html#ade42daf8481209279dffff62f4169368">Isis::Sensor::LookDirection()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera.html#acce0f513400fbbb2adcb751f7a320d79">Isis::LroWideAngleCamera::LroWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_mariner10_camera.html#a95bd2fc9a70874bd764329b0e5df5a73">Isis::Mariner10Camera::Mariner10Camera()</a>, <a class="el" href="class_isis_1_1_moc_narrow_angle_camera.html#afd8e7c069fbe9162dfae5f5cc0389124">Isis::MocNarrowAngleCamera::MocNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_moc_wide_angle_camera.html#a03c12a9dfe9b300937e1944311955351">Isis::MocWideAngleCamera::MocWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_rosetta_virtis_camera.html#a454546ac29834b333a4e361bf4a1ac03">Isis::RosettaVirtisCamera::RosettaVirtisCamera()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a33b95960691f7858717a48e9c6f97d55">Isis::RadarGroundMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a50f20e842f09ad9370d200b598e9f8bd">Isis::RadarGroundMap::SetGround()</a>, <a class="el" href="class_isis_1_1_sensor.html#ae3f0c97b9a7e1c90c6da6d0351fbdd1d">Isis::Sensor::SetLookDirection()</a>, <a class="el" href="class_isis_1_1_sensor.html#ab1aa5233ec8536e29457dc528f41abdd">Isis::Sensor::SetRightAscensionDeclination()</a>, and <a class="el" href="class_isis_1_1_tgo_cassis_camera.html#a940ab5649ac6aa069be36821efa52409">Isis::TgoCassisCamera::TgoCassisCamera()</a>.</p>
+
+</div>
+</div>
+<a id="ad9fd1a896a1fba1f7ce85afff8cfa029"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9fd1a896a1fba1f7ce85afff8cfa029">&#9670;&nbsp;</a></span>isTimeSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Spice::isTimeSet </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if time has been initialized. </p>
+<dl class="section author"><dt>Author</dt><dd>2016-10-19 Kristin Berry</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> true if time has been set </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera_detector_map.html#af7f1e8daeeb924e306190ff1639c1219">Isis::CameraDetectorMap::SetParent()</a>, and <a class="el" href="class_isis_1_1_rolling_shutter_camera_detector_map.html#ae95d85080321cad08503e4a8362a535b">Isis::RollingShutterCameraDetectorMap::SetParent()</a>.</p>
+
+</div>
+</div>
+<a id="a821ed5b533dc3fcacfc8da4774de70ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a821ed5b533dc3fcacfc8da4774de70ec">&#9670;&nbsp;</a></span>isUsingAle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::Spice::isUsingAle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a855813c0d663ced00e85147aab03296d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a855813c0d663ced00e85147aab03296d">&#9670;&nbsp;</a></span>naifBodyCode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpiceInt Isis::Spice::naifBodyCode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns the NAIF body code of the target indicated in the labels. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>SpiceInt</b> NAIF body code </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera.html#af97e88271c0bfd1508ad803aec612c9c">Isis::Camera::SpkCenterId()</a>.</p>
+
+</div>
+</div>
+<a id="acbfbd4f345c2096edf98e6016c721ca5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbfbd4f345c2096edf98e6016c721ca5">&#9670;&nbsp;</a></span>naifBodyFrameCode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpiceInt Isis::Spice::naifBodyFrameCode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns the NAIF body frame code. </p>
+<p>It is read from the labels, if it exists. Otherwise, it's calculated by the init() method.</p>
+<dl class="section return"><dt>Returns</dt><dd><b>SpiceInt</b> NAIF body frame code </dd></dl>
+
+</div>
+</div>
+<a id="a945a0cb52ad617be4fa2fc9b95d43f23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a945a0cb52ad617be4fa2fc9b95d43f23">&#9670;&nbsp;</a></span>naifCkCode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpiceInt Isis::Spice::naifCkCode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns the NAIF CK code to use when reading from CK kernels. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>SpiceInt</b> NAIF CK code </dd></dl>
+
+</div>
+</div>
+<a id="ac450d453ce0e6837124d69b84a8c6b9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac450d453ce0e6837124d69b84a8c6b9b">&#9670;&nbsp;</a></span>naifIkCode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpiceInt Isis::Spice::naifIkCode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns the NAIF IK code to use when reading from instrument kernels. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>SpiceInt</b> NAIF IK code </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_apollo_metric_camera.html#a992e6c71d34b6d66c7b3243bcec5891c">Isis::ApolloMetricCamera::ApolloMetricCamera()</a>, <a class="el" href="class_isis_1_1_apollo_panoramic_camera.html#a52fb369695f66297180758c198b71413">Isis::ApolloPanoramicCamera::ApolloPanoramicCamera()</a>, <a class="el" href="group___mars_reconnaissance_orbiter.html#gaa2961a0d1b22ff4c863afb9186ff0338">Isis::Chandrayaan1M3Camera::Chandrayaan1M3Camera()</a>, <a class="el" href="class_isis_1_1_clipper_nac_rolling_shutter_camera.html#aa04790bb0966aa885f45b93497768bdb">Isis::ClipperNacRollingShutterCamera::ClipperNacRollingShutterCamera()</a>, <a class="el" href="class_isis_1_1_clipper_push_broom_camera.html#a25a29b46174884c9df0f635f780eb0e1">Isis::ClipperPushBroomCamera::ClipperPushBroomCamera()</a>, <a class="el" href="class_isis_1_1_clipper_wac_fc_camera.html#a3d9ff3ecf2a7580875a23c6a6d8d6dc9">Isis::ClipperWacFcCamera::ClipperWacFcCamera()</a>, <a class="el" href="class_isis_1_1_crism_camera.html#a140a2397a1035544a59f584df5228ea6">Isis::CrismCamera::CrismCamera()</a>, <a class="el" href="class_isis_1_1_c_t_x_camera.html#a57b1a9eb8d72daab7e1d22000ce818a0">Isis::CTXCamera::CTXCamera()</a>, <a class="el" href="class_isis_1_1_dawn_fc_camera.html#a681968ed3697a89997d9ce3742f56fcc">Isis::DawnFcCamera::DawnFcCamera()</a>, <a class="el" href="class_isis_1_1_dawn_vir_camera.html#ae0948d667521b2d159056ffb8a0133bc">Isis::DawnVirCamera::DawnVirCamera()</a>, <a class="el" href="class_isis_1_1_hayabusa_amica_camera.html#a04767056208d853ece3b9a1ad5190994">Isis::HayabusaAmicaCamera::HayabusaAmicaCamera()</a>, <a class="el" href="class_isis_1_1_hayabusa_nirs_camera.html#a074fba3928bebaeede27e39667998111">Isis::HayabusaNirsCamera::HayabusaNirsCamera()</a>, <a class="el" href="class_isis_1_1_hires_camera.html#a180c7e99246c852d64b1841e720d8259">Isis::HiresCamera::HiresCamera()</a>, <a class="el" href="class_isis_1_1_hirise_camera.html#a034da3530dce257d36fa71c34ee6605e">Isis::HiriseCamera::HiriseCamera()</a>, <a class="el" href="class_isis_1_1_hrsc_camera.html#a1cf946326322a023facb7584c9fa9a7d">Isis::HrscCamera::HrscCamera()</a>, <a class="el" href="class_isis_1_1_hyb2_onc_camera.html#aecaf7a055b24f62b49f47b9a55dfc0fd">Isis::Hyb2OncCamera::Hyb2OncCamera()</a>, <a class="el" href="class_isis_1_1_iss_n_a_camera.html#ae1379469ffc23988311c1f281c6a4be4">Isis::IssNACamera::IssNACamera()</a>, <a class="el" href="class_isis_1_1_iss_w_a_camera.html#a40939367de14f4ceab92e63cbac5483f">Isis::IssWACamera::IssWACamera()</a>, <a class="el" href="class_isis_1_1_juno_camera.html#a96ed76797e1ab321f76904fcdf0ab3be">Isis::JunoCamera::JunoCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_mi_camera.html#aff13b02798fc8d4ada958ec542d8c832">Isis::KaguyaMiCamera::KaguyaMiCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_tc_camera.html#aa3a277ae3b92dd76f39e3afcb2259ad0">Isis::KaguyaTcCamera::KaguyaTcCamera()</a>, <a class="el" href="class_isis_1_1_lo_high_camera.html#a5d1c553aa0747b7e8278fe7c04710368">Isis::LoHighCamera::LoHighCamera()</a>, <a class="el" href="class_isis_1_1_lo_medium_camera.html#a867c099f83e4b758eedc59e08208c573">Isis::LoMediumCamera::LoMediumCamera()</a>, <a class="el" href="class_isis_1_1_lro_narrow_angle_camera.html#a7e310784f7229b84c9e5cdaa8a7487dd">Isis::LroNarrowAngleCamera::LroNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_lro_wide_angle_camera.html#acce0f513400fbbb2adcb751f7a320d79">Isis::LroWideAngleCamera::LroWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_lwir_camera.html#a3de974cfebf81e9d0e8418af30ca0dae">Isis::LwirCamera::LwirCamera()</a>, <a class="el" href="class_isis_1_1_marci_camera.html#ab1c614622a0615f3e54eaad3e99e818e">Isis::MarciCamera::MarciCamera()</a>, <a class="el" href="class_isis_1_1_mariner10_camera.html#a95bd2fc9a70874bd764329b0e5df5a73">Isis::Mariner10Camera::Mariner10Camera()</a>, <a class="el" href="class_isis_1_1_mdis_camera.html#a331991f68a867ffff37b127416143d44">Isis::MdisCamera::MdisCamera()</a>, <a class="el" href="class_isis_1_1_mex_hrsc_src_camera.html#a9af85539cb0e18ac9d840bc902b10559">Isis::MexHrscSrcCamera::MexHrscSrcCamera()</a>, <a class="el" href="class_isis_1_1_mini_r_f.html#abfbbad9e21bfe48dade11108298f9a80">Isis::MiniRF::MiniRF()</a>, <a class="el" href="class_isis_1_1_moc_narrow_angle_camera.html#afd8e7c069fbe9162dfae5f5cc0389124">Isis::MocNarrowAngleCamera::MocNarrowAngleCamera()</a>, <a class="el" href="class_isis_1_1_moc_wide_angle_camera.html#a03c12a9dfe9b300937e1944311955351">Isis::MocWideAngleCamera::MocWideAngleCamera()</a>, <a class="el" href="class_isis_1_1_msi_camera.html#a26cd32f4b430371dac263ae065a336ea">Isis::MsiCamera::MsiCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_leisa_camera.html#a1f6437c5488c941495cea26ae543ffb5">Isis::NewHorizonsLeisaCamera::NewHorizonsLeisaCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_lorri_camera.html#a7c9ad07352411bdec6111ffb87088528">Isis::NewHorizonsLorriCamera::NewHorizonsLorriCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_frame_camera.html#aa48c3e21156c83a7d54963f0240b501a">Isis::NewHorizonsMvicFrameCamera::NewHorizonsMvicFrameCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_tdi_camera.html#acd1c6614f017d336ba407044aa76526f">Isis::NewHorizonsMvicTdiCamera::NewHorizonsMvicTdiCamera()</a>, <a class="el" href="class_isis_1_1_nir_camera.html#ab4115fe38276b4964d91c60b20765efe">Isis::NirCamera::NirCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_camera.html#a04a1d8ee6e5f7a0b894bea4c632c723a">Isis::OsirisRexOcamsCamera::OsirisRexOcamsCamera()</a>, <a class="el" href="class_isis_1_1_osiris_rex_tagcams_camera.html#abfe161a325a14b8ee463f4bf36f2e8fd">Isis::OsirisRexTagcamsCamera::OsirisRexTagcamsCamera()</a>, <a class="el" href="class_isis_1_1_rosetta_osiris_camera.html#a07c6aefe99418ce646206f2e97b6ee30">Isis::RosettaOsirisCamera::RosettaOsirisCamera()</a>, <a class="el" href="class_isis_1_1_rosetta_virtis_camera.html#a454546ac29834b333a4e361bf4a1ac03">Isis::RosettaVirtisCamera::RosettaVirtisCamera()</a>, <a class="el" href="class_isis_1_1_camera.html#a91326d8e669ffedb917d627958c8f6b2">Isis::Camera::SetFocalLength()</a>, <a class="el" href="class_isis_1_1_camera.html#a97bdce993a2fb4008ed1edd41c5cd898">Isis::Camera::SetPixelPitch()</a>, <a class="el" href="class_isis_1_1_ssi_camera.html#a9dcb28e566215656e1983c90bf316651">Isis::SsiCamera::SsiCamera()</a>, <a class="el" href="class_isis_1_1_tgo_cassis_camera.html#a940ab5649ac6aa069be36821efa52409">Isis::TgoCassisCamera::TgoCassisCamera()</a>, <a class="el" href="class_isis_1_1_themis_ir_camera.html#ad6d3d29693ab5150652d6b7431e6cf94">Isis::ThemisIrCamera::ThemisIrCamera()</a>, <a class="el" href="class_isis_1_1_themis_vis_camera.html#abadb84893241b18757bec392b81d63c4">Isis::ThemisVisCamera::ThemisVisCamera()</a>, <a class="el" href="class_isis_1_1_uvvis_camera.html#aad2dd78ca84967f7d8817576805ad2ea">Isis::UvvisCamera::UvvisCamera()</a>, <a class="el" href="class_isis_1_1_viking_camera.html#a2a1a860e2ca961eb38e8f08361708875">Isis::VikingCamera::VikingCamera()</a>, <a class="el" href="class_isis_1_1_vims_camera.html#aca1523e3446796467d1c3001bcecd3fa">Isis::VimsCamera::VimsCamera()</a>, and <a class="el" href="class_isis_1_1_voyager_camera.html#afe52641e45e4a3845a056d32bbf5740a">Isis::VoyagerCamera::VoyagerCamera()</a>.</p>
+
+</div>
+</div>
+<a id="ac526dae921a54ac890ddff41f26e3717"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac526dae921a54ac890ddff41f26e3717">&#9670;&nbsp;</a></span>naifSclkCode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpiceInt Isis::Spice::naifSclkCode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns the NAIF SCLK code to use when reading from instrument kernels. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>SpiceInt</b> NAIF SCLK code </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_crism_camera.html#a140a2397a1035544a59f584df5228ea6">Isis::CrismCamera::CrismCamera()</a>.</p>
+
+</div>
+</div>
+<a id="a8ce1d16de72f106b821f2f4e77738b9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ce1d16de72f106b821f2f4e77738b9c">&#9670;&nbsp;</a></span>naifSpkCode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpiceInt Isis::Spice::naifSpkCode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This returns the NAIF SPK code to use when reading from SPK kernels. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>SpiceInt</b> NAIF SPK code </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera.html#ac8d5b2138cfed2168cd2a63a11960384">Isis::Camera::SpkTargetId()</a>.</p>
+
+</div>
+</div>
+<a id="a7d3f485541487d4e407b0a289cfdf2a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d3f485541487d4e407b0a289cfdf2a5">&#9670;&nbsp;</a></span>radii()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::radii </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_distance.html">Distance</a>&#160;</td>
+          <td class="paramname"><em>r</em>[3]</td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the radii of the body in km. </p>
+<p>The radii are obtained from the appropriate SPICE kernel for the body specified by TargetName in the Instrument group of the labels.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">r[]</td><td>Radii of the target in kilometers </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera.html#a7e0af21a39a23b4d1e35a666dd09d38e">Isis::Camera::BasicMapping()</a>, <a class="el" href="class_isis_1_1_camera.html#ad14732c0668e9bf5b7653713a177b7ed">Isis::Camera::GroundRange()</a>, <a class="el" href="class_isis_1_1_vims_ground_map.html#acba916653b591fe5acee66bb46c53cd9">Isis::VimsGroundMap::Init()</a>, <a class="el" href="class_isis_1_1_mini_r_f.html#abfbbad9e21bfe48dade11108298f9a80">Isis::MiniRF::MiniRF()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a33b95960691f7858717a48e9c6f97d55">Isis::RadarGroundMap::SetFocalPlane()</a>, and <a class="el" href="class_isis_1_1_c_s_m_camera.html#a06ee2ad6ec26524cf4bd03ad9d7ed52e">Isis::CSMCamera::setTarget()</a>.</p>
+
+</div>
+</div>
+<a id="a164c0572b914f415bde10909e9d5d990"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a164c0572b914f415bde10909e9d5d990">&#9670;&nbsp;</a></span>readStoredValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariant Isis::Spice::readStoredValue </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">SpiceValueType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_i_exception.html#aa2a167d03a041630226670e927d45c30">Isis::IException::print()</a>, <a class="el" href="namespace_isis.html#ad7233a0dfd589ede203db382294b286c">Isis::toDouble()</a>, and <a class="el" href="namespace_isis.html#a161dca47e06f74a883a05686d318e817">Isis::toInt()</a>.</p>
+
+</div>
+</div>
+<a id="a14f4291cd993d7ab2689dc7ee0f2a515"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14f4291cd993d7ab2689dc7ee0f2a515">&#9670;&nbsp;</a></span>readValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariant Isis::Spice::readValue </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">SpiceValueType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This should be used for reading ALL text naif kernel values. </p>
+<p>This will read it from Naif if we're using naif/not attached kernels. If we have attached kernels and a NaifKeywords label object we will grab it from there instead. This allows us to not furnish kernels after spiceinit.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The naif keyword,value name </td></tr>
+    <tr><td class="paramname">type</td><td>The naif value's primitive type </td></tr>
+    <tr><td class="paramname">index</td><td>The index into the naif keyword array to read </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_ideal_camera.html#ace59957190731b4e77dd4e7c1a6932bd">Isis::IdealCamera::IdealCamera()</a>.</p>
+
+</div>
+</div>
+<a id="afb6221ad55c4bfeb8f99198addfa2df8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb6221ad55c4bfeb8f99198addfa2df8">&#9670;&nbsp;</a></span>resolution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Spice::resolution </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Virtual method that returns the pixel resolution of the sensor in meters/pix. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> Resolution value of 1.0 </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_sensor.html#acac4514f058dac814de5af6882269b21">Isis::Sensor</a>, and <a class="el" href="class_isis_1_1_camera.html#af6ac4e4078360be7ef288b7fd1dea750">Isis::Camera</a>.</p>
+
+</div>
+</div>
+<a id="a03c9f95754aa3316be17605a93ebfb3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03c9f95754aa3316be17605a93ebfb3e">&#9670;&nbsp;</a></span>setTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::setTime </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1i_time.html">iTime</a> &amp;&#160;</td>
+          <td class="paramname"><em>et</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the ephemeris time and reads the spacecraft and sun position from the kernels at that instant in time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">et</td><td>Ephemeris time (read NAIF documentation for a detailed description)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a href="http://naif.jpl.nasa.gov/naif/">http://naif.jpl.nasa.gov/naif/</a> </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_sensor.html#a045920302d998435e6b21b4e5ec22383">Isis::Sensor</a>, and <a class="el" href="class_isis_1_1_c_s_m_camera.html#a2910225781ac50c2663b611a3a704106">Isis::CSMCamera</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1i_time.html#a4c6a5003750470e995c04af9c8b60927">Isis::iTime::Et()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sensor.html#a045920302d998435e6b21b4e5ec22383">Isis::Sensor::setTime()</a>.</p>
+
+</div>
+</div>
+<a id="a2d05fd998854f69854ecdbb28ce33bfa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d05fd998854f69854ecdbb28ce33bfa">&#9670;&nbsp;</a></span>solarLongitude()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a> Isis::Spice::solarLongitude </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the solar longitude. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>double</b> The Solar <a class="el" href="class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude.">Longitude</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d88bec371a50983975212fdda989255">Isis::Cube::attachSpiceFromIsd()</a>.</p>
+
+</div>
+</div>
+<a id="aadb769dd674a3c871d915d5d4a3efe68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadb769dd674a3c871d915d5d4a3efe68">&#9670;&nbsp;</a></span>storeResult()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::storeResult </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">SpiceValueType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVariant&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="class_isis_1_1_endian_swapper.html#a4c3a520a3df7659634da93019f04de62">Isis::EndianSwapper::Double()</a>.</p>
+
+</div>
+</div>
+<a id="ab0dfe9458789d9ef0ccd4ae1ac7623ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0dfe9458789d9ef0ccd4ae1ac7623ff">&#9670;&nbsp;</a></span>storeValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::storeValue </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_spice.html#a7ef5f0ab5680b4ce8910a4126687e9d5">SpiceValueType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QVariant&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#af80ef16d6eb13934fc2265889447e5d7">Isis::PvlKeyword::addValue()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#a2c88473ba977e24be39e95a3ac4f29c8">Isis::PvlKeyword::size()</a>, and <a class="el" href="namespace_isis.html#a0f2ba9939e73885ee6dcfca6a76815b2">Isis::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_ideal_camera.html#ace59957190731b4e77dd4e7c1a6932bd">Isis::IdealCamera::IdealCamera()</a>.</p>
+
+</div>
+</div>
+<a id="a5990d7408d8c8465fac2df8d2cfbb258"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5990d7408d8c8465fac2df8d2cfbb258">&#9670;&nbsp;</a></span>subSolarPoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::subSolarPoint </td>
+          <td>(</td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>lat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>lon</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the sub-solar latitude/longitude in universal coordinates (0-360 positive east, ocentric) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lat</td><td>Sub-solar latitude </td></tr>
+    <tr><td class="paramname">lon</td><td>Sub-solar longitude</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_spice.html#a03c9f95754aa3316be17605a93ebfb3e" title="Sets the ephemeris time and reads the spacecraft and sun position from the kernels at that instant in...">setTime()</a> </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">Isis::IException::Programmer</a></td><td>- "You must call SetTime
+            first." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_c_s_m_camera.html#a8d736347c078add726350a997f529414">Isis::CSMCamera</a>.</p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sensor.html#a24db724342d4032ff481497929b49723">Isis::Sensor::LocalSolarTime()</a>, and <a class="el" href="class_isis_1_1_camera.html#a51067ed84d640033c759c4b5579e27b8">Isis::Camera::SunAzimuth()</a>.</p>
+
+</div>
+</div>
+<a id="af5ddc30d236cccf6faf7cfc7996f7c73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5ddc30d236cccf6faf7cfc7996f7c73">&#9670;&nbsp;</a></span>subSpacecraftPoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::subSpacecraftPoint </td>
+          <td>(</td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>lat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>lon</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the sub-spacecraft latitude/longitude in universal coordinates (0-360 positive east, ocentric) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lat</td><td>Sub-spacecraft latitude</td></tr>
+    <tr><td class="paramname">lon</td><td>Sub-spacecraft longitude</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_spice.html#a03c9f95754aa3316be17605a93ebfb3e" title="Sets the ephemeris time and reads the spacecraft and sun position from the kernels at that instant in...">setTime()</a> </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">Isis::IException::Programmer</a></td><td>- "You must call SetTime
+            first." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_c_s_m_camera.html#a3ce6da693d29f366c58653bd20d1aea3">Isis::CSMCamera</a>.</p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, and <a class="el" href="namespace_isis.html#af5c40cb50b6ed8666dd61c2c3182cf7c">Isis::PI</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sensor.html#a7f0abba2619d226efa17e81737c3929e">Isis::Sensor::SpacecraftAltitude()</a>, and <a class="el" href="class_isis_1_1_camera.html#a2b822b5fe4693e850909c13a9682db97">Isis::Camera::SpacecraftAzimuth()</a>.</p>
+
+</div>
+</div>
+<a id="ae36732bda8698999d9a4082e8d39228f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae36732bda8698999d9a4082e8d39228f">&#9670;&nbsp;</a></span>sunPosition() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_spice_position.html">SpicePosition</a> * Isis::Spice::sunPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accessor method for the sun position. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a></b> Sun position for the image. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Steven Lambright </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_c_s_m_camera.html#a2a7796c2348a84246f9ef8ad0f0f32a7">Isis::CSMCamera</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sensor.html#a50996aa3ed89ffd015f228bf592b63c4">Isis::Sensor::SolarDistance()</a>.</p>
+
+</div>
+</div>
+<a id="ac6ea81a91ac36e550e09666ffa6867b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6ea81a91ac36e550e09666ffa6867b3">&#9670;&nbsp;</a></span>sunPosition() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Spice::sunPosition </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>p</em>[3]</td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Fills the input vector with sun position information, in either body-fixed or J2000 reference frame and km units. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p[]</td><td>Sun position</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_spice.html#a03c9f95754aa3316be17605a93ebfb3e" title="Sets the ephemeris time and reads the spacecraft and sun position from the kernels at that instant in...">setTime()</a> </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_c_s_m_camera.html#ae7621ff99dfff65b957d5803c76c9641">Isis::CSMCamera</a>.</p>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_cube.html#a7d88bec371a50983975212fdda989255">Isis::Cube::attachSpiceFromIsd()</a>.</p>
+
+</div>
+</div>
+<a id="a885899597963bd20c1b03feaf840c52c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a885899597963bd20c1b03feaf840c52c">&#9670;&nbsp;</a></span>sunToBodyDist()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Spice::sunToBodyDist </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a94627376dab709513c54e22689f71ff9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94627376dab709513c54e22689f71ff9">&#9670;&nbsp;</a></span>target()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_target.html">Target</a> * Isis::Spice::target </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a pointer to the target object. </p>
+<dl class="section return"><dt>Returns</dt><dd>string </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_camera.html#a7e0af21a39a23b4d1e35a666dd09d38e">Isis::Camera::BasicMapping()</a>, <a class="el" href="class_isis_1_1_camera.html#adc2d280c3f5d83f7d16dea9feb3156ba">Isis::Camera::basicRingMapping()</a>, <a class="el" href="class_isis_1_1_sensor.html#ad2107d04578384322a2129e6efe2604a">Isis::Sensor::Coordinate()</a>, <a class="el" href="class_isis_1_1_c_s_m_camera.html#abc5365421dcb52c9f14e19b54e70c154">Isis::CSMCamera::EmissionAngle()</a>, <a class="el" href="class_isis_1_1_sensor.html#ade260091f00408d26f1b9fd472181f3a">Isis::Sensor::EmissionAngle()</a>, <a class="el" href="class_isis_1_1_sensor.html#a6f571042bc3e7da91406c24845c947fd">Isis::Sensor::GetLatitude()</a>, <a class="el" href="class_isis_1_1_camera.html#abd95e49357606c5254b285a1c27b61c5">Isis::Camera::GetLocalNormal()</a>, <a class="el" href="class_isis_1_1_sensor.html#a467c578ce7a243765d891d011b0c1987">Isis::Sensor::GetLongitude()</a>, <a class="el" href="class_isis_1_1_sensor.html#a1306d5e14b3f0476ba63c79a1de3dedb">Isis::Sensor::GetSurfacePoint()</a>, <a class="el" href="class_isis_1_1_universal_ground_map.html#af5c20b33f37ba18305bbb01b6a872fe6">Isis::UniversalGroundMap::GroundRange()</a>, <a class="el" href="class_isis_1_1_sensor.html#a519e50f1a51985f1edb6541c4efd934d">Isis::Sensor::HasSurfaceIntersection()</a>, <a class="el" href="class_isis_1_1_sensor.html#aa6d01724fb788391b269e18324639007">Isis::Sensor::IgnoreElevationModel()</a>, <a class="el" href="class_isis_1_1_c_s_m_camera.html#a57b471ad34ef531c200a96bf9e26705d">Isis::CSMCamera::IncidenceAngle()</a>, <a class="el" href="class_isis_1_1_sensor.html#ababde9e6946d94a049211d8a97e33cdd">Isis::Sensor::IncidenceAngle()</a>, <a class="el" href="class_isis_1_1_camera.html#aa64212bc046ea5976587846c1e914de8">Isis::Camera::LoadCache()</a>, <a class="el" href="class_isis_1_1_sensor.html#ad9cca396f205c2c709d825f13c42937e">Isis::Sensor::LocalRadius()</a>, <a class="el" href="class_isis_1_1_find_tool.html#ac9c6ea45b071e5c2c02a945025d595bc">Isis::FindTool::mouseButtonRelease()</a>, <a class="el" href="class_isis_1_1_camera.html#a0783c77e64bd231a98da87c16814ad02">Isis::Camera::NorthAzimuth()</a>, <a class="el" href="class_isis_1_1_c_s_m_camera.html#a9ef9dfe67215074bf963b1ecbdf44d30">Isis::CSMCamera::PhaseAngle()</a>, <a class="el" href="class_isis_1_1_vims_ground_map.html#a3f3562584637b85df598ead4665812d8">Isis::VimsGroundMap::SetGround()</a>, <a class="el" href="class_isis_1_1_radar_ground_map.html#a50f20e842f09ad9370d200b598e9f8bd">Isis::RadarGroundMap::SetGround()</a>, <a class="el" href="class_isis_1_1_sensor.html#a92656fb1524de2e86367c1d84bd3d151">Isis::Sensor::SetGround()</a>, <a class="el" href="class_isis_1_1_camera.html#ac6b03615f3223c63d8f16fb352887455">Isis::Camera::SetGround()</a>, <a class="el" href="class_isis_1_1_c_s_m_camera.html#ae589c47da51f4b39d954f9fca1512597">Isis::CSMCamera::SetGround()</a>, <a class="el" href="class_isis_1_1_camera.html#a8c77ac87c62e4a9cd168966ede042b04">Isis::Camera::SetImage()</a>, <a class="el" href="class_isis_1_1_c_s_m_camera.html#a1339af245cff8a91ed1625156d17f993">Isis::CSMCamera::SetImage()</a>, <a class="el" href="class_isis_1_1_sensor.html#ae3f0c97b9a7e1c90c6da6d0351fbdd1d">Isis::Sensor::SetLookDirection()</a>, <a class="el" href="class_isis_1_1_c_s_m_camera.html#aeb4e8855f196577b4165728fe2655100">Isis::CSMCamera::SetLookDirection()</a>, <a class="el" href="class_isis_1_1_camera.html#af0cd6af4d555f46d623e91d397389df3">Isis::Camera::SetRightAscensionDeclination()</a>, <a class="el" href="class_isis_1_1_c_s_m_camera.html#a06ee2ad6ec26524cf4bd03ad9d7ed52e">Isis::CSMCamera::setTarget()</a>, <a class="el" href="class_isis_1_1_sensor.html#a045920302d998435e6b21b4e5ec22383">Isis::Sensor::setTime()</a>, <a class="el" href="class_isis_1_1_camera.html#aa85da101ac74f8593e04ef51984250e0">Isis::Camera::SetUniversalGround()</a>, <a class="el" href="class_isis_1_1_sensor.html#a1bb289fabb0b25b71837ad6affbf3627">Isis::Sensor::SetUniversalGround()</a>, <a class="el" href="class_isis_1_1_sensor.html#a54002c62d787f2d823596913195a6f5e">Isis::Sensor::SlantDistance()</a>, <a class="el" href="class_isis_1_1_camera.html#ae1e82ce341e7b5d7ae7ad7cab4e2b18e">Isis::Camera::Slope()</a>, and <a class="el" href="class_isis_1_1_sensor.html#a50996aa3ed89ffd015f228bf592b63c4">Isis::Sensor::SolarDistance()</a>.</p>
+
+</div>
+</div>
+<a id="a5939e730d6025a5a6df3c5311108bc28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5939e730d6025a5a6df3c5311108bc28">&#9670;&nbsp;</a></span>targetCenterDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Spice::targetCenterDistance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates and returns the distance from the spacecraft to the target center. </p>
+<dl class="section return"><dt>Returns</dt><dd>double <a class="el" href="class_isis_1_1_distance.html" title="Distance measurement, usually in meters.">Distance</a> to the center of the target from the spacecraft </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_c_s_m_camera.html#af86b6e28592118cdc1064b4671b97e09">Isis::CSMCamera</a>.</p>
+
+</div>
+</div>
+<a id="ac7bde6a47af90049984f1d3c1d54698a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7bde6a47af90049984f1d3c1d54698a">&#9670;&nbsp;</a></span>targetName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Spice::targetName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the QString name of the target. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_target.html#adab1312c54fb0f39e599310a65de639f">Isis::Target::name()</a>.</p>
+
+</div>
+</div>
+<a id="aa29e0f5a538a4d3ebc6932245514dcb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa29e0f5a538a4d3ebc6932245514dcb4">&#9670;&nbsp;</a></span>time()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1i_time.html">iTime</a> Isis::Spice::time </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the ephemeris time in seconds which was used to obtain the spacecraft and sun positions. </p>
+<dl class="section return"><dt>Returns</dt><dd><b><a class="el" href="class_isis_1_1i_time.html" title="Parse and return pieces of a time string.">iTime</a></b> the currently set ephemeris time</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab" title="This error is for when a programmer made an API call that was illegal.">IException::Programmer</a></td><td>"Unable to retrieve the time Spice::setTime must be called
+        first." </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_line_scan_camera_ground_map.html#a1f943e11dbd5161b7aec1380ec4ef3ce">Isis::LineScanCameraGroundMap::FindFocalPlane()</a>, <a class="el" href="class_isis_1_1_hires_camera.html#a180c7e99246c852d64b1841e720d8259">Isis::HiresCamera::HiresCamera()</a>, <a class="el" href="class_isis_1_1_kaguya_tc_camera.html#aa3a277ae3b92dd76f39e3afcb2259ad0">Isis::KaguyaTcCamera::KaguyaTcCamera()</a>, <a class="el" href="class_isis_1_1_lo_high_camera.html#a5d1c553aa0747b7e8278fe7c04710368">Isis::LoHighCamera::LoHighCamera()</a>, <a class="el" href="class_isis_1_1_lo_medium_camera.html#a867c099f83e4b758eedc59e08208c573">Isis::LoMediumCamera::LoMediumCamera()</a>, <a class="el" href="class_isis_1_1_lwir_camera.html#a3de974cfebf81e9d0e8418af30ca0dae">Isis::LwirCamera::LwirCamera()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_frame_camera.html#a8b2169eac30192eaf01102b4241d5aad">Isis::NewHorizonsMvicFrameCamera::SetBand()</a>, <a class="el" href="class_isis_1_1_line_scan_camera_detector_map.html#a2333a7830f3d56370a5c6d125e3485ca">Isis::LineScanCameraDetectorMap::SetDetector()</a>, <a class="el" href="class_isis_1_1_radar_pulse_map.html#a49152e3372c95ef321517f125a9e294b">Isis::RadarPulseMap::SetDetector()</a>, <a class="el" href="class_isis_1_1_variable_line_scan_camera_detector_map.html#a020f7d540418523f335518e9bbdc6b83">Isis::VariableLineScanCameraDetectorMap::SetDetector()</a>, <a class="el" href="class_isis_1_1_radar_slant_range_map.html#af9fe30da54558d03541223bc8bdbac08">Isis::RadarSlantRangeMap::SetFocalPlane()</a>, <a class="el" href="class_isis_1_1_camera_detector_map.html#af7f1e8daeeb924e306190ff1639c1219">Isis::CameraDetectorMap::SetParent()</a>, <a class="el" href="class_isis_1_1_rolling_shutter_camera_detector_map.html#ae95d85080321cad08503e4a8362a535b">Isis::RollingShutterCameraDetectorMap::SetParent()</a>, <a class="el" href="class_isis_1_1_sensor.html#a045920302d998435e6b21b4e5ec22383">Isis::Sensor::setTime()</a>, <a class="el" href="class_isis_1_1_radar_slant_range_map.html#a652ed381cf8b5bb6507adf5375bed30b">Isis::RadarSlantRangeMap::SetUndistortedFocalPlane()</a>, <a class="el" href="class_isis_1_1_apollo_metric_camera.html#a5d007721e1718e3c3a28320d038e8ee0">Isis::ApolloMetricCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_iss_n_a_camera.html#a59692b685623e720093bc30515990011">Isis::IssNACamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_iss_w_a_camera.html#a8e73c6b5feef96da207dce2519a15bf6">Isis::IssWACamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_hires_camera.html#a2e753646f7f9b6edffdd6ab9673195ab">Isis::HiresCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_lwir_camera.html#a8d2a2f12f8d14660bbc71d5172bb4631">Isis::LwirCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_nir_camera.html#a431299b169110c6871b985bac4f063ee">Isis::NirCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_uvvis_camera.html#a098f3ddc050f1c7a6ca5d06c7a22edae">Isis::UvvisCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_clipper_wac_fc_camera.html#a17045577528bcb027a67fa3d828e0e5a">Isis::ClipperWacFcCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_dawn_fc_camera.html#a1103c96cd7dad72a2f58fb91219760d8">Isis::DawnFcCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_ssi_camera.html#a20df6d23370b51aa23ad033f1c2cb887">Isis::SsiCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_hayabusa_amica_camera.html#acffd68dafc3ed0cf18c3aef375274b1f">Isis::HayabusaAmicaCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_hayabusa_nirs_camera.html#a73c86f2587680b7a9baa0cb59632c6fc">Isis::HayabusaNirsCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_hyb2_onc_camera.html#a9195512d8a8827152b059aacf326a872">Isis::Hyb2OncCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_juno_camera.html#aac644a1504494dc28b2b863b648fc057">Isis::JunoCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_lo_high_camera.html#aa1e96eb9ac7f2125e0f86d463a2e424b">Isis::LoHighCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_lo_medium_camera.html#a6e7ab49ba85443f255dc379904f8ebbe">Isis::LoMediumCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_mariner10_camera.html#ab6b515e5666d8c558c3147e2ac011e10">Isis::Mariner10Camera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_mdis_camera.html#a03adc3ab65d696151636c08a35db8636">Isis::MdisCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_mex_hrsc_src_camera.html#ab4859d505eb91ab1e2582d49c13705cf">Isis::MexHrscSrcCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_msi_camera.html#aed42e19783ae0d5f20484b161e6a0118">Isis::MsiCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_new_horizons_lorri_camera.html#a41dfa9ab6471b70625bec997d685fbc6">Isis::NewHorizonsLorriCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_new_horizons_mvic_frame_camera.html#afe14b3548fe24d78767e3da1c3edd820">Isis::NewHorizonsMvicFrameCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_osiris_rex_ocams_camera.html#a04cfb697b63cbe83eee1a3e406545f3f">Isis::OsirisRexOcamsCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_osiris_rex_tagcams_camera.html#a8b11deb3870e8216bfd48d9d81774e6c">Isis::OsirisRexTagcamsCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_rosetta_osiris_camera.html#ade5ed059dbab0febd4150044e6159c30">Isis::RosettaOsirisCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_tgo_cassis_camera.html#a2349bb83a4bc7b1d972f14572388910a">Isis::TgoCassisCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_viking_camera.html#a5294aa8f07fefac21e9c2443b8960047">Isis::VikingCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_voyager_camera.html#ad1170f356b20e62e73b3bf2e8aeda603">Isis::VoyagerCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_framing_camera.html#a12d2f94d35dab6fa398cf899f263c9c0">Isis::FramingCamera::ShutterOpenCloseTimes()</a>, <a class="el" href="class_isis_1_1_camera.html#a0802954432c931a411fe274a14cc9fab">Isis::Camera::StartEndEphemerisTimes()</a>, and <a class="el" href="class_isis_1_1_uvvis_camera.html#aad2dd78ca84967f7d8817576805ad2ea">Isis::UvvisCamera::UvvisCamera()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a083adc2f18b75712cf113e5bd699b8b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a083adc2f18b75712cf113e5bd699b8b9">&#9670;&nbsp;</a></span>m_BJ</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpiceDouble Isis::Spice::m_BJ[3][3]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This contains the transformation matrix from J2000 (J) to Body fixed (B). </p>
+<p>Recall that the transpose of this matrix JB will convert from body-fixed to J2000. It is left in protected space so that conversions between double and SpiceDouble do not have to occur in inheriting classes. </p>
+
+</div>
+</div>
+<a id="ad9c1f00606e8dc55da927dcfb04a047f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9c1f00606e8dc55da927dcfb04a047f">&#9670;&nbsp;</a></span>m_et</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1i_time.html">iTime</a>* Isis::Spice::m_et</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Ephemeris time (read NAIF documentation for a detailed description) </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_c_s_m_camera.html#a21ac63f8328bf83b682af7088ceca46d">Isis::CSMCamera::SetGround()</a>, and <a class="el" href="class_isis_1_1_c_s_m_camera.html#a1339af245cff8a91ed1625156d17f993">Isis::CSMCamera::SetImage()</a>.</p>
+
+</div>
+</div>
+<a id="a1b9f3fec795dbb7189765b9f45eb4906"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b9f3fec795dbb7189765b9f45eb4906">&#9670;&nbsp;</a></span>m_solarLongitude</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_longitude.html">Longitude</a>* Isis::Spice::m_solarLongitude</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Body rotation solar longitude value. </p>
+
+</div>
+</div>
+<a id="a130a339cb5dbbf75235a3a6b4d615e7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a130a339cb5dbbf75235a3a6b4d615e7b">&#9670;&nbsp;</a></span>m_target</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_target.html">Target</a>* Isis::Spice::m_target</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_isis_1_1_target.html" title="This class is used to create and store valid Isis targets.">Target</a> of the observation. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_c_s_m_camera.html#a06ee2ad6ec26524cf4bd03ad9d7ed52e">Isis::CSMCamera::setTarget()</a>.</p>
+
+</div>
+</div>
+<a id="acf71400239ea30e67c9ea81b16a2dda1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf71400239ea30e67c9ea81b16a2dda1">&#9670;&nbsp;</a></span>m_uB</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpiceDouble Isis::Spice::m_uB[3]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This contains the sun position (u) in the bodyfixed reference frame (B). </p>
+<p>It is left protected so that conversions between double and SpiceDouble do not have to occur in inheriting classes. Units are km </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_sensor.html#ababde9e6946d94a049211d8a97e33cdd">Isis::Sensor::IncidenceAngle()</a>, <a class="el" href="class_isis_1_1_camera.html#ab9aa06849d48a28fdc9adaa5eac4b1b2">Isis::Camera::LocalPhotometricAngles()</a>, and <a class="el" href="class_isis_1_1_sensor.html#aaa46000d977d325137b229be2644e1b2">Isis::Sensor::PhaseAngle()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Spice/<a class="el" href="_spice_8h_source.html">Spice.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/Spice/<a class="el" href="_spice_8cpp.html">Spice.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_spice.html">Spice</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

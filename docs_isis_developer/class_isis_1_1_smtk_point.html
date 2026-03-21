@@ -1,0 +1,790 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::SmtkPoint Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_smtk_point.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="class_isis_1_1_smtk_point-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::SmtkPoint Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Container for SMTK match points.  
+ <a href="class_isis_1_1_smtk_point.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_smtk_point_8h_source.html">SmtkPoint.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::SmtkPoint:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_smtk_point__coll__graph.png" border="0" usemap="#a_isis_1_1_smtk_point_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_smtk_point_coll__map" id="a_isis_1_1_smtk_point_coll__map">
+<area shape="rect" title="Container for SMTK match points." alt="" coords="173,1131,303,1388"/>
+<area shape="rect" href="class_isis_1_1_match_point.html" title="Structure containing comprehensive registration info/results." alt="" coords="344,841,468,1051"/>
+<area shape="rect" href="class_isis_1_1_affine_radio.html" title="Container for affine and radiometric parameters." alt="" coords="536,399,655,608"/>
+<area shape="rect" href="class_isis_1_1_point_pair.html" title="Define a point set of left, right and geometry at that location." alt="" coords="119,375,253,632"/>
+<area shape="rect" href="class_isis_1_1_coordinate.html" title="Define a generic Y/X container." alt="" coords="70,5,187,295"/>
+<area shape="rect" href="class_isis_1_1_point_geometry.html" title="Container for a point and its geometry." alt="" coords="5,656,143,817"/>
+<area shape="rect" title=" " alt="" coords="336,109,375,191"/>
+<area shape="rect" href="struct_isis_1_1_analysis.html" title="Error analysis of Gruen match point solution." alt="" coords="396,431,512,576"/>
+<area shape="rect" title=" " alt="" coords="273,905,318,987"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a920b76183e82ab276d2e8b80ff2d92ba"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#a920b76183e82ab276d2e8b80ff2d92ba">SmtkPoint</a> ()</td></tr>
+<tr class="separator:a920b76183e82ab276d2e8b80ff2d92ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac07dc1d195eb00628ef8c65509407394"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#ac07dc1d195eb00628ef8c65509407394">SmtkPoint</a> (const <a class="el" href="class_isis_1_1_point_pair.html">PointPair</a> &amp;point, const <a class="el" href="class_isis_1_1_point_pair.html">PointPair</a> &amp;geom=<a class="el" href="class_isis_1_1_point_pair.html">PointPair</a>())</td></tr>
+<tr class="separator:ac07dc1d195eb00628ef8c65509407394"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4b4151cf976ba8da7bfc177b70e8091"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#ae4b4151cf976ba8da7bfc177b70e8091">SmtkPoint</a> (const <a class="el" href="class_isis_1_1_match_point.html">MatchPoint</a> &amp;mpt, const <a class="el" href="class_isis_1_1_point_geometry.html">PointGeometry</a> &amp;regpnt, const <a class="el" href="class_isis_1_1_point_pair.html">PointPair</a> &amp;geom)</td></tr>
+<tr class="separator:ae4b4151cf976ba8da7bfc177b70e8091"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3398466e003d6a7d67d61f46c5e5e0ea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#a3398466e003d6a7d67d61f46c5e5e0ea">~SmtkPoint</a> ()</td></tr>
+<tr class="separator:a3398466e003d6a7d67d61f46c5e5e0ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46e9cdce60418d9245ed47784e82a463"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#a46e9cdce60418d9245ed47784e82a463">isValid</a> () const</td></tr>
+<tr class="memdesc:a46e9cdce60418d9245ed47784e82a463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates the smtk portion of the point is valid.  <a href="class_isis_1_1_smtk_point.html#a46e9cdce60418d9245ed47784e82a463">More...</a><br /></td></tr>
+<tr class="separator:a46e9cdce60418d9245ed47784e82a463"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dd690dc8281d1b3d75e74c9cc880ced"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#a0dd690dc8281d1b3d75e74c9cc880ced">GoodnessOfFit</a> () const</td></tr>
+<tr class="memdesc:a0dd690dc8281d1b3d75e74c9cc880ced"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns goodness of the fit registration.  <a href="class_isis_1_1_smtk_point.html#a0dd690dc8281d1b3d75e74c9cc880ced">More...</a><br /></td></tr>
+<tr class="separator:a0dd690dc8281d1b3d75e74c9cc880ced"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ce4d5c294393692f8afb90fa8deb949"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_point_pair.html">PointPair</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#a9ce4d5c294393692f8afb90fa8deb949">getPoints</a> () const</td></tr>
+<tr class="memdesc:a9ce4d5c294393692f8afb90fa8deb949"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get initial left and right point pair.  <a href="class_isis_1_1_smtk_point.html#a9ce4d5c294393692f8afb90fa8deb949">More...</a><br /></td></tr>
+<tr class="separator:a9ce4d5c294393692f8afb90fa8deb949"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af986baaa5c1560b0f4e92c320d1d7053"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_point_pair.html">PointPair</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#af986baaa5c1560b0f4e92c320d1d7053">getGeometry</a> () const</td></tr>
+<tr class="memdesc:af986baaa5c1560b0f4e92c320d1d7053"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return left and right point geometry.  <a href="class_isis_1_1_smtk_point.html#af986baaa5c1560b0f4e92c320d1d7053">More...</a><br /></td></tr>
+<tr class="separator:af986baaa5c1560b0f4e92c320d1d7053"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57ab920b72e28cfcc9164a17e26306df"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#a57ab920b72e28cfcc9164a17e26306df">getLeft</a> () const</td></tr>
+<tr class="memdesc:a57ab920b72e28cfcc9164a17e26306df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the left point.  <a href="class_isis_1_1_smtk_point.html#a57ab920b72e28cfcc9164a17e26306df">More...</a><br /></td></tr>
+<tr class="separator:a57ab920b72e28cfcc9164a17e26306df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a265454674ad895f87dd67013be0d9a9f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#a265454674ad895f87dd67013be0d9a9f">getRight</a> () const</td></tr>
+<tr class="memdesc:a265454674ad895f87dd67013be0d9a9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <b>registered</b> right coordinate.  <a href="class_isis_1_1_smtk_point.html#a265454674ad895f87dd67013be0d9a9f">More...</a><br /></td></tr>
+<tr class="separator:a265454674ad895f87dd67013be0d9a9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01c9a189ba58ae02e4abfafbc7c3f454"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_affine_radio.html">AffineRadio</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#a01c9a189ba58ae02e4abfafbc7c3f454">getAffine</a> () const</td></tr>
+<tr class="memdesc:a01c9a189ba58ae02e4abfafbc7c3f454"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the affine transform and radiometic results.  <a href="class_isis_1_1_smtk_point.html#a01c9a189ba58ae02e4abfafbc7c3f454">More...</a><br /></td></tr>
+<tr class="separator:a01c9a189ba58ae02e4abfafbc7c3f454"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09a630765b5306cc980e79cbebe15659"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#a09a630765b5306cc980e79cbebe15659">isRegistered</a> () const</td></tr>
+<tr class="memdesc:a09a630765b5306cc980e79cbebe15659"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns registration status.  <a href="class_isis_1_1_smtk_point.html#a09a630765b5306cc980e79cbebe15659">More...</a><br /></td></tr>
+<tr class="separator:a09a630765b5306cc980e79cbebe15659"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:aae9deb63f80f658e65881da7d85d8244"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_match_point.html">MatchPoint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#aae9deb63f80f658e65881da7d85d8244">m_matchpt</a></td></tr>
+<tr class="separator:aae9deb63f80f658e65881da7d85d8244"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5cd0ebaba402ab4e3708bab8103cfac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_point_geometry.html">PointGeometry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#ac5cd0ebaba402ab4e3708bab8103cfac">m_regpnt</a></td></tr>
+<tr class="separator:ac5cd0ebaba402ab4e3708bab8103cfac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2d239fb76a5783ffb3bbc4691dc6c9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_point_pair.html">PointPair</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#ab2d239fb76a5783ffb3bbc4691dc6c9b">m_geom</a></td></tr>
+<tr class="separator:ab2d239fb76a5783ffb3bbc4691dc6c9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c1875d4c6774f99b7123061eb5e0d4a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#a7c1875d4c6774f99b7123061eb5e0d4a">m_registered</a></td></tr>
+<tr class="separator:a7c1875d4c6774f99b7123061eb5e0d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae071c7b0f7b0c2939b70a102d1444a32"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_smtk_point.html#ae071c7b0f7b0c2939b70a102d1444a32">m_isValid</a></td></tr>
+<tr class="separator:ae071c7b0f7b0c2939b70a102d1444a32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Container for SMTK match points. </p>
+<p>This container maintains the state of a SMTK point candidate. It will hold all the neccessary information to complete stereo processing and generation of other SMTK points.</p>
+<dl class="section author"><dt>Author</dt><dd>2011-05-24 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a920b76183e82ab276d2e8b80ff2d92ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a920b76183e82ab276d2e8b80ff2d92ba">&#9670;&nbsp;</a></span>SmtkPoint() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SmtkPoint::SmtkPoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac07dc1d195eb00628ef8c65509407394"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac07dc1d195eb00628ef8c65509407394">&#9670;&nbsp;</a></span>SmtkPoint() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SmtkPoint::SmtkPoint </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_point_pair.html">PointPair</a> &amp;&#160;</td>
+          <td class="paramname"><em>point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_point_pair.html">PointPair</a> &amp;&#160;</td>
+          <td class="paramname"><em>geom</em> = <code><a class="el" href="class_isis_1_1_point_pair.html">PointPair</a>()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae4b4151cf976ba8da7bfc177b70e8091"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4b4151cf976ba8da7bfc177b70e8091">&#9670;&nbsp;</a></span>SmtkPoint() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SmtkPoint::SmtkPoint </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_match_point.html">MatchPoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>mpt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_point_geometry.html">PointGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>regpnt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_point_pair.html">PointPair</a> &amp;&#160;</td>
+          <td class="paramname"><em>geom</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3398466e003d6a7d67d61f46c5e5e0ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3398466e003d6a7d67d61f46c5e5e0ea">&#9670;&nbsp;</a></span>~SmtkPoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::SmtkPoint::~SmtkPoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a01c9a189ba58ae02e4abfafbc7c3f454"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01c9a189ba58ae02e4abfafbc7c3f454">&#9670;&nbsp;</a></span>getAffine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_affine_radio.html">AffineRadio</a>&amp; Isis::SmtkPoint::getAffine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the affine transform and radiometic results. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_match_point.html#abf73d88d456cd6be30ec5d9e5a07bb1b">Isis::MatchPoint::m_affine</a>, and <a class="el" href="class_isis_1_1_smtk_point.html#aae9deb63f80f658e65881da7d85d8244">m_matchpt</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_smtk_matcher.html#a059c39e7543ba69591620062b2aa9ca8">Isis::SmtkMatcher::Clone()</a>.</p>
+
+</div>
+</div>
+<a id="af986baaa5c1560b0f4e92c320d1d7053"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af986baaa5c1560b0f4e92c320d1d7053">&#9670;&nbsp;</a></span>getGeometry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_point_pair.html">PointPair</a>&amp; Isis::SmtkPoint::getGeometry </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return left and right point geometry. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_smtk_point.html#ab2d239fb76a5783ffb3bbc4691dc6c9b">m_geom</a>.</p>
+
+</div>
+</div>
+<a id="a57ab920b72e28cfcc9164a17e26306df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57ab920b72e28cfcc9164a17e26306df">&#9670;&nbsp;</a></span>getLeft()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_coordinate.html">Coordinate</a>&amp; Isis::SmtkPoint::getLeft </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the left point. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_smtk_point.html#a9ce4d5c294393692f8afb90fa8deb949">getPoints()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_smtk_matcher.html#a059c39e7543ba69591620062b2aa9ca8">Isis::SmtkMatcher::Clone()</a>, <a class="el" href="class_isis_1_1_smtk_matcher.html#a1d555ba08fa92a16922699fd3aca9aa6">Isis::SmtkMatcher::isValid()</a>, and <a class="el" href="class_isis_1_1_smtk_matcher.html#a2b048162320ec049c9f3889f1e411d4d">Isis::SmtkMatcher::Register()</a>.</p>
+
+</div>
+</div>
+<a id="a9ce4d5c294393692f8afb90fa8deb949"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ce4d5c294393692f8afb90fa8deb949">&#9670;&nbsp;</a></span>getPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_point_pair.html">PointPair</a>&amp; Isis::SmtkPoint::getPoints </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get initial left and right point pair. </p>
+<p>This method returns the points used in the registration of the point. The right point contains the origin of registration and <b>NOT</b> the registered point.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_smtk_point.html#a265454674ad895f87dd67013be0d9a9f" title="Returns the registered right coordinate.">getRight()</a></dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Kris Becker - 6/4/2011</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="class_isis_1_1_point_pair.html" title="Define a point set of left, right and geometry at that location.">PointPair</a>&amp; Returns left/right point pair </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_smtk_point.html#aae9deb63f80f658e65881da7d85d8244">m_matchpt</a>, and <a class="el" href="class_isis_1_1_match_point.html#a9b5d51ef51f1f6e0adba8ac2ce47bfea">Isis::MatchPoint::m_point</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_smtk_point.html#a57ab920b72e28cfcc9164a17e26306df">getLeft()</a>.</p>
+
+</div>
+</div>
+<a id="a265454674ad895f87dd67013be0d9a9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a265454674ad895f87dd67013be0d9a9f">&#9670;&nbsp;</a></span>getRight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_coordinate.html">Coordinate</a>&amp; Isis::SmtkPoint::getRight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the <b>registered</b> right coordinate. </p>
+<p>Use this method to get the <b>registered</b> right point coordinate. It should be the one used to compute the stereo match.</p>
+<dl class="section author"><dt>Author</dt><dd>Kris Becker - 6/4/2011</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="class_isis_1_1_coordinate.html" title="Define a generic Y/X container.">Coordinate</a>&amp; <a class="el" href="class_isis_1_1_coordinate.html" title="Define a generic Y/X container.">Coordinate</a> of the right registered point </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_point_geometry.html#aa0c1e79886ecbfc06ad0952cce423a35">Isis::PointGeometry::getPoint()</a>, and <a class="el" href="class_isis_1_1_smtk_point.html#ac5cd0ebaba402ab4e3708bab8103cfac">m_regpnt</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_smtk_matcher.html#a059c39e7543ba69591620062b2aa9ca8">Isis::SmtkMatcher::Clone()</a>, <a class="el" href="class_isis_1_1_smtk_matcher.html#a1d555ba08fa92a16922699fd3aca9aa6">Isis::SmtkMatcher::isValid()</a>, and <a class="el" href="class_isis_1_1_smtk_matcher.html#a2b048162320ec049c9f3889f1e411d4d">Isis::SmtkMatcher::Register()</a>.</p>
+
+</div>
+</div>
+<a id="a0dd690dc8281d1b3d75e74c9cc880ced"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dd690dc8281d1b3d75e74c9cc880ced">&#9670;&nbsp;</a></span>GoodnessOfFit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::SmtkPoint::GoodnessOfFit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns goodness of the fit registration. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_match_point.html#a477f9d754d2bf02f28c4114f532bd0e8">Isis::MatchPoint::getEigen()</a>, and <a class="el" href="class_isis_1_1_smtk_point.html#aae9deb63f80f658e65881da7d85d8244">m_matchpt</a>.</p>
+
+</div>
+</div>
+<a id="a09a630765b5306cc980e79cbebe15659"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09a630765b5306cc980e79cbebe15659">&#9670;&nbsp;</a></span>isRegistered()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::SmtkPoint::isRegistered </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns registration status. </p>
+<p>If this method returns true, then the point set has been registered by the <a class="el" href="class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm.">Gruen</a> algorithm. If false, it is not registered. This could be because the point was unsuccessfully registered (see <a class="el" href="class_isis_1_1_smtk_point.html#a46e9cdce60418d9245ed47784e82a463" title="Indicates the smtk portion of the point is valid.">isValid()</a>) or it was cloned from a registered point.</p>
+<dl class="section author"><dt>Author</dt><dd>Kris Becker - 5/26/2011</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if point has been registered, otherwise false. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_smtk_point.html#a7c1875d4c6774f99b7123061eb5e0d4a">m_registered</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_smtk_matcher.html#a2b048162320ec049c9f3889f1e411d4d">Isis::SmtkMatcher::Register()</a>.</p>
+
+</div>
+</div>
+<a id="a46e9cdce60418d9245ed47784e82a463"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46e9cdce60418d9245ed47784e82a463">&#9670;&nbsp;</a></span>isValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::SmtkPoint::isValid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Indicates the smtk portion of the point is valid. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_smtk_point.html#ae071c7b0f7b0c2939b70a102d1444a32">m_isValid</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_smtk_matcher.html#a1d555ba08fa92a16922699fd3aca9aa6">Isis::SmtkMatcher::isValid()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ab2d239fb76a5783ffb3bbc4691dc6c9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2d239fb76a5783ffb3bbc4691dc6c9b">&#9670;&nbsp;</a></span>m_geom</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_point_pair.html">PointPair</a> Isis::SmtkPoint::m_geom</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_smtk_point.html#af986baaa5c1560b0f4e92c320d1d7053">getGeometry()</a>.</p>
+
+</div>
+</div>
+<a id="ae071c7b0f7b0c2939b70a102d1444a32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae071c7b0f7b0c2939b70a102d1444a32">&#9670;&nbsp;</a></span>m_isValid</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::SmtkPoint::m_isValid</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_smtk_matcher.html#a059c39e7543ba69591620062b2aa9ca8">Isis::SmtkMatcher::Clone()</a>, <a class="el" href="class_isis_1_1_smtk_matcher.html#af4a5827dd3435e5512aa586a01c01cde">Isis::SmtkMatcher::Create()</a>, and <a class="el" href="class_isis_1_1_smtk_point.html#a46e9cdce60418d9245ed47784e82a463">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="aae9deb63f80f658e65881da7d85d8244"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae9deb63f80f658e65881da7d85d8244">&#9670;&nbsp;</a></span>m_matchpt</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_match_point.html">MatchPoint</a> Isis::SmtkPoint::m_matchpt</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_smtk_matcher.html#a059c39e7543ba69591620062b2aa9ca8">Isis::SmtkMatcher::Clone()</a>, <a class="el" href="class_isis_1_1_smtk_matcher.html#af4a5827dd3435e5512aa586a01c01cde">Isis::SmtkMatcher::Create()</a>, <a class="el" href="class_isis_1_1_smtk_point.html#a01c9a189ba58ae02e4abfafbc7c3f454">getAffine()</a>, <a class="el" href="class_isis_1_1_smtk_point.html#a9ce4d5c294393692f8afb90fa8deb949">getPoints()</a>, and <a class="el" href="class_isis_1_1_smtk_point.html#a0dd690dc8281d1b3d75e74c9cc880ced">GoodnessOfFit()</a>.</p>
+
+</div>
+</div>
+<a id="a7c1875d4c6774f99b7123061eb5e0d4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c1875d4c6774f99b7123061eb5e0d4a">&#9670;&nbsp;</a></span>m_registered</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::SmtkPoint::m_registered</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_smtk_matcher.html#a059c39e7543ba69591620062b2aa9ca8">Isis::SmtkMatcher::Clone()</a>, and <a class="el" href="class_isis_1_1_smtk_point.html#a09a630765b5306cc980e79cbebe15659">isRegistered()</a>.</p>
+
+</div>
+</div>
+<a id="ac5cd0ebaba402ab4e3708bab8103cfac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5cd0ebaba402ab4e3708bab8103cfac">&#9670;&nbsp;</a></span>m_regpnt</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_point_geometry.html">PointGeometry</a> Isis::SmtkPoint::m_regpnt</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_smtk_point.html#a265454674ad895f87dd67013be0d9a9f">getRight()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/SmtkMatcher/<a class="el" href="_smtk_point_8h_source.html">SmtkPoint.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_smtk_point.html">SmtkPoint</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,1491 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::GisGeometry Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_gis_geometry.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="class_isis_1_1_gis_geometry-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::GisGeometry Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Encapsulation class provides support for GEOS-C API.  
+ <a href="class_isis_1_1_gis_geometry.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_gis_geometry_8h_source.html">GisGeometry.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::GisGeometry:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_gis_geometry__coll__graph.png" border="0" usemap="#a_isis_1_1_gis_geometry_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_gis_geometry_coll__map" id="a_isis_1_1_gis_geometry_coll__map">
+<area shape="rect" title="Encapsulation class provides support for GEOS&#45;C API." alt="" coords="5,5,133,279"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a778236818a0c0867cd73536383ad2b61"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61">Type</a> { <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a72df7c73a0b7721e4ce5a9dc734f6692">None</a>
+, <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61ae37b05fa0f88d8ca3f4e6322e97943ae">WKT</a>
+, <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a9d3ddc7cb077b5d6ef696d78f476d588">WKB</a>
+, <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a02d269fc3073c23b70acadc07f2d97a1">IsisCube</a>
+, <br />
+&#160;&#160;<a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a6dad2b2f2f7df190a8f0a433ba898e6a">GeosGis</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a778236818a0c0867cd73536383ad2b61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Source type of the geometry.  <a href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61">More...</a><br /></td></tr>
+<tr class="separator:a778236818a0c0867cd73536383ad2b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aff1831f6688bf32e87d67e6e8a0b1813"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#aff1831f6688bf32e87d67e6e8a0b1813">GisGeometry</a> ()</td></tr>
+<tr class="memdesc:aff1831f6688bf32e87d67e6e8a0b1813"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fundamental constructor of an empty object.  <a href="class_isis_1_1_gis_geometry.html#aff1831f6688bf32e87d67e6e8a0b1813">More...</a><br /></td></tr>
+<tr class="separator:aff1831f6688bf32e87d67e6e8a0b1813"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60745b0c027361d9293ae7894b659d48"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a60745b0c027361d9293ae7894b659d48">GisGeometry</a> (const double xlongitude, const double ylatitude)</td></tr>
+<tr class="memdesc:a60745b0c027361d9293ae7894b659d48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a point geometry.  <a href="class_isis_1_1_gis_geometry.html#a60745b0c027361d9293ae7894b659d48">More...</a><br /></td></tr>
+<tr class="separator:a60745b0c027361d9293ae7894b659d48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d4c68bceddf94ab549fdfac66eebcbe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a5d4c68bceddf94ab549fdfac66eebcbe">GisGeometry</a> (<a class="el" href="class_isis_1_1_cube.html">Cube</a> &amp;cube)</td></tr>
+<tr class="memdesc:a5d4c68bceddf94ab549fdfac66eebcbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a geometry from a cube file.  <a href="class_isis_1_1_gis_geometry.html#a5d4c68bceddf94ab549fdfac66eebcbe">More...</a><br /></td></tr>
+<tr class="separator:a5d4c68bceddf94ab549fdfac66eebcbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13f9328b93720c2478d8a266ff4fb744"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a13f9328b93720c2478d8a266ff4fb744">GisGeometry</a> (const QString &amp;gisSource, const <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61">Type</a> t)</td></tr>
+<tr class="memdesc:a13f9328b93720c2478d8a266ff4fb744"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a geometry from a character WKT/WKB source.  <a href="class_isis_1_1_gis_geometry.html#a13f9328b93720c2478d8a266ff4fb744">More...</a><br /></td></tr>
+<tr class="separator:a13f9328b93720c2478d8a266ff4fb744"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae357b9b6fa67b64c5d8060bcd13540d6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#ae357b9b6fa67b64c5d8060bcd13540d6">GisGeometry</a> (const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;geom)</td></tr>
+<tr class="memdesc:ae357b9b6fa67b64c5d8060bcd13540d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a geometry from another geometry by cloning.  <a href="class_isis_1_1_gis_geometry.html#ae357b9b6fa67b64c5d8060bcd13540d6">More...</a><br /></td></tr>
+<tr class="separator:ae357b9b6fa67b64c5d8060bcd13540d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab379914df077e7f67a27407b0987e1af"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#ab379914df077e7f67a27407b0987e1af">GisGeometry</a> (GEOSGeometry *geom)</td></tr>
+<tr class="memdesc:ab379914df077e7f67a27407b0987e1af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a GISGeometry directly from a GEOS-C GEOSGeometry.  <a href="class_isis_1_1_gis_geometry.html#ab379914df077e7f67a27407b0987e1af">More...</a><br /></td></tr>
+<tr class="separator:ab379914df077e7f67a27407b0987e1af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a856a0eb3100fa7d01c9864b0d4d1290c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a856a0eb3100fa7d01c9864b0d4d1290c">operator=</a> (<a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> const &amp;geom)</td></tr>
+<tr class="memdesc:a856a0eb3100fa7d01c9864b0d4d1290c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator for GISGeomtries.  <a href="class_isis_1_1_gis_geometry.html#a856a0eb3100fa7d01c9864b0d4d1290c">More...</a><br /></td></tr>
+<tr class="separator:a856a0eb3100fa7d01c9864b0d4d1290c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c4f7aebe2b0ece0d17d5d29847f9045"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a1c4f7aebe2b0ece0d17d5d29847f9045">~GisGeometry</a> ()</td></tr>
+<tr class="memdesc:a1c4f7aebe2b0ece0d17d5d29847f9045"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_gis_geometry.html#a1c4f7aebe2b0ece0d17d5d29847f9045">More...</a><br /></td></tr>
+<tr class="separator:a1c4f7aebe2b0ece0d17d5d29847f9045"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaba3a16ee4a567eb66b52414d1ddbd5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#aaba3a16ee4a567eb66b52414d1ddbd5c">setGeometry</a> (GEOSGeometry *geom)</td></tr>
+<tr class="memdesc:aaba3a16ee4a567eb66b52414d1ddbd5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the geometry directly taking ownership.  <a href="class_isis_1_1_gis_geometry.html#aaba3a16ee4a567eb66b52414d1ddbd5c">More...</a><br /></td></tr>
+<tr class="separator:aaba3a16ee4a567eb66b52414d1ddbd5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7134aa35bc27ca10748df91ab2f7e62"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#ad7134aa35bc27ca10748df91ab2f7e62">isDefined</a> () const</td></tr>
+<tr class="memdesc:ad7134aa35bc27ca10748df91ab2f7e62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the current geometry is valid.  <a href="class_isis_1_1_gis_geometry.html#ad7134aa35bc27ca10748df91ab2f7e62">More...</a><br /></td></tr>
+<tr class="separator:ad7134aa35bc27ca10748df91ab2f7e62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9640c8292d134aceed4feb5015949222"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid</a> () const</td></tr>
+<tr class="memdesc:a9640c8292d134aceed4feb5015949222"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines validity of the geometry contained in this object.  <a href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">More...</a><br /></td></tr>
+<tr class="separator:a9640c8292d134aceed4feb5015949222"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af908d0176d6c1e29ac6e979456d35601"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#af908d0176d6c1e29ac6e979456d35601">isValidReason</a> () const</td></tr>
+<tr class="memdesc:af908d0176d6c1e29ac6e979456d35601"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a string describing reason for invalid geometry.  <a href="class_isis_1_1_gis_geometry.html#af908d0176d6c1e29ac6e979456d35601">More...</a><br /></td></tr>
+<tr class="separator:af908d0176d6c1e29ac6e979456d35601"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad790f30c05b24f7589abe54429aaa5be"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#ad790f30c05b24f7589abe54429aaa5be">isEmpty</a> () const</td></tr>
+<tr class="memdesc:ad790f30c05b24f7589abe54429aaa5be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests for a defined but empty geometry.  <a href="class_isis_1_1_gis_geometry.html#ad790f30c05b24f7589abe54429aaa5be">More...</a><br /></td></tr>
+<tr class="separator:ad790f30c05b24f7589abe54429aaa5be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40a3024938ed77cad4aaccf5f4bc1032"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a40a3024938ed77cad4aaccf5f4bc1032">type</a> () const</td></tr>
+<tr class="memdesc:a40a3024938ed77cad4aaccf5f4bc1032"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type (origin) of the geometry.  <a href="class_isis_1_1_gis_geometry.html#a40a3024938ed77cad4aaccf5f4bc1032">More...</a><br /></td></tr>
+<tr class="separator:a40a3024938ed77cad4aaccf5f4bc1032"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79430ed7a5dff3b0d36123924555eae4"><td class="memItemLeft" align="right" valign="top">const GEOSGeometry *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a79430ed7a5dff3b0d36123924555eae4">geometry</a> () const</td></tr>
+<tr class="memdesc:a79430ed7a5dff3b0d36123924555eae4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the GEOSGeometry object to extend functionality.  <a href="class_isis_1_1_gis_geometry.html#a79430ed7a5dff3b0d36123924555eae4">More...</a><br /></td></tr>
+<tr class="separator:a79430ed7a5dff3b0d36123924555eae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9682cc9acfe03be86bd5635ec51fd858"><td class="memItemLeft" align="right" valign="top">const GEOSPreparedGeometry *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a9682cc9acfe03be86bd5635ec51fd858">preparedGeometry</a> () const</td></tr>
+<tr class="memdesc:a9682cc9acfe03be86bd5635ec51fd858"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns special GEOS prepared geometry if it exists.  <a href="class_isis_1_1_gis_geometry.html#a9682cc9acfe03be86bd5635ec51fd858">More...</a><br /></td></tr>
+<tr class="separator:a9682cc9acfe03be86bd5635ec51fd858"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a789ea39ab136a047e5835ac083d2886c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a789ea39ab136a047e5835ac083d2886c">clone</a> () const</td></tr>
+<tr class="memdesc:a789ea39ab136a047e5835ac083d2886c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clones the contents of this geometry to a new instance.  <a href="class_isis_1_1_gis_geometry.html#a789ea39ab136a047e5835ac083d2886c">More...</a><br /></td></tr>
+<tr class="separator:a789ea39ab136a047e5835ac083d2886c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a403e95fb825b80395ff6ee29cbf77d93"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a403e95fb825b80395ff6ee29cbf77d93">area</a> () const</td></tr>
+<tr class="memdesc:a403e95fb825b80395ff6ee29cbf77d93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the area of a geometry.  <a href="class_isis_1_1_gis_geometry.html#a403e95fb825b80395ff6ee29cbf77d93">More...</a><br /></td></tr>
+<tr class="separator:a403e95fb825b80395ff6ee29cbf77d93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8725ab71112417cbaa3d257b0398e997"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a8725ab71112417cbaa3d257b0398e997">length</a> () const</td></tr>
+<tr class="memdesc:a8725ab71112417cbaa3d257b0398e997"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the length of a geometry.  <a href="class_isis_1_1_gis_geometry.html#a8725ab71112417cbaa3d257b0398e997">More...</a><br /></td></tr>
+<tr class="separator:a8725ab71112417cbaa3d257b0398e997"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86ae153417a68a371c85147c487d9602"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a86ae153417a68a371c85147c487d9602">distance</a> (const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;target) const</td></tr>
+<tr class="memdesc:a86ae153417a68a371c85147c487d9602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distance between two geometries.  <a href="class_isis_1_1_gis_geometry.html#a86ae153417a68a371c85147c487d9602">More...</a><br /></td></tr>
+<tr class="separator:a86ae153417a68a371c85147c487d9602"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0b84e3983b010064f8d6d4d0156ff6f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#ad0b84e3983b010064f8d6d4d0156ff6f">points</a> () const</td></tr>
+<tr class="memdesc:ad0b84e3983b010064f8d6d4d0156ff6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of points in geometry.  <a href="class_isis_1_1_gis_geometry.html#ad0b84e3983b010064f8d6d4d0156ff6f">More...</a><br /></td></tr>
+<tr class="separator:ad0b84e3983b010064f8d6d4d0156ff6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cdbf5f819938c43af469a7bbb6cf996"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a5cdbf5f819938c43af469a7bbb6cf996">intersects</a> (const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;target) const</td></tr>
+<tr class="memdesc:a5cdbf5f819938c43af469a7bbb6cf996"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a new geometry from the intersection of the two geomtries.  <a href="class_isis_1_1_gis_geometry.html#a5cdbf5f819938c43af469a7bbb6cf996">More...</a><br /></td></tr>
+<tr class="separator:a5cdbf5f819938c43af469a7bbb6cf996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32a19b17639656d49cccd485541676f0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a32a19b17639656d49cccd485541676f0">contains</a> (const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;target) const</td></tr>
+<tr class="memdesc:a32a19b17639656d49cccd485541676f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if the target geometry is contained within this geometry.  <a href="class_isis_1_1_gis_geometry.html#a32a19b17639656d49cccd485541676f0">More...</a><br /></td></tr>
+<tr class="separator:a32a19b17639656d49cccd485541676f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bc46a02b820807ab820958f93c7e6f2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a5bc46a02b820807ab820958f93c7e6f2">disjoint</a> (const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;target) const</td></tr>
+<tr class="memdesc:a5bc46a02b820807ab820958f93c7e6f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests for disjoint geometries.  <a href="class_isis_1_1_gis_geometry.html#a5bc46a02b820807ab820958f93c7e6f2">More...</a><br /></td></tr>
+<tr class="separator:a5bc46a02b820807ab820958f93c7e6f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21bad54d77851cc468ef39ccf44931ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a21bad54d77851cc468ef39ccf44931ce">overlaps</a> (const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;target) const</td></tr>
+<tr class="memdesc:a21bad54d77851cc468ef39ccf44931ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test for overlapping geometries.  <a href="class_isis_1_1_gis_geometry.html#a21bad54d77851cc468ef39ccf44931ce">More...</a><br /></td></tr>
+<tr class="separator:a21bad54d77851cc468ef39ccf44931ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bdc0958fbe29cf4408cf9c0d11f54a5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a4bdc0958fbe29cf4408cf9c0d11f54a5">equals</a> (const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;target) const</td></tr>
+<tr class="memdesc:a4bdc0958fbe29cf4408cf9c0d11f54a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if target and this geometry are equal.  <a href="class_isis_1_1_gis_geometry.html#a4bdc0958fbe29cf4408cf9c0d11f54a5">More...</a><br /></td></tr>
+<tr class="separator:a4bdc0958fbe29cf4408cf9c0d11f54a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cabab88bbbf03a7a8dd1e6ba0a26aa4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a1cabab88bbbf03a7a8dd1e6ba0a26aa4">intersectRatio</a> (const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;geom) const</td></tr>
+<tr class="memdesc:a1cabab88bbbf03a7a8dd1e6ba0a26aa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes intersect ratio between two geometries.  <a href="class_isis_1_1_gis_geometry.html#a1cabab88bbbf03a7a8dd1e6ba0a26aa4">More...</a><br /></td></tr>
+<tr class="separator:a1cabab88bbbf03a7a8dd1e6ba0a26aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad06c910653989471ed4063f6e323f0bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#ad06c910653989471ed4063f6e323f0bd">buffer</a> (const double width=0.0, const int quadsegs=16) const</td></tr>
+<tr class="memdesc:ad06c910653989471ed4063f6e323f0bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute a buffer around an existing geometry.  <a href="class_isis_1_1_gis_geometry.html#ad06c910653989471ed4063f6e323f0bd">More...</a><br /></td></tr>
+<tr class="separator:ad06c910653989471ed4063f6e323f0bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2f043c64a05cf7654c1891f109a73c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#ab2f043c64a05cf7654c1891f109a73c9">envelope</a> () const</td></tr>
+<tr class="memdesc:ab2f043c64a05cf7654c1891f109a73c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the envelope or bounding box of this geometry.  <a href="class_isis_1_1_gis_geometry.html#ab2f043c64a05cf7654c1891f109a73c9">More...</a><br /></td></tr>
+<tr class="separator:ab2f043c64a05cf7654c1891f109a73c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d0915694d5bb0374a6c101bf9dfd69f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a5d0915694d5bb0374a6c101bf9dfd69f">convexHull</a> () const</td></tr>
+<tr class="memdesc:a5d0915694d5bb0374a6c101bf9dfd69f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the geometry.  <a href="class_isis_1_1_gis_geometry.html#a5d0915694d5bb0374a6c101bf9dfd69f">More...</a><br /></td></tr>
+<tr class="separator:a5d0915694d5bb0374a6c101bf9dfd69f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad491b2ad5546afd849178d24db375477"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#ad491b2ad5546afd849178d24db375477">simplify</a> (const double &amp;tolerance) const</td></tr>
+<tr class="memdesc:ad491b2ad5546afd849178d24db375477"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplify complex or overdetermined geoemtry.  <a href="class_isis_1_1_gis_geometry.html#ad491b2ad5546afd849178d24db375477">More...</a><br /></td></tr>
+<tr class="separator:ad491b2ad5546afd849178d24db375477"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1d24dbdeeda8efbac2a41f6fbeafcaa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#ae1d24dbdeeda8efbac2a41f6fbeafcaa">intersection</a> (const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;geom) const</td></tr>
+<tr class="memdesc:ae1d24dbdeeda8efbac2a41f6fbeafcaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of two geometries.  <a href="class_isis_1_1_gis_geometry.html#ae1d24dbdeeda8efbac2a41f6fbeafcaa">More...</a><br /></td></tr>
+<tr class="separator:ae1d24dbdeeda8efbac2a41f6fbeafcaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74afe5aed2a279458a84eb78d60ae242"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a74afe5aed2a279458a84eb78d60ae242">g_union</a> (const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;geom) const</td></tr>
+<tr class="memdesc:a74afe5aed2a279458a84eb78d60ae242"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the union of two geometries.  <a href="class_isis_1_1_gis_geometry.html#a74afe5aed2a279458a84eb78d60ae242">More...</a><br /></td></tr>
+<tr class="separator:a74afe5aed2a279458a84eb78d60ae242"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2771183e6835026d929e3937ee28886c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a2771183e6835026d929e3937ee28886c">centroid</a> () const</td></tr>
+<tr class="memdesc:a2771183e6835026d929e3937ee28886c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the centroid of the geometry and returns it as a new geometry.  <a href="class_isis_1_1_gis_geometry.html#a2771183e6835026d929e3937ee28886c">More...</a><br /></td></tr>
+<tr class="separator:a2771183e6835026d929e3937ee28886c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7be04d1a06316ec4ad8d45b09adec720"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a7be04d1a06316ec4ad8d45b09adec720">centroid</a> (double &amp;xlongitude, double &amp;ylatitude) const</td></tr>
+<tr class="memdesc:a7be04d1a06316ec4ad8d45b09adec720"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the centroid of a spatial geometry.  <a href="class_isis_1_1_gis_geometry.html#a7be04d1a06316ec4ad8d45b09adec720">More...</a><br /></td></tr>
+<tr class="separator:a7be04d1a06316ec4ad8d45b09adec720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a5284c8c3107a8d00bbffbc67c3efa995"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61">Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a5284c8c3107a8d00bbffbc67c3efa995">type</a> (const QString &amp;gtype)</td></tr>
+<tr class="memdesc:a5284c8c3107a8d00bbffbc67c3efa995"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns enum representation of the geometry origin from string type.  <a href="class_isis_1_1_gis_geometry.html#a5284c8c3107a8d00bbffbc67c3efa995">More...</a><br /></td></tr>
+<tr class="separator:a5284c8c3107a8d00bbffbc67c3efa995"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e5fe7ad80dffd52965e8da6ebd3c1c7"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_gis_geometry.html#a0e5fe7ad80dffd52965e8da6ebd3c1c7">typeToString</a> (const <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61">Type</a> &amp;<a class="el" href="class_isis_1_1_gis_geometry.html#a40a3024938ed77cad4aaccf5f4bc1032">type</a>)</td></tr>
+<tr class="memdesc:a0e5fe7ad80dffd52965e8da6ebd3c1c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type of the Geometry as a QString.  <a href="class_isis_1_1_gis_geometry.html#a0e5fe7ad80dffd52965e8da6ebd3c1c7">More...</a><br /></td></tr>
+<tr class="separator:a0e5fe7ad80dffd52965e8da6ebd3c1c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Encapsulation class provides support for GEOS-C API. </p>
+<p>The Geometry Engine, Open Source (GEOS) software package, developed in C++ from a port of the Java Topology Suite (JTS) provides a simplified, generic C API using an opaque C pointer. This layer is to provide a stable API from which to develop and maintain applications that are relatively immune from changes to the underlying C++ implementation.</p>
+<p>This class provides much of the basic elements to support simplified development of C++ applications with similiar goals - to provide immmunity from developmental changes to code using the GEOS-C API in a C++ development environment.</p>
+<p>The GEOS home page is <a href="http://trac.osgeo.org/geos/">http://trac.osgeo.org/geos/</a>. The documentation for the GEOS-C package can be found at <a href="http://geos.osgeo.org/doxygen/c_iface.html">http://geos.osgeo.org/doxygen/c_iface.html</a>.</p>
+<dl class="section author"><dt>Author</dt><dd>2012-07-15 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a778236818a0c0867cd73536383ad2b61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a778236818a0c0867cd73536383ad2b61">&#9670;&nbsp;</a></span>Type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61">Isis::GisGeometry::Type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Source type of the geometry. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a778236818a0c0867cd73536383ad2b61a72df7c73a0b7721e4ce5a9dc734f6692"></a>None&#160;</td><td class="fielddoc"><p>No geometry. A geometry object cannot be created with this geometry type. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a778236818a0c0867cd73536383ad2b61ae37b05fa0f88d8ca3f4e6322e97943ae"></a>WKT&#160;</td><td class="fielddoc"><p>The GEOS library WKT reader is used to create the geometry. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a778236818a0c0867cd73536383ad2b61a9d3ddc7cb077b5d6ef696d78f476d588"></a>WKB&#160;</td><td class="fielddoc"><p>The GEOS library WKB reader is used to create the geometry. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a778236818a0c0867cd73536383ad2b61a02d269fc3073c23b70acadc07f2d97a1"></a>IsisCube&#160;</td><td class="fielddoc"><p>An ISIS <a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> is used to create the geometry. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a778236818a0c0867cd73536383ad2b61a6dad2b2f2f7df190a8f0a433ba898e6a"></a>GeosGis&#160;</td><td class="fielddoc"><p>GEOS GIS. A geometry object cannot be created with this geometry type. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aff1831f6688bf32e87d67e6e8a0b1813"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff1831f6688bf32e87d67e6e8a0b1813">&#9670;&nbsp;</a></span>GisGeometry() <span class="overload">[1/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::GisGeometry::GisGeometry </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Fundamental constructor of an empty object. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_topology.html#a01c7fc10630e54a542baa92fc8ae88ae">Isis::GisTopology::instance()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gis_geometry.html#ad06c910653989471ed4063f6e323f0bd">buffer()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a2771183e6835026d929e3937ee28886c">centroid()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a789ea39ab136a047e5835ac083d2886c">clone()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a5d0915694d5bb0374a6c101bf9dfd69f">convexHull()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#ab2f043c64a05cf7654c1891f109a73c9">envelope()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a74afe5aed2a279458a84eb78d60ae242">g_union()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#ae1d24dbdeeda8efbac2a41f6fbeafcaa">intersection()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#ad491b2ad5546afd849178d24db375477">simplify()</a>.</p>
+
+</div>
+</div>
+<a id="a60745b0c027361d9293ae7894b659d48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60745b0c027361d9293ae7894b659d48">&#9670;&nbsp;</a></span>GisGeometry() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::GisGeometry::GisGeometry </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>xlongitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>ylatitude</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a point geometry. </p>
+<p>This constructor will create a point geometry. Note this can either be used to create a geometric geometry with a longitude/latitude or a grid geometry in any system with an X/Y value. It is up to the caller to maintain the coordinate system.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">xlongitude</td><td>X or longitude coordinate </td></tr>
+    <tr><td class="paramname">ylatitude</td><td>Y or latitude coordinate </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_topology.html#a01c7fc10630e54a542baa92fc8ae88ae">Isis::GisTopology::instance()</a>.</p>
+
+</div>
+</div>
+<a id="a5d4c68bceddf94ab549fdfac66eebcbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d4c68bceddf94ab549fdfac66eebcbe">&#9670;&nbsp;</a></span>GisGeometry() <span class="overload">[3/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::GisGeometry::GisGeometry </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_cube.html">Cube</a> &amp;&#160;</td>
+          <td class="paramname"><em>cube</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a geometry from a cube file. </p>
+<p>This constructor will read the contents of the Polygon blob of an ISIS cube file and create a geometry from its contents.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cube</td><td><a class="el" href="class_isis_1_1_cube.html" title="IO Handler for Isis Cubes.">Cube</a> object to create the geometry from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_topology.html#a01c7fc10630e54a542baa92fc8ae88ae">Isis::GisTopology::instance()</a>.</p>
+
+</div>
+</div>
+<a id="a13f9328b93720c2478d8a266ff4fb744"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13f9328b93720c2478d8a266ff4fb744">&#9670;&nbsp;</a></span>GisGeometry() <span class="overload">[4/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::GisGeometry::GisGeometry </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>gisSource</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61">Type</a>&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a geometry from a character WKT/WKB source. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gisSource</td><td>String containing the text representation of a GIS geometry. This can be either a WKT or WKB formatted string </td></tr>
+    <tr><td class="paramname">t</td><td>Type of <a class="el" href="class_isis_1_1_gis_geometry.html" title="Encapsulation class provides support for GEOS-C API.">GisGeometry</a> - WKT or WKB </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_gis_topology.html#af1234a6a9b20a78f839f8052f0353d7d">Isis::GisTopology::geomFromWKB()</a>, <a class="el" href="class_isis_1_1_gis_topology.html#a0545258e859f9062c718663afb2df23b">Isis::GisTopology::geomFromWKT()</a>, <a class="el" href="class_isis_1_1_gis_topology.html#a01c7fc10630e54a542baa92fc8ae88ae">Isis::GisTopology::instance()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a02d269fc3073c23b70acadc07f2d97a1">IsisCube</a>, <a class="el" href="class_isis_1_1_cube.html#aa05a4870a3d19b9a5b57f12ede21ca86">Isis::Cube::open()</a>, <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a0e5fe7ad80dffd52965e8da6ebd3c1c7">typeToString()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a9d3ddc7cb077b5d6ef696d78f476d588">WKB</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61ae37b05fa0f88d8ca3f4e6322e97943ae">WKT</a>.</p>
+
+</div>
+</div>
+<a id="ae357b9b6fa67b64c5d8060bcd13540d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae357b9b6fa67b64c5d8060bcd13540d6">&#9670;&nbsp;</a></span>GisGeometry() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::GisGeometry::GisGeometry </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>geom</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a geometry from another geometry by cloning. </p>
+<p>This contructor uses the GISTopology clone method to generate a new geometry.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geom</td><td>GISGeometry to create new geometry from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_topology.html#a793e6ca8b21cb3c433c26208fb29b978">Isis::GisTopology::clone()</a>, <a class="el" href="class_isis_1_1_gis_topology.html#a01c7fc10630e54a542baa92fc8ae88ae">Isis::GisTopology::instance()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#ad7134aa35bc27ca10748df91ab2f7e62">isDefined()</a>.</p>
+
+</div>
+</div>
+<a id="ab379914df077e7f67a27407b0987e1af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab379914df077e7f67a27407b0987e1af">&#9670;&nbsp;</a></span>GisGeometry() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::GisGeometry::GisGeometry </td>
+          <td>(</td>
+          <td class="paramtype">GEOSGeometry *&#160;</td>
+          <td class="paramname"><em>geom</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a GISGeometry directly from a GEOS-C GEOSGeometry. </p>
+<p>This constructor will create a new GISGeometry object that takes ownership from the caller and is managed for the life of this new object.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geom</td><td>GEOSGeometry instance to use </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_topology.html#a01c7fc10630e54a542baa92fc8ae88ae">Isis::GisTopology::instance()</a>.</p>
+
+</div>
+</div>
+<a id="a1c4f7aebe2b0ece0d17d5d29847f9045"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c4f7aebe2b0ece0d17d5d29847f9045">&#9670;&nbsp;</a></span>~GisGeometry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::GisGeometry::~GisGeometry </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a403e95fb825b80395ff6ee29cbf77d93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a403e95fb825b80395ff6ee29cbf77d93">&#9670;&nbsp;</a></span>area()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::GisGeometry::area </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the area of a geometry. </p>
+<p>This method will compute the area of a geometry. Note the area is in the units of the coordinates. For example, if the coordinates of the geometry are in latitude/longitude, then the units are in degrees. Callers must maintain the units of the coordinates.</p>
+<p>Point geometries will have 0 area.</p>
+<dl class="section return"><dt>Returns</dt><dd>double Area of the geometry in units of data coordinates of the geometry </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gis_geometry.html#a1cabab88bbbf03a7a8dd1e6ba0a26aa4">intersectRatio()</a>.</p>
+
+</div>
+</div>
+<a id="ad06c910653989471ed4063f6e323f0bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad06c910653989471ed4063f6e323f0bd">&#9670;&nbsp;</a></span>buffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> * Isis::GisGeometry::buffer </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>width</em> = <code>0.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>quadsegs</em> = <code>16</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute a buffer around an existing geometry. </p>
+<p>Add a buffer around a geometry with the defined enlargement factor. It is common to use this as buffer(0) to fix geometries with self-intersections. These cases are often identified by calling <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222" title="Determines validity of the geometry contained in this object.">isValid()</a> and getting a false value returned.</p>
+<dl class="section author"><dt>Author</dt><dd>2018-07-29 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>Width to enlarge or shrink polygon </td></tr>
+    <tr><td class="paramname">quadsegs</td><td>Number of segments to define a circle on corners</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>GisGeometry* Pointer to new <a class="el" href="class_isis_1_1_gis_geometry.html" title="Encapsulation class provides support for GEOS-C API.">GisGeometry</a> with buffer applied </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#aff1831f6688bf32e87d67e6e8a0b1813">GisGeometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#ad7134aa35bc27ca10748df91ab2f7e62">isDefined()</a>.</p>
+
+</div>
+</div>
+<a id="a2771183e6835026d929e3937ee28886c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2771183e6835026d929e3937ee28886c">&#9670;&nbsp;</a></span>centroid() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> * Isis::GisGeometry::centroid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the centroid of the geometry and returns it as a new geometry. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_gis_geometry.html" title="Encapsulation class provides support for GEOS-C API.">GisGeometry</a> Pointer to point geometry of centroid of this geometry </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#aff1831f6688bf32e87d67e6e8a0b1813">GisGeometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a7be04d1a06316ec4ad8d45b09adec720"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7be04d1a06316ec4ad8d45b09adec720">&#9670;&nbsp;</a></span>centroid() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::GisGeometry::centroid </td>
+          <td>(</td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>xlongitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>ylatitude</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the centroid of a spatial geometry. </p>
+<p>This method will compute the coordinate centroid of a spatial geometry.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">xlongitude</td><td>X/longitude coordinate of centroid </td></tr>
+    <tr><td class="paramname">ylatitude</td><td>Y/latitude coordinate of centroid </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if successful, false if failed </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_topology.html#a2e16cfdbce63cca87df6a8e1905543ac">Isis::GisTopology::destroy()</a>, <a class="el" href="class_isis_1_1_gis_topology.html#a01c7fc10630e54a542baa92fc8ae88ae">Isis::GisTopology::instance()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>, and <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+</div>
+</div>
+<a id="a789ea39ab136a047e5835ac083d2886c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a789ea39ab136a047e5835ac083d2886c">&#9670;&nbsp;</a></span>clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> * Isis::GisGeometry::clone </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clones the contents of this geometry to a new instance. </p>
+<p>This method will clone the contents of this geometry and return a new instance to the caller.</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_gis_geometry.html" title="Encapsulation class provides support for GEOS-C API.">GisGeometry</a> Geometry to clone </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_topology.html#a793e6ca8b21cb3c433c26208fb29b978">Isis::GisTopology::clone()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#aff1831f6688bf32e87d67e6e8a0b1813">GisGeometry()</a>, <a class="el" href="class_isis_1_1_gis_topology.html#a01c7fc10630e54a542baa92fc8ae88ae">Isis::GisTopology::instance()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#ad7134aa35bc27ca10748df91ab2f7e62">isDefined()</a>.</p>
+
+</div>
+</div>
+<a id="a32a19b17639656d49cccd485541676f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32a19b17639656d49cccd485541676f0">&#9670;&nbsp;</a></span>contains()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::GisGeometry::contains </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Test if the target geometry is contained within this geometry. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>Other geometry to test </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if target is contained with this geometry, false otherwise </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a79430ed7a5dff3b0d36123924555eae4">geometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a5d0915694d5bb0374a6c101bf9dfd69f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d0915694d5bb0374a6c101bf9dfd69f">&#9670;&nbsp;</a></span>convexHull()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> * Isis::GisGeometry::convexHull </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the convex hull of the geometry. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_gis_geometry.html" title="Encapsulation class provides support for GEOS-C API.">GisGeometry</a> Pointer to new geometry that represents the convex hull of this geometry. A null geometry, not NULL pointer is returned if problems occur. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#aff1831f6688bf32e87d67e6e8a0b1813">GisGeometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a5bc46a02b820807ab820958f93c7e6f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bc46a02b820807ab820958f93c7e6f2">&#9670;&nbsp;</a></span>disjoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::GisGeometry::disjoint </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tests for disjoint geometries. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>Other geometry to test </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if geometries are disjoint, false otherwise </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a79430ed7a5dff3b0d36123924555eae4">geometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a86ae153417a68a371c85147c487d9602"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86ae153417a68a371c85147c487d9602">&#9670;&nbsp;</a></span>distance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::GisGeometry::distance </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the distance between two geometries. </p>
+<p>This method computes the distance between two geometries. Refer to the GEOS documentation as to the details of this computation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td><a class="el" href="class_isis_1_1_target.html" title="This class is used to create and store valid Isis targets.">Target</a> geometry to compute distance to </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double <a class="el" href="class_isis_1_1_distance.html" title="Distance measurement, usually in meters.">Distance</a> in units of geometry coordinates </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a79430ed7a5dff3b0d36123924555eae4">geometry()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>, and <a class="el" href="namespace_isis.html#a7fe89f1c37029f41eb5eec5f635629d2">Isis::Null</a>.</p>
+
+</div>
+</div>
+<a id="ab2f043c64a05cf7654c1891f109a73c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2f043c64a05cf7654c1891f109a73c9">&#9670;&nbsp;</a></span>envelope()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> * Isis::GisGeometry::envelope </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the envelope or bounding box of this geometry. </p>
+<p>This method computes the envelope or bounding box of the geometry in this object. A new geometry is computed and a pointer is returned to the caller. The caller assumes ownership of this geometry.</p>
+<p>A null geometry will be returned if an error is occured or the current geometry is invalid.</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_gis_geometry.html" title="Encapsulation class provides support for GEOS-C API.">GisGeometry</a> Pointer to envelope/bounding box. A null geometry, not NULL pointer, is returned in problems occur. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#aff1831f6688bf32e87d67e6e8a0b1813">GisGeometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a4bdc0958fbe29cf4408cf9c0d11f54a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bdc0958fbe29cf4408cf9c0d11f54a5">&#9670;&nbsp;</a></span>equals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::GisGeometry::equals </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Test if target and this geometry are equal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>Geometry to test for equality </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if geometries are equal, false if not </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a79430ed7a5dff3b0d36123924555eae4">geometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a74afe5aed2a279458a84eb78d60ae242"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74afe5aed2a279458a84eb78d60ae242">&#9670;&nbsp;</a></span>g_union()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> * Isis::GisGeometry::g_union </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the union of two geometries. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>Other geometry to union with this geometry </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_gis_geometry.html" title="Encapsulation class provides support for GEOS-C API.">GisGeometry</a> Result of unioning the two geometries </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a79430ed7a5dff3b0d36123924555eae4">geometry()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#aff1831f6688bf32e87d67e6e8a0b1813">GisGeometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a79430ed7a5dff3b0d36123924555eae4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79430ed7a5dff3b0d36123924555eae4">&#9670;&nbsp;</a></span>geometry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const GEOSGeometry * Isis::GisGeometry::geometry </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the GEOSGeometry object to extend functionality. </p>
+<dl class="section return"><dt>Returns</dt><dd>GEOSGeometry Pointer to GEOSGeometry structure </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_strategy.html#a5021524550e3d40db6ee6fc85dc477fa">Isis::Strategy::applyToIntersectedGeometry()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a32a19b17639656d49cccd485541676f0">contains()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a5bc46a02b820807ab820958f93c7e6f2">disjoint()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a86ae153417a68a371c85147c487d9602">distance()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a4bdc0958fbe29cf4408cf9c0d11f54a5">equals()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a74afe5aed2a279458a84eb78d60ae242">g_union()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#ae1d24dbdeeda8efbac2a41f6fbeafcaa">intersection()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a5cdbf5f819938c43af469a7bbb6cf996">intersects()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a21bad54d77851cc468ef39ccf44931ce">overlaps()</a>.</p>
+
+</div>
+</div>
+<a id="ae1d24dbdeeda8efbac2a41f6fbeafcaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1d24dbdeeda8efbac2a41f6fbeafcaa">&#9670;&nbsp;</a></span>intersection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> * Isis::GisGeometry::intersection </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the intersection of two geometries. </p>
+<p>The area of common interesction of the target geometry and this geometry are computed and returned to the caller.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>Other geometry to compute intersection </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_gis_geometry.html" title="Encapsulation class provides support for GEOS-C API.">GisGeometry</a> Intersection geometry </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a79430ed7a5dff3b0d36123924555eae4">geometry()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#aff1831f6688bf32e87d67e6e8a0b1813">GisGeometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gis_geometry.html#a1cabab88bbbf03a7a8dd1e6ba0a26aa4">intersectRatio()</a>.</p>
+
+</div>
+</div>
+<a id="a1cabab88bbbf03a7a8dd1e6ba0a26aa4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cabab88bbbf03a7a8dd1e6ba0a26aa4">&#9670;&nbsp;</a></span>intersectRatio()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::GisGeometry::intersectRatio </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes intersect ratio between two geometries. </p>
+<p>This method computes the intersection of two geometries and the returns the ratio of the area of intersection with this geometry. Units must be the same for both geometries or result will not be valid.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>Geometry to compute intersect ratio for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double Area of common intersection of two geometries in units of the two geometries. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a403e95fb825b80395ff6ee29cbf77d93">area()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#ae1d24dbdeeda8efbac2a41f6fbeafcaa">intersection()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a5cdbf5f819938c43af469a7bbb6cf996"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cdbf5f819938c43af469a7bbb6cf996">&#9670;&nbsp;</a></span>intersects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::GisGeometry::intersects </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes a new geometry from the intersection of the two geomtries. </p>
+<p>This method will compute the union of two geometries and return a new geometry that represents the combination of them.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>Other geometry to combine by union opertor </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if operation is successful, false otherwise </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a79430ed7a5dff3b0d36123924555eae4">geometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_strategy.html#a5021524550e3d40db6ee6fc85dc477fa">Isis::Strategy::applyToIntersectedGeometry()</a>.</p>
+
+</div>
+</div>
+<a id="ad7134aa35bc27ca10748df91ab2f7e62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7134aa35bc27ca10748df91ab2f7e62">&#9670;&nbsp;</a></span>isDefined()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::GisGeometry::isDefined </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines if the current geometry is valid. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if contents are valid, otherwise false </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gis_geometry.html#ad06c910653989471ed4063f6e323f0bd">buffer()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a789ea39ab136a047e5835ac083d2886c">clone()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#ae357b9b6fa67b64c5d8060bcd13540d6">GisGeometry()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#af908d0176d6c1e29ac6e979456d35601">isValidReason()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a856a0eb3100fa7d01c9864b0d4d1290c">operator=()</a>.</p>
+
+</div>
+</div>
+<a id="ad790f30c05b24f7589abe54429aaa5be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad790f30c05b24f7589abe54429aaa5be">&#9670;&nbsp;</a></span>isEmpty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::GisGeometry::isEmpty </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tests for a defined but empty geometry. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if empty, false if has content </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a9640c8292d134aceed4feb5015949222"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9640c8292d134aceed4feb5015949222">&#9670;&nbsp;</a></span>isValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::GisGeometry::isValid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines validity of the geometry contained in this object. </p>
+<p>First determines if it contains a geometry and then validates with the GEOS toolkit.</p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if valid, false if invalid or non-existant</dd></dl>
+<dl class="history"><dt><b><a class="el" href="history.html#_history000003">History:</a></b></dt><dd>2018-07-29 Kris Becker - If the geometry is invalid, it throws an exception. Catch all exceptions and return proper status. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#ad7134aa35bc27ca10748df91ab2f7e62">isDefined()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_strategy.html#a5021524550e3d40db6ee6fc85dc477fa">Isis::Strategy::applyToIntersectedGeometry()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a403e95fb825b80395ff6ee29cbf77d93">area()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a7be04d1a06316ec4ad8d45b09adec720">centroid()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a32a19b17639656d49cccd485541676f0">contains()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a5d0915694d5bb0374a6c101bf9dfd69f">convexHull()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a5bc46a02b820807ab820958f93c7e6f2">disjoint()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a86ae153417a68a371c85147c487d9602">distance()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#ab2f043c64a05cf7654c1891f109a73c9">envelope()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a4bdc0958fbe29cf4408cf9c0d11f54a5">equals()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a74afe5aed2a279458a84eb78d60ae242">g_union()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#ae1d24dbdeeda8efbac2a41f6fbeafcaa">intersection()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a1cabab88bbbf03a7a8dd1e6ba0a26aa4">intersectRatio()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a5cdbf5f819938c43af469a7bbb6cf996">intersects()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#ad790f30c05b24f7589abe54429aaa5be">isEmpty()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a8725ab71112417cbaa3d257b0398e997">length()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a21bad54d77851cc468ef39ccf44931ce">overlaps()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#ad0b84e3983b010064f8d6d4d0156ff6f">points()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#ad491b2ad5546afd849178d24db375477">simplify()</a>.</p>
+
+</div>
+</div>
+<a id="af908d0176d6c1e29ac6e979456d35601"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af908d0176d6c1e29ac6e979456d35601">&#9670;&nbsp;</a></span>isValidReason()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::GisGeometry::isValidReason </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a string describing reason for invalid geometry. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString Description of the reason the geometry is invalid </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_topology.html#a2e16cfdbce63cca87df6a8e1905543ac">Isis::GisTopology::destroy()</a>, <a class="el" href="class_isis_1_1_gis_topology.html#a01c7fc10630e54a542baa92fc8ae88ae">Isis::GisTopology::instance()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#ad7134aa35bc27ca10748df91ab2f7e62">isDefined()</a>.</p>
+
+</div>
+</div>
+<a id="a8725ab71112417cbaa3d257b0398e997"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8725ab71112417cbaa3d257b0398e997">&#9670;&nbsp;</a></span>length()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::GisGeometry::length </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the length of a geometry. </p>
+<p>This method will compute the length of a geometry. This is suitable for Linestring and spatial geometries.</p>
+<dl class="section return"><dt>Returns</dt><dd>double Length of the geometry in units of the coordinates </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a856a0eb3100fa7d01c9864b0d4d1290c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a856a0eb3100fa7d01c9864b0d4d1290c">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp; Isis::GisGeometry::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> const &amp;&#160;</td>
+          <td class="paramname"><em>geom</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Assignment operator for GISGeomtries. </p>
+<p>This assignment operator essentially clones the right side geomemtry</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geom</td><td>Geometry to assign to current object </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_gis_geometry.html" title="Encapsulation class provides support for GEOS-C API.">GisGeometry</a> New geometry </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_topology.html#a793e6ca8b21cb3c433c26208fb29b978">Isis::GisTopology::clone()</a>, <a class="el" href="class_isis_1_1_gis_topology.html#a01c7fc10630e54a542baa92fc8ae88ae">Isis::GisTopology::instance()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#ad7134aa35bc27ca10748df91ab2f7e62">isDefined()</a>.</p>
+
+</div>
+</div>
+<a id="a21bad54d77851cc468ef39ccf44931ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21bad54d77851cc468ef39ccf44931ce">&#9670;&nbsp;</a></span>overlaps()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::GisGeometry::overlaps </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Test for overlapping geometries. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>Geometry to test for overlap with this geometry </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if target geometry overlaps with this geometry, false otherwise </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a79430ed7a5dff3b0d36123924555eae4">geometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="ad0b84e3983b010064f8d6d4d0156ff6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0b84e3983b010064f8d6d4d0156ff6f">&#9670;&nbsp;</a></span>points()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::GisGeometry::points </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get number of points in geometry. </p>
+<dl class="section return"><dt>Returns</dt><dd>int Number of points contained in the geometry </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_strategy.html#a70e4158380735307e1c5c61202cbd3f8">Isis::Strategy::importGeometry()</a>.</p>
+
+</div>
+</div>
+<a id="a9682cc9acfe03be86bd5635ec51fd858"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9682cc9acfe03be86bd5635ec51fd858">&#9670;&nbsp;</a></span>preparedGeometry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const GEOSPreparedGeometry * Isis::GisGeometry::preparedGeometry </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns special GEOS prepared geometry if it exists. </p>
+<p>This method will return a pointer to the prepared version of the GEOSGeometry data. Caller should test for a NULL pointer as it may be disabled or non-existant.</p>
+<dl class="section return"><dt>Returns</dt><dd>GEOSPreparedGeometry Pointer to prepared geometry </dd></dl>
+
+</div>
+</div>
+<a id="aaba3a16ee4a567eb66b52414d1ddbd5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaba3a16ee4a567eb66b52414d1ddbd5c">&#9670;&nbsp;</a></span>setGeometry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::GisGeometry::setGeometry </td>
+          <td>(</td>
+          <td class="paramtype">GEOSGeometry *&#160;</td>
+          <td class="paramname"><em>geom</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the geometry directly taking ownership. </p>
+<p>This method will replace the current geoemetry with the geom parameter contents. The existing contents of this object is destroyed before taking ownership of the geom paramter object.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geom</td><td>GEOSGeometry to incoporate into this object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad491b2ad5546afd849178d24db375477"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad491b2ad5546afd849178d24db375477">&#9670;&nbsp;</a></span>simplify()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a> * Isis::GisGeometry::simplify </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>tolerance</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Simplify complex or overdetermined geoemtry. </p>
+<p>This method will simplify a geometry with a Douglas -Peucker algorithm using a tolerance specifying the maximum distance from the original (multi)polygon. The use of this algorithm is designed to prevent oversimplification</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tolerance</td><td>Maximum distance from the original geometry expressed in the coordinate system of the geometry.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>GisGeometry* Simplified geometry </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#aff1831f6688bf32e87d67e6e8a0b1813">GisGeometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a9640c8292d134aceed4feb5015949222">isValid()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_strategy.html#a70e4158380735307e1c5c61202cbd3f8">Isis::Strategy::importGeometry()</a>.</p>
+
+</div>
+</div>
+<a id="a40a3024938ed77cad4aaccf5f4bc1032"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40a3024938ed77cad4aaccf5f4bc1032">&#9670;&nbsp;</a></span>type() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61">GisGeometry::Type</a> Isis::GisGeometry::type </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the type (origin) of the geometry. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61" title="Source type of the geometry.">GisGeometry::Type</a> Enum type of geometry origin </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_strategy.html#a70e4158380735307e1c5c61202cbd3f8">Isis::Strategy::importGeometry()</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a0e5fe7ad80dffd52965e8da6ebd3c1c7">typeToString()</a>.</p>
+
+</div>
+</div>
+<a id="a5284c8c3107a8d00bbffbc67c3efa995"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5284c8c3107a8d00bbffbc67c3efa995">&#9670;&nbsp;</a></span>type() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61">GisGeometry::Type</a> Isis::GisGeometry::type </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>gstrType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns enum representation of the geometry origin from string type. </p>
+<dl class="section see"><dt>See also</dt><dd>type(QString) </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gstrType</td><td>Character representation of geometry origin </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61" title="Source type of the geometry.">GisGeometry::Type</a> Enum type of origin </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a6dad2b2f2f7df190a8f0a433ba898e6a">GeosGis</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a02d269fc3073c23b70acadc07f2d97a1">IsisCube</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a72df7c73a0b7721e4ce5a9dc734f6692">None</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a9d3ddc7cb077b5d6ef696d78f476d588">WKB</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61ae37b05fa0f88d8ca3f4e6322e97943ae">WKT</a>.</p>
+
+</div>
+</div>
+<a id="a0e5fe7ad80dffd52965e8da6ebd3c1c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e5fe7ad80dffd52965e8da6ebd3c1c7">&#9670;&nbsp;</a></span>typeToString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::GisGeometry::typeToString </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61">Type</a> &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the type of the Geometry as a QString. </p>
+<dl class="section see"><dt>See also</dt><dd>type(QString) </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gstrType</td><td>Enum type of origin </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61" title="Source type of the geometry.">GisGeometry::Type</a> Character representation of geometry or origin </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a6dad2b2f2f7df190a8f0a433ba898e6a">GeosGis</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a02d269fc3073c23b70acadc07f2d97a1">IsisCube</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a40a3024938ed77cad4aaccf5f4bc1032">type()</a>, <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61a9d3ddc7cb077b5d6ef696d78f476d588">WKB</a>, and <a class="el" href="class_isis_1_1_gis_geometry.html#a778236818a0c0867cd73536383ad2b61ae37b05fa0f88d8ca3f4e6322e97943ae">WKT</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_gis_geometry.html#a13f9328b93720c2478d8a266ff4fb744">GisGeometry()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/GisGeometry/<a class="el" href="_gis_geometry_8h_source.html">GisGeometry.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/GisGeometry/<a class="el" href="_gis_geometry_8cpp.html">GisGeometry.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_gis_geometry.html">GisGeometry</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,4 @@
+<map id="Isis::ApolloPanoramicDetectorMap" name="Isis::ApolloPanoramicDetectorMap">
+<area shape="rect" id="node1" title="Convert between parent image (aka encoder aka machine) coordinates and detector coordinates." alt="" coords="5,455,229,680"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="21,5,213,407"/>
+</map>

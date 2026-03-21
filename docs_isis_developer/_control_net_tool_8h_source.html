@@ -1,0 +1,346 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/ControlNetTool/ControlNetTool.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_control_net_tool_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">ControlNetTool.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_control_net_tool_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef ControlNetTool_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define ControlNetTool_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_tool_8h.html">Tool.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_control_point_8h.html">ControlPoint.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;QAction&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;QCloseEvent&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;QPalette&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;QPointer&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;QStringList&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keyword">class </span>ControlMeasure;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <span class="keyword">class </span>ControlNet;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">class </span>ControlPointEdit;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keyword">class </span>Cube;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">class </span>CubeDnView;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">class </span>CubeViewport;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">class </span>Directory;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <span class="keyword">class </span>MainWindow;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keyword">class </span>MdiCubeViewport;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  <span class="keyword">class </span>QnetHoldPointDialog;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <span class="keyword">class </span>SerialNumberList;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keyword">class </span>Stretch;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keyword">class </span>ToolPad;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keyword">class </span>UniversalGroundMap;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net_tool.html">   72</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_control_net_tool.html">ControlNetTool</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_tool.html">Tool</a> {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    Q_OBJECT</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <a class="code" href="class_isis_1_1_control_net_tool.html#ac709d539f233dac1e30c9f29a9c9f0c8">ControlNetTool</a> (<a class="code" href="class_isis_1_1_directory.html">Directory</a> *directory, <a class="code" href="class_q_widget.html">QWidget</a> *parent);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_control_net_tool.html#a9f132517f129a8b39237a42b50c02897">~ControlNetTool</a> ();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net_tool.html#a3c02b2c0e324a8ea650be3714afc3094">setControlNet</a>(<a class="code" href="class_isis_1_1_control_net.html">ControlNet</a> *controlNet);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net_tool.html#ab19c2280e8959581e9e48484493304b9">paintViewport</a> (<a class="code" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *cvp, QPainter *painter);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    signals:</div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net_tool.html#a9a27da84fad75d334e52e65ad6b68b00">   83</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net_tool.html#a9a27da84fad75d334e52e65ad6b68b00">modifyControlPoint</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *controlPoint, QString serialNumber);</div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net_tool.html#ab5fd42ac396ecb42947bd78279dfa341">   84</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net_tool.html#ab5fd42ac396ecb42947bd78279dfa341">deleteControlPoint</a>(<a class="code" href="class_isis_1_1_control_point.html">ControlPoint</a> *controlPoint);</div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="class_isis_1_1_control_net_tool.html#a28d01bd78e5c72c667909c9e579ebe00">   85</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net_tool.html#a28d01bd78e5c72c667909c9e579ebe00">createControlPoint</a>(<span class="keywordtype">double</span> latitude, <span class="keywordtype">double</span> longitude, <a class="code" href="class_isis_1_1_cube.html">Cube</a> *cube,</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                              <span class="keywordtype">bool</span> isGroundSource = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net_tool.html#a70d4e09c6cff947106a598585d784e7c">loadNetwork</a>();</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <a class="code" href="class_q_action.html">QAction</a> *<a class="code" href="class_isis_1_1_control_net_tool.html#a472adae4f65b0ab0e208ae778aa296be">toolPadAction</a>(<a class="code" href="class_isis_1_1_tool_pad.html">ToolPad</a> *pad);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">protected</span> slots:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_control_net_tool.html#a62158163a9a07e21cfcc11be8d7e0536">mouseButtonRelease</a>(QPoint p, Qt::MouseButton s);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keyword">private</span> slots:</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      <span class="keywordtype">void</span> paintAllViewports();</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <span class="keywordtype">void</span> createActions();</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      <span class="keywordtype">void</span> createMenus();</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <span class="keywordtype">void</span> drawAllMeasurements(<a class="code" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *vp, QPainter *painter);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keywordtype">void</span> drawGroundMeasures (<a class="code" href="class_isis_1_1_mdi_cube_viewport.html">MdiCubeViewport</a> *vp, QPainter *painter, <a class="code" href="class_isis_1_1_universal_ground_map.html">UniversalGroundMap</a> *groundMap);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      QPointer&lt;MainWindow&gt; m_ControlNetTool;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <a class="code" href="class_isis_1_1_directory.html">Directory</a> *m_directory;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <a class="code" href="class_isis_1_1_cube_dn_view.html">CubeDnView</a> *m_view;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      QPointer&lt;ControlNet&gt; m_controlNet;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;      QPointer&lt;Workspace&gt; m_workspace;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  };</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;};</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_control_point_8h_html"><div class="ttname"><a href="_control_point_8h.html">ControlPoint.h</a></div></div>
+<div class="ttc" id="a_tool_8h_html"><div class="ttname"><a href="_tool_8h.html">Tool.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_html"><div class="ttname"><a href="class_isis_1_1_control_net.html">Isis::ControlNet</a></div><div class="ttdoc">a control network</div><div class="ttdef"><b>Definition:</b> ControlNet.h:258</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_tool_html"><div class="ttname"><a href="class_isis_1_1_control_net_tool.html">Isis::ControlNetTool</a></div><div class="ttdoc">ControlNetTool Handles mouse events on CubeDnViews for control point editing for the ipce app.</div><div class="ttdef"><b>Definition:</b> ControlNetTool.h:72</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_tool_html_a28d01bd78e5c72c667909c9e579ebe00"><div class="ttname"><a href="class_isis_1_1_control_net_tool.html#a28d01bd78e5c72c667909c9e579ebe00">Isis::ControlNetTool::createControlPoint</a></div><div class="ttdeci">void createControlPoint(double latitude, double longitude, Cube *cube, bool isGroundSource=false)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_tool_html_a3c02b2c0e324a8ea650be3714afc3094"><div class="ttname"><a href="class_isis_1_1_control_net_tool.html#a3c02b2c0e324a8ea650be3714afc3094">Isis::ControlNetTool::setControlNet</a></div><div class="ttdeci">void setControlNet(ControlNet *controlNet)</div><div class="ttdoc">Set the active control net to be used for editing.</div><div class="ttdef"><b>Definition:</b> ControlNetTool.cpp:113</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_tool_html_a472adae4f65b0ab0e208ae778aa296be"><div class="ttname"><a href="class_isis_1_1_control_net_tool.html#a472adae4f65b0ab0e208ae778aa296be">Isis::ControlNetTool::toolPadAction</a></div><div class="ttdeci">QAction * toolPadAction(ToolPad *pad)</div><div class="ttdoc">Adds the ControlNet tool action to the tool pad.</div><div class="ttdef"><b>Definition:</b> ControlNetTool.cpp:83</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_tool_html_a62158163a9a07e21cfcc11be8d7e0536"><div class="ttname"><a href="class_isis_1_1_control_net_tool.html#a62158163a9a07e21cfcc11be8d7e0536">Isis::ControlNetTool::mouseButtonRelease</a></div><div class="ttdeci">void mouseButtonRelease(QPoint p, Qt::MouseButton s)</div><div class="ttdoc">Handle mouse events on CubeViewport.</div><div class="ttdef"><b>Definition:</b> ControlNetTool.cpp:139</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_tool_html_a70d4e09c6cff947106a598585d784e7c"><div class="ttname"><a href="class_isis_1_1_control_net_tool.html#a70d4e09c6cff947106a598585d784e7c">Isis::ControlNetTool::loadNetwork</a></div><div class="ttdeci">void loadNetwork()</div><div class="ttdef"><b>Definition:</b> ControlNetTool.cpp:123</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_tool_html_a9a27da84fad75d334e52e65ad6b68b00"><div class="ttname"><a href="class_isis_1_1_control_net_tool.html#a9a27da84fad75d334e52e65ad6b68b00">Isis::ControlNetTool::modifyControlPoint</a></div><div class="ttdeci">void modifyControlPoint(ControlPoint *controlPoint, QString serialNumber)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_tool_html_a9f132517f129a8b39237a42b50c02897"><div class="ttname"><a href="class_isis_1_1_control_net_tool.html#a9f132517f129a8b39237a42b50c02897">Isis::ControlNetTool::~ControlNetTool</a></div><div class="ttdeci">virtual ~ControlNetTool()</div><div class="ttdef"><b>Definition:</b> ControlNetTool.cpp:65</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_tool_html_ab19c2280e8959581e9e48484493304b9"><div class="ttname"><a href="class_isis_1_1_control_net_tool.html#ab19c2280e8959581e9e48484493304b9">Isis::ControlNetTool::paintViewport</a></div><div class="ttdeci">void paintViewport(MdiCubeViewport *cvp, QPainter *painter)</div><div class="ttdoc">This will draw the control measures on the given cube viewport.</div><div class="ttdef"><b>Definition:</b> ControlNetTool.cpp:233</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_tool_html_ab5fd42ac396ecb42947bd78279dfa341"><div class="ttname"><a href="class_isis_1_1_control_net_tool.html#ab5fd42ac396ecb42947bd78279dfa341">Isis::ControlNetTool::deleteControlPoint</a></div><div class="ttdeci">void deleteControlPoint(ControlPoint *controlPoint)</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_net_tool_html_ac709d539f233dac1e30c9f29a9c9f0c8"><div class="ttname"><a href="class_isis_1_1_control_net_tool.html#ac709d539f233dac1e30c9f29a9c9f0c8">Isis::ControlNetTool::ControlNetTool</a></div><div class="ttdeci">ControlNetTool(Directory *directory, QWidget *parent)</div><div class="ttdoc">ControlNet tool - Handles mouse button actions and drawing control points on viewports in the CubeDnV...</div><div class="ttdef"><b>Definition:</b> ControlNetTool.cpp:58</div></div>
+<div class="ttc" id="aclass_isis_1_1_control_point_html"><div class="ttname"><a href="class_isis_1_1_control_point.html">Isis::ControlPoint</a></div><div class="ttdoc">A single control point.</div><div class="ttdef"><b>Definition:</b> ControlPoint.h:356</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_dn_view_html"><div class="ttname"><a href="class_isis_1_1_cube_dn_view.html">Isis::CubeDnView</a></div><div class="ttdoc">View that displays cubes in a QView-like way.</div><div class="ttdef"><b>Definition:</b> CubeDnView.h:95</div></div>
+<div class="ttc" id="aclass_isis_1_1_cube_html"><div class="ttname"><a href="class_isis_1_1_cube.html">Isis::Cube</a></div><div class="ttdoc">IO Handler for Isis Cubes.</div><div class="ttdef"><b>Definition:</b> Cube.h:168</div></div>
+<div class="ttc" id="aclass_isis_1_1_directory_html"><div class="ttname"><a href="class_isis_1_1_directory.html">Isis::Directory</a></div><div class="ttdef"><b>Definition:</b> Directory.h:271</div></div>
+<div class="ttc" id="aclass_isis_1_1_mdi_cube_viewport_html"><div class="ttname"><a href="class_isis_1_1_mdi_cube_viewport.html">Isis::MdiCubeViewport</a></div><div class="ttdoc">Cube display widget for certain Isis MDI applications.</div><div class="ttdef"><b>Definition:</b> MdiCubeViewport.h:39</div></div>
+<div class="ttc" id="aclass_isis_1_1_tool_html"><div class="ttname"><a href="class_isis_1_1_tool.html">Isis::Tool</a></div><div class="ttdoc">Base class for the Qisis tools.</div><div class="ttdef"><b>Definition:</b> Tool.h:67</div></div>
+<div class="ttc" id="aclass_isis_1_1_tool_pad_html"><div class="ttname"><a href="class_isis_1_1_tool_pad.html">Isis::ToolPad</a></div><div class="ttdef"><b>Definition:</b> ToolPad.h:14</div></div>
+<div class="ttc" id="aclass_isis_1_1_universal_ground_map_html"><div class="ttname"><a href="class_isis_1_1_universal_ground_map.html">Isis::UniversalGroundMap</a></div><div class="ttdoc">Universal Ground Map.</div><div class="ttdef"><b>Definition:</b> UniversalGroundMap.h:69</div></div>
+<div class="ttc" id="aclass_q_action_html"><div class="ttname"><a href="class_q_action.html">QAction</a></div></div>
+<div class="ttc" id="aclass_q_widget_html"><div class="ttname"><a href="class_q_widget.html">QWidget</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_5eee1cd93e958c8df02460b04a47c77d.html">ControlNetTool</a></li><li class="navelem"><a class="el" href="_control_net_tool_8h.html">ControlNetTool.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

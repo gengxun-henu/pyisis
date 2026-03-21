@@ -1,0 +1,88 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Camera,"Spice, Instruments, and Cameras",isis/src/base/objs/Camera/Camera.h,isis_pybind_standalone/src/bind_camera.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Camera,isis_pybind.Camera,Y,Python class symbol is exported; constructor exposure may be limited; 抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Construction/Enum,"CameraType enum (Framing, PushFrame, LineScan, Radar, Point, RollingShutter, Csm)",isis_pybind.Camera.CameraType,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Construction/Enum,Camera(),isis_pybind.Camera(),N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Mutation/Configuration,"virtual bool SetImage(const double sample, const double line)",isis_pybind.Camera.set_image,Y,Current Python name
+Mutation/Configuration,"virtual bool SetImage(const double sample, const double line, const double deltaT)",isis_pybind.Camera.set_image,Y,Current Python name
+Mutation/Configuration,"virtual bool SetUniversalGround(const double latitude, const double longitude)",isis_pybind.Camera.set_universal_ground,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Mutation/Configuration,"virtual bool SetUniversalGround(const double latitude, const double longitude, const double radius)",isis_pybind.Camera.set_universal_ground,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Mutation/Configuration,"virtual bool SetGround(Latitude latitude, Longitude longitude)",isis_pybind.Camera.set_ground,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Mutation/Configuration,virtual bool SetGround(const SurfacePoint & surfacePt),isis_pybind.Camera.set_ground,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Mutation/Configuration,"virtual bool SetRightAscensionDeclination(const double ra, const double dec)",isis_pybind.Camera.set_right_ascension_declination,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,"void LocalPhotometricAngles(Angle & phase, Angle & incidence, Angle & emission, bool &success)",isis_pybind.Camera.local_photometric_angles,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,"void Slope(double &slope, bool &success)",isis_pybind.Camera.slope,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,void GetLocalNormal(double normal[3]),isis_pybind.Camera.get_local_normal,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Query,bool HasProjection(),isis_pybind.Camera.has_projection,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Query,virtual bool IsBandIndependent(),isis_pybind.Camera.is_band_independent,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,int ReferenceBand() const,isis_pybind.Camera.reference_band,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Query,bool HasReferenceBand() const,isis_pybind.Camera.has_reference_band,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Mutation/Configuration,virtual void SetBand(const int band),isis_pybind.Camera.set_band,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double Sample() const,isis_pybind.Camera.sample,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual int Band() const,isis_pybind.Camera.band,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double Line() const,isis_pybind.Camera.line,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,"bool GroundRange(double &minlat, double &maxlat, double &minlon, double &maxlon, Pvl &pvl)",isis_pybind.Camera.ground_range,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,"bool ringRange(double &minRingRadius, double &maxRingRadius, double &minRingLongitude, double &maxRingLongitude, Pvl &pvl)",isis_pybind.Camera.ring_range,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,bool IntersectsLongitudeDomain(Pvl &pvl),isis_pybind.Camera.intersects_longitude_domain,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double PixelResolution(),isis_pybind.Camera.pixel_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double LineResolution(),isis_pybind.Camera.line_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double SampleResolution(),isis_pybind.Camera.sample_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double DetectorResolution(),isis_pybind.Camera.detector_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double ObliqueDetectorResolution(bool useLocal = true),isis_pybind.Camera.oblique_detector_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double ObliqueSampleResolution(bool useLocal = true),isis_pybind.Camera.oblique_sample_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double ObliqueLineResolution(bool useLocal = true),isis_pybind.Camera.oblique_line_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double ObliquePixelResolution(bool useLocal = true),isis_pybind.Camera.oblique_pixel_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double resolution(),isis_pybind.Camera.resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double LowestImageResolution(),isis_pybind.Camera.lowest_image_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double HighestImageResolution(),isis_pybind.Camera.highest_image_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double LowestObliqueImageResolution(),isis_pybind.Camera.lowest_oblique_image_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double HighestObliqueImageResolution(),isis_pybind.Camera.highest_oblique_image_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,void BasicMapping(Pvl &map),isis_pybind.Camera.basic_mapping,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,void basicRingMapping(Pvl &map),isis_pybind.Camera.basic_ring_mapping,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double FocalLength() const,isis_pybind.Camera.focal_length,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double PixelPitch() const,isis_pybind.Camera.pixel_pitch,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual double exposureDuration() const,isis_pybind.Camera.exposure_duration,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,"virtual double exposureDuration(const double sample, const double line, const int band = -1) const",isis_pybind.Camera.exposure_duration,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual QList<QPointF> PixelIfovOffsets(),isis_pybind.Camera.pixel_ifov_offsets,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,int Samples() const,isis_pybind.Camera.samples,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,int Lines() const,isis_pybind.Camera.lines,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,int Bands() const,isis_pybind.Camera.bands,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,int ParentLines() const,isis_pybind.Camera.parent_lines,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,int ParentSamples() const,isis_pybind.Camera.parent_samples,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double CelestialNorthClockAngle(),isis_pybind.Camera.celestial_north_clock_angle,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,"bool RaDecRange(double &minra, double &maxra, double &mindec, double &maxdec)",isis_pybind.Camera.ra_dec_range,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double RaDecResolution(),isis_pybind.Camera.ra_dec_resolution,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,CameraDistortionMap *DistortionMap(),isis_pybind.Camera.distortion_map,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,CameraFocalPlaneMap *FocalPlaneMap(),isis_pybind.Camera.focal_plane_map,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,CameraDetectorMap *DetectorMap(),isis_pybind.Camera.detector_map,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,CameraGroundMap *GroundMap(),isis_pybind.Camera.ground_map,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,CameraSkyMap *SkyMap(),isis_pybind.Camera.sky_map,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,QString instrumentId(),isis_pybind.Camera.instrument_id,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,QString instrumentNameLong() const,isis_pybind.Camera.instrument_name_long,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,QString instrumentNameShort() const,isis_pybind.Camera.instrument_name_short,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,QString spacecraftNameLong() const,isis_pybind.Camera.spacecraft_name_long,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,QString spacecraftNameShort() const,isis_pybind.Camera.spacecraft_name_short,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Mutation/Configuration,"void SetDistortionMap(CameraDistortionMap *map, bool deleteExisting = true)",isis_pybind.Camera.set_distortion_map,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Mutation/Configuration,void SetFocalPlaneMap(CameraFocalPlaneMap *map),isis_pybind.Camera.set_focal_plane_map,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Mutation/Configuration,void SetDetectorMap(CameraDetectorMap *map),isis_pybind.Camera.set_detector_map,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Mutation/Configuration,void SetGroundMap(CameraGroundMap *map),isis_pybind.Camera.set_ground_map,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Mutation/Configuration,void SetSkyMap(CameraSkyMap *map),isis_pybind.Camera.set_sky_map,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double NorthAzimuth(),isis_pybind.Camera.north_azimuth,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double SunAzimuth(),isis_pybind.Camera.sun_azimuth,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double SpacecraftAzimuth(),isis_pybind.Camera.spacecraft_azimuth,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,double OffNadirAngle(),isis_pybind.Camera.off_nadir_angle,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Static/Factory,"static double GroundAzimuth(double glat, double glon, double slat, double slon)",isis_pybind.Camera.ground_azimuth,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,void IgnoreProjection(bool ignore),isis_pybind.Camera.ignore_projection,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Read/Write IO,void LoadCache(),isis_pybind.Camera.load_cache,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,"std::pair< double, double > StartEndEphemerisTimes()",isis_pybind.Camera.start_end_ephemeris_times,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,"int CacheSize(double startTime, double endTime)",isis_pybind.Camera.cache_size,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,"void GetGeometricTilingHint(int &startSize, int &endSize)",isis_pybind.Camera.get_geometric_tiling_hint,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,bool InCube(),isis_pybind.Camera.in_cube,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual CameraType GetCameraType() const = 0,isis_pybind.Camera.get_camera_type,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual int CkFrameId() const = 0,isis_pybind.Camera.ck_frame_id,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual int CkReferenceId() const = 0,isis_pybind.Camera.ck_reference_id,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual int SpkReferenceId() const = 0,isis_pybind.Camera.spk_reference_id,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual int SpkTargetId() const,isis_pybind.Camera.spk_target_id,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测
+Public API,virtual int SpkCenterId() const,isis_pybind.Camera.spk_center_id,N,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测

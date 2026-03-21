@@ -1,0 +1,7 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+NormModelFactory,Pattern Matching,isis/src/base/objs/NormModelFactory/NormModelFactory.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,工厂类，静态创建接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,NormModelFactory,isis_pybind.NormModelFactory,N,Python class symbol not found in current binding files; 工厂类，静态创建接口较多
+Static/Factory,"static NormModel *Create(Pvl &pvl, PhotoModel &pmodel)",isis_pybind.NormModelFactory.create,N,工厂类，静态创建接口较多
+Static/Factory,"static NormModel *Create(Pvl &pvl, PhotoModel &pmodel, AtmosModel &amodel)",isis_pybind.NormModelFactory.create,N,工厂类，静态创建接口较多

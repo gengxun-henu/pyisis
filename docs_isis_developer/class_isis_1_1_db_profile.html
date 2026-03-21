@@ -1,0 +1,1040 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::DbProfile Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_db_profile.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="class_isis_1_1_db_profile-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::DbProfile Class Reference<div class="ingroups"><a class="el" href="group___utility.html">Utility</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>A <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> is a container for access parameters to a database.  
+ <a href="class_isis_1_1_db_profile.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_db_profile_8h_source.html">DbProfile.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::DbProfile:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_db_profile__inherit__graph.png" border="0" usemap="#a_isis_1_1_db_profile_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_db_profile_inherit__map" id="a_isis_1_1_db_profile_inherit__map">
+<area shape="rect" title="A DbProfile is a container for access parameters to a database." alt="" coords="40,5,144,279"/>
+<area shape="rect" href="class_isis_1_1_db_access.html" title="DbAccess manages programatic access to a database through profiles." alt="" coords="5,327,179,584"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::DbProfile:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_db_profile__coll__graph.png" border="0" usemap="#a_isis_1_1_db_profile_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_db_profile_coll__map" id="a_isis_1_1_db_profile_coll__map">
+<area shape="rect" title="A DbProfile is a container for access parameters to a database." alt="" coords="5,5,110,279"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a3989c68f1f5e8ab25e42d06c2281ab0d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#a3989c68f1f5e8ab25e42d06c2281ab0d">DbProfile</a> ()</td></tr>
+<tr class="separator:a3989c68f1f5e8ab25e42d06c2281ab0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac24ec514913e6dfee2f2846f15ac1d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#aac24ec514913e6dfee2f2846f15ac1d9">DbProfile</a> (const QString &amp;name)</td></tr>
+<tr class="separator:aac24ec514913e6dfee2f2846f15ac1d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32288e0a578b51949d956119caf3b56b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#a32288e0a578b51949d956119caf3b56b">DbProfile</a> (const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;prof1, const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;prof2, const QString &amp;name=&quot;&quot;)</td></tr>
+<tr class="memdesc:a32288e0a578b51949d956119caf3b56b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a profile from the merging of two a DbProfiles.  <a href="class_isis_1_1_db_profile.html#a32288e0a578b51949d956119caf3b56b">More...</a><br /></td></tr>
+<tr class="separator:a32288e0a578b51949d956119caf3b56b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9293c3593ee32d40acffca13db93cef0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#a9293c3593ee32d40acffca13db93cef0">DbProfile</a> (<a class="el" href="class_isis_1_1_pvl_container.html">PvlContainer</a> &amp;pvl)</td></tr>
+<tr class="memdesc:a9293c3593ee32d40acffca13db93cef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> from a <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> entity.  <a href="class_isis_1_1_db_profile.html#a9293c3593ee32d40acffca13db93cef0">More...</a><br /></td></tr>
+<tr class="separator:a9293c3593ee32d40acffca13db93cef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06d786a893e6b4deb185052857f5d6e7"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#a06d786a893e6b4deb185052857f5d6e7">~DbProfile</a> ()</td></tr>
+<tr class="memdesc:a06d786a893e6b4deb185052857f5d6e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor ensures everything is cleaned up properly.  <a href="class_isis_1_1_db_profile.html#a06d786a893e6b4deb185052857f5d6e7">More...</a><br /></td></tr>
+<tr class="separator:a06d786a893e6b4deb185052857f5d6e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e753fff66e4fa985582d0b323fb8d7a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#a8e753fff66e4fa985582d0b323fb8d7a">isValid</a> () const</td></tr>
+<tr class="memdesc:a8e753fff66e4fa985582d0b323fb8d7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports if this is a valid profile.  <a href="class_isis_1_1_db_profile.html#a8e753fff66e4fa985582d0b323fb8d7a">More...</a><br /></td></tr>
+<tr class="separator:a8e753fff66e4fa985582d0b323fb8d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8001f958f23b759f97b96e9ddefb55cb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#a8001f958f23b759f97b96e9ddefb55cb">size</a> () const</td></tr>
+<tr class="memdesc:a8001f958f23b759f97b96e9ddefb55cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports the number of keywords in this user profile.  <a href="class_isis_1_1_db_profile.html#a8001f958f23b759f97b96e9ddefb55cb">More...</a><br /></td></tr>
+<tr class="separator:a8001f958f23b759f97b96e9ddefb55cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89c4bfcda5526607d53aa498fc0d02de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#a89c4bfcda5526607d53aa498fc0d02de">setName</a> (const QString &amp;name)</td></tr>
+<tr class="memdesc:a89c4bfcda5526607d53aa498fc0d02de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the name of this profile.  <a href="class_isis_1_1_db_profile.html#a89c4bfcda5526607d53aa498fc0d02de">More...</a><br /></td></tr>
+<tr class="separator:a89c4bfcda5526607d53aa498fc0d02de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2b98e9e63815915c4e1c8369f0a53da"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#ab2b98e9e63815915c4e1c8369f0a53da">Name</a> () const</td></tr>
+<tr class="memdesc:ab2b98e9e63815915c4e1c8369f0a53da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of this property.  <a href="class_isis_1_1_db_profile.html#ab2b98e9e63815915c4e1c8369f0a53da">More...</a><br /></td></tr>
+<tr class="separator:ab2b98e9e63815915c4e1c8369f0a53da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab252d6cc6845d833bc00143b78182416"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#ab252d6cc6845d833bc00143b78182416">exists</a> (const QString &amp;<a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key</a>) const</td></tr>
+<tr class="memdesc:ab252d6cc6845d833bc00143b78182416"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for the existance of a keyword.  <a href="class_isis_1_1_db_profile.html#ab252d6cc6845d833bc00143b78182416">More...</a><br /></td></tr>
+<tr class="separator:ab252d6cc6845d833bc00143b78182416"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a359a14ead67c59490e5a99b584d1bc79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#a359a14ead67c59490e5a99b584d1bc79">add</a> (const QString &amp;<a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key</a>, const QString &amp;<a class="el" href="class_isis_1_1_db_profile.html#a8d49d16d4713123def0dbabc93f1e058">value</a>=&quot;&quot;)</td></tr>
+<tr class="memdesc:a359a14ead67c59490e5a99b584d1bc79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a keyword and value pair to the profile.  <a href="class_isis_1_1_db_profile.html#a359a14ead67c59490e5a99b584d1bc79">More...</a><br /></td></tr>
+<tr class="separator:a359a14ead67c59490e5a99b584d1bc79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad37fcbfdf8a3006ba4805b59ce9b80b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#ad37fcbfdf8a3006ba4805b59ce9b80b5">replace</a> (const QString &amp;<a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key</a>, const QString &amp;<a class="el" href="class_isis_1_1_db_profile.html#a8d49d16d4713123def0dbabc93f1e058">value</a>=&quot;&quot;)</td></tr>
+<tr class="memdesc:ad37fcbfdf8a3006ba4805b59ce9b80b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a keyword and value pair to the profile.  <a href="class_isis_1_1_db_profile.html#ad37fcbfdf8a3006ba4805b59ce9b80b5">More...</a><br /></td></tr>
+<tr class="separator:ad37fcbfdf8a3006ba4805b59ce9b80b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1ec637786097f47d51ff568e7f8b0b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#ab1ec637786097f47d51ff568e7f8b0b2">remove</a> (const QString &amp;<a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key</a>)</td></tr>
+<tr class="memdesc:ab1ec637786097f47d51ff568e7f8b0b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a keyword from the profile.  <a href="class_isis_1_1_db_profile.html#ab1ec637786097f47d51ff568e7f8b0b2">More...</a><br /></td></tr>
+<tr class="separator:ab1ec637786097f47d51ff568e7f8b0b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc5496ec1ba107e24937ecf5efab4f0e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#afc5496ec1ba107e24937ecf5efab4f0e">count</a> (const QString &amp;<a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key</a>) const</td></tr>
+<tr class="memdesc:afc5496ec1ba107e24937ecf5efab4f0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report number of values in keyword.  <a href="class_isis_1_1_db_profile.html#afc5496ec1ba107e24937ecf5efab4f0e">More...</a><br /></td></tr>
+<tr class="separator:afc5496ec1ba107e24937ecf5efab4f0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9949267a80f9e296893140f8f0bf9e8"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key</a> (int nth) const</td></tr>
+<tr class="memdesc:ab9949267a80f9e296893140f8f0bf9e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the nth key in the profile.  <a href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">More...</a><br /></td></tr>
+<tr class="separator:ab9949267a80f9e296893140f8f0bf9e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d49d16d4713123def0dbabc93f1e058"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#a8d49d16d4713123def0dbabc93f1e058">value</a> (const QString &amp;<a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key</a>, int nth=0) const</td></tr>
+<tr class="memdesc:a8d49d16d4713123def0dbabc93f1e058"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the specified value for the given keyword.  <a href="class_isis_1_1_db_profile.html#a8d49d16d4713123def0dbabc93f1e058">More...</a><br /></td></tr>
+<tr class="separator:a8d49d16d4713123def0dbabc93f1e058"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ab8ce6e41fd030ead6f51679b57f3e4"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#a9ab8ce6e41fd030ead6f51679b57f3e4">operator()</a> (const QString &amp;<a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key</a>, int nth=0) const</td></tr>
+<tr class="memdesc:a9ab8ce6e41fd030ead6f51679b57f3e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the specified value for the given keyword.  <a href="class_isis_1_1_db_profile.html#a9ab8ce6e41fd030ead6f51679b57f3e4">More...</a><br /></td></tr>
+<tr class="separator:a9ab8ce6e41fd030ead6f51679b57f3e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:a6927c3fd90d3c7f1e7ec37a3ed46d5f8"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_isis_1_1_collector_map.html">CollectorMap</a>&lt; <a class="el" href="class_isis_1_1_i_string.html">IString</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a>, <a class="el" href="struct_isis_1_1_no_case_string_compare.html">NoCaseStringCompare</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#a6927c3fd90d3c7f1e7ec37a3ed46d5f8">KeyList</a></td></tr>
+<tr class="separator:a6927c3fd90d3c7f1e7ec37a3ed46d5f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ab5ff04f416dcb7c7ed742877dcb8bcd2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#ab5ff04f416dcb7c7ed742877dcb8bcd2">loadkeys</a> (<a class="el" href="class_isis_1_1_pvl_container.html">PvlContainer</a> &amp;pvl)</td></tr>
+<tr class="memdesc:ab5ff04f416dcb7c7ed742877dcb8bcd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> keys from the given <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> construct.  <a href="class_isis_1_1_db_profile.html#ab5ff04f416dcb7c7ed742877dcb8bcd2">More...</a><br /></td></tr>
+<tr class="separator:ab5ff04f416dcb7c7ed742877dcb8bcd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2fa66a58ecd95b7fc784e5974f2c2a9"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_db_profile.html#a6927c3fd90d3c7f1e7ec37a3ed46d5f8">KeyList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_db_profile.html#ac2fa66a58ecd95b7fc784e5974f2c2a9">getKeyList</a> () const</td></tr>
+<tr class="memdesc:ac2fa66a58ecd95b7fc784e5974f2c2a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a reference to the key list.  <a href="class_isis_1_1_db_profile.html#ac2fa66a58ecd95b7fc784e5974f2c2a9">More...</a><br /></td></tr>
+<tr class="separator:ac2fa66a58ecd95b7fc784e5974f2c2a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> is a container for access parameters to a database. </p>
+<p>This class provides a utility for (keyword) parameter management to access a database system. Profiles can be used to specify all parameters necessary to apply to programatic interfaces to database software such as Qt's SQL <a class="el" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources.">Module</a> class, <a class="el" href="class_q_sql_database.html">QSqlDatabase</a>.</p>
+<p>Using <a class="el" href="class_q_sql_database.html">QSqlDatabase</a> as an example, keywords such as <em>User</em>, <em>Host</em>, <em>Port</em>, and <em>Dbname</em> can be stored in this object and retrieved easily.</p>
+<p>It can be easily adapted to any database software API by externally managing the contents of a configuration file. See <a class="el" href="class_isis_1_1_db_access.html" title="DbAccess manages programatic access to a database through profiles.">DbAccess</a> for additional details on how this scheme can be utilized.</p>
+<dl class="section author"><dt>Author</dt><dd>2006-11-09 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a6927c3fd90d3c7f1e7ec37a3ed46d5f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6927c3fd90d3c7f1e7ec37a3ed46d5f8">&#9670;&nbsp;</a></span>KeyList</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="class_isis_1_1_collector_map.html">CollectorMap</a>&lt;<a class="el" href="class_isis_1_1_i_string.html">IString</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html">PvlKeyword</a>, <a class="el" href="struct_isis_1_1_no_case_string_compare.html">NoCaseStringCompare</a>&gt; <a class="el" href="class_isis_1_1_db_profile.html#a6927c3fd90d3c7f1e7ec37a3ed46d5f8">Isis::DbProfile::KeyList</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a3989c68f1f5e8ab25e42d06c2281ab0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3989c68f1f5e8ab25e42d06c2281ab0d">&#9670;&nbsp;</a></span>DbProfile() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::DbProfile::DbProfile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_db_access.html#a66c10011cdc6cb709d2abdfa73f06e3f">Isis::DbAccess::getProfile()</a>.</p>
+
+</div>
+</div>
+<a id="aac24ec514913e6dfee2f2846f15ac1d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac24ec514913e6dfee2f2846f15ac1d9">&#9670;&nbsp;</a></span>DbProfile() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::DbProfile::DbProfile </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a32288e0a578b51949d956119caf3b56b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32288e0a578b51949d956119caf3b56b">&#9670;&nbsp;</a></span>DbProfile() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::DbProfile::DbProfile </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;&#160;</td>
+          <td class="paramname"><em>prof1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;&#160;</td>
+          <td class="paramname"><em>prof2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a profile from the merging of two a DbProfiles. </p>
+<p>This constructor will create a new <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> from two existing DbProfiles. Its intended use is for the merging of keys in an ordered fashion. It is useful when a higher level class inherits this class and a specific implementations calls for the keys to come from both the parent and the child <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a>.</p>
+<p>It should be noted that this is a convenient way to merge high level database access parameters with individual profile access where the last keys take precedence over the first. Thus, in the case where the same keys exist in both the first and second profiles, keys in the second profile take precedence. This is great for defining general database parameters in the top level database configure section and having individual profiles redefine certain access parameters.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of new profile </td></tr>
+    <tr><td class="paramname">prof1</td><td>First profile to merge </td></tr>
+    <tr><td class="paramname">prof2</td><td>Second profile to merge </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_collector_map.html#ad96d0f9f2306a6815b8ed11747ee3f84">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::add()</a>, <a class="el" href="class_isis_1_1_collector_map.html#a72132d1b96597777ad730cedd4341838">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::getNth()</a>, <a class="el" href="class_isis_1_1_collector_map.html#ad74a178dd1e8741f0fc4fdf17ed44cf5">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::key()</a>, and <a class="el" href="class_isis_1_1_collector_map.html#a4490079cb06dc8c19bdf47e327422785">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::size()</a>.</p>
+
+</div>
+</div>
+<a id="a9293c3593ee32d40acffca13db93cef0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9293c3593ee32d40acffca13db93cef0">&#9670;&nbsp;</a></span>DbProfile() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::DbProfile::DbProfile </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl_container.html">PvlContainer</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> from a <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> entity. </p>
+<p>This constructor will create a <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> by reading keywords from a <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> container. <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> Containers can be an Object or a Group, or simply a list of keywords. This <a class="el" href="class_isis_1_1_pvl_container.html" title="Contains more than one keyword-value pair.">PvlContainer</a> is expected to point to the appropriate keywords that the caller has pre-established by normal <a class="el" href="namespace_isis.html" title="This is free and unencumbered software released into the public domain.">Isis</a> <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> methods.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td><a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> container of keywords to make a <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> from </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_collector_map.html#a8c174ae46fe8d294d4463881e093ffb7">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::exists()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab5ff04f416dcb7c7ed742877dcb8bcd2">loadkeys()</a>, and <a class="el" href="class_isis_1_1_db_profile.html#a8d49d16d4713123def0dbabc93f1e058">value()</a>.</p>
+
+</div>
+</div>
+<a id="a06d786a893e6b4deb185052857f5d6e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06d786a893e6b4deb185052857f5d6e7">&#9670;&nbsp;</a></span>~DbProfile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::DbProfile::~DbProfile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor ensures everything is cleaned up properly. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a359a14ead67c59490e5a99b584d1bc79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a359a14ead67c59490e5a99b584d1bc79">&#9670;&nbsp;</a></span>add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::DbProfile::add </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>value</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a keyword and value pair to the profile. </p>
+<p>This method adds a keyword and value pair to the profile if it doesn't exist. If the keyword already exists,it appends the value to the existing keyword.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>Keyword to add or ammend </td></tr>
+    <tr><td class="paramname">value</td><td>Value to add to the keyword </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_collector_map.html#ad96d0f9f2306a6815b8ed11747ee3f84">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::add()</a>, <a class="el" href="class_isis_1_1_pvl_keyword.html#af80ef16d6eb13934fc2265889447e5d7">Isis::PvlKeyword::addValue()</a>, <a class="el" href="class_isis_1_1_collector_map.html#a8c174ae46fe8d294d4463881e093ffb7">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::exists()</a>, <a class="el" href="class_isis_1_1_collector_map.html#a48037c2c415598559626fcf1d0f4cca6">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::get()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key()</a>, and <a class="el" href="class_isis_1_1_db_profile.html#a8d49d16d4713123def0dbabc93f1e058">value()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_database_factory.html#a930905abcb9bb0c1aaeaf12bfdb25c47">Isis::DatabaseFactory::addAccessProfile()</a>.</p>
+
+</div>
+</div>
+<a id="afc5496ec1ba107e24937ecf5efab4f0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc5496ec1ba107e24937ecf5efab4f0e">&#9670;&nbsp;</a></span>count()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::DbProfile::count </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Report number of values in keyword. </p>
+<p>This method will return the number of values in the specified keyword. If the keyword does not exist, 0 is returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>Name of key to get value count for</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int Number values in key, or 0 if the key does not exist </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_collector_map.html#a8c174ae46fe8d294d4463881e093ffb7">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::exists()</a>, <a class="el" href="class_isis_1_1_collector_map.html#a48037c2c415598559626fcf1d0f4cca6">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::get()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key()</a>, and <a class="el" href="class_isis_1_1_pvl_keyword.html#a2c88473ba977e24be39e95a3ac4f29c8">Isis::PvlKeyword::size()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="namespace_isis.html#a8e08fbdb4fa8b745337842796ead38f6">Isis::ConfKey()</a>, and <a class="el" href="class_isis_1_1_photometric_function.html#aaac2d71528cf78ba091d29c65aeff9ee">Isis::PhotometricFunction::ConfKey()</a>.</p>
+
+</div>
+</div>
+<a id="ab252d6cc6845d833bc00143b78182416"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab252d6cc6845d833bc00143b78182416">&#9670;&nbsp;</a></span>exists()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::DbProfile::exists </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks for the existance of a keyword. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>Name of keyword to check</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool True if it exists, false if it doesn't </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_collector_map.html#a8c174ae46fe8d294d4463881e093ffb7">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::exists()</a>, and <a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_database_factory.html#a930905abcb9bb0c1aaeaf12bfdb25c47">Isis::DatabaseFactory::addAccessProfile()</a>, <a class="el" href="class_isis_1_1_database.html#ab8e5b79d235e2ab8a4af1854df552ee9">Isis::Database::configureAccess()</a>, <a class="el" href="namespace_isis.html#a8e08fbdb4fa8b745337842796ead38f6">Isis::ConfKey()</a>, <a class="el" href="class_isis_1_1_photometric_function.html#aaac2d71528cf78ba091d29c65aeff9ee">Isis::PhotometricFunction::ConfKey()</a>, <a class="el" href="class_isis_1_1_db_access.html#acf8db2c274262d56961b65cee5e540be">Isis::DbAccess::getDefaultProfileName()</a>, <a class="el" href="namespace_isis.html#a91bd78d23f0175e0f40fc36f2cba4a38">Isis::IsTrueValue()</a>, <a class="el" href="class_isis_1_1_load_c_s_v.html#aba0350879e90225ee08fad1321270675">Isis::LoadCSV::load()</a>, and <a class="el" href="class_isis_1_1_zero_buffer_fit.html#af96c4998476f9bbc11aee4a99a660818">Isis::ZeroBufferFit::ZeroBufferFit()</a>.</p>
+
+</div>
+</div>
+<a id="ac2fa66a58ecd95b7fc784e5974f2c2a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2fa66a58ecd95b7fc784e5974f2c2a9">&#9670;&nbsp;</a></span>getKeyList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_db_profile.html#a6927c3fd90d3c7f1e7ec37a3ed46d5f8">KeyList</a>&amp; Isis::DbProfile::getKeyList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a reference to the key list. </p>
+<p>Direct access to the keyword container allows class developers some additional flexibility whilst maintaining integrity through the public interface.</p>
+<dl class="section return"><dt>Returns</dt><dd>const KeyList&amp; Reference to keyword list </dd></dl>
+
+</div>
+</div>
+<a id="a8e753fff66e4fa985582d0b323fb8d7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e753fff66e4fa985582d0b323fb8d7a">&#9670;&nbsp;</a></span>isValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::DbProfile::isValid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reports if this is a valid profile. </p>
+<p>A valid profile is simply defined to contain keys. If there are no keys defined for the profile, it is deemed invalid.</p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if the profile is valid, therefore containing keys </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_db_profile.html#a8001f958f23b759f97b96e9ddefb55cb">size()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_database.html#aa0abcf9960a9e689833a99534717d12f">Isis::Database::init()</a>.</p>
+
+</div>
+</div>
+<a id="ab9949267a80f9e296893140f8f0bf9e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9949267a80f9e296893140f8f0bf9e8">&#9670;&nbsp;</a></span>key()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::DbProfile::key </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nth</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the nth key in the profile. </p>
+<p>This method returns the name of the nth keyword in the profile so one can iterate through all existing keys. Note that database passwords could be vulnerable to exposure via this method.</p>
+<p>Keywords in the profile are sorted in alphabetical order and not in the order in which they are read.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nth</td><td>Specifies the nth key in the profile</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString Name of nth keyword in the profile.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Out-of-range</td><td>exception if the nth keyword does not exist </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_collector_map.html#ad74a178dd1e8741f0fc4fdf17ed44cf5">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::key()</a>, and <a class="el" href="class_isis_1_1_i_string.html#a771e32c8a3cbe76ba8ff9916da73effb">Isis::IString::ToQt()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_db_profile.html#a359a14ead67c59490e5a99b584d1bc79">add()</a>, <a class="el" href="class_isis_1_1_db_profile.html#afc5496ec1ba107e24937ecf5efab4f0e">count()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab252d6cc6845d833bc00143b78182416">exists()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab5ff04f416dcb7c7ed742877dcb8bcd2">loadkeys()</a>, <a class="el" href="class_isis_1_1_db_profile.html#a9ab8ce6e41fd030ead6f51679b57f3e4">operator()()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab1ec637786097f47d51ff568e7f8b0b2">remove()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ad37fcbfdf8a3006ba4805b59ce9b80b5">replace()</a>, and <a class="el" href="class_isis_1_1_db_profile.html#a8d49d16d4713123def0dbabc93f1e058">value()</a>.</p>
+
+</div>
+</div>
+<a id="ab5ff04f416dcb7c7ed742877dcb8bcd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5ff04f416dcb7c7ed742877dcb8bcd2">&#9670;&nbsp;</a></span>loadkeys()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::DbProfile::loadkeys </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl_container.html">PvlContainer</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads <a class="el" href="class_isis_1_1_db_profile.html" title="A DbProfile is a container for access parameters to a database.">DbProfile</a> keys from the given <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> construct. </p>
+<p>This method iterates through all keywords in the <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> container and loads them into this property.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pvl</td><td>Container of keywords that will be loaded </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_collector_map.html#ad96d0f9f2306a6815b8ed11747ee3f84">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::add()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a676040b7d08e97e2806b432db00588f8">Isis::PvlContainer::begin()</a>, <a class="el" href="class_isis_1_1_pvl_container.html#a964e6046cc43e397f6ae239b854836ca">Isis::PvlContainer::end()</a>, and <a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_db_profile.html#a9293c3593ee32d40acffca13db93cef0">DbProfile()</a>, and <a class="el" href="class_isis_1_1_db_access.html#a9afaf8573e76a2fe2282c7a59eb6e7ea">Isis::DbAccess::load()</a>.</p>
+
+</div>
+</div>
+<a id="ab2b98e9e63815915c4e1c8369f0a53da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2b98e9e63815915c4e1c8369f0a53da">&#9670;&nbsp;</a></span>Name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::DbProfile::Name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the name of this property. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString Name of this property </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_database_factory.html#a930905abcb9bb0c1aaeaf12bfdb25c47">Isis::DatabaseFactory::addAccessProfile()</a>, <a class="el" href="class_isis_1_1_database_factory.html#ab9564aae3d9b7fe1dfcbbcca99f41f94">Isis::DatabaseFactory::addProfile()</a>, <a class="el" href="class_isis_1_1_db_access.html#a997d40fc4eae8b92e902c041a778f424">Isis::DbAccess::addProfile()</a>, <a class="el" href="class_isis_1_1_db_access.html#ac9bff42af1715097cc4a0044f1dfbe49">Isis::DbAccess::getProfile()</a>, <a class="el" href="class_isis_1_1_database.html#aecd8c91707889f2d4fd62407bbf99568">Isis::Database::init()</a>, <a class="el" href="class_isis_1_1_db_access.html#a9afaf8573e76a2fe2282c7a59eb6e7ea">Isis::DbAccess::load()</a>, and <a class="el" href="class_isis_1_1_zero_buffer_fit.html#af96c4998476f9bbc11aee4a99a660818">Isis::ZeroBufferFit::ZeroBufferFit()</a>.</p>
+
+</div>
+</div>
+<a id="a9ab8ce6e41fd030ead6f51679b57f3e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ab8ce6e41fd030ead6f51679b57f3e4">&#9670;&nbsp;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::DbProfile::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nth</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the specified value for the given keyword. </p>
+<p>This method returns a value from the specified keyword. If the keyword or the specified value does not exist, an exception is thrown.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>Name of keyword to return value for.</td></tr>
+    <tr><td class="paramname">nth</td><td>Specifies the nth value in the keyword</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString The requested value in the keyword </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key()</a>, and <a class="el" href="class_isis_1_1_db_profile.html#a8d49d16d4713123def0dbabc93f1e058">value()</a>.</p>
+
+</div>
+</div>
+<a id="ab1ec637786097f47d51ff568e7f8b0b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1ec637786097f47d51ff568e7f8b0b2">&#9670;&nbsp;</a></span>remove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::DbProfile::remove </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes a keyword from the profile. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>Keyword to remove </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key()</a>, and <a class="el" href="class_isis_1_1_collector_map.html#a5a87354c55edda602b946317a2c23e94">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::remove()</a>.</p>
+
+</div>
+</div>
+<a id="ad37fcbfdf8a3006ba4805b59ce9b80b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad37fcbfdf8a3006ba4805b59ce9b80b5">&#9670;&nbsp;</a></span>replace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::DbProfile::replace </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>value</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a keyword and value pair to the profile. </p>
+<p>This method adds a keyword and value pair to the profile if it doesn't exist.</p>
+<p>If the keyword already exists, it is deleted and replaced with this new keyword and value.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>Keyword to replace </td></tr>
+    <tr><td class="paramname">value</td><td>Value to add to the keyword </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_collector_map.html#ad96d0f9f2306a6815b8ed11747ee3f84">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::add()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key()</a>, and <a class="el" href="class_isis_1_1_db_profile.html#a8d49d16d4713123def0dbabc93f1e058">value()</a>.</p>
+
+</div>
+</div>
+<a id="a89c4bfcda5526607d53aa498fc0d02de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89c4bfcda5526607d53aa498fc0d02de">&#9670;&nbsp;</a></span>setName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::DbProfile::setName </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the name of this profile. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>QString used to set the name of this profile </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8001f958f23b759f97b96e9ddefb55cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8001f958f23b759f97b96e9ddefb55cb">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::DbProfile::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reports the number of keywords in this user profile. </p>
+<dl class="section return"><dt>Returns</dt><dd>int Number keywords found in profile </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_collector_map.html#a4490079cb06dc8c19bdf47e327422785">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::size()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_db_profile.html#a8e753fff66e4fa985582d0b323fb8d7a">isValid()</a>.</p>
+
+</div>
+</div>
+<a id="a8d49d16d4713123def0dbabc93f1e058"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d49d16d4713123def0dbabc93f1e058">&#9670;&nbsp;</a></span>value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::DbProfile::value </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nth</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the specified value for the given keyword. </p>
+<p>This method returns a value from the specified keyword. If the keyword or the specified value does not exist, an exception is thrown.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>Name of keyword to return value for.</td></tr>
+    <tr><td class="paramname">nth</td><td>Specifies the nth value in the keyword</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString The requested value in the keyword </dd></dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_collector_map.html#a48037c2c415598559626fcf1d0f4cca6">Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;::get()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab9949267a80f9e296893140f8f0bf9e8">key()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26ab20c2b92457190a701aa5200ba3feaab">Isis::IException::Programmer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_db_profile.html#a359a14ead67c59490e5a99b584d1bc79">add()</a>, <a class="el" href="class_isis_1_1_database_factory.html#a930905abcb9bb0c1aaeaf12bfdb25c47">Isis::DatabaseFactory::addAccessProfile()</a>, <a class="el" href="namespace_isis.html#a8e08fbdb4fa8b745337842796ead38f6">Isis::ConfKey()</a>, <a class="el" href="class_isis_1_1_photometric_function.html#aaac2d71528cf78ba091d29c65aeff9ee">Isis::PhotometricFunction::ConfKey()</a>, <a class="el" href="class_isis_1_1_db_profile.html#a9293c3593ee32d40acffca13db93cef0">DbProfile()</a>, <a class="el" href="class_isis_1_1_db_access.html#acf8db2c274262d56961b65cee5e540be">Isis::DbAccess::getDefaultProfileName()</a>, <a class="el" href="class_isis_1_1_db_profile.html#a9ab8ce6e41fd030ead6f51679b57f3e4">operator()()</a>, and <a class="el" href="class_isis_1_1_db_profile.html#ad37fcbfdf8a3006ba4805b59ce9b80b5">replace()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/database/objs/DbProfile/<a class="el" href="_db_profile_8h_source.html">DbProfile.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/database/objs/DbProfile/<a class="el" href="_db_profile_8cpp.html">DbProfile.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

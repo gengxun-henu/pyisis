@@ -1,0 +1,7 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+PvlGroup,Parsing,isis/src/base/objs/PvlGroup/PvlGroup.h,isis_pybind_standalone/src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,PvlGroup,isis_pybind.PvlGroup,Y,Python class symbol is exported
+Construction/Enum,PvlGroup(),isis_pybind.PvlGroup(),Y,Constructor is explicitly bound
+Query,void validateGroup(PvlGroup & pPvlGrp),isis_pybind.PvlGroup.validate_group,N,Method not found in current binding files

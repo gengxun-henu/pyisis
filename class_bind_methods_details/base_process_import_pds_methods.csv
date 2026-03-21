@@ -1,0 +1,21 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ProcessImportPds,High Level Cube I/O,isis/src/base/objs/ProcessImportPds/ProcessImportPds.h,isis_pybind_standalone/src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ProcessImportPds,isis_pybind.ProcessImportPds,Y,Python class symbol is exported; 流程/回调接口较多
+Construction/Enum,"PdsFileType enum (Image, Qube, SpectralQube, L0, Rdn, Loc, Obs, CombinedSpectrum, All)",isis_pybind.ProcessImportPds.PdsFileType,N,流程/回调接口较多
+Construction/Enum,ProcessImportPds(),isis_pybind.ProcessImportPds(),Y,Constructor is explicitly bound
+Public API,bool GetProjectionOffsetChange(),isis_pybind.ProcessImportPds.get_projection_offset_change,N,流程/回调接口较多
+Public API,PvlGroup GetProjectionOffsetGroup(),isis_pybind.ProcessImportPds.get_projection_offset_group,N,流程/回调接口较多
+Mutation/Configuration,"void SetPdsFile(const QString &pdsLabelFile, const QString &pdsDataFile, Pvl &pdsLabel, PdsFileType allowedTypes = All)",isis_pybind.ProcessImportPds.set_pds_file,N,流程/回调接口较多
+Mutation/Configuration,"void SetPdsFile(const Pvl &pdsLabelPvl, const QString &pdsDataFile, PdsFileType allowedTypes = All)",isis_pybind.ProcessImportPds.set_pds_file,N,流程/回调接口较多
+Public API,"void ProcessLabel(const QString &pdsDataFile, PdsFileType allowedTypes)",isis_pybind.ProcessImportPds.process_label,N,流程/回调接口较多
+Public API,void TranslatePdsProjection(Pvl &lab),isis_pybind.ProcessImportPds.translate_pds_projection,N,流程/回调接口较多
+Public API,void TranslateIsis2Labels(Pvl &lab),isis_pybind.ProcessImportPds.translate_isis2_labels,N,流程/回调接口较多
+Public API,void TranslatePdsLabels(Pvl &lab),isis_pybind.ProcessImportPds.translate_pds_labels,N,流程/回调接口较多
+Query,bool IsIsis2(),isis_pybind.ProcessImportPds.is_isis2,N,流程/回调接口较多
+Public API,void OmitOriginalLabel(),isis_pybind.ProcessImportPds.omit_original_label,N,流程/回调接口较多
+Read/Write IO,Table &ImportTable(QString pdsTableName),isis_pybind.ProcessImportPds.import_table,N,流程/回调接口较多
+Public API,void StartProcess(),isis_pybind.ProcessImportPds.start_process,N,流程/回调接口较多
+Public API,void EndProcess(),isis_pybind.ProcessImportPds.end_process,N,流程/回调接口较多
+Public API,void Finalize(),isis_pybind.ProcessImportPds.finalize,N,流程/回调接口较多

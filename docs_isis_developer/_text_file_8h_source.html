@@ -1,0 +1,360 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/TextFile/TextFile.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_text_file_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">TextFile.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_text_file_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef TextFile_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define TextFile_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="class_isis_1_1_text_file.html">   38</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_text_file.html">TextFile</a> {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="class_isis_1_1_text_file.html#a7409c6860fa3f7672fe798d5f5f87fcb">   41</a></span>&#160;      std::fstream <a class="code" href="class_isis_1_1_text_file.html#a7409c6860fa3f7672fe798d5f5f87fcb">p_stream</a>;           </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="class_isis_1_1_text_file.html#a901e31dec08e8051c092a577890ad8a0">   42</a></span>&#160;      <span class="keywordtype">int</span>     <a class="code" href="class_isis_1_1_text_file.html#a901e31dec08e8051c092a577890ad8a0">p_openmode</a>;              </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="class_isis_1_1_text_file.html#aedab5d0adf06da84576302e9c6c2501c">   44</a></span>&#160;      QString  <a class="code" href="class_isis_1_1_text_file.html#aedab5d0adf06da84576302e9c6c2501c">p_filename</a>;         </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="class_isis_1_1_text_file.html#a6ad627624b66843c75b8116c3b098449">   45</a></span>&#160;      QString  <a class="code" href="class_isis_1_1_text_file.html#a6ad627624b66843c75b8116c3b098449">p_commentString</a>;    </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="class_isis_1_1_text_file.html#a5dcd8990015231a4037d4fd3f03d1e32">   47</a></span>&#160;      QString  <a class="code" href="class_isis_1_1_text_file.html#a5dcd8990015231a4037d4fd3f03d1e32">p_newLineString</a>;    </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_text_file.html#af0a1b723f38d96faf3a46d0636473eef">p_GetLine</a>(QString &amp;line, <span class="keywordtype">bool</span> chkComment);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      <span class="comment">// Constructors and destructors</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      <a class="code" href="class_isis_1_1_text_file.html#a24687f65d5261a9c190275d1be01246c">TextFile</a>();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <span class="comment">// implied open file</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;      <a class="code" href="class_isis_1_1_text_file.html#a24687f65d5261a9c190275d1be01246c">TextFile</a>(<span class="keyword">const</span> QString &amp;filename, <span class="keyword">const</span> <span class="keywordtype">char</span> *openmode = <span class="stringliteral">&quot;input&quot;</span>,</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;               <span class="keyword">const</span> <span class="keywordtype">char</span> *extension = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      <span class="comment">// implied getFile/putFile</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      <a class="code" href="class_isis_1_1_text_file.html#a24687f65d5261a9c190275d1be01246c">TextFile</a>(<span class="keyword">const</span>   <span class="keywordtype">char</span> *filename, <span class="keyword">const</span> <span class="keywordtype">char</span> *openmode,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;               std::vector&lt;QString&gt; &amp;lines,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;               <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;maxLinesToReadWrite = 0,</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;               <span class="keyword">const</span> <span class="keywordtype">bool</span> skipComments = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      <a class="code" href="class_isis_1_1_text_file.html#a24687f65d5261a9c190275d1be01246c">TextFile</a>(<span class="keyword">const</span> QString &amp;filename,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;               <span class="keyword">const</span> <span class="keywordtype">char</span> *openmode, std::vector&lt;QString&gt; &amp;lines,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;               <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;maxLinesToReadWrite = 0,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;               <span class="keyword">const</span> <span class="keywordtype">bool</span> skipComments = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <a class="code" href="class_isis_1_1_text_file.html#a24687f65d5261a9c190275d1be01246c">TextFile</a>(<span class="keyword">const</span>   <span class="keywordtype">char</span> *filename,</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;               <span class="keyword">const</span> <span class="keywordtype">char</span> *openmode, QString *lines,</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;               <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;maxLinesToReadWrite, <span class="keyword">const</span> <span class="keywordtype">bool</span> skipComments = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <a class="code" href="class_isis_1_1_text_file.html#a24687f65d5261a9c190275d1be01246c">TextFile</a>(<span class="keyword">const</span> QString &amp;filename,</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;               <span class="keyword">const</span> <span class="keywordtype">char</span> *openmode, QString *lines,</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;               <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;maxLinesToReadWrite, <span class="keyword">const</span> <span class="keywordtype">bool</span> skipComments = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <a class="code" href="class_isis_1_1_text_file.html#ab6d068af9bef2f528e3d3214f252a953">~TextFile</a>();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#a552757a83a57fd616c32ba41440aa46a">Open</a>(<span class="keyword">const</span> QString &amp;filename, <span class="keyword">const</span> <span class="keywordtype">char</span> *openmode = <span class="stringliteral">&quot;input&quot;</span>,</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span> *extension = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="class_isis_1_1_text_file.html#abf587d6d8ee8d122ad6eaf9d2eed8003">   80</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#abf587d6d8ee8d122ad6eaf9d2eed8003">Open</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <span class="keyword">const</span> <span class="keywordtype">char</span> *openmode = <span class="stringliteral">&quot;input&quot;</span>,</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span> *extension = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_text_file.html#a815f668f8daa81c90f3b9cf463b8c099">OpenChk</a>(<span class="keywordtype">bool</span> bailIfNotOpen = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#ae2ac3038b976ca1e104f89703019cede">Rewind</a>();</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#ae2194bdd07efde67ec718455121b5fea">Close</a>();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#a527bad26234bf9c0f25b81392f14247e">GetFile</a>(std::vector&lt;QString&gt; &amp;lines, </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                   <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;maxLinesToRead = 0, </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                   <span class="keyword">const</span> <span class="keywordtype">bool</span> skipComments = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#a527bad26234bf9c0f25b81392f14247e">GetFile</a>(QString *lines, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;maxLinesToRead, </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                   <span class="keyword">const</span> <span class="keywordtype">bool</span> skipComments = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#abe7445040c9d30c69a844389fa100fa6">PutFile</a>(std::vector&lt;QString&gt; &amp;lines, </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                   <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;maxLinesToWrite = 0);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#abe7445040c9d30c69a844389fa100fa6">PutFile</a>(<span class="keyword">const</span> QString *lines, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;maxLinesToWrite);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_text_file.html#a107a1a6a1db5d0b76557d8a2cb7b9d1f">GetLine</a>(QString &amp;line, <span class="keyword">const</span> <span class="keywordtype">bool</span> skipComments = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_text_file.html#ab3b47bb88c2d1ab746e619fc2fdfcf0d">GetLineNoFilter</a>(QString &amp;line);</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_text_file.html#a107a1a6a1db5d0b76557d8a2cb7b9d1f">GetLine</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> skipComments = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_text_file.html#ab3b47bb88c2d1ab746e619fc2fdfcf0d">GetLineNoFilter</a>();</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#a9e24cd5caef9d235cca490f70abcfbff">PutLine</a>(<span class="keyword">const</span> QString &amp;line);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#a9e24cd5caef9d235cca490f70abcfbff">PutLine</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *line = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#af562f49e81ddc40ea34b6aa13ec3ba78">PutLineComment</a>(<span class="keyword">const</span> QString &amp;line);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#af562f49e81ddc40ea34b6aa13ec3ba78">PutLineComment</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *line = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      QString <a class="code" href="class_isis_1_1_text_file.html#a063e0b26e916fd7ca81a03f9bd47147f">GetComment</a>();</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      QString <a class="code" href="class_isis_1_1_text_file.html#ae8314aaa4e246e5de09049cf1435e88b">GetNewLine</a>();</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#a633a2f8f4a4faf6b53f788d1781f5656">SetComment</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *commentString = <span class="stringliteral">&quot;#&quot;</span>);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_text_file.html#afc222af6118a5ed9e36911e4daab64ec">SetNewLine</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *newLineString = <span class="stringliteral">&quot;\n&quot;</span>);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      <span class="keywordtype">int</span> <a class="code" href="class_isis_1_1_text_file.html#a74b73a6084199ac91c0899929b5e75c4">LineCount</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> &amp;maxLinesToRead = 0);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      std::streamsize <a class="code" href="class_isis_1_1_text_file.html#aa37c597db168b3bf4121a13afb3e73db">Size</a>();</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  };</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;};</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html"><div class="ttname"><a href="class_isis_1_1_text_file.html">Isis::TextFile</a></div><div class="ttdoc">Provides access to sequential ASCII stream I/O.</div><div class="ttdef"><b>Definition:</b> TextFile.h:38</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a063e0b26e916fd7ca81a03f9bd47147f"><div class="ttname"><a href="class_isis_1_1_text_file.html#a063e0b26e916fd7ca81a03f9bd47147f">Isis::TextFile::GetComment</a></div><div class="ttdeci">QString GetComment()</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:564</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a107a1a6a1db5d0b76557d8a2cb7b9d1f"><div class="ttname"><a href="class_isis_1_1_text_file.html#a107a1a6a1db5d0b76557d8a2cb7b9d1f">Isis::TextFile::GetLine</a></div><div class="ttdeci">bool GetLine(QString &amp;line, const bool skipComments=true)</div><div class="ttdoc">Gets next line from file.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:411</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a24687f65d5261a9c190275d1be01246c"><div class="ttname"><a href="class_isis_1_1_text_file.html#a24687f65d5261a9c190275d1be01246c">Isis::TextFile::TextFile</a></div><div class="ttdeci">TextFile()</div><div class="ttdoc">Constructs an empty TextFile object.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:22</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a527bad26234bf9c0f25b81392f14247e"><div class="ttname"><a href="class_isis_1_1_text_file.html#a527bad26234bf9c0f25b81392f14247e">Isis::TextFile::GetFile</a></div><div class="ttdeci">void GetFile(std::vector&lt; QString &gt; &amp;lines, const int &amp;maxLinesToRead=0, const bool skipComments=true)</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:334</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a552757a83a57fd616c32ba41440aa46a"><div class="ttname"><a href="class_isis_1_1_text_file.html#a552757a83a57fd616c32ba41440aa46a">Isis::TextFile::Open</a></div><div class="ttdeci">void Open(const QString &amp;filename, const char *openmode=&quot;input&quot;, const char *extension=&quot;&quot;)</div><div class="ttdoc">Opens a text file.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:217</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a5dcd8990015231a4037d4fd3f03d1e32"><div class="ttname"><a href="class_isis_1_1_text_file.html#a5dcd8990015231a4037d4fd3f03d1e32">Isis::TextFile::p_newLineString</a></div><div class="ttdeci">QString p_newLineString</div><div class="ttdoc">'newline' string used by PutLine and PutLineComment</div><div class="ttdef"><b>Definition:</b> TextFile.h:47</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a633a2f8f4a4faf6b53f788d1781f5656"><div class="ttname"><a href="class_isis_1_1_text_file.html#a633a2f8f4a4faf6b53f788d1781f5656">Isis::TextFile::SetComment</a></div><div class="ttdeci">void SetComment(const char *commentString=&quot;#&quot;)</div><div class="ttdoc">Sets the 'comment' string.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:577</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a6ad627624b66843c75b8116c3b098449"><div class="ttname"><a href="class_isis_1_1_text_file.html#a6ad627624b66843c75b8116c3b098449">Isis::TextFile::p_commentString</a></div><div class="ttdeci">QString p_commentString</div><div class="ttdoc">'comment' string used by GetLine and PutLineComment</div><div class="ttdef"><b>Definition:</b> TextFile.h:45</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a7409c6860fa3f7672fe798d5f5f87fcb"><div class="ttname"><a href="class_isis_1_1_text_file.html#a7409c6860fa3f7672fe798d5f5f87fcb">Isis::TextFile::p_stream</a></div><div class="ttdeci">std::fstream p_stream</div><div class="ttdoc">File stream handle.</div><div class="ttdef"><b>Definition:</b> TextFile.h:41</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a74b73a6084199ac91c0899929b5e75c4"><div class="ttname"><a href="class_isis_1_1_text_file.html#a74b73a6084199ac91c0899929b5e75c4">Isis::TextFile::LineCount</a></div><div class="ttdeci">int LineCount(const int &amp;maxLinesToRead=0)</div><div class="ttdoc">Counts number of lines in file.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:607</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a815f668f8daa81c90f3b9cf463b8c099"><div class="ttname"><a href="class_isis_1_1_text_file.html#a815f668f8daa81c90f3b9cf463b8c099">Isis::TextFile::OpenChk</a></div><div class="ttdeci">bool OpenChk(bool bailIfNotOpen=false)</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:301</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a901e31dec08e8051c092a577890ad8a0"><div class="ttname"><a href="class_isis_1_1_text_file.html#a901e31dec08e8051c092a577890ad8a0">Isis::TextFile::p_openmode</a></div><div class="ttdeci">int p_openmode</div><div class="ttdoc">openmode of file: Input, Output, Overwrite, Append</div><div class="ttdef"><b>Definition:</b> TextFile.h:42</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_a9e24cd5caef9d235cca490f70abcfbff"><div class="ttname"><a href="class_isis_1_1_text_file.html#a9e24cd5caef9d235cca490f70abcfbff">Isis::TextFile::PutLine</a></div><div class="ttdeci">void PutLine(const QString &amp;line)</div><div class="ttdoc">Writes string to file and appends a 'newline' string.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:508</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_aa37c597db168b3bf4121a13afb3e73db"><div class="ttname"><a href="class_isis_1_1_text_file.html#aa37c597db168b3bf4121a13afb3e73db">Isis::TextFile::Size</a></div><div class="ttdeci">std::streamsize Size()</div><div class="ttdoc">Counts number of bytes in file.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:652</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_ab3b47bb88c2d1ab746e619fc2fdfcf0d"><div class="ttname"><a href="class_isis_1_1_text_file.html#ab3b47bb88c2d1ab746e619fc2fdfcf0d">Isis::TextFile::GetLineNoFilter</a></div><div class="ttdeci">bool GetLineNoFilter()</div><div class="ttdoc">Gets next NON-COMMENT line from file.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:447</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_ab6d068af9bef2f528e3d3214f252a953"><div class="ttname"><a href="class_isis_1_1_text_file.html#ab6d068af9bef2f528e3d3214f252a953">Isis::TextFile::~TextFile</a></div><div class="ttdeci">~TextFile()</div><div class="ttdoc">Closes file (if still open). Destroys the TextFile object.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:186</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_abe7445040c9d30c69a844389fa100fa6"><div class="ttname"><a href="class_isis_1_1_text_file.html#abe7445040c9d30c69a844389fa100fa6">Isis::TextFile::PutFile</a></div><div class="ttdeci">void PutFile(std::vector&lt; QString &gt; &amp;lines, const int &amp;maxLinesToWrite=0)</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:370</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_abf587d6d8ee8d122ad6eaf9d2eed8003"><div class="ttname"><a href="class_isis_1_1_text_file.html#abf587d6d8ee8d122ad6eaf9d2eed8003">Isis::TextFile::Open</a></div><div class="ttdeci">void Open(const char *filename, const char *openmode=&quot;input&quot;, const char *extension=&quot;&quot;)</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_ae2194bdd07efde67ec718455121b5fea"><div class="ttname"><a href="class_isis_1_1_text_file.html#ae2194bdd07efde67ec718455121b5fea">Isis::TextFile::Close</a></div><div class="ttdeci">void Close()</div><div class="ttdoc">Closes file. Called automatically by TextFile destructor.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:326</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_ae2ac3038b976ca1e104f89703019cede"><div class="ttname"><a href="class_isis_1_1_text_file.html#ae2ac3038b976ca1e104f89703019cede">Isis::TextFile::Rewind</a></div><div class="ttdeci">void Rewind()</div><div class="ttdoc">Sets Read / Write pointer to begining of opened file.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:317</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_ae8314aaa4e246e5de09049cf1435e88b"><div class="ttname"><a href="class_isis_1_1_text_file.html#ae8314aaa4e246e5de09049cf1435e88b">Isis::TextFile::GetNewLine</a></div><div class="ttdeci">QString GetNewLine()</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:582</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_aedab5d0adf06da84576302e9c6c2501c"><div class="ttname"><a href="class_isis_1_1_text_file.html#aedab5d0adf06da84576302e9c6c2501c">Isis::TextFile::p_filename</a></div><div class="ttdeci">QString p_filename</div><div class="ttdoc">FileName of the opened file.</div><div class="ttdef"><b>Definition:</b> TextFile.h:44</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_af0a1b723f38d96faf3a46d0636473eef"><div class="ttname"><a href="class_isis_1_1_text_file.html#af0a1b723f38d96faf3a46d0636473eef">Isis::TextFile::p_GetLine</a></div><div class="ttdeci">bool p_GetLine(QString &amp;line, bool chkComment)</div><div class="ttdoc">Gets next line from file.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:463</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_af562f49e81ddc40ea34b6aa13ec3ba78"><div class="ttname"><a href="class_isis_1_1_text_file.html#af562f49e81ddc40ea34b6aa13ec3ba78">Isis::TextFile::PutLineComment</a></div><div class="ttdeci">void PutLineComment(const QString &amp;line)</div><div class="ttdoc">Writes string to file, prepends a 'comment' string and appends a 'newline' string.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:549</div></div>
+<div class="ttc" id="aclass_isis_1_1_text_file_html_afc222af6118a5ed9e36911e4daab64ec"><div class="ttname"><a href="class_isis_1_1_text_file.html#afc222af6118a5ed9e36911e4daab64ec">Isis::TextFile::SetNewLine</a></div><div class="ttdeci">void SetNewLine(const char *newLineString=&quot;\n&quot;)</div><div class="ttdoc">Sets the 'newline' string.</div><div class="ttdef"><b>Definition:</b> TextFile.cpp:593</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_f8d388224b41c845360a0b7293c2f11c.html">base</a></li><li class="navelem"><a class="el" href="dir_127c7c903e8739793ed1af38b74136b4.html">objs</a></li><li class="navelem"><a class="el" href="dir_0e2622495c8e8edab36e89fb348ed7ee.html">TextFile</a></li><li class="navelem"><a class="el" href="_text_file_8h.html">TextFile.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

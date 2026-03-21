@@ -1,0 +1,320 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/apollo/objs/ApolloPanoramicCamera/ApolloPanoramicDetectorMap.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_apollo_panoramic_detector_map_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">ApolloPanoramicDetectorMap.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_apollo_panoramic_detector_map_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef ApolloPanoramicDetectorMap_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define ApolloPanoramicDetectorMap_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* SPDX-License-Identifier: CC0-1.0 */</span>                                                                   </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_apollo_pan_i_o_8h.html">ApolloPanIO.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_line_scan_camera_detector_map_8h.html">LineScanCameraDetectorMap.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_8h.html">Pvl.h</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_pvl_group_8h.html">PvlGroup.h</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="class_isis_1_1_apollo_panoramic_detector_map.html">   32</a></span>&#160;    <span class="keyword">class </span><a class="code" href="class_isis_1_1_apollo_panoramic_detector_map.html">ApolloPanoramicDetectorMap</a> : <span class="keyword">public</span> <a class="code" href="class_isis_1_1_camera_detector_map.html">CameraDetectorMap</a> {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="class_isis_1_1_apollo_panoramic_detector_map.html#a375dc3fd50df79fc52e220b369b84f95">   43</a></span>&#160;      <a class="code" href="class_isis_1_1_apollo_panoramic_detector_map.html#a375dc3fd50df79fc52e220b369b84f95">ApolloPanoramicDetectorMap</a>(<a class="code" href="class_isis_1_1_camera.html">Camera</a> *parent, <span class="keywordtype">double</span> etMiddle,</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                                <span class="keywordtype">double</span> lineRate, <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> *lab) : <a class="code" href="class_isis_1_1_camera_detector_map.html">CameraDetectorMap</a>(parent) {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        m_lineRate = lineRate;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        m_etMiddle = etMiddle;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        m_lab = lab;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        this-&gt;initializeInteriorOrientation();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;      }</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="class_isis_1_1_apollo_panoramic_detector_map.html#ac905e5ed5a79287f2f65acaa04b4af6f">   53</a></span>&#160;      <span class="keyword">virtual</span> <a class="code" href="class_isis_1_1_apollo_panoramic_detector_map.html#ac905e5ed5a79287f2f65acaa04b4af6f">~ApolloPanoramicDetectorMap</a>() {};</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_apollo_panoramic_detector_map.html#a44d63bee29f75e35e8acc34ef9df996a">SetParent</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> sample, <span class="keyword">const</span> <span class="keywordtype">double</span> line);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_isis_1_1_apollo_panoramic_detector_map.html#a976b1b237fb8b8f666a9c75bf9767ab1">SetDetector</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> sample, <span class="keyword">const</span> <span class="keywordtype">double</span> line);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="class_isis_1_1_apollo_panoramic_detector_map.html#ad8218fe728a2404c83ec9b1eae6b85f6">   68</a></span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_apollo_panoramic_detector_map.html#ad8218fe728a2404c83ec9b1eae6b85f6">SetLineRate</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> lineRate) {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        m_lineRate = lineRate;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      };</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="class_isis_1_1_apollo_panoramic_detector_map.html#ad730ce4ca6c42da23d539884cc3f9637">   77</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_apollo_panoramic_detector_map.html#ad730ce4ca6c42da23d539884cc3f9637">LineRate</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">return</span> m_lineRate;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      };</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="class_isis_1_1_apollo_panoramic_detector_map.html#ace07403a87b979d0252c288697d8b62d">   86</a></span>&#160;      <span class="keywordtype">double</span>  <a class="code" href="class_isis_1_1_apollo_panoramic_detector_map.html#ace07403a87b979d0252c288697d8b62d">meanResidual</a>() { <span class="keywordflow">return</span> p_intOri.<a class="code" href="class_isis_1_1_apollo_pan_i_o.html#aabc9ea57f69130b539ce75fc2f87f5f8">meanResiduals</a>(); };</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="class_isis_1_1_apollo_panoramic_detector_map.html#a72192608ee59a3112fec185aae1cd9a0">   93</a></span>&#160;      <span class="keywordtype">double</span>   <a class="code" href="class_isis_1_1_apollo_panoramic_detector_map.html#a72192608ee59a3112fec185aae1cd9a0">maxResidual</a>() { <span class="keywordflow">return</span> p_intOri.<a class="code" href="class_isis_1_1_apollo_pan_i_o.html#a50c47f8cf5b196bf7844ab4be88ae6ce">maxResiduals</a>(); };</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="class_isis_1_1_apollo_panoramic_detector_map.html#a7332b420b1010213f20a1af109890d18">  100</a></span>&#160;      <span class="keywordtype">double</span> <a class="code" href="class_isis_1_1_apollo_panoramic_detector_map.html#a7332b420b1010213f20a1af109890d18">stdevResidual</a>() { <span class="keywordflow">return</span> p_intOri.<a class="code" href="class_isis_1_1_apollo_pan_i_o.html#a5eed0fa592f2b72ad601ead152803b9b">stdevResiduals</a>(); };</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordtype">double</span> m_etMiddle; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">double</span> m_lineRate; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <a class="code" href="class_isis_1_1_pvl.html">Pvl</a> *m_lab;        </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <a class="code" href="class_isis_1_1_apollo_pan_i_o.html">ApolloPanIO</a> p_intOri;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordtype">int</span> initializeInteriorOrientation();</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    };</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;};</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_apollo_pan_i_o_8h_html"><div class="ttname"><a href="_apollo_pan_i_o_8h.html">ApolloPanIO.h</a></div></div>
+<div class="ttc" id="a_line_scan_camera_detector_map_8h_html"><div class="ttname"><a href="_line_scan_camera_detector_map_8h.html">LineScanCameraDetectorMap.h</a></div></div>
+<div class="ttc" id="a_pvl_8h_html"><div class="ttname"><a href="_pvl_8h.html">Pvl.h</a></div></div>
+<div class="ttc" id="a_pvl_group_8h_html"><div class="ttname"><a href="_pvl_group_8h.html">PvlGroup.h</a></div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html">Isis::ApolloPanIO</a></div><div class="ttdoc">Calculates a series of affine transformations from the measured coordinates of the up to 90 fiducial ...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.h:43</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_a50c47f8cf5b196bf7844ab4be88ae6ce"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#a50c47f8cf5b196bf7844ab4be88ae6ce">Isis::ApolloPanIO::maxResiduals</a></div><div class="ttdeci">double maxResiduals()</div><div class="ttdoc">Accessor for the mean (average) of the residual vector lenghts Call after computeInteriorOrienation()...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:777</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_a5eed0fa592f2b72ad601ead152803b9b"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#a5eed0fa592f2b72ad601ead152803b9b">Isis::ApolloPanIO::stdevResiduals</a></div><div class="ttdeci">double stdevResiduals()</div><div class="ttdoc">Accessor for the standard deviation of the residual vector lenghts Call after computeInteriorOrienati...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:754</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_pan_i_o_html_aabc9ea57f69130b539ce75fc2f87f5f8"><div class="ttname"><a href="class_isis_1_1_apollo_pan_i_o.html#aabc9ea57f69130b539ce75fc2f87f5f8">Isis::ApolloPanIO::meanResiduals</a></div><div class="ttdeci">double meanResiduals()</div><div class="ttdoc">Accessor for the mean (average) of the residual vector lenghts Call after computeInteriorOrienation()...</div><div class="ttdef"><b>Definition:</b> ApolloPanIO.cpp:766</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_panoramic_detector_map_html"><div class="ttname"><a href="class_isis_1_1_apollo_panoramic_detector_map.html">Isis::ApolloPanoramicDetectorMap</a></div><div class="ttdoc">Convert between parent image (aka encoder aka machine) coordinates and detector coordinates.</div><div class="ttdef"><b>Definition:</b> ApolloPanoramicDetectorMap.h:32</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_panoramic_detector_map_html_a375dc3fd50df79fc52e220b369b84f95"><div class="ttname"><a href="class_isis_1_1_apollo_panoramic_detector_map.html#a375dc3fd50df79fc52e220b369b84f95">Isis::ApolloPanoramicDetectorMap::ApolloPanoramicDetectorMap</a></div><div class="ttdeci">ApolloPanoramicDetectorMap(Camera *parent, double etMiddle, double lineRate, Pvl *lab)</div><div class="ttdoc">Construct a detector map for line scan cameras.</div><div class="ttdef"><b>Definition:</b> ApolloPanoramicDetectorMap.h:43</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_panoramic_detector_map_html_a44d63bee29f75e35e8acc34ef9df996a"><div class="ttname"><a href="class_isis_1_1_apollo_panoramic_detector_map.html#a44d63bee29f75e35e8acc34ef9df996a">Isis::ApolloPanoramicDetectorMap::SetParent</a></div><div class="ttdeci">virtual bool SetParent(const double sample, const double line)</div><div class="ttdoc">This method sets dector sample line coordinates from given cube coordinates.</div><div class="ttdef"><b>Definition:</b> ApolloPanoramicDetectorMap.cpp:58</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_panoramic_detector_map_html_a72192608ee59a3112fec185aae1cd9a0"><div class="ttname"><a href="class_isis_1_1_apollo_panoramic_detector_map.html#a72192608ee59a3112fec185aae1cd9a0">Isis::ApolloPanoramicDetectorMap::maxResidual</a></div><div class="ttdeci">double maxResidual()</div><div class="ttdoc">Max interior orientation residual vector length, accesor.</div><div class="ttdef"><b>Definition:</b> ApolloPanoramicDetectorMap.h:93</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_panoramic_detector_map_html_a7332b420b1010213f20a1af109890d18"><div class="ttname"><a href="class_isis_1_1_apollo_panoramic_detector_map.html#a7332b420b1010213f20a1af109890d18">Isis::ApolloPanoramicDetectorMap::stdevResidual</a></div><div class="ttdeci">double stdevResidual()</div><div class="ttdoc">Standard deviation of interior orientation residual vector lengths, accesor.</div><div class="ttdef"><b>Definition:</b> ApolloPanoramicDetectorMap.h:100</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_panoramic_detector_map_html_a976b1b237fb8b8f666a9c75bf9767ab1"><div class="ttname"><a href="class_isis_1_1_apollo_panoramic_detector_map.html#a976b1b237fb8b8f666a9c75bf9767ab1">Isis::ApolloPanoramicDetectorMap::SetDetector</a></div><div class="ttdeci">virtual bool SetDetector(const double sample, const double line)</div><div class="ttdoc">This method sets cube sample line coordinates from given Dector coordinates.</div><div class="ttdef"><b>Definition:</b> ApolloPanoramicDetectorMap.cpp:29</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_panoramic_detector_map_html_ac905e5ed5a79287f2f65acaa04b4af6f"><div class="ttname"><a href="class_isis_1_1_apollo_panoramic_detector_map.html#ac905e5ed5a79287f2f65acaa04b4af6f">Isis::ApolloPanoramicDetectorMap::~ApolloPanoramicDetectorMap</a></div><div class="ttdeci">virtual ~ApolloPanoramicDetectorMap()</div><div class="ttdoc">Destroys ApolloPanoramicDetectorMap object.</div><div class="ttdef"><b>Definition:</b> ApolloPanoramicDetectorMap.h:53</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_panoramic_detector_map_html_ace07403a87b979d0252c288697d8b62d"><div class="ttname"><a href="class_isis_1_1_apollo_panoramic_detector_map.html#ace07403a87b979d0252c288697d8b62d">Isis::ApolloPanoramicDetectorMap::meanResidual</a></div><div class="ttdeci">double meanResidual()</div><div class="ttdoc">Mean (average) of interior orientation residual vector lengths, accesor.</div><div class="ttdef"><b>Definition:</b> ApolloPanoramicDetectorMap.h:86</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_panoramic_detector_map_html_ad730ce4ca6c42da23d539884cc3f9637"><div class="ttname"><a href="class_isis_1_1_apollo_panoramic_detector_map.html#ad730ce4ca6c42da23d539884cc3f9637">Isis::ApolloPanoramicDetectorMap::LineRate</a></div><div class="ttdeci">double LineRate() const</div><div class="ttdoc">Return the time in seconds between scan lines.</div><div class="ttdef"><b>Definition:</b> ApolloPanoramicDetectorMap.h:77</div></div>
+<div class="ttc" id="aclass_isis_1_1_apollo_panoramic_detector_map_html_ad8218fe728a2404c83ec9b1eae6b85f6"><div class="ttname"><a href="class_isis_1_1_apollo_panoramic_detector_map.html#ad8218fe728a2404c83ec9b1eae6b85f6">Isis::ApolloPanoramicDetectorMap::SetLineRate</a></div><div class="ttdeci">void SetLineRate(const double lineRate)</div><div class="ttdoc">Reset the line rate.</div><div class="ttdef"><b>Definition:</b> ApolloPanoramicDetectorMap.h:68</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_detector_map_html"><div class="ttname"><a href="class_isis_1_1_camera_detector_map.html">Isis::CameraDetectorMap</a></div><div class="ttdoc">Convert between parent image coordinates and detector coordinates.</div><div class="ttdef"><b>Definition:</b> CameraDetectorMap.h:47</div></div>
+<div class="ttc" id="aclass_isis_1_1_camera_html"><div class="ttname"><a href="class_isis_1_1_camera.html">Isis::Camera</a></div><div class="ttdef"><b>Definition:</b> Camera.h:236</div></div>
+<div class="ttc" id="aclass_isis_1_1_pvl_html"><div class="ttname"><a href="class_isis_1_1_pvl.html">Isis::Pvl</a></div><div class="ttdoc">Container for cube-like labels.</div><div class="ttdef"><b>Definition:</b> Pvl.h:119</div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_867ecea560f4598ba2b460e8ba8460b7.html">apollo</a></li><li class="navelem"><a class="el" href="dir_38dc4224da0e23af1b1eb202e36c8189.html">objs</a></li><li class="navelem"><a class="el" href="dir_a6ec1a6a8603eac3007d3880e9a186cc.html">ApolloPanoramicCamera</a></li><li class="navelem"><a class="el" href="_apollo_panoramic_detector_map_8h.html">ApolloPanoramicDetectorMap.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

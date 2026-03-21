@@ -1,0 +1,9 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+VecFilter,Statistics,isis/src/base/objs/VecFilter/VecFilter.h,isis_pybind_standalone/src/bind_statistics.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,VecFilter,isis_pybind.VecFilter,Y,Python class symbol is exported
+Construction/Enum,VecFilter(),isis_pybind.VecFilter(),Y,Constructor is explicitly bound
+Public API,"std::vector<double> LowPass(std::vector<double> invec, int boxsize)",isis_pybind.VecFilter.low_pass,Y,Current Python name
+Public API,"std::vector<double> HighPass(std::vector<double> invec1, std::vector<double> invec2)",isis_pybind.VecFilter.high_pass,Y,Current Python name
+Public API,"std::vector<double> HighPass(std::vector<double> pdInVector1, std::vector<double> pdInVector2, std::vector<int> piValidPntsVector, int piMaxPoints, const QString & psMode=""SUBTRACT"")",isis_pybind.VecFilter.high_pass,Y,Current Python name

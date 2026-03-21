@@ -1,0 +1,5 @@
+<map id="Isis::ControlPoint" name="Isis::ControlPoint">
+<area shape="rect" id="node1" title="A single control point." alt="" coords="5,135,211,504"/>
+<area shape="rect" id="node3" href="$class_isis_1_1_lidar_control_point.html" title="A lidar control ControlPoint." alt="" coords="32,552,184,809"/>
+<area shape="rect" id="node2" href="$class_q_object.html" title=" " alt="" coords="73,5,143,87"/>
+</map>

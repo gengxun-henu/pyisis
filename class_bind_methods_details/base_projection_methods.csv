@@ -1,0 +1,39 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Projection,Map Projection,isis/src/base/objs/Projection/Projection.h,isis_pybind_standalone/src/base/bind_base_projection.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口；基础单测已补
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Projection,isis_pybind.RingPlaneProjection,Y,Python class symbol is exported; constructor exposure may be limited; 抽象基类/纯虚接口；基础单测已补
+Construction/Enum,"ProjectionType enum (Triaxial, RingPlane)",isis_pybind.RingPlaneProjection.ProjectionType,N,抽象基类/纯虚接口；基础单测已补
+Construction/Enum,Projection(),isis_pybind.RingPlaneProjection(),N,抽象基类/纯虚接口；基础单测已补
+Mutation/Configuration,void setProjectionType(const ProjectionType ptype),isis_pybind.RingPlaneProjection.set_projection_type,N,抽象基类/纯虚接口；基础单测已补
+Public API,ProjectionType projectionType() const,isis_pybind.RingPlaneProjection.projection_type,Y,Current Python name
+Query,bool IsSky() const,isis_pybind.RingPlaneProjection.is_sky,N,抽象基类/纯虚接口；基础单测已补
+Public API,virtual QString Name() const = 0,isis_pybind.RingPlaneProjection.name,N,抽象基类/纯虚接口；基础单测已补
+Public API,virtual double LocalRadius() const = 0,isis_pybind.RingPlaneProjection.local_radius,N,抽象基类/纯虚接口；基础单测已补
+Public API,virtual QString Version() const = 0,isis_pybind.RingPlaneProjection.version,N,抽象基类/纯虚接口；基础单测已补
+Query,virtual bool IsEquatorialCylindrical(),isis_pybind.RingPlaneProjection.is_equatorial_cylindrical,N,抽象基类/纯虚接口；基础单测已补
+Query,virtual bool HasGroundRange() const,isis_pybind.RingPlaneProjection.has_ground_range,N,抽象基类/纯虚接口；基础单测已补
+Public API,double Rotation() const,isis_pybind.RingPlaneProjection.rotation,N,抽象基类/纯虚接口；基础单测已补
+Mutation/Configuration,void SetWorldMapper(WorldMapper *mapper),isis_pybind.RingPlaneProjection.set_world_mapper,N,抽象基类/纯虚接口；基础单测已补
+Mutation/Configuration,"virtual bool SetGround(const double lat, const double lon) = 0",isis_pybind.RingPlaneProjection.set_ground,N,抽象基类/纯虚接口；基础单测已补
+Mutation/Configuration,"virtual bool SetCoordinate(const double x, const double y) = 0",isis_pybind.RingPlaneProjection.set_coordinate,N,抽象基类/纯虚接口；基础单测已补
+Query,bool IsGood() const,isis_pybind.RingPlaneProjection.is_good,N,抽象基类/纯虚接口；基础单测已补
+Public API,double XCoord() const,isis_pybind.RingPlaneProjection.x_coord,N,抽象基类/纯虚接口；基础单测已补
+Public API,double YCoord() const,isis_pybind.RingPlaneProjection.y_coord,N,抽象基类/纯虚接口；基础单测已补
+Mutation/Configuration,"virtual bool SetUniversalGround(const double coord1, const double coord2)",isis_pybind.RingPlaneProjection.set_universal_ground,N,抽象基类/纯虚接口；基础单测已补
+Mutation/Configuration,"virtual bool SetUnboundUniversalGround(const double coord1, const double coord2)",isis_pybind.RingPlaneProjection.set_unbound_universal_ground,N,抽象基类/纯虚接口；基础单测已补
+Mutation/Configuration,"virtual bool SetWorld(const double x, const double y)",isis_pybind.RingPlaneProjection.set_world,N,抽象基类/纯虚接口；基础单测已补
+Public API,virtual double WorldX() const,isis_pybind.RingPlaneProjection.world_x,N,抽象基类/纯虚接口；基础单测已补
+Public API,virtual double WorldY() const,isis_pybind.RingPlaneProjection.world_y,N,抽象基类/纯虚接口；基础单测已补
+Public API,double ToWorldX(const double projectionX) const,isis_pybind.RingPlaneProjection.to_world_x,N,抽象基类/纯虚接口；基础单测已补
+Public API,double ToWorldY(const double projectionY) const,isis_pybind.RingPlaneProjection.to_world_y,N,抽象基类/纯虚接口；基础单测已补
+Public API,double ToProjectionX(const double worldX) const,isis_pybind.RingPlaneProjection.to_projection_x,N,抽象基类/纯虚接口；基础单测已补
+Public API,double ToProjectionY(const double worldY) const,isis_pybind.RingPlaneProjection.to_projection_y,N,抽象基类/纯虚接口；基础单测已补
+Public API,double Resolution() const,isis_pybind.RingPlaneProjection.resolution,N,抽象基类/纯虚接口；基础单测已补
+Public API,virtual double Scale() const = 0,isis_pybind.RingPlaneProjection.scale,N,抽象基类/纯虚接口；基础单测已补
+Public API,"virtual bool XYRange(double &minX, double &maxX, double &minY, double &maxY) = 0",isis_pybind.RingPlaneProjection.xy_range,N,抽象基类/纯虚接口；基础单测已补
+Mutation/Configuration,"void SetUpperLeftCorner(const Displacement &x, const Displacement &y)",isis_pybind.RingPlaneProjection.set_upper_left_corner,N,抽象基类/纯虚接口；基础单测已补
+Public API,virtual PvlGroup Mapping() = 0,isis_pybind.RingPlaneProjection.mapping,N,抽象基类/纯虚接口；基础单测已补
+Static/Factory,static double ToHours(double angle),isis_pybind.RingPlaneProjection.to_hours,N,抽象基类/纯虚接口；基础单测已补
+Static/Factory,static QString ToDMS(double angle),isis_pybind.RingPlaneProjection.to_dms,N,抽象基类/纯虚接口；基础单测已补
+Static/Factory,static QString ToHMS(double angle),isis_pybind.RingPlaneProjection.to_hms,N,抽象基类/纯虚接口；基础单测已补

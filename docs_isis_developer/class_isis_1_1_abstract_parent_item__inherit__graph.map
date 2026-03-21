@@ -1,0 +1,9 @@
+<map id="Isis::AbstractParentItem" name="Isis::AbstractParentItem">
+<area shape="rect" id="node1" title="Base class for an item that is a parent in the tree." alt="" coords="289,488,452,729"/>
+<area shape="rect" id="node4" href="$class_isis_1_1_connection_parent_item.html" title="Tree item that is a parent and represents an image." alt="" coords="5,785,186,899"/>
+<area shape="rect" id="node5" href="$class_isis_1_1_image_parent_item.html" title="Tree item that is a parent and represents an image." alt="" coords="210,793,360,891"/>
+<area shape="rect" id="node6" href="$class_isis_1_1_point_parent_item.html" title="Tree item that is a parent and represents a control point." alt="" coords="385,785,529,899"/>
+<area shape="rect" id="node7" href="$class_isis_1_1_root_item.html" title="The root of a tree." alt="" coords="553,777,745,907"/>
+<area shape="rect" id="node2" href="$class_isis_1_1_abstract_tree_item.html" title="Base class for an item in the tree." alt="" coords="293,135,447,440"/>
+<area shape="rect" id="node3" href="$class_q_object.html" title=" " alt="" coords="336,5,405,87"/>
+</map>

@@ -1,0 +1,570 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::BulletWorldManager Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_bullet_world_manager.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="class_isis_1_1_bullet_world_manager-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::BulletWorldManager Class Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Bullet World manager maintains a proper state for target bodies.  
+ <a href="class_isis_1_1_bullet_world_manager.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_bullet_world_manager_8h_source.html">BulletWorldManager.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for Isis::BulletWorldManager:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_bullet_world_manager__coll__graph.png" border="0" usemap="#a_isis_1_1_bullet_world_manager_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_bullet_world_manager_coll__map" id="a_isis_1_1_bullet_world_manager_coll__map">
+<area shape="rect" title="Bullet World manager maintains a proper state for target bodies." alt="" coords="5,5,172,231"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a9a358d0e4bca3ab386aabf9d0a3f018d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_world_manager.html#a9a358d0e4bca3ab386aabf9d0a3f018d">BulletWorldManager</a> ()</td></tr>
+<tr class="memdesc:a9a358d0e4bca3ab386aabf9d0a3f018d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default empty constructor.  <a href="class_isis_1_1_bullet_world_manager.html#a9a358d0e4bca3ab386aabf9d0a3f018d">More...</a><br /></td></tr>
+<tr class="separator:a9a358d0e4bca3ab386aabf9d0a3f018d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ccbb53c506d9683313a6920b6ec2392"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_world_manager.html#a0ccbb53c506d9683313a6920b6ec2392">BulletWorldManager</a> (const QString &amp;<a class="el" href="class_isis_1_1_bullet_world_manager.html#a51abcb0100208a98ffcb023b8a5b4bf3">name</a>)</td></tr>
+<tr class="memdesc:a0ccbb53c506d9683313a6920b6ec2392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a world manager with a given name.  <a href="class_isis_1_1_bullet_world_manager.html#a0ccbb53c506d9683313a6920b6ec2392">More...</a><br /></td></tr>
+<tr class="separator:a0ccbb53c506d9683313a6920b6ec2392"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a253486b94d09701f6dcdcf7bd932cb28"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_world_manager.html#a253486b94d09701f6dcdcf7bd932cb28">~BulletWorldManager</a> ()</td></tr>
+<tr class="memdesc:a253486b94d09701f6dcdcf7bd932cb28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="class_isis_1_1_bullet_world_manager.html" title="Bullet World manager maintains a proper state for target bodies.">BulletWorldManager</a>.  <a href="class_isis_1_1_bullet_world_manager.html#a253486b94d09701f6dcdcf7bd932cb28">More...</a><br /></td></tr>
+<tr class="separator:a253486b94d09701f6dcdcf7bd932cb28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51abcb0100208a98ffcb023b8a5b4bf3"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_world_manager.html#a51abcb0100208a98ffcb023b8a5b4bf3">name</a> () const</td></tr>
+<tr class="memdesc:a51abcb0100208a98ffcb023b8a5b4bf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the world.  <a href="class_isis_1_1_bullet_world_manager.html#a51abcb0100208a98ffcb023b8a5b4bf3">More...</a><br /></td></tr>
+<tr class="separator:a51abcb0100208a98ffcb023b8a5b4bf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf40fee5926c52f1dc68aae35ab3b46d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_world_manager.html#aaf40fee5926c52f1dc68aae35ab3b46d">size</a> () const</td></tr>
+<tr class="memdesc:aaf40fee5926c52f1dc68aae35ab3b46d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of collision objects in the world.  <a href="class_isis_1_1_bullet_world_manager.html#aaf40fee5926c52f1dc68aae35ab3b46d">More...</a><br /></td></tr>
+<tr class="separator:aaf40fee5926c52f1dc68aae35ab3b46d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f8b22270c1c7c5175f9ae12d0d8dc77"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_world_manager.html#a6f8b22270c1c7c5175f9ae12d0d8dc77">getTarget</a> (const int &amp;index=0) const</td></tr>
+<tr class="memdesc:a6f8b22270c1c7c5175f9ae12d0d8dc77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a collision object by index into the world.  <a href="class_isis_1_1_bullet_world_manager.html#a6f8b22270c1c7c5175f9ae12d0d8dc77">More...</a><br /></td></tr>
+<tr class="separator:a6f8b22270c1c7c5175f9ae12d0d8dc77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9e3fab9173c93396d761ff3250d9663"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_world_manager.html#ad9e3fab9173c93396d761ff3250d9663">getTarget</a> (const QString &amp;<a class="el" href="class_isis_1_1_bullet_world_manager.html#a51abcb0100208a98ffcb023b8a5b4bf3">name</a>) const</td></tr>
+<tr class="memdesc:ad9e3fab9173c93396d761ff3250d9663"><td class="mdescLeft">&#160;</td><td class="mdescRight">Look for a specific collision object by name.  <a href="class_isis_1_1_bullet_world_manager.html#ad9e3fab9173c93396d761ff3250d9663">More...</a><br /></td></tr>
+<tr class="separator:ad9e3fab9173c93396d761ff3250d9663"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15d8498611cfa47e2607e2b9b9282317"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_world_manager.html#a15d8498611cfa47e2607e2b9b9282317">addTarget</a> (<a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> *target)</td></tr>
+<tr class="memdesc:a15d8498611cfa47e2607e2b9b9282317"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Bullet shape to the collision world.  <a href="class_isis_1_1_bullet_world_manager.html#a15d8498611cfa47e2607e2b9b9282317">More...</a><br /></td></tr>
+<tr class="separator:a15d8498611cfa47e2607e2b9b9282317"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a012b89e443acecc4b82cfaaae30771b1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_world_manager.html#a012b89e443acecc4b82cfaaae30771b1">raycast</a> (const btVector3 &amp;observer, const btVector3 &amp;lookdir, btCollisionWorld::RayResultCallback &amp;hits) const</td></tr>
+<tr class="memdesc:a012b89e443acecc4b82cfaaae30771b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform ray casting from a position and a look direction.  <a href="class_isis_1_1_bullet_world_manager.html#a012b89e443acecc4b82cfaaae30771b1">More...</a><br /></td></tr>
+<tr class="separator:a012b89e443acecc4b82cfaaae30771b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9197b67618fc3d53769cb3666aa4f6bd"><td class="memItemLeft" align="right" valign="top">const btCollisionWorld &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_bullet_world_manager.html#a9197b67618fc3d53769cb3666aa4f6bd">getWorld</a> () const</td></tr>
+<tr class="memdesc:a9197b67618fc3d53769cb3666aa4f6bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Collision World where the targets exist.  <a href="class_isis_1_1_bullet_world_manager.html#a9197b67618fc3d53769cb3666aa4f6bd">More...</a><br /></td></tr>
+<tr class="separator:a9197b67618fc3d53769cb3666aa4f6bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Bullet World manager maintains a proper state for target bodies. </p>
+<p>This class maintains the physics world created in Bullet-verse. This world is target-centric in that the center of the world is the center of the target (body-fixed) coordinate system. This could be changed to represent some other system (e.g., J2000), However this design allows one to operate on a per target basis.</p>
+<p>This class uses only the collision body world of Bullet, which is static and will not be subject to simulation operations.</p>
+<p>This design also allows for a whole target body DEM to be loaded or a large body broken up into smaller parts of the whole if needed.</p>
+<dl class="section author"><dt>Author</dt><dd>2017-03-17 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a9a358d0e4bca3ab386aabf9d0a3f018d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a358d0e4bca3ab386aabf9d0a3f018d">&#9670;&nbsp;</a></span>BulletWorldManager() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BulletWorldManager::BulletWorldManager </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default empty constructor. </p>
+
+</div>
+</div>
+<a id="a0ccbb53c506d9683313a6920b6ec2392"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ccbb53c506d9683313a6920b6ec2392">&#9670;&nbsp;</a></span>BulletWorldManager() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BulletWorldManager::BulletWorldManager </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a world manager with a given name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the world. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a253486b94d09701f6dcdcf7bd932cb28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a253486b94d09701f6dcdcf7bd932cb28">&#9670;&nbsp;</a></span>~BulletWorldManager()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::BulletWorldManager::~BulletWorldManager </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destroys the <a class="el" href="class_isis_1_1_bullet_world_manager.html" title="Bullet World manager maintains a proper state for target bodies.">BulletWorldManager</a>. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a15d8498611cfa47e2607e2b9b9282317"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15d8498611cfa47e2607e2b9b9282317">&#9670;&nbsp;</a></span>addTarget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::BulletWorldManager::addTarget </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> *&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add a Bullet shape to the collision world. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>The target shape to add to the world. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_target_shape.html#a80a9ef776f7cbce4b81d7bf737a6287c">Isis::BulletTargetShape::body()</a>.</p>
+
+</div>
+</div>
+<a id="a6f8b22270c1c7c5175f9ae12d0d8dc77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f8b22270c1c7c5175f9ae12d0d8dc77">&#9670;&nbsp;</a></span>getTarget() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> * Isis::BulletWorldManager::getTarget </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>index</em> = <code>0</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return a collision object by index into the world. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Index from 0 to <a class="el" href="class_isis_1_1_bullet_world_manager.html#aaf40fee5926c52f1dc68aae35ab3b46d" title="Number of collision objects in the world.">size()</a>-1 of the object that exist in the world</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>BulletTargetShape*</b> Pointer to shape if found. </dd></dl>
+
+</div>
+</div>
+<a id="ad9e3fab9173c93396d761ff3250d9663"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9e3fab9173c93396d761ff3250d9663">&#9670;&nbsp;</a></span>getTarget() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_bullet_target_shape.html">BulletTargetShape</a> * Isis::BulletWorldManager::getTarget </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Look for a specific collision object by name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of collision object to search for</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>BulletTargetShape*</b> Pointer to shape if found. Otherwise null. </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_bullet_target_shape.html#ab9ab4daabf981677c37c6401bbe7c3cc">Isis::BulletTargetShape::name()</a>.</p>
+
+</div>
+</div>
+<a id="a9197b67618fc3d53769cb3666aa4f6bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9197b67618fc3d53769cb3666aa4f6bd">&#9670;&nbsp;</a></span>getWorld()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const btCollisionWorld &amp; Isis::BulletWorldManager::getWorld </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the Collision World where the targets exist. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>btCollisionWorld</b> The Bullet collision world used for ray casting. </dd></dl>
+
+</div>
+</div>
+<a id="a51abcb0100208a98ffcb023b8a5b4bf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51abcb0100208a98ffcb023b8a5b4bf3">&#9670;&nbsp;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::BulletWorldManager::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Name of the world. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>QString</b> The name of the Bullet collision world. </dd></dl>
+
+</div>
+</div>
+<a id="a012b89e443acecc4b82cfaaae30771b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a012b89e443acecc4b82cfaaae30771b1">&#9670;&nbsp;</a></span>raycast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::BulletWorldManager::raycast </td>
+          <td>(</td>
+          <td class="paramtype">const btVector3 &amp;&#160;</td>
+          <td class="paramname"><em>rayStart</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const btVector3 &amp;&#160;</td>
+          <td class="paramname"><em>rayEnd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">btCollisionWorld::RayResultCallback &amp;&#160;</td>
+          <td class="paramname"><em>results</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Perform ray casting from a position and a look direction. </p>
+<dl class="section author"><dt>Author</dt><dd>2017-03-17 Kris Becker</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">rayStart</td><td>The origin of the ray </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">rayEnd</td><td>The end point of the ray <br  />
+ </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">results</td><td>Ray intersection callback. holds the output results of the ray cast. The type of callback determines what happens when an intersection is found during ray casting.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><b>bool</b> Returns true if any intersections are detected</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>btCollisionWorld::rayTest </dd></dl>
+
+</div>
+</div>
+<a id="aaf40fee5926c52f1dc68aae35ab3b46d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf40fee5926c52f1dc68aae35ab3b46d">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::BulletWorldManager::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Number of collision objects in the world. </p>
+<dl class="section return"><dt>Returns</dt><dd><b>int</b> The number of collision objects in the world. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/BulletWorldManager/<a class="el" href="_bullet_world_manager_8h_source.html">BulletWorldManager.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/base/objs/BulletWorldManager/<a class="el" href="_bullet_world_manager_8cpp.html">BulletWorldManager.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_bullet_world_manager.html">BulletWorldManager</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

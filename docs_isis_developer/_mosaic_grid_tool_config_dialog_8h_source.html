@@ -1,0 +1,369 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/qisis/objs/MosaicSceneWidget/MosaicGridToolConfigDialog.h Source File</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_mosaic_grid_tool_config_dialog_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle">
+<div class="title">MosaicGridToolConfigDialog.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_mosaic_grid_tool_config_dialog_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef MosaicGridToolConfigDialog_h</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define MosaicGridToolConfigDialog_h</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;QDialog&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;QPointer&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">class </span>QCheckBox;</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">class </span><a class="code" href="class_q_combo_box.html">QComboBox</a>;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">class </span>QLabel;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">class </span>QLineEdit;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">class </span>QPushButton;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">class </span>QSlider;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_isis.html">Isis</a> {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <span class="keyword">class </span>MosaicGridTool;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html">   37</a></span>&#160;  <span class="keyword">class </span><a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html">MosaicGridToolConfigDialog</a> : <span class="keyword">public</span> <a class="code" href="class_q_dialog.html">QDialog</a> {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;      Q_OBJECT</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;      <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">MosaicGridToolConfigDialog</a>(<a class="code" href="class_isis_1_1_mosaic_grid_tool.html">MosaicGridTool</a> *tool,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                                   <a class="code" href="class_q_widget.html">QWidget</a> *parent);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;      <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad3c05c2c55ee49f7dc34c64d1e97e9ad">~MosaicGridToolConfigDialog</a>();</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a2d5452ae04ef5bb5490df12498ba1563">applySettings</a>();</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a2d5452ae04ef5bb5490df12498ba1563">applySettings</a>(<span class="keywordtype">bool</span> shouldReadSettings);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad27b4fb69924b943881347acd083acf3">readSettings</a>();</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a74dfdc3b6b220eb832760fd6c5652748">refreshWidgetStates</a>();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#aa9fc5d446605d9ed89efa56930fd98b4">onBaseLatSliderChanged</a>();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a909e72cefb6172e5a6bd619c76e9d57f">onBaseLonSliderChanged</a>();</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a9110de87539e7e4043a3c7c02a6f910e">onLatIncSliderChanged</a>();</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a1a394b1fcaf5d3f54a6354f88d2d4772">onLonIncSliderChanged</a>();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a945adb34aba4feb5ecb09894bed0d1dd">onExtentTypeChanged</a>();</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a569d6690cb9c650c288afbaafa44b9a0">onMinLatExtentSliderChanged</a>();</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a6afc224b7f3a0a1c2cf54f8d5585d420">onMaxLatExtentSliderChanged</a>();</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a28a6d742801d63472b5eb22636a6f691">onMinLonExtentSliderChanged</a>();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a63d8a577eecebb40016a691d2f07b1d0">onMaxLonExtentSliderChanged</a>();</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      Q_DISABLE_COPY(<a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html">MosaicGridToolConfigDialog</a>); </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      <span class="keywordtype">void</span> <a class="code" href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a74dfdc3b6b220eb832760fd6c5652748">refreshWidgetStates</a>(<span class="keywordtype">bool</span> canAutoApply);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;      <a class="code" href="class_isis_1_1_mosaic_grid_tool.html">MosaicGridTool</a> *m_tool; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      QPointer&lt;QCheckBox&gt; m_showGridCheckBox; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      QPointer&lt;QCheckBox&gt; m_autoGridCheckBox; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      QPointer&lt;QLabel&gt;    m_baseLatLabel; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      QPointer&lt;QLineEdit&gt; m_baseLatLineEdit; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      QPointer&lt;QSlider&gt;   m_baseLatSlider; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      QPointer&lt;QLabel&gt;    m_baseLatTypeLabel; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      QPointer&lt;QLabel&gt;    m_baseLonLabel; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      QPointer&lt;QLineEdit&gt; m_baseLonLineEdit; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      QPointer&lt;QSlider&gt;   m_baseLonSlider; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      QPointer&lt;QLabel&gt;    m_baseLonTypeLabel; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      QPointer&lt;QLabel&gt;    m_latIncLabel; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      QPointer&lt;QLineEdit&gt; m_latIncLineEdit; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;      QPointer&lt;QSlider&gt;   m_latIncSlider; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;      QPointer&lt;QLabel&gt;    m_latIncTypeLabel; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      QPointer&lt;QLabel&gt;    m_lonIncLabel; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      QPointer&lt;QLineEdit&gt; m_lonIncLineEdit; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      QPointer&lt;QSlider&gt;   m_lonIncSlider; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      QPointer&lt;QLabel&gt;    m_lonIncTypeLabel; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      QPointer&lt;QLabel&gt;    m_latExtentLabel; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      QPointer&lt;QComboBox&gt; m_latExtentCombo;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      QPointer&lt;QLabel&gt;    m_latExtentTypeLabel;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;      QPointer&lt;QLabel&gt;    m_minLatExtentLabel; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      QPointer&lt;QLineEdit&gt; m_minLatExtentLineEdit; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;      QPointer&lt;QSlider&gt;   m_minLatExtentSlider; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      QPointer&lt;QLabel&gt;    m_minLatExtentTypeLabel;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;      QPointer&lt;QLabel&gt;    m_maxLatExtentLabel; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      QPointer&lt;QLineEdit&gt; m_maxLatExtentLineEdit; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;      QPointer&lt;QSlider&gt;   m_maxLatExtentSlider; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      QPointer&lt;QLabel&gt;    m_maxLatExtentTypeLabel;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      QPointer&lt;QLabel&gt;    m_lonExtentLabel; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;      QPointer&lt;QComboBox&gt; m_lonExtentCombo;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      QPointer&lt;QLabel&gt;    m_lonDomainLabel; </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      QPointer&lt;QLabel&gt;    m_minLonExtentLabel; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;      QPointer&lt;QLineEdit&gt; m_minLonExtentLineEdit; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;      QPointer&lt;QSlider&gt;   m_minLonExtentSlider; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;      QPointer&lt;QLabel&gt;    m_minLonExtentTypeLabel;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;      </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;      QPointer&lt;QLabel&gt;    m_maxLonExtentLabel; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      QPointer&lt;QLineEdit&gt; m_maxLonExtentLineEdit; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      QPointer&lt;QSlider&gt;   m_maxLonExtentSlider; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;      QPointer&lt;QLabel&gt;    m_maxLonExtentTypeLabel;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      QPointer&lt;QLabel&gt;    m_densityLabel; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;      QPointer&lt;QLineEdit&gt; m_densityEdit; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      QPointer&lt;QCheckBox&gt; m_autoApplyCheckBox; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  };</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;}</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html">Isis::MosaicGridToolConfigDialog</a></div><div class="ttdoc">Configure user's settings for the grid tool.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.h:37</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_a1a394b1fcaf5d3f54a6354f88d2d4772"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a1a394b1fcaf5d3f54a6354f88d2d4772">Isis::MosaicGridToolConfigDialog::onLonIncSliderChanged</a></div><div class="ttdeci">void onLonIncSliderChanged()</div><div class="ttdoc">Updates the corresponding line edit when the lonIncSlider changes.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:754</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_a28a6d742801d63472b5eb22636a6f691"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a28a6d742801d63472b5eb22636a6f691">Isis::MosaicGridToolConfigDialog::onMinLonExtentSliderChanged</a></div><div class="ttdeci">void onMinLonExtentSliderChanged()</div><div class="ttdoc">Updates the corresponding line edit when the minLonSlider changes.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:804</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_a2d5452ae04ef5bb5490df12498ba1563"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a2d5452ae04ef5bb5490df12498ba1563">Isis::MosaicGridToolConfigDialog::applySettings</a></div><div class="ttdeci">void applySettings()</div><div class="ttdoc">Slot that calls applySettings with true to call readSettings also.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:536</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_a569d6690cb9c650c288afbaafa44b9a0"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a569d6690cb9c650c288afbaafa44b9a0">Isis::MosaicGridToolConfigDialog::onMinLatExtentSliderChanged</a></div><div class="ttdeci">void onMinLatExtentSliderChanged()</div><div class="ttdoc">Updates the corresponding line edit when the minLatSlider changes.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:762</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_a63d8a577eecebb40016a691d2f07b1d0"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a63d8a577eecebb40016a691d2f07b1d0">Isis::MosaicGridToolConfigDialog::onMaxLonExtentSliderChanged</a></div><div class="ttdeci">void onMaxLonExtentSliderChanged()</div><div class="ttdoc">Updates the corresponding line edit when the maxLonSlider changes.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:817</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_a6afc224b7f3a0a1c2cf54f8d5585d420"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a6afc224b7f3a0a1c2cf54f8d5585d420">Isis::MosaicGridToolConfigDialog::onMaxLatExtentSliderChanged</a></div><div class="ttdeci">void onMaxLatExtentSliderChanged()</div><div class="ttdoc">Updates the corresponding line edit when the maxLatSlider changes.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:775</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_a74dfdc3b6b220eb832760fd6c5652748"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a74dfdc3b6b220eb832760fd6c5652748">Isis::MosaicGridToolConfigDialog::refreshWidgetStates</a></div><div class="ttdeci">void refreshWidgetStates()</div><div class="ttdoc">Calls the private method refreshWidgetStates with true as the argument in order to have refreshWidget...</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:598</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_a86c88015a55aa2f3a937dad7c888d341"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a86c88015a55aa2f3a937dad7c888d341">Isis::MosaicGridToolConfigDialog::MosaicGridToolConfigDialog</a></div><div class="ttdeci">MosaicGridToolConfigDialog(MosaicGridTool *tool, QWidget *parent)</div><div class="ttdoc">Create a config dialog that configures the given MosaicGridTool.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:34</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_a909e72cefb6172e5a6bd619c76e9d57f"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a909e72cefb6172e5a6bd619c76e9d57f">Isis::MosaicGridToolConfigDialog::onBaseLonSliderChanged</a></div><div class="ttdeci">void onBaseLonSliderChanged()</div><div class="ttdoc">Updates the corresponding line edit when the baseLonSlider changes.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:737</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_a9110de87539e7e4043a3c7c02a6f910e"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a9110de87539e7e4043a3c7c02a6f910e">Isis::MosaicGridToolConfigDialog::onLatIncSliderChanged</a></div><div class="ttdeci">void onLatIncSliderChanged()</div><div class="ttdoc">Updates the corresponding line edit when the latIncSlider changes.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:746</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_a945adb34aba4feb5ecb09894bed0d1dd"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#a945adb34aba4feb5ecb09894bed0d1dd">Isis::MosaicGridToolConfigDialog::onExtentTypeChanged</a></div><div class="ttdeci">void onExtentTypeChanged()</div><div class="ttdoc">Updates the dialog when the lat or lon extent source is changed.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:790</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_aa9fc5d446605d9ed89efa56930fd98b4"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#aa9fc5d446605d9ed89efa56930fd98b4">Isis::MosaicGridToolConfigDialog::onBaseLatSliderChanged</a></div><div class="ttdeci">void onBaseLatSliderChanged()</div><div class="ttdoc">Updates the corresponding line edit when the baseLatSlider changes.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:728</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_ad27b4fb69924b943881347acd083acf3"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad27b4fb69924b943881347acd083acf3">Isis::MosaicGridToolConfigDialog::readSettings</a></div><div class="ttdeci">void readSettings()</div><div class="ttdoc">Read the tool's current settings and set the widget states to match.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:544</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_config_dialog_html_ad3c05c2c55ee49f7dc34c64d1e97e9ad"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool_config_dialog.html#ad3c05c2c55ee49f7dc34c64d1e97e9ad">Isis::MosaicGridToolConfigDialog::~MosaicGridToolConfigDialog</a></div><div class="ttdeci">~MosaicGridToolConfigDialog()</div><div class="ttdoc">Clean up allocated memory.</div><div class="ttdef"><b>Definition:</b> MosaicGridToolConfigDialog.cpp:394</div></div>
+<div class="ttc" id="aclass_isis_1_1_mosaic_grid_tool_html"><div class="ttname"><a href="class_isis_1_1_mosaic_grid_tool.html">Isis::MosaicGridTool</a></div><div class="ttdoc">This controls the 'Grid' abilities in the MosaicSceneWidget.</div><div class="ttdef"><b>Definition:</b> MosaicGridTool.h:53</div></div>
+<div class="ttc" id="aclass_q_combo_box_html"><div class="ttname"><a href="class_q_combo_box.html">QComboBox</a></div></div>
+<div class="ttc" id="aclass_q_dialog_html"><div class="ttname"><a href="class_q_dialog.html">QDialog</a></div></div>
+<div class="ttc" id="aclass_q_widget_html"><div class="ttname"><a href="class_q_widget.html">QWidget</a></div></div>
+<div class="ttc" id="anamespace_isis_html"><div class="ttname"><a href="namespace_isis.html">Isis</a></div><div class="ttdoc">This is free and unencumbered software released into the public domain.</div><div class="ttdef"><b>Definition:</b> Apollo.h:16</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="dir_0af60cc04e62055da99322cf8213cd87.html">isis</a></li><li class="navelem"><a class="el" href="dir_c66143c42d822761e4872ef7b156ff68.html">src</a></li><li class="navelem"><a class="el" href="dir_1258efd98b3f520fade952b24d90bb8a.html">qisis</a></li><li class="navelem"><a class="el" href="dir_3096dbbb4e7d3f8b38d6973e14625d45.html">objs</a></li><li class="navelem"><a class="el" href="dir_910f955828120431efe3b62a171d7728.html">MosaicSceneWidget</a></li><li class="navelem"><a class="el" href="_mosaic_grid_tool_config_dialog_8h.html">MosaicGridToolConfigDialog.h</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

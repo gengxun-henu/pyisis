@@ -1,0 +1,36 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+ControlNetVitals,Control Networks,isis/src/control/objs/ControlNetVitals/ControlNetVitals.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,ControlNetVitals,isis_pybind.ControlNetVitals,N,Python class symbol not found in current binding files; Qt 类型/信号槽较多
+Construction/Enum,ControlNetVitals(),isis_pybind.ControlNetVitals(),N,Qt 类型/信号槽较多
+Public API,void initializeVitals(),isis_pybind.ControlNetVitals.initialize_vitals,N,Qt 类型/信号槽较多
+Query,bool hasIslands(),isis_pybind.ControlNetVitals.has_islands,N,Qt 类型/信号槽较多
+Public API,int numIslands(),isis_pybind.ControlNetVitals.num_islands,N,Qt 类型/信号槽较多
+Public API,const QList< QList<QString> > &getIslands(),isis_pybind.ControlNetVitals.get_islands,N,Qt 类型/信号槽较多
+Public API,ControlPoint *getPoint(QString id),isis_pybind.ControlNetVitals.get_point,N,Qt 类型/信号槽较多
+Public API,int numPoints(),isis_pybind.ControlNetVitals.num_points,N,Qt 类型/信号槽较多
+Public API,int numIgnoredPoints(),isis_pybind.ControlNetVitals.num_ignored_points,N,Qt 类型/信号槽较多
+Public API,int numLockedPoints(),isis_pybind.ControlNetVitals.num_locked_points,N,Qt 类型/信号槽较多
+Public API,int numFixedPoints(),isis_pybind.ControlNetVitals.num_fixed_points,N,Qt 类型/信号槽较多
+Public API,int numConstrainedPoints(),isis_pybind.ControlNetVitals.num_constrained_points,N,Qt 类型/信号槽较多
+Public API,int numFreePoints(),isis_pybind.ControlNetVitals.num_free_points,N,Qt 类型/信号槽较多
+Public API,int numPointsBelowMeasureThreshold(int num=3),isis_pybind.ControlNetVitals.num_points_below_measure_threshold,N,Qt 类型/信号槽较多
+Public API,int numImages(),isis_pybind.ControlNetVitals.num_images,N,Qt 类型/信号槽较多
+Public API,int numMeasures(),isis_pybind.ControlNetVitals.num_measures,N,Qt 类型/信号槽较多
+Public API,int numImagesBelowMeasureThreshold(int num=3),isis_pybind.ControlNetVitals.num_images_below_measure_threshold,N,Qt 类型/信号槽较多
+Public API,int numImagesBelowHullTolerance(int tolerance=75),isis_pybind.ControlNetVitals.num_images_below_hull_tolerance,N,Qt 类型/信号槽较多
+Public API,QList<QString> getCubeSerials(),isis_pybind.ControlNetVitals.get_cube_serials,N,Qt 类型/信号槽较多
+Public API,QList<ControlPoint*> getAllPoints(),isis_pybind.ControlNetVitals.get_all_points,N,Qt 类型/信号槽较多
+Public API,QList<ControlPoint*> getIgnoredPoints(),isis_pybind.ControlNetVitals.get_ignored_points,N,Qt 类型/信号槽较多
+Public API,QList<ControlPoint*> getLockedPoints(),isis_pybind.ControlNetVitals.get_locked_points,N,Qt 类型/信号槽较多
+Public API,QList<ControlPoint*> getFixedPoints(),isis_pybind.ControlNetVitals.get_fixed_points,N,Qt 类型/信号槽较多
+Public API,QList<ControlPoint*> getConstrainedPoints(),isis_pybind.ControlNetVitals.get_constrained_points,N,Qt 类型/信号槽较多
+Public API,QList<ControlPoint*> getFreePoints(),isis_pybind.ControlNetVitals.get_free_points,N,Qt 类型/信号槽较多
+Public API,QList<ControlPoint*> getPointsBelowMeasureThreshold(int num=3),isis_pybind.ControlNetVitals.get_points_below_measure_threshold,N,Qt 类型/信号槽较多
+Public API,QList<QString> getImagesBelowMeasureThreshold(int num=3),isis_pybind.ControlNetVitals.get_images_below_measure_threshold,N,Qt 类型/信号槽较多
+Public API,QList<QString> getImagesBelowHullTolerance(int num=75),isis_pybind.ControlNetVitals.get_images_below_hull_tolerance,N,Qt 类型/信号槽较多
+Public API,QString getNetworkId(),isis_pybind.ControlNetVitals.get_network_id,N,Qt 类型/信号槽较多
+Public API,QString getStatus(),isis_pybind.ControlNetVitals.get_status,N,Qt 类型/信号槽较多
+Public API,QString getStatusDetails(),isis_pybind.ControlNetVitals.get_status_details,N,Qt 类型/信号槽较多
+Public API,"void emitHistoryEntry(QString entry, QString id, QVariant oldValue, QVariant newValue)",isis_pybind.ControlNetVitals.emit_history_entry,N,Qt 类型/信号槽较多

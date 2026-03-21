@@ -1,0 +1,2099 @@
+
+<!-- HTML header for doxygen 1.8.14-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+        <meta name="generator" content="Doxygen 1.9.1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Start USGS customized -->
+        <meta name="keywords" content="Isis, image processing, API, object, class documentation">
+        <meta name="author" content="USGS Astrogeology Research Program">
+        <meta name="description" content="Documentation for Isis Objects, the Isis API">
+        <meta name="publisher" content="USGS - GD - Astrogeology Research Program">
+        <meta name="country" content="USA">
+        <meta name="state" content="AZ">
+        <meta name="county" content="Coconino">
+        <meta name="city" content="Flagstaff">
+        <meta name="zip" content="86001">
+        <!-- End USGS customized -->
+        <title>Isis Developer Reference: Isis::ZeroBufferFit Class Reference</title>
+        <!-- USGS -->
+        <link rel="stylesheet" href="../../assets/styles/usgs/common.css" />
+        <link rel="stylesheet" href="../../assets/styles/usgs/custom.css" />
+        <!-- Govt -->
+        <link rel="stylesheet" href="../../assets/styles/uswds.css"/>
+        <script src="../../assets/scripts/uswds-init.min.js"></script>
+        <!-- ISIS API Docs -->
+        <link rel="stylesheet" href="../../assets/styles/IsisStyleAPI.css"/>
+        <link href="tabs.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+        <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/NativeMML"],
+});
+</script>
+<script type="text/javascript" async="async" src="../assets/MathJax.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+            <script src="../../assets/scripts/uswds.min.js"></script>
+            <div id="titlearea">
+                <header>
+                    <!-- Government Website Banner-->
+                    <section class="usa-banner" aria-label="Official website of the United States government">
+                        <div class="usa-accordion">
+                        <header class="usa-banner__header">
+                            <div class="usa-banner__inner">
+                            <div class="grid-col-auto">
+                                <img
+                                aria-hidden="true"
+                                class="usa-banner__header-flag"
+                                src="../../assets/img/us_flag_small.png"
+                                alt=""
+                                />
+                            </div>
+                            <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                                <p class="usa-banner__header-text">
+                                An official website of the United States government
+                                </p>
+                                <p class="usa-banner__header-action">Here’s how you know</p>
+                            </div>
+                            <button
+                                type="button"
+                                class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false"
+                                aria-controls="gov-banner-default"
+                            >
+                                <span class="usa-banner__button-text">Here’s how you know</span>
+                            </button>
+                            </div>
+                        </header>
+                        <div
+                            class="usa-banner__content usa-accordion__content"
+                            id="gov-banner-default"
+                        >
+                            <div class="grid-row grid-gap-lg">
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-dot-gov.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br />A
+                                    <strong>.gov</strong> website belongs to an official government
+                                    organization in the United States.
+                                </p>
+                                </div>
+                            </div>
+                            <div class="usa-banner__guidance tablet:grid-col-6">
+                                <img
+                                class="usa-banner__icon usa-media-block__img"
+                                src="../../assets/img/icon-https.svg"
+                                role="img"
+                                alt=""
+                                aria-hidden="true"
+                                />
+                                <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br />A
+                                    <strong>lock</strong>
+                                    (<span class="icon-lock"
+                                    ><svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 100 1000 1000"
+                                        class="usa-banner__lock-image-pd"
+                                        role="img"
+                                        aria-labelledby="banner-lock-description-default"
+                                        focusable="false"
+                                    >
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path
+                                        fill="#000000"
+                                        fill-rule="evenodd"
+                                        d="M955.5,560.9v471.4c0,14.3-5.7,28-15.9,38.1-10.1,10.1-23.8,15.8-38.1,15.9H302.5c-14.3,0-28-5.8-38.1-15.9-10.1-10.1-15.8-23.8-15.9-38.1v-471.4c0-14.3,5.7-28,15.9-38.1,10.1-10.1,23.8-15.8,38.1-15.9h58.4v-120.6c0-63.9,25.4-125.2,70.6-170.4,45.2-45.2,106.5-70.6,170.5-70.6s125.2,25.4,170.5,70.6c45.2,45.2,70.6,106.5,70.6,170.5v120.6h58.4,0c14.3,0,28,5.7,38.1,15.9,10.1,10.1,15.8,23.8,15.9,38.1h0ZM767.5,386.3c0-43.9-17.4-86-48.5-117-31-31-73.1-48.5-117-48.5s-86,17.4-117,48.5-48.5,73.1-48.5,117v120.6h330.9v-120.6Z"
+                                        />
+                                    </svg> </span
+                                    >) or <strong>https://</strong> means you’ve safely connected to
+                                    the .gov website. Share sensitive information only on official,
+                                    secure websites.
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </header>
+                <!-- Official USGS Header -->
+                <header id="navbar" class="header-nav" role="banner">
+                    <div class="tmp-container">
+                        <div class="header-search">
+                        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
+                            <img src="https://asc-docs.s3.us-west-2.amazonaws.com/common/img/usgs-vis-2x.png"
+                            style="height: 50px; margin-top: 8px; margin-bottom: 8px;" alt="Home" class="img" border="0" />
+                        </a>
+                        </div>
+                    </div>
+                </header>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr style="height: 56px;">
+                            <td id="projectalign" style="padding-left: 0.5em;">
+                                <div id="projectname">Isis Developer Reference
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_isis_1_1_zero_buffer_fit.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="class_isis_1_1_zero_buffer_fit-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">Isis::ZeroBufferFit Class Reference<div class="ingroups"><a class="el" href="group___utility.html">Utility</a></div></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Computes non-linear lsq fit of HiRISE Drift (Zd module)  
+ <a href="class_isis_1_1_zero_buffer_fit.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_zero_buffer_fit_8h_source.html">ZeroBufferFit.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Isis::ZeroBufferFit:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_zero_buffer_fit__inherit__graph.png" border="0" usemap="#a_isis_1_1_zero_buffer_fit_inherit__map" alt="Inheritance graph"/></div>
+<map name="a_isis_1_1_zero_buffer_fit_inherit__map" id="a_isis_1_1_zero_buffer_fit_inherit__map">
+<area shape="rect" title="Computes non&#45;linear lsq fit of HiRISE Drift (Zd module)" alt="" coords="83,407,210,648"/>
+<area shape="rect" href="class_isis_1_1_non_linear_l_s_q.html" title="NonLinearLSQ Computes a fit using a Levenberg&#45;Marquardt algorithm." alt="" coords="5,37,141,327"/>
+<area shape="rect" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources." alt="" coords="165,5,277,359"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for Isis::ZeroBufferFit:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_isis_1_1_zero_buffer_fit__coll__graph.png" border="0" usemap="#a_isis_1_1_zero_buffer_fit_coll__map" alt="Collaboration graph"/></div>
+<map name="a_isis_1_1_zero_buffer_fit_coll__map" id="a_isis_1_1_zero_buffer_fit_coll__map">
+<area shape="rect" title="Computes non&#45;linear lsq fit of HiRISE Drift (Zd module)" alt="" coords="68,617,195,859"/>
+<area shape="rect" href="class_isis_1_1_non_linear_l_s_q.html" title="NonLinearLSQ Computes a fit using a Levenberg&#45;Marquardt algorithm." alt="" coords="48,279,183,568"/>
+<area shape="rect" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources." alt="" coords="207,287,309,560"/>
+<area shape="rect" href="class_isis_1_1_hi_history.html" title=" " alt="" coords="5,5,111,199"/>
+<area shape="rect" title=" " alt="" coords="135,61,266,143"/>
+<area shape="rect" title=" " alt="" coords="291,61,356,143"/>
+<area shape="rect" title=" " alt="" coords="387,61,425,143"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a30249f23af469a33385b6cc143f1cf3e"><td class="memItemLeft" align="right" valign="top">typedef TNT::Array1D&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a></td></tr>
+<tr class="separator:a30249f23af469a33385b6cc143f1cf3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c215e2e00882d8fa032d43af27e2a75"><td class="memItemLeft" align="right" valign="top">typedef TNT::Array2D&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a6c215e2e00882d8fa032d43af27e2a75">NLMatrix</a></td></tr>
+<tr class="separator:a6c215e2e00882d8fa032d43af27e2a75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:af96c4998476f9bbc11aee4a99a660818"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#af96c4998476f9bbc11aee4a99a660818">ZeroBufferFit</a> (const HiCalConf &amp;conf)</td></tr>
+<tr class="memdesc:af96c4998476f9bbc11aee4a99a660818"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute second level drift correction (Zf module)  <a href="class_isis_1_1_zero_buffer_fit.html#af96c4998476f9bbc11aee4a99a660818">More...</a><br /></td></tr>
+<tr class="separator:af96c4998476f9bbc11aee4a99a660818"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae32af1cee5b998c73d83e85876c44261"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#ae32af1cee5b998c73d83e85876c44261">~ZeroBufferFit</a> ()</td></tr>
+<tr class="memdesc:ae32af1cee5b998c73d83e85876c44261"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_isis_1_1_zero_buffer_fit.html#ae32af1cee5b998c73d83e85876c44261">More...</a><br /></td></tr>
+<tr class="separator:ae32af1cee5b998c73d83e85876c44261"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8221d343ec1ab600497830d139d7b122"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a8221d343ec1ab600497830d139d7b122">setBin</a> (int bin)</td></tr>
+<tr class="memdesc:a8221d343ec1ab600497830d139d7b122"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set binning/summing mode.  <a href="class_isis_1_1_zero_buffer_fit.html#a8221d343ec1ab600497830d139d7b122">More...</a><br /></td></tr>
+<tr class="separator:a8221d343ec1ab600497830d139d7b122"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac981bf6e40c6ef2bd26e1b8b822cf43b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#ac981bf6e40c6ef2bd26e1b8b822cf43b">setLineTime</a> (double ltime)</td></tr>
+<tr class="memdesc:ac981bf6e40c6ef2bd26e1b8b822cf43b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set scan line time.  <a href="class_isis_1_1_zero_buffer_fit.html#ac981bf6e40c6ef2bd26e1b8b822cf43b">More...</a><br /></td></tr>
+<tr class="separator:ac981bf6e40c6ef2bd26e1b8b822cf43b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ebc1ccca5bcfb814eba7b274459b6ae"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a3ebc1ccca5bcfb814eba7b274459b6ae">size</a> () const</td></tr>
+<tr class="memdesc:a3ebc1ccca5bcfb814eba7b274459b6ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size of the data buffer.  <a href="class_isis_1_1_zero_buffer_fit.html#a3ebc1ccca5bcfb814eba7b274459b6ae">More...</a><br /></td></tr>
+<tr class="separator:a3ebc1ccca5bcfb814eba7b274459b6ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace1aa4ad501bb6ddbd96d9e3f112bd5b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#ace1aa4ad501bb6ddbd96d9e3f112bd5b">nSize</a> () const</td></tr>
+<tr class="memdesc:ace1aa4ad501bb6ddbd96d9e3f112bd5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size of the fitted buffer.  <a href="class_isis_1_1_zero_buffer_fit.html#ace1aa4ad501bb6ddbd96d9e3f112bd5b">More...</a><br /></td></tr>
+<tr class="separator:ace1aa4ad501bb6ddbd96d9e3f112bd5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11e64e3e0c9b952a9adcaad3cc809143"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a11e64e3e0c9b952a9adcaad3cc809143">nParms</a> () const</td></tr>
+<tr class="memdesc:a11e64e3e0c9b952a9adcaad3cc809143"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of parameter to be fitted.  <a href="class_isis_1_1_zero_buffer_fit.html#a11e64e3e0c9b952a9adcaad3cc809143">More...</a><br /></td></tr>
+<tr class="separator:a11e64e3e0c9b952a9adcaad3cc809143"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a780841d8dd5c3933536a18158e62ad06"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a780841d8dd5c3933536a18158e62ad06">setabsErr</a> (double absError)</td></tr>
+<tr class="memdesc:a780841d8dd5c3933536a18158e62ad06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the absolute error parameter.  <a href="class_isis_1_1_zero_buffer_fit.html#a780841d8dd5c3933536a18158e62ad06">More...</a><br /></td></tr>
+<tr class="separator:a780841d8dd5c3933536a18158e62ad06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4832ff88d51c9cbe7700b59bf88f1175"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a4832ff88d51c9cbe7700b59bf88f1175">setrelErr</a> (double relError)</td></tr>
+<tr class="memdesc:a4832ff88d51c9cbe7700b59bf88f1175"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the relative error parameter <br  />
+  <a href="class_isis_1_1_zero_buffer_fit.html#a4832ff88d51c9cbe7700b59bf88f1175">More...</a><br /></td></tr>
+<tr class="separator:a4832ff88d51c9cbe7700b59bf88f1175"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9028cf77f23acd8b4f701584c0cfc224"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9028cf77f23acd8b4f701584c0cfc224">absErr</a> () const</td></tr>
+<tr class="memdesc:a9028cf77f23acd8b4f701584c0cfc224"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current value of the absolute error.  <a href="class_isis_1_1_zero_buffer_fit.html#a9028cf77f23acd8b4f701584c0cfc224">More...</a><br /></td></tr>
+<tr class="separator:a9028cf77f23acd8b4f701584c0cfc224"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d49115e718c5b9e134683b18a019ffd"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a4d49115e718c5b9e134683b18a019ffd">relErr</a> () const</td></tr>
+<tr class="memdesc:a4d49115e718c5b9e134683b18a019ffd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current value of the relative error.  <a href="class_isis_1_1_zero_buffer_fit.html#a4d49115e718c5b9e134683b18a019ffd">More...</a><br /></td></tr>
+<tr class="separator:a4d49115e718c5b9e134683b18a019ffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9989cea8f757a5926d6ea84fb9937173"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Solve</a> (const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> &amp;d)</td></tr>
+<tr class="memdesc:a9989cea8f757a5926d6ea84fb9937173"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute non-linear fit to (typically) <a class="el" href="class_isis_1_1_zero_buffer_smooth.html" title="Processes Buffer calibration data (ZeroBufferSmooth Module)">ZeroBufferSmooth</a> module.  <a href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">More...</a><br /></td></tr>
+<tr class="separator:a9989cea8f757a5926d6ea84fb9937173"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a822f3d4cf3df453f6faeba990dbd0455"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a822f3d4cf3df453f6faeba990dbd0455">guess</a> ()</td></tr>
+<tr class="memdesc:a822f3d4cf3df453f6faeba990dbd0455"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the initial guess of the fit.  <a href="class_isis_1_1_zero_buffer_fit.html#a822f3d4cf3df453f6faeba990dbd0455">More...</a><br /></td></tr>
+<tr class="separator:a822f3d4cf3df453f6faeba990dbd0455"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8179ccbd58a3451f1cda4be3d4ad6408"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a8179ccbd58a3451f1cda4be3d4ad6408">checkIteration</a> (const int Iter, const <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a> &amp;fitcoefs, const <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a> &amp;uncerts, double cplxconj, int Istatus)</td></tr>
+<tr class="memdesc:a8179ccbd58a3451f1cda4be3d4ad6408"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the interation check for convergence.  <a href="class_isis_1_1_zero_buffer_fit.html#a8179ccbd58a3451f1cda4be3d4ad6408">More...</a><br /></td></tr>
+<tr class="separator:a8179ccbd58a3451f1cda4be3d4ad6408"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace5932e7aef1e07f9783636885283564"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#ace5932e7aef1e07f9783636885283564">f_x</a> (const <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a> &amp;a)</td></tr>
+<tr class="memdesc:ace5932e7aef1e07f9783636885283564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the function value at the current iteration.  <a href="class_isis_1_1_zero_buffer_fit.html#ace5932e7aef1e07f9783636885283564">More...</a><br /></td></tr>
+<tr class="separator:ace5932e7aef1e07f9783636885283564"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a548c2af473b95a748e46d0ac7036fd37"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a6c215e2e00882d8fa032d43af27e2a75">NLMatrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a548c2af473b95a748e46d0ac7036fd37">df_x</a> (const <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a> &amp;a)</td></tr>
+<tr class="memdesc:a548c2af473b95a748e46d0ac7036fd37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the first derivative of the function at the current iteration.  <a href="class_isis_1_1_zero_buffer_fit.html#a548c2af473b95a748e46d0ac7036fd37">More...</a><br /></td></tr>
+<tr class="separator:a548c2af473b95a748e46d0ac7036fd37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0d11c4d7eb90410e1b0fc51bec895be"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#ac0d11c4d7eb90410e1b0fc51bec895be">Chisq</a> () const</td></tr>
+<tr class="memdesc:ac0d11c4d7eb90410e1b0fc51bec895be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the Chi-Square value of the fit solution.  <a href="class_isis_1_1_zero_buffer_fit.html#ac0d11c4d7eb90410e1b0fc51bec895be">More...</a><br /></td></tr>
+<tr class="separator:ac0d11c4d7eb90410e1b0fc51bec895be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5237315a8046f0799f1a5765f1178b10"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a5237315a8046f0799f1a5765f1178b10">DoF</a> () const</td></tr>
+<tr class="memdesc:a5237315a8046f0799f1a5765f1178b10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the Degrees of Freedom.  <a href="class_isis_1_1_zero_buffer_fit.html#a5237315a8046f0799f1a5765f1178b10">More...</a><br /></td></tr>
+<tr class="separator:a5237315a8046f0799f1a5765f1178b10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a272f2999f7384db61e4bd9f74c725ca5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a272f2999f7384db61e4bd9f74c725ca5">Yfit</a> () const</td></tr>
+<tr class="memdesc:a272f2999f7384db61e4bd9f74c725ca5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the solution vector using current coefficents.  <a href="class_isis_1_1_zero_buffer_fit.html#a272f2999f7384db61e4bd9f74c725ca5">More...</a><br /></td></tr>
+<tr class="separator:a272f2999f7384db61e4bd9f74c725ca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27a60d198c26cd0d7842c721f574873a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_zero_buffer_fit.html#a27a60d198c26cd0d7842c721f574873a">Normalize</a> (const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> &amp;v)</td></tr>
+<tr class="memdesc:a27a60d198c26cd0d7842c721f574873a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute normalized solution vector from result.  <a href="class_isis_1_1_zero_buffer_fit.html#a27a60d198c26cd0d7842c721f574873a">More...</a><br /></td></tr>
+<tr class="separator:a27a60d198c26cd0d7842c721f574873a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ed1229323b92e7ebb91508e08f87223"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a5ed1229323b92e7ebb91508e08f87223">setMaxIters</a> (int m)</td></tr>
+<tr class="memdesc:a5ed1229323b92e7ebb91508e08f87223"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the maximum number of iterations.  <a href="class_isis_1_1_non_linear_l_s_q.html#a5ed1229323b92e7ebb91508e08f87223">More...</a><br /></td></tr>
+<tr class="separator:a5ed1229323b92e7ebb91508e08f87223"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9634152d8e53dbc1dbe2ba6f3e62e173"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a9634152d8e53dbc1dbe2ba6f3e62e173">maxIters</a> () const</td></tr>
+<tr class="memdesc:a9634152d8e53dbc1dbe2ba6f3e62e173"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum number iterations for valid solution.  <a href="class_isis_1_1_non_linear_l_s_q.html#a9634152d8e53dbc1dbe2ba6f3e62e173">More...</a><br /></td></tr>
+<tr class="separator:a9634152d8e53dbc1dbe2ba6f3e62e173"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1daac306c333dc1e780b7fdc16b5e671"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a1daac306c333dc1e780b7fdc16b5e671">curvefit</a> ()</td></tr>
+<tr class="separator:a1daac306c333dc1e780b7fdc16b5e671"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27f834c3a9584efbe77d19cb820dffff"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a27f834c3a9584efbe77d19cb820dffff">status</a> () const</td></tr>
+<tr class="memdesc:a27f834c3a9584efbe77d19cb820dffff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return status of last fit processing.  <a href="class_isis_1_1_non_linear_l_s_q.html#a27f834c3a9584efbe77d19cb820dffff">More...</a><br /></td></tr>
+<tr class="separator:a27f834c3a9584efbe77d19cb820dffff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a876d4bea4cd82c5f786d043da19ec604"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a876d4bea4cd82c5f786d043da19ec604">success</a> () const</td></tr>
+<tr class="memdesc:a876d4bea4cd82c5f786d043da19ec604"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine success from last fit processing.  <a href="class_isis_1_1_non_linear_l_s_q.html#a876d4bea4cd82c5f786d043da19ec604">More...</a><br /></td></tr>
+<tr class="separator:a876d4bea4cd82c5f786d043da19ec604"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf55648024b36f2c8154c2ee899367a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#abf55648024b36f2c8154c2ee899367a0">success</a> (int <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a27f834c3a9584efbe77d19cb820dffff">status</a>) const</td></tr>
+<tr class="memdesc:abf55648024b36f2c8154c2ee899367a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check status for success of the given condition <br  />
+  <a href="class_isis_1_1_non_linear_l_s_q.html#abf55648024b36f2c8154c2ee899367a0">More...</a><br /></td></tr>
+<tr class="separator:abf55648024b36f2c8154c2ee899367a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c406809ce9aa991c20044fa48600a0a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a9c406809ce9aa991c20044fa48600a0a">statusstr</a> () const</td></tr>
+<tr class="memdesc:a9c406809ce9aa991c20044fa48600a0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return error message pertaining to last fit procesing.  <a href="class_isis_1_1_non_linear_l_s_q.html#a9c406809ce9aa991c20044fa48600a0a">More...</a><br /></td></tr>
+<tr class="separator:a9c406809ce9aa991c20044fa48600a0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f328958377d51343c84d3e12d4f9779"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a1f328958377d51343c84d3e12d4f9779">statusstr</a> (int <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a27f834c3a9584efbe77d19cb820dffff">status</a>) const</td></tr>
+<tr class="memdesc:a1f328958377d51343c84d3e12d4f9779"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return error message given status condition.  <a href="class_isis_1_1_non_linear_l_s_q.html#a1f328958377d51343c84d3e12d4f9779">More...</a><br /></td></tr>
+<tr class="separator:a1f328958377d51343c84d3e12d4f9779"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa40d36e6d4c51682e68ca799816291d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#afa40d36e6d4c51682e68ca799816291d">coefs</a> () const</td></tr>
+<tr class="memdesc:afa40d36e6d4c51682e68ca799816291d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return coefficients from last fit processing.  <a href="class_isis_1_1_non_linear_l_s_q.html#afa40d36e6d4c51682e68ca799816291d">More...</a><br /></td></tr>
+<tr class="separator:afa40d36e6d4c51682e68ca799816291d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02e12773405b5f76cc090fb2f1c10583"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a02e12773405b5f76cc090fb2f1c10583">uncert</a> () const</td></tr>
+<tr class="memdesc:a02e12773405b5f76cc090fb2f1c10583"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return uncertainties from last fit processing.  <a href="class_isis_1_1_non_linear_l_s_q.html#a02e12773405b5f76cc090fb2f1c10583">More...</a><br /></td></tr>
+<tr class="separator:a02e12773405b5f76cc090fb2f1c10583"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75ee3027a51702f7662069e2b330e6ff"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a75ee3027a51702f7662069e2b330e6ff">nIterations</a> () const</td></tr>
+<tr class="memdesc:a75ee3027a51702f7662069e2b330e6ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return number of iterations from last fit processing.  <a href="class_isis_1_1_non_linear_l_s_q.html#a75ee3027a51702f7662069e2b330e6ff">More...</a><br /></td></tr>
+<tr class="separator:a75ee3027a51702f7662069e2b330e6ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99ead949c89174a0deac29664e561524"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a99ead949c89174a0deac29664e561524">name</a> () const</td></tr>
+<tr class="memdesc:a99ead949c89174a0deac29664e561524"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns name of component.  <a href="class_isis_1_1_module.html#a99ead949c89174a0deac29664e561524">More...</a><br /></td></tr>
+<tr class="separator:a99ead949c89174a0deac29664e561524"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fe08b4d228f61fdcfe426004632b1da"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a0fe08b4d228f61fdcfe426004632b1da">getcsvFile</a> () const</td></tr>
+<tr class="memdesc:a0fe08b4d228f61fdcfe426004632b1da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns expanded name of last CSV file loaded by loadCsv.  <a href="class_isis_1_1_module.html#a0fe08b4d228f61fdcfe426004632b1da">More...</a><br /></td></tr>
+<tr class="separator:a0fe08b4d228f61fdcfe426004632b1da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace6913a240430e7b6f09b50684c30581"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#ace6913a240430e7b6f09b50684c30581">Process</a> (const <a class="el" href="class_isis_1_1_module.html">Module</a> &amp;c)</td></tr>
+<tr class="memdesc:ace6913a240430e7b6f09b50684c30581"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invokes the process method on the <a class="el" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources.">Module</a> vector.  <a href="class_isis_1_1_module.html#ace6913a240430e7b6f09b50684c30581">More...</a><br /></td></tr>
+<tr class="separator:ace6913a240430e7b6f09b50684c30581"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a219df8ec46bf6f7f0e323a6efac82b1f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a219df8ec46bf6f7f0e323a6efac82b1f">Process</a> (const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> &amp;v)</td></tr>
+<tr class="memdesc:a219df8ec46bf6f7f0e323a6efac82b1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default processing behavior makes a reference copy of data array.  <a href="class_isis_1_1_module.html#a219df8ec46bf6f7f0e323a6efac82b1f">More...</a><br /></td></tr>
+<tr class="separator:a219df8ec46bf6f7f0e323a6efac82b1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae38e6020b27097a9c12b005ff0b99284"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#ae38e6020b27097a9c12b005ff0b99284">loadCsv</a> (const QString &amp;csvBase, const HiCalConf &amp;conf, const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;prof, const int &amp;elements=0)</td></tr>
+<tr class="memdesc:ae38e6020b27097a9c12b005ff0b99284"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provide generic loading of CSV file for all modules.  <a href="class_isis_1_1_module.html#ae38e6020b27097a9c12b005ff0b99284">More...</a><br /></td></tr>
+<tr class="separator:ae38e6020b27097a9c12b005ff0b99284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a429129a3c98d079bc38008a1bea6d046"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a429129a3c98d079bc38008a1bea6d046">ref</a> () const</td></tr>
+<tr class="memdesc:a429129a3c98d079bc38008a1bea6d046"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return data via a const reference.  <a href="class_isis_1_1_module.html#a429129a3c98d079bc38008a1bea6d046">More...</a><br /></td></tr>
+<tr class="separator:a429129a3c98d079bc38008a1bea6d046"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08c34671b3c7548458e5fdca28890c12"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a08c34671b3c7548458e5fdca28890c12">operator()</a> (int index) const</td></tr>
+<tr class="memdesc:a08c34671b3c7548458e5fdca28890c12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return individual element of the data vector.  <a href="class_isis_1_1_module.html#a08c34671b3c7548458e5fdca28890c12">More...</a><br /></td></tr>
+<tr class="separator:a08c34671b3c7548458e5fdca28890c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf92b4d6049f1a0aec6e3bbd53f4e5a4"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_isis_1_1_hi_history.html">HiHistory</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#adf92b4d6049f1a0aec6e3bbd53f4e5a4">History</a> () const</td></tr>
+<tr class="memdesc:adf92b4d6049f1a0aec6e3bbd53f4e5a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return recorded history of events.  <a href="class_isis_1_1_module.html#adf92b4d6049f1a0aec6e3bbd53f4e5a4">More...</a><br /></td></tr>
+<tr class="separator:adf92b4d6049f1a0aec6e3bbd53f4e5a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6663a73c2f9154b9166b552cea3e7b6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#ac6663a73c2f9154b9166b552cea3e7b6">record</a> (<a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;pvl, const QString keyname=&quot;ModuleHistory&quot;) const</td></tr>
+<tr class="memdesc:ac6663a73c2f9154b9166b552cea3e7b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record history in <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> group object.  <a href="class_isis_1_1_module.html#ac6663a73c2f9154b9166b552cea3e7b6">More...</a><br /></td></tr>
+<tr class="separator:ac6663a73c2f9154b9166b552cea3e7b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9643785aedb120064920b7e47eb33b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#ac9643785aedb120064920b7e47eb33b5">Dump</a> (const QString &amp;fname) const</td></tr>
+<tr class="memdesc:ac9643785aedb120064920b7e47eb33b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dumps the component to a specified file.  <a href="class_isis_1_1_module.html#ac9643785aedb120064920b7e47eb33b5">More...</a><br /></td></tr>
+<tr class="separator:ac9643785aedb120064920b7e47eb33b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:aaed96e188ee3971b100e1d802fbcb95f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="class_isis_1_1_module.html#aaed96e188ee3971b100e1d802fbcb95fa0e531ce204e776746f8e9c0ba7515516">DefaultWidth</a> = 10
+, <a class="el" href="class_isis_1_1_module.html#aaed96e188ee3971b100e1d802fbcb95fac7d552e6dac88d1d406d0ec563b8b4b4">DefaultPrecision</a> = 6
+ }</td></tr>
+<tr class="separator:aaed96e188ee3971b100e1d802fbcb95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a754f0680f7545a78fb77d449a0e27cea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a754f0680f7545a78fb77d449a0e27cea">Terminate</a> (const std::string &amp;message=&quot;&quot;)</td></tr>
+<tr class="separator:a754f0680f7545a78fb77d449a0e27cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae43630cf83d107d43a6927d85f4a634b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#ae43630cf83d107d43a6927d85f4a634b">Abort</a> (const std::string &amp;reason=&quot;&quot;)</td></tr>
+<tr class="separator:ae43630cf83d107d43a6927d85f4a634b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3478a837b44ac7553ed5a609465fae1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#ad3478a837b44ac7553ed5a609465fae1">doContinue</a> () const</td></tr>
+<tr class="separator:ad3478a837b44ac7553ed5a609465fae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9b8842ec0e6751b0a038e8143eabb1b"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#af9b8842ec0e6751b0a038e8143eabb1b">formatDbl</a> (const double &amp;value) const</td></tr>
+<tr class="memdesc:af9b8842ec0e6751b0a038e8143eabb1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Properly format values that could be special pixels.  <a href="class_isis_1_1_module.html#af9b8842ec0e6751b0a038e8143eabb1b">More...</a><br /></td></tr>
+<tr class="separator:af9b8842ec0e6751b0a038e8143eabb1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a7c9523f44ab26e8eb1562ca701e7fdc0"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a7c9523f44ab26e8eb1562ca701e7fdc0">_name</a></td></tr>
+<tr class="memdesc:a7c9523f44ab26e8eb1562ca701e7fdc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of component.  <a href="class_isis_1_1_module.html#a7c9523f44ab26e8eb1562ca701e7fdc0">More...</a><br /></td></tr>
+<tr class="separator:a7c9523f44ab26e8eb1562ca701e7fdc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67182d4696ae5bf7d27ee4450e4b52df"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a67182d4696ae5bf7d27ee4450e4b52df">_csvFile</a></td></tr>
+<tr class="memdesc:a67182d4696ae5bf7d27ee4450e4b52df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fully expanded name of CSV file if present.  <a href="class_isis_1_1_module.html#a67182d4696ae5bf7d27ee4450e4b52df">More...</a><br /></td></tr>
+<tr class="separator:a67182d4696ae5bf7d27ee4450e4b52df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11c9231f61fe197580ebcfbce76d992f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_isis_1_1_hi_history.html">HiHistory</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">_history</a></td></tr>
+<tr class="memdesc:a11c9231f61fe197580ebcfbce76d992f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hierarchial component history.  <a href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">More...</a><br /></td></tr>
+<tr class="separator:a11c9231f61fe197580ebcfbce76d992f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab430d0afa727db1b858f1a5d92629f7f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#ab430d0afa727db1b858f1a5d92629f7f">_fmtWidth</a></td></tr>
+<tr class="memdesc:ab430d0afa727db1b858f1a5d92629f7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default field with of double.  <a href="class_isis_1_1_module.html#ab430d0afa727db1b858f1a5d92629f7f">More...</a><br /></td></tr>
+<tr class="separator:ab430d0afa727db1b858f1a5d92629f7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f69df4304491e49ef58cd71e0beef8c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_isis_1_1_module.html#a0f69df4304491e49ef58cd71e0beef8c">_fmtPrecision</a></td></tr>
+<tr class="memdesc:a0f69df4304491e49ef58cd71e0beef8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default field with of double.  <a href="class_isis_1_1_module.html#a0f69df4304491e49ef58cd71e0beef8c">More...</a><br /></td></tr>
+<tr class="separator:a0f69df4304491e49ef58cd71e0beef8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Computes non-linear lsq fit of HiRISE Drift (Zd module) </p>
+<p>This class is best used with individual HiRISE images as the number of lines is critical to proper use. It is best applied by getting the buffer as a reference and applying it during systematic processing.</p>
+<p>This class models the drift correction using the Levenberg-Marquardt algorithm.</p>
+<dl class="section author"><dt>Author</dt><dd>2007-11-07 Kris Becker </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a6c215e2e00882d8fa032d43af27e2a75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c215e2e00882d8fa032d43af27e2a75">&#9670;&nbsp;</a></span>NLMatrix</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef TNT::Array2D&lt;double&gt; <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a6c215e2e00882d8fa032d43af27e2a75">Isis::NonLinearLSQ::NLMatrix</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a30249f23af469a33385b6cc143f1cf3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30249f23af469a33385b6cc143f1cf3e">&#9670;&nbsp;</a></span>NLVector</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef TNT::Array1D&lt;double&gt; <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">Isis::NonLinearLSQ::NLVector</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="aaed96e188ee3971b100e1d802fbcb95f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaed96e188ee3971b100e1d802fbcb95f">&#9670;&nbsp;</a></span>anonymous enum</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aaed96e188ee3971b100e1d802fbcb95fa0e531ce204e776746f8e9c0ba7515516"></a>DefaultWidth&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aaed96e188ee3971b100e1d802fbcb95fac7d552e6dac88d1d406d0ec563b8b4b4"></a>DefaultPrecision&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af96c4998476f9bbc11aee4a99a660818"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af96c4998476f9bbc11aee4a99a660818">&#9670;&nbsp;</a></span>ZeroBufferFit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Isis::ZeroBufferFit::ZeroBufferFit </td>
+          <td>(</td>
+          <td class="paramtype">const HiCalConf &amp;&#160;</td>
+          <td class="paramname"><em>conf</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute second level drift correction (Zf module) </p>
+<p>This class provides the second level drift correction that is</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">conf</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">Isis::Module::_history</a>, <a class="el" href="class_isis_1_1_hi_history.html#ada8b78e85f63de6a2dbb1bc65b907f1c">Isis::HiHistory::add()</a>, <a class="el" href="namespace_isis.html#a8e08fbdb4fa8b745337842796ead38f6">Isis::ConfKey()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab252d6cc6845d833bc00143b78182416">Isis::DbProfile::exists()</a>, <a class="el" href="namespace_isis.html#af53fe6ad709794c0dcf85bbe98add4be">Isis::IsEqual()</a>, <a class="el" href="namespace_isis.html#a91bd78d23f0175e0f40fc36f2cba4a38">Isis::IsTrueValue()</a>, <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a9634152d8e53dbc1dbe2ba6f3e62e173">Isis::NonLinearLSQ::maxIters()</a>, <a class="el" href="class_isis_1_1_db_profile.html#ab2b98e9e63815915c4e1c8369f0a53da">Isis::DbProfile::Name()</a>, <a class="el" href="class_isis_1_1_hi_line_time_eqn.html#a1c6f9c9722e39696e0b7b6ee4199ef14">Isis::HiLineTimeEqn::setBin()</a>, <a class="el" href="class_isis_1_1_hi_line_time_eqn.html#ab905c2695eaa89f398fbbe1c4e23b4c4">Isis::HiLineTimeEqn::setLineTime()</a>, <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a5ed1229323b92e7ebb91508e08f87223">Isis::NonLinearLSQ::setMaxIters()</a>, <a class="el" href="namespace_isis.html#ad7233a0dfd589ede203db382294b286c">Isis::toDouble()</a>, <a class="el" href="namespace_isis.html#ad48386c42a816e44a98a8e753887dcc0">Isis::ToDouble()</a>, <a class="el" href="namespace_isis.html#a161dca47e06f74a883a05686d318e817">Isis::toInt()</a>, <a class="el" href="namespace_isis.html#ae98f04d30cc0fe8406dcf1c948b9cc36">Isis::ToInteger()</a>, and <a class="el" href="namespace_isis.html#ab566ab61edc78483bccf8b6ec84f55a2">Isis::ToString()</a>.</p>
+
+</div>
+</div>
+<a id="ae32af1cee5b998c73d83e85876c44261"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae32af1cee5b998c73d83e85876c44261">&#9670;&nbsp;</a></span>~ZeroBufferFit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Isis::ZeroBufferFit::~ZeroBufferFit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae43630cf83d107d43a6927d85f4a634b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae43630cf83d107d43a6927d85f4a634b">&#9670;&nbsp;</a></span>Abort()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::NonLinearLSQ::Abort </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reason</em> = <code>&quot;&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9028cf77f23acd8b4f701584c0cfc224"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9028cf77f23acd8b4f701584c0cfc224">&#9670;&nbsp;</a></span>absErr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ZeroBufferFit::absErr </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the current value of the absolute error. </p>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a20c88a8e8c420469437c00f151732b7e">Isis::NonLinearLSQ</a>.</p>
+
+</div>
+</div>
+<a id="a8179ccbd58a3451f1cda4be3d4ad6408"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8179ccbd58a3451f1cda4be3d4ad6408">&#9670;&nbsp;</a></span>checkIteration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ZeroBufferFit::checkIteration </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>Iter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>fitcoefs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>uncerts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>cplxconj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>Istatus</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the interation check for convergence. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Iter</td><td>Current iteration </td></tr>
+    <tr><td class="paramname">fitcoefs</td><td>Vector of current fit coefficients </td></tr>
+    <tr><td class="paramname">uncerts</td><td>Uncertainties </td></tr>
+    <tr><td class="paramname">cplxconj</td><td>Complex conjugate of the current iteration </td></tr>
+    <tr><td class="paramname">Istatus</td><td>State of current iteration</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int Simply passes on the Istatus value </dd></dl>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#aa70042bbb5413bf563c60da07eca1d63">Isis::NonLinearLSQ</a>.</p>
+
+</div>
+</div>
+<a id="ac0d11c4d7eb90410e1b0fc51bec895be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0d11c4d7eb90410e1b0fc51bec895be">&#9670;&nbsp;</a></span>Chisq()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ZeroBufferFit::Chisq </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the Chi-Square value of the fit solution. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Solve()</a>.</p>
+
+</div>
+</div>
+<a id="afa40d36e6d4c51682e68ca799816291d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa40d36e6d4c51682e68ca799816291d">&#9670;&nbsp;</a></span>coefs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a> Isis::NonLinearLSQ::coefs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return coefficients from last fit processing. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Solve()</a>.</p>
+
+</div>
+</div>
+<a id="a1daac306c333dc1e780b7fdc16b5e671"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1daac306c333dc1e780b7fdc16b5e671">&#9670;&nbsp;</a></span>curvefit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::NonLinearLSQ::curvefit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Solve()</a>.</p>
+
+</div>
+</div>
+<a id="a548c2af473b95a748e46d0ac7036fd37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a548c2af473b95a748e46d0ac7036fd37">&#9670;&nbsp;</a></span>df_x()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a6c215e2e00882d8fa032d43af27e2a75">NonLinearLSQ::NLMatrix</a> Isis::ZeroBufferFit::df_x </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the first derivative of the function at the current iteration. </p>
+
+<p>Implements <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a3adc46b4416c72b981055c5d30466389">Isis::NonLinearLSQ</a>.</p>
+
+</div>
+</div>
+<a id="ad3478a837b44ac7553ed5a609465fae1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3478a837b44ac7553ed5a609465fae1">&#9670;&nbsp;</a></span>doContinue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::NonLinearLSQ::doContinue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5237315a8046f0799f1a5765f1178b10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5237315a8046f0799f1a5765f1178b10">&#9670;&nbsp;</a></span>DoF()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ZeroBufferFit::DoF </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the Degrees of Freedom. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a11e64e3e0c9b952a9adcaad3cc809143">nParms()</a>, and <a class="el" href="class_isis_1_1_zero_buffer_fit.html#ace1aa4ad501bb6ddbd96d9e3f112bd5b">nSize()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Solve()</a>.</p>
+
+</div>
+</div>
+<a id="ac9643785aedb120064920b7e47eb33b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9643785aedb120064920b7e47eb33b5">&#9670;&nbsp;</a></span>Dump()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::Module::Dump </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>fname</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Dumps the component to a specified file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fname</td><td>Name of file to dump contents to </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="_i_exception_8h.html#a8af20d160691c8d9948ad76a9048ebc0">_FILEINFO_</a>, <a class="el" href="class_isis_1_1_file_name.html#a7009f2aa93c4be969fea1c9ea1dae7fe">Isis::FileName::expanded()</a>, and <a class="el" href="class_isis_1_1_i_exception.html#a04677cadda13dc5bd22f87319d263e26a93461802f1b3c75720231c2d8d24273b">Isis::IException::User</a>.</p>
+
+</div>
+</div>
+<a id="ace5932e7aef1e07f9783636885283564"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace5932e7aef1e07f9783636885283564">&#9670;&nbsp;</a></span>f_x()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NonLinearLSQ::NLVector</a> Isis::ZeroBufferFit::f_x </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the function value at the current iteration. </p>
+
+<p>Implements <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a4fdd079328757d065b9c0ee7cadb7d91">Isis::NonLinearLSQ</a>.</p>
+
+</div>
+</div>
+<a id="af9b8842ec0e6751b0a038e8143eabb1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9b8842ec0e6751b0a038e8143eabb1b">&#9670;&nbsp;</a></span>formatDbl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Module::formatDbl </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Properly format values that could be special pixels. </p>
+<p>This method applies ISIS special pixel value conventions to properly print pixel values.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">(double)</td><td>value Input value to test for specialness and print as requested by caller </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">(int)</td><td>width Width of field in which to print the value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">(int)</td><td>prec Precision used to format the value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>(string) Formatted double value </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a0f69df4304491e49ef58cd71e0beef8c">Isis::Module::_fmtPrecision</a>, <a class="el" href="class_isis_1_1_module.html#ab430d0afa727db1b858f1a5d92629f7f">Isis::Module::_fmtWidth</a>, <a class="el" href="namespace_isis.html#aaeffdb92fb5baf0f0ec1cef66a90c2a7">Isis::IsSpecial()</a>, and <a class="el" href="namespace_isis.html#ad52e1e7f5b377a13b07cc19ab28dfe98">Isis::PixelToString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_module.html#a90535d33e8f0038286d3883f5741b4ef">Isis::Module::printOn()</a>.</p>
+
+</div>
+</div>
+<a id="a0fe08b4d228f61fdcfe426004632b1da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fe08b4d228f61fdcfe426004632b1da">&#9670;&nbsp;</a></span>getcsvFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Module::getcsvFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns expanded name of last CSV file loaded by loadCsv. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a67182d4696ae5bf7d27ee4450e4b52df">Isis::Module::_csvFile</a>.</p>
+
+</div>
+</div>
+<a id="a822f3d4cf3df453f6faeba990dbd0455"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a822f3d4cf3df453f6faeba990dbd0455">&#9670;&nbsp;</a></span>guess()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NonLinearLSQ::NLVector</a> Isis::ZeroBufferFit::guess </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute the initial guess of the fit. </p>
+<p>This method provides the non-linear fit with an initial guess of the solution. It involves a linear fit to the latter half of the data to provide the first two coefficents, the difference of the averages of the residuals at both ends of the data set and 5 times the last line time as the final (fourth) element...a bit involved really.</p>
+<dl class="section return"><dt>Returns</dt><dd>NLVector 4-element vector of the initial guess coefficients </dd></dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a59f46a2561fdfba2416b07fbd46e4246">Isis::NonLinearLSQ</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">Isis::Module::_history</a>, <a class="el" href="class_isis_1_1_hi_history.html#ada8b78e85f63de6a2dbb1bc65b907f1c">Isis::HiHistory::add()</a>, <a class="el" href="class_isis_1_1_statistics.html#aa34678b074b1697cc12414d44ff2b9b9">Isis::Statistics::AddData()</a>, <a class="el" href="class_isis_1_1_statistics.html#a28f531f8a2800b24b0c659a2fa16da4c">Isis::Statistics::Average()</a>, <a class="el" href="class_isis_1_1_module.html#a429129a3c98d079bc38008a1bea6d046">Isis::Module::ref()</a>, <a class="el" href="class_isis_1_1_statistics.html#af53edc41f7c11082980fb5fdfebc7496">Isis::Statistics::Reset()</a>, and <a class="el" href="namespace_isis.html#ab566ab61edc78483bccf8b6ec84f55a2">Isis::ToString()</a>.</p>
+
+</div>
+</div>
+<a id="adf92b4d6049f1a0aec6e3bbd53f4e5a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf92b4d6049f1a0aec6e3bbd53f4e5a4">&#9670;&nbsp;</a></span>History()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_isis_1_1_hi_history.html">HiHistory</a>&amp; Isis::Module::History </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return recorded history of events. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">Isis::Module::_history</a>.</p>
+
+</div>
+</div>
+<a id="ae38e6020b27097a9c12b005ff0b99284"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae38e6020b27097a9c12b005ff0b99284">&#9670;&nbsp;</a></span>loadCsv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> Isis::Module::loadCsv </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>csvBase</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const HiCalConf &amp;&#160;</td>
+          <td class="paramname"><em>conf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_db_profile.html">DbProfile</a> &amp;&#160;</td>
+          <td class="paramname"><em>prof</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>elements</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Provide generic loading of CSV file for all modules. </p>
+<p>This method provides generalized access to CSV files through the standardized format.</p>
+<dl class="section author"><dt>Author</dt><dd>Kris Becker - 4/16/2010</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cvsBase</td><td>Name of base keyword for CSV file </td></tr>
+    <tr><td class="paramname">conf</td><td>Configuration parameters </td></tr>
+    <tr><td class="paramname">prof</td><td><a class="el" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources.">Module</a> profile parameters </td></tr>
+    <tr><td class="paramname">samples</td><td>Number of expect elements to be read from CSV file</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>HiVector </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a67182d4696ae5bf7d27ee4450e4b52df">Isis::Module::_csvFile</a>, <a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">Isis::Module::_history</a>, <a class="el" href="class_isis_1_1_load_c_s_v.html#a39ba4b0373e606ce309400b532af8dfd">Isis::LoadCSV::filename()</a>, <a class="el" href="class_isis_1_1_load_c_s_v.html#aee29bda63993024c0615c74db4838cd9">Isis::LoadCSV::getVector()</a>, <a class="el" href="class_isis_1_1_load_c_s_v.html#acf85d596ef21c2344b169843b128ce8b">Isis::LoadCSV::History()</a>, and <a class="el" href="class_isis_1_1_load_c_s_v.html#ab30b901fff2a2add840ec8d05746940f">Isis::LoadCSV::validateSize()</a>.</p>
+
+</div>
+</div>
+<a id="a9634152d8e53dbc1dbe2ba6f3e62e173"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9634152d8e53dbc1dbe2ba6f3e62e173">&#9670;&nbsp;</a></span>maxIters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::NonLinearLSQ::maxIters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Maximum number iterations for valid solution. </p>
+<dl class="section return"><dt>Returns</dt><dd>int Maximum resolutions </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#af96c4998476f9bbc11aee4a99a660818">ZeroBufferFit()</a>.</p>
+
+</div>
+</div>
+<a id="a99ead949c89174a0deac29664e561524"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99ead949c89174a0deac29664e561524">&#9670;&nbsp;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Module::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns name of component. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a7c9523f44ab26e8eb1562ca701e7fdc0">Isis::Module::_name</a>.</p>
+
+</div>
+</div>
+<a id="a75ee3027a51702f7662069e2b330e6ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75ee3027a51702f7662069e2b330e6ff">&#9670;&nbsp;</a></span>nIterations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::NonLinearLSQ::nIterations </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return number of iterations from last fit processing. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Solve()</a>.</p>
+
+</div>
+</div>
+<a id="a27a60d198c26cd0d7842c721f574873a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27a60d198c26cd0d7842c721f574873a">&#9670;&nbsp;</a></span>Normalize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> Isis::ZeroBufferFit::Normalize </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute normalized solution vector from result. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">Isis::Module::_history</a>, <a class="el" href="class_isis_1_1_hi_history.html#ada8b78e85f63de6a2dbb1bc65b907f1c">Isis::HiHistory::add()</a>, and <a class="el" href="namespace_isis.html#ab566ab61edc78483bccf8b6ec84f55a2">Isis::ToString()</a>.</p>
+
+</div>
+</div>
+<a id="a11e64e3e0c9b952a9adcaad3cc809143"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11e64e3e0c9b952a9adcaad3cc809143">&#9670;&nbsp;</a></span>nParms()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ZeroBufferFit::nParms </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of parameter to be fitted. </p>
+<p>This is the number of parameters that <a class="el" href="class_isis_1_1_zero_buffer_fit.html" title="Computes non-linear lsq fit of HiRISE Drift (Zd module)">ZeroBufferFit</a> needs to fit. This method is a requirement of the <a class="el" href="class_isis_1_1_non_linear_l_s_q.html" title="NonLinearLSQ Computes a fit using a Levenberg-Marquardt algorithm.">NonLinearLSQ</a> class.</p>
+<dl class="section return"><dt>Returns</dt><dd>int Number of parameter to fit </dd></dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a18e19dcef822e8c772a5560102798b1f">Isis::NonLinearLSQ</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a5237315a8046f0799f1a5765f1178b10">DoF()</a>.</p>
+
+</div>
+</div>
+<a id="ace1aa4ad501bb6ddbd96d9e3f112bd5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace1aa4ad501bb6ddbd96d9e3f112bd5b">&#9670;&nbsp;</a></span>nSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ZeroBufferFit::nSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the size of the fitted buffer. </p>
+<p><b>Important:</b> This returns the size of the buffer being fitted and not the size of original data buffer. This is a requirement of the <a class="el" href="class_isis_1_1_non_linear_l_s_q.html" title="NonLinearLSQ Computes a fit using a Levenberg-Marquardt algorithm.">NonLinearLSQ</a> class. USE WITH CAUTION!</p>
+<dl class="section return"><dt>Returns</dt><dd>int Size of buffer being fitted </dd></dl>
+
+<p>Implements <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#aeeece421ede17d69a8ca8a9833c122c3">Isis::NonLinearLSQ</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a5237315a8046f0799f1a5765f1178b10">DoF()</a>.</p>
+
+</div>
+</div>
+<a id="a08c34671b3c7548458e5fdca28890c12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08c34671b3c7548458e5fdca28890c12">&#9670;&nbsp;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::Module::operator() </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return individual element of the data vector. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a01f4704d4302c9f2c132d6d2297456b2">Isis::Module::_data</a>.</p>
+
+</div>
+</div>
+<a id="a219df8ec46bf6f7f0e323a6efac82b1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a219df8ec46bf6f7f0e323a6efac82b1f">&#9670;&nbsp;</a></span>Process() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Module::Process </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Default processing behavior makes a reference copy of data array. </p>
+
+<p>Reimplemented in <a class="el" href="class_isis_1_1_spline_fill.html#a95c5638092f963af9cb503315b50a330">Isis::SplineFill</a>, and <a class="el" href="class_isis_1_1_low_pass_filter.html#a4e411061bf243b0a6e19ed3c5d07b4c3">Isis::LowPassFilter</a>.</p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a01f4704d4302c9f2c132d6d2297456b2">Isis::Module::_data</a>.</p>
+
+</div>
+</div>
+<a id="ace6913a240430e7b6f09b50684c30581"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace6913a240430e7b6f09b50684c30581">&#9670;&nbsp;</a></span>Process() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Module::Process </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_isis_1_1_module.html">Module</a> &amp;&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Invokes the process method on the <a class="el" href="class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources.">Module</a> vector. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a429129a3c98d079bc38008a1bea6d046">Isis::Module::ref()</a>.</p>
+
+</div>
+</div>
+<a id="ac6663a73c2f9154b9166b552cea3e7b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6663a73c2f9154b9166b552cea3e7b6">&#9670;&nbsp;</a></span>record()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Isis::Module::record </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_isis_1_1_pvl_group.html">PvlGroup</a> &amp;&#160;</td>
+          <td class="paramname"><em>pvl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString&#160;</td>
+          <td class="paramname"><em>keyname</em> = <code>&quot;ModuleHistory&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Record history in <a class="el" href="class_isis_1_1_pvl.html" title="Container for cube-like labels.">Pvl</a> group object. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">Isis::Module::_history</a>, and <a class="el" href="class_isis_1_1_hi_history.html#a30dce403f3e4f5039ad1388c811774fc">Isis::HiHistory::makekey()</a>.</p>
+
+</div>
+</div>
+<a id="a429129a3c98d079bc38008a1bea6d046"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a429129a3c98d079bc38008a1bea6d046">&#9670;&nbsp;</a></span>ref()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a>&amp; Isis::Module::ref </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return data via a const reference. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a01f4704d4302c9f2c132d6d2297456b2">Isis::Module::_data</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a822f3d4cf3df453f6faeba990dbd0455">guess()</a>, <a class="el" href="class_isis_1_1_low_pass_filter.html#ab58ba80d66836a602e9616e3e339a32c">Isis::LowPassFilter::LowPassFilter()</a>, <a class="el" href="class_isis_1_1_module.html#ace6913a240430e7b6f09b50684c30581">Isis::Module::Process()</a>, and <a class="el" href="class_isis_1_1_spline_fill.html#ac8655cc0f59d421ae31345d2d6c0b9c6">Isis::SplineFill::SplineFill()</a>.</p>
+
+</div>
+</div>
+<a id="a4d49115e718c5b9e134683b18a019ffd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d49115e718c5b9e134683b18a019ffd">&#9670;&nbsp;</a></span>relErr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Isis::ZeroBufferFit::relErr </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the current value of the relative error. </p>
+
+<p>Reimplemented from <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#aae8da0f2f61ea0431ac3098dda1998a0">Isis::NonLinearLSQ</a>.</p>
+
+</div>
+</div>
+<a id="a780841d8dd5c3933536a18158e62ad06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a780841d8dd5c3933536a18158e62ad06">&#9670;&nbsp;</a></span>setabsErr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ZeroBufferFit::setabsErr </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>absError</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the absolute error parameter. </p>
+
+</div>
+</div>
+<a id="a8221d343ec1ab600497830d139d7b122"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8221d343ec1ab600497830d139d7b122">&#9670;&nbsp;</a></span>setBin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ZeroBufferFit::setBin </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set binning/summing mode. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bin</td><td>Summing mode of observatio </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_hi_line_time_eqn.html#a1c6f9c9722e39696e0b7b6ee4199ef14">Isis::HiLineTimeEqn::setBin()</a>.</p>
+
+</div>
+</div>
+<a id="ac981bf6e40c6ef2bd26e1b8b822cf43b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac981bf6e40c6ef2bd26e1b8b822cf43b">&#9670;&nbsp;</a></span>setLineTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ZeroBufferFit::setLineTime </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>ltime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set scan line time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ltime</td><td>Scan line time </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_hi_line_time_eqn.html#ab905c2695eaa89f398fbbe1c4e23b4c4">Isis::HiLineTimeEqn::setLineTime()</a>.</p>
+
+</div>
+</div>
+<a id="a5ed1229323b92e7ebb91508e08f87223"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ed1229323b92e7ebb91508e08f87223">&#9670;&nbsp;</a></span>setMaxIters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::NonLinearLSQ::setMaxIters </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the maximum number of iterations. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>User provides the maximum number iterations </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#af96c4998476f9bbc11aee4a99a660818">ZeroBufferFit()</a>.</p>
+
+</div>
+</div>
+<a id="a4832ff88d51c9cbe7700b59bf88f1175"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4832ff88d51c9cbe7700b59bf88f1175">&#9670;&nbsp;</a></span>setrelErr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::ZeroBufferFit::setrelErr </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>relError</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the relative error parameter <br  />
+ </p>
+
+</div>
+</div>
+<a id="a3ebc1ccca5bcfb814eba7b274459b6ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ebc1ccca5bcfb814eba7b274459b6ae">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::ZeroBufferFit::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the size of the data buffer. </p>
+<p>This is the size of the original data buffer.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_isis_1_1_zero_buffer_fit.html#ace1aa4ad501bb6ddbd96d9e3f112bd5b" title="Returns the size of the fitted buffer.">nSize()</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>int Size of the input buffer </dd></dl>
+
+</div>
+</div>
+<a id="a9989cea8f757a5926d6ea84fb9937173"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9989cea8f757a5926d6ea84fb9937173">&#9670;&nbsp;</a></span>Solve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> Isis::ZeroBufferFit::Solve </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> &amp;&#160;</td>
+          <td class="paramname"><em>d</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute non-linear fit to (typically) <a class="el" href="class_isis_1_1_zero_buffer_smooth.html" title="Processes Buffer calibration data (ZeroBufferSmooth Module)">ZeroBufferSmooth</a> module. </p>
+<p>This method computes a non-linear fit to the result of the <a class="el" href="class_isis_1_1_zero_buffer_smooth.html" title="Processes Buffer calibration data (ZeroBufferSmooth Module)">ZeroBufferSmooth</a> module. There are several things that can go wrong and some config conditions that dictate behavior of this process.</p>
+<p>Should the image be a short exposure (i.e., not many lines) the fit will not succeed so it simply skips this entire module providing the input result (d) as the solution. This wil also occur when the user has selected the skip option for the module.</p>
+<p>A fit is attempted on the <a class="el" href="class_isis_1_1_zero_buffer_smooth.html" title="Processes Buffer calibration data (ZeroBufferSmooth Module)">ZeroBufferSmooth</a> data. The non-linear solution must converge within the specifed number of iterations (MaximumIterations) or a polynomial fit will be used in leui of a valid solution.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">d</td><td><a class="el" href="class_isis_1_1_zero_buffer_smooth.html" title="Processes Buffer calibration data (ZeroBufferSmooth Module)">ZeroBufferSmooth</a> data solution as input to this method</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>HiVector Returns result of the processing </dd></dl>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_module.html#a11c9231f61fe197580ebcfbce76d992f">Isis::Module::_history</a>, <a class="el" href="class_isis_1_1_hi_history.html#ada8b78e85f63de6a2dbb1bc65b907f1c">Isis::HiHistory::add()</a>, <a class="el" href="class_isis_1_1_zero_buffer_fit.html#ac0d11c4d7eb90410e1b0fc51bec895be">Chisq()</a>, <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#afa40d36e6d4c51682e68ca799816291d">Isis::NonLinearLSQ::coefs()</a>, <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a1daac306c333dc1e780b7fdc16b5e671">Isis::NonLinearLSQ::curvefit()</a>, <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a5237315a8046f0799f1a5765f1178b10">DoF()</a>, <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a75ee3027a51702f7662069e2b330e6ff">Isis::NonLinearLSQ::nIterations()</a>, <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a9c406809ce9aa991c20044fa48600a0a">Isis::NonLinearLSQ::statusstr()</a>, <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a876d4bea4cd82c5f786d043da19ec604">Isis::NonLinearLSQ::success()</a>, <a class="el" href="namespace_isis.html#ab566ab61edc78483bccf8b6ec84f55a2">Isis::ToString()</a>, <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a02e12773405b5f76cc090fb2f1c10583">Isis::NonLinearLSQ::uncert()</a>, and <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a272f2999f7384db61e4bd9f74c725ca5">Yfit()</a>.</p>
+
+</div>
+</div>
+<a id="a27f834c3a9584efbe77d19cb820dffff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27f834c3a9584efbe77d19cb820dffff">&#9670;&nbsp;</a></span>status()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::NonLinearLSQ::status </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return status of last fit processing. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a1f328958377d51343c84d3e12d4f9779">Isis::NonLinearLSQ::statusstr()</a>, and <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#abf55648024b36f2c8154c2ee899367a0">Isis::NonLinearLSQ::success()</a>.</p>
+
+</div>
+</div>
+<a id="a9c406809ce9aa991c20044fa48600a0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c406809ce9aa991c20044fa48600a0a">&#9670;&nbsp;</a></span>statusstr() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::NonLinearLSQ::statusstr </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return error message pertaining to last fit procesing. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Solve()</a>.</p>
+
+</div>
+</div>
+<a id="a1f328958377d51343c84d3e12d4f9779"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f328958377d51343c84d3e12d4f9779">&#9670;&nbsp;</a></span>statusstr() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Isis::NonLinearLSQ::statusstr </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>status</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return error message given status condition. </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a27f834c3a9584efbe77d19cb820dffff">Isis::NonLinearLSQ::status()</a>.</p>
+
+</div>
+</div>
+<a id="a876d4bea4cd82c5f786d043da19ec604"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a876d4bea4cd82c5f786d043da19ec604">&#9670;&nbsp;</a></span>success() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::NonLinearLSQ::success </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determine success from last fit processing. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Solve()</a>.</p>
+
+</div>
+</div>
+<a id="abf55648024b36f2c8154c2ee899367a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf55648024b36f2c8154c2ee899367a0">&#9670;&nbsp;</a></span>success() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Isis::NonLinearLSQ::success </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>status</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check status for success of the given condition <br  />
+ </p>
+
+<p class="reference">References <a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a27f834c3a9584efbe77d19cb820dffff">Isis::NonLinearLSQ::status()</a>.</p>
+
+</div>
+</div>
+<a id="a754f0680f7545a78fb77d449a0e27cea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a754f0680f7545a78fb77d449a0e27cea">&#9670;&nbsp;</a></span>Terminate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Isis::NonLinearLSQ::Terminate </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>message</em> = <code>&quot;&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a02e12773405b5f76cc090fb2f1c10583"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02e12773405b5f76cc090fb2f1c10583">&#9670;&nbsp;</a></span>uncert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_non_linear_l_s_q.html#a30249f23af469a33385b6cc143f1cf3e">NLVector</a> Isis::NonLinearLSQ::uncert </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return uncertainties from last fit processing. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Solve()</a>.</p>
+
+</div>
+</div>
+<a id="a272f2999f7384db61e4bd9f74c725ca5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a272f2999f7384db61e4bd9f74c725ca5">&#9670;&nbsp;</a></span>Yfit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_isis.html#ab439ccdced5cec003c9a480caa581607">HiVector</a> Isis::ZeroBufferFit::Yfit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the solution vector using current coefficents. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Solve()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a67182d4696ae5bf7d27ee4450e4b52df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67182d4696ae5bf7d27ee4450e4b52df">&#9670;&nbsp;</a></span>_csvFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Module::_csvFile</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Fully expanded name of CSV file if present. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_module.html#a0fe08b4d228f61fdcfe426004632b1da">Isis::Module::getcsvFile()</a>, and <a class="el" href="class_isis_1_1_module.html#ae38e6020b27097a9c12b005ff0b99284">Isis::Module::loadCsv()</a>.</p>
+
+</div>
+</div>
+<a id="a0f69df4304491e49ef58cd71e0beef8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f69df4304491e49ef58cd71e0beef8c">&#9670;&nbsp;</a></span>_fmtPrecision</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Module::_fmtPrecision</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Default field with of double. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_module.html#af9b8842ec0e6751b0a038e8143eabb1b">Isis::Module::formatDbl()</a>.</p>
+
+</div>
+</div>
+<a id="ab430d0afa727db1b858f1a5d92629f7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab430d0afa727db1b858f1a5d92629f7f">&#9670;&nbsp;</a></span>_fmtWidth</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Isis::Module::_fmtWidth</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Default field with of double. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_module.html#af9b8842ec0e6751b0a038e8143eabb1b">Isis::Module::formatDbl()</a>.</p>
+
+</div>
+</div>
+<a id="a11c9231f61fe197580ebcfbce76d992f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11c9231f61fe197580ebcfbce76d992f">&#9670;&nbsp;</a></span>_history</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_isis_1_1_hi_history.html">HiHistory</a> Isis::Module::_history</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Hierarchial component history. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a822f3d4cf3df453f6faeba990dbd0455">guess()</a>, <a class="el" href="class_isis_1_1_module.html#adf92b4d6049f1a0aec6e3bbd53f4e5a4">Isis::Module::History()</a>, <a class="el" href="class_isis_1_1_module.html#ae38e6020b27097a9c12b005ff0b99284">Isis::Module::loadCsv()</a>, <a class="el" href="class_isis_1_1_low_pass_filter.html#ab58ba80d66836a602e9616e3e339a32c">Isis::LowPassFilter::LowPassFilter()</a>, <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a27a60d198c26cd0d7842c721f574873a">Normalize()</a>, <a class="el" href="class_isis_1_1_module.html#a90535d33e8f0038286d3883f5741b4ef">Isis::Module::printOn()</a>, <a class="el" href="class_isis_1_1_low_pass_filter.html#a4e411061bf243b0a6e19ed3c5d07b4c3">Isis::LowPassFilter::Process()</a>, <a class="el" href="class_isis_1_1_spline_fill.html#a95c5638092f963af9cb503315b50a330">Isis::SplineFill::Process()</a>, <a class="el" href="class_isis_1_1_module.html#ac6663a73c2f9154b9166b552cea3e7b6">Isis::Module::record()</a>, <a class="el" href="class_isis_1_1_zero_buffer_fit.html#a9989cea8f757a5926d6ea84fb9937173">Solve()</a>, <a class="el" href="class_isis_1_1_spline_fill.html#ac8655cc0f59d421ae31345d2d6c0b9c6">Isis::SplineFill::SplineFill()</a>, and <a class="el" href="class_isis_1_1_zero_buffer_fit.html#af96c4998476f9bbc11aee4a99a660818">ZeroBufferFit()</a>.</p>
+
+</div>
+</div>
+<a id="a7c9523f44ab26e8eb1562ca701e7fdc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c9523f44ab26e8eb1562ca701e7fdc0">&#9670;&nbsp;</a></span>_name</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Isis::Module::_name</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Name of component. </p>
+
+<p class="reference">Referenced by <a class="el" href="class_isis_1_1_module.html#a99ead949c89174a0deac29664e561524">Isis::Module::name()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/mro/objs/HiCal/<a class="el" href="_zero_buffer_fit_8h_source.html">ZeroBufferFit.h</a></li>
+<li>/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/mro/objs/HiCal/<a class="el" href="_zero_buffer_fit_8cpp.html">ZeroBufferFit.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+    <!-- HTML footer for doxygen 1.8.14-->
+    <!-- start footer part -->
+    <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+      <ul>
+        <li class="navelem"><a class="el" href="namespace_isis.html">Isis</a></li><li class="navelem"><a class="el" href="class_isis_1_1_zero_buffer_fit.html">ZeroBufferFit</a></li>
+      </ul>
+    </div>
+    <!-- REQUIRED Official USGS Footer-->
+    <footer class="footer">
+      <div class="tmp-container">
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/sitemap">Site Map</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://answers.usgs.gov/">Contact USGS</a></li>
+          </ul>
+        </div>
+        <hr/>
+        <div class="footer-doi">
+          <ul class="menu nav">
+            <li class="first leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doioig.gov/">DOI Inspector General</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/">White House</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+            <li class="leaf menu-links menu-level-1"><a
+                href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+            <li class="last leaf menu-links menu-level-1"><a
+                href="https://www.usgs.gov/about/organization/science-support/foia">FOIA</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
